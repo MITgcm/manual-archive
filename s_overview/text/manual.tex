@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.11 2001/11/16 21:18:36 cnh Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.12 2001/11/19 14:33:44 cnh Exp $
 % $Name:  $
 
 %tci%\documentclass[12pt]{book}
@@ -34,7 +34,7 @@
 
 % Section: Overview
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.11 2001/11/16 21:18:36 cnh Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.12 2001/11/19 14:33:44 cnh Exp $
 % $Name:  $
 
 \section{Introduction}
@@ -83,13 +83,57 @@ studies.
 computational platforms.
 \end{itemize}
 
-Key publications reporting on and charting the development of the model are
-listed in an Appendix.
+Key publications reporting on and charting the development of the model are:
+
+\begin{verbatim}
+
+Hill, C. and J. Marshall, (1995)
+Application of a Parallel Navier-Stokes Model to Ocean Circulation in 
+Parallel Computational Fluid Dynamics
+In Proceedings of Parallel Computational Fluid Dynamics: Implementations 
+and Results Using Parallel Computers, 545-552.
+Elsevier Science B.V.: New York
+
+Marshall, J., C. Hill, L. Perelman, and A. Adcroft, (1997)
+Hydrostatic, quasi-hydrostatic, and nonhydrostatic ocean modeling,
+J. Geophysical Res., 102(C3), 5733-5752.
+
+Marshall, J., A. Adcroft, C. Hill, L. Perelman, and C. Heisey, (1997)
+A finite-volume, incompressible Navier Stokes model for studies of the ocean
+on parallel computers,
+J. Geophysical Res., 102(C3), 5753-5766.
+
+Adcroft, A.J., Hill, C.N. and J. Marshall, (1997)
+Representation of topography by shaved cells in a height coordinate ocean
+model
+Mon Wea Rev, vol 125, 2293-2315
+
+Marshall, J., Jones, H. and C. Hill, (1998)
+Efficient ocean modeling using non-hydrostatic algorithms
+Journal of Marine Systems, 18, 115-134
+
+Adcroft, A., Hill C. and J. Marshall: (1999)
+A new treatment of the Coriolis terms in C-grid models at both high and low
+resolutions,
+Mon. Wea. Rev. Vol 127, pages 1928-1936
+
+Hill, C, Adcroft,A., Jamous,D., and J. Marshall, (1999)
+A Strategy for Terascale Climate Modeling.
+In Proceedings of the Eight ECMWF Workshop on the Use of Parallel Processors
+in Meteorology
+
+Marotzke, J, Giering,R., Zhang, K.Q., Stammer,D., Hill,C., and T.Lee, (1999)
+Construction of the adjoint MIT ocean general circulation model and 
+application to Atlantic heat transport variability
+J. Geophysical Res., 104(C12), 29,529-29,547.
+
+
+\end{verbatim}
 
 We begin by briefly showing some of the results of the model in action to
 give a feel for the wide range of problems that can be addressed using it.
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.11 2001/11/16 21:18:36 cnh Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.12 2001/11/19 14:33:44 cnh Exp $
 % $Name:  $
 
 \section{Illustrations of the model in action}
@@ -289,7 +333,7 @@ stratification of the ACC.
 \input{part1/lab_figure}
 %%CNHend
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.11 2001/11/16 21:18:36 cnh Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.12 2001/11/19 14:33:44 cnh Exp $
 % $Name:  $
 
 \section{Continuous equations in `r' coordinates}
@@ -1028,7 +1072,7 @@ to discretize the model.
 Tangent linear and adjoint counterparts of the forward model are described
 in Chapter 5.
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.11 2001/11/16 21:18:36 cnh Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.12 2001/11/19 14:33:44 cnh Exp $
 % $Name:  $
 
 \section{Appendix ATMOSPHERE}
@@ -1155,7 +1199,7 @@ _{h}+\mathbf{\nabla }_{p}\phi ^{\prime } &=&\vec{\mathbf{\mathcal{F}}} \label{eq
 \frac{D\theta }{Dt} &=&\frac{\mathcal{Q}}{\Pi } 
 \end{eqnarray}
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.11 2001/11/16 21:18:36 cnh Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.12 2001/11/19 14:33:44 cnh Exp $
 % $Name:  $
 
 \section{Appendix OCEAN}
@@ -1371,7 +1415,7 @@ the perturbation density. Nevertheless, it is the hydrostatic ($\epsilon
 _{nh}=0$ form of these equations that are used throughout the ocean modeling
 community and referred to as the primitive equations (HPE).
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.11 2001/11/16 21:18:36 cnh Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.12 2001/11/19 14:33:44 cnh Exp $
 % $Name:  $
 
 \section{Appendix:OPERATORS}
