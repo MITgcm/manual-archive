@@ -1,7 +1,7 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/Attic/mnc.tex,v 1.5 2004/02/12 03:35:05 edhill Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/Attic/mnc.tex,v 1.6 2004/02/13 21:35:59 edhill Exp $
 % $Name:  $
 
-\section{NetCDF I/O Integration}
+\section{NetCDF I/O Integration: MNC}
 \label{sec:pkg:mnc}
 
 The \texttt{mnc} package is a set of convenience routines written to
@@ -23,8 +23,8 @@ http://www.unidata.ucar.edu/packages/netcdf/
 The \texttt{mnc} package is a two-level convenience library (or
 ``wrapper'') for most of the NetCDF Fortran API.  Its purpose is to
 streamline the user interface to NetCDF by maintaining internal
-relations (``look-up tables'') keyed with strings (or ``names'') and
-entities such as NetCDF files, variables, and attributes.
+relations (look-up tables) keyed with strings (or names) and entities
+such as NetCDF files, variables, and attributes.
 
 The two levels of the \texttt{mnc} package are:
 \begin{description}
@@ -34,7 +34,7 @@ The two levels of the \texttt{mnc} package are:
   The upper level contains information about two kinds of
   associations:
   \begin{description}
-  \item[Grid type] is lookup table indexed with a grid type name.
+  \item[grid type] is lookup table indexed with a grid type name.
     Each grid type name is associated with a number of dimensions, the
     dimension sizes (one of which may be unlimited), and starting and
     ending index arrays.  The intent is to store all the necessary
@@ -44,7 +44,7 @@ The two levels of the \texttt{mnc} package are:
     shown in Figures \ref{fig:communication_primitives} and
     \ref{fig:tiling-strategy}).
   
-  \item[Variable type] is a lookup table indexed by a variable type
+  \item[variable type] is a lookup table indexed by a variable type
     name.  For each name, the table contains a reference to a grid
     type for the variable and the names and values of various
     attributes.
@@ -68,7 +68,7 @@ The two levels of the \texttt{mnc} package are:
 
 \subsection{Using MNC}
 
-\subsubsection{``Grid--Types'' and ``Variable--Types''}
+\subsubsection{Grid--Types and Variable--Types}
 
 As a convenience for users, the MNC package includes numerous routines
 to aid in the writing of data to NetCDF format.  Probably the biggest
@@ -94,13 +94,13 @@ string follows the format
 \begin{center}
   \texttt{H0\_H1\_H2\_\_V\_\_T}
 \end{center}
-where the terms \textit{H0,H1,H2,V,T} can be almost any combination of
-the following:
+where the terms \textit{H0}, \textit{H1}, \textit{H2}, \textit{V},
+\textit{T} can be almost any combination of the following:
 \begin{center}
   \begin{tabular}[h]{|ccc|c|c|}\hline
-    \multicolumn{3}{|c|}{Horizontal} & Vertical &  \\
-    Location & Direction & Halo & Location & Time  \\\hline
-    H0  &  H1  &  H2  &  V  &  T  \\\hline
+    \multicolumn{3}{|c|}{Horizontal} & Vertical & Time \\
+    \textit{H0}: location & \textit{H1}: dimensions & \textit{H2}: halo 
+          & \textit{V}: location & \textit{T}: level  \\\hline
     \texttt{-} & xy & Hn & \texttt{-} & \texttt{-} \\
     U  &  x  &  Hy  &  i  &  t  \\
     V  &  y  &      &  c  &     \\
@@ -120,15 +120,14 @@ file
 Writing variables to NetCDF files can be accomplished in as few as two
 function calls.  The first function call defines a variable type,
 associates it with a name (character string), and provides additional
-information about the indicies for \texttt{bi,bj} dimensions.  The
-second function call will write variable at, if necessary, the
-current time level within the model.
+information about the indicies for the tile (\texttt{bi},\texttt{bj})
+dimensions.  The second function call will write the data at, if
+necessary, the current time level within the model.
 
 Examples of the initialization calls can be found in the file 
-\begin{center}
-  \filelink{model/src/initialise\_fixed.F}{model-src-initialise_fixed.F}
-\end{center}
-where these four function calls: {\footnotesize
+\filelink{model/src/initialise\_fixed.F}{model-src-initialise_fixed.F}
+where these four function calls:
+{\footnotesize
 \begin{verbatim}
   C     Create MNC definitions for DYNVARS.h variables
         CALL MNC_CW_ADD_VNAME(myThid, 'iter', '-_-_--__-__t', 0,0)
@@ -136,21 +135,23 @@ where these four function calls: {\footnotesize
        &     'long_name','iteration_count')
         CALL MNC_CW_ADD_VNAME(myThid, 'U', 'U_xy_Hn__C__t', 4,5)
         CALL MNC_CW_ADD_VATTR_TEXT(myThid,'U',1,'units','m/s')
-\end{verbatim} }
-{\noindent initialize two \texttt{VNAME}s and add one attribute to each.}
+\end{verbatim}
+}
+{\noindent initialize two \texttt{VNAME}s and add one NetCDF
+  attribute to each.}
     
-The two variables are subsequently written at specific time steps
-within 
-\begin{center}
-  \filelink{model/src/write\_state.F}{model-src-write_state.F}
-\end{center}
-using the function calls: {\footnotesize
+The two variables defined above are subsequently written at specific
+time steps within
+\filelink{model/src/write\_state.F}{model-src-write_state.F}
+using the function calls:
+{\footnotesize
 \begin{verbatim}
   C     Write the DYNVARS.h variables using the MNC package
         mnc_iter = myIter
         CALL MNC_CW_RL_W_R(myThid,'state',0,0,'iter',-1,mnc_iter)
         CALL MNC_CW_RL_W_D(myThid,'state',0,0,'U', 0, uVel)
-\end{verbatim} }
+\end{verbatim}
+}
 
 
 \subsection{Key subroutines, parameters and files}
