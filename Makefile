@@ -48,7 +48,7 @@ l2h: l2h.tgz
 
 subfigs: manual.tgz
 
-manual.dvi: *.tex */*.tex */*/*/*.tex */*.ps */*.eps */*/*/*.eps
+manual.dvi: *.tex */*.tex */*/*/*.tex */*.ps */*.eps */*/*/*.eps manual_references.bib
 	TEXINPUTS=.:::texinputs latex manual
 	bibtex manual
 	TEXINPUTS=.:::texinputs latex manual
