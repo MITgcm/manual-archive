@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_software/text/sarch.tex,v 1.11 2004/01/28 19:33:04 afe Exp $
+% $Header: /u/gcmpack/manual/s_software/text/sarch.tex,v 1.12 2004/01/28 19:59:03 afe Exp $
 
 This chapter focuses on describing the {\bf WRAPPER} environment within which
 both the core numerics and the pluggable packages operate. The description
@@ -974,41 +974,16 @@ critical communication. However, in order to simplify the task
 of controlling and coordinating the start up of a large number
 (hundreds and possibly even thousands) of copies of the same 
 program, MPI is used. The calls to the MPI multi-process startup
-routines must be activated at compile time. This is done
-by setting the {\em ALLOW\_USE\_MPI} and {\em ALWAYS\_USE\_MPI}
-flags in the {\em CPP\_EEOPTIONS.h} file.\\
+routines must be activated at compile time.  Currently MPI libraries are 
+invoked by
+specifying the appropriate options file with the 
+\begin{verbatim}-of\end{verbatim} flag when running the {\em genmake2} 
+script, which generates the Makefile for compiling and linking MITgcm.
+(Previously this was done by setting the {\em ALLOW\_USE\_MPI} and 
+{\em ALWAYS\_USE\_MPI} flags in the {\em CPP\_EEOPTIONS.h} file.)  More
+detailed information about the use of {\em genmake2} for specifying 
+local compiler flags is located in section 3 ??\\  
 
-\fbox{ 
-\begin{minipage}{4.75in}
-File: {\em eesupp/inc/CPP\_EEOPTIONS.h}\\
-CPP:  {\em ALLOW\_USE\_MPI}\\
-CPP:  {\em ALWAYS\_USE\_MPI}\\
-Parameter:  {\em nPx}\\
-Parameter:  {\em nPy}
-\end{minipage}
-} \\
-
-Additionally, compile time options are required to link in the 
-MPI libraries and header files. Examples of these options 
-can be found in the {\em genmake2} script that creates makefiles
-for compilation. When this script is executed with the {bf -mpi}
-flag it will generate a makefile that includes
-paths for search for MPI head files and for linking in 
-MPI libraries. For example the {\bf -mpi} flag on a
- Silicon Graphics IRIX system causes a
-Makefile with the compilation command
-Graphics IRIX system \begin{verbatim}
-mpif77 -I/usr/local/mpi/include -DALLOW_USE_MPI -DALWAYS_USE_MPI
-\end{verbatim}
-to be generated.
-This is the correct set of options for using the MPICH open-source
-version of MPI, when it has been installed under the subdirectory
-/usr/local/mpi.
-However, on many systems there may be several
-versions of MPI installed. For example many systems have both
-the open source MPICH set of libraries and a vendor specific native form
-of the MPI libraries. The correct setup to use will depend on the
-local configuration of your system.\\
 
 \fbox{ 
 \begin{minipage}{4.75in}
