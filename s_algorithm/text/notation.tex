@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/notation.tex,v 1.4 2001/08/09 20:45:27 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/notation.tex,v 1.5 2001/09/11 16:05:00 cnh Exp $
 % $Name:  $
 
 \subsection{Notation} 
@@ -13,15 +13,21 @@ Volume of the grid box surrounding $u,v,w,\theta$ point;
 \\ $i,j,k$ : current index relative to X,Y,R directions;
 \\basic operator:
 \\ $\delta_i $ : $\delta_i \Phi = \Phi_{i+1/2} - \Phi_{i-1/2} $
+\label{eq:delta_i}
 \\ $\overline{~}i$ : $\overline{\Phi}^i = ( \Phi_{i+1/2} + \Phi_{i-1/2} ) / 2 $ 
+\label{eq:bar_i}
 \\ $\delta_x $ : $\delta_x \Phi = \frac{1}{\Delta x} \delta_i \Phi $
+\label{eq:delta_x}
 \\
 \\ $\overline{\nabla}$ = gradient operator :  
 $\overline{\nabla} \Phi = \{ \delta_x \Phi , \delta_y \Phi \}$
+\label{eq:d_grad}
 \\ $\overline{\nabla} \cdot$ = divergence operator :  
 $\overline{\nabla}\cdot \vec{\mathrm{f}}  = 
 \frac{1}{\cal A} \{ \delta_i \Delta y \mathrm{f}_x 
                   + \delta_j \Delta x \mathrm{f}_y \} $
+\label{eq:d_div}
 \\ $\overline{\nabla}^2 $ = Laplacien operator :
 $ \overline{\nabla}^2 \Phi = 
    \overline{\nabla}\cdot \overline{\nabla}\Phi $
+\label{eq:d_lap}
