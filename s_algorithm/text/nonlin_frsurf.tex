@@ -1,9 +1,10 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/nonlin_frsurf.tex,v 1.5 2001/10/25 18:36:53 cnh Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/nonlin_frsurf.tex,v 1.6 2001/11/13 20:13:54 adcroft Exp $
 % $Name:  $
 
 
 
 \subsection{Non-linear free surface}
+\label{sect:nonlinear-freesurface}
 
 Recently, two options have been added to the model (and have not yet
 been extensively tested) that concern the free surface formulation.
@@ -136,7 +137,7 @@ $$
 \partial_t (h \theta) + \nabla \cdot ( h \theta \vec{\bf v})= 0
 $$
 Using the implicit (non-linear) free surface described above (section
-\ref{sect:??}, we have:
+\ref{sect:pressure-method-linear-backward}) we have:
 \begin{eqnarray*}
 h^{n+1} = h^{n} - \Delta_t \nabla \cdot (h^n \, \vec{\bf v}^{n+1} ) \\
 \end{eqnarray*}

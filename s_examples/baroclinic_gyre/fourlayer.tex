@@ -1,8 +1,8 @@
-% $Header: /u/gcmpack/manual/s_examples/baroclinic_gyre/fourlayer.tex,v 1.10 2001/11/13 19:01:42 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_examples/baroclinic_gyre/fourlayer.tex,v 1.11 2001/11/13 20:13:54 adcroft Exp $
 % $Name:  $
 
 \section{Example: Four layer Baroclinic Ocean Gyre In Spherical Coordinates}
-\label{sec:eg-fourlayer}
+\label{sect:eg-fourlayer}
 
 \bodytext{bgcolor="#FFFFFFFF"}
 
@@ -19,7 +19,7 @@
 This document describes an example experiment using MITgcm
 to simulate a baroclinic ocean gyre in spherical
 polar coordinates. The barotropic
-example experiment in section \ref{sec:eg-baro}
+example experiment in section \ref{sect:eg-baro}
 illustrated how to configure the code for a single layer 
 simulation in a Cartesian grid. In this example a similar physical problem
 is simulated, but the code is now configured
@@ -63,7 +63,7 @@ $\tau_0$ is set to $0.1N m^{-2}$.
 
 Figure \ref{FIG:simulation_config}
 summarizes the configuration simulated.
-In contrast to the example in section \ref{sec:eg-baro}, the 
+In contrast to the example in section \ref{sect:eg-baro}, the 
 current experiment simulates a spherical polar domain. As indicated
 by the axes in the lower left of the figure the model code works internally
 in a locally orthogonal coordinate $(x,y,z)$. For this experiment description 
@@ -119,7 +119,7 @@ The vertical spacing, $\Delta z$, is constant and equal to $500$m.
 
 \subsection{Equations solved}
 For this problem
-the implicit free surface, {\bf HPE} (see section \ref{sec:hydrostatic_and_quasi-hydrostatic_forms}) form of the 
+the implicit free surface, {\bf HPE} (see section \ref{sect:hydrostatic_and_quasi-hydrostatic_forms}) form of the 
 equations described in Marshall et. al \cite{marshall:97a} are
 employed. The flow is three-dimensional with just temperature, $\theta$, as 
 an active tracer.  The equation of state is linear.
@@ -221,7 +221,7 @@ y=r\varphi,~\Delta y &= &r\Delta \varphi
 
 The procedure for generating a set of internal grid variables from a
 spherical polar grid specification is discussed in section 
-\ref{sec:spatial_discrete_horizontal_grid}.
+\ref{sect:spatial_discrete_horizontal_grid}.
 
 \noindent\fbox{ \begin{minipage}{5.5in}
 {\em S/R INI\_SPHERICAL\_POLAR\_GRID} ({\em
@@ -242,15 +242,15 @@ $\Delta x_v$, $\Delta y_u$: {\bf DXv}, {\bf DYu} ({\em GRID.h})
 
 
 
-As described in \ref{sec:tracer_equations}, the time evolution of potential 
+As described in \ref{sect:tracer_equations}, the time evolution of potential 
 temperature, 
 $\theta$, (equation \ref{eq:eg_fourl_theta})
 is evaluated prognostically. The centered second-order scheme with
 Adams-Bashforth time stepping described in section 
-\ref{sec:tracer_equations_abII} is used to step forward the temperature 
+\ref{sect:tracer_equations_abII} is used to step forward the temperature 
 equation. Prognostic terms in
 the momentum equations are solved using flux form as
-described in section \ref{sec:flux-form_momentum_eqautions}.
+described in section \ref{sect:flux-form_momentum_eqautions}.
 The pressure forces that drive the fluid motions, (
 $\frac{\partial p^{'}}{\partial \lambda}$ and $\frac{\partial p^{'}}{\partial \varphi}$), are found by summing pressure due to surface 
 elevation $\eta$ and the hydrostatic pressure. The hydrostatic part of the 
@@ -258,7 +258,7 @@ pressure is diagnosed explicitly by integrating density. The sea-surface
 height, $\eta$, is diagnosed using an implicit scheme. The pressure
 field solution method is described in sections
 \ref{sect:pressure-method-linear-backward} and 
-\ref{sec:finding_the_pressure_field}.
+\ref{sect:finding_the_pressure_field}.
 
 \subsubsection{Numerical Stability Criteria}
 
