@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/Attic/mnc.tex,v 1.10 2004/07/05 16:35:32 edhill Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/Attic/mnc.tex,v 1.11 2004/09/22 15:11:32 edhill Exp $
 % $Name:  $
 
 \section{NetCDF I/O Integration: MNC}
@@ -186,42 +186,88 @@ C       Write dynvars using the MNC package
 
 \subsubsection{Parameters}
 
-All the MNC parameters are contained within a file named
-\texttt{data.mnc}.  If this file does not exist, then the MNC package
-will interpret that as an indication that it is not to be used.  If
-the \texttt{data.mnc} does exist, then it may contain the following
-parameters:
+Most of the MNC--related parameters are contained within a Fortran
+namelist file called \texttt{data.mnc}.  If this file does not exist,
+then the MNC package will interpret that as an indication that it is
+not to be used.  If the \texttt{data.mnc} file does exist, then it may
+contain the following parameters:
 
 \begin{center}
   {\footnotesize
-    \begin{tabular}[htb]{|l|l|l|l|}\hline
-      &  &  &  \\
-      \textbf{Name}  &  \textbf{Type}  &  
+    \begin{tabular}[htb]{|l|c|l|l|}\hline
+      \textbf{Name}  &  \textbf{T}  &  
       \textbf{Default}  &  \textbf{Description}  \\\hline
       &  &  &  \\
-      \texttt{useMNC}  &  Logical  & \texttt{.FALSE.}  &  
+      \texttt{useMNC}  &  L  & \texttt{.FALSE.}  &  
       \textbf{overall MNC ON/OFF switch}  \\
-      \texttt{mnc\_echo\_gvtypes}  &  Logical  & \texttt{.FALSE.}  &  
-      echo pre-defined ``types'' to STDOUT?   \\
-      \texttt{mnc\_use\_outdir}  &  Logical  & \texttt{.FALSE.}  &  
-      create a directory for output?  \\
-      \texttt{mnc\_outdir\_str}  &  String  & \texttt{'mnc\_'}  &  
+      \texttt{mnc\_echo\_gvtypes}  &  L  & \texttt{.FALSE.}  &  
+      echo pre-defined ``types'' (debugging)   \\
+      \texttt{mnc\_use\_outdir}  &  L  & \texttt{.FALSE.}  &  
+      create a directory for output  \\
+      \texttt{mnc\_outdir\_str}  &  S  & \texttt{'mnc\_'}  &  
       output directory name \\
-      \texttt{mnc\_outdir\_date}  &  Logical  & \texttt{.FALSE.}  &  
-      embed date in output directory name?  \\
-      \texttt{mnc\_pickup\_write}  &  Logical  & \texttt{.FALSE.}  &  
-      use MNC to write (create) pickup files?  \\
-      \texttt{mnc\_pickup\_read}  &  Logical  & \texttt{.FALSE.}  &  
-      use MNC to read pickup files?  \\
-      \texttt{mnc\_use\_indir}  &  Logical  & \texttt{.FALSE.}  &  
-      use a directory (path) for input?  \\
-      \texttt{mnc\_indir\_str}  &  String  & \texttt{''}  &  
+      \texttt{mnc\_outdir\_date}  &  L  & \texttt{.FALSE.}  &  
+      embed date in the output dir name  \\
+      \texttt{pickup\_write\_mnc}  &  L  & \texttt{.FALSE.}  &  
+      use MNC to write (create) pickup files  \\
+      \texttt{pickup\_read\_mnc}  &  L  & \texttt{.FALSE.}  &  
+      use MNC to read pickup files  \\
+      \texttt{mnc\_use\_indir}  &  L  & \texttt{.FALSE.}  &  
+      use a directory (path) for input  \\
+      \texttt{mnc\_indir\_str}  &  S  & \texttt{''}  &  
       input directory (or path) name  \\
-      \texttt{mnc\_use\_for\_mon}  &  Logical  & \texttt{.FALSE.}  &  
-      write \texttt{monitor} output using MNC?  \\\hline
+      \texttt{snapshot\_mnc}  &  L  & \texttt{.FALSE.}  &  
+      write \texttt{snapshot} (instantaneous) w/MNC  \\
+      \texttt{monitor\_mnc}  &  L  & \texttt{.FALSE.}  &  
+      write \texttt{monitor} w/MNC  \\
+      \texttt{timeave\_mnc}  &  L  & \texttt{.FALSE.}  &  
+      write \texttt{timeave} w/MNC  \\\hline
     \end{tabular}
   }
 \end{center}
 
-%\subsection{Package Reference}
+Additional MNC--related parameters are contained within the main
+\texttt{data} namelist file and in some of the namelist files for
+individual packages.  These options are:
+\begin{center}
+  {\footnotesize
+    \begin{tabular}[htb]{|l|c|l|l|}\hline
+      \textbf{Name}  &  \textbf{T}  &  
+      \textbf{Default}  &  \textbf{Description}  \\\hline
+      \multicolumn{4}{|c|}{\ }  \\
+      \multicolumn{4}{|c|}{Main namelist file: 
+        ``\textbf{data}''}  \\\hline
+      \texttt{snapshot\_ioinc}  &  L  & \texttt{.FALSE.}  &  
+      write \texttt{snapshot} ``inclusively''  \\
+      \texttt{timeave\_ioinc}  &  L  & \texttt{.FALSE.}  &  
+      write \texttt{timeave} ``inclusively''  \\
+      \texttt{monitor\_ioinc}  &  L  & \texttt{.FALSE.}  &  
+      write \texttt{monitor} ``inclusively''  \\\hline
+      \multicolumn{4}{|c|}{\ }  \\
+      \multicolumn{4}{|c|}{Diagnostics namelist file: 
+        ``\textbf{data.diagnostics}''}  \\\hline
+      \texttt{diag\_mnc}  &  L  & \texttt{.FALSE.}  &  
+      write \texttt{diagnostics} w/MNC  \\
+      \texttt{diag\_ioinc}  &  L  & \texttt{.FALSE.}  &  
+      write \texttt{diagnostics} ``inclusively''  \\\hline
+    \end{tabular}
+  }
+\end{center}
 
+By default, turning on MNC for a particular output stream will result
+in turning off all the corresponding (usually, default) MDSIO or
+STDOUT output mechanisms.  In other words, output defaults to being an
+exclusive selection.  To enable multiple kinds of simultaneous output,
+flags of the form \texttt{NAME\_ioinc} can be used where \texttt{NAME}
+corresponds to the various MNC output flags.  When a
+\texttt{NAME\_ioinc} flag is set to \texttt{.TRUE.}, then multiple
+forms of output are allowed for the \texttt{NAME} output mechanism.
+The intent of this design is that typical users will only want one
+kind of output while people debugging the code (particularly the I/O
+routines) may want simultaneous types of output.
+
+This ``inclusive'' versus ``exclusive'' design is easily applied in
+cases where three or more kinds of output may be generated.  Thus, it
+can be readily extended to additional new output types (eg. HDF5).
+
+Input types are always exclusive.
