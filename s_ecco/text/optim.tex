@@ -1,0 +1,240 @@
+\section{The line search optimisation algorithm
+\label{sectionoptim}}
+
+\subsection{General features}
+
+The line search algorithm is based on a quasi-Newton
+variable storage method which was implemented by
+\cite{gil-mar:89}.
+
+TO BE CONTINUED...
+
+\subsection{The online vs. offline version}
+
+\begin{itemize}
+%
+\item {\bf Online version} \\
+Every call to {\it simul} refers to an execution of the 
+forward and adjoint model.
+Several iterations of optimization may thus be performed within
+a single run of the main program (lsopt\_top).
+The following cases may occur:
+%
+\begin{itemize}
+\item
+cold start only (no optimization)
+\item
+cold start, followed by one or several iterations of optimization
+\item
+warm start from previous cold start with one or several iterations
+\item
+warm start from previous warm start with one or several iterations
+\end{itemize}
+%
+\item {\bf Offline version} \\
+Every call to simul refers to a read procedure which
+reads the result of a forward and adjoint run
+Therefore, only one call to simul is allowed,
+                     {\tt itmax = 0}, for cold start
+                     {\tt itmax = 1}, for warm start
+Also, at the end, {\bf x(i+1)} needs to be computed and saved
+to be available for the offline model and adjoint run
+\end{itemize}
+
+In order to achieve minimum difference between the online and offline code
+{\bf xdiff(i+1)} is stored to file at the end of an (offline) iteration,
+but recomputed identically at the beginning of the next iteration.
+
+\subsection{Number of iterations vs. number of simulations}
+
+{\tt - itmax:} controls the max. number of iterations \\
+{\tt - nfunc:} controls the max. number of simulations 
+within one iteration
+
+\paragraph{Summary} ~ \\
+From one iteration to the next the descent direction changes.
+Within one iteration more than one forward and adjoint 
+run may be performed.
+The updated control used as input for these simulations uses the same
+descent direction, but different step sizes.
+
+\paragraph{Description} ~ \\
+From one iteration to the next the descent direction dd changes using
+the result for the adjoint vector gg of the previous iteration.
+In lsline the updated control
+\[
+\tt
+xdiff(i,1) = xx(i-1) + tact(i-1,1)*dd(i-1)
+\]
+serves as input for
+a forward and adjoint model run yielding a new {\tt gg(i,1)}.
+In general, the new solution passes the 1st and 2nd Wolfe tests 
+so {\tt xdiff(i,1)} represents the solution sought:
+\[ 
+{\tt xx(i) = xdiff(i,1)}
+\]
+If one of the two tests fails, 
+an inter- or extrapolation is invoked to determine
+a new step size {\tt tact(i-1,2)}.
+If more than one function call is permitted, 
+the new step size is used together
+with the "old" descent direction {\tt dd(i-1)}
+(i.e. dd is not updated using the new {\tt gg(i)}),
+to compute a new 
+\[
+{\tt xdiff(i,2) = xx(i-1) + tact(i-1,2)*dd(i-1)} 
+\]
+that serves as input
+in a new forward and adjoint run, yielding {\tt gg(i,2)}.
+If now, both Wolfe tests are successfull, 
+the updated solution is given by
+\[
+\tt
+xx(i) = xdiff(i,2) = xx(i-1) + tact(i-1,2)*dd(i-1)
+\]
+
+In order to save memory both the fields dd and xdiff 
+have a double usage.
+%
+\begin{itemize}
+%
+\item [{\tt xdiff}] ~\\
+- in {\it lsopt\_top}: used as {\tt x(i) - x(i-1)} for Hessian update \\
+- in {\it lsline}:    intermediate result for control update 
+{\tt x = x + tact*dd}
+%
+\item [{\tt dd}] ~\\
+- in {\it lsopt\_top, lsline}: descent vector, {\tt dd = -gg} 
+and {\tt hessupd} \\
+- in {\it dgscale}: intermediate result to compute new preconditioner
+%
+\end{itemize}
+
+\paragraph{The parameter file lsopt.par}
+
+%
+\begin{itemize}
+%
+\item {\bf NUPDATE}
+max. no. of update pairs {\tt (gg(i)-gg(i-1), xx(i)-xx(i-1))}
+to be stored in {\tt OPWARMD} to estimate Hessian
+[pair of current iter. is stored in 
+{\tt (2*jmax+2, 2*jmax+3)}
+jmax must be > 0 to access these entries]
+Presently {\tt NUPDATE} must be > 0 
+(i.e. iteration without reference to previous
+ iterations through {\tt OPWARMD} has not been tested)
+%
+\item {\bf EPSX}
+relative precision on xx bellow which xx should not be improved
+%
+\item {\bf EPSG}
+relative precision on gg below which optimization is 
+considered successful
+%
+\item {\bf IPRINT}
+controls verbose (>=1) or non-verbose output
+%
+\item {\bf NUMITER}
+max. number of iterations of optimisation;
+NUMTER = 0: cold start only, no optimization
+%
+\item {\bf ITER\_NUM}
+index of new restart file to be created (not necessarily = NUMITER!)
+%
+\item {\bf NFUNC}
+max. no. of simulations per iteration
+(must be > 0);
+is used if step size {\tt tact} is inter-/extrapolated;
+in this case, if NFUNC > 1, a new simulation is performed with
+same gradient but "improved" step size
+%
+\item {\bf FMIN}
+first guess cost function value
+(only used as long as first iteration not completed,
+i.e. for jmax <= 0)
+%
+\end{itemize}
+
+\paragraph{OPWARMI, OPWARMD files}
+Two files retain values of previous iterations which are
+used in latest iteration to update Hessian:
+\begin{itemize}
+%
+\item {\bf OPWARMI}: contains index settings and scalar variables
+
+{\footnotesize
+\begin{tabular}{ll}
+{\tt n  = nn}      & no. of control variables \\
+{\tt fc = ff}      & cost value of last iteration \\
+{\tt isize}        & no. of bytes per record in OPWARMD \\
+{\tt m = nupdate}  & max. no. of updates for Hessian \\
+{\tt jmin, jmax}   & pointer indices for OPWARMD file (cf. below) \\
+{\tt gnorm0}       & norm of first (cold start) gradient gg \\
+{\tt iabsiter}     & total number of iterations with respect to cold start
+\end{tabular}
+}
+%
+\item {\bf OPWARMD}: contains vectors (control and gradient)
+
+{\scriptsize
+\begin{tabular}{cll}
+entry & name & description \\
+\hline
+     1    & {\tt xx(i)}         & control vector of latest iteration \\
+     2    & {\tt gg(i)}         & gradient of latest iteration \\
+     3    & {\tt xdiff(i),diag} & preconditioning vector; (1,...,1)
+for cold start \\
+ 2*jmax+2 & {\tt gold=g(i)-g(i-1)} & for last update (jmax) \\
+ 2*jmax+3 & {\tt xdiff=tact*d=xx(i)-xx(i-1)} & for last update (jmax)
+\end{tabular}
+}
+%
+\end{itemize}
+%
+\begin{figure}[b!]
+{\footnotesize
+\begin{verbatim}
+
+Example 1: jmin = 1, jmax = 3, mupd = 5
+
+  1   2   3   |   4   5     6   7     8   9     empty     empty
+|___|___|___| | |___|___| |___|___| |___|___| |___|___| |___|___|
+      0       |     1         2         3
+
+Example 2: jmin = 3, jmax = 7, mupd = 5   ---> jmax = 2
+
+  1   2   3   |  
+|___|___|___| | |___|___| |___|___| |___|___| |___|___| |___|___|
+              |     6         7         3         4         5
+
+\end{verbatim}
+}
+\caption{Examples of OPWARM file handling}
+\label{fig:opwarm}
+\end{figure}
+
+\paragraph{Error handling}
+
+
+
+\newpage
+
+\begin{figure}[b!]
+\input{part8/lsopt_flow_1}
+\caption{Flow chart (part 1 of 3)}
+\label{fig:lsoptflow1}
+\end{figure}
+
+\begin{figure}[b!]
+\input{part8/lsopt_flow_2}
+\caption{Flow chart (part 2 of 3)}
+\label{fig:lsoptflow2}
+\end{figure}
+
+\begin{figure}[b!]
+\input{part8/lsopt_flow_3}
+\caption{Flow chart (part 3 of 3)}
+\label{fig:lsoptflow3}
+\end{figure}
+
