@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.21 2004/03/11 16:11:56 edhill Exp $
+% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.22 2004/03/24 20:53:12 edhill Exp $
 % $Name:  $
 
 %\section{Getting started}
@@ -772,6 +772,21 @@ The most important command-line options are:
   the user's path.  When these three items have been identified,
   genmake2 will try to find an optfile that has a matching name.
   
+\item[\texttt{--pdefault='PKG1 PKG2 PKG3 ...'}] specifies the default
+  set of packages to be used.  The normal order of precedence for
+  packages is as follows:
+  \begin{enumerate}
+  \item If available, the command line (\texttt{--pdefault}) settings
+    over-rule any others.
+
+  \item Next, \texttt{genmake2} will look for a file named
+    ``\texttt{packages.conf}'' in the local directory or in any of the
+    directories specified with the \texttt{--mods} option.
+    
+  \item Finally, if neither of the above are available,
+    \texttt{genmake2} will use the \texttt{/pkg/pkg\_default} file.
+  \end{enumerate}
+  
 \item[\texttt{--pdepend=/PATH/FILENAME}] specifies the dependency file
   used for packages.
   
@@ -783,12 +798,6 @@ The most important command-line options are:
   relationship, respectively.  If no rule is specified, then it is
   assumed that the two packages are compatible and will function
   either with or without each other.
-  
-\item[\texttt{--pdefault='PKG1 PKG2 PKG3 ...'}] specifies the default
-  set of packages to be used.
-  
-  If not set, the default package list will be read from {\em
-    pkg/pkg\_default}
   
 \item[\texttt{--adof=/path/to/file}] specifies the "adjoint" or
   automatic differentiation options file to be used.  The file is
