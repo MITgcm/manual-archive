@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.14 2003/07/30 13:42:52 edhill Exp $
+% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.15 2004/01/28 20:50:14 edhill Exp $
 % $Name:  $
 
 %\section{Getting started}
@@ -18,23 +18,34 @@ you are ready to try implementing the configuration you have in mind.
 \section{Where to find information}
 \label{sect:whereToFindInfo}
 
-A web site is maintained for release 1 (Sealion) of MITgcm:
+A web site is maintained for release 2 (``Pelican'') of MITgcm:
+\begin{rawhtml} <A href=http://mitgcm.org/pelican/ target="idontexist"> \end{rawhtml}
 \begin{verbatim}
-http://mitgcm.org/sealion
+http://mitgcm.org/pelican
 \end{verbatim}
+\begin{rawhtml} </A> \end{rawhtml}
 Here you will find an on-line version of this document, a
 ``browsable'' copy of the code and a searchable database of the model
 and site, as well as links for downloading the model and
-documentation, to data-sources and other related sites.
+documentation, to data-sources, and other related sites.
 
-There is also a support news group for the model that you can email at
-\texttt{MITgcm-support@mitgcm.org} or browse at:
+There is also a web-archived support mailing list for the model that
+you can email at \texttt{MITgcm-support@mitgcm.org} or browse at:
+\begin{rawhtml} <A href=http://mitgcm.org/mailman/listinfo/mitgcm-support/ target="idontexist"> \end{rawhtml}
 \begin{verbatim}
-news://mitgcm.org/mitgcm.support
+http://mitgcm.org/mailman/listinfo/mitgcm-support/
+http://mitgcm.org/pipermail/mitgcm-support/
 \end{verbatim}
-A mail to the email list will reach all the developers and be archived
-on the newsgroup. A users email list will be established at some time
-in the future.
+\begin{rawhtml} </A> \end{rawhtml}
+Essentially all of the MITgcm web pages can be searched using a
+popular web crawler such as Google or through our own search facility:
+\begin{verbatim}
+http://mitgcm.org/htdig/
+\end{verbatim}
+\begin{rawhtml} </A> \end{rawhtml}
+%%% http://www.google.com/search?q=hydrostatic+site%3Amitgcm.org
+
+
 
 \section{Obtaining the code}
 \label{sect:obtainingCode}
@@ -72,30 +83,52 @@ provides an efficient and elegant way of organizing your code and keeping
 track of your changes. If CVS is not available on your machine, you can also
 download a tar file.
 
-Before you can use CVS, the following environment variable has to be set in
-your .cshrc or .tcshrc:
+Before you can use CVS, the following environment variable(s) should
+be set within your shell.  For a csh or tcsh shell, put the following 
 \begin{verbatim}
-% setenv CVSROOT :pserver:cvsanon@mitgcm.org:/u/u0/gcmpack
+% setenv CVSROOT :pserver:cvsanon@mitgcm.org:/u/gcmpack
 \end{verbatim}
+in your .cshrc or .tcshrc file.  For bash or sh shells, put:
+\begin{verbatim}
+% export CVSROOT=':pserver:cvsanon@mitgcm.org:/u/gcmpack'
+\end{verbatim}
+in your .profile or .bashrc file.
 
-To start using CVS, register with the MITgcm CVS server using command:
+
+To get MITgcm through CVS, first register with the MITgcm CVS server
+using command:
 \begin{verbatim}
 % cvs login ( CVS password: cvsanon )
 \end{verbatim}
-You only need to do ``cvs login'' once.
+You only need to do a ``cvs login'' once.
 
-To obtain the sources for release1 type:
+To obtain the latest sources type:
+\begin{verbatim}
+% cvs co MITgcm
+\end{verbatim}
+or to get a specific release type:
 \begin{verbatim}
 % cvs co -d directory -P -r release1_beta1 MITgcm
 \end{verbatim}
+The MITgcm web site contains further directions concerning the source
+code and CVS.  It also contains a web interface to our CVS archive so
+that one may easily view the state of files, revisions, and other
+development milestones:
+\begin{rawhtml} <A href=http://mitgcm.org/download target="idontexist"> \end{rawhtml}
+\begin{verbatim}
+http://mitgcm.org/source_code.html
+\end{verbatim}
+\begin{rawhtml} </A> \end{rawhtml}
 
-This creates a directory called \textit{directory}. If \textit{directory}
-exists this command updates your code based on the repository. Each
-directory in the source tree contains a directory \textit{CVS}. This
-information is required by CVS to keep track of your file versions with
-respect to the repository. Don't edit the files in \textit{CVS}!
-You can also use CVS to download code updates.  More extensive
-information on using CVS for maintaining MITgcm code can be found 
+
+The checkout process creates a directory called \textit{MITgcm}. If
+the directory \textit{MITgcm} exists this command updates your code
+based on the repository. Each directory in the source tree contains a
+directory \textit{CVS}. This information is required by CVS to keep
+track of your file versions with respect to the repository. Don't edit
+the files in \textit{CVS}!  You can also use CVS to download code
+updates.  More extensive information on using CVS for maintaining
+MITgcm code can be found
 \begin{rawhtml} <A href=http://mitgcm.org/usingcvstoget.html target="idontexist"> \end{rawhtml}
 here
 \begin{rawhtml} </A> \end{rawhtml} 
@@ -106,7 +139,7 @@ here
 \label{sect:conventionalDownload}
 
 If you do not have CVS on your system, you can download the model as a
-tar file from the reference web site at:
+tar file from the web site at:
 \begin{rawhtml} <A href=http://mitgcm.org/download target="idontexist"> \end{rawhtml}
 \begin{verbatim}
 http://mitgcm.org/download/
@@ -114,7 +147,9 @@ http://mitgcm.org/download/
 \begin{rawhtml} </A> \end{rawhtml}
 The tar file still contains CVS information which we urge you not to
 delete; even if you do not use CVS yourself the information can help
-us if you should need to send us your copy of the code.
+us if you should need to send us your copy of the code.  If a recent
+tar file does not exist, then please contact the developers through
+the MITgcm-support list.
 
 \paragraph*{Upgrading from an earlier version}
 
@@ -124,7 +159,7 @@ your copy instead of downloading the entire repository again. First,
 \begin{verbatim}
 % cd MITgcm
 \end{verbatim}
-and then issue the cvs update command:
+and then issue the cvs update command such as:
 \begin{verbatim}
 % cvs -q update -r release1_beta1 -d -P
 \end{verbatim}
@@ -140,8 +175,8 @@ C model/src/ini_parms.F
 \end{verbatim}
 If the list of conflicts scrolled off the screen, you can re-issue the
 cvs update command and it will report the conflicts. Conflicts are
-indicated in the code by the delimites ``<<<<<<<'', ``======='' and
-``>>>>>>>''. For example,
+indicated in the code by the delimites ``$<<<<<<<$'', ``======='' and
+``$>>>>>>>$''. For example,
 \begin{verbatim}
 <<<<<<< ini_parms.F
      & bottomDragLinear,myOwnBottomDragCoefficient,
@@ -156,7 +191,7 @@ changed to:
 \begin{verbatim}
      & bottomDragLinear,bottomDragQuadratic,myOwnBottomDragCoefficient,
 \end{verbatim}
-and the lines with the delimiters (<<<<<<,======,>>>>>>) be deleted.
+and the lines with the delimiters ($<<<<<<$,======,$>>>>>>$) be deleted.
 Unless you are making modifications which exactly parallel
 developments we make, these types of conflicts should be rare.
 
@@ -223,7 +258,7 @@ relative to the atmospheric intermediate physics. The packages are described
 in detail in section 3.
 
 \item \textit{tools}: this directory contains various useful tools. For
-example, \textit{genmake} is a script written in csh (C-shell) that should
+example, \textit{genmake2} is a script written in csh (C-shell) that should
 be used to generate your makefile. The directory \textit{adjoint} contains
 the makefile specific to the Tangent linear and Adjoint Compiler (TAMC) that
 generates the adjoint code. The latter is described in details in part V.
@@ -243,99 +278,102 @@ section \ref{sect:modelExamples}.
 \section{Example experiments}
 \label{sect:modelExamples}
 
-The MITgcm distribution comes with a set of twenty-four pre-configured
-numerical experiments. Some of these examples experiments are tests of 
-individual parts of the model code, but many are fully fledged numerical
-simulations. A few of the examples are used for tutorial documentation
-in sections \ref{sect:eg-baro} - \ref{sect:eg-global}. The other examples
-follow the same general structure as the tutorial examples. However,
-they only include brief instructions in a text file called {\it README}.
-The examples are located in subdirectories under
-the directory \textit{verification}. Each
-example is briefly described below.
+%% a set of twenty-four pre-configured numerical experiments
+
+The MITgcm distribution comes with more than a dozen pre-configured
+numerical experiments. Some of these example experiments are tests of
+individual parts of the model code, but many are fully fledged
+numerical simulations. A few of the examples are used for tutorial
+documentation in sections \ref{sect:eg-baro} - \ref{sect:eg-global}.
+The other examples follow the same general structure as the tutorial
+examples. However, they only include brief instructions in a text file
+called {\it README}.  The examples are located in subdirectories under
+the directory \textit{verification}. Each example is briefly described
+below.
 
 \subsection{Full list of model examples}
 
 \begin{enumerate}
 \item \textit{exp0} - single layer, ocean double gyre (barotropic with
-free-surface). This experiment is described in detail in section
-\ref{sect:eg-baro}.
+  free-surface). This experiment is described in detail in section
+  \ref{sect:eg-baro}.
 
-\item \textit{exp1} - Four layer, ocean double gyre. This experiment is described in detail in section
-\ref{sect:eg-baroc}.
-
+\item \textit{exp1} - Four layer, ocean double gyre. This experiment
+  is described in detail in section \ref{sect:eg-baroc}.
+  
 \item \textit{exp2} - 4x4 degree global ocean simulation with steady
-climatological forcing. This experiment is described in detail in section
-\ref{sect:eg-global}.
-
-\item \textit{exp4} - Flow over a Gaussian bump in open-water or channel
-with open boundaries.
-
-\item \textit{exp5} - Inhomogenously forced ocean convection in a doubly
-periodic box.
+  climatological forcing. This experiment is described in detail in
+  section \ref{sect:eg-global}.
+  
+\item \textit{exp4} - Flow over a Gaussian bump in open-water or
+  channel with open boundaries.
+  
+\item \textit{exp5} - Inhomogenously forced ocean convection in a
+  doubly periodic box.
 
 \item \textit{front\_relax} - Relaxation of an ocean thermal front (test for
 Gent/McWilliams scheme). 2D (Y-Z).
 
-\item \textit{internal wave} - Ocean internal wave forced by open boundary
-conditions.
-
+\item \textit{internal wave} - Ocean internal wave forced by open
+  boundary conditions.
+  
 \item \textit{natl\_box} - Eastern subtropical North Atlantic with KPP
-scheme; 1 month integration
-
-\item \textit{hs94.1x64x5} - Zonal averaged atmosphere using Held and Suarez
-'94 forcing.
-
-\item \textit{hs94.128x64x5} - 3D atmosphere dynamics using Held and Suarez
-'94 forcing.
-
+  scheme; 1 month integration
+  
+\item \textit{hs94.1x64x5} - Zonal averaged atmosphere using Held and
+  Suarez '94 forcing.
+  
+\item \textit{hs94.128x64x5} - 3D atmosphere dynamics using Held and
+  Suarez '94 forcing.
+  
 \item \textit{hs94.cs-32x32x5} - 3D atmosphere dynamics using Held and
-Suarez '94 forcing on the cubed sphere.
-
-\item \textit{aim.5l\_zon-ave} - Intermediate Atmospheric physics. Global 
-Zonal Mean configuration, 1x64x5 resolution.
-
-\item \textit{aim.5l\_XZ\_Equatorial\_Slice} - Intermediate Atmospheric
-physics, equatorial Slice configuration.
-2D (X-Z).
-
+  Suarez '94 forcing on the cubed sphere.
+  
+\item \textit{aim.5l\_zon-ave} - Intermediate Atmospheric physics.
+  Global Zonal Mean configuration, 1x64x5 resolution.
+  
+\item \textit{aim.5l\_XZ\_Equatorial\_Slice} - Intermediate
+  Atmospheric physics, equatorial Slice configuration.  2D (X-Z).
+  
 \item \textit{aim.5l\_Equatorial\_Channel} - Intermediate Atmospheric
-physics. 3D Equatorial Channel configuration.
-
+  physics. 3D Equatorial Channel configuration.
+  
 \item \textit{aim.5l\_LatLon} - Intermediate Atmospheric physics.
-Global configuration, on latitude longitude grid with 128x64x5 grid points
-($2.8^\circ{\rm degree}$ resolution).
-
-\item \textit{adjustment.128x64x1} Barotropic adjustment
-problem on latitude longitude grid with 128x64 grid points ($2.8^\circ{\rm degree}$ resolution).
-
-\item \textit{adjustment.cs-32x32x1}
-Barotropic adjustment
-problem on cube sphere grid with 32x32 points per face ( roughly
-$2.8^\circ{\rm degree}$ resolution).
-
+  Global configuration, on latitude longitude grid with 128x64x5 grid
+  points ($2.8^\circ{\rm degree}$ resolution).
+  
+\item \textit{adjustment.128x64x1} Barotropic adjustment problem on
+  latitude longitude grid with 128x64 grid points ($2.8^\circ{\rm
+    degree}$ resolution).
+  
+\item \textit{adjustment.cs-32x32x1} Barotropic adjustment problem on
+  cube sphere grid with 32x32 points per face ( roughly $2.8^\circ{\rm
+    degree}$ resolution).
+  
 \item \textit{advect\_cs} Two-dimensional passive advection test on
-cube sphere grid.
-
-\item \textit{advect\_xy} Two-dimensional (horizontal plane) passive advection 
-test on Cartesian grid.
-
-\item \textit{advect\_yz} Two-dimensional (vertical plane) passive advection test on Cartesian grid.
-
-\item \textit{carbon} Simple passive tracer experiment. Includes derivative
-calculation. Described in detail in section \ref{sect:eg-carbon-ad}.
+  cube sphere grid.
+  
+\item \textit{advect\_xy} Two-dimensional (horizontal plane) passive
+  advection test on Cartesian grid.
+  
+\item \textit{advect\_yz} Two-dimensional (vertical plane) passive
+  advection test on Cartesian grid.
+  
+\item \textit{carbon} Simple passive tracer experiment. Includes
+  derivative calculation. Described in detail in section
+  \ref{sect:eg-carbon-ad}.
 
 \item \textit{flt\_example} Example of using float package.
-
-\item \textit{global\_ocean.90x40x15} Global circulation with
-GM, flux boundary conditions and poles.
+  
+\item \textit{global\_ocean.90x40x15} Global circulation with GM, flux
+  boundary conditions and poles.
 
 \item \textit{global\_ocean\_pressure} Global circulation in pressure
   coordinate (non-Boussinesq ocean model). Described in detail in
   section \ref{sect:eg-globalpressure}.
-
-\item \textit{solid-body.cs-32x32x1} Solid body rotation test for cube sphere
-grid.
+  
+\item \textit{solid-body.cs-32x32x1} Solid body rotation test for cube
+  sphere grid.
 
 \end{enumerate}
 
@@ -348,35 +386,37 @@ Each example directory has the following subdirectories:
 minimum, this directory includes the following files:
 
 \begin{itemize}
-\item \textit{code/CPP\_EEOPTIONS.h}: declares CPP keys relative to the
-``execution environment'' part of the code. The default version is located
-in \textit{eesupp/inc}.
-
+\item \textit{code/CPP\_EEOPTIONS.h}: declares CPP keys relative to
+  the ``execution environment'' part of the code. The default version
+  is located in \textit{eesupp/inc}.
+  
 \item \textit{code/CPP\_OPTIONS.h}: declares CPP keys relative to the
-``numerical model'' part of the code. The default version is located in 
-\textit{model/inc}.
-
-\item \textit{code/SIZE.h}: declares size of underlying computational grid.
-The default version is located in \textit{model/inc}.
+  ``numerical model'' part of the code. The default version is located
+  in \textit{model/inc}.
+  
+\item \textit{code/SIZE.h}: declares size of underlying computational
+  grid.  The default version is located in \textit{model/inc}.
 \end{itemize}
 
-In addition, other include files and subroutines might be present in \textit{%
-code} depending on the particular experiment. See section 2 for more details.
+In addition, other include files and subroutines might be present in
+\textit{code} depending on the particular experiment. See Section 2
+for more details.
 
-\item \textit{input}: contains the input data files required to run the
-example. At a minimum, the \textit{input} directory contains the following
-files:
+\item \textit{input}: contains the input data files required to run
+  the example. At a minimum, the \textit{input} directory contains the
+  following files:
 
 \begin{itemize}
-\item \textit{input/data}: this file, written as a namelist, specifies the
-main parameters for the experiment.
-
-\item \textit{input/data.pkg}: contains parameters relative to the packages
-used in the experiment.
-
-\item \textit{input/eedata}: this file contains ``execution environment''
-data. At present, this consists of a specification of the number of threads
-to use in $X$ and $Y$ under multithreaded execution.
+\item \textit{input/data}: this file, written as a namelist, specifies
+  the main parameters for the experiment.
+  
+\item \textit{input/data.pkg}: contains parameters relative to the
+  packages used in the experiment.
+  
+\item \textit{input/eedata}: this file contains ``execution
+  environment'' data. At present, this consists of a specification of
+  the number of threads to use in $X$ and $Y$ under multithreaded
+  execution.
 \end{itemize}
 
 In addition, you will also find in this directory the forcing and topography
