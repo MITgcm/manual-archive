@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_overview/Attic/appendix_atmos.tex,v 1.1.1.1 2001/08/08 16:16:18 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_overview/Attic/appendix_atmos.tex,v 1.2 2001/09/11 14:34:38 cnh Exp $
 % $Name:  $
 
 \section{Appendix ATMOSPHERE}
@@ -12,12 +12,13 @@ The hydrostatic primitive equations (HPEs) in p-coordinates are:
 \begin{eqnarray}
 \frac{D\vec{\mathbf{v}}_{h}}{Dt}+f\hat{\mathbf{k}}\times \vec{\mathbf{v}}%
 _{h}+\mathbf{\nabla }_{p}\phi &=&\vec{\mathbf{\mathcal{F}}}
-\label{eq-p-hmom-start} \\
+\label{eq:atmos-mom} \\
 \frac{\partial \phi }{\partial p}+\alpha &=&0  \label{eq-p-hydro-start} \\
 \mathbf{\nabla }_{p}\cdot \vec{\mathbf{v}}_{h}+\frac{\partial \omega }{%
-\partial p} &=&0  \label{eq-p-cont-start} \\
-p\alpha &=&RT  \label{eq-p-eos-start} \\
-c_{v}\frac{DT}{Dt}+p\frac{D\alpha }{Dt} &=&\mathcal{Q}  \label{eq-p-firstlaw}
+\partial p} &=&0  \label{eq:atmos-cont} \\
+p\alpha &=&RT  \label{eq:atmos-eos} \\
+c_{v}\frac{DT}{Dt}+p\frac{D\alpha }{Dt} &=&\mathcal{Q}  
+\label{eq:atmos-heat}
 \end{eqnarray}
 where $\vec{\mathbf{v}}_{h}=(u,v,0)$ is the `horizontal' (on pressure
 surfaces) component of velocity,$\frac{D}{Dt}=\vec{\mathbf{v}}_{h}\cdot 
@@ -43,7 +44,7 @@ c_{p}\frac{DT}{Dt}-\alpha \frac{Dp}{Dt}=\mathcal{Q}
 \end{equation}
 Potential temperature is defined: 
 \begin{equation}
-\theta =T(\frac{p_{c}}{p})^{\kappa }  \label{eq-potential-temp}
+\theta =T(\frac{p_{c}}{p})^{\kappa }  \label{eq:potential-temp}
 \end{equation}
 where $p_{c}$ is a reference pressure and $\kappa =R/c_{p}$. For convenience
 we will make use of the Exner function $\Pi (p)$ which defined by: 
@@ -67,7 +68,7 @@ c_{p}\frac{DT}{Dt}=\frac{D(\Pi \theta )}{Dt}=\Pi \frac{D\theta }{Dt}+\theta
 \]
 and on substituting into (\ref{eq-p-heat-interim}) gives: 
 \begin{equation}
-\Pi \frac{D\theta }{Dt}=\mathcal{Q}  \label{theta-equation}
+\Pi \frac{D\theta }{Dt}=\mathcal{Q}  \label{eq:potential-temperature-equation}
 \end{equation}
 which is in conservative form.
 
@@ -80,6 +81,7 @@ The upper and lower boundary conditions are :
 \begin{eqnarray*}
 \mbox{at the top:}\;\;p=0 &&\text{, }\omega =\frac{Dp}{Dt}=0 \\
 \mbox{at the surface:}\;\;p=p_{s} &&\text{, }\phi =\phi _{topo}=g~Z_{topo}
+\label{eq:boundary-condition-atmosphere}
 \end{eqnarray*}
 In $p$-coordinates, the upper boundary acts like a solid boundary ($\omega
 =0 $); in $z$-coordinates and the lower boundary is analogous to a free
@@ -94,9 +96,9 @@ is not dynamically relevant and can therefore be subtracted from the
 equations. The equations written in terms of perturbations are obtained by
 substituting the following definitions into the previous model equations: 
 \begin{eqnarray*}
-\theta &=&\theta _{o}+\theta ^{\prime } \\
-\alpha &=&\alpha _{o}+\alpha ^{\prime } \\
-\phi &=&\phi _{o}+\phi ^{\prime }
+\theta &=&\theta _{o}+\theta ^{\prime } \label{eq:atmos-ref-prof-theta} \\
+\alpha &=&\alpha _{o}+\alpha ^{\prime }  \label{eq:atmos-ref-prof-alpha}\\
+\phi &=&\phi _{o}+\phi ^{\prime } \label{eq:atmos-ref-prof-phi}
 \end{eqnarray*}
 The reference state (indicated by subscript ``0'') corresponds to
 horizontally homogeneous atmosphere at rest ($\theta _{o},\alpha _{o},\phi
@@ -116,12 +118,12 @@ The final form of the HPE's in p coordinates is then:
 \begin{eqnarray}
 \frac{D\vec{\mathbf{v}}_{h}}{Dt}+f\hat{\mathbf{k}}\times \vec{\mathbf{v}}%
 _{h}+\mathbf{\nabla }_{p}\phi ^{\prime } &=&\vec{\mathbf{\mathcal{F}}}
-\label{eq-p-hmom} \\
+                  \\
 \frac{\partial \phi ^{\prime }}{\partial p}+\alpha ^{\prime } &=&0
-\label{eq-p-hydro} \\
+                   \\
 \mathbf{\nabla }_{p}\cdot \vec{\mathbf{v}}_{h}+\frac{\partial \omega }{%
-\partial p} &=&0  \label{eq-p-cont} \\
+\partial p} &=&0                    \\
 \frac{\partial \Pi }{\partial p}\theta ^{\prime } &=&\alpha ^{\prime }
-\label{eq-p-eos} \\
-\frac{D\theta }{Dt} &=&\frac{\mathcal{Q}}{\Pi }  \label{eq-p-heat}
+                  \
+\frac{D\theta }{Dt} &=&\frac{\mathcal{Q}}{\Pi }  \label{eq:atmos-prime}
 \end{eqnarray}
