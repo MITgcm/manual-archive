@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/Attic/mnc.tex,v 1.6 2004/02/13 21:35:59 edhill Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/Attic/mnc.tex,v 1.7 2004/04/02 15:56:02 edhill Exp $
 % $Name:  $
 
 \section{NetCDF I/O Integration: MNC}
@@ -99,8 +99,8 @@ where the terms \textit{H0}, \textit{H1}, \textit{H2}, \textit{V},
 \begin{center}
   \begin{tabular}[h]{|ccc|c|c|}\hline
     \multicolumn{3}{|c|}{Horizontal} & Vertical & Time \\
-    \textit{H0}: location & \textit{H1}: dimensions & \textit{H2}: halo 
-          & \textit{V}: location & \textit{T}: level  \\\hline
+    \textbf{H0}: location & \textbf{H1}: dimensions & \textbf{H2}: halo 
+          & \textbf{V}: location & \textbf{T}: level  \\\hline
     \texttt{-} & xy & Hn & \texttt{-} & \texttt{-} \\
     U  &  x  &  Hy  &  i  &  t  \\
     V  &  y  &      &  c  &     \\
@@ -113,6 +113,18 @@ file
 \begin{center}
   \texttt{pkg/mnc/pre-defined\_grids.txt}.
 \end{center}
+
+The variable type is an association between a variable type name and the
+following items:
+\begin{center}
+  \begin{tabular}[h]{|ll|}\hline
+    \textbf{Item}  & \textbf{Purpose}  \\\hline
+    grid type  &  defines the in-memory arrangement  \\
+    \texttt{bi,bj} dimensions  &  tiling indices, if present  \\\hline
+  \end{tabular}
+\end{center}
+and is used by the \texttt{mnc\_cw\_*\_[R|W]} subroutines for reading
+and writing variables.
 
 
 \subsubsection{An Example}
