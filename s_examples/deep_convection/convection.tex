@@ -290,19 +290,19 @@ For each depth level the initial and reference profiles will be uniform in
 $x$ and $y$. The values specified are read into the
 variable 
 {\bf 
-\begin{rawhtml} <A href=../../../code_reference/vdb/names/OK.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/names/OK.htm> \end{rawhtml}
 tRef
 \begin{rawhtml} </A>\end{rawhtml}
 } 
 in the model code, by procedure 
 {\it
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
 S/R INI\_PARMS ({\it ini\_parms.F})
 \begin{rawhtml} </A>\end{rawhtml}.
 }
 The temperature field is initialised, by procedure 
 {\it
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/OK.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/OK.htm> \end{rawhtml}
 S/R INI\_THETA ({\it ini\_theta.F})
 \begin{rawhtml} </A>\end{rawhtml}.
 }
@@ -320,19 +320,19 @@ tracer. For each depth level the initial and reference profiles will be uniform 
 $x$ and $y$. The values specified are read into the
 variable 
 {\bf
-\begin{rawhtml} <A href=../../../code_reference/vdb/names/OK.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/names/OK.htm> \end{rawhtml}
 sRef
 \begin{rawhtml} </A>\end{rawhtml}
 } 
 in the model code, by procedure 
 {\it
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
 S/R INI\_PARMS ({\it ini\_parms.F})
 }
 \begin{rawhtml} </A>\end{rawhtml}.
 The salinity field is initialised, by procedure 
 {\it
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/OK.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/OK.htm> \end{rawhtml}
 S/R INI\_SALT ({\it ini\_salt.F})
 \begin{rawhtml} </A>\end{rawhtml}.
 }
@@ -347,23 +347,23 @@ this line sets the horizontal laplacian dissipation coefficient to
 for this operator are specified later. 
 The variable 
 {\bf 
-\begin{rawhtml} <A href=../../../code_reference/vdb/names/SI.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/names/SI.htm> \end{rawhtml}
 viscAh
 \begin{rawhtml} </A>\end{rawhtml}
 }
 is read in the routine
 {\it
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
 S/R INI\_PARMS ({\it ini\_params.F})
 \begin{rawhtml} </A>\end{rawhtml}
 } and applied in routines 
 {\it 
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
 S/R CALC\_MOM\_RHS ({\it calc\_mom\_rhs.F})
 \begin{rawhtml} </A>\end{rawhtml}
 } and 
 {\it 
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
 S/R CALC\_GW ({\it calc\_gw.F})
 \begin{rawhtml} </A>\end{rawhtml}
 }.
@@ -378,25 +378,25 @@ this line sets the vertical laplacian frictional dissipation coefficient to
 for this operator are specified later.
 The variable 
 {\bf 
-\begin{rawhtml} <A href=../../../code_reference/vdb/names/ZQ.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/names/ZQ.htm> \end{rawhtml}
 viscAz
 \begin{rawhtml} </A>\end{rawhtml}
 }
 is read in the routine
 {\it
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
 S/R INI\_PARMS ({\it ini\_parms.F})
 \begin{rawhtml} </A>\end{rawhtml}
 }
 and is copied into model general vertical coordinate variable 
 {\bf 
-\begin{rawhtml} <A href=../../../code_reference/vdb/names/PF.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/names/PF.htm> \end{rawhtml}
 viscAr
 \begin{rawhtml} </A>\end{rawhtml}
 }. At each time step, the viscous term contribution to the momentum equations
 is calculated in routine
 {\it 
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
 S/R CALC\_DIFFUSIVITY ({\it calc\_diffusivity.F})
 \begin{rawhtml} </A>\end{rawhtml}
 }.
@@ -412,18 +412,18 @@ e.g. $\frac{\partial u}{\partial y}$=0 along boundaries in $y$ and
 $\frac{\partial v}{\partial x}$=0 along boundaries in $x$.
 The variable
 {\bf
-\begin{rawhtml} <A href=../../../code_reference/vdb/names/UT.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/names/UT.htm> \end{rawhtml}
 no\_slip\_sides
 \begin{rawhtml} </A>\end{rawhtml}
 }
 is read in the routine
 {\it
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
 S/R INI\_PARMS ({\it ini\_parms.F})
 \begin{rawhtml} </A>\end{rawhtml}
 } and the boundary condition is evaluated in routine
 {\it 
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
 S/R CALC\_MOM\_RHS ({\it calc\_mom\_rhs.F})
 \begin{rawhtml} </A>\end{rawhtml}
 }.
@@ -438,18 +438,18 @@ boundary condition in the vertical laplacian friction operator
 e.g. $u=v=0$ at $z=-H$, where $H$ is the local depth of the domain.
 The variable
 {\bf
-\begin{rawhtml} <A href=../../../code_reference/vdb/names/UK.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/names/UK.htm> \end{rawhtml}
 no\_slip\_bottom
 \begin{rawhtml} </A>\end{rawhtml}
 }
 is read in the routine
 {\it
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
 S/R INI\_PARMS ({\it ini\_parms.F})
 \begin{rawhtml} </A>\end{rawhtml}
 } and is applied in the routine 
 {\it 
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
 S/R CALC\_MOM\_RHS ({\it calc\_mom\_rhs.F})
 \begin{rawhtml} </A>\end{rawhtml}
 }.
@@ -464,18 +464,18 @@ operator is $\frac{\partial}{\partial x}=\frac{\partial}{\partial y}=0$ at
 all boundaries.
 The variable
 {\bf
-\begin{rawhtml} <A href=../../../code_reference/vdb/names/RC.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/names/RC.htm> \end{rawhtml}
 diffKhT
 \begin{rawhtml} </A>\end{rawhtml}
 }
 is read in the routine
 {\it
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
 S/R INI\_PARMS ({\it ini\_parms.F})
 \begin{rawhtml} </A>\end{rawhtml}
 } and used in routine 
 {\it
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
 S/R CALC\_GT ({\it calc\_gt.F})
 \begin{rawhtml} </A>\end{rawhtml}
 }.
@@ -489,24 +489,24 @@ to 0.1 ${\rm m^{2}s^{-1}}$. The boundary condition on this
 operator is $\frac{\partial}{\partial z}$ = 0 on all boundaries.
 The variable
 {\bf
-\begin{rawhtml} <A href=../../../code_reference/vdb/names/ZT.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/names/ZT.htm> \end{rawhtml}
 diffKzT
 \begin{rawhtml} </A>\end{rawhtml}
 }
 is read in the routine
 {\it
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
 S/R INI\_PARMS ({\it ini\_parms.F})
 \begin{rawhtml} </A>\end{rawhtml}
 }.
 It is copied into model general vertical coordinate variable
 {\bf
-\begin{rawhtml} <A href=../../../code_reference/vdb/names/PD.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/names/PD.htm> \end{rawhtml}
 diffKrT
 \begin{rawhtml} </A>\end{rawhtml}
 } which is used in routine 
 {\it 
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
 S/R CALC\_DIFFUSIVITY ({\it calc\_diffusivity.F})
 \begin{rawhtml} </A>\end{rawhtml}
 }.
@@ -522,18 +522,18 @@ operator is $\frac{\partial}{\partial x}=\frac{\partial}{\partial y}=0$ on
 all boundaries.
 The variable
 {\bf
-\begin{rawhtml} <A href=../../../code_reference/vdb/names/RC.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/names/RC.htm> \end{rawhtml}
 diffKsT
 \begin{rawhtml} </A>\end{rawhtml}
 }
 is read in the routine
 {\it
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
 S/R INI\_PARMS ({\it ini\_parms.F})
 \begin{rawhtml} </A>\end{rawhtml}
 } and used in routine 
 {\it
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
 S/R CALC\_GS ({\it calc\_gs.F})
 \begin{rawhtml} </A>\end{rawhtml}
 }.
@@ -548,24 +548,24 @@ to 0.1 ${\rm m^{2}s^{-1}}$. The boundary condition on this
 operator is $\frac{\partial}{\partial z}$ = 0 on all boundaries.
 The variable
 {\bf
-\begin{rawhtml} <A href=../../../code_reference/vdb/names/ZT.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/names/ZT.htm> \end{rawhtml}
 diffKzS
 \begin{rawhtml} </A>\end{rawhtml}
 }
 is read in the routine
 {\it
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
 S/R INI\_PARMS ({\it ini\_parms.F})
 \begin{rawhtml} </A>\end{rawhtml}
 }.
 It is copied into model general vertical coordinate variable
 {\bf
-\begin{rawhtml} <A href=../../../code_reference/vdb/names/PD.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/names/PD.htm> \end{rawhtml}
 diffKrS
 \begin{rawhtml} </A>\end{rawhtml}
 } which is used in routine 
 {\it 
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
 S/R CALC\_DIFFUSIVITY ({\it calc\_diffusivity.F})
 \begin{rawhtml} </A>\end{rawhtml}
 }.
@@ -594,19 +594,19 @@ This line sets the thermal expansion coefficient for the fluid
 to $2 \times 10^{-4}$ $^o$ C$^{-1}$.
 The variable
 {\bf
-\begin{rawhtml} <A href=../../../code_reference/vdb/names/ZV.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/names/ZV.htm> \end{rawhtml}
 tAlpha 
 \begin{rawhtml} </A>\end{rawhtml}
 }
 is read in the routine
 {\it
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
 S/R INI\_PARMS ({\it ini\_parms.F})
 \begin{rawhtml} </A>\end{rawhtml}
 }. 
 The routine 
 {\it
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
 S/R FIND\_RHO ({\it find\_rho.F})
 \begin{rawhtml} </A>\end{rawhtml}
 } makes use of {\bf tAlpha}.
@@ -672,7 +672,7 @@ This line sets the  maximum number of iterations the three-dimensional, conjugat
 gradient solver will use to 40, {\bf irrespective of the convergence 
 criteria being met}. Used in routine
 {\it
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
 S/R CG3D ({\it cg3d.F})
 \begin{rawhtml} </A>\end{rawhtml}
 }. 
@@ -690,7 +690,7 @@ The solver will iterate until the
 tolerance falls below this value or until the maximum number of
 solver iterations is reached. Used in routine
 {\it
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
 S/R CG3D ({\it cg3d.F})
 \begin{rawhtml} </A>\end{rawhtml}
 }. 
@@ -759,19 +759,19 @@ to high coordinate for both axes. The matlab program
 surface heat flux file used in the example. 
 The variable
 {\bf
-\begin{rawhtml} <A href=../../../code_reference/vdb/names/179.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/names/179.htm> \end{rawhtml}
 Qsurf 
 \begin{rawhtml} </A>\end{rawhtml}
 }
 is read in the routine
 {\it
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
 S/R INI\_PARMS ({\it ini\_parms.F})
 \begin{rawhtml} </A>\end{rawhtml}
 }
 and applied in  
 {\it
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
 S/R EXTERNAL\_FORCING\_SURF ({\it external\_forcing\_surf.F})
 \begin{rawhtml} </A>\end{rawhtml}
 } where the flux is converted to a temperature tendency.

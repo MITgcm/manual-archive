@@ -28,7 +28,7 @@ generate_latest_manual.sh  - This is coded for running on twain.lcs.mit.edu, whi
 Adding subjects to the mailto: ref.
 ===================================
 make_mail_subjects.sh   - Find mailto: block and substitutes a javascript block for
-make_mail_subjects.awk    mailto:support@mitgcm.org?subject=....
+make_mail_subjects.awk    mailto:MITgcm-support@mitgcm.org?subject=....
                           where subject is the files TITLE block.
 
 Finding figures and making substitutions in l2h output

@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_examples/baroclinic_gyre/fourlayer.tex,v 1.13 2002/05/16 15:54:37 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_examples/baroclinic_gyre/fourlayer.tex,v 1.14 2003/07/30 13:42:53 edhill Exp $
 % $Name:  $
 
 \section{Four Layer Baroclinic Ocean Gyre In Spherical Coordinates}
@@ -383,13 +383,13 @@ depth level the initial and reference profiles will be uniform in
 $x$ and $y$. The values specified here are read into the
 variable 
 {\bf
-\begin{rawhtml} <A href=../../../code_reference/vdb/names/OK.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/names/OK.htm> \end{rawhtml}
 tRef
 \begin{rawhtml} </A>\end{rawhtml}
 } 
 in the model code, by procedure 
 {\it
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
 INI\_PARMS
 \begin{rawhtml} </A>\end{rawhtml}
 }.
@@ -402,7 +402,7 @@ INI\_PARMS
 %% \file{ini_parms}
 \newcommand{\VARtref}{
 {\bf
-\begin{rawhtml} <A href=../../../code_reference/vdb/names/OK.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/names/OK.htm> \end{rawhtml}
 tRef
 \begin{rawhtml} </A>\end{rawhtml}
 } 
@@ -417,7 +417,7 @@ tRef
 \end{minipage}
 }
 {\bf
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/98.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/98.htm> \end{rawhtml}
 goto code
 \begin{rawhtml} </A>\end{rawhtml}
 }
@@ -430,19 +430,19 @@ $1 \times 10^{-2} {\rm m^{2}s^{-1}}$. Boundary conditions
 for this operator are specified later. 
 The variable 
 {\bf 
-\begin{rawhtml} <A href=../../../code_reference/vdb/names/ZQ.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/names/ZQ.htm> \end{rawhtml}
 viscAz
 \begin{rawhtml} </A>\end{rawhtml}
 }
 is read in the routine
 {\it
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
 INI\_PARMS
 \begin{rawhtml} </A>\end{rawhtml}
 }
 and is copied into model general vertical coordinate variable 
 {\bf 
-\begin{rawhtml} <A href=../../../code_reference/vdb/names/PF.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/names/PF.htm> \end{rawhtml}
 viscAr
 \begin{rawhtml} </A>\end{rawhtml}
 }. At each time step, the viscous term contribution to the momentum equations
@@ -455,7 +455,7 @@ is calculated in routine
 \end{minipage}
 }
 {\bf
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/53.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/53.htm> \end{rawhtml}
 goto code
 \begin{rawhtml} </A>\end{rawhtml}
 }
@@ -469,13 +469,13 @@ $1 \times 10^{-2} {\rm m^{2}s^{-1}}$. Boundary conditions
 for this operator are specified later.
 The variable 
 {\bf 
-\begin{rawhtml} <A href=../../../code_reference/vdb/names/SI.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/names/SI.htm> \end{rawhtml}
 viscAh
 \begin{rawhtml} </A>\end{rawhtml}
 }
 is read in the routine
 {\it
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
 INI\_PARMS
 \begin{rawhtml} </A>\end{rawhtml}
 } and applied in routines {\it CALC\_MOM\_RHS} and {\it CALC\_GW}.
@@ -486,7 +486,7 @@ INI\_PARMS
 \end{minipage}
 }
 {\bf
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/60.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/60.htm> \end{rawhtml}
 goto code
 \begin{rawhtml} </A>\end{rawhtml}
 }
@@ -497,7 +497,7 @@ goto code
 \end{minipage}
 }
 {\bf
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/58.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/58.htm> \end{rawhtml}
 goto code
 \begin{rawhtml} </A>\end{rawhtml}
 }
@@ -512,13 +512,13 @@ e.g. $\frac{\partial u}{\partial y}$=0 along boundaries in $y$ and
 $\frac{\partial v}{\partial x}$=0 along boundaries in $x$.
 The variable
 {\bf
-\begin{rawhtml} <A href=../../../code_reference/vdb/names/UT.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/names/UT.htm> \end{rawhtml}
 no\_slip\_sides
 \begin{rawhtml} </A>\end{rawhtml}
 }
 is read in the routine
 {\it
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
 INI\_PARMS
 \begin{rawhtml} </A>\end{rawhtml}
 } and the boundary condition is evaluated in routine
@@ -531,7 +531,7 @@ INI\_PARMS
 \end{minipage}
 }
 {\bf
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/60.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/60.htm> \end{rawhtml}
 goto code
 \begin{rawhtml} </A>\end{rawhtml}
 }
@@ -545,13 +545,13 @@ boundary condition in the vertical laplacian friction operator
 e.g. $u=v=0$ at $z=-H$, where $H$ is the local depth of the domain.
 The variable
 {\bf
-\begin{rawhtml} <A href=../../../code_reference/vdb/names/UK.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/names/UK.htm> \end{rawhtml}
 no\_slip\_bottom
 \begin{rawhtml} </A>\end{rawhtml}
 }
 is read in the routine
 {\it
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
 INI\_PARMS
 \begin{rawhtml} </A>\end{rawhtml}
 } and is applied in the routine {\it S/R CALC\_MOM\_RHS}.
@@ -562,7 +562,7 @@ INI\_PARMS
 \end{minipage}
 }
 {\bf
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/60.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/60.htm> \end{rawhtml}
 goto code
 \begin{rawhtml} </A>\end{rawhtml}
 }
@@ -577,13 +577,13 @@ operator is $\frac{\partial}{\partial x}=\frac{\partial}{\partial y}=0$ at
 all boundaries.
 The variable
 {\bf
-\begin{rawhtml} <A href=../../../code_reference/vdb/names/RC.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/names/RC.htm> \end{rawhtml}
 diffKhT
 \begin{rawhtml} </A>\end{rawhtml}
 }
 is read in the routine
 {\it
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
 INI\_PARMS
 \begin{rawhtml} </A>\end{rawhtml}
 } and used in routine {\it S/R CALC\_GT}.
@@ -593,7 +593,7 @@ INI\_PARMS
 \end{minipage}
 }
 {\bf
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/57.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/57.htm> \end{rawhtml}
 goto code
 \begin{rawhtml} </A>\end{rawhtml}
 }
@@ -607,19 +607,19 @@ to $10^{-2}\,{\rm m^{2}s^{-1}}$. The boundary condition on this
 operator is $\frac{\partial}{\partial z}$ = 0 on all boundaries.
 The variable
 {\bf
-\begin{rawhtml} <A href=../../../code_reference/vdb/names/ZT.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/names/ZT.htm> \end{rawhtml}
 diffKzT
 \begin{rawhtml} </A>\end{rawhtml}
 }
 is read in the routine
 {\it
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
 INI\_PARMS
 \begin{rawhtml} </A>\end{rawhtml}
 }.
 It is copied into model general vertical coordinate variable
 {\bf
-\begin{rawhtml} <A href=../../../code_reference/vdb/names/PD.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/names/PD.htm> \end{rawhtml}
 diffKrT
 \begin{rawhtml} </A>\end{rawhtml}
 } which is used in routine {\it S/R CALC\_DIFFUSIVITY}.
@@ -629,7 +629,7 @@ diffKrT
 \end{minipage}
 }
 {\bf
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/53.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/53.htm> \end{rawhtml}
 goto code
 \begin{rawhtml} </A>\end{rawhtml}
 }
@@ -644,13 +644,13 @@ This line sets the thermal expansion coefficient for the fluid
 to $2 \times 10^{-4}\,{\rm degrees}^{-1}$
 The variable
 {\bf
-\begin{rawhtml} <A href=../../../code_reference/vdb/names/ZV.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/names/ZV.htm> \end{rawhtml}
 tAlpha 
 \begin{rawhtml} </A>\end{rawhtml}
 }
 is read in the routine
 {\it
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
 INI\_PARMS
 \begin{rawhtml} </A>\end{rawhtml}
 }. The routine {\it S/R FIND\_RHO} makes use of {\bf tAlpha}.
@@ -661,7 +661,7 @@ INI\_PARMS
 \end{minipage}
 }
 {\bf
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/79.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/79.htm> \end{rawhtml}
 goto code
 \begin{rawhtml} </A>\end{rawhtml}
 }
@@ -673,13 +673,13 @@ eosType='LINEAR'
 This line selects the linear form of the equation of state.
 The variable
 {\bf
-\begin{rawhtml} <A href=../../../code_reference/vdb/names/WV.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/names/WV.htm> \end{rawhtml}
 eosType
 \begin{rawhtml} </A>\end{rawhtml}
 }
 is read in the routine
 {\it
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
 INI\_PARMS
 \begin{rawhtml} </A>\end{rawhtml}
 }. The values of {\bf eosType} sets which formula in routine
@@ -691,7 +691,7 @@ INI\_PARMS
 \end{minipage}
 }
 {\bf
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/79.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/79.htm> \end{rawhtml}
 goto code
 \begin{rawhtml} </A>\end{rawhtml}
 }
@@ -709,13 +709,13 @@ causes the grid generation routines to initialize an internal grid based
 on spherical polar geometry.
 The variable
 {\bf
-\begin{rawhtml} <A href=../../../code_reference/vdb/names/10T.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/names/10T.htm> \end{rawhtml}
 usingSphericalPolarGrid
 \begin{rawhtml} </A>\end{rawhtml}
 }
 is read in the routine
 {\it
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
 INI\_PARMS
 \begin{rawhtml} </A>\end{rawhtml}
 }. When set to {\bf .TRUE.} the settings of {\bf delX} and {\bf delY} are
@@ -728,7 +728,7 @@ routine {\it INI\_SPEHRICAL\_POLAR\_GRID}.
 \end{minipage}
 }
 {\bf
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/97.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/97.htm> \end{rawhtml}
 goto code
 \begin{rawhtml} </A>\end{rawhtml}
 }
@@ -746,13 +746,13 @@ a longitude boundary, since the absolute longitude does
 not alter the kernel equation discretisation.
 The variable
 {\bf
-\begin{rawhtml} <A href=../../../code_reference/vdb/names/110.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/names/110.htm> \end{rawhtml}
 phiMin
 \begin{rawhtml} </A>\end{rawhtml}
 }
 is read in the routine
 {\it
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
 INI\_PARMS
 \begin{rawhtml} </A>\end{rawhtml}
 } and is used in routine {\it INI\_SPEHRICAL\_POLAR\_GRID}.
@@ -763,7 +763,7 @@ INI\_PARMS
 \end{minipage}
 }
 {\bf
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/97.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/97.htm> \end{rawhtml}
 goto code
 \begin{rawhtml} </A>\end{rawhtml}
 }
@@ -776,13 +776,13 @@ This line sets the horizontal grid spacing between each y-coordinate line
 in the discrete grid to $1^{\circ}$ in longitude.
 The variable
 {\bf
-\begin{rawhtml} <A href=../../../code_reference/vdb/names/10Z.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/names/10Z.htm> \end{rawhtml}
 delX
 \begin{rawhtml} </A>\end{rawhtml}
 }
 is read in the routine
 {\it
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
 INI\_PARMS
 \begin{rawhtml} </A>\end{rawhtml}
 } and is used in routine {\it INI\_SPEHRICAL\_POLAR\_GRID}. 
@@ -793,7 +793,7 @@ INI\_PARMS
 \end{minipage}
 }
 {\bf
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/97.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/97.htm> \end{rawhtml}
 goto code
 \begin{rawhtml} </A>\end{rawhtml}
 }
@@ -806,13 +806,13 @@ This line sets the horizontal grid spacing between each y-coordinate line
 in the discrete grid to $1^{\circ}$ in latitude.
 The variable
 {\bf
-\begin{rawhtml} <A href=../../../code_reference/vdb/names/UB.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/names/UB.htm> \end{rawhtml}
 delY   
 \begin{rawhtml} </A>\end{rawhtml}
 }
 is read in the routine
 {\it
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
 INI\_PARMS
 \begin{rawhtml} </A>\end{rawhtml}
 } and is used in routine {\it INI\_SPEHRICAL\_POLAR\_GRID}. 
@@ -823,7 +823,7 @@ INI\_PARMS
 \end{minipage}
 }
 {\bf
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/97.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/97.htm> \end{rawhtml}
 goto code
 \begin{rawhtml} </A>\end{rawhtml}
 }
@@ -837,20 +837,20 @@ in the discrete grid to $500\,{\rm m}$, so that the total model depth
 is $2\,{\rm km}$.
 The variable
 {\bf
-\begin{rawhtml} <A href=../../../code_reference/vdb/names/10W.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/names/10W.htm> \end{rawhtml}
 delZ
 \begin{rawhtml} </A>\end{rawhtml}
 }
 is read in the routine
 {\it
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
 INI\_PARMS
 \begin{rawhtml} </A>\end{rawhtml}
 }.
 It is copied into the internal
 model coordinate variable 
 {\bf 
-\begin{rawhtml} <A href=../../../code_reference/vdb/names/10Y.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/names/10Y.htm> \end{rawhtml}
 delR
 \begin{rawhtml} </A>\end{rawhtml}
 } which is used in routine {\it INI\_VERTICAL\_GRID}.
@@ -861,7 +861,7 @@ delR
 \end{minipage}
 }
 {\bf
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/100.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/100.htm> \end{rawhtml}
 goto code
 \begin{rawhtml} </A>\end{rawhtml}
 }
@@ -883,13 +883,13 @@ of $-2000m$ indicates open ocean. The matlab program
 bathymetry file.
 The variable
 {\bf
-\begin{rawhtml} <A href=../../../code_reference/vdb/names/179.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/names/179.htm> \end{rawhtml}
 bathyFile
 \begin{rawhtml} </A>\end{rawhtml}
 }
 is read in the routine
 {\it
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
 INI\_PARMS
 \begin{rawhtml} </A>\end{rawhtml}
 }. The bathymetry file is read in the routine {\it INI\_DEPTHS}.
@@ -900,7 +900,7 @@ INI\_PARMS
 \end{minipage}
 }
 {\bf
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/88.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/88.htm> \end{rawhtml}
 goto code
 \begin{rawhtml} </A>\end{rawhtml}
 }
@@ -919,13 +919,13 @@ code to generate a valid
 file.  
 The variable
 {\bf
-\begin{rawhtml} <A href=../../../code_reference/vdb/names/13W.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/names/13W.htm> \end{rawhtml}
 zonalWindFile
 \begin{rawhtml} </A>\end{rawhtml}
 }
 is read in the routine
 {\it
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
 INI\_PARMS
 \begin{rawhtml} </A>\end{rawhtml}
 }.  The wind-stress file is read in the routine 
@@ -937,7 +937,7 @@ INI\_PARMS
 \end{minipage}
 }
 {\bf
-\begin{rawhtml} <A href=../../../code_reference/vdb/code/75.htm> \end{rawhtml}
+\begin{rawhtml} <A href=../code_reference/vdb/code/75.htm> \end{rawhtml}
 goto code
 \begin{rawhtml} </A>\end{rawhtml}
 }
