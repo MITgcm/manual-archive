@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_software/text/sarch.tex,v 1.15 2004/01/29 15:39:49 afe Exp $
+% $Header: /u/gcmpack/manual/s_software/text/sarch.tex,v 1.16 2004/01/29 16:02:58 afe Exp $
 
 This chapter focuses on describing the {\bf WRAPPER} environment within which
 both the core numerics and the pluggable packages operate. The description
@@ -1267,7 +1267,9 @@ The \_EXCH operation is also central to supporting grids such as
 the cube-sphere grid. In this class of grid a rotation may be required
 between tiles. Aligning the coordinate requiring rotation with the
 tile decomposition, allows the coordinate transformation to 
-be embedded within a custom form of the \_EXCH primitive.
+be embedded within a custom form of the \_EXCH primitive.  In these
+cases \_EXCH is mapped to exch2 routines, as detailed in the exch2
+package documentation  \ref{sec:exch2}.
 
 \item {\bf Reverse Mode}
 The communication primitives \_EXCH and \_GSUM both employ 
@@ -1284,6 +1286,7 @@ operations. However, the routine argument {\em simulationMode}
 is set to the value {\em REVERSE\_SIMULATION}. This signifies 
 ti the low-level routines that the adjoint forms of the
 appropriate communication operation should be performed.
+
 \item {\bf MAX\_NO\_THREADS}
 The variable {\em MAX\_NO\_THREADS} is used to indicate the
 maximum number of OS threads that a code will use. This
@@ -1388,7 +1391,7 @@ a series of template files, for example {\em exch\_rx.template}.
 This is done to allow a large number of variations on the exchange 
 process to be maintained. One set of variations supports the
 cube sphere grid. Support for a cube sphere grid in MITgcm is based
-on having each face of the cube as a separate tile (or tiles).
+on having each face of the cube as a separate tile or tiles.
 The exchange routines are then able to absorb much of the
 detailed rotation and reorientation required when moving around the
 cube grid. The set of {\em \_EXCH} routines that contain the
