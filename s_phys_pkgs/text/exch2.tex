@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/text/exch2.tex,v 1.15 2004/03/18 14:56:25 afe Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/text/exch2.tex,v 1.16 2004/03/18 22:20:38 afe Exp $
 % $Name:  $
 
 %%  * Introduction
@@ -403,10 +403,41 @@ The arrays \varlink{exch2\_oi}{exch2_oi},
 \varlink{exch2\_oj\_f}{exch2_oj_f} are indexed to tile number and
 neighbor and specify the relative offset within the subdomain of the
 array index of a variable going from a neighboring tile $N$ to a local
-tile $T$.  Consider the six-tile case (Fig. \ref{fig:6tile}), where
-\code{exch2\_oi(1,1)=33}, \code{exch2\_oi(2,1)=0},
-\code{exch2\_oi(3,1)=32}, and \code{exch2\_oi(4,1)=-32}.  Each of these
-indicates the offset in the $x$ direction \\
+tile $T$.  Consider \code{T=1} in the six-tile topology
+(Fig. \ref{fig:6tile}), where
+
+\begin{verbatim}
+       exch2_oi(1,1)=33
+       exch2_oi(2,1)=0
+       exch2_oi(3,1)=32
+       exch2_oi(4,1)=-32
+\end{verbatim}
+
+The simplest case is \code{exch2\_oi(2,1)}, the southern neighbor,
+which is \code{Tn=6}.  The axes of \code{T} and \code{Tn} have the
+same orientation and their $x$ axes have the same origin, and so an
+exchange between the two requires no changes to the $x$ index.  For
+the western neighbor (\code{Tn=5}), \code{code\_oi(3,1)=32} since the
+\code{x=0} vector on \code{T} corresponds to the \code{y=32} vector on
+\code{Tn}.  The eastern edge of \code{T} shows the reverse case
+(\code{exch2\_oi(4,1)=-32)}, where \code{x=32} on \code{T} exchanges
+with \code{x=0} on \code{Tn=2}.  The most interesting case, where
+\code{exch2\_oi(1,1)=33} and \code{Tn=3}, involves a reversal of
+indices.  As in every case, the offset \code{exch2\_oi} is added to
+the original $x$ index of \code{T} multiplied by the transformation
+factor \code{exch2\_pi(t,N,T)}.  Here \code{exch2\_pi(1,1,1)=0} since
+the $x$ axis of \code{T} is orthogonal to the $x$ axis of \code{Tn}.
+\code{exch2\_pi(2,1,1)=-1} since the $x$ axis of \code{T} corresponds
+to the $y$ axis of \code{Tn}, but the axes are reversed.  The result
+is that the index of the northern edge of \code{T}, which runs
+\code{(1:32)}, is transformed to
+\code{(-1:-32)}. \code{exch2\_oi(1,1)} is then added to this range to
+get back \code{(1:32)} -- the index of the $y$ axis of \code{Tn}.
+This transformation may seem overly convoluted for the six-tile case,
+but it is necessary to provide a general solution for various
+topologies. \\
+
+
 
 Finally, \varlink{exch2\_itlo\_c}{exch2_itlo_c},
 \varlink{exch2\_ithi\_c}{exch2_ithi_c},
@@ -469,6 +500,30 @@ This needs some diagrams. \\
 
 \subsection{Key Routines}
 
+Most of the subroutines particular to exch2 handle the exchanges
+themselves and are of the same format as those described in
+\ref{sect:cube_sphere_communication} \sectiontitle{Cube sphere
+communication}.  Like the original routines, they are written as
+templates which the local Makefile converts from RX into RL and RS
+forms. \\
 
+The interfaces with the core model subroutines are
+\code{EXCH\_UV\_XY\_RX}, \code{EXCH\_UV\_XYZ\_RX} and \code{EXCH\_XY\_RX}.
+They override the standard exchange routines when \code{genmake2} is
+run with \code{exch2} option.  They in turn call the local exch2
+subroutines \code{EXCH2\_UV\_XY\_RX} and \code{EXCH2\_UV\_XYZ\_RX} for two
+and three dimensional vector quantities, and \code{EXCH2\_XY\_RX} and
+\code{EXCH2\_XYZ\_RX} for two and three dimensional scalar quantities.
+These subroutines set the dimensions of the area to be exchanged, call
+\code{EXCH2\_RX1\_CUBE} for scalars and \code{EXCH2\_RX2\_CUBE} for
+vectors, and then handle the singularities at the cube corners. \\
 
-\subsection{References}
+The separate scalar and vector forms of \code{EXCH2\_RX1\_CUBE} and
+\code{EXCH2\_RX2\_CUBE} reflect that the vector-handling subrouine needs
+to pass both the $x$ and $y$ components of the vectors.  This arises
+from the topological folding discussed above, where the $x$ and $y$
+axes get swapped in some cases.  This swapping is not an issue with
+the scalar version. These subroutines call \code{EXCH2\_SEND\_RX1} and
+\code{EXCH2\_SEND\_RX2}, which do most of the work using the variables
+discussed above. \\
+
