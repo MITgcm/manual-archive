@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_software/text/sarch.tex,v 1.12 2004/01/28 19:59:03 afe Exp $
+% $Header: /u/gcmpack/manual/s_software/text/sarch.tex,v 1.13 2004/01/28 20:27:54 afe Exp $
 
 This chapter focuses on describing the {\bf WRAPPER} environment within which
 both the core numerics and the pluggable packages operate. The description
@@ -1064,7 +1064,10 @@ are also set in this routine. These are used to identify
 processes holding tiles to the west, east, south and north 
 of this process. These values are stored in global storage
 in the header file {\em EESUPPORT.h} for use by
-communication routines.
+communication routines.  The above does not hold when the 
+exch2 package is used -- exch2 sets its own parameters to 
+specify the global indices of tiles and their relationships
+to each other.
 \\
 
 \fbox{ 
