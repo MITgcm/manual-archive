@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.25 2004/06/04 15:32:38 edhill Exp $
+% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.26 2004/10/13 05:06:25 cnh Exp $
 % $Name:  $
 
 %\section{Getting started}
@@ -324,7 +324,7 @@ structure).
 
 \end{itemize}
 
-\section{Example experiments}
+\section[MITgcm Example Experiments]{Example experiments}
 \label{sect:modelExamples}
 
 %% a set of twenty-four pre-configured numerical experiments
@@ -484,7 +484,7 @@ Each example directory has the following subdirectories:
 Once you have chosen the example you want to run, you are ready to
 compile the code.
 
-\section{Building the code}
+\section[Building MITgcm]{Building the code}
 \label{sect:buildingCode}
 
 To compile the code, we use the {\em make} program. This uses a file
@@ -950,7 +950,7 @@ the GNU g77 compiler and the mpich MPI library is:
 
 
 
-\section{Running the model}
+\section[Running MITgcm]{Running the model in prognostic mode}
 \label{sect:runModel}
 
 If compilation finished succesfuully (section \ref{sect:buildingCode})
@@ -1059,7 +1059,7 @@ Some examples of reading and visualizing some output in {\em Matlab}:
 >> for n=1:11; imagesc(eta(:,:,n)');axis ij;colorbar;pause(.5);end
 \end{verbatim}
 
-\section{Doing it yourself: customizing the code}
+\section[Customizing MITgcm]{Doing it yourself: customizing the code}
 
 When you are ready to run the model in the configuration you want, the
 easiest thing is to use and adapt the setup of the case studies

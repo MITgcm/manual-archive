@@ -1,7 +1,7 @@
-% $Header: /u/gcmpack/manual/s_examples/held_suarez_cs/Attic/hs_atmos.tex,v 1.4 2004/10/12 17:14:02 cnh Exp $
+% $Header: /u/gcmpack/manual/s_examples/held_suarez_cs/Attic/hs_atmos.tex,v 1.5 2004/10/13 05:06:26 cnh Exp $
 % $Name:  $
 
-\section{Held-Suarez forcing atmospheric simulation on a latitude-longitude grid 2.8$^\circ$ resolution and on
+\section[Held-Suarez Atmosphere MITgcm Example]{Held-Suarez forcing atmospheric simulation on a latitude-longitude grid 2.8$^\circ$ resolution and on
 a cube-sphere grid with 32 square cube faces.}
 \label{www:tutorials}
 \label{sect:eg-hs}
@@ -18,9 +18,6 @@ a cube-sphere grid with 32 square cube faces.}
 %{\large May 2001}
 %\end{center}
 
-\subsection{Introduction}
-\label{www:tutorials}
-
 This example illustrates the use of the MITgcm for large scale atmospheric 
 circulation simulation. Two simulations are described
 \begin{itemize}
@@ -35,38 +32,34 @@ MITgcm to enable atmospheric simulation.
 \subsection{Overview}
 \label{www:tutorials}
 
-This example experiment demonstrates using the MITgcm to simulate
-the planetary atmospheric circulation in two different ways. 
+This example demonstrates using the MITgcm to simulate
+the planetary atmospheric circulation in two ways.
 In both cases the simulation is configured with flat orography.
 In the first case shown a $2.8^{\circ} \times 2.8^{\circ}$ spherical polar 
 horizontal grid is employed. In the second case a cube-sphere horizontal
 grid is used that projects a cube with face size of $32 \times 32$ onto a
 sphere.
-Five pressurce corrdinate levels are used in the vertical, ranging in thickness
+Five pressure corrdinate levels are used in the vertical, ranging in thickness
 from $100\,{\rm mb}$ at the bottom of the atmosphere to $300\,{\rm mb}$ in the middle atmosphere.
-At this resolution, the configuration
-can be integrated forward for many years on a single 
-processor desktop computer.
+The total depth of the atmosphere is $1000{\rm mb}$.
+At this resolution, the configuration can be integrated forward for many years on a 
+single processor desktop computer.
 \\
 
-The model is forced with climatological wind stress data and surface
-flux data from DaSilva \cite{DaSilva94}. Climatological data
-from Levitus \cite{Levitus94} is used to initialize the model hydrography.
-Levitus seasonal climatology data is also used throughout the calculation
-to provide additional air-sea fluxes.
-These fluxes are combined with the DaSilva climatological estimates of
-surface heat flux and fresh water, resulting in a mixed boundary
-condition of the style described in Haney \cite{Haney}.
-Altogether, this yields the following forcing applied
-in the model surface layer.
+The model is forced by relaxation to a radiative equilibrium profile 
+from Held and Suarez \cite{held-suar:94}. Initial conditions are a
+statically stable thermal gradient and no motion. The atmosphere 
+in these experiments is dry and the only active ``physics'' are the
+terms in the Held and Suarez \cite{held-suar:94} formula. The
+MITgcm intermediate atmospheric physics package (see \ref{sec:aim}) and
+MITgcm high-end physics package ( see \ref{sec:pkg:fizhi}) are turned off.
+Altogether, this yields the following forcing that is applied to
+the fluid:
 
 \begin{eqnarray}
 \label{EQ:eg-hs-global_forcing}
 \label{EQ:eg-hs-global_forcing_fu}
-{\cal F}_{u} & = & \frac{\tau_{x}}{\rho_{0} \Delta z_{s}}
-\\
-\label{EQ:eg-hs-global_forcing_fv}
-{\cal F}_{v} & = & \frac{\tau_{y}}{\rho_{0} \Delta z_{s}}
+\vec{{\cal F}_{u}} & = & -k_{v}(\sigma)\vec{v}
 \\
 \label{EQ:eg-hs-global_forcing_ft}
 {\cal F}_{\theta} & = & - \lambda_{\theta} ( \theta - \theta^{\ast} ) 
