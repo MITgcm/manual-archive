@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.23 2004/04/08 02:24:23 edhill Exp $
+% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.24 2004/04/09 15:06:18 edhill Exp $
 % $Name:  $
 
 %\section{Getting started}
@@ -666,17 +666,17 @@ the one experiment:
 \end{verbatim}
 
 
-\subsection{Using \textit{genmake2}}
+\subsection{Using \texttt{genmake2}}
 \label{sect:genmake}
 
 To compile the code, first use the program \texttt{genmake2} (located
-in the \textit{tools} directory) to generate a Makefile.
+in the \texttt{tools} directory) to generate a Makefile.
 \texttt{genmake2} is a shell script written to work with all
 ``sh''--compatible shells including bash v1, bash v2, and Bourne.
 Internally, \texttt{genmake2} determines the locations of needed
 files, the compiler, compiler options, libraries, and Unix tools.  It
-relies upon a number of ``optfiles'' located in the {\em
-  tools/build\_options} directory.
+relies upon a number of ``optfiles'' located in the
+\texttt{tools/build\_options} directory.
 
 The purpose of the optfiles is to provide all the compilation options
 for particular ``platforms'' (where ``platform'' roughly means the
@@ -918,7 +918,17 @@ The steps for building MITgcm with MPI support are:
   Sightly more complicated scripts may be needed for many machines
   since execution of the code may be controlled by both the MPI
   library and a job scheduling and queueing system such as PBS,
-  LoadLeveller, Condor, or any of a number of similar tools.
+  LoadLeveller, Condor, or any of a number of similar tools.  A few
+  example scripts (those used for our \begin{rawhtml} <A
+    href="http://mitgcm.org/testing.html"> \end{rawhtml}regular
+  verification runs\begin{rawhtml} </A> \end{rawhtml}) are available
+  at:
+  \begin{rawhtml} <A
+    href="http://mitgcm.org/cgi-bin/viewcvs.cgi/MITgcm_contrib/test_scripts/">
+  \end{rawhtml}
+  {\footnotesize \tt
+    http://mitgcm.org/cgi-bin/viewcvs.cgi/MITgcm\_contrib/test\_scripts/ }
+  \begin{rawhtml} </A> \end{rawhtml}
 
 \end{enumerate}
 
