@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.20 2004/02/16 02:42:10 edhill Exp $
+% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.21 2004/03/11 16:11:56 edhill Exp $
 % $Name:  $
 
 %\section{Getting started}
@@ -824,6 +824,17 @@ The most important command-line options are:
   provided by commercial Unix vendors, GNU \texttt{make} (sometimes
   called \texttt{gmake}) should be preferred.  This option provides a
   means for specifying the make executable to be used.
+  
+\item[\texttt{--bash=/path/to/sh}] On some (usually older UNIX)
+  machines, the ``bash'' shell is unavailable.  To run on these
+  systems, \texttt{genmake2} can be invoked using an ``sh'' (that is,
+  a Bourne, POSIX, or compatible) shell.  The syntax in these
+  circumstances is:
+  \begin{center}
+    \texttt{/bin/sh genmake2 -bash=/bin/sh [...options...]}
+  \end{center}
+  where \texttt{/bin/sh} can be replaced with the full path and name
+  of the desired shell.
 
 \end{description}
 
