@@ -1,18 +1,40 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/tracer.tex,v 1.1 2001/08/09 19:48:39 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/tracer.tex,v 1.2 2001/08/09 20:45:27 adcroft Exp $
 % $Name:  $
 
 \section{Tracer equations}
 
-The tracer equations are discretized consistantly with the continuity
-equation to facilitate conservation properties analogous to the
-continuum:
+The basic discretization used for the tracer equations is the second
+order piece-wise constant finite volume form of the forced
+advection-diussion equations. There are many alternatives to second
+order method for advection and alternative parameterizations for the
+sub-grid scale processes. The Gent-McWilliams eddy parameterization,
+KPP mixing scheme and PV flux parameterization are all dealt with in
+separate sections. The basic discretization of the advection-diffusion
+part of the tracer equations and the various advection schemes will be
+described here.
+
+\subsection{Centered second order advection-diffusion}
+
+The basic discretization, centered second order, is the default. It is
+designed to be consistant with the continuity equation to facilitate
+conservation properties analogous to the continuum:
 \begin{equation}
 {\cal A}_c \Delta r_f h_c \partial_\theta
-+ \delta_i U \overline{ \theta }^i
-+ \delta_j V \overline{ \theta }^j
-+ \delta_k W \overline{ \theta }^k
-= {\cal A}_c \Delta r_f h_c {\cal S}_\theta + \theta {\cal A}_c \delta_k (P-E)_{r=0}
++ \delta_i F_x
++ \delta_j F_y
++ \delta_k F_r
+= {\cal A}_c \Delta r_f h_c {\cal S}_\theta
++ \theta {\cal A}_c \delta_k (P-E)_{r=0}
 \end{equation}
+where the area integrated fluxes are given by:
+\begin{eqnarray}
+F_x & = & U \overline{ \theta }^i
+- \kappa_h \frac{\Delta y_g \Delta r_f h_w}{\Delta x_c} \delta_i \theta \\
+F_y & = & V \overline{ \theta }^j
+- \kappa_h \frac{\Delta x_g \Delta r_f h_s}{\Delta y_c} \delta_j \theta \\
+F_r & = & W \overline{ \theta }^k
+- \kappa_v \frac{\Delta x_g \Delta y_g}{\Delta r_c} \delta_k \theta
+\end{eqnarray}
 The quantities $U$, $V$ and $W$ are volume fluxes defined:
 \marginpar{$U$: {\bf uTrans} }
 \marginpar{$V$: {\bf vTrans} }
@@ -22,8 +44,8 @@ U & = & \Delta y_g \Delta r_f h_w u \\
 V & = & \Delta x_g \Delta r_f h_s v \\
 W & = & {\cal A}_c w
 \end{eqnarray}
-${\cal S}$ represents the ``parameterized'' SGS processes and
-physics associated with the tracer. For instance, potential
+${\cal S}$ represents the ``parameterized'' SGS processes and physics
+and sources associated with the tracer. For instance, potential
 temperature equation in the ocean has is forced by surface and
 partially penetrating heat fluxes:
 \begin{equation}
@@ -32,7 +54,7 @@ partially penetrating heat fluxes:
 while the salt equation has no real sources, ${\cal S}=0$, which
 leaves just the $P-E$ term.
 
-The continuity equation can be recovered by setting ${\cal Q}=0$ and
+The continuity equation can be recovered by setting ${\cal Q}=0$, $\kappa_h = \kappa_v = 0$ and
 $\theta=1$. The term $\theta (P-E)_{r=0}$ is required to retain local
 conservation of $\theta$. Global conservation is not possible using
 the flux-form (as here) and a linearized free-surface

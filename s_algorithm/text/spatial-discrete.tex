@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/spatial-discrete.tex,v 1.4 2001/08/09 19:48:39 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/spatial-discrete.tex,v 1.5 2001/08/09 20:45:27 adcroft Exp $
 % $Name:  $
 
 \section{Spatial discretization of the dynamical equations}
@@ -8,30 +8,9 @@ method. This amounts to a grid-point method (namely second-order
 centered finite difference) in the fluid interior but allows
 boundaries to intersect a regular grid allowing a more accurate
 representation of the position of the boundary. We treat the
-horizontal and veritical directions as seperable and thus slightly
-differently.
+horizontal and veritical directions as seperable and differently.
 
-Initialization of grid data is controlled by subroutine {\em
-INI\_GRID} which in calls {\em INI\_VERTICAL\_GRID} to initialize the
-vertical grid, and then either of {\em INI\_CARTESIAN\_GRID}, {\em
-INI\_SPHERICAL\_POLAR\_GRID} or {\em INI\_CURV\-ILINEAR\_GRID} to
-initialize the horizontal grid for cartesian, spherical-polar or
-curvilinear coordinates respectively.
-
-The reciprocals of all grid quantities are pre-calculated and this is
-done in subroutine {\em INI\_MASKS\_ETC} which is called later by
-subroutine {\em INITIALIZE\_FIXED}.
-
-All grid descriptors are global arrays and stored in common blocks in
-{\em GRID.h} and a generally declared as {\em \_RS}.
-
-\fbox{ \begin{minipage}{4.75in}
-{\em S/R INI\_GRID} ({\em model/src/ini\_grid.F})
-
-{\em S/R INI\_MASKS\_ETC} ({\em model/src/ini\_masks\_etc.F})
-
-grid data: ({\em model/inc/GRID.h})
-\end{minipage} }
+\input{part2/notation}
 
 
 \subsection{The finite volume method: finite volumes versus finite difference}
@@ -107,6 +86,30 @@ for the meridional and vertical directions.  The continiuty cell is
 synonymous with tracer cells (they are one and the same).
 
 
+
+\subsection{Grid initialization and data}
+
+Initialization of grid data is controlled by subroutine {\em
+INI\_GRID} which in calls {\em INI\_VERTICAL\_GRID} to initialize the
+vertical grid, and then either of {\em INI\_CARTESIAN\_GRID}, {\em
+INI\_SPHERICAL\_POLAR\_GRID} or {\em INI\_CURV\-ILINEAR\_GRID} to
+initialize the horizontal grid for cartesian, spherical-polar or
+curvilinear coordinates respectively.
+
+The reciprocals of all grid quantities are pre-calculated and this is
+done in subroutine {\em INI\_MASKS\_ETC} which is called later by
+subroutine {\em INITIALIZE\_FIXED}.
+
+All grid descriptors are global arrays and stored in common blocks in
+{\em GRID.h} and a generally declared as {\em \_RS}.
+
+\fbox{ \begin{minipage}{4.75in}
+{\em S/R INI\_GRID} ({\em model/src/ini\_grid.F})
+
+{\em S/R INI\_MASKS\_ETC} ({\em model/src/ini\_masks\_etc.F})
+
+grid data: ({\em model/inc/GRID.h})
+\end{minipage} }
 
 
 \subsection{Horizontal grid}
@@ -446,7 +449,7 @@ $h_s^{-1}$: {\bf RECIP\_hFacS} ({\em GRID.h})
 \end{minipage} }
 
 
-\subsection{Continuity and horizontal pressure gradient terms}
+\section{Continuity and horizontal pressure gradient terms}
 
 The core algorithm is based on the ``C grid'' discretization of the
 continuity equation which can be summarized as:
@@ -483,7 +486,7 @@ The source term $P-E$ on the rhs of continuity accounts for the local
 addition of volume due to excess precipitation and run-off over
 evaporation and only enters the top-level of the {\em ocean} model.
 
-\subsection{Hydrostatic balance}
+\section{Hydrostatic balance}
 
 The vertical momentum equation has the hydrostatic or
 quasi-hydrostatic balance on the right hand side. This discretization
