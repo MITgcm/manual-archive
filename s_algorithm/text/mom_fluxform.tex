@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/mom_fluxform.tex,v 1.3 2001/09/28 03:28:32 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/mom_fluxform.tex,v 1.4 2001/10/25 00:55:28 cnh Exp $
 % $Name:  $
 
 \section{Flux-form momentum equations}
@@ -106,10 +106,10 @@ discretized:
 \end{eqnarray}
 where the Coriolis parameters $f$ and $f'$ are defined:
 \begin{eqnarray}
-f & = & 2 \Omega \sin{\phi} \\
-f' & = & 2 \Omega \cos{\phi}
+f & = & 2 \Omega \sin{\varphi} \\
+f' & = & 2 \Omega \cos{\varphi}
 \end{eqnarray}
-where $\phi$ is geographic latitude when using spherical geometry,
+where $\varphi$ is geographic latitude when using spherical geometry,
 otherwise the $\beta$-plane definition is used:
 \begin{eqnarray}
 f & = & f_o + \beta y \\
@@ -152,31 +152,31 @@ $G_u^{Cor}$, $G_v^{Cor}$: {\bf cF} (local to {\em calc\_mom\_rhs.F})
 \subsection{Curvature metric terms}
 
 The most commonly used coordinate system on the sphere is the
-geographic system $(\lambda,\phi)$. The curvilinear nature of these
+geographic system $(\lambda,\varphi)$. The curvilinear nature of these
 coordinates on the sphere lead to some ``metric'' terms in the
 component momentum equations. Under the thin-atmosphere and
 hydrostatic approximations these terms are discretized:
 \begin{eqnarray}
 {\cal A}_w \Delta r_f h_w G_u^{metric} & = &
-  \overline{ \frac{ \overline{u}^i }{a} \tan{\phi} {\cal A}_c \Delta r_f h_c \overline{ v }^j }^i \\
+  \overline{ \frac{ \overline{u}^i }{a} \tan{\varphi} {\cal A}_c \Delta r_f h_c \overline{ v }^j }^i \\
 {\cal A}_s \Delta r_f h_s G_v^{metric} & = &
-- \overline{ \frac{ \overline{u}^i }{a} \tan{\phi} {\cal A}_c \Delta r_f h_c \overline{ u }^i }^j \\
+- \overline{ \frac{ \overline{u}^i }{a} \tan{\varphi} {\cal A}_c \Delta r_f h_c \overline{ u }^i }^j \\
 G_w^{metric} & = & 0
 \end{eqnarray}
 where $a$ is the radius of the planet (sphericity is assumed) or the
 radial distance of the particle (i.e. a function of height).  It is
 easy to see that this discretization satisfies all the properties of
 the discrete Coriolis terms since the metric factor $\frac{u}{a}
-\tan{\phi}$ can be viewed as a modification of the vertical Coriolis
-parameter: $f \rightarrow f+\frac{u}{a} \tan{\phi}$.
+\tan{\varphi}$ can be viewed as a modification of the vertical Coriolis
+parameter: $f \rightarrow f+\frac{u}{a} \tan{\varphi}$.
 
 However, as for the Coriolis terms, a non-energy conserving form has
 exclusively been used to date:
 \begin{eqnarray}
-G_u^{metric} & = & \frac{u \overline{v}^{ij} }{a} \tan{\phi} \\
-G_v^{metric} & = & \frac{ \overline{u}^{ij} \overline{u}^{ij}}{a} \tan{\phi}
+G_u^{metric} & = & \frac{u \overline{v}^{ij} }{a} \tan{\varphi} \\
+G_v^{metric} & = & \frac{ \overline{u}^{ij} \overline{u}^{ij}}{a} \tan{\varphi}
 \end{eqnarray}
-where $\tan{\phi}$ is evaluated at the $u$ and $v$ points
+where $\tan{\varphi}$ is evaluated at the $u$ and $v$ points
 respectively.
 
 \fbox{ \begin{minipage}{4.75in}
@@ -240,19 +240,19 @@ tensor such as symmetry.
 
 The lateral viscous stresses are discretized:
 \begin{eqnarray}
-\tau_{11} & = & A_h c_{11\Delta}(\phi) \frac{1}{\Delta x_f} \delta_i u
-               -A_4 c_{11\Delta^2}(\phi) \frac{1}{\Delta x_f} \delta_i \nabla^2 u \\
-\tau_{12} & = & A_h c_{12\Delta}(\phi) \frac{1}{\Delta y_u} \delta_j u
-               -A_4 c_{12\Delta^2}(\phi)\frac{1}{\Delta y_u} \delta_j \nabla^2 u \\
-\tau_{21} & = & A_h c_{21\Delta}(\phi) \frac{1}{\Delta x_v} \delta_i v
-               -A_4 c_{21\Delta^2}(\phi) \frac{1}{\Delta x_v} \delta_i \nabla^2 v \\
-\tau_{22} & = & A_h c_{22\Delta}(\phi) \frac{1}{\Delta y_f} \delta_j v
-               -A_4 c_{22\Delta^2}(\phi) \frac{1}{\Delta y_f} \delta_j \nabla^2 v
+\tau_{11} & = & A_h c_{11\Delta}(\varphi) \frac{1}{\Delta x_f} \delta_i u
+               -A_4 c_{11\Delta^2}(\varphi) \frac{1}{\Delta x_f} \delta_i \nabla^2 u \\
+\tau_{12} & = & A_h c_{12\Delta}(\varphi) \frac{1}{\Delta y_u} \delta_j u
+               -A_4 c_{12\Delta^2}(\varphi)\frac{1}{\Delta y_u} \delta_j \nabla^2 u \\
+\tau_{21} & = & A_h c_{21\Delta}(\varphi) \frac{1}{\Delta x_v} \delta_i v
+               -A_4 c_{21\Delta^2}(\varphi) \frac{1}{\Delta x_v} \delta_i \nabla^2 v \\
+\tau_{22} & = & A_h c_{22\Delta}(\varphi) \frac{1}{\Delta y_f} \delta_j v
+               -A_4 c_{22\Delta^2}(\varphi) \frac{1}{\Delta y_f} \delta_j \nabla^2 v
 \end{eqnarray}
-where the non-dimensional factors $c_{lm\Delta^n}(\phi), \{l,m,n\} \in
+where the non-dimensional factors $c_{lm\Delta^n}(\varphi), \{l,m,n\} \in
 \{1,2\}$ define the ``cosine'' scaling with latitude which can be
 applied in various ad-hoc ways. For instance, $c_{11\Delta} =
-c_{21\Delta} = (\cos{\phi})^{3/2}$, $c_{12\Delta}=c_{22\Delta}=0$ would
+c_{21\Delta} = (\cos{\varphi})^{3/2}$, $c_{12\Delta}=c_{22\Delta}=0$ would
 represent the an-isotropic cosine scaling typically used on the
 ``lat-lon'' grid for Laplacian viscosity.
 \marginpar{Need to tidy up method for controlling this in code}
@@ -298,11 +298,11 @@ conditions. The ``body'' force takes the form:
 \begin{eqnarray}
 G_u^{side-drag} & = &
 \frac{4}{\Delta z_f} \overline{ (1-h_\zeta) \frac{\Delta x_v}{\Delta y_u} }^j
-\left( A_h c_{12\Delta}(\phi) u - A_4 c_{12\Delta^2}(\phi) \nabla^2 u \right)
+\left( A_h c_{12\Delta}(\varphi) u - A_4 c_{12\Delta^2}(\varphi) \nabla^2 u \right)
 \\
 G_v^{side-drag} & = &
 \frac{4}{\Delta z_f} \overline{ (1-h_\zeta) \frac{\Delta y_u}{\Delta x_v} }^i
-\left( A_h c_{21\Delta}(\phi) v - A_4 c_{21\Delta^2}(\phi) \nabla^2 v \right)
+\left( A_h c_{21\Delta}(\varphi) v - A_4 c_{21\Delta^2}(\varphi) \nabla^2 v \right)
 \end{eqnarray}
 
 In fact, the above discretization is not quite complete because it
