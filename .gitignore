@@ -33,6 +33,7 @@ core
 *.toc
 *.dvi
 *.ps
+*.ps.gz
 *.pdf
 *.out
 *.tz
