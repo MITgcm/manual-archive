@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_getstarted/text/testing.tex,v 1.1 2004/01/29 17:36:26 edhill Exp $
+% $Header: /u/gcmpack/manual/s_getstarted/text/testing.tex,v 1.2 2004/01/29 18:50:45 edhill Exp $
 % $Name:  $
 
 \section{Testing}
@@ -7,23 +7,54 @@
 
 A script (\texttt{testreport}) for automated testing is included in
 the model within the {\em verification} directory.  While intended
-primarily advanced users, the script can be helpful for beginners.
+mostly for advanced users, the script can be helpful for beginners.
 
 \subsection{Using \texttt{testreport}}
 
-On many systems, the utility can be run with a command as simple as
+On many systems, the program can be run with the command:
 \begin{verbatim}
 % cd verification
 % ./testreport -ieee
 \end{verbatim}
 which will do the following:
 \begin{enumerate}
-\item Locate all directories within the current directory (which is
-  generally {\em verification}) tha
+\item Locate all ``valid'' test directories.  Here, valid tests are
+  defined to be those directories within the current directory (which
+  is generally {\em verification}) that contain a subdirectory and
+  file with the names {\em results/output.txt}.
+
+\item Then within each valid test:
+  \begin{enumerate}
+  \item run \texttt{genmake2} to produce a {\em Makefile}
+  \item build an executable
+  \item run the executable
+  \item compare and the output of the executable with the
+    contents of certain variables within {\em
+      TESTNAME/results/output.txt}
+  \item print and, if requested (with the
+    \texttt{-addr=EMAIL\_ADDRESS} option), send a MIME-encoded email
+    with the testing results
+  \end{enumerate}
+
 \end{enumerate}
 
-For further \texttt{testreport} details, please see the 
+For further details, please see the MITgcm Developers' HOWTO at:
+\begin{rawhtml} <A href=''http://mitgcm.org/docs.html'' target="idontexist"> \end{rawhtml}
+\begin{verbatim}
+http://mitgcm.org/docs.html
+\end{verbatim}
+\begin{rawhtml} </A> \end{rawhtml}
 
 
 \subsection{Automated testing}
+
+Automated testing results are produced on a regular basis and they can
+be viewed at:
+\begin{rawhtml} <A href=''http://mitgcm.org/testing.html'' target="idontexist"> \end{rawhtml}
+\begin{verbatim}
+http://mitgcm.org/testing.html
+\end{verbatim}
+\begin{rawhtml} </A> \end{rawhtml}
+which also includes links to various scripts for batch job submission
+on a variety of different machines.
 
