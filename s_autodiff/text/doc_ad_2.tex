@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_autodiff/text/doc_ad_2.tex,v 1.3 2001/09/27 02:00:24 cnh Exp $
+% $Header: /u/gcmpack/manual/s_autodiff/text/doc_ad_2.tex,v 1.4 2001/10/05 22:22:20 heimbach Exp $
 % $Name:  $
 
 {\sf Automatic differentiation} (AD), also referred to as algorithmic
@@ -18,24 +18,26 @@ In principle, a variety of derived algorithms
 can be generated automatically in this way.
 
 The MITGCM has been adapted for use with the
-Tangent linear and Adjoint Model Compiler (TAMC) and its succssor TAF
+Tangent linear and Adjoint Model Compiler (TAMC) and its successor TAF
 (Transformation of Algorithms in Fortran), developed
 by Ralf Giering (\cite{gie-kam:98}, \cite{gie:99,gie:00}).
 The first application of the adjoint of the MITGCM for senistivity
 studies has been published by \cite{maro-eta:99}.
 \cite{sta-eta:97,sta-eta:01} use the MITGCM and its adjoint
 for ocean state estimation studies.
+In the following we shall refer to TAMC and TAF synonymously,
+except were explicitly stated otherwise.
 
 TAMC exploits the chain rule for computing the first
 derivative of a function with
 respect to a set of input variables. 
 Treating a given forward code as a composition of operations --
-each line representing a compositional element -- the chain rule is
+each line representing a compositional element, the chain rule is
 rigorously applied to the code, line by line. The resulting 
 tangent linear or adjoint code,
 then, may be thought of as the composition in 
 forward or reverse order, respectively, of the
-Jacobian matrices of the forward code compositional elements.
+Jacobian matrices of the forward code's compositional elements.
 
 %**********************************************************************
 \section{Some basic algebra}
@@ -105,7 +107,7 @@ In contrast to the full nonlinear model $ {\cal M} $, the operator
 $ M $ is just a matrix
 which can readily be used to find the forward sensitivity of $\vec{v}$ to 
 perturbations in  $u$,
-but if there are very many input variables $(>>O(10^{6})$ for 
+but if there are very many input variables $(\gg O(10^{6})$ for 
 large-scale oceanographic application), it quickly becomes 
 prohibitive to proceed directly as in (\ref{tangent_linear}),
 if the impact of each component $ {\bf e_{i}} $ is to be assessed. 
@@ -130,9 +132,9 @@ or a measure of some model-to-data misfit)
 \label{compo}
 \end{eqnarray}
 %
-The linear approximation of $ {\cal J} $,
+The perturbation of $ {\cal J} $ around a fixed point $ {\cal J}_0 $,
 \[
-{\cal J} \, \approx \, {\cal J}_0 \, + \, \delta {\cal J}
+{\cal J} \, = \, {\cal J}_0 \, + \, \delta {\cal J}
 \]
 can be expressed in both bases of $ \vec{u} $ and $ \vec{v} $
 w.r.t. their corresponding inner product 
@@ -168,7 +170,8 @@ transpose of $ A $,
 \[
 A^{\ast} \, = \, A^T
 \]
-and from eq. (\ref{tangent_linear}), we note that
+and from eq. (\ref{tangent_linear}), (\ref{deljidentity}),
+we note that
 (omitting $|$'s):
 %
 \begin{equation}
@@ -204,7 +207,24 @@ the adjoint variable of the model state $ \vec{v} $, and
 $ \delta \vec{u}^{\ast} $ the adjoint variable of the control variable $ \vec{u} $.
 
 The {\sf reverse} nature of the adjoint calculation can be readily 
-seen as follows. Let us decompose ${\cal J}(u)$, thus:
+seen as follows. 
+Consider a model integration which consists of $ \Lambda $
+consecutive operations
+$ {\cal M}_{\Lambda} (  {\cal M}_{\Lambda-1} ( 
+...... ( {\cal M}_{\lambda} (
+......
+( {\cal M}_{1} ( {\cal M}_{0}(\vec{u}) )))) $,
+where the ${\cal M}$'s could be the elementary steps, i.e. single lines
+in the code of the model, or successive time steps of the
+model integration, 
+starting at step 0 and moving up to step $\Lambda$, with intermediate
+${\cal M}_{\lambda} (\vec{u}) = \vec{v}^{(\lambda+1)}$ and final 
+${\cal M}_{\Lambda} (\vec{u}) = \vec{v}^{(\Lambda+1)} = \vec{v}$.
+Let ${\cal J}$ be a cost funciton which explicitly depends on the
+final state $\vec{v}$ only
+(this restriction is for clarity reasons only).
+%
+${\cal J}(u)$ may be decomposed according to:
 %
 \begin{equation}
 {\cal J}({\cal M}(\vec{u})) \, = \, 
@@ -215,16 +235,11 @@ seen as follows. Let us decompose ${\cal J}(u)$, thus:
 \label{compos}
 \end{equation}
 %
-where the ${\cal M}$'s could be the elementary steps, i.e. single lines
-in the code of the model,
-starting at step 0 and moving up to step $\Lambda$, with intermediate
-${\cal M}_{\lambda} (\vec{u}) = \vec{v}^{(\lambda+1)}$ and final 
-${\cal M}_{\Lambda} (\vec{u}) = \vec{v}^{(\Lambda+1)} = \vec{v}$ 
-Then, according to the chain rule the forward calculation reads in 
-terms of the Jacobi matrices
+Then, according to the chain rule, the forward calculation reads, 
+in terms of the Jacobi matrices
 (we've omitted the $ | $'s which, nevertheless are important
 to the aspect of {\it tangent} linearity;
-note also that per definition
+note also that by definition
 $ \langle \, \nabla _{v}{\cal J}^T \, , \, \delta \vec{v} \, \rangle
 = \nabla_v {\cal J} \cdot \delta \vec{v} $ )
 %
@@ -259,17 +274,15 @@ M_{\Lambda}^T \cdot \nabla_v {\cal J}^T \\
 %
 clearly expressing the reverse nature of the calculation.
 Eq. (\ref{reverse}) is at the heart of automatic adjoint compilers.
-The intermediate steps $\lambda$ in 
+If the intermediate steps $\lambda$ in 
 eqn. (\ref{compos}) -- (\ref{reverse})
-could represent the model state (forward or adjoint) at each 
-intermediate time step in which case
-$ {\cal M}(\vec{v}^{(\lambda)}) = \vec{v}^{(\lambda+1)} $, and correspondingly,
-$ M^T (\delta \vec{v}^{(\lambda) \, \ast}) = \delta \vec{v}^{(\lambda-1) \, \ast} $, 
-but they can also be viewed more generally as 
-single lines of code in the numerical algorithm.
-In both cases it becomes evident that the adjoint calculation
-yields at the same time the adjoint of each model state component 
-$ \vec{v}^{(\lambda)} $ at each intermediate step $ l $, namely
+represent the model state (forward or adjoint) at each 
+intermediate time step as noted above, then correspondingly,
+$ M^T (\delta \vec{v}^{(\lambda) \, \ast}) = 
+\delta \vec{v}^{(\lambda-1) \, \ast} $ for the adjoint variables.
+It thus becomes evident that the adjoint calculation also
+yields the adjoint of each model state component 
+$ \vec{v}^{(\lambda)} $ at each intermediate step $ \lambda $, namely
 %
 \begin{equation}
 \boxed{
@@ -285,7 +298,8 @@ M_{\Lambda}^T |_{\vec{v}^{(\lambda)}} \cdot \delta \vec{v}^{\ast} \\
 %
 in close analogy to eq. (\ref{adjoint})
 We note in passing that that the $\delta \vec{v}^{(\lambda) \, \ast}$
-are the Lagrange multipliers of the model state $ \vec{v}^{(\lambda)}$.
+are the Lagrange multipliers of the model equations which determine
+$ \vec{v}^{(\lambda)}$.
 
 In coponents, eq. (\ref{adjoint}) reads as follows.
 Let
@@ -395,8 +409,9 @@ and the shorthand notation for the adjoint variables
 $ \delta v^{(\lambda) \, \ast}_{j} = \frac{\partial}{\partial v^{(\lambda)}_{j}} 
 {\cal J}^T $, $ j = 1, \ldots , n_{\lambda} $, 
 for intermediate components, yielding
-\[
-\footnotesize
+\begin{equation}
+\small
+\begin{split}
 \left(
 \begin{array}{c}
 \delta v^{(\lambda) \, \ast}_1 \\
@@ -404,20 +419,22 @@ for intermediate components, yielding
 \delta v^{(\lambda) \, \ast}_{n_{\lambda}} \\
 \end{array}
 \right)
-\, = \, 
+\, = &
 \left(
 \begin{array}{ccc}
 \frac{\partial ({\cal M}_{\lambda})_1}{\partial v^{(\lambda)}_1}
-& \ldots &
+& \ldots \,\, \ldots &
 \frac{\partial ({\cal M}_{\lambda})_{n_{\lambda+1}}}{\partial v^{(\lambda)}_1} \\
 \vdots & ~ & \vdots \\
 \frac{\partial ({\cal M}_{\lambda})_1}{\partial v^{(\lambda)}_{n_{\lambda}}}
-& \ldots  &
+& \ldots \,\, \ldots  &
 \frac{\partial ({\cal M}_{\lambda})_{n_{\lambda+1}}}{\partial v^{(\lambda)}_{n_{\lambda}}} \\
 \end{array}
 \right)
-%
 \cdot
+%
+\\ ~ & ~
+\\ ~ &
 %
 \left(
 \begin{array}{ccc}
@@ -431,7 +448,7 @@ for intermediate components, yielding
 \frac{\partial ({\cal M}_{\lambda+1})_{n_{\lambda+2}}}{\partial v^{(\lambda+1)}_{n_{\lambda+1}}} \\
 \end{array}
 \right)
-\cdot \ldots \ldots \cdot
+\cdot \, \ldots \, \cdot
 \left(
 \begin{array}{c}
 \delta v^{\ast}_1 \\
@@ -439,7 +456,8 @@ for intermediate components, yielding
 \delta v^{\ast}_{n} \\
 \end{array}
 \right)
-\]
+\end{split}
+\end{equation}
 
 Eq. (\ref{forward}) and (\ref{reverse}) are perhaps clearest in
 showing the advantage of the reverse over the forward mode
@@ -460,7 +478,7 @@ In contrast, eq. (\ref{reverse}) yields the full
 gradient $\nabla _{u}{\cal J}$ (and all intermediate gradients
 $\nabla _{v^{(\lambda)}}{\cal J}$) within a single reverse calculation.
 
-Note, that in case $ {\cal J} $ is a vector-valued function
+Note, that if $ {\cal J} $ is a vector-valued function
 of dimension $ l > 1 $,
 eq. (\ref{reverse}) has to be modified according to
 \[
@@ -468,7 +486,8 @@ M^T \left( \nabla_v {\cal J}^T \left(\delta \vec{J}\right) \right)
 \, = \,
 \nabla_u {\cal J}^T \cdot \delta \vec{J}
 \]
-where now $ \delta \vec{J} \in I\!\!R $ is a vector of dimenison $ l $.
+where now $ \delta \vec{J} \in I\!\!R^l $ is a vector of 
+dimenison $ l $.
 In this case $ l $ reverse simulations have to be performed
 for each $ \delta J_{k}, \,\, k = 1, \ldots, l $.
 Then, the reverse mode is more efficient as long as
@@ -503,7 +522,7 @@ operator onto the $j$-th component ${\bf f_{j}}$,
 \paragraph{Example 2: 
 $ {\cal J} = \langle \, {\cal H}(\vec{v}) - \vec{d} \, , 
  \, {\cal H}(\vec{v}) - \vec{d} \, \rangle $} ~ \\
-The cost function represents the quadratic model vs.data misfit.
+The cost function represents the quadratic model vs. data misfit.
 Here, $ \vec{d} $ is the data vector and $ {\cal H} $ represents the
 operator which maps the model state space onto the data space.
 Then, $ \nabla_v {\cal J} $ takes the form
@@ -534,24 +553,25 @@ H \cdot \left( {\cal H}(\vec{v}) - \vec{d} \, \right)
 
 We note an important aspect of the forward vs. reverse 
 mode calculation.
-Because of the locality of the derivative,
+Because of the local character of the derivative
+(a derivative is defined w.r.t. a point along the trajectory),
 the intermediate results of the model trajectory
 $\vec{v}^{(\lambda+1)}={\cal M}_{\lambda}(v^{(\lambda)})$ 
 are needed to evaluate the intermediate Jacobian 
 $M_{\lambda}|_{\vec{v}^{(\lambda)}} \, \delta \vec{v}^{(\lambda)} $.
 In the forward mode, the intermediate results are required
 in the same order as computed by the full forward model ${\cal M}$,
-in the reverse mode they are required in the reverse order.
+but in the reverse mode they are required in the reverse order.
 Thus, in the reverse mode the trajectory of the forward model
 integration ${\cal M}$ has to be stored to be available in the reverse
-calculation. Alternatively, the model state would have to be
-recomputed whenever its value is required.
+calculation. Alternatively, the complete model state up to the
+point of evaluation has to be recomputed whenever its value is required.
 
 A method to balance the amount of recomputations vs.
 storage requirements is called {\sf checkpointing}
 (e.g. \cite{res-eta:98}).
-It is depicted in Fig. ... for a 3-level checkpointing
-[as concrete example, we give explicit numbers for a 3-day 
+It is depicted in \reffig{3levelcheck} for a 3-level checkpointing
+[as an example, we give explicit numbers for a 3-day 
 integration with a 1-hourly timestep in square brackets].
 \begin{itemize}
 %
@@ -559,44 +579,44 @@ integration with a 1-hourly timestep in square brackets].
 In a first step, the model trajectory is subdivided into 
 $ {n}^{lev3} $ subsections [$ {n}^{lev3} $=3 1-day intervals],
 with the label $lev3$ for this outermost loop.
-The model is then integrated over the full trajectory,
+The model is then integrated along the full trajectory,
 and the model state stored only at every $ k_{i}^{lev3} $-th timestep 
 [i.e. 3 times, at
 $ i = 0,1,2 $ corresponding to $ k_{i}^{lev3} = 0, 24, 48 $].
 %
 \item [$lev2$]
-In a second step each subsection is itself divided into
-$ {n}^{lev2} $ subsubsections
+In a second step each subsection itself is divided into
+$ {n}^{lev2} $ sub-subsections
 [$ {n}^{lev2} $=4 6-hour intervals per subsection].
 The model picks up at the last outermost dumped state 
-$ v_{k_{n}^{lev3}} $ and is integrated forward in time over
+$ v_{k_{n}^{lev3}} $ and is integrated forward in time along
 the last subsection, with the label $lev2$ for this  
 intermediate loop. 
-The model state is now stored only at every $ k_{i}^{lev2} $-th 
+The model state is now stored at every $ k_{i}^{lev2} $-th 
 timestep 
 [i.e. 4 times, at
 $ i = 0,1,2,3 $ corresponding to $ k_{i}^{lev2} = 48, 54, 60, 66 $].
 %
 \item [$lev1$]
-Finally, the mode picks up at the last intermediate dump state
-$ v_{k_{n}^{lev2}} $ and is integrated forward in time over
-the last subsubsection, with the label $lev1$ for this  
+Finally, the model picks up at the last intermediate dump state
+$ v_{k_{n}^{lev2}} $ and is integrated forward in time along
+the last sub-subsection, with the label $lev1$ for this  
 intermediate loop.
-Within this subsubsection only, the model state is stored
+Within this sub-subsection only, the model state is stored
 at every timestep 
 [i.e. every hour $ i=0,...,5$ corresponding to 
 $ k_{i}^{lev1} = 66, 67, \ldots, 71 $].
 Thus, the  final state $ v_n = v_{k_{n}^{lev1}} $ is reached
-and the model state of all peceeding timesteps over the last
-subsubsections are available, enabling integration backwards
-in time over the last subsubsection.
-Thus, the adjoint can be computed over this last 
-subsubsection $k_{n}^{lev2}$. 
+and the model state of all peceeding timesteps along the last
+sub-subsections are available, enabling integration backwards
+in time along the last sub-subsection.
+Thus, the adjoint can be computed along this last 
+sub-subsection $k_{n}^{lev2}$. 
 %
 \end{itemize}
 %
 This procedure is repeated consecutively for each previous
-subsubsection $k_{n-1}^{lev2}, \ldots, k_{1}^{lev2} $
+sub-subsection $k_{n-1}^{lev2}, \ldots, k_{1}^{lev2} $
 carrying the adjoint computation to the initial time 
 of the subsection $k_{n}^{lev3}$.
 Then, the procedure is repeated for the previous subsection
@@ -632,15 +652,15 @@ on the computing resources available.
 \caption
 {Schematic view of intermediate dump and restart for 
 3-level checkpointing.}
-\label{fig:erswns}
+\label{fig:3levelcheck}
 \end{figure}
 
-\subsection{Optimal perturbations}
-\label{optpert}
+% \subsection{Optimal perturbations}
+% \label{sec_optpert}
 
 
-\subsection{Error covariance estimate and Hessian matrix}
-\label{sec_hessian}
+% \subsection{Error covariance estimate and Hessian matrix}
+% \label{sec_hessian}
 
 \newpage
 
@@ -649,11 +669,9 @@ on the computing resources available.
 \label{sec_ad_setup_ex}
 %**********************************************************************
 
-The MITGCM has been adapted to enable AD using TAMC or TAF
-(we'll refer to TAMC and TAF interchangeably, except where
-distinctions are explicitly mentioned).
+The MITGCM has been adapted to enable AD using TAMC or TAF.
 The present description, therefore, is specific to the
-use of TAMC as AD tool.
+use of TAMC or TAF as AD tool.
 The following sections describe the steps which are necessary to 
 generate a tangent linear or adjoint model of the MITGCM.
 We take as an example the sensitivity of carbon sequestration
@@ -664,7 +682,7 @@ The AD-relevant hooks in the code are sketched in
 \subsection{Overview of the experiment}
 
 We describe an adjoint sensitivity analysis of outgassing from 
-the ocean into the atmosphere of a carbon like tracer injected
+the ocean into the atmosphere of a carbon-like tracer injected
 into the ocean interior (see \cite{hil-eta:01}).
 
 \subsubsection{Passive tracer equation}
@@ -686,7 +704,8 @@ represents interior sources of $C$ such as would arise due to
 direct injection.
 The velocity term, $U$, is the sum of the
 model Eulerian circulation and an eddy-induced velocity, the latter
-parameterized according to Gent/McWilliams (\cite{gen:90, dan:95}).
+parameterized according to Gent/McWilliams 
+(\cite{gen-mcw:90, gen-eta:95}).
 The convection function, $\Gamma$, mixes $C$ vertically wherever the 
 fluid is locally statically unstable. 
 
@@ -777,6 +796,12 @@ together with the forcing fields and and restart files:
 %
 \item {\it data.ctrl}
 %
+\item {\it data.gmredi}
+%
+\item {\it data.grdchk}
+%
+\item {\it data.optim}
+%
 \item {\it data.pkg}
 %
 \item {\it eedata}
@@ -807,11 +832,11 @@ Below we describe the customisations of this files which are
 specific to this experiment.
 
 \subsubsection{File {\it .genmakerc}}
-This file overwites default settings of {\it genmake}.
+This file overwrites default settings of {\it genmake}.
 In the present example it is used to switch on the following
 packages which are related to automatic differentiation
 and are disabled by default: \\
-\hspace*{4ex} {\tt set ENABLE=( autodiff cost ctrl ecco )}  \\
+\hspace*{4ex} {\tt set ENABLE=( autodiff cost ctrl ecco gmredi grdchk kpp )}  \\
 Other packages which are not needed are switched off: \\
 \hspace*{4ex} {\tt set DISABLE=( aim obcs zonal\_filt shap\_filt cal exf )}
 
@@ -828,7 +853,7 @@ the standard include of the {\it CPP\_OPTIONS.h} file.
 
 This file contains 'wrapper'-specific CPP options.
 It only needs to be changed if the code is to be run
-in  parallel environment (see Section \ref{???}).
+in a parallel environment (see Section \ref{???}).
 
 \subsubsection{File {\it CPP\_OPTIONS.h}}
 
@@ -837,13 +862,29 @@ This file contains model-specific CPP options
 Most options are related to the forward model setup.
 They are identical to the global steady circulation setup of
 {\it verification/exp2/}.
-The option specific to this experiment is \\
+The three options specific to this experiment are \\
+\hspace*{4ex} {\tt \#define ALLOW\_PASSIVE\_TRACER} \\
+This flag enables the code to carry through the
+advection/diffusion of a passive tracer along the
+model integration. \\
 \hspace*{4ex} {\tt \#define ALLOW\_MIT\_ADJOINT\_RUN} \\
 This flag enables the inclusion of some AD-related fields
 concerning initialisation, link between control variables
 and forward model variables, and the call to the top-level
 forward/adjoint subroutine {\it adthe\_main\_loop}
-instead of {\it the\_main\_loop}.
+instead of {\it the\_main\_loop}. \\
+\hspace*{4ex} {\tt \#define ALLOW\_GRADIENT\_CHECK} \\
+This flag enables the gradient check package.
+After computing the unperturbed cost function and its gradient,
+a series of computations are performed for which \\
+$\bullet$ an element of the control vector is perturbed \\
+$\bullet$ the cost function w.r.t. the perturbed element is
+computed \\
+$\bullet$ the difference between the perturbed and unperturbed
+cost function is computed to compute the finite difference gradient \\
+$\bullet$ the finite difference gradient is compared with the
+adjoint-generated gradient.
+The gradient check package is further described in Section ???.
 
 \subsubsection{File {\it ECCO\_OPTIONS.h}}
 
@@ -878,7 +919,7 @@ enables all general aspects of the cost function handling,
 in particular the hooks in the foorward code for
 initialising, accumulating and finalizing the cost function. \\
 \hspace*{4ex} {\tt \#define ALLOW\_COST\_TRACER} \\
-includes the subroutine with the cost function for this
+includes the call to the cost function for this
 particular experiment, eqn. (\ref{cost_tracer}).
 %
 \item Control variable package: {\it pkg/ctrl/} \\
@@ -900,7 +941,7 @@ meridional wind stress \\
 freshwater flux \\
 \hspace*{2ex} {\tt \#define ALLOW\_HFLUX0\_CONTROL} & 
 heat flux \\
-\hspace*{2ex} {\tt \#undef ALLOW\_DIFFKR\_CONTROL} & 
+\hspace*{2ex} {\tt \#define ALLOW\_DIFFKR\_CONTROL} & 
 diapycnal diffusivity \\
 \hspace*{2ex} {\tt \#undef ALLOW\_KAPPAGM\_CONTROL} & 
 isopycnal diffusivity \\
@@ -932,6 +973,10 @@ The common blocks are used by the adjoint support routine
 \hspace*{4ex} is related to {\it DYNVARS.h} \\
 \hspace*{4ex} {\tt common /addynvars\_cd/} &
 \hspace*{4ex} is related to {\it DYNVARS.h} \\
+\hspace*{4ex} {\tt common /addynvars\_diffkr/} &
+\hspace*{4ex} is related to {\it DYNVARS.h} \\
+\hspace*{4ex} {\tt common /addynvars\_kapgm/} &
+\hspace*{4ex} is related to {\it DYNVARS.h} \\
 \hspace*{4ex} {\tt common /adtr1\_r/} &
 \hspace*{4ex} is related to {\it TR1.h} \\
 \hspace*{4ex} {\tt common /adffields/} &
@@ -956,7 +1001,7 @@ This routine contains the dimensions for TAMC checkpointing.
 3-level checkpointing is enabled, i.e. the timestepping
 is divided into three different levels (see Section \ref{???}).
 The model state of the outermost ({\tt nchklev\_3}) and the
-itermediate ({\tt nchklev\_2}) timestepping loop are stored to file
+intermediate ({\tt nchklev\_2}) timestepping loop are stored to file
 (handled in {\it the\_main\_loop}).
 The innermost loop ({\tt nchklev\_1}) 
 avoids I/O by storing all required variables
@@ -968,7 +1013,7 @@ In the present example the dimensions are chosen as follows: \\
 \hspace*{4ex} {\tt nchklev\_2      =  30 } \\
 \hspace*{4ex} {\tt nchklev\_3      =  60 } \\
 To guarantee that the checkpointing intervals span the entire
-integration period the relation \\
+integration period the following relation must be satisfied: \\
 \hspace*{4ex} {\tt nchklev\_1*nchklev\_2*nchklev\_3 $ \ge $ nTimeSteps} \\
 where {\tt nTimeSteps} is either specified in {\it data}
 or computed via \\
@@ -982,10 +1027,16 @@ Similar to above, the following relation has to be satisfied \\
 %
 \end{itemize}
 
+The following parameters may be worth describing: \\
+%
+\hspace*{4ex} {\tt isbyte} \\
+\hspace*{4ex} {\tt maxpass} \\
+~
+ 
 \subsubsection{File {\it makefile}}
 
 This file contains all relevant paramter flags and
-lists to run TAMC.
+lists to run TAMC or TAF.
 It is assumed that TAMC is available to you, either locally,
 being installed on your network, or remotely through the 'TAMC Utility'.
 TAMC is called with the command {\tt tamc} followed by a
@@ -996,7 +1047,7 @@ Here we briefly discuss the main flags used in the {\it makefile}
 \begin{itemize}
 \item [{\tt tamc}] {\tt
 -input <variable names>
--output <variable name> ... \\
+-output <variable name> -r4 ... \\
 -toplevel <S/R name> -reverse <file names> 
 }
 \end{itemize}
@@ -1017,7 +1068,8 @@ Dependent variable $ J $  which is to be differentiated.
 \item {\tt -reverse <file names>} \\
 Adjoint code is generated to compute the sensitivity of an
 independent variable w.r.t.  many dependent variables.
-The generated adjoint top-level routine computes the product
+In the discussion of Section ???
+the generated adjoint top-level routine computes the product
 of the transposed Jacobian matrix $ M^T $ times
 the gradient vector $ \nabla_v J $.
 \\
@@ -1028,9 +1080,13 @@ above the top-level routine (some initialisations), or are
 deliberately hidden from TAMC, either because hand-written
 adjoint routines exist, or the routines must not (or don't have to)
 be differentiated. For each routine which is part of the flow tree
-of the top-level routine, but deliberately hidden from TAMC,
+of the top-level routine, but deliberately hidden from TAMC
+(or for each package which contains such routines),
 a corresponding file {\it .flow} exists containing flow directives
 for TAMC.
+%
+\item {\tt -r4} \\
+~
 %
 \end{itemize}
 
@@ -1040,6 +1096,12 @@ for TAMC.
 \subsubsection{File {\it data.cost}}
 
 \subsubsection{File {\it data.ctrl}}
+
+\subsubsection{File {\it data.gmredi}}
+
+\subsubsection{File {\it data.grdchk}}
+
+\subsubsection{File {\it data.optim}}
 
 \subsubsection{File {\it data.pkg}}
 
@@ -1060,7 +1122,7 @@ for TAMC.
 \newpage 
 
 %**********************************************************************
-\section{TLM and ADM code generation in general}
+\section{TLM and ADM generation in general}
 \label{sec_ad_setup_gen}
 %**********************************************************************
 
@@ -1068,7 +1130,37 @@ In this section we describe in a general fashion
 the parts of the code that are relevant for automatic
 differentiation using the software tool TAMC. 
 
-\subsection{The cost function (dependent variable)}
+\begin{figure}[b!]
+\input{part5/doc_ad_the_model}
+\caption{~}
+\label{fig:adthemodel}
+\end{figure}
+
+The basic flow is depicted in \reffig{adthemodel}.
+If the option {\tt ALLOW\_AUTODIFF\_TAMC} is defined, the driver routine
+{\it the\_model\_main}, instead of calling {\it the\_main\_loop},
+invokes the adjoint of this routine, {\it adthe\_main\_loop},
+which is the toplevel routine in terms of reverse mode computation.
+The routine {\it adthe\_main\_loop} has been generated using TAMC.
+It contains both the forward integration of the full model, 
+any additional storing that is required for efficient checkpointing, 
+and the reverse integration of the adjoint model.
+The structure of {\it adthe\_main\_loop} has been strongly
+simplified for clarification; in particular, no checkpointing
+procedures are shown here.
+Prior to the call of {\it adthe\_main\_loop}, the routine
+{\it ctrl\_unpack} is invoked to unpack the control vector,
+and following that call, the routine {\it ctrl\_pack}
+is invoked to pack the control vector
+(cf. Section \ref{section_ctrl}).
+If gradient checks are to be performed, the option 
+{\tt ALLOW\_GRADIENT\_CHECK} is defined. In this case
+the driver routine {\it grdchk\_main} is called after
+the gradient has been computed via the adjoint
+(cf. Section \ref{section_grdchk}).
+
+\subsection{The cost function (dependent variable)
+\label{section_cost}}
 
 The cost function $ {\cal J} $ is referred to as the {\sf dependent variable}.
 It is a function of the input variables $ \vec{u} $ via the composition
@@ -1076,8 +1168,14 @@ $ {\cal J}(\vec{u}) \, = \, {\cal J}(M(\vec{u})) $.
 The input is referred to as the
 {\sf independent variables} or {\sf control variables}.
 All aspects relevant to the treatment of the cost function $ {\cal J} $
-(parameter setting, initialisation, incrementation, 
-final evaluation), are controled by the package {\it pkg/cost}.
+(parameter setting, initialisation, accumulation, 
+final evaluation), are controlled by the package {\it pkg/cost}.
+
+\begin{figure}[h!]
+\input{part5/doc_cost_flow}
+\caption{~}
+\label{fig:costflow}
+\end{figure}
 
 \subsubsection{genmake and CPP options}
 %
@@ -1097,7 +1195,7 @@ compile list in 3 different ways (cf. Section \ref{???}):
 \begin{enumerate}
 %
 \item {\it genmake}: \\
-Change the default settngs in the file {\it genmake} by adding 
+Change the default settings in the file {\it genmake} by adding 
 {\bf cost} to the {\bf enable} list (not recommended).
 %
 \item {\it .genmakerc}: \\
@@ -1110,14 +1208,14 @@ Call {\it genmake} with the option
 {\tt genmake -enable=cost}.
 %
 \end{enumerate}
-Since the cost function is usually used in conjunction with
-automatic differentiation, the CPP option
-{\bf ALLOW\_ADJOINT\_RUN} should be defined
-(file {\it CPP\_OPTIONS.h}).
 The basic CPP option to enable the cost function is {\bf ALLOW\_COST}.
 Each specific cost function contribution has its own option.
 For the present example the option is {\bf ALLOW\_COST\_TRACER}.
 All cost-specific options are set in {\it ECCO\_CPPOPTIONS.h}
+Since the cost function is usually used in conjunction with
+automatic differentiation, the CPP option
+{\bf ALLOW\_ADJOINT\_RUN} should be defined
+(file {\it CPP\_OPTIONS.h}).
 
 \subsubsection{Initialisation}
 %
@@ -1158,7 +1256,7 @@ which is defined on each tile (bi,bj).
 %
 \end{itemize}
 %
-\subsubsection{Incrementation}
+\subsubsection{Accumulation}
 %
 \begin{itemize}
 %
@@ -1206,27 +1304,22 @@ The total cost function {\bf fc} will be the
 tamc -output 'fc' ...
 \end{verbatim}
 
-\begin{figure}[t!]
-\input{part5/doc_ad_the_model}
-\label{fig:adthemodel}
-\caption{~}
-\end{figure}
-
 %%%% \end{document}
 
 \begin{figure}
 \input{part5/doc_ad_the_main}
-\label{fig:adthemain}
 \caption{~}
+\label{fig:adthemain}
 \end{figure}
 
-\subsection{The control variables (independent variables)}
+\subsection{The control variables (independent variables)
+\label{section_ctrl}}
 
 The control variables are a subset of the model input
 (initial conditions, boundary conditions, model parameters).
 Here we identify them with the variable $ \vec{u} $.
 All intermediate variables whose derivative w.r.t. control
-variables don't vanish are called {\sf active variables}.
+variables do not vanish are called {\sf active variables}.
 All subroutines whose derivative w.r.t. the control variables
 don't vanish are called {\sf active routines}.
 Read and write operations from and to file can be viewed
@@ -1236,6 +1329,12 @@ are read are called {\sf active files}.
 All aspects relevant to the treatment of the control variables
 (parameter setting, initialisation, perturbation)
 are controled by the package {\it pkg/ctrl}.
+
+\begin{figure}[h!]
+\input{part5/doc_ctrl_flow}
+\caption{~}
+\label{fig:ctrlflow}
+\end{figure}
 
 \subsubsection{genmake and CPP options}
 %
@@ -1295,17 +1394,23 @@ Two important issues related to the handling of the control
 variables in the MITGCM need to be addressed.
 First, in order to save memory, the control variable arrays
 are not kept in memory, but rather read from file and added
-to the initial (or first guess) fields.
+to the initial fields during the model initialisation phase.
 Similarly, the corresponding adjoint fields which represent
 the gradient of the cost function w.r.t. the control variables
-are written to to file.
+are written to file at the end of the adjoint integration.
 Second, in addition to the files holding the 2-dim. and 3-dim.
-control variables and the gradient, a 1-dim. {\sf control vector} 
+control variables and the corresponding cost gradients, 
+a 1-dim. {\sf control vector} 
 and {\sf gradient vector} are written to file. They contain 
 only the wet points of the control variables and the corresponding 
 gradient.
 This leads to a significant data compression.
-Furthermore, the control and the gradient vector can be passed to a 
+Furthermore, an option is available
+({\tt ALLOW\_NONDIMENSIONAL\_CONTROL\_IO}) to
+non-dimensionalise the control and gradient vector,
+which otherwise would contain different pieces of different
+magnitudes and units.
+Finally, the control and gradient vector can be passed to a 
 minimization routine if an update of the control variables
 is sought as part of a minimization exercise.
 
@@ -1316,10 +1421,10 @@ and gradient are generated and initialised in S/R {\it ctrl\_unpack}.
 
 \subsubsection{Perturbation of the independent variables}
 %
-The dependency chain for differentiation starts
-with adding a perturbation onto the the input variable,
+The dependency flow for differentiation w.r.t. the controls 
+starts with adding a perturbation onto the input variable,
 thus defining the independent or control variables for TAMC.
-Three classes of controls may be considered:
+Three types of controls may be considered:
 %
 \begin{itemize}
 %
@@ -1334,7 +1439,7 @@ Three classes of controls may be considered:
 Consider as an example the initial tracer distribution
 {\bf tr1} as control variable.
 After {\bf tr1} has been initialised in
-{\it ini\_tr1} (dynamical variables including
+{\it ini\_tr1} (dynamical variables such as
 temperature and salinity are initialised in {\it ini\_fields}),
 a perturbation anomaly is added to the field in S/R
 {\it ctrl\_map\_ini}
@@ -1347,10 +1452,11 @@ u         & = \, u_{[0]} \, + \, \Delta u \\
 \end{split}
 \end{equation}
 %
-In principle {\bf xx\_tr1} is a 3-dim. global array 
+{\bf xx\_tr1} is a 3-dim. global array 
 holding the perturbation. In the case of a simple
 sensitivity study this array is identical to zero.
-However, it's specification is essential since TAMC
+However, it's specification is essential in the context
+of automatic differentiation since TAMC
 treats the corresponding line in the code symbolically
 when determining the differentiation chain and its origin.
 Thus, the variable names are part of the argument list
@@ -1390,8 +1496,8 @@ Note, that reading an active variable corresponds
 to a variable assignment. Its derivative corresponds
 to a write statement of the adjoint variable.
 The 'active file' routines have been designed
-to support active read and corresponding active write
-operations.
+to support active read and corresponding adjoint active write
+operations (and vice versa).
 %
 \item 
 \fbox{
@@ -1408,8 +1514,10 @@ with the symbolic perturbation taking place in S/R
 Note however an important difference:
 Since the boundary values are time dependent with a new
 forcing field applied at each time steps,
-the general problem may be be thought of as
-a new control variable at each time step, i.e.
+the general problem may be thought of as
+a new control variable at each time step
+(or, if the perturbation is averaged over a certain period,
+at each $ N $ timesteps), i.e.
 \[
 u_{\rm forcing} \, = \,
 \{ \, u_{\rm forcing} ( t_n ) \, \}_{
@@ -1434,37 +1542,58 @@ calendar ({\it cal}~) and external forcing ({\it exf}~) packages.
 %
 This routine is not yet implemented, but would proceed
 proceed along the same lines as the initial value sensitivity.
+The mixing parameters {\bf diffkr} and {\bf kapgm}
+are currently added as controls in {\it ctrl\_map\_ini.F}.
 %
 \end{itemize}
 %
 
 \subsubsection{Output of adjoint variables and gradient}
 %
-Two ways exist to generate output of adjoint fields.
+Several ways exist to generate output of adjoint fields.
 %
 \begin{itemize}
 %
 \item 
 \fbox{
 \begin{minipage}{12cm}
-{\it ctrl\_pack}: 
+{\it ctrl\_map\_ini, ctrl\_map\_forcing}: 
 \end{minipage}
 }
 \\
-At the end of the forward/adjoint integration, the S/R
-{\it ctrl\_pack} is called which mirrors S/R {\it ctrl\_unpack}.
-It writes the following files:
+\begin{itemize}
+%
+\item {\bf xx\_...}: the control variable fields \\
+Before the forward integration, the control
+variables are read from file {\bf xx\_ ...} and added to
+the model field.
+%
+\item {\bf adxx\_...}: the adjoint variable fields, i.e. the gradient
+$ \nabla _{u}{\cal J} $ for each control variable \\
+After the adjoint integration the corresponding adjoint
+variables are written to {\bf adxx\_ ...}.
+%
+\end{itemize}
+%
+\item 
+\fbox{
+\begin{minipage}{12cm}
+{\it ctrl\_unpack, ctrl\_pack}: 
+\end{minipage}
+}
+\\
 %
 \begin{itemize}
 %
-\item {\bf xx\_...}: the control variable fields
+\item {\bf vector\_ctrl}: the control vector \\
+At the very beginning of the model initialisation,
+the updated compressed control vector is read (or initialised)
+and distributed to 2-dim. and 3-dim. control variable fields.
 %
-\item {\bf adxx\_...}: the adjoint variable fields, i.e. the gradient
-$ \nabla _{u}{\cal J} $ for each control variable,
-%
-\item {\bf vector\_ctrl}: the control vector
-%
-\item {\bf vector\_grad}: the gradient vector
+\item {\bf vector\_grad}: the gradient vector \\
+At the very end of the adjoint integration,
+the 2-dim. and 3-dim. adjoint variables are read,
+compressed to a single vector and written to file.
 %
 \end{itemize}
 %
@@ -1476,10 +1605,9 @@ $ \nabla _{u}{\cal J} $ for each control variable,
 }
 \\
 In addition to writing the gradient at the end of the
-forward/adjoint integration, many more adjoint variables,
-representing the Lagrange multipliers of the model state
-w.r.t. the model state
-at different times can be written using S/R 
+forward/adjoint integration, many more adjoint variables
+of the model state
+at intermediate times can be written using S/R 
 {\it addummy\_in\_stepping}.
 This routine is part of the adjoint support package 
 {\it pkg/autodiff} (cf.f. below).
@@ -1493,7 +1621,8 @@ than generated automatically.
 Appropriate flow directives ({\it dummy\_in\_stepping.flow})
 ensure that TAMC does not automatically 
 generate {\it addummy\_in\_stepping} by trying to differentiate
-{\it dummy\_in\_stepping}, but rather takes the hand-written routine.
+{\it dummy\_in\_stepping}, but instead refers to 
+the hand-written routine.
 
 {\it dummy\_in\_stepping} is called in the forward code
 at the beginning of each
@@ -1503,9 +1632,11 @@ each timestep in the adjoint calculation, after the call to
 {\it addynamics}.
 
 {\it addummy\_in\_stepping} includes the header files
-{\it adffields.h, addynamics.h, adtr1.h}.
-These header files are also hand-written. They contain
-the common blocks {\bf /addynvars\_r/}, {\bf /addynvars\_cd/},
+{\it adcommon.h}.
+This header file is also hand-written. It contains
+the common blocks 
+{\bf /addynvars\_r/}, {\bf /addynvars\_cd/},
+{\bf /addynvars\_diffkr/}, {\bf /addynvars\_kapgm/},
 {\bf /adtr1\_r/}, {\bf /adffields/},
 which have been extracted from the adjoint code to enable
 access to the adjoint variables.
@@ -1523,7 +1654,8 @@ The gradient $ \nabla _{u}{\cal J} |_{u_{[k]}} $ together
 with the value of the cost function itself $ {\cal J}(u_{[k]}) $ 
 at iteration step $ k $ serve
 as input to a minimization routine (e.g. quasi-Newton method,
-conjugate gradient, ...) to compute an update in the
+conjugate gradient, ... \cite{gil_lem:89}) 
+to compute an update in the
 control variable for iteration step $k+1$
 \[
 u_{[k+1]} \, = \,  u_{[0]} \, + \, \Delta u_{[k+1]}
@@ -1537,7 +1669,7 @@ Tab. \ref{???} sketches the flow between forward/adjoint model
 and the minimization routine.
 
 \begin{eqnarray*}
-\footnotesize
+\scriptsize
 \begin{array}{ccccc}
 u_{[0]} \,\, ,  \,\, \Delta u_{[k]}    & ~ & ~ & ~ & ~ \\
 {\Big\downarrow} 
@@ -1554,11 +1686,14 @@ v_{[k]} = M \left( u_{[k]} \right) &
 {\cal J}_{[k]} = {\cal J} \left( M \left( u_{[k]} \right) \right)} \\
 \multicolumn{1}{|c}{~} & ~ & ~ & ~ & \multicolumn{1}{c|}{~} \\
 \hline
+\multicolumn{1}{|c}{~} & ~ & ~ & ~ & \multicolumn{1}{c|}{~}  \\
+\multicolumn{1}{|c}{~} & ~ & ~ & ~ & \multicolumn{1}{c|}{{\Big\downarrow}} \\
+\multicolumn{1}{|c}{~} & ~ & ~ & ~ & \multicolumn{1}{c|}{~}  \\
 \hline
 \multicolumn{1}{|c}{~} & ~ & ~ & ~ & \multicolumn{1}{c|}{~} \\
 \multicolumn{1}{|c}{
 \nabla_u {\cal J}_{[k]} (\delta {\cal J}) = 
-T\!\!^{\ast} \cdot \nabla_v {\cal J} |_{v_{[k]}} (\delta {\cal J})} &
+T^{\ast} \cdot \nabla_v {\cal J} |_{v_{[k]}} (\delta {\cal J})} &
 \stackrel{\bf adjoint}{\mathbf \longleftarrow} &
 ad \, v_{[k]} (\delta {\cal J}) = 
 \nabla_v {\cal J} |_{v_{[k]}} (\delta {\cal J}) &
@@ -1567,9 +1702,9 @@ ad \, v_{[k]} (\delta {\cal J}) =
 \multicolumn{1}{|c}{~} & ~ & ~ & ~ & \multicolumn{1}{c|}{~} \\
 \hline
  ~ & ~ & ~ & ~ & ~ \\
-~ & ~ & 
-{\cal J}_{[k]} \qquad {\Bigg\downarrow}  \qquad \nabla_u {\cal J}_{[k]}
- & ~ & ~ \\
+\hspace*{15ex}{\Bigg\downarrow}  
+\quad {\cal J}_{[k]}, \quad \nabla_u {\cal J}_{[k]}
+ & ~ & ~ & ~ & ~ \\
  ~ & ~ & ~ & ~ & ~ \\
 \hline
 \multicolumn{1}{|c}{~} & ~ & ~ & ~ & \multicolumn{1}{c|}{~} \\
@@ -1597,6 +1732,7 @@ The corresponding I/O flow looks as follows:
 
 \vspace*{0.5cm}
 
+{\scriptsize
 \begin{tabular}{ccccc}
 {\bf vector\_ctrl\_$<$k$>$ } & ~ & ~ & ~ & ~ \\
 {\big\downarrow}  & ~ & ~ & ~ & ~ \\
@@ -1607,18 +1743,19 @@ The corresponding I/O flow looks as follows:
 \cline{3-3}
 \multicolumn{1}{l}{\bf xx\_theta0...$<$k$>$} & ~ &
 \multicolumn{1}{|c|}{~} & ~ & ~ \\
-\multicolumn{1}{l}{\bf xx\_salt0...$<$k$>$} & $\longrightarrow$ &
+\multicolumn{1}{l}{\bf xx\_salt0...$<$k$>$} & 
+$\stackrel{\mbox{read}}{\longrightarrow}$ &
 \multicolumn{1}{|c|}{forward integration} & ~ & ~ \\ 
 \multicolumn{1}{l}{\bf \vdots} & ~ & \multicolumn{1}{|c|}{~}  
 & ~ & ~ \\
 \cline{3-3}
-~ & ~ & ~ & ~ & ~ \\
+~ & ~ & $\downarrow$ & ~ & ~ \\
 \cline{3-3}
 ~ & ~ & 
 \multicolumn{1}{|c|}{~} & ~ & 
 \multicolumn{1}{l}{\bf adxx\_theta0...$<$k$>$}  \\
 ~ & ~ & \multicolumn{1}{|c|}{adjoint integration} & 
-$\longrightarrow$ & 
+$\stackrel{\mbox{write}}{\longrightarrow}$ & 
 \multicolumn{1}{l}{\bf adxx\_salt0...$<$k$>$} \\ 
 ~ & ~ & \multicolumn{1}{|c|}{~}  
 & ~ & \multicolumn{1}{l}{\bf \vdots} \\
@@ -1630,19 +1767,22 @@ $\longrightarrow$ &
 ~ & ~ & ~ & ~ &  {\big\downarrow} \\
 ~ & ~ & ~ & ~ &  {\bf vector\_grad\_$<$k$>$ } \\
 \end{tabular}
+}
 
 \vspace*{0.5cm}
 
 
-{\it ctrl\_unpack} reads in the updated control vector
+{\it ctrl\_unpack} reads the updated control vector
 {\bf vector\_ctrl\_$<$k$>$}.
 It distributes the different control variables to
 2-dim. and 3-dim. files {\it xx\_...$<$k$>$}.
-During the forward integration the control variables
-are read from {\it xx\_...$<$k$>$}.
-Correspondingly, the adjoint fields are written
+At the start of the forward integration the control variables
+are read from {\it xx\_...$<$k$>$} and added to the
+field.
+Correspondingly, at the end of the adjoint integration
+the adjoint fields are written
 to {\it adxx\_...$<$k$>$}, again via the active file routines.
-Finally, {\it ctrl\_pack} collects all adjoint field files
+Finally, {\it ctrl\_pack} collects all adjoint files
 and writes them to the compressed vector file
 {\bf vector\_grad\_$<$k$>$}.
 
@@ -1650,11 +1790,11 @@ and writes them to the compressed vector file
 
 
 
-\subsection{Flow directives and adjoint support routines}
+\subsection{Flow directives and adjoint support routines \label{section_flowdir}}
 
-\subsection{Store directives and checkpointing}
+\subsection{Store directives and checkpointing \label{section_checkpointing}}
 
-\subsection{Gradient checks}
+\subsection{Gradient checks \label{section_grdchk}}
 
 \subsection{Second derivative generation via TAMC}
 

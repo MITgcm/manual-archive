@@ -1,0 +1,32 @@
+
+{\scriptsize
+\begin{verbatim}
+      the_model_main
+      |
+      |-- initialise_fixed
+      |   |
+      |   |-- packages_readparms
+      |       |
+      |       |-- cost_readparms
+      |       o
+      |
+      |-- the_main_loop
+     ...  |
+          |-- initialise_varia
+          |   |
+          |   |-- packages_init_variables
+          |       |
+          |       |-- cost_init
+          |       o
+          |
+          |-- do iloop = 1,nTimeSteps
+          |      |-- forward_step
+          |      |-- cost_tile
+          |      |   |
+          |      |   |-- cost_tracer
+          |   end do
+          |
+          |-- cost_final
+          o
+\end{verbatim}
+}

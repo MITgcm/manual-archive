@@ -1,40 +1,48 @@
-% $Header: /u/gcmpack/manual/s_autodiff/text/doc_ad_the_model.tex,v 1.1.1.1 2001/08/08 16:16:26 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_autodiff/text/doc_ad_the_model.tex,v 1.2 2001/10/05 22:22:20 heimbach Exp $
 % $Name:  $
 
-{\small
+{\scriptsize
 \begin{verbatim}
-   **************
    the_model_main
-   **************
    |
    |--- initialise_fixed
-   |    |
-   |   ...
-   |    |--- packages_readparms
-   |    |    |
-   |    |   ...
-   |    |    |--- #ifdef ALLOW_ADJOINT_RUN
-   |    |    |           call cost_readparms
-   |    |    |           call ctrl_readparms
-   |    |    |    #endif
-   |    |   ...
-   |    |    o
-   |   ...
-   |    o
-  ...
    |
    |--- #ifdef ALLOW_ADJOINT_RUN
-   |           call ctrl_unpack
-   |           call adthe_main_loop
-   |           call ctrl_pack
-   |    #else
-   |           call the_main_loop
+   |           |    
+   |           |--- ctrl_unpack
+   |           |    
+   |           |--- adthe_main_loop
+   |           |    |
+   |           |    |--- initialise_varia
+   |           |    |--- ctrl_map_forcing
+   |           |    |--- do iloop = 1, nTimeSteps
+   |           |    |       |--- forward_step
+   |           |    |       |--- cost_tile
+   |           |    |    end do
+   |           |    |--- cost_final
+   |           |    |
+   |           |    |--- adcost_final
+   |           |    |--- do iloop = nTimeSteps, 1, -1
+   |           |    |       |--- adcost_tile
+   |           |    |       |--- adforward_step
+   |           |    |    end do
+   |           |    |--- adctrl_map_forcing
+   |           |    |--- adinitialise_varia
+   |           |    o
+   |           |
+   |           |--- ctrl_pack
+   |           |
+   |--- #else
+   |           |
+   |           |--- the_main_loop
+   |           |
    |    #endif
    |
    |--- #ifdef ALLOW_GRADIENT_CHECK
-   |           call grdchk_main
+   |           |
+   |           |--- grdchk_main
+   |           o
    |    #endif
-  ...
    o
 \end{verbatim}
 }

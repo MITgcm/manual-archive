@@ -1,0 +1,29 @@
+
+{\scriptsize
+\begin{verbatim}
+          the_model_main
+          |
+          |-- initialise_fixed
+          |   |
+          |   |-- packages_readparms
+          |       |
+          |       |-- ctrl_init                - initialise control
+          |       o                              package
+          |
+          |-- ctrl_unpack                      - unpack control vector
+          |
+          |-- adthe_main_loop                  - forward/adjoint run
+          |   |
+          |   |-- initialise_variables
+          |   |   |
+          |   |   |-- packages_init_variables
+          |   |       |
+          |   |       |-- ctrl_map_ini         - link init. state and
+          |   |       o                          parameters to control 
+          |   |                                  variables
+          |   |-- ctrl_map_forcing             - link forcing fields to
+          |  ...                                 control variables
+          |
+          |-- ctrl_pack                        - pack control vector
+\end{verbatim}
+}
