@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_overview/Attic/appendix_ocean.tex,v 1.1.1.1 2001/08/08 16:16:19 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_overview/Attic/appendix_ocean.tex,v 1.2 2001/09/11 14:39:38 cnh Exp $
 % $Name:  $
 
 \section{Appendix OCEAN}
@@ -11,14 +11,15 @@ non-Boussinesq equations for oceanic motion are:
 \begin{eqnarray}
 \frac{D\vec{\mathbf{v}}_{h}}{Dt}+f\hat{\mathbf{k}}\times \vec{\mathbf{v}}%
 _{h}+\frac{1}{\rho }\mathbf{\nabla }_{z}p &=&\vec{\mathbf{\mathcal{F}}}
-\label{eq-zns-hmom} \\
+\\
 \epsilon _{nh}\frac{Dw}{Dt}+g+\frac{1}{\rho }\frac{\partial p}{\partial z}
-&=&\epsilon _{nh}\mathcal{F}_{w}  \label{eq-zns-hydro} \\
+&=&\epsilon _{nh}\mathcal{F}_{w}  \\
 \frac{1}{\rho }\frac{D\rho }{Dt}+\mathbf{\nabla }_{z}\cdot \vec{\mathbf{v}}%
-_{h}+\frac{\partial w}{\partial z} &=&0  \label{eq-zns-cont} \\
-\rho &=&\rho (\theta ,S,p)  \label{eq-zns-eos} \\
-\frac{D\theta }{Dt} &=&\mathcal{Q}_{\theta }  \label{eq-zns-heat} \\
-\frac{DS}{Dt} &=&\mathcal{Q}_{s}  \label{eq-zns-salt}
+_{h}+\frac{\partial w}{\partial z} &=&0  \\
+\rho &=&\rho (\theta ,S,p)  \\
+\frac{D\theta }{Dt} &=&\mathcal{Q}_{\theta }  \\
+\frac{DS}{Dt} &=&\mathcal{Q}_{s} 
+\label{eq:non-boussinesq}
 \end{eqnarray}
 These equations permit acoustics modes, inertia-gravity waves,
 non-hydrostatic motions, a geostrophic (Rossby) mode and a thermo-haline
@@ -194,15 +195,15 @@ equations:
 \begin{eqnarray}
 \frac{D\vec{\mathbf{v}}_{h}}{Dt}+f\hat{\mathbf{k}}\times \vec{\mathbf{v}}%
 _{h}+\frac{1}{\rho _{c}}\mathbf{\nabla }_{z}p^{\prime } &=&\vec{\mathbf{%
-\mathcal{F}}}  \label{eq-zpe-hmom} \\
+\mathcal{F}}}  \label{eq:ocean-mom} \\
 \epsilon _{nh}\frac{Dw}{Dt}+\frac{g\rho ^{\prime }}{\rho _{c}}+\frac{1}{\rho
 _{c}}\frac{\partial p^{\prime }}{\partial z} &=&\epsilon _{nh}\mathcal{F}_{w}
-\label{eq-zpe-hydro} \\
+\label{eq:ocean-wmom} \\
 \mathbf{\nabla }_{z}\cdot \vec{\mathbf{v}}_{h}+\frac{\partial w}{\partial z}
-&=&0  \label{eq-zpe-cont} \\
-\rho ^{\prime } &=&\rho (\theta ,S,p_{o}(z))-\rho _{c}  \label{eq-zpe-eos} \\
-\frac{D\theta }{Dt} &=&\mathcal{Q}_{\theta }  \label{eq-zpe-heat} \\
-\frac{DS}{Dt} &=&\mathcal{Q}_{s}  \label{eq-zpe-salt}
+&=&0  \label{eq:ocean-cont} \\
+\rho ^{\prime } &=&\rho (\theta ,S,p_{o}(z))-\rho _{c}  \label{eq:ocean-eos} \\
+\frac{D\theta }{Dt} &=&\mathcal{Q}_{\theta }  \label{eq:ocean-theta} \\
+\frac{DS}{Dt} &=&\mathcal{Q}_{s}  \label{eq:ocean-salt}
 \end{eqnarray}
 Note that the hydrostatic pressure of the resting fluid, including that
 associated with $\rho _{c}$, is subtracted out since it has no effect on the
