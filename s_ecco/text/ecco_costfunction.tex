@@ -59,7 +59,7 @@ field & file name & deccription & unit \\
 \begin{enumerate}
 %
 \item
-Compute 11yr model mean spatial distribution
+Compute $nYears$ model mean spatial distribution
 %
 \begin{equation}
 psmean(i,j)\, =\, 
@@ -68,7 +68,7 @@ psbar(i,j)
 \end{equation}
 %
 \item
-Compute global offset between 11-yr model and T/P mean:
+Compute global offset between $nYears$ model and T/P mean:
 %
 \begin{equation}
 \begin{split}
@@ -289,8 +289,8 @@ field & file name & deccription & unit \\
 [ppt] \\
 {\it wti, wsi} & {\tt data\_errfile} & vert. stdev. profile for $T$, $S$ &
 ~ \\
-{\it wtheta2} & {\tt temperrfile} & ~ & [$^{\circ}$C] \\
-{\it wsalt2} & {\tt salterrfile} & ~ & [ppt] \\
+{\it wtvar} & {\tt temperrfile} & spatially varying stdev. & [$^{\circ}$C] \\
+{\it wsvar} & {\tt salterrfile} & spatially varying stdev. & [ppt] \\
 ~&~&~&~\\
 \hline \hline
 \end{tabular}
@@ -301,9 +301,9 @@ field & file name & deccription & unit \\
 
 \begin{equation}
 \begin{split}
-cost\_xbt\_t(i,j) & = \,
-\left[ \, \frac{cosphi \cdot mask}{wtheta2} \sum_{\tau=1}^{nMonsRec}
-\left\{ Tbar(\tau) \, - \, T2\theta[xbtobs(\tau)] \right\}^2 \, \right](i,j)
+cost\_xbt\_t(i,j,k) & = \,
+\left[ \, \frac{fac \cdot ratio}{wti^2 + wtvar^2} \sum_{\tau=1}^{nMonsRec}
+\left\{ Tbar(\tau) \, - \, T2\theta[xbtobs(\tau)] \right\}^2 \, \right](i,j,k)
  \\
 \end{split}
 \end{equation}
@@ -312,13 +312,13 @@ cost\_xbt\_t(i,j) & = \,
 
 \begin{equation}
 \begin{split}
-cost\_ctd\_t(i,j) & = \,
-\left[ \, \frac{cosphi \cdot mask}{wtheta2} \sum_{\tau=1}^{nMonsRec}
-\left\{ Tbar(\tau) \, - \, ctdTobs(\tau) \right\}^2 \, \right](i,j)
+cost\_ctd\_t(i,j,k) & = \,
+\left[ \, \frac{fac \cdot ratio}{wti^2 + wtvar^2} \sum_{\tau=1}^{nMonsRec}
+\left\{ Tbar(\tau) \, - \, ctdTobs(\tau) \right\}^2 \, \right](i,j,k)
  \\
-cost\_ctd\_s(i,j) & = \,
-\left[ \, \frac{cosphi \cdot mask}{wsalt2} \sum_{\tau=1}^{nMonsRec}
-\left\{ Sbar(\tau) \, - \, ctdSobs(\tau) \right\}^2 \, \right](i,j)
+cost\_ctd\_s(i,j,k) & = \,
+\left[ \, \frac{fac \cdot ratio}{wsi^2 + wsvar^2} \sum_{\tau=1}^{nMonsRec}
+\left\{ Sbar(\tau) \, - \, ctdSobs(\tau) \right\}^2 \, \right](i,j,k)
  \\
 \end{split}
 \end{equation}
@@ -327,13 +327,13 @@ cost\_ctd\_s(i,j) & = \,
 
 \begin{equation}
 \begin{split}
-cost\_argo\_t(i,j) & = \,
-\left[ \, \frac{cosphi \cdot mask}{wtheta2} \sum_{\tau=1}^{nMonsRec}
-\left\{ Tbar(\tau) \, - \, T2\theta[argoTobs(\tau)] \right\}^2 \, \right](i,j)
+cost\_argo\_t(i,j,k) & = \,
+\left[ \, \frac{fac \cdot ratio}{wti^2 + wvar^2} \sum_{\tau=1}^{nMonsRec}
+\left\{ Tbar(\tau) \, - \, T2\theta[argoTobs(\tau)] \right\}^2 \, \right](i,j,k)
  \\
-cost\_argo\_s(i,j) & = \,
-\left[ \, \frac{cosphi \cdot mask}{wsalt2} \sum_{\tau=1}^{nMonsRec}
-\left\{ Sbar(\tau) \, - \, argoSobs(\tau) \right\}^2 \, \right](i,j)
+cost\_argo\_s(i,j,k) & = \,
+\left[ \, \frac{fac \cdot ratio}{wsi^2 + wsvar^2} \sum_{\tau=1}^{nMonsRec}
+\left\{ Sbar(\tau) \, - \, argoSobs(\tau) \right\}^2 \, \right](i,j,k)
  \\
 \end{split}
 \end{equation}
@@ -343,17 +343,42 @@ cost\_argo\_s(i,j) & = \,
 \begin{equation}
 \begin{split}
 cost\_sst(i,j) & = \,
-\left[ \, \frac{cosphi \cdot mask}{wsst} \sum_{\tau=1}^{nMonsRec}
+\left[ \, wsst \sum_{\tau=1}^{nMonsRec}
 \left\{ Tbar(\tau) \, - \, sstDat(\tau) \right\}^2 \, \right](i,j)
  \\
 cost\_sss(i,j) & = \,
-\left[ \, \frac{cosphi \cdot mask}{wsss} \sum_{\tau=1}^{nMonsRec}
+\left[ \, wsss \sum_{\tau=1}^{nMonsRec}
 \left\{ Sbar(\tau) \, - \, sssDat(\tau) \right\}^2 \, \right](i,j)
  \\
 \end{split}
 \end{equation}
 
 \subsubsection{Levitus montly T, S climatological data}
+
+Model vs. data misfits are taken from $nYears$ monthly model means
+vs. Levitus monthly data.
+The description below is for potential temperature.
+Procedure for salinity is fully analogous.
+Spatial indices $(i,j,k)$ are omitted throughout.
+%
+\begin{enumerate}
+%
+\item
+Compute $nYears$ monthly model means for each month $imon$:
+\[
+\overline{Tbar}(imon) \, = \, \frac{1}{nYears} 
+\sum_{iyear=1}^{nYears} Tbar(iyear,imon)
+\]
+%
+\item
+Compute misfit:
+\[
+cost\_theta(i,j,k) \, = \, \left[ 
+\frac{fac \cdot ratio}{wti^2} \sum_{imon=1}^{12}
+\left\{ \overline{Tbar}(imon) \, - \, Tdat(imon) \right\}^2  \right] (i,j,k)
+\]
+
+\end{enumerate}
 
 
 \subsubsection{Weights and notes}
@@ -370,12 +395,15 @@ cosphi(i,j) \, = \, 1
 \]
 %
 \item
-Spatially constant weights:
+$ fac \, = \, cosphi \cdot mask $
+%
+\item
+Spatially {\it constant} weights:
 %
 \begin{enumerate}
 %
 \item
-Read standard deviation fields \\
+Read standard deviation vertical profiles for $T$, $S$ \\
 $ {\tt data\_errfile} \, \longrightarrow \, 
 wti(k), \,\, wsi(k) $ \\
 $ {\tt data\_errfile} \, \longrightarrow \, 
@@ -385,32 +413,32 @@ ratio = 0.25 = \left( \frac{1}{2} \right)^2 $
 Take inverse squares:
 \[
 \begin{split}
-wtheta(k) & = \, \frac{ratio}{wti(k) \cdot wti(k)} \\
-wsalt(k) & = \, \frac{ratio}{wsi(k) \cdot wsi(k)} \\
+wtheta(k) & = \, \frac{ratio}{wti(k)^2} \\
+wsalt(k) & = \, \frac{ratio}{wsi(k)^2} \\
 \end{split}
 \]
 %
 \end{enumerate}
 %
 \item
-Spatially varying weights:
+Spatially {\it varying} weights:
 %
 \begin{enumerate}
 %
 \item
 Read standard deviation fields \\
-$ {\tt temperrfile} \, \longrightarrow \, wtheta2(i,j,k) $ \\
-$ {\tt salterrfile} \, \longrightarrow \, wsalt2(i,j,k) $ \\
+$ {\tt temperrfile} \, \longrightarrow \, wtvar(i,j,k) $ \\
+$ {\tt salterrfile} \, \longrightarrow \, wsvar(i,j,k) $ \\
 %
 \item
 Weights are combination of spatially constant and varying parts:
 \[
 \begin{split}
 wtheta2(i,j,k) & = \, \frac{ratio}
-{wti(k) \cdot wti(k) \, + \,wtheta2(i,j,k) \cdot wtheta2(i,j,k) } \\
+{wti(k)^2 \, + \,wtvar(i,j,k)^2 } \\
 wsalt2(i,j,k) & = \, 
 \frac{ratio}
-{wsi(k) \cdot wsi(k) \, + \,wsalt2(i,j,k) \cdot wsalt2(i,j,k) } \\
+{wsi(k)^2 \, + \,wsvar(i,j,k)^2 } \\
 \end{split}
 \]
 %
@@ -420,9 +448,9 @@ wsalt2(i,j,k) & = \,
 Sea surface $T$, $S$ weights:
 \begin{itemize}
 \item
-SST: $ wsst \, = \, wtheta(1)$: horizontally constant
+SST: $ wsst \, = \, fac \cdot wtheta(1)$: horizontally constant
 \item
-SSS: $ wsss \, = \, wsalt2(i,j,1)$: horizontally varying
+SSS: $ wsss \, = \, fac \cdot wsalt2(i,j,1)$: horizontally varying
 \end{itemize}
 (Why this difference? I don't know.)
 %
@@ -434,7 +462,7 @@ SSS: $ wsss \, = \, wsalt2(i,j,1)$: horizontally varying
 \begin{itemize}
 %
 \item
-Map out $wtheta2(i,j)$, $wsalt2(i,j)$.
+Map out $wtheta2(i,j,k)$, $wsalt2(i,j,k)$.
 
 %
 \end{itemize}
