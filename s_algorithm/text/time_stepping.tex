@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.2 2001/08/09 16:22:09 jmc Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.3 2001/08/09 20:06:18 jmc Exp $
 % $Name:  $
 
 The convention used in this section is as follows:
@@ -8,7 +8,7 @@ at time $t = n \Delta t$ . We used the notation $\Phi^{(n)}$
 when time interpolation is required to estimate the value of $\phi$
 at the time $n \Delta t$.
 
-\section{Time Integration}
+\section{Time integration}
 
 The discretization in time of the model equations (cf section I )
 does not depend of the discretization in space of each
@@ -30,10 +30,10 @@ b' & = & b'(\theta,S,r)
 \label{eq-r-split-hyd}
 \\
 \partial_t \vec{\bf v}
-+ {\bf \nabla}_r B_o \eta
-+ \epsilon_{nh} {\bf \nabla}_r \phi'_{nh}
++ {\bf \nabla}_h b_s \eta
++ \epsilon_{nh} {\bf \nabla}_h \phi'_{nh}
 & = & \vec{\bf G}_{\vec{\bf v}} 
-- {\bf \nabla}_r \phi'_{hyd}
+- {\bf \nabla}_h \phi'_{hyd}
 \label{eq-r-split-hmom}
 \\
 \epsilon_{nh} \frac {\partial{\dot{r}}}{\partial{t}}
@@ -41,27 +41,27 @@ b' & = & b'(\theta,S,r)
 & = & \epsilon_{nh} G_{\dot{r}} 
 \label{eq-r-split-rdot}
 \\
-{\bf \nabla}_r \cdot \vec{\bf v} + \partial_r \dot{r}
+{\bf \nabla}_h \cdot \vec{\bf v} + \partial_r \dot{r}
 & = & 0
 \label{eq-r-cont}
 \end{eqnarray}
 where
 \begin{eqnarray*}
 G_\theta & = &
-- \vec{\bf v} \cdot {\bf \nabla}_r \theta + {\cal Q}_\theta
+- \vec{\bf v} \cdot {\bf \nabla} \theta + {\cal Q}_\theta
 \\
 G_S & = &
-- \vec{\bf v} \cdot {\bf \nabla}_r S + {\cal Q}_S
+- \vec{\bf v} \cdot {\bf \nabla} S + {\cal Q}_S
 \\
 \vec{\bf G}_{\vec{\bf v}}
 & = &
-- \vec{\bf v} \cdot {\bf \nabla}_r \vec{\bf v}
+- \vec{\bf v} \cdot {\bf \nabla} \vec{\bf v}
 - f \hat{\bf k} \wedge \vec{\bf v}
 + \vec{\cal F}_{\vec{\bf v}}
 \\
 G_{\dot{r}}
 & = &
-- \vec{\bf v} \cdot {\bf \nabla}_r \dot{r}
+- \vec{\bf v} \cdot {\bf \nabla} \dot{r}
 + {\cal F}_{\dot{r}}
 \end{eqnarray*}
 The exact form of all the "{\it G}"s terms is described in the next
@@ -70,7 +70,8 @@ all the RHS terms except the pressure / geo- potential terms.
 
 The switch $\epsilon_{nh}$ allows to activate the non hydrostatic
 mode ($\epsilon_{nh}=1$) for the ocean model. Otherwise, 
-in the hydrostatic limit $\epsilon_{nh} = 0$ and the 3rd equation vanishes.
+in the hydrostatic limit $\epsilon_{nh} = 0$ 
+and equation \ref{eq-r-split-rdot} vanishes.
 
 The equation for $\eta$ is obtained by integrating the 
 continuity equation over the entire depth of the fluid, 
@@ -79,7 +80,7 @@ from $R_{min}(x,y)$ up to $R_o(x,y)$
 \begin{eqnarray}
 \epsilon_{fs} \partial_t \eta =
 \left. \dot{r} \right|_{r=r_{surf}} + \epsilon_{fw} (P-E) =
-- {\bf \nabla}_r \cdot \int_{R_{min}}^{R_o} \vec{\bf v} dr
+- {\bf \nabla} \cdot \int_{R_{min}}^{R_o} \vec{\bf v} dr
 + \epsilon_{fw} (P-E)
 \label{eq-cont-2D}
 \end{eqnarray}
@@ -104,89 +105,7 @@ $\phi'_{hyd}(r=R_o) = 0$:
 \phi'_{hyd}(x,y,r') = \int_{r'}^{R_o} b' dr
 \end{eqnarray*}
 
-\subsection{standard synchronous time stepping}
-
-In the standard formulation, the surface pressure is 
-evaluated at time step n+1 (implicit method).
-The above set of equations is then discretized in time 
-as follows:
-\begin{eqnarray}
-\left[ 1 - \partial_r \kappa_v^\theta \partial_r \right]
-\theta^{n+1} & = & \theta^*
-\\
-\left[ 1 - \partial_r \kappa_v^S \partial_r \right]
-S^{n+1} & = & S^*
-\\
-%{b'}^{n} & = & b'(\theta^{n},S^{n},r)
-%\partial_r {\phi'_{hyd}}^{n} & = & {-b'}^{n}
-%\\
-{\phi'_{hyd}}^{n} & = & \int_{r'}^{R_o} b'(\theta^{n},S^{n},r) dr
-\label{eq-rtd-hyd}
-\\
-\vec{\bf v} ^{n+1}
-+ \Delta t {\bf \nabla}_r B_o {\eta}^{n+1}
-+ \epsilon_{nh} \Delta t {\bf \nabla}_r {\phi'_{nh}}^{n+1}
-- \partial_r A_v \partial_r \vec{\bf v}^{n+1}
-& = &
-\vec{\bf v}^*
-\label{eq-rtd-hmom}
-\\
-\epsilon_{fs} {\eta}^{n+1} + \Delta t
-{\bf \nabla}_r \cdot \int_{R_{min}}^{R_o} \vec{\bf v}^{n+1} dr
-& = & 
-    \epsilon_{fs} {\eta}^{n} + \epsilon_{fw} \Delta_t (P-E)^{n} 
-\nonumber
-\\
-% = \epsilon_{fs} {\eta}^{n} & + & \epsilon_{fw} \Delta_t (P-E)^{n} 
-\label{eq-rtd-eta}
-\\
-\epsilon_{nh} \left( \dot{r} ^{n+1}
-+ \Delta t \partial_r {\phi'_{nh}} ^{n+1}
-\right)
-& = & \epsilon_{nh} \dot{r}^*
-\label{eq-rtd-rdot}
-\\
-{\bf \nabla}_r \cdot \vec{\bf v}^{n+1} + \partial_r \dot{r}^{n+1}
-& = & 0
-\label{eq-rtd-cont}
-\end{eqnarray}
-where
-\begin{eqnarray}
-\theta^* & = &
-\theta ^{n} + \Delta t G_{\theta} ^{(n+1/2)}
-\\
-S^* & = &
-S ^{n} + \Delta t G_{S} ^{(n+1/2)}
-\\
-\vec{\bf v}^* & = &
-\vec{\bf v}^{n} + \Delta t \vec{\bf G}_{\vec{\bf v}} ^{(n+1/2)}
-+ \Delta t  {\bf \nabla}_r {\phi'_{hyd}}^{(n+1/2)}
-\\
-\dot{r}^* & = &
-\dot{r} ^{n} + \Delta t G_{\dot{r}} ^{(n+1/2)}
-\end{eqnarray}
-
-Note that implicit vertical terms (viscosity and diffusivity) are 
-not considered as part of the "{\it G}" terms, but are 
-written separately here.
-
-To ensure a second order time discretization for both 
-momentum and tracer,
-The "G" terms are "extrapolated" forward in time
-(Adams Bashforth time stepping)
-from the values computed at time step $n$ and $n-1$
-to the time $n+1/2$:
-$$G^{(n+1/2)} = G^n + (1/2+\epsilon_{AB}) (G^n - G^{n-1})$$
-A small number for the parameter $\epsilon_{AB}$ is generally used 
-to stabilize this time stepping.
-
-In the standard non-stagger formulation, 
-the Adams-Bashforth time stepping is also applied to the 
-hydrostatic (pressure / geo-) potential term $\nabla_h \Phi'_{hyd}$. 
-Note that presently, this term is in fact incorporated to the 
-$\vec{\bf G}_{\vec{\bf v}}$ arrays ({\it gU,gV}).
-
-\subsection{general method}
+\subsection{General method}
  
 The general algorithm consist in  a "predictor step" that computes
 the forward tendencies ("G" terms") and all 
@@ -238,17 +157,99 @@ as function of the present state (time step $n$) and external forcing ;
 Then within the main part of model,
 only those new tendencies are added to the model variables.
 
-[mode details needed]
+[more details needed]\\
 The atmospheric physics follows this general scheme.
 
-\subsection{stagger baroclinic time stepping}
+\subsection{Standard synchronous time stepping}
+
+In the standard formulation, the surface pressure is 
+evaluated at time step n+1 (implicit method).
+The above set of equations is then discretized in time 
+as follows:
+\begin{eqnarray}
+\left[ 1 - \partial_r \kappa_v^\theta \partial_r \right]
+\theta^{n+1} & = & \theta^*
+\\
+\left[ 1 - \partial_r \kappa_v^S \partial_r \right]
+S^{n+1} & = & S^*
+\\
+%{b'}^{n} & = & b'(\theta^{n},S^{n},r)
+%\partial_r {\phi'_{hyd}}^{n} & = & {-b'}^{n}
+%\\
+{\phi'_{hyd}}^{n} & = & \int_{r'}^{R_o} b'(\theta^{n},S^{n},r) dr
+\label{eq-rtd-hyd}
+\\
+\vec{\bf v} ^{n+1}
++ \Delta t {\bf \nabla}_h b_s {\eta}^{n+1}
++ \epsilon_{nh} \Delta t {\bf \nabla} {\phi'_{nh}}^{n+1}
+- \partial_r A_v \partial_r \vec{\bf v}^{n+1}
+& = &
+\vec{\bf v}^*
+\label{eq-rtd-hmom}
+\\
+\epsilon_{fs} {\eta}^{n+1} + \Delta t
+{\bf \nabla}_h \cdot \int_{R_{min}}^{R_o} \vec{\bf v}^{n+1} dr
+& = & 
+    \epsilon_{fs} {\eta}^{n} + \epsilon_{fw} \Delta_t (P-E)^{n} 
+\nonumber
+\\
+% = \epsilon_{fs} {\eta}^{n} & + & \epsilon_{fw} \Delta_t (P-E)^{n} 
+\label{eq-rtd-eta}
+\\
+\epsilon_{nh} \left( \dot{r} ^{n+1}
++ \Delta t \partial_r {\phi'_{nh}} ^{n+1}
+\right)
+& = & \epsilon_{nh} \dot{r}^*
+\label{eq-rtd-rdot}
+\\
+{\bf \nabla}_h \cdot \vec{\bf v}^{n+1} + \partial_r \dot{r}^{n+1}
+& = & 0
+\label{eq-rtd-cont}
+\end{eqnarray}
+where
+\begin{eqnarray}
+\theta^* & = &
+\theta ^{n} + \Delta t G_{\theta} ^{(n+1/2)}
+\\
+S^* & = &
+S ^{n} + \Delta t G_{S} ^{(n+1/2)}
+\\
+\vec{\bf v}^* & = &
+\vec{\bf v}^{n} + \Delta t \vec{\bf G}_{\vec{\bf v}} ^{(n+1/2)}
++ \Delta t  {\bf \nabla}_h {\phi'_{hyd}}^{(n+1/2)}
+\\
+\dot{r}^* & = &
+\dot{r} ^{n} + \Delta t G_{\dot{r}} ^{(n+1/2)}
+\end{eqnarray}
+
+Note that implicit vertical terms (viscosity and diffusivity) are 
+not considered as part of the "{\it G}" terms, but are 
+written separately here.
+
+To ensure a second order time discretization for both 
+momentum and tracer,
+The "G" terms are "extrapolated" forward in time
+(Adams Bashforth time stepping)
+from the values computed at time step $n$ and $n-1$
+to the time $n+1/2$:
+$$G^{(n+1/2)} = G^n + (1/2+\epsilon_{AB}) (G^n - G^{n-1})$$
+A small number for the parameter $\epsilon_{AB}$ is generally used 
+to stabilize this time stepping.
+
+In the standard non-stagger formulation, 
+the Adams-Bashforth time stepping is also applied to the 
+hydrostatic (pressure / geo-) potential term $\nabla_h \Phi'_{hyd}$. 
+Note that presently, this term is in fact incorporated to the 
+$\vec{\bf G}_{\vec{\bf v}}$ arrays ({\bf gU,gV}).
+
+\subsection{Stagger baroclinic time stepping}
 
 An alternative is to evaluate $\phi'_{hyd}$ with the 
 new tracer fields, and step forward the momentum after.
 This option is known as stagger baroclinic time stepping, 
 since tracer and momentum are step forward in time one after the other.
 It can be activated turning on a running flag parameter 
-{\it staggerTimeStep} in file "{\it data}"). 
+{\bf staggerTimeStep} in file "{\it data}"). 
 
 The main advantage of this time stepping compared to a synchronous one,
 is a better stability, specially regarding internal gravity waves,
@@ -288,15 +289,15 @@ And
 %\label{eq-rtd-hyd}
 \\
 \vec{\bf v} ^{n+1}
-+ \Delta t {\bf \nabla}_r B_o {\eta}^{n+1}
-+ \epsilon_{nh} \Delta t {\bf \nabla}_r {\phi'_{nh}}^{n+1}
++ \Delta t {\bf \nabla}_h b_s {\eta}^{n+1}
++ \epsilon_{nh} \Delta t {\bf \nabla}_h {\phi'_{nh}}^{n+1}
 - \partial_r A_v \partial_r \vec{\bf v}^{n+1}
 & = &
 \vec{\bf v}^*
 %\label{eq-rtd-hmom}
 \\
 \epsilon_{fs} {\eta}^{n+1} + \Delta t
-{\bf \nabla}_r \cdot \int_{R_{min}}^{R_o} \vec{\bf v}^{n+1} dr
+{\bf \nabla}_h \cdot \int_{R_{min}}^{R_o} \vec{\bf v}^{n+1} dr
 & = & 
 \epsilon_{fs} {\eta}^{n} + \epsilon_{fw} \Delta_t (P-E)^{n} 
 \\
@@ -306,7 +307,7 @@ And
 & = & \epsilon_{nh} \dot{r}^*
 %\label{eq-rtd-rdot}
 \\
-{\bf \nabla}_r \cdot \vec{\bf v}^{n+1} + \partial_r \dot{r}^{n+1}
+{\bf \nabla}_h \cdot \vec{\bf v}^{n+1} + \partial_r \dot{r}^{n+1}
 & = & 0
 %\label{eq-rtd-cont}
 \end{eqnarray*}
@@ -314,7 +315,7 @@ with
 \begin{eqnarray*}
 \vec{\bf v}^* & = &
 \vec{\bf v} ^{n} + \Delta t \vec{\bf G}_{\vec{\bf v}} ^{(n+1/2)}
-+ \Delta t  {\bf \nabla}_r {\phi'_{hyd}}^{n+1/2}
++ \Delta t  {\bf \nabla}_h {\phi'_{hyd}}^{n+1/2}
 \\
 \dot{r}^* & = &
 \dot{r} ^{n} + \Delta t G_{\dot{r}} ^{(n+1/2)}
@@ -322,21 +323,21 @@ with
 
 %---------------------------------------------------------------------
 
-\subsection{surface pressure}
+\subsection{Surface pressure}
 
 Substituting \ref{eq-rtd-hmom} into \ref{eq-rtd-cont}, assuming
 $\epsilon_{nh} = 0$ yields a Helmholtz equation for ${\eta}^{n+1}$:
 \begin{eqnarray}
 \epsilon_{fs} {\eta}^{n+1} -
-{\bf \nabla}_r \cdot \Delta t^2 (R_o-R_{min})
-{\bf \nabla}_r B_o {\eta}^{n+1}
+{\bf \nabla}_h \cdot \Delta t^2 (R_o-R_{min})
+{\bf \nabla}_h b_s {\eta}^{n+1}
 = {\eta}^*
 \label{solve_2d}
 \end{eqnarray}
 where
 \begin{eqnarray}
 {\eta}^* = \epsilon_{fs} \: {\eta}^{n} -
-\Delta t {\bf \nabla}_r \cdot \int_{R_{min}}^{R_o} \vec{\bf v}^* dr
+\Delta t {\bf \nabla}_h \cdot \int_{R_{min}}^{R_o} \vec{\bf v}^* dr
 \: + \: \epsilon_{fw} \Delta_t (P-E)^{n} 
 \label{solve_2d_rhs}
 \end{eqnarray}
@@ -346,7 +347,7 @@ would yield $\vec{\bf v}^{n+1}$ if the model is hydrostatic
 ($\epsilon_{nh}=0$):
 $$
 \vec{\bf v}^{n+1} = \vec{\bf v}^{*}
-- \Delta t {\bf \nabla}_r B_o {\eta}^{n+1}
+- \Delta t {\bf \nabla}_h b_s {\eta}^{n+1}
 $$
 
 This is known as the correction step. However, when the model is
@@ -355,13 +356,13 @@ additional equation for $\phi'_{nh}$. This is obtained by
 substituting \ref{eq-rtd-hmom} and \ref{eq-rtd-rdot} into
 \ref{eq-rtd-cont}:
 \begin{equation}
-\left[ {\bf \nabla}_r^2 + \partial_{rr} \right] {\phi'_{nh}}^{n+1}
+\left[ {\bf \nabla}_h^2 + \partial_{rr} \right] {\phi'_{nh}}^{n+1}
 = \frac{1}{\Delta t} \left(
-{\bf \nabla}_r \cdot \vec{\bf v}^{**} + \partial_r \dot{r}^* \right)
+{\bf \nabla}_h \cdot \vec{\bf v}^{**} + \partial_r \dot{r}^* \right)
 \end{equation}
 where
 \begin{displaymath}
-\vec{\bf v}^{**} = \vec{\bf v}^* - \Delta t {\bf \nabla}_r B_o {\eta}^{n+1}
+\vec{\bf v}^{**} = \vec{\bf v}^* - \Delta t {\bf \nabla}_h b_s {\eta}^{n+1}
 \end{displaymath}
 Note that $\eta^{n+1}$ is also used to update the second RHS term
 $\partial_r \dot{r}^* $ since
@@ -371,7 +372,7 @@ is evaluated as $(\eta^{n+1} - \eta^n) / \Delta t$.
 Finally, the horizontal velocities at the new time level are found by:
 \begin{equation}
 \vec{\bf v}^{n+1} = \vec{\bf v}^{**}
-- \epsilon_{nh} \Delta t {\bf \nabla}_r {\phi'_{nh}}^{n+1}
+- \epsilon_{nh} \Delta t {\bf \nabla}_h {\phi'_{nh}}^{n+1}
 \end{equation}
 and the vertical velocity is found by integrating the continuity
 equation vertically.
@@ -419,13 +420,13 @@ the main data file "{\it data}" and are set by default to 1,1.
 Equations \ref{eq-rtd-hmom} and \ref{eq-rtd-eta} are modified as follows:
 $$
 \frac{ \vec{\bf v}^{n+1} }{ \Delta t }
-+ {\bf \nabla}_r B_o [ \beta {\eta}^{n+1} + (1-\beta) {\eta}^{n} ] 
-+ \epsilon_{nh} {\bf \nabla}_r {\phi'_{nh}}^{n+1}
++ {\bf \nabla}_h b_s [ \beta {\eta}^{n+1} + (1-\beta) {\eta}^{n} ] 
++ \epsilon_{nh} {\bf \nabla}_h {\phi'_{nh}}^{n+1}
  = \frac{ \vec{\bf v}^* }{ \Delta t }
 $$
 $$
 \epsilon_{fs} \frac{ {\eta}^{n+1} - {\eta}^{n} }{ \Delta t}
-+ {\bf \nabla}_r \cdot \int_{R_{min}}^{R_o} 
++ {\bf \nabla}_h \cdot \int_{R_{min}}^{R_o} 
 [ \gamma \vec{\bf v}^{n+1} + (1-\gamma) \vec{\bf v}^{n}] dr
 = \epsilon_{fw} (P-E)
 $$
@@ -433,12 +434,12 @@ where:
 \begin{eqnarray*}
 \vec{\bf v}^* & = &
 \vec{\bf v} ^{n} + \Delta t \vec{\bf G}_{\vec{\bf v}} ^{(n+1/2)}
-+ (\beta-1) \Delta t {\bf \nabla}_r B_o {\eta}^{n}
-+ \Delta t {\bf \nabla}_r {\phi'_{hyd}}^{(n+1/2)}
++ (\beta-1) \Delta t {\bf \nabla}_h b_s {\eta}^{n}
++ \Delta t {\bf \nabla}_h {\phi'_{hyd}}^{(n+1/2)}
 \\
 {\eta}^* & = &
 \epsilon_{fs} {\eta}^{n} + \epsilon_{fw} \Delta t (P-E) 
-- \Delta t {\bf \nabla}_r \cdot \int_{R_{min}}^{R_o} 
+- \Delta t {\bf \nabla}_h \cdot \int_{R_{min}}^{R_o} 
 [ \gamma \vec{\bf v}^* + (1-\gamma) \vec{\bf v}^{n}] dr
 \end{eqnarray*}
 \\
@@ -446,14 +447,14 @@ In the hydrostatic case ($\epsilon_{nh}=0$),
 this allow to find ${\eta}^{n+1}$, according to:
 $$
 \epsilon_{fs} {\eta}^{n+1} -
-{\bf \nabla}_r \cdot \beta\gamma \Delta t^2 B_o (R_o - R_{min})
-{\bf \nabla}_r {\eta}^{n+1}
+{\bf \nabla}_h \cdot \beta\gamma \Delta t^2 b_s (R_o - R_{min})
+{\bf \nabla}_h {\eta}^{n+1}
 = {\eta}^*
 $$ 
 and then to compute (correction step):
 $$
 \vec{\bf v}^{n+1} = \vec{\bf v}^{*}
-- \beta \Delta t {\bf \nabla}_r B_o {\eta}^{n+1}
+- \beta \Delta t {\bf \nabla}_h b_s {\eta}^{n+1}
 $$
 
 The non-hydrostatic part is solved as described previously. 
