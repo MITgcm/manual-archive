@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/spatial-discrete.tex,v 1.2 2001/08/08 22:19:02 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/spatial-discrete.tex,v 1.3 2001/08/09 16:26:43 adcroft Exp $
 % $Name:  $
 
 \section{Spatial discretization of the dynamical equations}
@@ -38,25 +38,52 @@ grid data: ({\em model/inc/GRID.h})
 
 The finite volume method is used to discretize the equations in
 space. The expression ``finite volume'' actually has two meanings; one
-involves invocation of the weak formulation (e.g. integral
-formulation) and the other involves non-linear expressions for
-interpolation of data (e.g. flux limiters). We use both but they can
-and will be ddiscussed seperately. The finite volume method discretizes by invoking the weak formulation of the equations or integral form. For example, the 1-D advection-diffusion equation:
+is the method of cut or instecting boundaries (shaved or lopped cells
+in our terminology) and the other is non-linear interpolation methods
+that can deal with non-smooth solutions such as shocks (i.e. flux
+limiters for advection). Both make use of the integral form of the
+conservation laws to which the {\it weak solution} is a solution on
+each finite volume of (sub-domain). The weak solution can be
+constructed outof piece-wise constant elements or be
+differentiable. The differentiable equations can not be satisfied by
+piece-wise constant functions.
+
+As an example, the 1-D constant coefficient advection-diffusion
+equation:
 \begin{displaymath}
 \partial_t \theta + \partial_x ( u \theta - \kappa \partial_x \theta ) = 0
 \end{displaymath}
-can be discretized by integrating of finite lengths $\Delta x$:
+can be discretized by integrating over finite sub-domains, i.e.
+the lengths $\Delta x_i$:
 \begin{displaymath}
 \Delta x \partial_t \theta + \delta_i ( F ) = 0
 \end{displaymath}
-is exact but where the flux
+is exact if $\theta(x)$ is peice-wise constant over the interval
+$\Delta x_i$ or more generally if $\theta_i$ is defined as the average
+over the interval $\Delta x_i$.
+
+The flux, $F_{i-1/2}$, must be approximated:
 \begin{displaymath}
 F = u \overline{\theta} - \frac{\kappa}{\Delta x_c} \partial_i \theta
 \end{displaymath}
-is approximate. The method for obtained $\overline{\theta}$ is
-unspecified and non-lienar finite volume methods can be invoked.
+and this is where truncation errors can enter the solution. The
+method for obtaining $\overline{\theta}$ is unspecified and a wide
+range of possibilities exist including centered and upwind
+interpolation, polynomial fits based on the the volume average
+definitions of quantities and non-linear interpolation such as
+flux-limiters.
 
-....  INCOMPLETE
+Choosing simple centered second-order interpolation and differencing
+recovers the same ODE's resulting from finite differencing for the
+interior of a fluid. Differences arise at boundaries where a boundary
+is not positioned on a regular or smoothly varying grid. This method
+is used to represent the topography using lopped cell, see
+\cite{Adcroft98}. Subtle difference also appear in more than one
+dimension away from boundaries. This happens because the each
+direction is discretized independantly in the finite difference method
+while the integrating over finite volume implicitly treats all
+directions simultaneously. Illustration of this is given in
+\cite{Adcroft02}.
 
 \subsection{C grid staggering of variables}
 
@@ -122,65 +149,66 @@ curvilinear. All that is necessary to distinguish between the
 coordinate systems is to initialize the grid data (discriptors)
 appropriately.
 
-\marginpar{Caution!}
 In the following, we refer to the orientation of quantities on the
 computational grid using geographic terminology such as points of the
-compass. This is purely for convenience but should note be confused
+compass.
+\marginpar{Caution!}
+This is purely for convenience but should note be confused
 with the actual geographic orientation of model quantities.
 
-\marginpar{$A_c$: {\bf rAc}}
-\marginpar{$\Delta x_g$: {\bf DXg}}
-\marginpar{$\Delta y_g$: {\bf DYg}}
 Fig.~\ref{fig:hgrid}a shows the tracer cell (synonymous with the
 continuity cell). The length of the southern edge, $\Delta x_g$,
 western edge, $\Delta y_g$ and surface area, $A_c$, presented in the
-vertical are stored in arrays {\bf DXg}, {\bf DYg} and {\bf rAc}. The
-``g'' suffix indicates that the lengths are along the defining grid
-boundaries. The ``c'' suffix associates the quantity with the cell
-centers. The quantities are staggered in space and the indexing is
-such that {\bf DXg(i,j)} is positioned to the south of {\bf rAc(i,j)}
-and {\bf DYg(i,j)} positioned to the west.
+vertical are stored in arrays {\bf DXg}, {\bf DYg} and {\bf rAc}.
+\marginpar{$A_c$: {\bf rAc}}
+\marginpar{$\Delta x_g$: {\bf DXg}}
+\marginpar{$\Delta y_g$: {\bf DYg}}
+The ``g'' suffix indicates that the lengths are along the defining
+grid boundaries. The ``c'' suffix associates the quantity with the
+cell centers. The quantities are staggered in space and the indexing
+is such that {\bf DXg(i,j)} is positioned to the south of {\bf
+rAc(i,j)} and {\bf DYg(i,j)} positioned to the west.
 
-\marginpar{$A_\zeta$: {\bf rAz}}
-\marginpar{$\Delta x_c$: {\bf DXc}}
-\marginpar{$\Delta y_c$: {\bf DYc}}
 Fig.~\ref{fig:hgrid}b shows the vorticity cell. The length of the
 southern edge, $\Delta x_c$, western edge, $\Delta y_c$ and surface
 area, $A_\zeta$, presented in the vertical are stored in arrays {\bf
-DXg}, {\bf DYg} and {\bf rAz}.  The ``z'' suffix indicates that the
-lengths are measured between the cell centers and the ``$\zeta$'' suffix
-associates points with the vorticity points. The quantities are
-staggered in space and the indexing is such that {\bf DXc(i,j)} is
-positioned to the north of {\bf rAc(i,j)} and {\bf DYc(i,j)} positioned
-to the east.
+DXg}, {\bf DYg} and {\bf rAz}.
+\marginpar{$A_\zeta$: {\bf rAz}}
+\marginpar{$\Delta x_c$: {\bf DXc}}
+\marginpar{$\Delta y_c$: {\bf DYc}}
+The ``z'' suffix indicates that the lengths are measured between the
+cell centers and the ``$\zeta$'' suffix associates points with the
+vorticity points. The quantities are staggered in space and the
+indexing is such that {\bf DXc(i,j)} is positioned to the north of
+{\bf rAc(i,j)} and {\bf DYc(i,j)} positioned to the east.
 
-\marginpar{$A_w$: {\bf rAw}}
-\marginpar{$\Delta x_v$: {\bf DXv}}
-\marginpar{$\Delta y_f$: {\bf DYf}}
 Fig.~\ref{fig:hgrid}c shows the ``u'' or western (w) cell. The length of
 the southern edge, $\Delta x_v$, eastern edge, $\Delta y_f$ and
 surface area, $A_w$, presented in the vertical are stored in arrays
-{\bf DXv}, {\bf DYf} and {\bf rAw}.  The ``v'' suffix indicates that
-the length is measured between the v-points, the ``f'' suffix
-indicates that the length is measured between the (tracer) cell faces
-and the ``w'' suffix associates points with the u-points (w stands for
-west). The quantities are staggered in space and the indexing is such
-that {\bf DXv(i,j)} is positioned to the south of {\bf rAw(i,j)} and
-{\bf DYf(i,j)} positioned to the east.
+{\bf DXv}, {\bf DYf} and {\bf rAw}. 
+\marginpar{$A_w$: {\bf rAw}}
+\marginpar{$\Delta x_v$: {\bf DXv}}
+\marginpar{$\Delta y_f$: {\bf DYf}}
+The ``v'' suffix indicates that the length is measured between the
+v-points, the ``f'' suffix indicates that the length is measured
+between the (tracer) cell faces and the ``w'' suffix associates points
+with the u-points (w stands for west). The quantities are staggered in
+space and the indexing is such that {\bf DXv(i,j)} is positioned to
+the south of {\bf rAw(i,j)} and {\bf DYf(i,j)} positioned to the east.
 
-\marginpar{$A_s$: {\bf rAs}}
-\marginpar{$\Delta x_f$: {\bf DXf}}
-\marginpar{$\Delta y_u$: {\bf DYu}}
 Fig.~\ref{fig:hgrid}d shows the ``v'' or southern (s) cell. The length of
 the northern edge, $\Delta x_f$, western edge, $\Delta y_u$ and
 surface area, $A_s$, presented in the vertical are stored in arrays
-{\bf DXf}, {\bf DYu} and {\bf rAs}.  The ``u'' suffix indicates that
-the length is measured between the u-points, the ``f'' suffix
-indicates that the length is measured between the (tracer) cell faces
-and the ``s'' suffix associates points with the v-points (s stands for
-south). The quantities are staggered in space and the indexing is such
-that {\bf DXf(i,j)} is positioned to the north of {\bf rAs(i,j)} and
-{\bf DYu(i,j)} positioned to the west.
+{\bf DXf}, {\bf DYu} and {\bf rAs}. 
+\marginpar{$A_s$: {\bf rAs}}
+\marginpar{$\Delta x_f$: {\bf DXf}}
+\marginpar{$\Delta y_u$: {\bf DYu}}
+The ``u'' suffix indicates that the length is measured between the
+u-points, the ``f'' suffix indicates that the length is measured
+between the (tracer) cell faces and the ``s'' suffix associates points
+with the v-points (s stands for south). The quantities are staggered
+in space and the indexing is such that {\bf DXf(i,j)} is positioned to
+the north of {\bf rAs(i,j)} and {\bf DYu(i,j)} positioned to the west.
 
 \fbox{ \begin{minipage}{4.75in}
 {\em S/R INI\_CARTESIAN\_GRID} ({\em
@@ -344,6 +372,76 @@ $\Delta r_c$: {\bf DRc} ({\em GRID.h})
 $\Delta r_f^{-1}$: {\bf RECIP\_DRf} ({\em GRID.h})
 
 $\Delta r_c^{-1}$: {\bf RECIP\_DRc} ({\em GRID.h})
+
+\end{minipage} }
+
+
+\subsection{Topography: partially filled cells}
+
+\begin{figure}
+\centerline{
+\resizebox{4.5in}{!}{\includegraphics{part2/vgrid-xz.eps}}
+}
+\caption{
+A schematic of the x-r plane showing the location of the
+non-dimensional fractions $h_c$ and $h_w$. The physical thickness of a
+tracer cell is given by $h_c(i,j,k) \Delta r_f(k)$ and the physical
+thickness of the open side is given by $h_w(i,j,k) \Delta r_f(k)$.}
+\label{fig:hfacs}
+\end{figure}
+
+\cite{Adcroft97} presented two alternatives to the step-wise finite
+difference representation of topography. The method is known to the
+engineering community as {\em intersecting boundary method}. It
+involves allowing the boundary to intersect a grid of cells thereby
+modifying the shape of those cells intersected. We suggested allowing
+the topgoraphy to take on a peice-wise linear representation (shaved
+cells) or a simpler piecewise constant representaion (partial step).
+Both show dramatic improvements in solution compared to the
+traditional full step representation, the piece-wise linear being the
+best. However, the storage requirements are excessive so the simpler
+piece-wise constant or partial-step method is all that is currently
+supported.
+
+Fig.~\ref{fig:hfacs} shows a schematic of the x-r plane indicating how
+the thickness of a level is determined at tracer and u points.
+\marginpar{$h_c$: {\bf hFacC}}
+\marginpar{$h_w$: {\bf hFacW}}
+\marginpar{$h_s$: {\bf hFacS}}
+The physical thickness of a tracer cell is given by $h_c(i,j,k) \Delta
+r_f(k)$ and the physical thickness of the open side is given by
+$h_w(i,j,k) \Delta r_f(k)$. Three 3-D discriptors $h_c$, $h_w$ and
+$h_s$ are used to describe the geometry: {\bf hFacC}, {\bf hFacW} and
+{\bf hFacS} respectively. These are calculated in subroutine {\em
+INI\_MASKS\_ETC} along with there reciprocals {\bf RECIP\_hFacC}, {\bf
+RECIP\_hFacW} and {\bf RECIP\_hFacS}.
+
+The non-dimensional fractions (or h-facs as we call them) are
+calculated from the model depth array and then processed to avoid tiny
+volumes. The rule is that if a fraction is less than {\bf hFacMin}
+then it is rounded to the nearer of $0$ or {\bf hFacMin} or if the
+physical thickness is less than {\bf hFacMinDr} then it is similarly
+rounded. The larger of the two methods is used when there is a
+conflict. By setting {\bf hFacMinDr} equal to or larger than the
+thinnest nominal layers, $\min{(\Delta z_f)}$, but setting {\bf
+hFacMin} to some small fraction then the model will only lop thick
+layers but retain stability based on the thinnest unlopped thickness;
+$\min{(\Delta z_f,\mbox{\bf hFacMinDr})}$.
+
+\fbox{ \begin{minipage}{4.75in}
+{\em S/R INI\_MASKS\_ETC} ({\em model/src/ini\_masks\_etc.F})
+
+$h_c$: {\bf hFacC} ({\em GRID.h})
+
+$h_w$: {\bf hFacW} ({\em GRID.h})
+
+$h_s$: {\bf hFacS} ({\em GRID.h})
+
+$h_c^{-1}$: {\bf RECIP\_hFacC} ({\em GRID.h})
+
+$h_w^{-1}$: {\bf RECIP\_hFacW} ({\em GRID.h})
+
+$h_s^{-1}$: {\bf RECIP\_hFacS} ({\em GRID.h})
 
 \end{minipage} }
 
