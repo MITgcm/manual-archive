@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.24 2004/04/09 15:06:18 edhill Exp $
+% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.25 2004/06/04 15:32:38 edhill Exp $
 % $Name:  $
 
 %\section{Getting started}
@@ -931,6 +931,22 @@ The steps for building MITgcm with MPI support are:
   \begin{rawhtml} </A> \end{rawhtml}
 
 \end{enumerate}
+
+An example of the above process on the MITgcm cluster (``cg01'') using
+the GNU g77 compiler and the mpich MPI library is:
+
+{\footnotesize \begin{verbatim}
+  %  cd MITgcm/verification/exp5
+  %  mkdir build
+  %  cd build
+  %  ../../../tools/genmake2 -mpi -mods=../code \
+       -of=../../../tools/build_options/linux_ia32_g77+mpi_cg01
+  %  make depend
+  %  make
+  %  cd ../input
+  %  /usr/local/pkg/mpi/mpi-1.2.4..8a-gm-1.5/g77/bin/mpirun.ch_gm \
+       -machinefile mf --gm-kill 5 -v -np 2  ../build/mitgcmuv
+\end{verbatim} }
 
 
 
