@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.5 2001/10/15 19:34:28 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.6 2001/10/24 15:21:27 cnh Exp $
 % $Name:  $
 
 %tci%\documentclass[12pt]{book}
@@ -34,7 +34,7 @@
 
 % Section: Overview
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.5 2001/10/15 19:34:28 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.6 2001/10/24 15:21:27 cnh Exp $
 % $Name:  $
 
 \section{Introduction}
@@ -95,7 +95,7 @@ listed in an Appendix.
 We begin by briefly showing some of the results of the model in action to
 give a feel for the wide range of problems that can be addressed using it.
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.5 2001/10/15 19:34:28 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.6 2001/10/24 15:21:27 cnh Exp $
 % $Name:  $
 
 \section{Illustrations of the model in action}
@@ -286,7 +286,7 @@ stratification of the ACC.
 \input{part1/lab_figure}
 %%CNHend
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.5 2001/10/15 19:34:28 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.6 2001/10/24 15:21:27 cnh Exp $
 % $Name:  $
 
 \section{Continuous equations in `r' coordinates}
@@ -601,9 +601,9 @@ discussion:
 \left. 
 \begin{tabular}{l}
 $G_{u}=-\vec{\mathbf{v}}.\nabla u$ \\ 
-$-\left\{ \underline{\frac{u\dot{r}}{{r}}}-\frac{uv\tan lat}{{r}}\right\} $
+$-\left\{ \underline{\frac{u\dot{r}}{{r}}}-\frac{uv\tan \varphi}{{r}}\right\} $
 \\ 
-$-\left\{ -2\Omega v\sin lat+\underline{2\Omega \dot{r}\cos lat}\right\} $
+$-\left\{ -2\Omega v\sin \varphi+\underline{2\Omega \dot{r}\cos \varphi}\right\} $
 \\ 
 $+\mathcal{F}_{u}$
 \end{tabular}
@@ -621,9 +621,9 @@ $+\mathcal{F}_{u}$
 \left. 
 \begin{tabular}{l}
 $G_{v}=-\vec{\mathbf{v}}.\nabla v$ \\ 
-$-\left\{ \underline{\frac{v\dot{r}}{{r}}}-\frac{u^{2}\tan lat}{{r}}\right\} 
+$-\left\{ \underline{\frac{v\dot{r}}{{r}}}-\frac{u^{2}\tan \varphi}{{r}}\right\} 
 $ \\ 
-$-\left\{ -2\Omega u\sin lat\right\} $ \\ 
+$-\left\{ -2\Omega u\sin \varphi \right\} $ \\ 
 $+\mathcal{F}_{v}$
 \end{tabular}
 \ \right\} \left\{ 
@@ -642,7 +642,7 @@ $+\mathcal{F}_{v}$
 \begin{tabular}{l}
 $G_{\dot{r}}=-\underline{\underline{\vec{\mathbf{v}}.\nabla \dot{r}}}$ \\ 
 $+\left\{ \underline{\frac{u^{_{^{2}}}+v^{2}}{{r}}}\right\} $ \\ 
-${+}\underline{{2\Omega u\cos lat}}$ \\ 
+${+}\underline{{2\Omega u\cos \varphi}}$ \\ 
 $\underline{\underline{\mathcal{F}_{\dot{r}}}}$
 \end{tabular}
 \ \right\} \left\{ 
@@ -656,7 +656,7 @@ $\underline{\underline{\mathcal{F}_{\dot{r}}}}$
 \end{equation}
 \qquad \qquad \qquad \qquad \qquad
 
-In the above `${r}$' is the distance from the center of the earth and `$lat$
+In the above `${r}$' is the distance from the center of the earth and `$\varphi$
 ' is latitude.
 
 Grad and div operators in spherical coordinates are defined in appendix
@@ -694,7 +694,7 @@ computed at all other levels by integration of the hydrostatic relation, eq(
 
 In the `quasi-hydrostatic' equations (\textbf{QH)} strict balance between
 gravity and vertical pressure gradients is not imposed. The $2\Omega u\cos
-\phi $ Coriolis term are not neglected and are balanced by a non-hydrostatic
+\varphi $ Coriolis term are not neglected and are balanced by a non-hydrostatic
 contribution to the pressure field: only the terms underlined twice in Eqs. (
 \ref{eq:gu-speherical}$\rightarrow $\ \ref{eq:gw-spherical}) are set to zero
 and, simultaneously, the shallow atmosphere approximation is relaxed. In 
@@ -703,7 +703,7 @@ variation of the radial position of a particle monitored. The \textbf{QH}\
 vertical momentum equation (\ref{eq:mom-w}) becomes:
 
 \begin{equation*}
-\frac{\partial \phi _{nh}}{\partial r}=2\Omega u\cos lat
+\frac{\partial \phi _{nh}}{\partial r}=2\Omega u\cos \varphi
 \end{equation*}
 making a small correction to the hydrostatic pressure.
 
@@ -789,7 +789,7 @@ stepping forward the vertical momentum equation.
 %%CNHend
 
 There is no penalty in implementing \textbf{QH} over \textbf{HPE} except, of
-course, some complication that goes with the inclusion of $\cos \phi \ $
+course, some complication that goes with the inclusion of $\cos \varphi \ $
 Coriolis terms and the relaxation of the shallow atmosphere approximation.
 But this leads to negligible increase in computation. In \textbf{NH}, in
 contrast, one additional elliptic equation - a three-dimensional one - must
@@ -1021,7 +1021,7 @@ to discretize the model.
 Tangent linear and adjoint counterparts of the forward model and described
 in Chapter 5.
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.5 2001/10/15 19:34:28 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.6 2001/10/24 15:21:27 cnh Exp $
 % $Name:  $
 
 \section{Appendix ATMOSPHERE}
@@ -1045,7 +1045,7 @@ c_{v}\frac{DT}{Dt}+p\frac{D\alpha }{Dt} &=&\mathcal{Q}  \label{eq:atmos-heat}
 where $\vec{\mathbf{v}}_{h}=(u,v,0)$ is the `horizontal' (on pressure
 surfaces) component of velocity,$\frac{D}{Dt}=\vec{\mathbf{v}}_{h}\cdot 
 \mathbf{\nabla }_{p}+\omega \frac{\partial }{\partial p}$ is the total
-derivative, $f=2\Omega \sin lat$ is the Coriolis parameter, $\phi =gz$ is
+derivative, $f=2\Omega \sin \varphi$ is the Coriolis parameter, $\phi =gz$ is
 the geopotential, $\alpha =1/\rho $ is the specific volume, $\omega =\frac{Dp
 }{Dt}$ is the vertical velocity in the $p-$coordinate. Equation(\ref
 {eq:atmos-heat}) is the first law of thermodynamics where internal energy $
@@ -1148,7 +1148,7 @@ _{h}+\mathbf{\nabla }_{p}\phi ^{\prime } &=&\vec{\mathbf{\mathcal{F}}} \\
 \frac{D\theta }{Dt} &=&\frac{\mathcal{Q}}{\Pi }  \label{eq:atmos-prime}
 \end{eqnarray}
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.5 2001/10/15 19:34:28 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.6 2001/10/24 15:21:27 cnh Exp $
 % $Name:  $
 
 \section{Appendix OCEAN}
@@ -1364,7 +1364,7 @@ the perturbation density. Nevertheless, it is the hydrostatic ($\epsilon
 _{nh}=0$ form of these equations that are used throughout the ocean modeling
 community and referred to as the primitive equations (HPE).
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.5 2001/10/15 19:34:28 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.6 2001/10/24 15:21:27 cnh Exp $
 % $Name:  $
 
 \section{Appendix:OPERATORS}
@@ -1377,11 +1377,11 @@ In spherical coordinates, the velocity components in the zonal, meridional
 and vertical direction respectively, are given by (see Fig.2) :
 
 \begin{equation*}
-u=r\cos \phi \frac{D\lambda }{Dt}
+u=r\cos \varphi \frac{D\lambda }{Dt}
 \end{equation*}
 
 \begin{equation*}
-v=r\frac{D\phi }{Dt}\qquad
+v=r\frac{D\varphi }{Dt}\qquad
 \end{equation*}
 $\qquad \qquad \qquad \qquad $
 
@@ -1389,7 +1389,7 @@ $\qquad \qquad \qquad \qquad $
 \dot{r}=\frac{Dr}{Dt}
 \end{equation*}
 
-Here $\phi $ is the latitude, $\lambda $ the longitude, $r$ the radial
+Here $\varphi $ is the latitude, $\lambda $ the longitude, $r$ the radial
 distance of the particle from the center of the earth, $\Omega $ is the
 angular speed of rotation of the Earth and $D/Dt$ is the total derivative.
 
@@ -1397,14 +1397,14 @@ The `grad' ($\nabla $) and `div' ($\nabla $.) operators are defined by, in
 spherical coordinates:
 
 \begin{equation*}
-\nabla \equiv \left( \frac{1}{r\cos \phi }\frac{\partial }{\partial \lambda }
-,\frac{1}{r}\frac{\partial }{\partial \phi },\frac{\partial }{\partial r}
+\nabla \equiv \left( \frac{1}{r\cos \varphi }\frac{\partial }{\partial \lambda }
+,\frac{1}{r}\frac{\partial }{\partial \varphi },\frac{\partial }{\partial r}
 \right)
 \end{equation*}
 
 \begin{equation*}
-\nabla .v\equiv \frac{1}{r\cos \phi }\left\{ \frac{\partial u}{\partial
-\lambda }+\frac{\partial }{\partial \phi }\left( v\cos \phi \right) \right\}
+\nabla .v\equiv \frac{1}{r\cos \varphi }\left\{ \frac{\partial u}{\partial
+\lambda }+\frac{\partial }{\partial \varphi }\left( v\cos \varphi \right) \right\}
 +\frac{1}{r^{2}}\frac{\partial \left( r^{2}\dot{r}\right) }{\partial r}
 \end{equation*}
 
