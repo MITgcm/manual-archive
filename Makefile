@@ -1,3 +1,10 @@
+default:
+	@echo "Targets"
+	@echo " make all  - just the tex "
+	@echo " make tex  - tex and bibliograohy"
+	@echo " make ps   - postscript form of manual"
+	@echo " make pdf  - pdf form of manual"
+	@echo " make html - hypertext form of manual"
 all:
 	make tex
 
