@@ -376,6 +376,16 @@ N & NAME & UNITS & LEVELS & DESCRIPTION \\
          &\begin{minipage}[t]{3in}
           {Turbulent Flux of Sensible Heat}
          \end{minipage}\\
+\end{tabular}
+
+\newpage
+\vspace*{\fill}
+\begin{tabular}{lllll}
+\hline\hline
+N & NAME & UNITS & LEVELS & DESCRIPTION \\
+\hline
+
+&\\
 26 & TQFLUX   &  $Watts/m^2$ &  Nrphys
          &\begin{minipage}[t]{3in}
           {Turbulent Flux of Latent Heat}
@@ -405,16 +415,6 @@ N & NAME & UNITS & LEVELS & DESCRIPTION \\
           {Ground temperature adjustment}
          \end{minipage}\\
 
-\end{tabular}
-
-\newpage
-\vspace*{\fill}
-\begin{tabular}{lllll}
-\hline\hline
-N & NAME & UNITS & LEVELS & DESCRIPTION \\
-\hline
-
-&\\
 33 & QG        &  $g/kg$ &  1
          &\begin{minipage}[t]{3in}
           {Ground specific humidity}
@@ -423,8 +423,6 @@ N & NAME & UNITS & LEVELS & DESCRIPTION \\
          &\begin{minipage}[t]{3in}
           {Saturation surface specific humidity}
          \end{minipage}\\
-
-&\\
 35 & TGRLW    &    $deg$   &    1  
          &\begin{minipage}[t]{3in}
           {Instantaneous ground temperature used as input to the
@@ -475,23 +473,25 @@ N & NAME & UNITS & LEVELS & DESCRIPTION \\
           {Total cloud fraction used in the Longwave and Shortwave radiation
           subroutines} 
          \end{minipage}\\
-46 & RADSWT   &    $Watts/m^2$   &  1 
+46 & LWGDOWN  &    $Watts/m^2$   &  1 
+         &\begin{minipage}[t]{3in}
+          {Downwelling Longwave radiation at the ground}
+         \end{minipage}\\
+47 & GWDT     &    $deg/day$ &  Nrphys
+         &\begin{minipage}[t]{3in}
+          {Temperature tendency due to Gravity Wave Drag}
+         \end{minipage}\\
+48 & RADSWT   &    $Watts/m^2$   &  1 
          &\begin{minipage}[t]{3in}
           {Incident Shortwave radiation at the top of the atmosphere}
          \end{minipage}\\
-47 & CLROSW   &    $0-1$   &  Nrphys 
+49 & TAUCLD   &    $per 100 mb$   &  Nrphys 
          &\begin{minipage}[t]{3in}
-          {Random overlap cloud fraction used in the shortwave radiation
-          subroutine} 
+          {Counted Cloud Optical Depth (non-dimensional) per 100 mb}
          \end{minipage}\\
-48 & CLMOSW   &    $0-1$   &  Nrphys 
+50 & TAUCLDC  &    $Number$   &  Nrphys 
          &\begin{minipage}[t]{3in}
-          {Maximum overlap cloud fraction used in the shortwave radiation
-          subroutine} 
-         \end{minipage}\\
-49 & EVAP     &    $mm/day$   &  1 
-         &\begin{minipage}[t]{3in}
-          {Surface evaporation}
+          {Cloud Optical Depth Counter}
          \end{minipage}\\
 \end{tabular}
 \vfill
@@ -504,115 +504,106 @@ N & NAME & UNITS & LEVELS & DESCRIPTION \\
 \hline
 
 &\\
-50 & DUDT     &    $m/sec/day$ &  Nrphys
+51 & CLDLOW   &    $0-1$   &  Nrphys 
+         &\begin{minipage}[t]{3in}
+          {Low-Level ( 1000-700 hPa) Cloud Fraction  (0-1)}
+         \end{minipage}\\
+52 & EVAP     &    $mm/day$   &  1 
+         &\begin{minipage}[t]{3in}
+          {Surface evaporation}
+         \end{minipage}\\
+53 & DPDT     &    $hPa/day$ &  1
+         &\begin{minipage}[t]{3in}
+          {Surface Pressure tendency}
+         \end{minipage}\\
+54 & UAVE     &    $m/sec$ &  Nrphys
+         &\begin{minipage}[t]{3in}
+          {Average U-Wind}
+         \end{minipage}\\
+55 & VAVE     &    $m/sec$ &  Nrphys
+         &\begin{minipage}[t]{3in}
+          {Average V-Wind}
+         \end{minipage}\\
+56 & TAVE     &    $deg$ &  Nrphys
+         &\begin{minipage}[t]{3in}
+          {Average Temperature}
+         \end{minipage}\\
+57 & QAVE     &    $g/kg$ &  Nrphys
+         &\begin{minipage}[t]{3in}
+          {Average Specific Humidity}
+         \end{minipage}\\
+58 & OMEGA    &    $hPa/day$ &  Nrphys
+         &\begin{minipage}[t]{3in}
+          {Vertical Velocity}
+         \end{minipage}\\
+59 & DUDT     &    $m/sec/day$ &  Nrphys
          &\begin{minipage}[t]{3in}
           {Total U-Wind tendency}
          \end{minipage}\\
-51 & DVDT     &    $m/sec/day$ &  Nrphys
+60 & DVDT     &    $m/sec/day$ &  Nrphys
          &\begin{minipage}[t]{3in}
           {Total V-Wind tendency}
          \end{minipage}\\
-52 & DTDT     &    $deg/day$ &  Nrphys
+61 & DTDT     &    $deg/day$ &  Nrphys
          &\begin{minipage}[t]{3in}
           {Total Temperature tendency}
          \end{minipage}\\
-53 & DQDT     &    $g/kg/day$ &  Nrphys
+62 & DQDT     &    $g/kg/day$ &  Nrphys
          &\begin{minipage}[t]{3in}
           {Total Specific Humidity tendency}
          \end{minipage}\\
-54 & USTAR    &    $m/sec$ &  1
+63 & VORT     &    $10^{-4}/sec$ &  Nrphys
+         &\begin{minipage}[t]{3in}
+          {Relative Vorticity}
+         \end{minipage}\\
+64 & NOT USED &    $$ &  
+         &\begin{minipage}[t]{3in}
+          {}
+         \end{minipage}\\
+65 & DTLS     &    $deg/day$ &  Nrphys
+         &\begin{minipage}[t]{3in}
+          {Temperature tendency due to Stratiform Cloud Formation}
+         \end{minipage}\\
+66 & DQLS     &    $g/kg/day$ &  Nrphys
+         &\begin{minipage}[t]{3in}
+          {Specific Humidity tendency due to Stratiform Cloud Formation}
+         \end{minipage}\\
+67 & USTAR    &    $m/sec$ &  1
          &\begin{minipage}[t]{3in}
           {Surface USTAR wind}
          \end{minipage}\\
-55 & Z0       &    $m$ &  1
+68 & Z0       &    $m$ &  1
          &\begin{minipage}[t]{3in}
           {Surface roughness}
          \end{minipage}\\
-56 & FRQTRB   &    $0-1$ &  Nrphys-1
+69 & FRQTRB   &    $0-1$ &  Nrphys-1
          &\begin{minipage}[t]{3in}
           {Frequency of Turbulence}
          \end{minipage}\\
-57 & PBL      &    $mb$ &  1
+70 & PBL      &    $mb$ &  1
          &\begin{minipage}[t]{3in}
           {Planetary Boundary Layer depth}
          \end{minipage}\\
-58 & SWCLR    &  $deg/day$ &  Nrphys 
+71 & SWCLR    &  $deg/day$ &  Nrphys 
          &\begin{minipage}[t]{3in}
           {Net clearsky Shortwave heating rate for each level}
          \end{minipage}\\
-59 & OSR      &   $Watts/m^2$  &    1 
+72 & OSR      &   $Watts/m^2$  &    1 
          &\begin{minipage}[t]{3in}
           {Net downward Shortwave flux at the top of the model}
          \end{minipage}\\
-60 & OSRCLR   &   $Watts/m^2$  &    1  
+73 & OSRCLR   &   $Watts/m^2$  &    1  
          &\begin{minipage}[t]{3in}
           {Net downward clearsky Shortwave flux at the top of the model}
          \end{minipage}\\
-61 & CLDMAS   &   $kg / m^2$  &    Nrphys
+74 & CLDMAS   &   $kg / m^2$  &    Nrphys
          &\begin{minipage}[t]{3in}
           {Convective cloud mass flux}
          \end{minipage}\\
-62 & UAVE     &   $m/sec$  &    Nrphys
+75 & UAVE     &   $m/sec$  &    Nrphys
          &\begin{minipage}[t]{3in}
           {Time-averaged $u-Wind$}
          \end{minipage}\\
-63 & VAVE     &   $m/sec$  &    Nrphys
-         &\begin{minipage}[t]{3in}
-          {Time-averaged $v-Wind$}
-         \end{minipage}\\
-64 & TAVE     &   $deg$  &    Nrphys
-         &\begin{minipage}[t]{3in}
-          {Time-averaged $Temperature$}
-         \end{minipage}\\
-65 & QAVE     &   $g/g$  &    Nrphys
-         &\begin{minipage}[t]{3in}
-          {Time-averaged $Specific \, \, Humidity$}
-         \end{minipage}\\
-66 & PAVE     &   $mb$  &    1
-         &\begin{minipage}[t]{3in}
-          {Time-averaged $p_{surf} - p_{top}$}
-         \end{minipage}\\
-67 & QQAVE    &   $(m/sec)^2$  &    Nrphys
-         &\begin{minipage}[t]{3in}
-          {Time-averaged $Turbulent Kinetic Energy$}
-         \end{minipage}\\
-68 & SWGCLR   &   $Watts/m^2$  &    1  
-         &\begin{minipage}[t]{3in}
-          {Net downward clearsky Shortwave flux at the ground} 
-         \end{minipage}\\
-69 & SDIAG1   &             &    1  
-         &\begin{minipage}[t]{3in}
-          {User-Defined Surface Diagnostic-1} 
-         \end{minipage}\\
-70 & SDIAG2   &             &    1  
-         &\begin{minipage}[t]{3in}
-          {User-Defined Surface Diagnostic-2} 
-         \end{minipage}\\
-71 & UDIAG1   &             &    Nrphys
-         &\begin{minipage}[t]{3in}
-          {User-Defined Upper-Air Diagnostic-1} 
-         \end{minipage}\\
-72 & UDIAG2   &             &    Nrphys
-         &\begin{minipage}[t]{3in}
-          {User-Defined Upper-Air Diagnostic-2} 
-         \end{minipage}\\
-73 & DIABU    & $m/sec/day$ &    Nrphys
-         &\begin{minipage}[t]{3in}
-          {Total Diabatic forcing on $u-Wind$} 
-         \end{minipage}\\
-74 & DIABV    & $m/sec/day$ &    Nrphys
-         &\begin{minipage}[t]{3in}
-          {Total Diabatic forcing on $v-Wind$} 
-         \end{minipage}\\
-75 & DIABT    & $deg/day$ &    Nrphys
-         &\begin{minipage}[t]{3in}
-          {Total Diabatic forcing on $Temperature$} 
-         \end{minipage}\\
-76 & DIABQ    & $g/kg/day$ &    Nrphys
-         &\begin{minipage}[t]{3in}
-          {Total Diabatic forcing on $Specific \, \, Humidity$} 
-         \end{minipage}\\
-
 \end{tabular}
 \vfill
 
@@ -623,71 +614,594 @@ N & NAME & UNITS & LEVELS & DESCRIPTION \\
 N & NAME & UNITS & LEVELS & DESCRIPTION \\
 \hline
 
-77 & VINTUQ  & $m/sec \cdot g/kg$ &    1
+&\\
+76 & VAVE     &   $m/sec$  &    Nrphys
          &\begin{minipage}[t]{3in}
-          {Vertically integrated $u \, q$} 
+          {Time-averaged $v-Wind$}
          \end{minipage}\\
-78 & VINTVQ  & $m/sec \cdot g/kg$ &    1
+77 & TAVE     &   $deg$  &    Nrphys
          &\begin{minipage}[t]{3in}
-          {Vertically integrated $v \, q$} 
+          {Time-averaged $Temperature$}
          \end{minipage}\\
-79 & VINTUT  & $m/sec \cdot deg$ &    1
+78 & QAVE     &   $g/g$  &    Nrphys
          &\begin{minipage}[t]{3in}
-          {Vertically integrated $u \, T$} 
+          {Time-averaged $Specific \, \, Humidity$}
          \end{minipage}\\
-80 & VINTVT  & $m/sec \cdot deg$ &    1
+79 & RFT      &    $deg/day$ &  Nrphys
          &\begin{minipage}[t]{3in}
-          {Vertically integrated $v \, T$} 
+          {Temperature tendency due Rayleigh Friction}
          \end{minipage}\\
-81 & CLDFRC  & $0-1$ &    1
+80 & PS       &   $mb$  &    1
+         &\begin{minipage}[t]{3in}
+          {Surface Pressure}
+         \end{minipage}\\
+81 & QQAVE    &   $(m/sec)^2$  &    Nrphys
+         &\begin{minipage}[t]{3in}
+          {Time-averaged $Turbulent Kinetic Energy$}
+         \end{minipage}\\
+82 & SWGCLR   &   $Watts/m^2$  &    1  
+         &\begin{minipage}[t]{3in}
+          {Net downward clearsky Shortwave flux at the ground} 
+         \end{minipage}\\
+83 & PAVE     &   $mb$  &    1
+         &\begin{minipage}[t]{3in}
+          {Time-averaged Surface Pressure}
+         \end{minipage}\\
+84 & SDIAG1   &             &    1  
+         &\begin{minipage}[t]{3in}
+          {User-Defined Surface Diagnostic-1} 
+         \end{minipage}\\
+85 & SDIAG2   &             &    1  
+         &\begin{minipage}[t]{3in}
+          {User-Defined Surface Diagnostic-2} 
+         \end{minipage}\\
+86 & UDIAG1   &             &    Nrphys
+         &\begin{minipage}[t]{3in}
+          {User-Defined Upper-Air Diagnostic-1} 
+         \end{minipage}\\
+87 & UDIAG2   &             &    Nrphys
+         &\begin{minipage}[t]{3in}
+          {User-Defined Upper-Air Diagnostic-2} 
+         \end{minipage}\\
+88 & DIABU    & $m/sec/day$ &    Nrphys
+         &\begin{minipage}[t]{3in}
+          {Total Diabatic forcing on $u-Wind$} 
+         \end{minipage}\\
+89 & DIABV    & $m/sec/day$ &    Nrphys
+         &\begin{minipage}[t]{3in}
+          {Total Diabatic forcing on $v-Wind$} 
+         \end{minipage}\\
+90 & DIABT    & $deg/day$ &    Nrphys
+         &\begin{minipage}[t]{3in}
+          {Total Diabatic forcing on $Temperature$} 
+         \end{minipage}\\
+91 & DIABQ    & $g/kg/day$ &    Nrphys
+         &\begin{minipage}[t]{3in}
+          {Total Diabatic forcing on $Specific \, \, Humidity$} 
+         \end{minipage}\\
+92 & RFU      &    $m/sec/day$ &  Nrphys
+         &\begin{minipage}[t]{3in}
+          {U-Wind tendency due to Rayleigh Friction}
+         \end{minipage}\\
+93 & RFV      &    $m/sec/day$ &  Nrphys
+         &\begin{minipage}[t]{3in}
+          {V-Wind tendency due to Rayleigh Friction}
+         \end{minipage}\\
+94 & GWDU     &    $m/sec/day$ &  Nrphys
+         &\begin{minipage}[t]{3in}
+          {U-Wind tendency due to Gravity Wave Drag}
+         \end{minipage}\\
+95 & GWDU     &    $m/sec/day$ &  Nrphys
+         &\begin{minipage}[t]{3in}
+          {V-Wind tendency due to Gravity Wave Drag}
+         \end{minipage}\\
+96 & GWDUS    &    $N/m^2$ &  1
+         &\begin{minipage}[t]{3in}
+          {U-Wind Gravity Wave Drag Stress at Surface}
+         \end{minipage}\\
+97 & GWDVS    &    $N/m^2$ &  1
+         &\begin{minipage}[t]{3in}
+          {V-Wind Gravity Wave Drag Stress at Surface}
+         \end{minipage}\\
+98 & GWDUT    &    $N/m^2$ &  1
+         &\begin{minipage}[t]{3in}
+          {U-Wind Gravity Wave Drag Stress at Top}
+         \end{minipage}\\
+99 & GWDVT    &    $N/m^2$ &  1
+         &\begin{minipage}[t]{3in}
+          {V-Wind Gravity Wave Drag Stress at Top}
+         \end{minipage}\\
+100& LZRAD    &    $mg/kg$ &  Nrphys
+         &\begin{minipage}[t]{3in}
+          {Estimated Cloud Liquid Water used in Radiation}
+         \end{minipage}\\
+\end{tabular}
+\vfill
+
+\newpage
+\vspace*{\fill}
+\begin{tabular}{lllll}
+\hline\hline
+N & NAME & UNITS & LEVELS & DESCRIPTION \\
+\hline
+
+&\\
+101& SLP      &   $mb$  &    1
+         &\begin{minipage}[t]{3in}
+          {Time-averaged Sea-level Pressure}
+         \end{minipage}\\
+102& NOT USED &    $$ &  
+         &\begin{minipage}[t]{3in}
+          {}
+         \end{minipage}\\
+103& NOT USED &    $$ &  
+         &\begin{minipage}[t]{3in}
+          {}
+         \end{minipage}\\
+104& NOT USED &    $$ &  
+         &\begin{minipage}[t]{3in}
+          {}
+         \end{minipage}\\
+105& NOT USED &    $$ &  
+         &\begin{minipage}[t]{3in}
+          {}
+         \end{minipage}\\
+106& CLDFRC  & $0-1$ &    1
          &\begin{minipage}[t]{3in}
           {Total Cloud Fraction} 
          \end{minipage}\\
-82 & QINT    & $gm/cm^2$ &    1
+107& TPW     & $gm/cm^2$ &    1
          &\begin{minipage}[t]{3in}
           {Precipitable water} 
          \end{minipage}\\
-83 & U2M     & $m/sec$ &    1
+108& U2M     & $m/sec$ &    1
          &\begin{minipage}[t]{3in}
           {U-Wind at 2 meters}
          \end{minipage}\\
-84 & V2M     & $m/sec$ &    1
+109& V2M     & $m/sec$ &    1
          &\begin{minipage}[t]{3in}
           {V-Wind at 2 meters}
          \end{minipage}\\
-85 & T2M     & $deg$ &    1
+110& T2M     & $deg$ &    1
          &\begin{minipage}[t]{3in}
           {Temperature at 2 meters}
          \end{minipage}\\
-86 & Q2M     & $g/kg$ &    1
+111& Q2M     & $g/kg$ &    1
          &\begin{minipage}[t]{3in}
           {Specific Humidity at 2 meters}
          \end{minipage}\\
-87 & U10M    & $m/sec$ &    1
+112& U10M    & $m/sec$ &    1
          &\begin{minipage}[t]{3in}
           {U-Wind at 10 meters}
          \end{minipage}\\
-88 & V10M    & $m/sec$ &    1
+113& V10M    & $m/sec$ &    1
          &\begin{minipage}[t]{3in}
           {V-Wind at 10 meters}
          \end{minipage}\\
-89 & T10M    & $deg$ &    1
+114& T10M    & $deg$ &    1
          &\begin{minipage}[t]{3in}
           {Temperature at 10 meters}
          \end{minipage}\\
-90 & Q10M    & $g/kg$ &    1
+115& Q10M    & $g/kg$ &    1
          &\begin{minipage}[t]{3in}
           {Specific Humidity at 10 meters}
          \end{minipage}\\
-91 & DTRAIN  & $kg/m^2$ &    Nrphys
+116& DTRAIN  & $kg/m^2$ &    Nrphys
          &\begin{minipage}[t]{3in}
           {Detrainment Cloud Mass Flux}
          \end{minipage}\\
-92 & QFILL   & $g/kg/day$ &    Nrphys
+117& QFILL   & $g/kg/day$ &    Nrphys
          &\begin{minipage}[t]{3in}
           {Filling of negative specific humidity}
          \end{minipage}\\
+118& NOT USED &    $$ &  
+         &\begin{minipage}[t]{3in}
+          {}
+         \end{minipage}\\
+119& NOT USED &    $$ &  
+         &\begin{minipage}[t]{3in}
+          {}
+         \end{minipage}\\
+120& SHAPU    &    $m/sec/day$ &  Nrphys
+         &\begin{minipage}[t]{3in}
+          {U-Wind tendency due to Shapiro Filter}
+         \end{minipage}\\
+121& SHAPV    &    $m/sec/day$ &  Nrphys
+         &\begin{minipage}[t]{3in}
+          {V-Wind tendency due to Shapiro Filter}
+         \end{minipage}\\
+122& SHAPT    &    $deg/day$ &  Nrphys
+         &\begin{minipage}[t]{3in}
+          {Temperature tendency due Shapiro Filter}
+         \end{minipage}\\
+123& SHAPQ    &    $g/kg/day$ &  Nrphys
+         &\begin{minipage}[t]{3in}
+          {Specific Humidity tendency due to Shapiro Filter}
+         \end{minipage}\\
+124& SDIAG3   &             &    1  
+         &\begin{minipage}[t]{3in}
+          {User-Defined Surface Diagnostic-3} 
+         \end{minipage}\\
+125& SDIAG4   &             &    1  
+         &\begin{minipage}[t]{3in}
+          {User-Defined Surface Diagnostic-4} 
+         \end{minipage}\\
+\end{tabular}
+\vspace{1.5in}
+\vfill
 
+\newpage
+\vspace*{\fill}
+\begin{tabular}{lllll}
+\hline\hline
+N & NAME & UNITS & LEVELS & DESCRIPTION \\
+\hline
+
+&\\
+126& SDIAG5   &             &    1  
+         &\begin{minipage}[t]{3in}
+          {User-Defined Surface Diagnostic-5} 
+         \end{minipage}\\
+127& SDIAG6   &             &    1  
+         &\begin{minipage}[t]{3in}
+          {User-Defined Surface Diagnostic-6} 
+         \end{minipage}\\
+128& SDIAG7   &             &    1  
+         &\begin{minipage}[t]{3in}
+          {User-Defined Surface Diagnostic-7} 
+         \end{minipage}\\
+129& SDIAG8   &             &    1  
+         &\begin{minipage}[t]{3in}
+          {User-Defined Surface Diagnostic-8} 
+         \end{minipage}\\
+130& SDIAG9   &             &    1  
+         &\begin{minipage}[t]{3in}
+          {User-Defined Surface Diagnostic-9} 
+         \end{minipage}\\
+131& SDIAG10  &             &    1  
+         &\begin{minipage}[t]{3in}
+          {User-Defined Surface Diagnostic-1-} 
+         \end{minipage}\\
+132& UDIAG3   &             &    Nrphys  
+         &\begin{minipage}[t]{3in}
+          {User-Defined Multi-Level Diagnostic-3} 
+         \end{minipage}\\
+133& UDIAG4   &             &    Nrphys  
+         &\begin{minipage}[t]{3in}
+          {User-Defined Multi-Level Diagnostic-4} 
+         \end{minipage}\\
+134& UDIAG5   &             &    Nrphys  
+         &\begin{minipage}[t]{3in}
+          {User-Defined Multi-Level Diagnostic-5} 
+         \end{minipage}\\
+135& UDIAG6   &             &    Nrphys  
+         &\begin{minipage}[t]{3in}
+          {User-Defined Multi-Level Diagnostic-6} 
+         \end{minipage}\\
+136& UDIAG7   &             &    Nrphys  
+         &\begin{minipage}[t]{3in}
+          {User-Defined Multi-Level Diagnostic-7} 
+         \end{minipage}\\
+137& UDIAG8   &             &    Nrphys  
+         &\begin{minipage}[t]{3in}
+          {User-Defined Multi-Level Diagnostic-8} 
+         \end{minipage}\\
+138& UDIAG9   &             &    Nrphys  
+         &\begin{minipage}[t]{3in}
+          {User-Defined Multi-Level Diagnostic-9} 
+         \end{minipage}\\
+139& UDIAG10  &             &    Nrphys  
+         &\begin{minipage}[t]{3in}
+          {User-Defined Multi-Level Diagnostic-10} 
+         \end{minipage}\\
+\end{tabular}
+\vspace{1.5in}
+\vfill
+
+\newpage
+\vspace*{\fill}
+\begin{tabular}{lllll}
+\hline\hline
+N & NAME & UNITS & LEVELS & DESCRIPTION \\
+\hline
+
+&\\
+238& ETAN     & $(hPa,m)$ &    1
+         &\begin{minipage}[t]{3in}
+          {Perturbation of Surface (pressure, height)} 
+         \end{minipage}\\
+239& ETANSQ   & $(hPa^2,m^2)$ & 1
+         &\begin{minipage}[t]{3in}
+          {Square of Perturbation of Surface (pressure, height)} 
+         \end{minipage}\\
+240& THETA    & $deg K$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Potential Temperature} 
+         \end{minipage}\\
+241& SALT     & $g/kg$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Salt (or Water Vapor Mixing Ratio)} 
+         \end{minipage}\\
+242& UVEL     & $m/sec$ & Nr
+         &\begin{minipage}[t]{3in}
+          {U-Velocity} 
+         \end{minipage}\\
+243& VVEL     & $m/sec$ & Nr
+         &\begin{minipage}[t]{3in}
+          {V-Velocity} 
+         \end{minipage}\\
+244& WVEL     & $m/sec$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Vertical-Velocity} 
+         \end{minipage}\\
+245& THETASQ  & $deg^2$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Square of Potential Temperature} 
+         \end{minipage}\\
+246& SALTSQ   & $g^2/{kg}^2$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Square of Salt (or Water Vapor Mixing Ratio)} 
+         \end{minipage}\\
+247& UVELSQ   & $m^2/sec^2$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Square of U-Velocity} 
+         \end{minipage}\\
+248& VVELSQ   & $m^2/sec^2$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Square of V-Velocity} 
+         \end{minipage}\\
+249& WVELSQ   & $m^2/sec^2$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Square of Vertical-Velocity} 
+         \end{minipage}\\
+250& UVELVVEL & $m^2/sec^2$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Meridional Transport of Zonal Momentum} 
+         \end{minipage}\\
+\end{tabular}
+\vspace{1.5in}
+\vfill
+
+\newpage
+\vspace*{\fill}
+\begin{tabular}{lllll}
+\hline\hline
+N & NAME & UNITS & LEVELS & DESCRIPTION \\
+\hline
+
+&\\
+251& UVELMASS & $m/sec$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Zonal Mass-Weighted Component of Velocity} 
+         \end{minipage}\\
+252& VVELMASS & $m/sec$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Meridional Mass-Weighted Component of Velocity} 
+         \end{minipage}\\
+253& WVELMASS & $m/sec$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Vertical Mass-Weighted Component of Velocity} 
+         \end{minipage}\\
+254& UTHMASS  & $m-deg/sec$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Zonal Mass-Weight Transp of Pot Temp} 
+         \end{minipage}\\
+255& VTHMASS  & $m-deg/sec$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Meridional Mass-Weight Transp of Pot Temp} 
+         \end{minipage}\\
+256& WTHMASS  & $m-deg/sec$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Vertical Mass-Weight Transp of Pot Temp} 
+         \end{minipage}\\
+257& USLTMASS & $m-kg/sec-kg$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Zonal Mass-Weight Transp of Salt (or W.Vap Mix Rat.)} 
+         \end{minipage}\\
+258& VSLTMASS & $m-kg/sec-kg$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Meridional Mass-Weight Transp of Salt (or W.Vap Mix Rat.)} 
+         \end{minipage}\\
+259& WSLTMASS & $m-kg/sec-kg$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Vertical Mass-Weight Transp of Salt (or W.Vap Mix Rat.)} 
+         \end{minipage}\\
+260& UVELTH   & $m-deg/sec$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Zonal Transp of Pot Temp} 
+         \end{minipage}\\
+261& VVELTH   & $m-deg/sec$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Meridional Transp of Pot Temp} 
+         \end{minipage}\\
+262& WVELTH   & $m-deg/sec$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Vertical Transp of Pot Temp} 
+         \end{minipage}\\
+263& UVELSLT  & $m-kg/sec-kg$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Zonal Transp of Salt (or W.Vap Mix Rat.)} 
+         \end{minipage}\\
+264& VVELSLT  & $m-kg/sec-kg$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Meridional Transp of Salt (or W.Vap Mix Rat.)} 
+         \end{minipage}\\
+265& WVELSLT  & $m-kg/sec-kg$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Vertical Transp of Salt (or W.Vap Mix Rat.)} 
+         \end{minipage}\\
+266& UTRAC1   & $m-kg/sec-kg$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Zonal Transp of Tracer 1} 
+         \end{minipage}\\
+267& VTRAC1   & $m-kg/sec-kg$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Meridional Transp of Tracer 1} 
+         \end{minipage}\\
+268& WTRAC1   & $m-kg/sec-kg$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Vertical Transp of Tracer 1} 
+         \end{minipage}\\
+269& UTRAC2   & $m-kg/sec-kg$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Zonal Transp of Tracer 2} 
+         \end{minipage}\\
+270& VTRAC2   & $m-kg/sec-kg$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Meridional Transp of Tracer 2} 
+         \end{minipage}\\
+271& WTRAC2   & $m-kg/sec-kg$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Vertical Transp of Tracer 2} 
+         \end{minipage}\\
+272& UTRAC3   & $m-kg/sec-kg$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Zonal Transp of Tracer 3} 
+         \end{minipage}\\
+273& VTRAC3   & $m-kg/sec-kg$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Meridional Transp of Tracer 3} 
+         \end{minipage}\\
+274& WTRAC3   & $m-kg/sec-kg$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Vertical Transp of Tracer 3} 
+         \end{minipage}\\
+275& WSLTMASS & $m-kg/sec-kg$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Vertical Mass-Weight Transp of Salt (or W.Vap Mix Rat.)} 
+         \end{minipage}\\
+\end{tabular}
+\vspace{1.5in}
+\vfill
+
+\newpage
+\vspace*{\fill}
+\begin{tabular}{lllll}
+\hline\hline
+N & NAME & UNITS & LEVELS & DESCRIPTION \\
+\hline
+
+&\\
+275& UTRAC4   & $m-kg/sec-kg$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Zonal Transp of Tracer 4} 
+         \end{minipage}\\
+276& VTRAC4   & $m-kg/sec-kg$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Meridional Transp of Tracer 4} 
+         \end{minipage}\\
+277& WTRAC4   & $m-kg/sec-kg$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Vertical Transp of Tracer 4} 
+         \end{minipage}\\
+278& UTRAC5   & $m-kg/sec-kg$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Zonal Transp of Tracer 5} 
+         \end{minipage}\\
+279& VTRAC5   & $m-kg/sec-kg$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Meridional Transp of Tracer 5} 
+         \end{minipage}\\
+280& WTRAC5   & $m-kg/sec-kg$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Vertical Transp of Tracer 5} 
+         \end{minipage}\\
+281& TRAC1    & $kg/kg$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Mass-Weight Tracer 1} 
+         \end{minipage}\\
+282& TRAC2    & $kg/kg$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Mass-Weight Tracer 2} 
+         \end{minipage}\\
+283& TRAC3    & $kg/kg$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Mass-Weight Tracer 3} 
+         \end{minipage}\\
+284& TRAC4    & $kg/kg$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Mass-Weight Tracer 4} 
+         \end{minipage}\\
+285& TRAC5    & $kg/kg$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Mass-Weight Tracer 5} 
+         \end{minipage}\\
+286& DICBIOA  & $mol/m3/s$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Biological Productivity} 
+         \end{minipage}\\
+287& DICCARB  & $mol eq/m3/s$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Carbonate chg-biol prod and remin} 
+         \end{minipage}\\
+288& DICTFLX  & $mol/m3/s$ & 1
+         &\begin{minipage}[t]{3in}
+          {Tendency of DIC due to air-sea exch} 
+         \end{minipage}\\
+289& DICOFLX  & $mol/m3/s$ & 1
+         &\begin{minipage}[t]{3in}
+          {Tendency of O2 due to air-sea exch} 
+         \end{minipage}\\
+290& DICCFLX  & $mol/m2/s$ & 1
+         &\begin{minipage}[t]{3in}
+          {Flux of CO2 - air-sea exch} 
+         \end{minipage}\\
+291& DICPCO2  & $atm$ & 1
+         &\begin{minipage}[t]{3in}
+          {Partial Pressure of CO2} 
+         \end{minipage}\\
+292& DICPHAV  & $dimensionless$ & 1
+         &\begin{minipage}[t]{3in}
+          {Average pH} 
+         \end{minipage}\\
+293& DTCONV   & $deg/sec$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Temp Change due to Convection} 
+         \end{minipage}\\
+294& DQCONV   & $g/kg/sec$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Specific Humidity Change due to Convection} 
+         \end{minipage}\\
+295& RELHUM   & $percent$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Relative Humidity} 
+         \end{minipage}\\
+296& PRECLS   & $g/m^2/sec$ & 1
+         &\begin{minipage}[t]{3in}
+          {Large Scale Precipitation} 
+         \end{minipage}\\
+297& ENPREC   & $J/g$ & 1
+         &\begin{minipage}[t]{3in}
+          {Energy of Precipitation (snow, rain Temp)} 
+         \end{minipage}\\
+298& VISCA4   & $m^4/sec$ & 1
+         &\begin{minipage}[t]{3in}
+          {Biharmonic Viscosity Coefficient} 
+         \end{minipage}\\
+299& VISCAH   & $m^2/sec$ & 1
+         &\begin{minipage}[t]{3in}
+          {Harmonic Viscosity Coefficient} 
+         \end{minipage}\\
+300& DRHODR   & $kg/m^3/{r-unit}$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Stratification: d.Sigma/dr} 
+         \end{minipage}\\
+\end{tabular}
+\vspace{1.5in}
+\vfill
+
+\newpage
+\vspace*{\fill}
+\begin{tabular}{lllll}
+\hline\hline
+N & NAME & UNITS & LEVELS & DESCRIPTION \\
+\hline
+
+&\\
+301& DETADT2  & ${r-unit}^2/s^2$ & 1
+         &\begin{minipage}[t]{3in}
+          {Square of Eta (Surf.P,SSH) Tendency} 
+         \end{minipage}\\
 \end{tabular}
 \vspace{1.5in}
 \vfill
