@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.12 2001/12/05 15:49:39 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.13 2002/12/17 14:39:53 mlosch Exp $
 % $Name:  $
 
 %\section{Getting started}
@@ -329,6 +329,10 @@ calculation. Described in detail in section \ref{sect:eg-carbon-ad}.
 
 \item \textit{global\_ocean.90x40x15} Global circulation with
 GM, flux boundary conditions and poles.
+
+\item \textit{global\_ocean\_pressure} Global circulation in pressure
+  coordinate (non-Boussinesq ocean model). Described in detail in
+  section \ref{sect:eg-globalpressure}.
 
 \item \textit{solid-body.cs-32x32x1} Solid body rotation test for cube sphere
 grid.
@@ -867,43 +871,70 @@ here I think. To come soon...)
 \item time-discretization
 \end{itemize}
 
-The time steps are set through the real variables \textbf{deltaTMom }and 
-\textbf{deltaTtracer }(in s) which represent the time step for the momentum
-and tracer equations, respectively. For synchronous integrations, simply set
-the two variables to the same value (or you can prescribe one time step only
-through the variable \textbf{deltaT}). The Adams-Bashforth stabilizing
-parameter is set through the variable \textbf{abEps }(dimensionless). The
-stagger baroclinic time stepping can be activated by setting the logical
-variable \textbf{staggerTimeStep }to '.\texttt{TRUE}.'.
+The time steps are set through the real variables \textbf{deltaTMom}
+and \textbf{deltaTtracer} (in s) which represent the time step for the
+momentum and tracer equations, respectively. For synchronous
+integrations, simply set the two variables to the same value (or you
+can prescribe one time step only through the variable
+\textbf{deltaT}). The Adams-Bashforth stabilizing parameter is set
+through the variable \textbf{abEps} (dimensionless). The stagger
+baroclinic time stepping can be activated by setting the logical
+variable \textbf{staggerTimeStep} to '.\texttt{TRUE}.'.
 
 \subsection{Equation of state}
 
-First, because the model equations are written in terms of perturbations, a
-reference thermodynamic state needs to be specified. This is done through
-the 1D arrays \textbf{tRef}\textit{\ }and \textbf{sRef}. \textbf{tRef }%
-specifies the reference potential temperature profile (in $^{o}$C for
-the ocean and $^{o}$K for the atmosphere) starting from the level
-k=1. Similarly, \textbf{sRef}\textit{\ }specifies the reference salinity
-profile (in ppt) for the ocean or the reference specific humidity profile
-(in g/kg) for the atmosphere.
+First, because the model equations are written in terms of
+perturbations, a reference thermodynamic state needs to be specified.
+This is done through the 1D arrays \textbf{tRef} and \textbf{sRef}.
+\textbf{tRef} specifies the reference potential temperature profile
+(in $^{o}$C for the ocean and $^{o}$K for the atmosphere) starting
+from the level k=1. Similarly, \textbf{sRef} specifies the reference
+salinity profile (in ppt) for the ocean or the reference specific
+humidity profile (in g/kg) for the atmosphere.
 
-The form of the equation of state is controlled by the character variables 
-\textbf{buoyancyRelation}\textit{\ }and \textbf{eosType}\textit{. }\textbf{%
-buoyancyRelation}\textit{\ }is set to '\texttt{OCEANIC}' by default and
-needs to be set to '\texttt{ATMOSPHERIC}' for atmosphere simulations. In
-this case, \textbf{eosType}\textit{\ }must be set to '\texttt{IDEALGAS}'.
-For the ocean, two forms of the equation of state are available: linear (set 
-\textbf{eosType}\textit{\ }to '\texttt{LINEAR}') and a polynomial
-approximation to the full nonlinear equation ( set \textbf{eosType}\textit{\ 
-}to '\texttt{POLYNOMIAL}'). In the linear case, you need to specify the
-thermal and haline expansion coefficients represented by the variables 
-\textbf{tAlpha}\textit{\ }(in K$^{-1}$) and \textbf{sBeta}\textit{\ }(in ppt$%
-^{-1}$). For the nonlinear case, you need to generate a file of polynomial
-coefficients called \textit{POLY3.COEFFS. }To do this, use the program 
-\textit{utils/knudsen2/knudsen2.f }under the model tree (a Makefile is
-available in the same directory and you will need to edit the number and the
-values of the vertical levels in \textit{knudsen2.f }so that they match
-those of your configuration). \textit{\ }
+The form of the equation of state is controlled by the character
+variables \textbf{buoyancyRelation} and \textbf{eosType}.
+\textbf{buoyancyRelation} is set to '\texttt{OCEANIC}' by default and
+needs to be set to '\texttt{ATMOSPHERIC}' for atmosphere simulations.
+In this case, \textbf{eosType} must be set to '\texttt{IDEALGAS}'.
+For the ocean, two forms of the equation of state are available:
+linear (set \textbf{eosType} to '\texttt{LINEAR}') and a polynomial
+approximation to the full nonlinear equation ( set
+\textbf{eosType}\textit{\ }to '\texttt{POLYNOMIAL}'). In the linear
+case, you need to specify the thermal and haline expansion
+coefficients represented by the variables \textbf{tAlpha}\textit{\ 
+  }(in K$^{-1}$) and \textbf{sBeta} (in ppt$^{-1}$). For the nonlinear
+case, you need to generate a file of polynomial coefficients called
+\textit{POLY3.COEFFS}. To do this, use the program
+\textit{utils/knudsen2/knudsen2.f} under the model tree (a Makefile is
+available in the same directory and you will need to edit the number
+and the values of the vertical levels in \textit{knudsen2.f} so that
+they match those of your configuration).
+
+There there are also higher polynomials for the equation of state:
+\begin{description}
+\item['\texttt{UNESCO}':] The UNESCO equation of state formula of
+  Fofonoff and Millard \cite{fofonoff83}. This equation of state
+  assumes in-situ temperature, which is not a model variable; \emph{its use
+  is therefore discouraged, and it is only listed for completeness}.
+\item['\texttt{JMD95Z}':] A modified UNESCO formula by Jackett and
+  McDougall \cite{jackett95}, which uses the model variable potential
+  temperature as input. The '\texttt{Z}' indicates that this equation
+  of state uses a horizontally and temporally constant pressure
+  $p_{0}=-g\rho_{0}z$. 
+\item['\texttt{JMD95P}':] A modified UNESCO formula by Jackett and
+  McDougall \cite{jackett95}, which uses the model variable potential
+  temperature as input. The '\texttt{P}' indicates that this equation
+  of state uses the actual hydrostatic pressure of the last time
+  step. Lagging the pressure in this way requires an additional pickup
+  file for restarts.
+\item['\texttt{MDJWF}':] The new, more accurate and less expensive
+  equation of state by McDougall et~al. \cite{mcdougall03}. It also
+  requires lagging the pressure and therefore an additional pickup
+  file for restarts.
+\end{description}
+For none of these options an reference profile of temperature or
+salinity is required.
 
 \subsection{Momentum equations}
 
@@ -1136,3 +1167,8 @@ fields can be written out by setting the variable \textbf{taveFreq} (in s).
 The precision with which to write the binary data is controlled by the
 integer variable w\textbf{riteBinaryPrec }(set it to \texttt{32} or \texttt{%
 64}).
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End: 
