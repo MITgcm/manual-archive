@@ -1,4 +1,20 @@
 
+#eh3
+
+Without any tweaking, "make all" seems to produce good output and no
+(fatal) errors on a RH 9 system using LaTeX and LaTeX2HTML as provided
+by the following RH-provided tetex RPMs:
+
+  tetex-xdvi-1.0.7-66
+  tetex-afm-1.0.7-66
+  tetex-dvips-1.0.7-66
+  tetex-fonts-1.0.7-66
+  tetex-latex-1.0.7-66
+  tetex-1.0.7-66
+
+#eh3
+
+
 Scripts for manipulating and otherwise disassembling l2h output.
 
 Driver for generating the latest manual from sources in CVS repo.
@@ -11,8 +27,9 @@ generate_latest_manual.sh  - This is coded for running on twain.lcs.mit.edu, whi
 
 Adding subjects to the mailto: ref.
 ===================================
-make_mail_subjects.sh   - Find mailto: block and substitutes mailto:support@mitgcm.org?subject=....
-make_mail_subjects.awk    where subject is the files TITLE block.
+make_mail_subjects.sh   - Find mailto: block and substitutes a javascript block for
+make_mail_subjects.awk    mailto:support@mitgcm.org?subject=....
+                          where subject is the files TITLE block.
 
 Finding figures and making substitutions in l2h output
 ======================================================

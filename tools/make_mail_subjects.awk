@@ -4,7 +4,7 @@ BEGIN{nop=0}
 printf("
 <script language="javascript">
 <!--
- document.write("<a href=\"mailto:support@mitgcm.org?subject=[MITgcm Manual] section " + document.title + "&body=Comments and questions on page " + document.URL + "\">");
+ document.write("<a href=\"mailto:mitgcm-support@dev.mitgcm.org?subject=[MITgcm Manual] section " + document.title + "&body=Comments and questions on page " + document.URL + "\">");
 // -->
 </script>
 \n");

@@ -1,9 +1,9 @@
-L2H = -image_type gif -split 5 -show_section_numbers -link 2 \
-      -address "<a href=mailto:support@mitgcm.org>support@mitgcm.org</a>" \
-      -local_icons -noantialias -notransparent -white
+#L2H = -image_type gif -split 5 -show_section_numbers -link 2 \
+#      -address "<a href=mailto:support@mitgcm.org>support@mitgcm.org</a>" \
+#      -local_icons -noantialias -notransparent -white
 
 L2H = -image_type png -split 5 -show_section_numbers -link 2 \
-      -address "<a href=mailto:support@mitgcm.org>support@mitgcm.org</a>" \
+      -address "<a href=mailto:support@mitgcm.org>mitgcm-support@dev.mitgcm.org</a>" \
       -local_icons -noantialias -notransparent -white
 
 default:
