@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_examples/rotating_tank/tank.tex,v 1.7 2004/07/26 21:09:47 afe Exp $
+% $Header: /u/gcmpack/manual/s_examples/rotating_tank/tank.tex,v 1.8 2004/07/26 21:25:34 afe Exp $
 % $Name:  $
 
 \bodytext{bgcolor="#FFFFFFFF"}
@@ -36,94 +36,10 @@ levels.
 
 
 
-This example experiment demonstrates using the MITgcm to simulate
-a Barotropic, wind-forced, ocean gyre circulation. The experiment 
-is a numerical rendition of the gyre circulation problem similar
-to the problems described analytically by Stommel in 1966 
-\cite{Stommel66} and numerically in Holland et. al \cite{Holland75}.
-
-In this experiment the model 
-is configured to represent a rectangular enclosed box of fluid,
-$1200 \times 1200 $~km in lateral extent. The fluid is $5$~km deep and is forced
-by a constant in time zonal wind stress, $\tau_x$, that varies sinusoidally
-in the ``north-south'' direction. Topologically the grid is Cartesian and 
-the coriolis parameter $f$ is defined according to a mid-latitude beta-plane 
-equation
-
-\begin{equation}
-\label{EQ:eg-baro-fcori}
-f(y) = f_{0}+\beta y
-\end{equation}
  
-\noindent where $y$ is the distance along the ``north-south'' axis of the 
-simulated domain. For this experiment $f_{0}$ is set to $10^{-4}s^{-1}$ in 
-(\ref{EQ:eg-baro-fcori}) and $\beta = 10^{-11}s^{-1}m^{-1}$. 
-\\
-\\
- The sinusoidal wind-stress variations are defined according to 
-
-\begin{equation}
-\label{EQ:eg-baro-taux}
-\tau_x(y) = \tau_{0}\sin(\pi \frac{y}{L_y})
-\end{equation}
- 
-\noindent where $L_{y}$ is the lateral domain extent ($1200$~km) and 
-$\tau_0$ is set to $0.1N m^{-2}$. 
-\\
-\\
-Figure \ref{FIG:eg-baro-simulation_config}
-summarizes the configuration simulated.
-
-%% === eh3 ===
-\begin{figure}
-%% \begin{center}
-%%  \resizebox{7.5in}{5.5in}{
-%%    \includegraphics*[0.2in,0.7in][10.5in,10.5in]
-%%     {part3/case_studies/barotropic_gyre/simulation_config.eps} }
-%% \end{center}
-\centerline{
-  \scalefig{.95}
-  \epsfbox{part3/case_studies/barotropic_gyre/simulation_config.eps}
-}
-\caption{Schematic of simulation domain and wind-stress forcing function 
-for barotropic gyre numerical experiment. The domain is enclosed bu solid
-walls at $x=$~0,1200km and at $y=$~0,1200km.}
-\label{FIG:eg-baro-simulation_config}
-\end{figure}
 
 \subsection{Equations Solved}
 \label{www:tutorials}
-The model is configured in hydrostatic form. The implicit free surface form of the
-pressure equation described in Marshall et. al \cite{marshall:97a} is
-employed.
-A horizontal Laplacian operator $\nabla_{h}^2$ provides viscous
-dissipation. The wind-stress momentum input is added to the momentum equation
-for the ``zonal flow'', $u$. Other terms in the model
-are explicitly switched off for this experiment configuration (see section
-\ref{SEC:code_config} ), yielding an active set of equations solved in this
-configuration as follows 
-
-\begin{eqnarray}
-\label{EQ:eg-baro-model_equations}
-\frac{Du}{Dt} - fv +
-              g\frac{\partial \eta}{\partial x} -
-              A_{h}\nabla_{h}^2u
-& = &
-\frac{\tau_{x}}{\rho_{0}\Delta z}
-\\
-\frac{Dv}{Dt} + fu + g\frac{\partial \eta}{\partial y} -
-              A_{h}\nabla_{h}^2v
-& = &
-0
-\\
-\frac{\partial \eta}{\partial t} + \nabla_{h}\cdot \vec{u}
-&=&
-0
-\end{eqnarray}
-
-\noindent where $u$ and $v$ and the $x$ and $y$ components of the
-flow vector $\vec{u}$.
-\\
 
 
 \subsection{Discrete Numerical Configuration}
