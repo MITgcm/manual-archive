@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/text/exch2.tex,v 1.5 2004/01/29 21:03:53 afe Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/text/exch2.tex,v 1.6 2004/02/03 19:43:38 afe Exp $
 % $Name:  $
 
 %%  * Introduction
@@ -36,10 +36,13 @@ points, running on a single processor.
 \subsection{Key Variables}
 
 The descriptions of the variables are divided up into scalars,
-one-dimensional arrays indexed to the tile number, and two-dimensional
+one-dimensional arrays indexed to the tile number, and two and three 
+dimensional
 arrays indexed to tile number and neighboring tile.  This division
-actually reflects  the functionality of these variables, not just the
-whim of some FORTRAN enthusiast.
+actually reflects  the functionality of these variables: the scalars
+are common to every part of the topology, the tile-indexed arrays to 
+individual tiles, and the arrays indexed to tile and neighbor to 
+relationships between tiles and their neighbors.
 
 \subsubsection{Scalars}
 
@@ -60,7 +63,7 @@ are tile-layout-neutral and have no bearing on the internal storage of the
 arrays.  The tiles are internally stored in a range from {\em 1,bi} (in the
 x axis) and y-axis variable {\em bj} is generally ignored within the package.
 
-\subsubsection{One-Dimensional Arrays}
+\subsubsection{Arrays Indexed to Tile Number}
 
 The following arrays are of size {\em NTILES}, are indexed to the tile number, 
 and the indices are omitted in their descriptions.
@@ -97,7 +100,7 @@ neighboring tiles each tile has, and is used for setting bounds for looping
 over neighboring tiles.  {\em exch2\_tProc} holds the process rank of each tile,
 and is used in interprocess communication.
 
-\subsubsection{Two-Dimensional Arrays}
+\subsubsection{Arrays Indexed to Tile Number and Neighbor}
 
 The following arrays are all of size {\em MAX\_NEIGHBOURS}x{\em NTILES} and
 describe the orientations between the the tiles.
@@ -111,7 +114,9 @@ In other words,
 exch2_neighbourId( exch2_opposingSend_record(a,T), exch2_neighbourId(a,T) ) = T
 \end{verbatim}
 
-{\em exch2\_neighbourId(exch2\_opposingSend\_record(a,T),exch2\_neighbourId(a,T))=T}.
+% {\em exch2\_neighbourId(exch2\_opposingSend\_record(a,T),exch2\_neighbourId(a,T))=T}.
+% alternate version
+
 This is to provide a backreference from the neighbor tiles.
 
 
@@ -120,10 +125,7 @@ This is to provide a backreference from the neighbor tiles.
 \begin{verbatim}
 
 
-C      exch2_neighbourId :: Tile number for each neighbour entry.        
-C      exch2_opposingSend_record :: Record for entry in target tile send 
-C                                :: list that has this tile and face     
-C                                :: as its target.                       
+
 C      exch2_pi          :: X index row of target to source permutation 
 C                        :: matrix for each neighbour entry.            
 C      exch2_pj          :: Y index row of target to source permutation 
