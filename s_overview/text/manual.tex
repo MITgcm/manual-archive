@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.7 2001/10/25 12:06:56 cnh Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.8 2001/10/25 15:24:01 cnh Exp $
 % $Name:  $
 
 %tci%\documentclass[12pt]{book}
@@ -34,7 +34,7 @@
 
 % Section: Overview
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.7 2001/10/25 12:06:56 cnh Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.8 2001/10/25 15:24:01 cnh Exp $
 % $Name:  $
 
 \section{Introduction}
@@ -89,7 +89,7 @@ listed in an Appendix.
 We begin by briefly showing some of the results of the model in action to
 give a feel for the wide range of problems that can be addressed using it.
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.7 2001/10/25 12:06:56 cnh Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.8 2001/10/25 15:24:01 cnh Exp $
 % $Name:  $
 
 \section{Illustrations of the model in action}
@@ -289,7 +289,7 @@ stratification of the ACC.
 \input{part1/lab_figure}
 %%CNHend
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.7 2001/10/25 12:06:56 cnh Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.8 2001/10/25 15:24:01 cnh Exp $
 % $Name:  $
 
 \section{Continuous equations in `r' coordinates}
@@ -326,31 +326,33 @@ see figure \ref{fig:zandp-vert-coord}.
 \begin{equation*}
 \frac{D\vec{\mathbf{v}_{h}}}{Dt}+\left( 2\vec{\Omega}\times \vec{\mathbf{v}}
 \right) _{h}+\mathbf{\nabla }_{h}\phi =\mathcal{F}_{\vec{\mathbf{v}_{h}}}
-\text{ horizontal mtm}
-\end{equation*}
-
-\begin{equation*}
-\frac{D\dot{r}}{Dt}+\widehat{k}\cdot \left( 2\vec{\Omega}\times \vec{\mathbf{
-v}}\right) +\frac{\partial \phi }{\partial r}+b=\mathcal{F}_{\dot{r}}\text{
-vertical mtm}
+\text{ horizontal mtm} \label{eq:horizontal_mtm}
 \end{equation*}
 
 \begin{equation}
-\mathbf{\nabla }_{h}\cdot \vec{\mathbf{v}}_{h}+\frac{\partial \dot{r}}{
-\partial r}=0\text{ continuity}  \label{eq:continuous}
+\frac{D\dot{r}}{Dt}+\widehat{k}\cdot \left( 2\vec{\Omega}\times \vec{\mathbf{
+v}}\right) +\frac{\partial \phi }{\partial r}+b=\mathcal{F}_{\dot{r}}\text{
+vertical mtm} \label{eq:vertical_mtm}
 \end{equation}
 
-\begin{equation*}
-b=b(\theta ,S,r)\text{ equation of state}
-\end{equation*}
+\begin{equation}
+\mathbf{\nabla }_{h}\cdot \vec{\mathbf{v}}_{h}+\frac{\partial \dot{r}}{
+\partial r}=0\text{ continuity}  \label{eq:continuity}
+\end{equation}
 
-\begin{equation*}
+\begin{equation}
+b=b(\theta ,S,r)\text{ equation of state} \label{eq:equation_of_state}
+\end{equation}
+
+\begin{equation}
 \frac{D\theta }{Dt}=\mathcal{Q}_{\theta }\text{ potential temperature}
-\end{equation*}
+\label{eq:potential_temperature}
+\end{equation}
 
-\begin{equation*}
+\begin{equation}
 \frac{DS}{Dt}=\mathcal{Q}_{S}\text{ humidity/salinity}
-\end{equation*}
+\label{eq:humidtity_salt}
+\end{equation}
 
 Here:
 
@@ -523,8 +525,8 @@ The boundary conditions at top and bottom are given by:
 atmosphere)}  \label{eq:moving-bc-atmos}
 \end{eqnarray}
 
-Then the (hydrostatic form of) eq(\ref{eq:continuous}) yields a consistent
-set of atmospheric equations which, for convenience, are written out in $p$
+Then the (hydrostatic form of) equations (\ref{eq:horizontal_mtm}-\ref{eq:humidity_slainty}) 
+yields a consistent set of atmospheric equations which, for convenience, are written out in $p$
 coordinates in Appendix Atmosphere - see eqs(\ref{eq:atmos-prime}).
 
 \subsection{Ocean}
@@ -560,7 +562,8 @@ w &=&\frac{D\eta }{Dt}\text{ at }r=R_{moving}=\eta \text{ (ocean surface)
 \end{eqnarray}
 where $\eta $ is the elevation of the free surface.
 
-Then eq(\ref{eq:continuous}) yields a consistent set of oceanic equations
+Then equations (\ref{eq:horizontal_mtm}-\ref{eq:humidity_slainty}) yield a consistent set 
+of oceanic equations
 which, for convenience, are written out in $z$ coordinates in Appendix Ocean
 - see eqs(\ref{eq:ocean-mom}) to (\ref{eq:ocean-salt}).
 
@@ -573,7 +576,7 @@ Let us separate $\phi $ in to surface, hydrostatic and non-hydrostatic terms:
 \phi (x,y,r)=\phi _{s}(x,y)+\phi _{hyd}(x,y,r)+\phi _{nh}(x,y,r)
 \label{eq:phi-split}
 \end{equation}
-and write eq(\ref{incompressible}a,b) in the form:
+and write eq(\ref{eq:incompressible}) in the form:
 
 \begin{equation}
 \frac{\partial \vec{\mathbf{v}_{h}}}{\partial t}+\mathbf{\nabla }_{h}\phi
@@ -666,8 +669,6 @@ In the above `${r}$' is the distance from the center of the earth and `$\varphi$
 
 Grad and div operators in spherical coordinates are defined in appendix
 OPERATORS.
-\marginpar{
-Fig.6 Spherical polar coordinate system.}
 
 %%CNHbegin
 \input{part1/sphere_coord_figure.tex}
@@ -730,7 +731,7 @@ In the non-hydrostatic ocean model all terms in equations Eqs.(\ref
 three dimensional elliptic equation must be solved subject to Neumann
 boundary conditions (see below). It is important to note that use of the
 full \textbf{NH} does not admit any new `fast' waves in to the system - the
-incompressible condition eq(\ref{eq:continuous})c has already filtered out
+incompressible condition eq(\ref{eq:continuity}) has already filtered out
 acoustic modes. It does, however, ensure that the gravity waves are treated
 accurately with an exact dispersion relation. The \textbf{NH} set has a
 complete angular momentum principle and consistent energetics - see White
@@ -779,9 +780,8 @@ coordinates are supported - see eqs(\ref{eq:ocean-mom}) to (\ref
 \subsection{Solution strategy}
 
 The method of solution employed in the \textbf{HPE}, \textbf{QH} and \textbf{
-NH} models is summarized in Fig.7.
-\marginpar{
-Fig.7 Solution strategy} Under all dynamics, a 2-d elliptic equation is
+NH} models is summarized in Figure \ref{fig:solution-strategy}.
+Under all dynamics, a 2-d elliptic equation is
 first solved to find the surface pressure and the hydrostatic pressure at
 any level computed from the weight of fluid above. Under \textbf{HPE} and 
 \textbf{QH} dynamics, the horizontal momentum equations are then stepped
@@ -838,8 +838,8 @@ atmospheric pressure pushing down on the ocean's surface) by setting:
 
 \subsubsection{Surface pressure}
 
-The surface pressure equation can be obtained by integrating continuity, (
-\ref{eq:continuous})c, vertically from $r=R_{fixed}$ to $r=R_{moving}$
+The surface pressure equation can be obtained by integrating continuity,
+(\ref{eq:continuity}), vertically from $r=R_{fixed}$ to $r=R_{moving}$
 
 \begin{equation*}
 \int_{R_{fixed}}^{R_{moving}}\left( \mathbf{\nabla }_{h}\cdot \vec{\mathbf{v}
@@ -864,7 +864,7 @@ r $. The above can be rearranged to yield, using Leibnitz's theorem:
 where we have incorporated a source term.
 
 Whether $\phi $ is pressure (ocean model, $p/\rho _{c}$) or geopotential
-(atmospheric model), in (\ref{mtm-split}), the horizontal gradient term can
+(atmospheric model), in (\ref{eq:mom-h}), the horizontal gradient term can
 be written 
 \begin{equation}
 \mathbf{\nabla }_{h}\phi _{s}=\mathbf{\nabla }_{h}\left( b_{s}\eta \right)
@@ -872,16 +872,16 @@ be written
 \end{equation}
 where $b_{s}$ is the buoyancy at the surface.
 
-In the hydrostatic limit ($\epsilon _{nh}=0$), Eqs(\ref{eq:mom-h}), (\ref
+In the hydrostatic limit ($\epsilon _{nh}=0$), equations (\ref{eq:mom-h}), (\ref
 {eq:free-surface}) and (\ref{eq:phi-surf}) can be solved by inverting a 2-d
 elliptic equation for $\phi _{s}$ as described in Chapter 2. Both `free
 surface' and `rigid lid' approaches are available.
 
 \subsubsection{Non-hydrostatic pressure}
 
-Taking the horizontal divergence of (\ref{hor-mtm}) and adding $\frac{
-\partial }{\partial r}$ of (\ref{vertmtm}), invoking the continuity equation
-(\ref{incompressible}), we deduce that:
+Taking the horizontal divergence of (\ref{eq:mom-h}) and adding 
+$\frac{\partial }{\partial r}$ of (\ref{eq:mom-w}), invoking the continuity equation
+(\ref{eq:continuity}), we deduce that:
 
 \begin{equation}
 \nabla _{3}^{2}\phi _{nh}=\nabla .\vec{\mathbf{G}}_{\vec{v}}-\left( \mathbf{
@@ -911,7 +911,7 @@ tangential component of velocity, $v_{T}$, at all solid boundaries,
 depending on the form chosen for the dissipative terms in the momentum
 equations - see below.
 
-Eq.(\ref{nonormalflow}) implies, making use of (\ref{mtm-split}), that:
+Eq.(\ref{nonormalflow}) implies, making use of (\ref{eq:mom-h}), that:
 
 \begin{equation}
 \widehat{n}.\nabla \phi _{nh}=\widehat{n}.\vec{\mathbf{F}}
@@ -951,7 +951,7 @@ If the flow is `close' to hydrostatic balance then the 3-d inversion
 converges rapidly because $\phi _{nh}\ $is then only a small correction to
 the hydrostatic pressure field (see the discussion in Marshall et al, a,b).
 
-The solution $\phi _{nh}\ $to (\ref{eq:3d-invert}) and (\ref{homneuman})
+The solution $\phi _{nh}\ $to (\ref{eq:3d-invert}) and (\ref{eq:inhom-neumann-nh})
 does not vanish at $r=R_{moving}$, and so refines the pressure there.
 
 \subsection{Forcing/dissipation}
@@ -959,7 +959,7 @@ does not vanish at $r=R_{moving}$, and so refines the pressure there.
 \subsubsection{Forcing}
 
 The forcing terms $\mathcal{F}$ on the rhs of the equations are provided by
-`physics packages' described in detail in chapter ??.
+`physics packages' and forcing packages. These are described later on.
 
 \subsubsection{Dissipation}
 
@@ -1007,7 +1007,7 @@ salinity ... ).
 \subsection{Vector invariant form}
 
 For some purposes it is advantageous to write momentum advection in eq(\ref
-{hor-mtm}) and (\ref{vertmtm}) in the (so-called) `vector invariant' form:
+{eq:horizontal_mtm}) and (\ref{eq:vertical_mtm}) in the (so-called) `vector invariant' form:
 
 \begin{equation}
 \frac{D\vec{\mathbf{v}}}{Dt}=\frac{\partial \vec{\mathbf{v}}}{\partial t}
@@ -1025,10 +1025,10 @@ to discretize the model.
 
 \subsection{Adjoint}
 
-Tangent linear and adjoint counterparts of the forward model and described
+Tangent linear and adjoint counterparts of the forward model are described
 in Chapter 5.
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.7 2001/10/25 12:06:56 cnh Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.8 2001/10/25 15:24:01 cnh Exp $
 % $Name:  $
 
 \section{Appendix ATMOSPHERE}
@@ -1147,15 +1147,15 @@ _{o}(p_{o})=g~Z_{topo}$, defined:
 The final form of the HPE's in p coordinates is then: 
 \begin{eqnarray}
 \frac{D\vec{\mathbf{v}}_{h}}{Dt}+f\hat{\mathbf{k}}\times \vec{\mathbf{v}}
-_{h}+\mathbf{\nabla }_{p}\phi ^{\prime } &=&\vec{\mathbf{\mathcal{F}}} \\
+_{h}+\mathbf{\nabla }_{p}\phi ^{\prime } &=&\vec{\mathbf{\mathcal{F}}} \label{eq:atmos-prime} \\
 \frac{\partial \phi ^{\prime }}{\partial p}+\alpha ^{\prime } &=&0 \\
 \mathbf{\nabla }_{p}\cdot \vec{\mathbf{v}}_{h}+\frac{\partial \omega }{
 \partial p} &=&0 \\
 \frac{\partial \Pi }{\partial p}\theta ^{\prime } &=&\alpha ^{\prime } \\
-\frac{D\theta }{Dt} &=&\frac{\mathcal{Q}}{\Pi }  \label{eq:atmos-prime}
+\frac{D\theta }{Dt} &=&\frac{\mathcal{Q}}{\Pi } 
 \end{eqnarray}
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.7 2001/10/25 12:06:56 cnh Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.8 2001/10/25 15:24:01 cnh Exp $
 % $Name:  $
 
 \section{Appendix OCEAN}
@@ -1171,10 +1171,11 @@ _{h}+\frac{1}{\rho }\mathbf{\nabla }_{z}p &=&\vec{\mathbf{\mathcal{F}}} \\
 \epsilon _{nh}\frac{Dw}{Dt}+g+\frac{1}{\rho }\frac{\partial p}{\partial z}
 &=&\epsilon _{nh}\mathcal{F}_{w} \\
 \frac{1}{\rho }\frac{D\rho }{Dt}+\mathbf{\nabla }_{z}\cdot \vec{\mathbf{v}}
-_{h}+\frac{\partial w}{\partial z} &=&0 \\
-\rho &=&\rho (\theta ,S,p) \\
-\frac{D\theta }{Dt} &=&\mathcal{Q}_{\theta } \\
-\frac{DS}{Dt} &=&\mathcal{Q}_{s}  \label{eq:non-boussinesq}
+_{h}+\frac{\partial w}{\partial z} &=&0 \label{eq-zns-cont}\\
+\rho &=&\rho (\theta ,S,p) \label{eq-zns-eos}\\
+\frac{D\theta }{Dt} &=&\mathcal{Q}_{\theta } \label{eq-zns-heat}\\
+\frac{DS}{Dt} &=&\mathcal{Q}_{s}  \label{eq-zns-salt}
+\label{eq:non-boussinesq}
 \end{eqnarray}
 These equations permit acoustics modes, inertia-gravity waves,
 non-hydrostatic motions, a geostrophic (Rossby) mode and a thermo-haline
@@ -1193,8 +1194,7 @@ _{\theta ,S}\frac{Dp}{Dt}  \label{EOSexpansion}
 \end{equation}
 
 Note that $\frac{\partial \rho }{\partial p}=\frac{1}{c_{s}^{2}}$ is the
-reciprocal of the sound speed ($c_{s}$) squared. Substituting into \ref
-{eq-zns-cont} gives: 
+reciprocal of the sound speed ($c_{s}$) squared. Substituting into \ref{eq-zns-cont} gives: 
 \begin{equation}
 \frac{1}{\rho c_{s}^{2}}\frac{Dp}{Dt}+\mathbf{\nabla }_{z}\cdot \vec{\mathbf{
 v}}+\partial _{z}w\approx 0  \label{eq-zns-pressure}
@@ -1371,7 +1371,7 @@ the perturbation density. Nevertheless, it is the hydrostatic ($\epsilon
 _{nh}=0$ form of these equations that are used throughout the ocean modeling
 community and referred to as the primitive equations (HPE).
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.7 2001/10/25 12:06:56 cnh Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.8 2001/10/25 15:24:01 cnh Exp $
 % $Name:  $
 
 \section{Appendix:OPERATORS}
