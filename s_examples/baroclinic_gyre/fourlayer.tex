@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_examples/baroclinic_gyre/fourlayer.tex,v 1.15 2003/08/07 18:27:52 edhill Exp $
+% $Header: /u/gcmpack/manual/s_examples/baroclinic_gyre/fourlayer.tex,v 1.16 2003/09/15 19:39:04 edhill Exp $
 % $Name:  $
 
 \section{Four Layer Baroclinic Ocean Gyre In Spherical Coordinates}
@@ -375,86 +375,29 @@ are
 
 \item Line 4, 
 \begin{verbatim} tRef=20.,10.,8.,6., \end{verbatim} 
-this line sets
-the initial and reference values of potential temperature at each model
-level in units of $^{\circ}$C.
-The entries are ordered from surface to depth. For each
-depth level the initial and reference profiles will be uniform in
-$x$ and $y$. The values specified here are read into the
-variable 
-\varlink{tRef}{tRef}
-%{\bf
-%\begin{rawhtml} <A href=../code_reference/vdb/names/OK.htm> \end{rawhtml}
-%tRef
-%\begin{rawhtml} </A>\end{rawhtml}
-%} 
-in the model code, by procedure 
-\filelink{INI\_PARMS}{model-src-ini_parms.F}
-%{\it
-%\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
-%INI\_PARMS
-%\begin{rawhtml} </A>\end{rawhtml}
-%}.
-
-%% \codelink{var:tref} tRef \endlink
-%% \codelink{file:ini_parms} {\it INI\_PARMS } \endlink
-%% \codelink{proc:ini_parms} {\it INI\_PARMS } \endlink
-%% \var{tref}
-%% \proc{ini_parms}
-%% \file{ini_parms}
-\newcommand{\VARtref}{
-{\bf
-\begin{rawhtml} <A href=../code_reference/vdb/names/OK.htm> \end{rawhtml}
-tRef
-\begin{rawhtml} </A>\end{rawhtml}
-} 
-}
-
-
+this line sets the initial and reference values of potential
+temperature at each model level in units of $^{\circ}$C.  The entries
+are ordered from surface to depth. For each depth level the initial
+and reference profiles will be uniform in $x$ and $y$. The values
+specified here are read into the variable \varlink{tRef}{tRef} in the
+model code, by procedure \filelink{INI\_PARMS}{model-src-ini_parms.F}
 
 \fbox{
-\begin{minipage}{5.0in}
-{\it S/R INI\_THETA}
-({\it ini\_theta.F})
-\end{minipage}
+  \begin{minipage}{5.0in}
+    {\it S/R INI\_THETA}({\it ini\_theta.F})
+  \end{minipage}
 }
 \filelink{ini\_theta.F}{model-src-ini_theta.F}
-%{\bf
-%\begin{rawhtml} <A href=../code_reference/vdb/code/98.htm> \end{rawhtml}
-%goto code
-%\begin{rawhtml} </A>\end{rawhtml}
-%}
-
 
 \item Line 6, 
 \begin{verbatim} viscAz=1.E-2, \end{verbatim} 
-this line sets the vertical Laplacian dissipation coefficient to
-$1 \times 10^{-2} {\rm m^{2}s^{-1}}$. Boundary conditions
-for this operator are specified later. 
-The variable 
-\varlink{viscAz}{viscAz}
-%{\bf 
-%\begin{rawhtml} <A href=../code_reference/vdb/names/ZQ.htm> \end{rawhtml}
-%viscAz
-%\begin{rawhtml} </A>\end{rawhtml}
-%}
-is read in the routine
-\filelink{ini\_parms.F}{model-src-ini_parms.F}
-%{\it
-%\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
-%INI\_PARMS
-%\begin{rawhtml} </A>\end{rawhtml}
-%}
-and is copied into model general vertical coordinate variable 
-\varlink{viscAr}{viscAr}
-%{\bf 
-%\begin{rawhtml} <A href=../code_reference/vdb/names/PF.htm> \end{rawhtml}
-%viscAr
-%\begin{rawhtml} </A>\end{rawhtml}
-%}.
-At each time step, the viscous term contribution to the momentum equations
-is calculated in routine
-%{\it S/R CALC\_DIFFUSIVITY}.
+this line sets the vertical Laplacian dissipation coefficient to $1
+\times 10^{-2} {\rm m^{2}s^{-1}}$. Boundary conditions for this
+operator are specified later.  The variable \varlink{viscAz}{viscAz}
+is read in the routine \filelink{ini\_parms.F}{model-src-ini_parms.F}
+and is copied into model general vertical coordinate variable
+\varlink{viscAr}{viscAr} At each time step, the viscous term
+contribution to the momentum equations is calculated in routine
 \varlink{CALC\_DIFFUSIVITY}{CALC_DIFFUSIVITY}
 
 \fbox{
@@ -462,504 +405,272 @@ is calculated in routine
 {\it S/R CALC\_DIFFUSIVITY}({\it calc\_diffusivity.F})
 \end{minipage}
 }
-%{\bf
-%\begin{rawhtml} <A href=../code_reference/vdb/code/53.htm> \end{rawhtml}
-%goto code
-%\begin{rawhtml} </A>\end{rawhtml}
-%}
 
 \item Line 7, 
 \begin{verbatim}
 viscAh=4.E2,
 \end{verbatim} 
-this line sets the horizontal laplacian frictional dissipation coefficient to
-$1 \times 10^{-2} {\rm m^{2}s^{-1}}$. Boundary conditions
-for this operator are specified later.
-The variable 
-\varlink{viscAh}{viscAh}
-%{\bf 
-%\begin{rawhtml} <A href=../code_reference/vdb/names/SI.htm> \end{rawhtml}
-%viscAh
-%\begin{rawhtml} </A>\end{rawhtml}
-%}
-is read in the routine
-\varlink{INI\_PARMS}{INI_PARMS}
-%{\it
-%\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
-%INI\_PARMS
-%\begin{rawhtml} </A>\end{rawhtml}
-%}
-and applied in routines
-%{\it CALC\_MOM\_RHS} and {\it CALC\_GW}.
-\varlink{CALC\_MOM\_RHS}{CALC_MOM_RHS}
-and
-\varlink{CALC\_GW}{CALC_GW}.
-
+  this line sets the horizontal laplacian frictional dissipation
+  coefficient to $1 \times 10^{-2} {\rm m^{2}s^{-1}}$. Boundary
+  conditions for this operator are specified later.  The variable
+  \varlink{viscAh}{viscAh} is read in the routine
+  \varlink{INI\_PARMS}{INI_PARMS} and applied in routines
+  \varlink{CALC\_MOM\_RHS}{CALC_MOM_RHS} and
+  \varlink{CALC\_GW}{CALC_GW}.
 
 \fbox{
-\begin{minipage}{5.0in}
-{\it S/R CALC\_MOM\_RHS}({\it calc\_mom\_rhs.F})
-\end{minipage}
+  \begin{minipage}{5.0in}
+    {\it S/R CALC\_MOM\_RHS}({\it calc\_mom\_rhs.F})
+  \end{minipage}
 }
-%{\bf
-%\begin{rawhtml} <A href=../code_reference/vdb/code/60.htm> \end{rawhtml}
-%goto code
-%\begin{rawhtml} </A>\end{rawhtml}
-%}
-
 \fbox{
-\begin{minipage}{5.0in}
-{\it S/R CALC\_GW}({\it calc\_gw.F})
-\end{minipage}
+  \begin{minipage}{5.0in}
+    {\it S/R CALC\_GW}({\it calc\_gw.F})
+  \end{minipage}
 }
-%{\bf
-%\begin{rawhtml} <A href=../code_reference/vdb/code/58.htm> \end{rawhtml}
-%goto code
-%\begin{rawhtml} </A>\end{rawhtml}
-%}
 
-\item Lines 8,
+\item Line 8,
 \begin{verbatim}
 no_slip_sides=.FALSE.
 \end{verbatim}
-this line selects a free-slip lateral boundary condition for
-the horizontal laplacian friction operator 
-e.g. $\frac{\partial u}{\partial y}$=0 along boundaries in $y$ and
-$\frac{\partial v}{\partial x}$=0 along boundaries in $x$.
-The variable
-\varlink{no\_slip\_sides}{no_slip_sides}
-%{\bf
-%\begin{rawhtml} <A href=../code_reference/vdb/names/UT.htm> \end{rawhtml}
-%no\_slip\_sides
-%\begin{rawhtml} </A>\end{rawhtml}
-%}
-is read in the routine
-\varlink{INI\_PARMS}{INI_PARMS}
-%{\it
-%\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
-%INI\_PARMS
-%\begin{rawhtml} </A>\end{rawhtml}
-%}
-and the boundary condition is evaluated in routine
-%{\it S/R CALC\_MOM\_RHS}.
+  this line selects a free-slip lateral boundary condition for the
+  horizontal laplacian friction operator e.g. $\frac{\partial
+    u}{\partial y}$=0 along boundaries in $y$ and $\frac{\partial
+    v}{\partial x}$=0 along boundaries in $x$.  The variable
+  \varlink{no\_slip\_sides}{no_slip_sides} is read in the routine
+  \varlink{INI\_PARMS}{INI_PARMS} and the boundary condition is
+  evaluated in routine
 
-
-\fbox{
-\begin{minipage}{5.0in}
-{\it S/R CALC\_MOM\_RHS}({\it calc\_mom\_rhs.F})
-\end{minipage}
-}
-{\bf
-\begin{rawhtml} <A href=../code_reference/vdb/code/60.htm> \end{rawhtml}
-goto code
-\begin{rawhtml} </A>\end{rawhtml}
-}
-
+  \fbox{
+    \begin{minipage}{5.0in}
+      {\it S/R CALC\_MOM\_RHS}({\it calc\_mom\_rhs.F})
+    \end{minipage}
+  }
+  \filelink{calc\_mom\_rhs.F}{calc_mom_rhs.F}
+  
 \item Lines 9,
 \begin{verbatim}
 no_slip_bottom=.TRUE.
 \end{verbatim}
-this line selects a no-slip boundary condition for bottom
-boundary condition in the vertical laplacian friction operator 
-e.g. $u=v=0$ at $z=-H$, where $H$ is the local depth of the domain.
-The variable
-{\bf
-\begin{rawhtml} <A href=../code_reference/vdb/names/UK.htm> \end{rawhtml}
-no\_slip\_bottom
-\begin{rawhtml} </A>\end{rawhtml}
-}
-is read in the routine
-{\it
-\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
-INI\_PARMS
-\begin{rawhtml} </A>\end{rawhtml}
-} and is applied in the routine {\it S/R CALC\_MOM\_RHS}.
+  this line selects a no-slip boundary condition for bottom boundary
+  condition in the vertical laplacian friction operator e.g. $u=v=0$
+  at $z=-H$, where $H$ is the local depth of the domain.  The variable
+  \varlink{no\_slip\_bottom}{no\_slip\_bottom} is read in the routine
+  \filelink{INI\_PARMS}{model-src-ini_parms.F} and is applied in the
+  routine \varlink{CALC\_MOM\_RHS}{CALC_MOM_RHS}.
 
-\fbox{
-\begin{minipage}{5.0in}
-{\it S/R CALC\_MOM\_RHS}({\it calc\_mom\_rhs.F})
-\end{minipage}
-}
-{\bf
-\begin{rawhtml} <A href=../code_reference/vdb/code/60.htm> \end{rawhtml}
-goto code
-\begin{rawhtml} </A>\end{rawhtml}
-}
+  \fbox{
+    \begin{minipage}{5.0in}
+      {\it S/R CALC\_MOM\_RHS}({\it calc\_mom\_rhs.F})
+    \end{minipage}
+  }
+  \filelink{calc\_mom\_rhs.F}{calc_mom_rhs.F}
 
 \item Line 10,
 \begin{verbatim}
 diffKhT=4.E2,
 \end{verbatim}
-this line sets the horizontal diffusion coefficient for temperature
-to $400\,{\rm m^{2}s^{-1}}$. The boundary condition on this
-operator is $\frac{\partial}{\partial x}=\frac{\partial}{\partial y}=0$ at
-all boundaries.
-The variable
-{\bf
-\begin{rawhtml} <A href=../code_reference/vdb/names/RC.htm> \end{rawhtml}
-diffKhT
-\begin{rawhtml} </A>\end{rawhtml}
-}
-is read in the routine
-{\it
-\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
-INI\_PARMS
-\begin{rawhtml} </A>\end{rawhtml}
-} and used in routine {\it S/R CALC\_GT}.
+  this line sets the horizontal diffusion coefficient for temperature
+  to $400\,{\rm m^{2}s^{-1}}$. The boundary condition on this operator
+  is $\frac{\partial}{\partial x}=\frac{\partial}{\partial y}=0$ at
+  all boundaries.  The variable \varlink{diffKhT}{diffKhT} is read in
+  the routine \varlink{INI\_PARMS}{INI_PARMS} and used in routine
+  \varlink{CALC\_GT}{CALC_GT}.
 
-\fbox{ \begin{minipage}{5.0in}
-{\it S/R CALC\_GT}({\it calc\_gt.F})
-\end{minipage}
-}
-{\bf
-\begin{rawhtml} <A href=../code_reference/vdb/code/57.htm> \end{rawhtml}
-goto code
-\begin{rawhtml} </A>\end{rawhtml}
-}
+  \fbox{ \begin{minipage}{5.0in}
+      {\it S/R CALC\_GT}({\it calc\_gt.F})
+    \end{minipage}
+  }
+  \filelink{calc\_gt.F}{model-src-calc_gt.F}
 
 \item Line 11,
 \begin{verbatim}
 diffKzT=1.E-2,
 \end{verbatim}
-this line sets the vertical diffusion coefficient for temperature
-to $10^{-2}\,{\rm m^{2}s^{-1}}$. The boundary condition on this
-operator is $\frac{\partial}{\partial z}$ = 0 on all boundaries.
-The variable
-{\bf
-\begin{rawhtml} <A href=../code_reference/vdb/names/ZT.htm> \end{rawhtml}
-diffKzT
-\begin{rawhtml} </A>\end{rawhtml}
-}
-is read in the routine
-{\it
-\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
-INI\_PARMS
-\begin{rawhtml} </A>\end{rawhtml}
-}.
-It is copied into model general vertical coordinate variable
-{\bf
-\begin{rawhtml} <A href=../code_reference/vdb/names/PD.htm> \end{rawhtml}
-diffKrT
-\begin{rawhtml} </A>\end{rawhtml}
-} which is used in routine {\it S/R CALC\_DIFFUSIVITY}.
+  this line sets the vertical diffusion coefficient for temperature to
+  $10^{-2}\,{\rm m^{2}s^{-1}}$. The boundary condition on this
+  operator is $\frac{\partial}{\partial z}$ = 0 on all boundaries.
+  The variable \varlink{diffKzT}{diffKzT} is read in the routine
+  \varlink{INI\_PARMS}{INI_PARMS}. It is copied into model general
+  vertical coordinate variable \varlink{diffKrT}{diffKrT} which is
+  used in routine \varlink{CALC\_DIFFUSIVITY}{CALC_DIFFUSIVITY}.
 
-\fbox{ \begin{minipage}{5.0in}
-{\it S/R CALC\_DIFFUSIVITY}({\it calc\_diffusivity.F})
-\end{minipage}
-}
-{\bf
-\begin{rawhtml} <A href=../code_reference/vdb/code/53.htm> \end{rawhtml}
-goto code
-\begin{rawhtml} </A>\end{rawhtml}
-}
-
-
+  \fbox{ \begin{minipage}{5.0in}
+      {\it S/R CALC\_DIFFUSIVITY}({\it calc\_diffusivity.F})
+    \end{minipage}
+  }
+  \filelink{calc\_diffusivity.F}{model-src-calc_diffusivity.F}
 
 \item Line 13,
 \begin{verbatim}
 tAlpha=2.E-4,
 \end{verbatim}
-This line sets the thermal expansion coefficient for the fluid
-to $2 \times 10^{-4}\,{\rm degrees}^{-1}$
-The variable
-{\bf
-\begin{rawhtml} <A href=../code_reference/vdb/names/ZV.htm> \end{rawhtml}
-tAlpha 
-\begin{rawhtml} </A>\end{rawhtml}
-}
-is read in the routine
-{\it
-\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
-INI\_PARMS
-\begin{rawhtml} </A>\end{rawhtml}
-}. The routine {\it S/R FIND\_RHO} makes use of {\bf tAlpha}.
+  This line sets the thermal expansion coefficient for the fluid to $2
+  \times 10^{-4}\,{\rm degrees}^{-1}$ The variable
+  \varlink{tAlpha}{tAlpha} is read in the routine
+  \varlink{INI\_PARMS}{INI_PARMS}. The routine
+  \varlink{FIND\_RHO}{FIND\_RHO} makes use of {\bf tAlpha}.
 
-\fbox{
-\begin{minipage}{5.0in}
-{\it S/R FIND\_RHO}({\it find\_rho.F})
-\end{minipage}
-}
-{\bf
-\begin{rawhtml} <A href=../code_reference/vdb/code/79.htm> \end{rawhtml}
-goto code
-\begin{rawhtml} </A>\end{rawhtml}
-}
+  \fbox{
+    \begin{minipage}{5.0in}
+      {\it S/R FIND\_RHO}({\it find\_rho.F})
+    \end{minipage}
+  }
+  \filelink{find\_rho.F}{model-src-find_rho.F}
 
 \item Line 18,
 \begin{verbatim}
 eosType='LINEAR'
 \end{verbatim}
-This line selects the linear form of the equation of state.
-The variable
-{\bf
-\begin{rawhtml} <A href=../code_reference/vdb/names/WV.htm> \end{rawhtml}
-eosType
-\begin{rawhtml} </A>\end{rawhtml}
-}
-is read in the routine
-{\it
-\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
-INI\_PARMS
-\begin{rawhtml} </A>\end{rawhtml}
-}. The values of {\bf eosType} sets which formula in routine
-{\it FIND\_RHO} is used to calculate density.
+  This line selects the linear form of the equation of state.  The
+  variable \varlink{eosType}{eosType} is read in the routine
+  \varlink{INI\_PARMS}{INI_PARMS}. The values of {\bf eosType} sets
+  which formula in routine {\it FIND\_RHO} is used to calculate
+  density.
 
-\fbox{
-\begin{minipage}{5.0in}
-{\it S/R FIND\_RHO}({\it find\_rho.F})
-\end{minipage}
-}
-{\bf
-\begin{rawhtml} <A href=../code_reference/vdb/code/79.htm> \end{rawhtml}
-goto code
-\begin{rawhtml} </A>\end{rawhtml}
-}
-
-
+  \fbox{
+    \begin{minipage}{5.0in}
+      {\it S/R FIND\_RHO}({\it find\_rho.F})
+    \end{minipage}
+  }
+  \filelink{find\_rho.F}{model-src-find_rho.F}
 
 \item Line 40,
 \begin{verbatim}
 usingSphericalPolarGrid=.TRUE.,
 \end{verbatim}
-This line requests that the simulation be performed in a 
-spherical polar coordinate system. It affects the interpretation of
-grid input parameters, for example {\bf delX} and {\bf delY} and
-causes the grid generation routines to initialize an internal grid based
-on spherical polar geometry.
-The variable
-{\bf
-\begin{rawhtml} <A href=../code_reference/vdb/names/10T.htm> \end{rawhtml}
-usingSphericalPolarGrid
-\begin{rawhtml} </A>\end{rawhtml}
-}
-is read in the routine
-{\it
-\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
-INI\_PARMS
-\begin{rawhtml} </A>\end{rawhtml}
-}. When set to {\bf .TRUE.} the settings of {\bf delX} and {\bf delY} are
-taken to be in degrees. These values are used in the
-routine {\it INI\_SPEHRICAL\_POLAR\_GRID}.
+  This line requests that the simulation be performed in a spherical
+  polar coordinate system. It affects the interpretation of grid input
+  parameters, for example {\bf delX} and {\bf delY} and causes the
+  grid generation routines to initialize an internal grid based on
+  spherical polar geometry.  The variable
+  \varlink{usingSphericalPolarGrid}{usingSphericalPolarGrid} is read
+  in the routine \varlink{INI\_PARMS}{INI_PARMS}. When set to {\bf
+    .TRUE.} the settings of {\bf delX} and {\bf delY} are taken to be
+  in degrees. These values are used in the routine
 
-\fbox{
-\begin{minipage}{5.0in}
-{\it S/R INI\_SPEHRICAL\_POLAR\_GRID}({\it ini\_spherical\_polar\_grid.F})
-\end{minipage}
-}
-{\bf
-\begin{rawhtml} <A href=../code_reference/vdb/code/97.htm> \end{rawhtml}
-goto code
-\begin{rawhtml} </A>\end{rawhtml}
-}
+  \fbox{
+    \begin{minipage}{5.0in}
+      {\it S/R INI\_SPEHRICAL\_POLAR\_GRID}({\it ini\_spherical\_polar\_grid.F})
+    \end{minipage}
+  }
+  \filelink{ini\_spherical\_polar\_grid.F}{model-src-ini_spherical_polar_grid.F}
 
 \item Line 41,
 \begin{verbatim}
 phiMin=0.,
 \end{verbatim}
-This line sets the southern boundary of the modeled
-domain to $0^{\circ}$ latitude. This value affects both the
-generation of the locally orthogonal grid that the model
-uses internally and affects the initialization of the coriolis force.
-Note - it is not required to set
-a longitude boundary, since the absolute longitude does
-not alter the kernel equation discretisation.
-The variable
-{\bf
-\begin{rawhtml} <A href=../code_reference/vdb/names/110.htm> \end{rawhtml}
-phiMin
-\begin{rawhtml} </A>\end{rawhtml}
-}
-is read in the routine
-{\it
-\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
-INI\_PARMS
-\begin{rawhtml} </A>\end{rawhtml}
-} and is used in routine {\it INI\_SPEHRICAL\_POLAR\_GRID}.
+  This line sets the southern boundary of the modeled domain to
+  $0^{\circ}$ latitude. This value affects both the generation of the
+  locally orthogonal grid that the model uses internally and affects
+  the initialization of the coriolis force.  Note - it is not required
+  to set a longitude boundary, since the absolute longitude does not
+  alter the kernel equation discretisation.  The variable
+  \varlink{phiMin}{phiMin} is read in the
+  routine \varlink{INI\_PARMS}{INI_PARMS} and is used in routine
 
-\fbox{
-\begin{minipage}{5.0in}
-{\it S/R INI\_SPEHRICAL\_POLAR\_GRID}({\it ini\_spherical\_polar\_grid.F})
-\end{minipage}
-}
-{\bf
-\begin{rawhtml} <A href=../code_reference/vdb/code/97.htm> \end{rawhtml}
-goto code
-\begin{rawhtml} </A>\end{rawhtml}
-}
+  \fbox{
+    \begin{minipage}{5.0in}
+      {\it S/R INI\_SPEHRICAL\_POLAR\_GRID}({\it ini\_spherical\_polar\_grid.F})
+    \end{minipage}
+  }
+  \filelink{ini\_spherical\_polar\_grid.F}{model-src-ini_spherical_polar_grid.F}
 
 \item Line 42,
 \begin{verbatim}
 delX=60*1.,
 \end{verbatim}
-This line sets the horizontal grid spacing between each y-coordinate line
-in the discrete grid to $1^{\circ}$ in longitude.
-The variable
-{\bf
-\begin{rawhtml} <A href=../code_reference/vdb/names/10Z.htm> \end{rawhtml}
-delX
-\begin{rawhtml} </A>\end{rawhtml}
-}
-is read in the routine
-{\it
-\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
-INI\_PARMS
-\begin{rawhtml} </A>\end{rawhtml}
-} and is used in routine {\it INI\_SPEHRICAL\_POLAR\_GRID}. 
-
-\fbox{
-\begin{minipage}{5.0in}
-{\it S/R INI\_SPEHRICAL\_POLAR\_GRID}({\it ini\_spherical\_polar\_grid.F})
-\end{minipage}
-}
-{\bf
-\begin{rawhtml} <A href=../code_reference/vdb/code/97.htm> \end{rawhtml}
-goto code
-\begin{rawhtml} </A>\end{rawhtml}
-}
+  This line sets the horizontal grid spacing between each y-coordinate
+  line in the discrete grid to $1^{\circ}$ in longitude.  The variable
+  \varlink{delX}{delX} is read in the routine
+  \varlink{INI\_PARMS}{INI_PARMS} and is used in routine
+ 
+  \fbox{
+    \begin{minipage}{5.0in}
+      {\it S/R INI\_SPEHRICAL\_POLAR\_GRID}({\it ini\_spherical\_polar\_grid.F})
+    \end{minipage}
+  }
+  \filelink{ini\_spherical\_polar\_grid.F}{model-src-ini_spherical_polar_grid.F}
 
 \item Line 43,
 \begin{verbatim}
 delY=60*1.,
 \end{verbatim}
-This line sets the horizontal grid spacing between each y-coordinate line
-in the discrete grid to $1^{\circ}$ in latitude.
-The variable
-{\bf
-\begin{rawhtml} <A href=../code_reference/vdb/names/UB.htm> \end{rawhtml}
-delY   
-\begin{rawhtml} </A>\end{rawhtml}
-}
-is read in the routine
-{\it
-\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
-INI\_PARMS
-\begin{rawhtml} </A>\end{rawhtml}
-} and is used in routine {\it INI\_SPEHRICAL\_POLAR\_GRID}. 
+  This line sets the horizontal grid spacing between each y-coordinate
+  line in the discrete grid to $1^{\circ}$ in latitude.  The variable
+  \varlink{delY}{delY} is read in the routine
+  \varlink{INI\_PARMS}{INI_PARMS} and is used in routine
 
-\fbox{
-\begin{minipage}{5.0in}
-{\it S/R INI\_SPEHRICAL\_POLAR\_GRID}({\it ini\_spherical\_polar\_grid.F})
-\end{minipage}
-}
-{\bf
-\begin{rawhtml} <A href=../code_reference/vdb/code/97.htm> \end{rawhtml}
-goto code
-\begin{rawhtml} </A>\end{rawhtml}
-}
+  \fbox{
+    \begin{minipage}{5.0in}
+      {\it S/R INI\_SPEHRICAL\_POLAR\_GRID}({\it ini\_spherical\_polar\_grid.F})
+    \end{minipage}
+  }
+  \filelink{ini\_spherical\_polar\_grid.F}{model-src-ini_spherical_polar_grid.F}
 
 \item Line 44,
 \begin{verbatim}
 delZ=500.,500.,500.,500.,
 \end{verbatim}
-This line sets the vertical grid spacing between each z-coordinate line
-in the discrete grid to $500\,{\rm m}$, so that the total model depth 
-is $2\,{\rm km}$.
-The variable
-{\bf
-\begin{rawhtml} <A href=../code_reference/vdb/names/10W.htm> \end{rawhtml}
-delZ
-\begin{rawhtml} </A>\end{rawhtml}
-}
-is read in the routine
-{\it
-\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
-INI\_PARMS
-\begin{rawhtml} </A>\end{rawhtml}
-}.
-It is copied into the internal
-model coordinate variable 
-{\bf 
-\begin{rawhtml} <A href=../code_reference/vdb/names/10Y.htm> \end{rawhtml}
-delR
-\begin{rawhtml} </A>\end{rawhtml}
-} which is used in routine {\it INI\_VERTICAL\_GRID}.
+  This line sets the vertical grid spacing between each z-coordinate
+  line in the discrete grid to $500\,{\rm m}$, so that the total model
+  depth is $2\,{\rm km}$.  The variable \varlink{delZ}{delZ} is read
+  in the routine \varlink{INI\_PARMS}{INI_PARMS}.  It is copied into
+  the internal model coordinate variable \varlink{delR}{delR} which is
+  used in routine
 
-\fbox{
-\begin{minipage}{5.0in}
-{\it S/R INI\_VERTICAL\_GRID}({\it ini\_vertical\_grid.F})
-\end{minipage}
-}
-{\bf
-\begin{rawhtml} <A href=../code_reference/vdb/code/100.htm> \end{rawhtml}
-goto code
-\begin{rawhtml} </A>\end{rawhtml}
-}
+  \fbox{
+    \begin{minipage}{5.0in}
+      {\it S/R INI\_VERTICAL\_GRID}({\it ini\_vertical\_grid.F})
+    \end{minipage}
+  }
+  \filelink{ini\_vertical\_grid.F}{model-src-ini_vertical_grid.F}
 
 \item Line 47,
 \begin{verbatim}
 bathyFile='topog.box'
 \end{verbatim}
-This line specifies the name of the file from which the domain
-bathymetry is read. This file is a two-dimensional ($x,y$) map of
-depths. This file is assumed to contain 64-bit binary numbers 
-giving the depth of the model at each grid cell, ordered with the x 
-coordinate varying fastest. The points are ordered from low coordinate
-to high coordinate for both axes. The units and orientation of the
-depths in this file are the same as used in the MITgcm code. In this
-experiment, a depth of $0m$ indicates a solid wall and a depth
-of $-2000m$ indicates open ocean. The matlab program
-{\it input/gendata.m} shows an example of how to generate a
-bathymetry file.
-The variable
-{\bf
-\begin{rawhtml} <A href=../code_reference/vdb/names/179.htm> \end{rawhtml}
-bathyFile
-\begin{rawhtml} </A>\end{rawhtml}
-}
-is read in the routine
-{\it
-\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
-INI\_PARMS
-\begin{rawhtml} </A>\end{rawhtml}
-}. The bathymetry file is read in the routine {\it INI\_DEPTHS}.
+  This line specifies the name of the file from which the domain
+  bathymetry is read. This file is a two-dimensional ($x,y$) map of
+  depths. This file is assumed to contain 64-bit binary numbers giving
+  the depth of the model at each grid cell, ordered with the x
+  coordinate varying fastest. The points are ordered from low
+  coordinate to high coordinate for both axes. The units and
+  orientation of the depths in this file are the same as used in the
+  MITgcm code. In this experiment, a depth of $0m$ indicates a solid
+  wall and a depth of $-2000m$ indicates open ocean. The matlab
+  program {\it input/gendata.m} shows an example of how to generate a
+  bathymetry file.  The variable \varlink{bathyFile}{bathyFile} is
+  read in the routine \varlink{INI\_PARMS}{INI_PARMS}.  The bathymetry
+  file is read in the routine
 
-\fbox{
-\begin{minipage}{5.0in}
-{\it S/R INI\_DEPTHS}({\it ini\_depths.F})
-\end{minipage}
-}
-{\bf
-\begin{rawhtml} <A href=../code_reference/vdb/code/88.htm> \end{rawhtml}
-goto code
-\begin{rawhtml} </A>\end{rawhtml}
-}
-
+  \fbox{
+    \begin{minipage}{5.0in}
+      {\it S/R INI\_DEPTHS}({\it ini\_depths.F})
+    \end{minipage}
+  }
+  \filelink{ini\_depths.F}{model-src-ini_depths.F}
 
 \item Line 50,
 \begin{verbatim}
 zonalWindFile='windx.sin_y'
 \end{verbatim}
-This line specifies the name of the file from which the x-direction
-(zonal) surface wind stress is read. This file is also a two-dimensional
-($x,y$) map and is enumerated and formatted in the same manner as the 
-bathymetry file. The matlab program {\it input/gendata.m} includes example 
-code to generate a valid 
-{\bf zonalWindFile} 
-file.  
-The variable
-{\bf
-\begin{rawhtml} <A href=../code_reference/vdb/names/13W.htm> \end{rawhtml}
-zonalWindFile
-\begin{rawhtml} </A>\end{rawhtml}
-}
-is read in the routine
-{\it
-\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
-INI\_PARMS
-\begin{rawhtml} </A>\end{rawhtml}
-}.  The wind-stress file is read in the routine 
-{\it EXTERNAL\_FIELDS\_LOAD}.
+  This line specifies the name of the file from which the x-direction
+  (zonal) surface wind stress is read. This file is also a
+  two-dimensional ($x,y$) map and is enumerated and formatted in the
+  same manner as the bathymetry file. The matlab program {\it
+    input/gendata.m} includes example code to generate a valid {\bf
+    zonalWindFile} file.  The variable
+  \varlink{zonalWindFile}{zonalWindFile} is read in the routine
+  \varlink{INI\_PARMS}{INI_PARMS}.  The wind-stress file is read in
+  the routine
 
-\fbox{
-\begin{minipage}{5.0in}
-{\it S/R EXTERNAL\_FIELDS\_LOAD}({\it external\_fields\_load.F})
-\end{minipage}
-}
-{\bf
-\begin{rawhtml} <A href=../code_reference/vdb/code/75.htm> \end{rawhtml}
-goto code
-\begin{rawhtml} </A>\end{rawhtml}
-}
+  \fbox{
+    \begin{minipage}{5.0in}
+      {\it S/R EXTERNAL\_FIELDS\_LOAD}({\it external\_fields\_load.F})
+    \end{minipage}
+  }
+  \filelink{external\_fields\_load.F}{model-src-external_fields_load.F}
 
 \end{itemize}
 
@@ -986,16 +697,15 @@ customisations for this experiment.
 \subsubsection{File {\it input/windx.sin\_y}}
 \label{www:tutorials}
 
-The {\it input/windx.sin\_y} file specifies a two-dimensional ($x,y$) 
-map of wind stress ,$\tau_{x}$, values. The units used are $Nm^{-2}$ (the
-default for MITgcm).
-Although $\tau_{x}$ is only a function of latitude, $y$,
-in this experiment
-this file must still define a complete two-dimensional map in order
-to be compatible with the standard code for loading forcing fields 
-in MITgcm (routine {\it EXTERNAL\_FIELDS\_LOAD}.
-The included matlab program {\it input/gendata.m} gives a complete
-code for creating the {\it input/windx.sin\_y} file.
+The {\it input/windx.sin\_y} file specifies a two-dimensional ($x,y$)
+map of wind stress ,$\tau_{x}$, values. The units used are $Nm^{-2}$
+(the default for MITgcm).  Although $\tau_{x}$ is only a function of
+latitude, $y$, in this experiment this file must still define a
+complete two-dimensional map in order to be compatible with the
+standard code for loading forcing fields in MITgcm (routine {\it
+  EXTERNAL\_FIELDS\_LOAD}.  The included matlab program {\it
+  input/gendata.m} gives a complete code for creating the {\it
+  input/windx.sin\_y} file.
 
 \subsubsection{File {\it input/topog.box}}
 \label{www:tutorials}
