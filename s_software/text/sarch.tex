@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_software/text/sarch.tex,v 1.14 2004/01/28 20:38:28 afe Exp $
+% $Header: /u/gcmpack/manual/s_software/text/sarch.tex,v 1.15 2004/01/29 15:39:49 afe Exp $
 
 This chapter focuses on describing the {\bf WRAPPER} environment within which
 both the core numerics and the pluggable packages operate. The description
@@ -977,16 +977,17 @@ program, MPI is used. The calls to the MPI multi-process startup
 routines must be activated at compile time.  Currently MPI libraries are 
 invoked by
 specifying the appropriate options file with the 
-\begin{verbatim}-of\end{verbatim} flag when running the {\em genmake2} 
+{\tt-of} flag when running the {\em genmake2} 
 script, which generates the Makefile for compiling and linking MITgcm.
 (Previously this was done by setting the {\em ALLOW\_USE\_MPI} and 
 {\em ALWAYS\_USE\_MPI} flags in the {\em CPP\_EEOPTIONS.h} file.)  More
 detailed information about the use of {\em genmake2} for specifying 
-local compiler flags is located in section 3 ??\\  
+local compiler flags is located in section \ref{sect:genmake}.\\  
 
 
 \fbox{ 
 \begin{minipage}{4.75in}
+Directory: {\em tools/build\_options}\\
 File: {\em tools/genmake2}
 \end{minipage}
 } \\
@@ -1005,7 +1006,7 @@ product of the processor grid settings of {\em nPx} and {\em nPy}
 in the file {\em SIZE.h}. The parameter {\em mf} specifies that a text file
 called ``mf'' will be read to get a list of processor names on
 which the sixty-four processes will execute. The syntax of this file
-is specified by the MPI distribution
+is specified by the MPI distribution.
 \\ 
 
 \fbox{ 
@@ -1056,9 +1057,9 @@ to processor identification are are used later in the routine
 Allocation of processes to tiles in controlled by the routine
 {\em INI\_PROCS()}. For each process this routine sets
 the variables {\em myXGlobalLo} and {\em myYGlobalLo}.
-These variables specify (in index space) the coordinate
-of the southern most and western most corner of the 
-southern most and western most tile owned by this process.
+These variables specify in index space the coordinates
+of the southernmost and westernmost corner of the 
+southernmost and westernmost tile owned by this process.
 The variables {\em pidW}, {\em pidE}, {\em pidS} and {\em pidN}
 are also set in this routine. These are used to identify
 processes holding tiles to the west, east, south and north 
@@ -1067,7 +1068,9 @@ in the header file {\em EESUPPORT.h} for use by
 communication routines.  The above does not hold when the 
 exch2 package is used -- exch2 sets its own parameters to 
 specify the global indices of tiles and their relationships
-to each other.  See exch2 docs for details??.
+to each other.  See the documentation on the exch2 package
+(\ref{sec:exch2})  for
+details.
 \\
 
 \fbox{ 
@@ -1093,10 +1096,12 @@ operations and that can be customized for different platforms. This section
 describes the information that is held and used.
 
 \begin{enumerate}
-\item {\bf Tile-tile connectivity information} For each tile the WRAPPER
-sets a flag that sets the tile number to the north, south, east and
+\item {\bf Tile-tile connectivity information} 
+For each tile the WRAPPER
+sets a flag that sets the tile number to the north, 
+south, east and
 west of that tile. This number is unique over all tiles in a 
-configuration. Except when using the exch2 package,
+configuration. Except when using the cubed sphere and the exch2 package,
 the number is held in the variables {\em tileNo}
 ( this holds the tiles own number), {\em tileNoN}, {\em tileNoS},
 {\em tileNoE} and {\em tileNoW}. A parameter is also stored with each tile
@@ -1120,11 +1125,11 @@ of the WRAPPER exchange primitive
 (see figure \ref{fig:communication_primitives}). The routine 
 {\em ini\_communication\_patterns()} is responsible for setting the
 communication mode values for each tile.
-\\
 
 When using the cubed sphere configuration with the exch2 package, the 
 relationships between tiles and their communication methods are set 
-by the package in other variables.  See the exch2 docs for details.??
+by the package in other variables.  See the exch2 package documentation 
+(\ref{sec:exch2} for details.
 
 
 
