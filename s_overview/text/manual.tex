@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.19 2004/03/23 16:47:04 afe Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.20 2004/10/15 14:44:25 jmc Exp $
 % $Name:  $
 
 %tci%\documentclass[12pt]{book}
@@ -34,7 +34,7 @@
 
 % Section: Overview
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.19 2004/03/23 16:47:04 afe Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.20 2004/10/15 14:44:25 jmc Exp $
 % $Name:  $
 
 This document provides the reader with the information necessary to
@@ -137,7 +137,7 @@ J. Geophysical Res., 104(C12), 29,529-29,547.
 We begin by briefly showing some of the results of the model in action to
 give a feel for the wide range of problems that can be addressed using it.
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.19 2004/03/23 16:47:04 afe Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.20 2004/10/15 14:44:25 jmc Exp $
 % $Name:  $
 
 \section{Illustrations of the model in action}
@@ -372,7 +372,7 @@ stratification of the ACC.
 \input{part1/lab_figure}
 %%CNHend
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.19 2004/03/23 16:47:04 afe Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.20 2004/10/15 14:44:25 jmc Exp $
 % $Name:  $
 
 \section{Continuous equations in `r' coordinates}
@@ -409,11 +409,11 @@ see figure \ref{fig:zandp-vert-coord}.
 \input{part1/vertcoord_figure.tex}
 %%CNHend
 
-\begin{equation*}
+\begin{equation}
 \frac{D\vec{\mathbf{v}_{h}}}{Dt}+\left( 2\vec{\Omega}\times \vec{\mathbf{v}}
 \right) _{h}+\mathbf{\nabla }_{h}\phi =\mathcal{F}_{\vec{\mathbf{v}_{h}}}
 \text{ horizontal mtm} \label{eq:horizontal_mtm}
-\end{equation*}
+\end{equation}
 
 \begin{equation}
 \frac{D\dot{r}}{Dt}+\widehat{k}\cdot \left( 2\vec{\Omega}\times \vec{\mathbf{
@@ -666,7 +666,9 @@ Let us separate $\phi $ in to surface, hydrostatic and non-hydrostatic terms:
 \phi (x,y,r)=\phi _{s}(x,y)+\phi _{hyd}(x,y,r)+\phi _{nh}(x,y,r)
 \label{eq:phi-split}
 \end{equation}
-and write eq(\ref{eq:incompressible}) in the form:
+%and write eq(\ref{eq:incompressible}) in the form: 
+%                  ^- this eq is missing (jmc) ; replaced with:
+and write eq( \ref{eq:horizontal_mtm}) in the form:
 
 \begin{equation}
 \frac{\partial \vec{\mathbf{v}_{h}}}{\partial t}+\mathbf{\nabla }_{h}\phi
@@ -1118,7 +1120,7 @@ to discretize the model.
 Tangent linear and adjoint counterparts of the forward model are described
 in Chapter 5.
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.19 2004/03/23 16:47:04 afe Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.20 2004/10/15 14:44:25 jmc Exp $
 % $Name:  $
 
 \section{Appendix ATMOSPHERE}
@@ -1245,7 +1247,7 @@ _{h}+\mathbf{\nabla }_{p}\phi ^{\prime } &=&\vec{\mathbf{\mathcal{F}}} \label{eq
 \frac{D\theta }{Dt} &=&\frac{\mathcal{Q}}{\Pi } 
 \end{eqnarray}
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.19 2004/03/23 16:47:04 afe Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.20 2004/10/15 14:44:25 jmc Exp $
 % $Name:  $
 
 \section{Appendix OCEAN}
@@ -1461,7 +1463,7 @@ the perturbation density. Nevertheless, it is the hydrostatic ($\epsilon
 _{nh}=0$ form of these equations that are used throughout the ocean modeling
 community and referred to as the primitive equations (HPE).
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.19 2004/03/23 16:47:04 afe Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.20 2004/10/15 14:44:25 jmc Exp $
 % $Name:  $
 
 \section{Appendix:OPERATORS}
