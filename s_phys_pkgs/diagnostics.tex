@@ -178,14 +178,8 @@ will activate a user-defined list of diagnostics quantities to be computed,
 specify the frequency of output, the number of levels, and the name of
 up to 10 separate output files. A sample data.diagnostics namelist file:
 
-<<<<<<< diagnostics.tex
 $\#$ Diagnostic Package Choices
  $\&$diagnostics\_list
-=======
-\begin{verbatim}
-\# Diagnostic Package Choices
- \&diagnostics_list
->>>>>>> 1.4
   frequency(1) = 10, \
    levels(1,1) = 1.,2.,3.,4.,5., \
    fields(1,1) = 'UVEL    ','VVEL    ', \
@@ -194,12 +188,7 @@ $\#$ Diagnostic Package Choices
    levels(1,2) = 1.,2.,3.,4.,5., \
    fields(1,2) = 'THETA   ','SALT    ', \
    filename(2) = 'diagout2', \
-<<<<<<< diagnostics.tex
  $\&$end \
-=======
- \&end \
-\end{verbatim}
->>>>>>> 1.4
 
 In this example, there are two output files that will be generated
 for each tile and for each output time. The first set of output files

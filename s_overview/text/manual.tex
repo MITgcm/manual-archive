@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.20 2004/10/15 14:44:25 jmc Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.21 2004/10/16 03:40:12 edhill Exp $
 % $Name:  $
 
 %tci%\documentclass[12pt]{book}
@@ -34,7 +34,7 @@
 
 % Section: Overview
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.20 2004/10/15 14:44:25 jmc Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.21 2004/10/16 03:40:12 edhill Exp $
 % $Name:  $
 
 This document provides the reader with the information necessary to
@@ -137,7 +137,7 @@ J. Geophysical Res., 104(C12), 29,529-29,547.
 We begin by briefly showing some of the results of the model in action to
 give a feel for the wide range of problems that can be addressed using it.
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.20 2004/10/15 14:44:25 jmc Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.21 2004/10/16 03:40:12 edhill Exp $
 % $Name:  $
 
 \section{Illustrations of the model in action}
@@ -372,7 +372,7 @@ stratification of the ACC.
 \input{part1/lab_figure}
 %%CNHend
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.20 2004/10/15 14:44:25 jmc Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.21 2004/10/16 03:40:12 edhill Exp $
 % $Name:  $
 
 \section{Continuous equations in `r' coordinates}
@@ -611,9 +611,11 @@ The boundary conditions at top and bottom are given by:
 atmosphere)}  \label{eq:moving-bc-atmos}
 \end{eqnarray}
 
-Then the (hydrostatic form of) equations (\ref{eq:horizontal_mtm}-\ref{eq:humidity_salt}) 
-yields a consistent set of atmospheric equations which, for convenience, are written out in $p$
-coordinates in Appendix Atmosphere - see eqs(\ref{eq:atmos-prime}).
+Then the (hydrostatic form of) equations
+(\ref{eq:horizontal_mtm}-\ref{eq:humidity_salt}) yields a consistent
+set of atmospheric equations which, for convenience, are written out
+in $p$ coordinates in Appendix Atmosphere - see
+eqs(\ref{eq:atmos-prime}).
 
 \subsection{Ocean}
 
@@ -1098,8 +1100,9 @@ salinity ... ).
 
 \subsection{Vector invariant form}
 
-For some purposes it is advantageous to write momentum advection in eq(\ref
-{eq:horizontal_mtm}) and (\ref{eq:vertical_mtm}) in the (so-called) `vector invariant' form:
+For some purposes it is advantageous to write momentum advection in
+eq(\ref {eq:horizontal_mtm}) and (\ref{eq:vertical_mtm}) in the
+(so-called) `vector invariant' form:
 
 \begin{equation}
 \frac{D\vec{\mathbf{v}}}{Dt}=\frac{\partial \vec{\mathbf{v}}}{\partial t}
@@ -1120,7 +1123,7 @@ to discretize the model.
 Tangent linear and adjoint counterparts of the forward model are described
 in Chapter 5.
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.20 2004/10/15 14:44:25 jmc Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.21 2004/10/16 03:40:12 edhill Exp $
 % $Name:  $
 
 \section{Appendix ATMOSPHERE}
@@ -1239,7 +1242,8 @@ _{o}(p_{o})=g~Z_{topo}$, defined:
 The final form of the HPE's in p coordinates is then: 
 \begin{eqnarray}
 \frac{D\vec{\mathbf{v}}_{h}}{Dt}+f\hat{\mathbf{k}}\times \vec{\mathbf{v}}
-_{h}+\mathbf{\nabla }_{p}\phi ^{\prime } &=&\vec{\mathbf{\mathcal{F}}} \label{eq:atmos-prime} \\
+_{h}+\mathbf{\nabla }_{p}\phi ^{\prime } &=&\vec{\mathbf{\mathcal{F}}} 
+\label{eq:atmos-prime} \\
 \frac{\partial \phi ^{\prime }}{\partial p}+\alpha ^{\prime } &=&0 \\
 \mathbf{\nabla }_{p}\cdot \vec{\mathbf{v}}_{h}+\frac{\partial \omega }{
 \partial p} &=&0 \\
@@ -1247,7 +1251,7 @@ _{h}+\mathbf{\nabla }_{p}\phi ^{\prime } &=&\vec{\mathbf{\mathcal{F}}} \label{eq
 \frac{D\theta }{Dt} &=&\frac{\mathcal{Q}}{\Pi } 
 \end{eqnarray}
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.20 2004/10/15 14:44:25 jmc Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.21 2004/10/16 03:40:12 edhill Exp $
 % $Name:  $
 
 \section{Appendix OCEAN}
@@ -1285,8 +1289,9 @@ _{\theta ,p}\frac{DS}{Dt}+\left. \frac{\partial \rho }{\partial p}\right|
 _{\theta ,S}\frac{Dp}{Dt}  \label{EOSexpansion}
 \end{equation}
 
-Note that $\frac{\partial \rho }{\partial p}=\frac{1}{c_{s}^{2}}$ is the
-reciprocal of the sound speed ($c_{s}$) squared. Substituting into \ref{eq-zns-cont} gives: 
+Note that $\frac{\partial \rho }{\partial p}=\frac{1}{c_{s}^{2}}$ is
+the reciprocal of the sound speed ($c_{s}$) squared. Substituting into
+\ref{eq-zns-cont} gives:
 \begin{equation}
 \frac{1}{\rho c_{s}^{2}}\frac{Dp}{Dt}+\mathbf{\nabla }_{z}\cdot \vec{\mathbf{
 v}}+\partial _{z}w\approx 0  \label{eq-zns-pressure}
@@ -1463,7 +1468,7 @@ the perturbation density. Nevertheless, it is the hydrostatic ($\epsilon
 _{nh}=0$ form of these equations that are used throughout the ocean modeling
 community and referred to as the primitive equations (HPE).
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.20 2004/10/15 14:44:25 jmc Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.21 2004/10/16 03:40:12 edhill Exp $
 % $Name:  $
 
 \section{Appendix:OPERATORS}

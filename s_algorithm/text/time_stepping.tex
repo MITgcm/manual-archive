@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.18 2004/10/14 22:22:30 jmc Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.19 2004/10/16 03:40:12 edhill Exp $
 % $Name:  $
 
 This chapter lays out the numerical schemes that are
@@ -12,6 +12,10 @@ passive and dynamically active tracers are described.
 
 
 \section{Time-stepping}
+\begin{rawhtml}
+<!-- CMIREDIR:time-stepping: -->
+\end{rawhtml}
+
 The equations of motion integrated by the model involve four
 prognostic equations for flow, $u$ and $v$, temperature, $\theta$, and
 salt/moisture, $S$, and three diagnostic equations for vertical flow,
@@ -61,7 +65,11 @@ treated more exactly, including non-linear terms, and this is
 described in section \ref{sect:nonlinear-freesurface}.
 
 
-\section{Pressure method with rigid-lid} \label{sect:pressure-method-rigid-lid}
+\section{Pressure method with rigid-lid}
+\label{sect:pressure-method-rigid-lid}
+\begin{rawhtml}
+<!-- CMIREDIR:pressure_method_rigid_lid: -->
+\end{rawhtml}
 
 \begin{figure}
 \begin{center}
@@ -203,6 +211,9 @@ G_u^{(n+1/2)}
 
 \section{Pressure method with implicit linear free-surface}
 \label{sect:pressure-method-linear-backward}
+\begin{rawhtml}
+<!-- CMIREDIR:pressure_method_linear_backward: -->
+\end{rawhtml}
 
 The rigid-lid approximation filters out external gravity waves
 subsequently modifying the dispersion relation of barotropic Rossby
@@ -279,6 +290,9 @@ pressure-method.
 
 \section{Explicit time-stepping: Adams-Bashforth}
 \label{sect:adams-bashforth}
+\begin{rawhtml}
+<!-- CMIREDIR:adams_bashforth: -->
+\end{rawhtml}
 
 In describing the the pressure method above we deferred describing the
 time discretization of the explicit terms. We have historically used
@@ -346,6 +360,9 @@ A stability analysis for a relaxation equation should be given at this point.
 
 
 \section{Implicit time-stepping: backward method}
+\begin{rawhtml}
+<!-- CMIREDIR:implicit_time-stepping_backward: -->
+\end{rawhtml}
 
 Vertical diffusion and viscosity can be treated implicitly in time
 using the backward method which is an intrinsic scheme. 
@@ -391,6 +408,9 @@ implicit and are thus cast as a an explicit drag term.
 
 \section{Synchronous time-stepping: variables co-located in time}
 \label{sect:adams-bashforth-sync}
+\begin{rawhtml}
+<!-- CMIREDIR:adams_bashforth_sync: -->
+\end{rawhtml}
 
 \begin{figure}
 \begin{center}
@@ -508,6 +528,9 @@ time-step. The corresponding calling tree is given in
 
 \section{Staggered baroclinic time-stepping}
 \label{sect:adams-bashforth-staggered}
+\begin{rawhtml}
+<!-- CMIREDIR:adams_bashforth_staggered: -->
+\end{rawhtml}
 
 \begin{figure}
 \begin{center}
@@ -650,6 +673,9 @@ time-level variables and terms correspond to.
 
 \section{Non-hydrostatic formulation}
 \label{sect:non-hydrostatic}
+\begin{rawhtml}
+<!-- CMIREDIR:non-hydrostatic_formulation: -->
+\end{rawhtml}
 
 The non-hydrostatic formulation re-introduces the full vertical
 momentum equation and requires the solution of a 3-D elliptic
