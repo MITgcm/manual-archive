@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.17 2004/10/13 18:50:54 jmc Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.18 2004/10/14 22:22:30 jmc Exp $
 % $Name:  $
 
 This chapter lays out the numerical schemes that are
@@ -516,20 +516,23 @@ time-step. The corresponding calling tree is given in
 \caption{
 A schematic of the explicit Adams-Bashforth and implicit time-stepping
 phases of the algorithm but with staggering in time of thermodynamic
-variables with the flow. Explicit thermodynamics tendencies are
-evaluated at time level $n$ as a function of the thermodynamics
-state at that time level $n$ and flow at time $n+1/2$ (dotted arrow). The
-explicit tendency from the previous time level, $n-1$, is used to
-extrapolate tendencies to $n+1/2$ (dashed arrow). This extrapolated
-tendency allows thermo-dynamics variables to be stably integrated
-forward-in-time to render an estimate ($*$-variables) at the $n+1$
-time level (solid arc-arrow). The implicit-in-time operator ${\cal
-L_{\theta,S}}$ is solved to yield the thermodynamic variables at time
-level $n+1$. These are then used to calculate the hydrostatic
-pressure/geo-potential, $\phi_{hyd}$ (vertical arrows). The
-hydrostatic pressure gradient is evaluated directly at time level
-$n+1$ in stepping forward the flow variables from $n+1/2$ to $n+3/2$
-(solid arc-arrow). }
+variables with the flow. 
+Explicit momentum tendencies are evaluated at time level $n-1/2$ as a 
+function of the flow field at that time level $n-1/2$.
+The explicit tendency from the previous time level, $n-3/2$, is used to
+extrapolate tendencies to $n$ (dashed arrow). 
+The hydrostatic pressure/geo-potential $\phi_{hyd}$ is evaluated directly 
+at time level $n$ (vertical arrows) and used with the extrapolated tendencies
+to step forward the flow variables from $n-1/2$ to $n+1/2$ (solid arc-arrow).
+The implicit-in-time operator ${\cal L_{u,v}}$ (vertical arrows) is 
+then applied to the previous estimation of the the flow field ($*$-variables) 
+and yields to the two velocity components $u,v$ at time level $n+1/2$. 
+These are then used to calculate the advection term (dashed arc-arrow) 
+of the thermo-dynamics tendencies at time step $n$.
+The extrapolated thermodynamics tendency, from time level $n-1$ and $n$ 
+to $n+1/2$, allows thermodynamic variables to be stably integrated 
+forward-in-time (solid arc-arrow) up to time level $n+1$.
+}
 \label{fig:adams-bashforth-staggered}
 \end{figure}
 
@@ -636,7 +639,7 @@ for the non-linear free-surface algorithm.
 
 The only difficulty with this approach is apparent in equation
 \ref{eq:Gt-n-staggered} and illustrated by the dotted arrow
-connecting $u,v^n$ with $G_\theta^{n-1/2}$. The flow used to advect
+connecting $u,v^{n+1/2}$ with $G_\theta^{n}$. The flow used to advect
 tracers around is not naturally located in time. This could be avoided
 by applying the Adams-Bashforth extrapolation to the tracer field
 itself and advecting that around but this approach is not yet
