@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_software/text/sarch.tex,v 1.4 2001/10/25 18:36:55 cnh Exp $
+% $Header: /u/gcmpack/manual/s_software/text/sarch.tex,v 1.5 2001/11/13 18:32:33 cnh Exp $
 
 In this chapter we describe the software architecture and
 implementation strategy for the MITgcm code. The first part of this
@@ -136,14 +136,14 @@ particular machine (for example an IBM SP2) or just one particular family or
 class of machines (for example Parallel Vector Processor Systems). Instead the
 WRAPPER provides applications with an 
 abstract {\it machine model}. The machine model is very general, however, it can
-easily be specialized to fit, in a computationally effificent manner, any 
+easily be specialized to fit, in a computationally efficient manner, any 
 computer architecture currently available to the scientific computing community.
 
 \subsection{Machine model parallelism}
 
  Codes operating under the WRAPPER target an abstract machine that is assumed to
 consist of one or more logical processors that can compute concurrently.  
-Computational work is divided amongst the logical
+Computational work is divided among the logical
 processors by allocating ``ownership'' to 
 each processor of a certain set (or sets) of calculations. Each set of 
 calculations owned by a particular processor is associated with a specific 
@@ -402,8 +402,8 @@ highly optimized library.
   \includegraphics{part4/comm-primm.eps}
  }
 \end{center}
-\caption{Three performance critical parallel primititives are provided
-by the WRAPPER. These primititives are always used to communicate data
+\caption{Three performance critical parallel primitives are provided
+by the WRAPPER. These primitives are always used to communicate data
 between tiles. The figure shows four tiles. The curved arrows indicate
 exchange primitives which transfer data between the overlap regions at tile
 edges and interior regions for nearest-neighbor tiles.
@@ -1006,7 +1006,7 @@ using a command such as
 \begin{verbatim}
 mpirun -np 64 -machinefile mf ./mitgcmuv
 \end{verbatim}
-In this example the text {\em -np 64} specifices the number of processes 
+In this example the text {\em -np 64} specifies the number of processes 
 that will be created. The numeric value {\em 64} must be equal to the
 product of the processor grid settings of {\em nPx} and {\em nPy}
 in the file {\em SIZE.h}. The parameter {\em mf} specifies that a text file
@@ -1212,7 +1212,7 @@ asm("lock; addl $0,0(%%esp)": : :"memory")
 \item {\bf Cache line size}
 As discussed in section \ref{sec:cache_effects_and_false_sharing},
 milti-threaded codes explicitly avoid penalties associated with excessive 
-coherence traffic on an SMP system. To do this the sgared memory data structures
+coherence traffic on an SMP system. To do this the shared memory data structures
 used by the {\em GLOBAL\_SUM}, {\em GLOBAL\_MAX} and {\em BARRIER} routines
 are padded. The variables that control the padding are set in the
 header file {\em EEPARAMS.h}. These variables are called
@@ -1220,7 +1220,7 @@ header file {\em EEPARAMS.h}. These variables are called
 {\em lShare8}. The default values should not normally need changing.
 \item {\bf \_BARRIER}
 This is a CPP macro that is expanded to a call to a routine
-which synchronises all the logical processors running under the
+which synchronizes all the logical processors running under the
 WRAPPER. Using a macro here preserves flexibility to insert
 a specialized call in-line into application code. By default this
 resolves to calling the procedure {\em BARRIER()}. The default
@@ -1228,13 +1228,13 @@ setting for the \_BARRIER macro is given in the file {\em CPP\_EEMACROS.h}.
 
 \item {\bf \_GSUM}
 This is a CPP macro that is expanded to a call to a routine
-which sums up a floating point numner
+which sums up a floating point number
 over all the logical processors running under the
 WRAPPER. Using a macro here provides extra flexibility to insert
 a specialized call in-line into application code. By default this
-resolves to calling the procedure {\em GLOBAL\_SOM\_R8()} ( for
-84=bit floating point operands)
-or {\em GLOBAL\_SOM\_R4()} (for 32-bit floating point operands). The default
+resolves to calling the procedure {\em GLOBAL\_SUM\_R8()} ( for
+64-bit floating point operands)
+or {\em GLOBAL\_SUM\_R4()} (for 32-bit floating point operands). The default
 setting for the \_GSUM macro is given in the file {\em CPP\_EEMACROS.h}.
 The \_GSUM macro is a performance critical operation, especially for
 large processor count, small tile size configurations.
@@ -1253,23 +1253,23 @@ in the header file {\em CPP\_EEMACROS.h}. As with \_GSUM, the
 \_EXCH operation plays a crucial role in scaling to small tile,
 large logical and physical processor count configurations.
 The example in section \ref{sec:jam_example} discusses defining an
-optimised and specialized form on the \_EXCH operation.
+optimized and specialized form on the \_EXCH operation.
 
 The \_EXCH operation is also central to supporting grids such as
 the cube-sphere grid. In this class of grid a rotation may be required
 between tiles. Aligning the coordinate requiring rotation with the
-tile decomposistion, allows the coordinate transformation to 
+tile decomposition, allows the coordinate transformation to 
 be embedded within a custom form of the \_EXCH primitive.
 
 \item {\bf Reverse Mode}
 The communication primitives \_EXCH and \_GSUM both employ 
 hand-written adjoint forms (or reverse mode) forms. 
 These reverse mode forms can be found in the
-sourc code directory {\em pkg/autodiff}.
+source code directory {\em pkg/autodiff}.
 For the global sum primitive the reverse mode form
 calls are to {\em GLOBAL\_ADSUM\_R4} and
 {\em GLOBAL\_ADSUM\_R8}. The reverse mode form of the
-exchamge primitives are found in routines
+exchange primitives are found in routines
 prefixed {\em ADEXCH}. The exchange routines make calls to
 the same low-level communication primitives as the forward mode
 operations. However, the routine argument {\em simulationMode}
@@ -1281,7 +1281,7 @@ The variable {\em MAX\_NO\_THREADS} is used to indicate the
 maximum number of OS threads that a code will use. This
 value defaults to thirty-two and is set in the file {\em EEPARAMS.h}.
 For single threaded execution it can be reduced to one if required.
-The va;lue is largely private to the WRAPPER and application code
+The value; is largely private to the WRAPPER and application code
 will nor normally reference the value, except in the following scenario.
 
 For certain physical parametrization schemes it is necessary to have 
@@ -1296,8 +1296,8 @@ and {\em nSy} ( as described in section
 being specified involves many more tiles than OS threads then
 it can save memory resources to reduce the variable
 {\em MAX\_NO\_THREADS} to be equal to the actual number of threads that
-will be used and to declare the physical parameterisation
-work arrays with a sinble {\em MAX\_NO\_THREADS} extra dimension.
+will be used and to declare the physical parameterization
+work arrays with a single {\em MAX\_NO\_THREADS} extra dimension.
 An example of this is given in the verification experiment
 {\em aim.5l\_cs}. Here the default setting of 
 {\em MAX\_NO\_THREADS} is altered to
@@ -1310,12 +1310,12 @@ created with declarations of the form.
 \begin{verbatim}
       common /FORCIN/ sst1(ngp,MAX_NO_THREADS)
 \end{verbatim}
-This declaration scheme is not used widely, becuase most global data
+This declaration scheme is not used widely, because most global data
 is used for permanent not temporary storage of state information.
 In the case of permanent state information this approach cannot be used
 because there has to be enough storage allocated for all tiles.
 However, the technique can sometimes be a useful scheme for reducing memory 
-requirements in complex physical paramterisations.
+requirements in complex physical parameterizations.
 \end{enumerate}
 
 \begin{figure}
@@ -1348,7 +1348,7 @@ MP directives to spawn multiple threads.
 The isolation of performance critical communication primitives and the
 sub-division of the simulation domain into tiles is a powerful tool.
 Here we show how it can be used to improve application performance and
-how it can be used to adapt to new gridding approaches.
+how it can be used to adapt to new griding approaches.
 
 \subsubsection{JAM example}
 \label{sec:jam_example}
