@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_examples/baroclinic_gyre/fourlayer.tex,v 1.7 2001/10/25 01:15:16 cnh Exp $
+% $Header: /u/gcmpack/manual/s_examples/baroclinic_gyre/fourlayer.tex,v 1.8 2001/10/25 12:06:56 cnh Exp $
 % $Name:  $
 
 \section{Example: Four layer Baroclinic Ocean Gyre In Spherical Coordinates}
@@ -67,8 +67,8 @@ In contrast to the example in section \ref{sec:eg-baro}, the
 current experiment simulates a spherical polar domain. As indicated
 by the axes in the lower left of the figure the model code works internally
 in a locally orthoganal coordinate $(x,y,z)$. For this experiment description 
-of this document the local orthogonal model coordinate $(x,y,z)$ is synonomous 
-with the spherical polar coordinate shown in figure 
+the local orthogonal model coordinate $(x,y,z)$ is synonomous 
+with the coordinates $(\lambda,\varphi,r)$ shown in figure
 \ref{fig:spherical-polar-coord}
 \\
 
@@ -118,9 +118,9 @@ The vertical spacing, $\Delta z$, is constant and equal to $500$m.
 \end{figure}
 
 \subsection{Equations solved}
-
-The implicit free surface {\bf HPE} form of the 
-equations described in Marshall et. al \cite{Marshall97a} is 
+For this problem
+the implicit free surface, {\bf HPE} (see section \ref{sec:hydrostatic_and_quasi-hydrostatic_forms}) form of the 
+equations described in Marshall et. al \cite{Marshall97a} are
 employed. The flow is three-dimensional with just temperature, $\theta$, as 
 an active tracer.  The equation of state is linear.
 A horizontal laplacian operator $\nabla_{h}^2$ provides viscous
@@ -185,7 +185,7 @@ due to variations in sea-surface height, $\eta$, and a hydrostatic
 part due to variations in density, $\rho^{\prime}$, integrated
 through the water column.
 
-The suffices ${s},{i}$ indicate surface and interior of the domain.
+The suffices ${s},{i}$ indicate surface layer and the interior of the domain.
 The windstress forcing, ${\cal F}_{\lambda}$, is applied in the surface layer 
 by a source term in the zonal momentum equation. In the ocean interior
 this term is zero.
@@ -248,17 +248,22 @@ $\theta$, (equation \ref{eq:eg_fourl_theta})
 is evaluated prognostically. The centered second-order scheme with
 Adams-Bashforth time stepping described in section 
 \ref{sec:tracer_equations_abII} is used to step forward the temperature 
-equation. The pressure forces that drive the fluid motions, (
+equation. Prognostic terms in
+the momentum equations are solved using flux form as
+described in section \ref{sec:flux-form_momentum_eqautions}.
+The pressure forces that drive the fluid motions, (
 $\frac{\partial p^{'}}{\partial \lambda}$ and $\frac{\partial p^{'}}{\partial \varphi}$), are found by summing pressure due to surface 
 elevation $\eta$ and the hydrostatic pressure. The hydrostatic part of the 
-pressure is evaluated explicitly by integrating density. The sea-surface
-height, $\eta$, is solved for implicitly as described in section 
-\ref{sect:pressure-method-linear-backward}.
+pressure is diagnosed explicitly by integrating density. The sea-surface
+height, $\eta$, is diagnosed using an implicit scheme. The pressure
+field solution method is described in sections
+\ref{sect:pressure-method-linear-backward} and 
+\ref{sec:finding_the_pressure_field}.
 
 \subsubsection{Numerical Stability Criteria}
 
-The laplacian dissipation coefficient, $A_{h}$, is set to $400 m s^{-1}$.
-This value is chosen to yield a Munk layer width \cite{Adcroft_thesis},
+The laplacian viscosity coefficient, $A_{h}$, is set to $400 m s^{-1}$.
+This value is chosen to yield a Munk layer width,
 
 \begin{eqnarray}
 \label{EQ:munk_layer}
@@ -266,13 +271,15 @@ M_{w} = \pi ( \frac { A_{h} }{ \beta } )^{\frac{1}{3}}
 \end{eqnarray}
 
 \noindent  of $\approx 100$km. This is greater than the model
-resolution in mid-latitudes $\Delta x$, ensuring that the frictional 
+resolution in mid-latitudes 
+$\Delta x=r \cos(\varphi) \Delta \lambda \approx 80~{\rm km}$ at
+$\varphi=45^{\circ}$, ensuring that the frictional 
 boundary layer is well resolved.
 \\
 
 \noindent The model is stepped forward with a 
 time step $\delta t=1200$secs. With this time step the stability 
-parameter to the horizontal laplacian friction \cite{Adcroft_thesis}
+parameter to the horizontal laplacian friction
 
 \begin{eqnarray}
 \label{EQ:laplacian_stability}
@@ -280,7 +287,7 @@ S_{l} = 4 \frac{A_{h} \delta t}{{\Delta x}^2}
 \end{eqnarray}
 
 \noindent evaluates to 0.012, which is well below the 0.3 upper limit
-for stability. 
+for stability for this term under ABII time-stepping.
 \\
 
 \noindent The vertical dissipation coefficient, $A_{z}$, is set to 
@@ -298,7 +305,6 @@ and vertical ($K_{z}$) diffusion coefficients for temperature respectively.
 \\
 
 \noindent The numerical stability for inertial oscillations
-\cite{Adcroft_thesis} 
 
 \begin{eqnarray}
 \label{EQ:inertial_stability}
@@ -309,35 +315,35 @@ S_{i} = f^{2} {\delta t}^2
 limit for stability.
 \\
 
-\noindent The advective CFL \cite{Adcroft_thesis} for a extreme maximum 
+\noindent The advective CFL for a extreme maximum 
 horizontal flow
 speed of $ | \vec{u} | = 2 ms^{-1}$
 
 \begin{eqnarray}
 \label{EQ:cfl_stability}
-S_{a} = \frac{| \vec{u} | \delta t}{ \Delta x}
+C_{a} = \frac{| \vec{u} | \delta t}{ \Delta x}
 \end{eqnarray}
 
 \noindent evaluates to $5 \times 10^{-2}$. This is well below the stability 
 limit of 0.5.
 \\
 
-\noindent The stability parameter for internal gravity waves 
-\cite{Adcroft_thesis}
+\noindent The stability parameter for internal gravity waves
+propogating at $2~{\rm m}~{\rm s}^{-1}$ 
 
 \begin{eqnarray}
 \label{EQ:igw_stability}
 S_{c} = \frac{c_{g} \delta t}{ \Delta x}
 \end{eqnarray}
 
-\noindent evaluates to $5 \times 10^{-2}$. This is well below the linear
+\noindent evaluates to $\approx 5 \times 10^{-2}$. This is well below the linear
 stability limit of 0.25.
   
 \subsection{Code Configuration}
 \label{SEC:eg_fourl_code_config}
 
 The model configuration for this experiment resides under the 
-directory {\it verification/exp1/}.  The experiment files 
+directory {\it verification/exp2/}.  The experiment files 
 \begin{itemize}
 \item {\it input/data}
 \item {\it input/data.pkg}
@@ -432,7 +438,9 @@ and is copied into model general vertical coordinate variable
 \begin{rawhtml} <A href=../../../code_reference/vdb/names/PF.htm> \end{rawhtml}
 viscAr
 \begin{rawhtml} </A>\end{rawhtml}
-}.
+}. At each time step, the viscous term contribution to the momentum eqautions
+is calculated in routine
+{\it S/R CALC\_DIFFUSIVITY}.
 
 \fbox{
 \begin{minipage}{5.0in}
@@ -463,7 +471,7 @@ is read in the routine
 \begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
 INI\_PARMS
 \begin{rawhtml} </A>\end{rawhtml}
-}.
+} and applied in routines {\it CALC\_MOM\_RHS} and {\it CALC\_GW}.
 
 \fbox{
 \begin{minipage}{5.0in}
@@ -506,7 +514,8 @@ is read in the routine
 \begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
 INI\_PARMS
 \begin{rawhtml} </A>\end{rawhtml}
-}.
+} and the boundary condition is evaluated in routine
+{\it S/R CALC\_MOM\_RHS}.
 
 
 \fbox{
@@ -538,7 +547,7 @@ is read in the routine
 \begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
 INI\_PARMS
 \begin{rawhtml} </A>\end{rawhtml}
-}.
+} and is applied in the routine {\it S/R CALC\_MOM\_RHS}.
 
 \fbox{
 \begin{minipage}{5.0in}
@@ -570,7 +579,7 @@ is read in the routine
 \begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
 INI\_PARMS
 \begin{rawhtml} </A>\end{rawhtml}
-}.
+} and used in routine {\it S/R CALC\_GT}.
 
 \fbox{ \begin{minipage}{5.0in}
 {\it S/R CALC\_GT}({\it calc\_gt.F})
@@ -606,7 +615,7 @@ It is copied into model general vertical coordinate variable
 \begin{rawhtml} <A href=../../../code_reference/vdb/names/PD.htm> \end{rawhtml}
 diffKrT
 \begin{rawhtml} </A>\end{rawhtml}
-}.
+} which is used in routine {\it S/R CALC\_DIFFUSIVITY}.
 
 \fbox{ \begin{minipage}{5.0in}
 {\it S/R CALC\_DIFFUSIVITY}({\it calc\_diffusivity.F})
@@ -637,7 +646,7 @@ is read in the routine
 \begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
 INI\_PARMS
 \begin{rawhtml} </A>\end{rawhtml}
-}.
+}. The routine {\it S/R FIND\_RHO} makes use of {\bf tAlpha}.
 
 \fbox{
 \begin{minipage}{5.0in}
@@ -666,7 +675,8 @@ is read in the routine
 \begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
 INI\_PARMS
 \begin{rawhtml} </A>\end{rawhtml}
-}.
+}. The values of {\bf eosType} sets which formula in routine
+{\it FIND\_RHO} is used to calculate density.
 
 \fbox{
 \begin{minipage}{5.0in}
@@ -701,7 +711,9 @@ is read in the routine
 \begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
 INI\_PARMS
 \begin{rawhtml} </A>\end{rawhtml}
-}.
+}. When set to {\bf .TRUE.} the settings of {\bf delX} and {\bf delY} are
+taken to be in degrees. These values are used in the
+routine {\it INI\_SPEHRICAL\_POLAR\_GRID}.
 
 \fbox{
 \begin{minipage}{5.0in}
@@ -736,7 +748,7 @@ is read in the routine
 \begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
 INI\_PARMS
 \begin{rawhtml} </A>\end{rawhtml}
-}.
+} and is used in routine {\it INI\_SPEHRICAL\_POLAR\_GRID}.
 
 \fbox{
 \begin{minipage}{5.0in}
@@ -766,7 +778,7 @@ is read in the routine
 \begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
 INI\_PARMS
 \begin{rawhtml} </A>\end{rawhtml}
-}.
+} and is used in routine {\it INI\_SPEHRICAL\_POLAR\_GRID}. 
 
 \fbox{
 \begin{minipage}{5.0in}
@@ -796,7 +808,7 @@ is read in the routine
 \begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
 INI\_PARMS
 \begin{rawhtml} </A>\end{rawhtml}
-}.
+} and is used in routine {\it INI\_SPEHRICAL\_POLAR\_GRID}. 
 
 \fbox{
 \begin{minipage}{5.0in}
@@ -834,7 +846,7 @@ model coordinate variable
 \begin{rawhtml} <A href=../../../code_reference/vdb/names/10Y.htm> \end{rawhtml}
 delR
 \begin{rawhtml} </A>\end{rawhtml}
-}. 
+} which is used in routine {\it INI\_VERTICAL\_GRID}.
 
 \fbox{
 \begin{minipage}{5.0in}
@@ -873,7 +885,7 @@ is read in the routine
 \begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
 INI\_PARMS
 \begin{rawhtml} </A>\end{rawhtml}
-}.
+}. The bathymetry file is read in the routine {\it INI\_DEPTHS}.
 
 \fbox{
 \begin{minipage}{5.0in}
@@ -892,7 +904,7 @@ goto code
 zonalWindFile='windx.sin_y'
 \end{verbatim}
 This line specifies the name of the file from which the x-direction
-surface wind stress is read. This file is also a two-dimensional
+(zonal) surface wind stress is read. This file is also a two-dimensional
 ($x,y$) map and is enumerated and formatted in the same manner as the 
 bathymetry file. The matlab program {\it input/gendata.m} includes example 
 code to generate a valid 
@@ -909,7 +921,8 @@ is read in the routine
 \begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
 INI\_PARMS
 \begin{rawhtml} </A>\end{rawhtml}
-}.
+}.  The wind-stress file is read in the routine 
+{\it EXTERNAL\_FIELDS\_LOAD}.
 
 \fbox{
 \begin{minipage}{5.0in}
@@ -924,9 +937,7 @@ goto code
 
 \end{itemize}
 
-\noindent other lines in the file {\it input/data} are standard values
-that are described in the MITgcm Getting Started and MITgcm Parameters
-notes.
+\noindent other lines in the file {\it input/data} are standard values.
 
 \begin{rawhtml}<PRE>\end{rawhtml}
 \begin{small}
@@ -947,11 +958,14 @@ customisations for this experiment.
 \subsubsection{File {\it input/windx.sin\_y}}
 
 The {\it input/windx.sin\_y} file specifies a two-dimensional ($x,y$) 
-map of wind stress ,$\tau_{x}$, values. The units used are $Nm^{-2}$.
-Although $\tau_{x}$ is only a function of $y$n in this experiment
+map of wind stress ,$\tau_{x}$, values. The units used are $Nm^{-2}$ (the
+default for MITgcm).
+Although $\tau_{x}$ is only a function of latituted, $y$,
+in this experiment
 this file must still define a complete two-dimensional map in order
 to be compatible with the standard code for loading forcing fields 
-in MITgcm. The included matlab program {\it input/gendata.m} gives a complete
+in MITgcm (routine {\it EXTERNAL\_FIELDS\_LOAD}.
+The included matlab program {\it input/gendata.m} gives a complete
 code for creating the {\it input/windx.sin\_y} file.
 
 \subsubsection{File {\it input/topog.box}}
@@ -959,7 +973,7 @@ code for creating the {\it input/windx.sin\_y} file.
 
 The {\it input/topog.box} file specifies a two-dimensional ($x,y$) 
 map of depth values. For this experiment values are either
-$0m$ or $-2000\,{\rm m}$, corresponding respectively to a wall or to deep
+$0~{\rm m}$ or $-2000\,{\rm m}$, corresponding respectively to a wall or to deep
 ocean. The file contains a raw binary stream of data that is enumerated
 in the same way as standard MITgcm two-dimensional, horizontal arrays.
 The included matlab program {\it input/gendata.m} gives a complete
@@ -1020,15 +1034,15 @@ dxF, dyF, dxG, dyG, dxC, dyC}.
 \subsubsection{Code Download}
 
  In order to run the examples you must first download the code distribution.
-Instructions for downloading the code can be found in the Getting Started
-Guide \cite{MITgcm_Getting_Started}.
+Instructions for downloading the code can be found in section
+\ref{sect:obtainingCode}.
 
 \subsubsection{Experiment Location}
 
  This example experiments is located under the release sub-directory
 
 \vspace{5mm}
-{\it verification/exp1/ }
+{\it verification/exp2/ }
 
 \subsubsection{Running the Experiment}
 
@@ -1049,7 +1063,7 @@ Guide \cite{MITgcm_Getting_Started}.
 
  You shold see a response on the screen ending in
 
-{\it verification/exp1/input }
+{\it verification/exp2/input }
 
 
 \item Run the genmake script to create the experiment {\it Makefile}

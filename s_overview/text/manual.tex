@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.6 2001/10/24 15:21:27 cnh Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.7 2001/10/25 12:06:56 cnh Exp $
 % $Name:  $
 
 %tci%\documentclass[12pt]{book}
@@ -34,7 +34,7 @@
 
 % Section: Overview
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.6 2001/10/24 15:21:27 cnh Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.7 2001/10/25 12:06:56 cnh Exp $
 % $Name:  $
 
 \section{Introduction}
@@ -54,18 +54,14 @@ MITgcm has a number of novel aspects:
 \begin{itemize}
 \item it can be used to study both atmospheric and oceanic phenomena; one
 hydrodynamical kernel is used to drive forward both atmospheric and oceanic
-models - see fig
-\marginpar{
-Fig.1 One model}\ref{fig:onemodel}
+models - see fig \ref{fig:onemodel}
 
 %% CNHbegin
 \input{part1/one_model_figure}
 %% CNHend
 
 \item it has a non-hydrostatic capability and so can be used to study both
-small-scale and large scale processes - see fig 
-\marginpar{
-Fig.2 All scales}\ref{fig:all-scales}
+small-scale and large scale processes - see fig \ref{fig:all-scales}
 
 %% CNHbegin
 \input{part1/all_scales_figure}
@@ -73,9 +69,7 @@ Fig.2 All scales}\ref{fig:all-scales}
 
 \item finite volume techniques are employed yielding an intuitive
 discretization and support for the treatment of irregular geometries using
-orthogonal curvilinear grids and shaved cells - see fig 
-\marginpar{
-Fig.3 Finite volumes}\ref{fig:finite-volumes}
+orthogonal curvilinear grids and shaved cells - see fig \ref{fig:finite-volumes}
 
 %% CNHbegin
 \input{part1/fvol_figure}
@@ -95,14 +89,14 @@ listed in an Appendix.
 We begin by briefly showing some of the results of the model in action to
 give a feel for the wide range of problems that can be addressed using it.
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.6 2001/10/24 15:21:27 cnh Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.7 2001/10/25 12:06:56 cnh Exp $
 % $Name:  $
 
 \section{Illustrations of the model in action}
 
 The MITgcm has been designed and used to model a wide range of phenomena,
 from convection on the scale of meters in the ocean to the global pattern of
-atmospheric winds - see fig.2\ref{fig:all-scales}. To give a flavor of the
+atmospheric winds - see figure \ref{fig:all-scales}. To give a flavor of the
 kinds of problems the model has been used to study, we briefly describe some
 of them here. A more detailed description of the underlying formulation,
 numerical algorithm and implementation that lie behind these calculations is
@@ -113,10 +107,10 @@ described in detail in the documentation.
 
 \subsection{Global atmosphere: `Held-Suarez' benchmark}
 
-A novel feature of MITgcm is its ability to simulate both atmospheric and
-oceanographic flows at both small and large scales.
+A novel feature of MITgcm is its ability to simulate, using one basic algorithm, 
+both atmospheric and oceanographic flows at both small and large scales.
 
-Fig.E1a.\ref{fig:eddy_cs} shows an instantaneous plot of the 500$mb$
+Figure \ref{fig:eddy_cs} shows an instantaneous plot of the 500$mb$
 temperature field obtained using the atmospheric isomorph of MITgcm run at
 2.8$^{\circ }$ resolution on the cubed sphere. We see cold air over the pole
 (blue) and warm air along an equatorial band (red). Fully developed
@@ -132,16 +126,16 @@ there are no mountains or land-sea contrast.
 %% CNHend
 
 As described in Adcroft (2001), a `cubed sphere' is used to discretize the
-globe permitting a uniform gridding and obviated the need to fourier filter.
+globe permitting a uniform gridding and obviated the need to Fourier filter.
 The `vector-invariant' form of MITgcm supports any orthogonal curvilinear
 grid, of which the cubed sphere is just one of many choices.
 
-Fig.E1b shows the 5-year mean, zonally averaged potential temperature, zonal
-wind and meridional overturning streamfunction from a 20-level version of
+Figure \ref{fig:hs_zave_u} shows the 5-year mean, zonally averaged zonal
+wind from a 20-level configuration of
 the model. It compares favorable with more conventional spatial
-discretization approaches.
-
-A regular spherical lat-lon grid can also be used.
+discretization approaches. The two plots show the field calculated using the
+cube-sphere grid and the flow calculated using a regular, spherical polar
+latitude-longitude grid. Both grids are supported within the model.
 
 %% CNHbegin
 \input{part1/hs_zave_u_figure}
@@ -157,13 +151,14 @@ diffusive patterns of ocean currents. But if the resolution of our models is
 increased until the baroclinic instability process is resolved, numerical
 solutions of a different and much more realistic kind, can be obtained.
 
-Fig. ?.? shows the surface temperature and velocity field obtained from
-MITgcm run at $\frac{1}{6}^{\circ }$ horizontal resolution on a $lat-lon$
+Figure \ref{fig:ocean-gyres} shows the surface temperature and velocity 
+field obtained from MITgcm run at $\frac{1}{6}^{\circ }$ horizontal 
+resolution on a $lat-lon$
 grid in which the pole has been rotated by 90$^{\circ }$ on to the equator
 (to avoid the converging of meridian in northern latitudes). 21 vertical
 levels are used in the vertical with a `lopped cell' representation of
 topography. The development and propagation of anomalously warm and cold
-eddies can be clearly been seen in the Gulf Stream region. The transport of
+eddies can be clearly seen in the Gulf Stream region. The transport of
 warm water northward by the mean flow of the Gulf Stream is also clearly
 visible.
 
@@ -174,7 +169,8 @@ visible.
 
 \subsection{Global ocean circulation}
 
-Fig.E2a shows the pattern of ocean currents at the surface of a 4$^{\circ }$
+Figure \ref{fig:large-scale-circ} (top) shows the pattern of ocean currents at 
+the surface of a 4$^{\circ }$
 global ocean model run with 15 vertical levels. Lopped cells are used to
 represent topography on a regular $lat-lon$ grid extending from 70$^{\circ
 }N $ to 70$^{\circ }S$. The model is driven using monthly-mean winds with
@@ -182,8 +178,8 @@ mixed boundary conditions on temperature and salinity at the surface. The
 transfer properties of ocean eddies, convection and mixing is parameterized
 in this model.
 
-Fig.E2b shows the meridional overturning circulation of the global ocean in
-Sverdrups.
+Figure \ref{fig:large-scale-circ} (bottom) shows the meridional overturning 
+circulation of the global ocean in Sverdrups.
 
 %%CNHbegin
 \input{part1/global_circ_figure}
@@ -195,7 +191,8 @@ Dense plumes generated by localized cooling on the continental shelf of the
 ocean may be influenced by rotation when the deformation radius is smaller
 than the width of the cooling region. Rather than gravity plumes, the
 mechanism for moving dense fluid down the shelf is then through geostrophic
-eddies. The simulation shown in the figure (blue is cold dense fluid, red is
+eddies. The simulation shown in the figure \ref{fig::convect-and-topo}
+(blue is cold dense fluid, red is
 warmer, lighter fluid) employs the non-hydrostatic capability of MITgcm to
 trigger convection by surface cooling. The cold, dense water falls down the
 slope but is deflected along the slope by rotation. It is found that
@@ -214,10 +211,11 @@ presence of complex geometry makes it an ideal tool to study internal wave
 dynamics and mixing in oceanic canyons and ridges driven by large amplitude
 barotropic tidal currents imposed through open boundary conditions.
 
-Fig. ?.? shows the influence of cross-slope topographic variations on
+Fig. \ref{fig:boundary-forced-wave} shows the influence of cross-slope 
+topographic variations on
 internal wave breaking - the cross-slope velocity is in color, the density
 contoured. The internal waves are excited by application of open boundary
-conditions on the left.\ They propagate to the sloping boundary (represented
+conditions on the left. They propagate to the sloping boundary (represented
 using MITgcm's finite volume spatial discretization) where they break under
 nonhydrostatic dynamics.
 
@@ -231,10 +229,12 @@ Forward and tangent linear counterparts of MITgcm are supported using an
 `automatic adjoint compiler'. These can be used in parameter sensitivity and
 data assimilation studies.
 
-As one example of application of the MITgcm adjoint, Fig.E4 maps the
-gradient $\frac{\partial J}{\partial \mathcal{H}}$where $J$ is the magnitude
-of the overturning streamfunction shown in fig?.? at 40$^{\circ }$N and $
-\mathcal{H}$ is the air-sea heat flux 100 years before. We see that $J$ is
+As one example of application of the MITgcm adjoint, Figure \ref{fig:hf-sensitivity}
+maps the gradient $\frac{\partial J}{\partial \mathcal{H}}$where $J$ is the magnitude
+of the overturning streamfunction shown in figure \ref{fig:large-scale-circ}
+at 60$^{\circ }$N and $
+\mathcal{H}(\lambda,\varphi)$ is the mean, local air-sea heat flux over
+a 100 year period. We see that $J$ is
 sensitive to heat fluxes over the Labrador Sea, one of the important sources
 of deep water for the thermohaline circulations. This calculation also
 yields sensitivities to all other model parameters.
@@ -250,9 +250,10 @@ ocean circulation. An appropriately defined `cost function', which measures
 the departure of the model from observations (both remotely sensed and
 insitu) over an interval of time, is minimized by adjusting `control
 parameters' such as air-sea fluxes, the wind field, the initial conditions
-etc. Figure ?.? shows an estimate of the time-mean surface elevation of the
-ocean obtained by bringing the model in to consistency with altimetric and
-in-situ observations over the period 1992-1997.
+etc. Figure \ref{fig:assimilated-globes} shows an estimate of the time-mean
+surface elevation of the ocean obtained by bringing the model in to
+consistency with altimetric and in-situ observations over the period
+1992-1997. {\bf CHANGE THIS TEXT - FIG FROM PATRICK/CARL/DETLEF}
 
 %% CNHbegin
 \input{part1/globes_figure}
@@ -263,9 +264,11 @@ in-situ observations over the period 1992-1997.
 MITgcm is being used to study global biogeochemical cycles in the ocean. For
 example one can study the effects of interannual changes in meteorological
 forcing and upper ocean circulation on the fluxes of carbon dioxide and
-oxygen between the ocean and atmosphere. The figure shows the annual air-sea
-flux of oxygen and its relation to density outcrops in the southern oceans
-from a single year of a global, interannually varying simulation.
+oxygen between the ocean and atmosphere. Figure \ref{fig:biogeo} shows 
+the annual air-sea flux of oxygen and its relation to density outcrops in 
+the southern oceans from a single year of a global, interannually varying 
+simulation. The simulation is run at $1^{\circ}\times1^{\circ}$ resolution
+telescoping to $\frac{1}{3}^{\circ}\times\frac{1}{3}^{\circ}$ in the tropics (not shown).
 
 %%CNHbegin
 \input{part1/biogeo_figure}
@@ -273,33 +276,34 @@ from a single year of a global, interannually varying simulation.
 
 \subsection{Simulations of laboratory experiments}
 
-Figure ?.? shows MITgcm being used to simulate a laboratory experiment
-enquiring in to the dynamics of the Antarctic Circumpolar Current (ACC). An
+Figure \ref{fig:lab-simulation} shows MITgcm being used to simulate a 
+laboratory experiment enquiring in to the dynamics of the Antarctic Circumpolar Current (ACC). An
 initially homogeneous tank of water ($1m$ in diameter) is driven from its
 free surface by a rotating heated disk. The combined action of mechanical
 and thermal forcing creates a lens of fluid which becomes baroclinically
 unstable. The stratification and depth of penetration of the lens is
-arrested by its instability in a process analogous to that whic sets the
+arrested by its instability in a process analogous to that which sets the
 stratification of the ACC.
 
 %%CNHbegin
 \input{part1/lab_figure}
 %%CNHend
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.6 2001/10/24 15:21:27 cnh Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.7 2001/10/25 12:06:56 cnh Exp $
 % $Name:  $
 
 \section{Continuous equations in `r' coordinates}
 
 To render atmosphere and ocean models from one dynamical core we exploit
 `isomorphisms' between equation sets that govern the evolution of the
-respective fluids - see fig.4
-\marginpar{
-Fig.4. Isomorphisms}. One system of hydrodynamical equations is written down
+respective fluids - see figure \ref{fig:isomorphic-equations}. 
+One system of hydrodynamical equations is written down
 and encoded. The model variables have different interpretations depending on
 whether the atmosphere or ocean is being studied. Thus, for example, the
 vertical coordinate `$r$' is interpreted as pressure, $p$, if we are
-modeling the atmosphere and height, $z$, if we are modeling the ocean.
+modeling the atmosphere (left hand side of figure \ref{fig:isomorphic-equations})
+and height, $z$, if we are modeling the ocean (right hand side of figure
+\ref{fig:isomorphic-equations}).
 
 %%CNHbegin
 \input{part1/zandpcoord_figure.tex}
@@ -311,9 +315,9 @@ velocity $\vec{\mathbf{v}}$, active tracers $\theta $ and $S$, a
 depend on $\theta $, $S$, and $p$. The equations that govern the evolution
 of these fields, obtained by applying the laws of classical mechanics and
 thermodynamics to a Boussinesq, Navier-Stokes fluid are, written in terms of
-a generic vertical coordinate, $r$, see fig.5
-\marginpar{
-Fig.5 The vertical coordinate of model}:
+a generic vertical coordinate, $r$, so that the appropriate
+kinematic boundary conditions can be applied isomorphically
+see figure \ref{fig:zandp-vert-coord}.
 
 %%CNHbegin
 \input{part1/vertcoord_figure.tex}
@@ -410,13 +414,14 @@ S\text{ is specific humidity in the atmosphere; salinity in the ocean}
 \end{equation*}
 
 The $\mathcal{F}^{\prime }s$ and $\mathcal{Q}^{\prime }s$ are provided by
-extensive `physics' packages for atmosphere and ocean described in Chapter 6.
+`physics' and forcing packages for atmosphere and ocean. These are described
+in later chapters.
 
 \subsection{Kinematic Boundary conditions}
 
 \subsubsection{vertical}
 
-at fixed and moving $r$ surfaces we set (see fig.5):
+at fixed and moving $r$ surfaces we set (see figure \ref{fig:zandp-vert-coord}):
 
 \begin{equation}
 \dot{r}=0atr=R_{fixed}(x,y)\text{ (ocean bottom, top of the atmosphere)}
@@ -447,7 +452,7 @@ where $\vec{\mathbf{n}}$ is the normal to a solid boundary.
 
 \subsection{Atmosphere}
 
-In the atmosphere, see fig.5, we interpret:
+In the atmosphere, (see figure \ref{fig:zandp-vert-coord}), we interpret:
 
 \begin{equation}
 r=p\text{ is the pressure}  \label{eq:atmos-r}
@@ -681,6 +686,7 @@ r $ in, for example, (\ref{eq:gu-speherical}), we do not replace $r$ by $a$,
 the radius of the earth.
 
 \subsubsection{Hydrostatic and quasi-hydrostatic forms}
+\label{sec:hydrostatic_and_quasi-hydrostatic_forms}
 
 These are discussed at length in Marshall et al (1997a).
 
@@ -799,6 +805,7 @@ Marshall et al, 1997) resulting in a non-hydrostatic algorithm that, in the
 hydrostatic limit, is as computationally economic as the \textbf{HPEs}.
 
 \subsection{Finding the pressure field}
+\label{sec:finding_the_pressure_field}
 
 Unlike the prognostic variables $u$, $v$, $w$, $\theta $ and $S$, the
 pressure field must be obtained diagnostically. We proceed, as before, by
@@ -1021,7 +1028,7 @@ to discretize the model.
 Tangent linear and adjoint counterparts of the forward model and described
 in Chapter 5.
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.6 2001/10/24 15:21:27 cnh Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.7 2001/10/25 12:06:56 cnh Exp $
 % $Name:  $
 
 \section{Appendix ATMOSPHERE}
@@ -1148,7 +1155,7 @@ _{h}+\mathbf{\nabla }_{p}\phi ^{\prime } &=&\vec{\mathbf{\mathcal{F}}} \\
 \frac{D\theta }{Dt} &=&\frac{\mathcal{Q}}{\Pi }  \label{eq:atmos-prime}
 \end{eqnarray}
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.6 2001/10/24 15:21:27 cnh Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.7 2001/10/25 12:06:56 cnh Exp $
 % $Name:  $
 
 \section{Appendix OCEAN}
@@ -1364,7 +1371,7 @@ the perturbation density. Nevertheless, it is the hydrostatic ($\epsilon
 _{nh}=0$ form of these equations that are used throughout the ocean modeling
 community and referred to as the primitive equations (HPE).
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.6 2001/10/24 15:21:27 cnh Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.7 2001/10/25 12:06:56 cnh Exp $
 % $Name:  $
 
 \section{Appendix:OPERATORS}
