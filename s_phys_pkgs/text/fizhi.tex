@@ -12,7 +12,7 @@ boundary layer turbulence, and land surface processes.
 
 \subsubsection{Moist Convective Processes}
 
-\subsubsubsection{Sub-grid and Large-scale Convection}
+\subsubsection{Sub-grid and Large-scale Convection}
 \label{sec:fizhi:mc}
 
 Sub-grid scale cumulus convection is parameterized using the Relaxed Arakawa
@@ -119,7 +119,7 @@ The large-scale precipitation re-evaporates during descent to partially saturate
 lower layers in a process identical to the re-evaporation of convective rain. 
 
  
-\subsubsubsection{Cloud Formation}
+\subsubsection{Cloud Formation}
 \label{sec:fizhi:clouds}
 
 Convective and large-scale cloud fractons which are used for cloud-radiative interactions are determined
@@ -219,7 +219,7 @@ climatological values specified as a function
 of latitude and height (Rosenfield, et al., 1987) are linearly interpolated to the current time.
 
 
-\subsubsubsection{Shortwave Radiation}
+\subsubsection{Shortwave Radiation}
 
 The shortwave radiation package used in the package computes solar radiative 
 heating due to the absoption by water vapor, ozone, carbon dioxide, oxygen,
@@ -314,7 +314,7 @@ low/middle/high classification, and appropriately averaged to produce the net so
 \end{figure*}
 
 
-\subsubsubsection{Longwave Radiation}
+\subsubsection{Longwave Radiation}
 
 The longwave radiation package used in the fizhi package is thoroughly described by Chou and Suarez (1994).
 As described in that document, IR fluxes are computed due to absorption by water vapor, carbon
@@ -382,7 +382,7 @@ For groups and/or levels outside the range of $p_1$ and $p_2$, a clear line-of-s
 assigned.
 
 
-\subsubsubsection{Cloud-Radiation Interaction}
+\subsubsection{Cloud-Radiation Interaction}
 \label{sec:fizhi:radcloud}
 
 The cloud fractions and diagnosed cloud liquid water produced by moist processes 
@@ -612,13 +612,13 @@ land.
 Once all the diffusion coefficients are calculated, the diffusion equations are solved numerically
 using an implicit backward operator.
 
-\subsubsubsection{Atmospheric Boundary Layer}
+\subsubsection{Atmospheric Boundary Layer}
 
 The depth of the atmospheric boundary layer (ABL) is diagnosed by the parameterization as the
 level at which the turbulent kinetic energy is reduced to a tenth of its maximum near surface value.
 The vertical structure of the ABL is explicitly resolved by the lowest few (3-8) model layers.
 
-\subsubsubsection{Surface Energy Budget}
+\subsubsection{Surface Energy Budget}
 
 The ground temperature equation is solved as part of the turbulence package
 using a backward implicit time differencing scheme:
@@ -669,7 +669,7 @@ is a function of the ground wetness, $W$.
 
 \subsubsection{Land Surface Processes}
 
-\subsubsubsection{Surface Type}
+\subsubsection{Surface Type}
 The fizhi package surface Types are designated using the Koster-Suarez (1992) mosaic
 philosophy which allows multiple ``tiles'', or multiple surface types, in any one
 grid cell. The Koster-Suarez Land Surface Model (LSM) surface type classifications
@@ -728,14 +728,14 @@ and surface albedo.}
 \end{figure*}
 
 
-\subsubsubsection{Surface Roughness}
+\subsubsection{Surface Roughness}
 The surface roughness length over oceans is computed iteratively with the wind
 stress by the surface layer parameterization (Helfand and Schubert, 1991).
 It employs an interpolation between the functions of Large and Pond (1981)
 for high winds and of Kondo (1975) for weak winds.
 
 
-\subsubsubsection{Albedo}
+\subsubsection{Albedo}
 The surface albedo computation, described in Koster and Suarez (1991),
 employs the ``two stream'' approximation used in Sellers' (1987) Simple Biosphere (SiB)
 Model which distinguishes between the direct and diffuse albedos in the visible
@@ -815,7 +815,7 @@ current years and frequencies available.}
 \end{table}
 
 
-\subsubsubsection{Topography and Topography Variance}
+\subsubsection{Topography and Topography Variance}
 
 Surface geopotential heights are provided from an averaging of the Navy 10 minute
 by 10 minute dataset supplied by the National Center for Atmospheric Research (NCAR) to the
@@ -879,7 +879,7 @@ re-interpolated back to the 10 minute by 10 minute resolution.
 The sub-grid scale variance is constructed based on this smoothed dataset.
 
 
-\subsubsubsection{Upper Level Moisture}
+\subsubsection{Upper Level Moisture}
 The fizhi package uses climatological water vapor data above 100 mb from the Stratospheric Aerosol and Gas 
 Experiment (SAGE) as input into the model's radiation packages.  The SAGE data is archived
 as monthly zonal means at 5$^\circ$ latitudinal resolution.  The data is interpolated to the
