@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/Attic/mnc.tex,v 1.9 2004/04/06 16:48:33 edhill Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/Attic/mnc.tex,v 1.10 2004/07/05 16:35:32 edhill Exp $
 % $Name:  $
 
 \section{NetCDF I/O Integration: MNC}
@@ -175,7 +175,7 @@ using the function calls:
 \begin{verbatim}
 C       Write dynvars using the MNC package
         CALL MNC_CW_SET_UDIM('state', -1, myThid)
-        CALL MNC_CW_RL_W('I','state',0,0,'iter', myIter, myThid)
+        CALL MNC_CW_I_W('I','state',0,0,'iter', myIter, myThid)
         CALL MNC_CW_SET_UDIM('state', 0, myThid)
         CALL MNC_CW_RL_W('D','state',0,0,'model_time',myTime, myThid)
         CALL MNC_CW_RL_W('D','state',0,0,'U', uVel, myThid)
