@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.8 2001/10/05 19:41:08 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.9 2001/10/25 18:36:53 cnh Exp $
 % $Name:  $
 
 The equations of motion integrated by the model involve four
@@ -13,7 +13,7 @@ and diagnostic equations requires a model algorithm that can march
 forward prognostic variables while satisfying constraints imposed by
 diagnostic equations.
 
-Since the model comes in several flavours and formulation, it would be
+Since the model comes in several flavors and formulation, it would be
 confusing to present the model algorithm exactly as written into code
 along with all the switches and optional terms. Instead, we present
 the algorithm for each of the basic formulations which are:
@@ -37,7 +37,7 @@ method, with a rigid-lid model in section
 \ref{sect:pressure-method-rigid-lid}. This algorithm is essentially
 unchanged, apart for some coefficients, when the rigid lid assumption
 is replaced with a linearized implicit free-surface, described in
-section \ref{sect:pressure-method-linear-backward}. These two flavours
+section \ref{sect:pressure-method-linear-backward}. These two flavors
 of the pressure-method encompass all formulations of the model as it
 exists today. The integration of explicit in time terms is out-lined
 in section \ref{sect:adams-bashforth} and put into the context of the
@@ -61,7 +61,7 @@ A schematic of the evolution in time of the pressure method
 algorithm. A prediction for the flow variables at time level $n+1$ is
 made based only on the explicit terms, $G^{(n+^1/_2)}$, and denoted
 $u^*$, $v^*$. Next, a pressure field is found such that $u^{n+1}$,
-$v^{n+1}$ will be non-divergent. Conceptually, the $*$ quantitites
+$v^{n+1}$ will be non-divergent. Conceptually, the $*$ quantities
 exist at time level $n+1$ but they are intermediate and only
 temporary.}
 \label{fig:pressure-method-rigid-lid}
@@ -80,7 +80,7 @@ FORWARD\_STEP \\
 \>\> CALC\_GRAD\_PHI\_SURF \` $\nabla \eta^{n+1}$ \\
 \>\> CORRECTION\_STEP \` $u^{n+1}$,$v^{n+1}$ (\ref{eq:un+1-rigid-lid},\ref{eq:vn+1-rigid-lid})
 \end{tabbing} \end{minipage} } \end{center}
-\caption{Calling tree for the pressure method alogtihm}
+\caption{Calling tree for the pressure method algorihtm}
 \label{fig:call-tree-pressure-method}
 \end{figure}
 
@@ -102,7 +102,7 @@ flow boundary conditions applied, becomes:
 \label{eq:rigid-lid-continuity}
 \end{equation}
 Here, $H\widehat{u} = \int_H u dz$ is the depth integral of $u$,
-similarly for $H\widehat{v}$. The rigid-lid approzimation sets $w=0$
+similarly for $H\widehat{v}$. The rigid-lid approximation sets $w=0$
 at the lid so that it does not move but allows a pressure to be
 exerted on the fluid by the lid. The horizontal momentum equations and
 vertically integrated continuity equation are be discretized in time
@@ -130,7 +130,7 @@ pressure gradient is explicit and so can be included in the vector
 $G$.
 
 Substituting the two momentum equations into the depth integrated
-continuity equation eliminates $u^{n+1}$ and $v^{n+1}$ yeilding an
+continuity equation eliminates $u^{n+1}$ and $v^{n+1}$ yielding an
 elliptic equation for $\eta^{n+1}$. Equations
 \ref{eq:discrete-time-u}, \ref{eq:discrete-time-v} and
 \ref{eq:discrete-time-cont-rigid-lid} can then be re-arranged as follows:
@@ -157,7 +157,7 @@ Fig.~\ref{fig:pressure-method-rigid-lid} we depicted as co-located
 with the future flow field (time level $n+1$) but it could equally
 have been drawn as staggered in time with the flow.
 
-The correspondance to the code is as follows:
+The correspondence to the code is as follows:
 \begin{itemize}
 \item
 the prognostic phase, equations \ref{eq:ustar-rigid-lid} and \ref{eq:vstar-rigid-lid},
@@ -165,7 +165,7 @@ stepping forward $u^n$ and $v^n$ to $u^{*}$ and $v^{*}$ is coded in
 {\em TIMESTEP.F}
 \item
 the vertical integration, $H \widehat{u^*}$ and $H
-\widehat{v^*}$, divergence and invertion of the elliptic operator in
+\widehat{v^*}$, divergence and inversion of the elliptic operator in
 equation \ref{eq:elliptic} is coded in {\em
 SOLVE\_FOR\_PRESSURE.F}
 \item
@@ -250,9 +250,9 @@ to~\ref{eq:vn+1-backward-free-surface}, solved sequentially, represent
 the pressure method algorithm with a backward implicit, linearized
 free surface. The method is still formerly a pressure method because
 in the limit of large $\Delta t$ the rigid-lid method is
-reovered. However, the implicit treatment of the free-surface allows
+recovered. However, the implicit treatment of the free-surface allows
 the flow to be divergent and for the surface pressure/elevation to
-respond on a finite time-scale (as opposed to instantly). To recovere
+respond on a finite time-scale (as opposed to instantly). To recover
 the rigid-lid formulation, we introduced a switch-like parameter,
 $\epsilon_{fs}$, which selects between the free-surface and rigid-lid;
 $\epsilon_{fs}=1$ allows the free-surface to evolve; $\epsilon_{fs}=0$
@@ -331,7 +331,7 @@ A stability analysis for a relaxation equation should be given at this point.
 
 Vertical diffusion and viscosity can be treated implicitly in time
 using the backward method which is an intrinsic scheme. For tracers,
-the time discrretized equation is:
+the time discretized equation is:
 \begin{equation}
 \tau^{n+1} - \Delta t \partial_r \kappa_v \partial_r \tau^{n+1} =
 \tau^{n} + \Delta t G_\tau^{(n+1/2)}
@@ -377,10 +377,10 @@ implicit and are thus cast as a an explicit drag term.
 \caption{
 A schematic of the explicit Adams-Bashforth and implicit time-stepping
 phases of the algorithm. All prognostic variables are co-located in
-time. Explicit tendancies are evaluated at time level $n$ as a
+time. Explicit tendencies are evaluated at time level $n$ as a
 function of the state at that time level (dotted arrow). The explicit
-tendancy from the previous time level, $n-1$, is used to extrapolate
-tendancies to $n+1/2$ (dashed arrow). This extrapolated tendancy
+tendency from the previous time level, $n-1$, is used to extrapolate
+tendencies to $n+1/2$ (dashed arrow). This extrapolated tendency
 allows variables to be stably integrated forward-in-time to render an
 estimate ($*$-variables) at the $n+1$ time level (solid
 arc-arrow). The operator ${\cal L}$ formed from implicit-in-time terms
@@ -417,9 +417,9 @@ Adams-Bashforth time-stepping.}
 \label{fig:call-tree-adams-bashforth-sync}
 \end{figure}
 
-The Adams-Bashforth extrapolation of explicit tendancies fits neatly
+The Adams-Bashforth extrapolation of explicit tendencies fits neatly
 into the pressure method algorithm when all state variables are
-co-locacted in time. Fig.~\ref{fig:adams-bashforth-sync} illustrates
+co-located in time. Fig.~\ref{fig:adams-bashforth-sync} illustrates
 the location of variables in time and the evolution of the algorithm
 with time. The algorithm can be represented by the sequential solution
 of the follow equations:
@@ -453,8 +453,8 @@ G_{\theta,S}^{(n+1/2)} & = & (3/2+\epsilon_{AB}) G_{\theta,S}^{n}-(1/2+\epsilon_
 \end{eqnarray}
 Fig.~\ref{fig:adams-bashforth-sync} illustrates the location of
 variables in time and evolution of the algorithm with time. The
-Adams-Bashforth extrapolation of the tracer tendancies is illustrated
-byt the dashed arrow, the prediction at $n+1$ is indicated by the
+Adams-Bashforth extrapolation of the tracer tendencies is illustrated
+by the dashed arrow, the prediction at $n+1$ is indicated by the
 solid arc. Inversion of the implicit terms, ${\cal
 L}^{-1}_{\theta,S}$, then yields the new tracer fields at $n+1$. All
 these operations are carried out in subroutine {\em THERMODYNAMICS} an
@@ -480,12 +480,12 @@ time-step. The corresponding calling tree is given in
 \caption{
 A schematic of the explicit Adams-Bashforth and implicit time-stepping
 phases of the algorithm but with staggering in time of thermodynamic
-variables with the flow. Explicit thermodynamics tendancies are
+variables with the flow. Explicit thermodynamics tendencies are
 evaluated at time level $n-1/2$ as a function of the thermodynamics
 state at that time level $n$ and flow at time $n$ (dotted arrow). The
-explicit tendancy from the previous time level, $n-3/2$, is used to
-extrapolate tendancies to $n$ (dashed arrow). This extrapolated
-tendancy allows thermo-dynamics variables to be stably integrated
+explicit tendency from the previous time level, $n-3/2$, is used to
+extrapolate tendencies to $n$ (dashed arrow). This extrapolated
+tendency allows thermo-dynamics variables to be stably integrated
 forward-in-time to render an estimate ($*$-variables) at the $n+1/2$
 time level (solid arc-arrow). The implicit-in-time operator ${\cal
 L_{\theta,S}}$ is solved to yield the thermodynamic variables at time
@@ -502,7 +502,7 @@ limiting process for determining a stable time-step. In the
 circumstance, it is more efficient to stagger in time the
 thermodynamic variables with the flow
 variables. Fig.~\ref{fig:adams-bashforth-staggered} illustrates the
-staggering and algorith. The key difference between this and
+staggering and algorithm. The key difference between this and
 Fig.~\ref{fig:adams-bashforth-sync} is that the new thermodynamics
 fields are used to compute the hydrostatic pressure at time level
 $n+1/2$. The essentially allows the gravity wave terms to leap-frog in
@@ -515,7 +515,7 @@ algorithm involves replacing equation \ref{eq:phi-hyd-sync} with
 \phi_{hyd}^n = \int b(\theta^{n+1},S^{n+1}) dr
 \end{displaymath}
 but the pressure gradient must also be taken out of the
-Adams-Bashforth extrapoltion. Also, retaining the integer time-levels,
+Adams-Bashforth extrapolation. Also, retaining the integer time-levels,
 $n$ and $n+1$, does not give a user the sense of where variables are
 located in time.  Instead, we re-write the entire algorithm,
 \ref{eq:Gt-n-sync} to \ref{eq:v-n+1-sync}, annotating the
@@ -574,12 +574,12 @@ correspond to.
 
 \section{Variants on the Free Surface}
 
-We now descibe the various formulations of the free-surface that
+We now describe the various formulations of the free-surface that
 include non-linear forms, implicit in time using Crank-Nicholson,
 explicit and [one day] split-explicit. First, we'll reiterate the
 underlying algorithm but this time using the notation consistent with
 the more general vertical coordinate $r$. The elliptic equation for
-free-surface coordinate (units of $r$), correpsonding to
+free-surface coordinate (units of $r$), corresponding to
 \ref{eq:discrete-time-backward-free-surface}, and
 assuming no non-hydrostatic effects ($\epsilon_{nh} = 0$) is:
 \begin{eqnarray}

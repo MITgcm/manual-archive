@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/mom_fluxform.tex,v 1.5 2001/10/25 12:06:56 cnh Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/mom_fluxform.tex,v 1.6 2001/10/25 18:36:53 cnh Exp $
 % $Name:  $
 
 \section{Flux-form momentum equations}
@@ -194,7 +194,7 @@ $G_u^{metric}$, $G_v^{metric}$: {\bf mT} (local to {\em calc\_mom\_rhs.F})
 
 For the non-hydrostatic equations, dropping the thin-atmosphere
 approximation re-introduces metric terms involving $w$ and are
-required to conserve anglular momentum:
+required to conserve angular momentum:
 \begin{eqnarray}
 {\cal A}_w \Delta r_f h_w G_u^{metric} & = &
 - \overline{ \frac{ \overline{u}^i \overline{w}^k }{a} {\cal A}_c \Delta r_f h_c }^i \\
@@ -258,7 +258,7 @@ represent the an-isotropic cosine scaling typically used on the
 ``lat-lon'' grid for Laplacian viscosity.
 \marginpar{Need to tidy up method for controlling this in code}
 
-It should be noted that dispite the ad-hoc nature of the scaling, some
+It should be noted that despite the ad-hoc nature of the scaling, some
 scaling must be done since on a lat-lon grid the converging meridians
 make it very unlikely that a stable viscosity parameter exists across
 the entire model domain.
@@ -308,7 +308,7 @@ G_v^{side-drag} & = &
 
 In fact, the above discretization is not quite complete because it
 assumes that the bathymetry at velocity points is deeper than at
-neighbouring vorticity points, e.g. $1-h_w < 1-h_\zeta$
+neighboring vorticity points, e.g. $1-h_w < 1-h_\zeta$
 
 \fbox{ \begin{minipage}{4.75in}
 {\em S/R MOM\_U\_SIDEDRAG} ({\em mom\_u\_sidedrag.F})
@@ -325,7 +325,7 @@ Vertical viscosity terms are discretized with only partial adherence
 to the variable grid lengths introduced by the finite volume
 formulation. This reduces the formal accuracy of these terms to just
 first order but only next to boundaries; exactly where other terms
-appear such as linar and quadratic bottom drag.
+appear such as linear and quadratic bottom drag.
 \begin{eqnarray}
 G_u^{v-diss} & = &
 \frac{1}{\Delta r_f h_w} \delta_k \tau_{13} \\

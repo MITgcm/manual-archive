@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_examples/baroclinic_gyre/fourlayer.tex,v 1.8 2001/10/25 12:06:56 cnh Exp $
+% $Header: /u/gcmpack/manual/s_examples/baroclinic_gyre/fourlayer.tex,v 1.9 2001/10/25 18:36:55 cnh Exp $
 % $Name:  $
 
 \section{Example: Four layer Baroclinic Ocean Gyre In Spherical Coordinates}
@@ -20,8 +20,8 @@ This document describes an example experiment using MITgcm
 to simulate a baroclinic ocean gyre in spherical
 polar coordinates. The barotropic
 example experiment in section \ref{sec:eg-baro}
-ilustrated how to configure the code for a single layer 
-simulation in a cartesian grid. In this example a similar physical problem
+illustrated how to configure the code for a single layer 
+simulation in a Cartesian grid. In this example a similar physical problem
 is simulated, but the code is now configured
 for four layers and in a spherical polar coordinate system.
 
@@ -29,7 +29,7 @@ for four layers and in a spherical polar coordinate system.
 
 This example experiment demonstrates using the MITgcm to simulate
 a baroclinic, wind-forced, ocean gyre circulation. The experiment 
-is a numerical rendition of the gyre circulation problem simliar
+is a numerical rendition of the gyre circulation problem similar
 to the problems described analytically by Stommel in 1966 
 \cite{Stommel66} and numerically in Holland et. al \cite{Holland75}.
 \\
@@ -62,12 +62,12 @@ $\tau_0$ is set to $0.1N m^{-2}$.
 \\
 
 Figure \ref{FIG:simulation_config}
-summarises the configuration simulated.
+summarizes the configuration simulated.
 In contrast to the example in section \ref{sec:eg-baro}, the 
 current experiment simulates a spherical polar domain. As indicated
 by the axes in the lower left of the figure the model code works internally
-in a locally orthoganal coordinate $(x,y,z)$. For this experiment description 
-the local orthogonal model coordinate $(x,y,z)$ is synonomous 
+in a locally orthogonal coordinate $(x,y,z)$. For this experiment description 
+the local orthogonal model coordinate $(x,y,z)$ is synonymous 
 with the coordinates $(\lambda,\varphi,r)$ shown in figure
 \ref{fig:spherical-polar-coord}
 \\
@@ -123,11 +123,11 @@ the implicit free surface, {\bf HPE} (see section \ref{sec:hydrostatic_and_quasi
 equations described in Marshall et. al \cite{Marshall97a} are
 employed. The flow is three-dimensional with just temperature, $\theta$, as 
 an active tracer.  The equation of state is linear.
-A horizontal laplacian operator $\nabla_{h}^2$ provides viscous
+A horizontal Laplacian operator $\nabla_{h}^2$ provides viscous
 dissipation and provides a diffusive sub-grid scale closure for the 
 temperature equation. A wind-stress momentum forcing is added to the momentum 
 equation for the zonal flow, $u$. Other terms in the model
-are explicitly switched off for this experiement configuration (see section
+are explicitly switched off for this experiment configuration (see section
 \ref{SEC:eg_fourl_code_config} ). This yields an active set of equations
 solved in this configuration, written in spherical polar coordinates as 
 follows
@@ -210,7 +210,7 @@ that there are sixty grid cells in the zonal and meridional directions.
 Vertically the 
 model is configured with four layers with constant depth, 
 $\Delta z$, of $500$~m. The internal, locally orthogonal, model coordinate 
-variables $x$ and $y$ are initialised from the values of
+variables $x$ and $y$ are initialized from the values of
 $\lambda$, $\varphi$, $\Delta \lambda$ and $\Delta \varphi$ in
 radians according to
 
@@ -262,7 +262,7 @@ field solution method is described in sections
 
 \subsubsection{Numerical Stability Criteria}
 
-The laplacian viscosity coefficient, $A_{h}$, is set to $400 m s^{-1}$.
+The Laplacian viscosity coefficient, $A_{h}$, is set to $400 m s^{-1}$.
 This value is chosen to yield a Munk layer width,
 
 \begin{eqnarray}
@@ -279,7 +279,7 @@ boundary layer is well resolved.
 
 \noindent The model is stepped forward with a 
 time step $\delta t=1200$secs. With this time step the stability 
-parameter to the horizontal laplacian friction
+parameter to the horizontal Laplacian friction
 
 \begin{eqnarray}
 \label{EQ:laplacian_stability}
@@ -329,7 +329,7 @@ limit of 0.5.
 \\
 
 \noindent The stability parameter for internal gravity waves
-propogating at $2~{\rm m}~{\rm s}^{-1}$ 
+propagating at $2~{\rm m}~{\rm s}^{-1}$ 
 
 \begin{eqnarray}
 \label{EQ:igw_stability}
@@ -355,7 +355,7 @@ directory {\it verification/exp2/}.  The experiment files
 \item {\it code/SIZE.h}. 
 \end{itemize}
 contain the code customisations and parameter settings for this 
-experiements. Below we describe the customisations
+experiments. Below we describe the customisations
 to these files associated with this experiment.
 
 \subsubsection{File {\it input/data}}
@@ -372,7 +372,7 @@ this line sets
 the initial and reference values of potential temperature at each model
 level in units of $^{\circ}$C.
 The entries are ordered from surface to depth. For each
-depth level the inital and reference profiles will be uniform in
+depth level the initial and reference profiles will be uniform in
 $x$ and $y$. The values specified here are read into the
 variable 
 {\bf
@@ -418,7 +418,7 @@ goto code
 
 \item Line 6, 
 \begin{verbatim} viscAz=1.E-2, \end{verbatim} 
-this line sets the vertical laplacian dissipation coefficient to
+this line sets the vertical Laplacian dissipation coefficient to
 $1 \times 10^{-2} {\rm m^{2}s^{-1}}$. Boundary conditions
 for this operator are specified later. 
 The variable 
@@ -438,7 +438,7 @@ and is copied into model general vertical coordinate variable
 \begin{rawhtml} <A href=../../../code_reference/vdb/names/PF.htm> \end{rawhtml}
 viscAr
 \begin{rawhtml} </A>\end{rawhtml}
-}. At each time step, the viscous term contribution to the momentum eqautions
+}. At each time step, the viscous term contribution to the momentum equations
 is calculated in routine
 {\it S/R CALC\_DIFFUSIVITY}.
 
@@ -697,8 +697,8 @@ usingSphericalPolarGrid=.TRUE.,
 \end{verbatim}
 This line requests that the simulation be performed in a 
 spherical polar coordinate system. It affects the interpretation of
-grid inoput parameters, for exampl {\bf delX} and {\bf delY} and
-causes the grid generation routines to initialise an internal grid based
+grid input parameters, for example {\bf delX} and {\bf delY} and
+causes the grid generation routines to initialize an internal grid based
 on spherical polar geometry.
 The variable
 {\bf
@@ -733,7 +733,7 @@ phiMin=0.,
 This line sets the southern boundary of the modeled
 domain to $0^{\circ}$ latitude. This value affects both the
 generation of the locally orthogonal grid that the model
-uses internally and affects the initialisation of the coriolis force.
+uses internally and affects the initialization of the coriolis force.
 Note - it is not required to set
 a longitude boundary, since the absolute longitude does
 not alter the kernel equation discretisation.
@@ -960,7 +960,7 @@ customisations for this experiment.
 The {\it input/windx.sin\_y} file specifies a two-dimensional ($x,y$) 
 map of wind stress ,$\tau_{x}$, values. The units used are $Nm^{-2}$ (the
 default for MITgcm).
-Although $\tau_{x}$ is only a function of latituted, $y$,
+Although $\tau_{x}$ is only a function of latitude, $y$,
 in this experiment
 this file must still define a complete two-dimensional map in order
 to be compatible with the standard code for loading forcing fields 
@@ -1061,7 +1061,7 @@ Instructions for downloading the code can be found in section
 % pwd
 \end{verbatim}
 
- You shold see a response on the screen ending in
+ You should see a response on the screen ending in
 
 {\it verification/exp2/input }
 

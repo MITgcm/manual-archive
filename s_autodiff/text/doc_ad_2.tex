@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_autodiff/text/doc_ad_2.tex,v 1.6 2001/10/11 19:37:39 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_autodiff/text/doc_ad_2.tex,v 1.7 2001/10/25 18:36:55 cnh Exp $
 % $Name:  $
 
 {\sf Automatic differentiation} (AD), also referred to as algorithmic
@@ -21,7 +21,7 @@ The MITGCM has been adapted for use with the
 Tangent linear and Adjoint Model Compiler (TAMC) and its successor TAF
 (Transformation of Algorithms in Fortran), developed
 by Ralf Giering (\cite{gie-kam:98}, \cite{gie:99,gie:00}).
-The first application of the adjoint of the MITGCM for senistivity
+The first application of the adjoint of the MITGCM for sensitivity
 studies has been published by \cite{maro-eta:99}.
 \cite{sta-eta:97,sta-eta:01} use the MITGCM and its adjoint
 for ocean state estimation studies.
@@ -52,7 +52,7 @@ $\vec{u}=(u_1,\ldots,u_m)$
 such as forcing functions) to the $n$-dimensional space 
 $V \subset I\!\!R^n$ of 
 model output variable $\vec{v}=(v_1,\ldots,v_n)$ 
-(model state, model diagnostcs, objective function, ...) 
+(model state, model diagnostics, objective function, ...) 
 under consideration,
 %
 \begin{equation}
@@ -220,7 +220,7 @@ model integration,
 starting at step 0 and moving up to step $\Lambda$, with intermediate
 ${\cal M}_{\lambda} (\vec{u}) = \vec{v}^{(\lambda+1)}$ and final 
 ${\cal M}_{\Lambda} (\vec{u}) = \vec{v}^{(\Lambda+1)} = \vec{v}$.
-Let ${\cal J}$ be a cost funciton which explicitly depends on the
+Let ${\cal J}$ be a cost function which explicitly depends on the
 final state $\vec{v}$ only
 (this restriction is for clarity reasons only).
 %
@@ -301,7 +301,7 @@ We note in passing that that the $\delta \vec{v}^{(\lambda) \, \ast}$
 are the Lagrange multipliers of the model equations which determine
 $ \vec{v}^{(\lambda)}$.
 
-In coponents, eq. (\ref{adjoint}) reads as follows.
+In components, eq. (\ref{adjoint}) reads as follows.
 Let
 \[
 \begin{array}{rclcrcl}
@@ -322,7 +322,7 @@ Let
 \end{array}
 \]
 denote the perturbations in $\vec{u}$ and $\vec{v}$, respectively,
-and their adjoint varaiables;
+and their adjoint variables;
 further
 \[
 M \, = \, \left(
@@ -468,7 +468,7 @@ variables $u$
 {\it all} intermediate states $ \vec{v}^{(\lambda)} $) are sought.
 In order to be able to solve for each component of the gradient
 $ \partial {\cal J} / \partial u_{i} $ in (\ref{forward})
-a forward calulation has to be performed for each component seperately,
+a forward calculation has to be performed for each component separately,
 i.e. $ \delta \vec{u} = \delta u_{i} {\vec{e}_{i}} $ 
 for  the $i$-th forward calculation. 
 Then, (\ref{forward}) represents the
@@ -487,12 +487,12 @@ M^T \left( \nabla_v {\cal J}^T \left(\delta \vec{J}\right) \right)
 \nabla_u {\cal J}^T \cdot \delta \vec{J}
 \]
 where now $ \delta \vec{J} \in I\!\!R^l $ is a vector of 
-dimenison $ l $.
+dimension $ l $.
 In this case $ l $ reverse simulations have to be performed
 for each $ \delta J_{k}, \,\, k = 1, \ldots, l $.
 Then, the reverse mode is more efficient as long as
 $ l < n $, otherwise the forward mode is preferable.
-Stricly, the reverse mode is called adjoint mode only for
+Strictly, the reverse mode is called adjoint mode only for
 $ l = 1 $.
 
 A detailed analysis of the underlying numerical operations 
@@ -607,7 +607,7 @@ at every timestep
 [i.e. every hour $ i=0,...,5$ corresponding to 
 $ k_{i}^{lev1} = 66, 67, \ldots, 71 $].
 Thus, the  final state $ v_n = v_{k_{n}^{lev1}} $ is reached
-and the model state of all peceeding timesteps along the last
+and the model state of all  proceeding timesteps along the last
 sub-subsections are available, enabling integration backwards
 in time along the last sub-subsection.
 Thus, the adjoint can be computed along this last 
@@ -683,7 +683,7 @@ The AD-relevant hooks in the code are sketched in
 
 \subsection{Overview of the experiment}
 
-We describe an adjoint sensitivity analysis of outgassing from 
+We describe an adjoint sensitivity analysis of out-gassing from 
 the ocean into the atmosphere of a carbon-like tracer injected
 into the ocean interior (see \cite{hil-eta:01}).
 
@@ -691,7 +691,7 @@ into the ocean interior (see \cite{hil-eta:01}).
 
 For this work the MITGCM was augmented with a thermodynamically 
 inactive tracer, $C$. Tracer residing in the ocean 
-model surface layer is outgassed according to a relaxation time scale, 
+model surface layer is out-gassed according to a relaxation time scale, 
 $\mu$. Within the ocean interior, the tracer is passively advected 
 by the ocean model currents. The full equation for the time evolution
 %
@@ -711,13 +711,13 @@ parameterized according to Gent/McWilliams
 The convection function, $\Gamma$, mixes $C$ vertically wherever the 
 fluid is locally statically unstable. 
 
-The outgassing time scale, $\mu$, in eqn. (\ref{carbon_ddt})
+The out-gassing time scale, $\mu$, in eqn. (\ref{carbon_ddt})
 is set so that \( 1/\mu \sim 1 \ \mathrm{year} \) for the surface
 ocean and $\mu=0$ elsewhere. With this value, eqn. (\ref{carbon_ddt})
 is valid as a prognostic equation for small perturbations in oceanic 
 carbon concentrations. This configuration provides a 
 powerful tool for examining the impact of large-scale ocean circulation
-on $ CO_2 $ outgassing due to interior injections.
+on $ CO_2 $ out-gassing due to interior injections.
 As source we choose a constant in time injection of 
 $ S = 1 \,\, {\rm mol / s}$.
 
@@ -728,41 +728,41 @@ $4^\circ \times 4^\circ$ resolution horizontal grid and realistic
 geography and bathymetry. Twenty vertical layers are used with 
 vertical spacing ranging
 from 50 m near the surface to 815 m at depth. 
-Driven to steady-state by climatalogical wind-stress, heat and
+Driven to steady-state by climatological wind-stress, heat and
 fresh-water forcing the model reproduces well known large-scale
 features of the ocean general circulation. 
 
-\subsubsection{Outgassing cost function}
+\subsubsection{Out-gassing cost function}
 
-To quantify and understand outgassing due to injections of $C$
+To quantify and understand out-gassing due to injections of $C$
 in eqn. (\ref{carbon_ddt}),
 we define a cost function $ {\cal J} $ that measures the total amount of 
-tracer outgassed at each timestep:
+tracer out-gassed at each timestep:
 %
 \begin{equation}
 \label{cost_tracer}
 {\cal J}(t=T)=\int_{t=0}^{t=T}\int_{A} \mu C \, dA \, dt
 \end{equation}
 %
-Equation(\ref{cost_tracer}) integrates the outgassing term, $\mu C$, 
+Equation(\ref{cost_tracer}) integrates the out-gassing term, $\mu C$, 
 from (\ref{carbon_ddt})
 over the entire ocean surface area, $A$, and accumulates it 
 up to time $T$.
 Physically, ${\cal J}$ can be thought of as representing the amount of 
-$CO_2$ that our model predicts would be outgassed following an
+$CO_2$ that our model predicts would be out-gassed following an
 injection at rate $S$.
 The sensitivity of ${\cal J}$ to the spatial location of $S$, 
 $\frac{\partial {\cal J}}{\partial S}$,
 can be used to identify regions from which circulation
-would cause $CO_2$ to rapidly outgas following injection
+would cause $CO_2$ to rapidly out-gas following injection
 and regions in which $CO_2$ injections would remain effectively 
-sequesterd within the ocean.
+sequestered within the ocean.
 
 \subsection{Code configuration}
 
 The model configuration for this experiment resides under the
 directory {\it verification/carbon/}.
-The code customisation routines are in {\it verification/carbon/code/}:
+The code customization routines are in {\it verification/carbon/code/}:
 %
 \begin{itemize}
 %
@@ -830,7 +830,7 @@ $ adjoint/ $:
 \end{itemize}
 %
 
-Below we describe the customisations of this files which are
+Below we describe the customizations of this files which are
 specific to this experiment.
 
 \subsubsection{File {\it .genmakerc}}
@@ -871,7 +871,7 @@ advection/diffusion of a passive tracer along the
 model integration. \\
 \hspace*{4ex} {\tt \#define ALLOW\_MIT\_ADJOINT\_RUN} \\
 This flag enables the inclusion of some AD-related fields
-concerning initialisation, link between control variables
+concerning initialization, link between control variables
 and forward model variables, and the call to the top-level
 forward/adjoint subroutine {\it adthe\_main\_loop}
 instead of {\it the\_main\_loop}. \\
@@ -907,19 +907,19 @@ enables the checkpointing feature of TAMC
 (see Section \ref{???}).
 In the present example a 3-level checkpointing is implemented.
 The code contains the relevant store directives, common block
-and tape initialisations, storing key computation,
+and tape initializations, storing key computation,
 and loop index handling.
 The checkpointing length at each level is defined in
 file {\it tamc.h}, cf. below.
 %
 \item Cost function package: {\it pkg/cost/} \\
 This package contains all relevant routines for
-initialising, accumulating and finalizing the cost function
+initializing, accumulating and finalizing the cost function
 (see Section \ref{???}). \\
 \hspace*{4ex} {\tt \#define ALLOW\_COST} \\
 enables all general aspects of the cost function handling,
-in particular the hooks in the foorward code for
-initialising, accumulating and finalizing the cost function. \\
+in particular the hooks in the forward code for
+initializing, accumulating and finalizing the cost function. \\
 \hspace*{4ex} {\tt \#define ALLOW\_COST\_TRACER} \\
 includes the call to the cost function for this
 particular experiment, eqn. (\ref{cost_tracer}).
@@ -958,7 +958,7 @@ model. It is identical to the {\it verification/exp2/}: \\
 \hspace*{4ex} {\tt sNx = 90} \\
 \hspace*{4ex} {\tt sNy = 40} \\
 \hspace*{4ex} {\tt Nr = 20} \\
-It correpsponds to a single-tile/single-processor setup:
+It corresponds to a single-tile/single-processor setup:
 {\tt nSx = nSy = 1, nPx = nPy = 1},
 with standard overlap dimensioning
 {\tt OLx = OLy = 3}.
@@ -1037,7 +1037,7 @@ The following parameters may be worth describing: \\
  
 \subsubsection{File {\it makefile}}
 
-This file contains all relevant paramter flags and
+This file contains all relevant parameter flags and
 lists to run TAMC or TAF.
 It is assumed that TAMC is available to you, either locally,
 being installed on your network, or remotely through the 'TAMC Utility'.
@@ -1078,7 +1078,7 @@ the gradient vector $ \nabla_v J $.
 {\tt <file names>} refers to the list of files {\it .f} which are to be
 analyzed by TAMC. This list is generally smaller than the full list
 of code to be compiled. The files not contained are either
-above the top-level routine (some initialisations), or are
+above the top-level routine (some initializations), or are
 deliberately hidden from TAMC, either because hand-written
 adjoint routines exist, or the routines must not (or don't have to)
 be differentiated. For each routine which is part of the flow tree
@@ -1211,12 +1211,12 @@ TAMC or TAF info is written to file
 The multi-threading capability of the MITGCM requires a slight
 change in the parameter list of some routines that are related to
 to active file handling.
-This postprocessing invokes the sed script {\it adjoint\_ecco\_sed.com}
+This post-processing invokes the sed script {\it adjoint\_ecco\_sed.com}
 to insert the threading counter {\bf myThId} into the parameter list
 of those subroutines.
 The resulting code is written to file {\it tamc\_code\_sed\_ad.f}
 and appended to the file {\it adjoint\_model.F}.
-This concludes the adjoint codel generation.
+This concludes the adjoint code generation.
 %
 \item
 {\tt cd ../bin} \\
@@ -1296,7 +1296,7 @@ $ {\cal J}(\vec{u}) \, = \, {\cal J}(M(\vec{u})) $.
 The input is referred to as the
 {\sf independent variables} or {\sf control variables}.
 All aspects relevant to the treatment of the cost function $ {\cal J} $
-(parameter setting, initialisation, accumulation, 
+(parameter setting, initialization, accumulation, 
 final evaluation), are controlled by the package {\it pkg/cost}.
 
 \begin{figure}[h!]
@@ -1345,9 +1345,9 @@ automatic differentiation, the CPP option
 {\bf ALLOW\_ADJOINT\_RUN} should be defined
 (file {\it CPP\_OPTIONS.h}).
 
-\subsubsection{Initialisation}
+\subsubsection{Initialization}
 %
-The initialisation of the {\it cost} package is readily enabled
+The initialization of the {\it cost} package is readily enabled
 as soon as the CPP option {\bf ALLOW\_ADJOINT\_RUN} is defined.
 %
 \begin{itemize}
@@ -1378,8 +1378,8 @@ Variables: {\it cost\_init}
 }
 \\
 This S/R 
-initialises the different cost function contributions.
-The contribtion for the present example is {\bf objf\_tracer}
+initializes the different cost function contributions.
+The contribution for the present example is {\bf objf\_tracer}
 which is defined on each tile (bi,bj).
 %
 \end{itemize}
@@ -1455,8 +1455,8 @@ as variable assignments. Therefore, files to which
 active variables are written and from which active variables
 are read are called {\sf active files}.
 All aspects relevant to the treatment of the control variables
-(parameter setting, initialisation, perturbation)
-are controled by the package {\it pkg/ctrl}.
+(parameter setting, initialization, perturbation)
+are controlled by the package {\it pkg/ctrl}.
 
 \begin{figure}[h!]
 \input{part5/doc_ctrl_flow}
@@ -1482,7 +1482,7 @@ To enable the directory to be included to the compile list,
 Each control variable is enabled via its own CPP option
 in {\it ECCO\_CPPOPTIONS.h}.
 
-\subsubsection{Initialisation}
+\subsubsection{Initialization}
 %
 \begin{itemize}
 %
@@ -1522,7 +1522,7 @@ Two important issues related to the handling of the control
 variables in the MITGCM need to be addressed.
 First, in order to save memory, the control variable arrays
 are not kept in memory, but rather read from file and added
-to the initial fields during the model initialisation phase.
+to the initial fields during the model initialization phase.
 Similarly, the corresponding adjoint fields which represent
 the gradient of the cost function w.r.t. the control variables
 are written to file at the end of the adjoint integration.
@@ -1602,8 +1602,8 @@ dummy variable {\bf xx\_tr1\_dummy} is introduced
 and an 'active read' routine of the adjoint support
 package {\it pkg/autodiff} is invoked.
 The read-procedure is tagged with the variable
-{\bf xx\_tr1\_dummy} enabbling TAMC to recognize the
-initialisation of the perturbation.
+{\bf xx\_tr1\_dummy} enabling TAMC to recognize the
+initialization of the perturbation.
 The modified call of TAMC thus reads
 %
 \begin{verbatim}
@@ -1714,7 +1714,7 @@ variables are written to {\bf adxx\_ ...}.
 \begin{itemize}
 %
 \item {\bf vector\_ctrl}: the control vector \\
-At the very beginning of the model initialisation,
+At the very beginning of the model initialization,
 the updated compressed control vector is read (or initialised)
 and distributed to 2-dim. and 3-dim. control variable fields.
 %

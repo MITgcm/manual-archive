@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.8 2001/10/22 11:55:47 cnh Exp $
+% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.9 2001/10/25 18:36:54 cnh Exp $
 % $Name:  $
 
 %\section{Getting started}
@@ -48,7 +48,7 @@ to enable us to keep track of who's using the model and in what application.
 You can download the model two ways:
 
 \begin{enumerate}
-\item Using CVS software. CVS is a freely available source code managment
+\item Using CVS software. CVS is a freely available source code management
 tool. To use CVS you need to have the software installed. Many systems
 come with CVS pre-installed, otherwise good places to look for
 the software for a particular platform are
@@ -139,7 +139,7 @@ directory in which to compile the code.
 
 \item \textit{diags}: contains the code relative to time-averaged
 diagnostics. It is subdivided into two subdirectories \textit{inc} and 
-\textit{src} that contain include files (*.\textit{h} files) and fortran
+\textit{src} that contain include files (*.\textit{h} files) and Fortran
 subroutines (*.\textit{F} files), respectively.
 
 \item \textit{doc}: contains brief documentation notes.
@@ -255,9 +255,9 @@ $2.8^\circ{\rm degree}$ resolution).
 cube sphere grid.
 
 \item \textit{advect\_xy} Two-dimensional (horizontal plane) passive advection 
-test on cartesian grid.
+test on Cartesian grid.
 
-\item \textit{advect\_yz} Two-dimensional (vertical plane) passive advection test on cartesian grid.
+\item \textit{advect\_yz} Two-dimensional (vertical plane) passive advection test on Cartesian grid.
 
 \item \textit{carbon} Simple passive tracer experiment. Includes derivative
 calculation. Described in detail in section \ref{sec:eg-carbon-ad}.
@@ -297,7 +297,7 @@ In addition, other include files and subroutines might be present in \textit{%
 code} depending on the particular experiment. See section 2 for more details.
 
 \item \textit{input}: contains the input data files required to run the
-example. At a mimimum, the \textit{input} directory contains the following
+example. At a minimum, the \textit{input} directory contains the following
 files:
 
 \begin{itemize}
@@ -330,9 +330,9 @@ the code.
 To compile the code, we use the {\em make} program. This uses a file
 ({\em Makefile}) that allows us to pre-process source files, specify
 compiler and optimization options and also figures out any file
-dependancies. We supply a script ({\em genmake}), described in section
+dependencies. We supply a script ({\em genmake}), described in section
 \ref{sect:genmake}, that automatically creates the {\em Makefile} for
-you. You then need to build the dependancies and compile the code.
+you. You then need to build the dependencies and compile the code.
 
 As an example, let's assume that you want to build and run experiment
 \textit{verification/exp2}. The are multiple ways and places to actually
@@ -354,7 +354,7 @@ to use the following options when invoking \textit{genmake}:
 % ../../../tools/genmake  -mods=../code
 \end{verbatim}
 
-Next, create the dependancies:
+Next, create the dependencies:
 \begin{verbatim}
 % make depend
 \end{verbatim}
@@ -406,7 +406,7 @@ files must be in the same place. If you only have one calculation to make:
 % cp ../code/mitgcmuv ./
 % ./mitgcmuv > output.txt
 \end{verbatim}
-or if you will be making muliple runs with the same executable:
+or if you will be making multiple runs with the same executable:
 \begin{verbatim}
 % cd ../
 % cp -r input run1
@@ -418,7 +418,7 @@ or if you will be making muliple runs with the same executable:
 \subsubsection{Building from a new directory}
 
 Since the {\em input} directory contains input files it is often more
-useful to keep {\em input} prestine and build in a new directory
+useful to keep {\em input} pristine and build in a new directory
 within {\em verification/exp2/}:
 \begin{verbatim}
 % cd verification/exp2

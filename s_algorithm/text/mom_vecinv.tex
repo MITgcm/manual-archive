@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/mom_vecinv.tex,v 1.1 2001/08/09 19:48:39 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/mom_vecinv.tex,v 1.2 2001/10/25 18:36:53 cnh Exp $
 % $Name:  $
 
 \section{Vector invariant momentum equations}
@@ -53,7 +53,7 @@ $G_w$: {\bf Gw} ({\em DYNVARS.h})
 
 The vertical component of relative vorticity is explicitly calculated
 and use in the discretization. The particular form is crucial for
-numerical stablility; alternative definitions break the conservation
+numerical stability; alternative definitions break the conservation
 properties of the discrete equations.
 
 Relative vorticity is defined:
@@ -128,7 +128,7 @@ G_v^{fu} + G_v^{\zeta_3 u} & = & -
 \end{eqnarray}
 
 \marginpar{Run-time control needs to be added for these options} The
-disctinction between using absolute vorticity or relative vorticity is
+distinction between using absolute vorticity or relative vorticity is
 useful when constructing higher order advection schemes; monotone
 advection of relative vorticity behaves differently to monotone
 advection of absolute vorticity. Currently the choice of

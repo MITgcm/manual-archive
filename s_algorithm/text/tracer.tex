@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/tracer.tex,v 1.7 2001/10/24 23:14:44 cnh Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/tracer.tex,v 1.8 2001/10/25 18:36:53 cnh Exp $
 % $Name:  $
 
 \section{Tracer equations}
@@ -6,7 +6,7 @@
 
 The basic discretization used for the tracer equations is the second
 order piece-wise constant finite volume form of the forced
-advection-diussion equations. There are many alternatives to second
+advection-diffusion equations. There are many alternatives to second
 order method for advection and alternative parameterizations for the
 sub-grid scale processes. The Gent-McWilliams eddy parameterization,
 KPP mixing scheme and PV flux parameterization are all dealt with in
@@ -48,13 +48,13 @@ flux-form (as here) and a linearized free-surface
 The continuity equation can be recovered by setting
 $G_{diff}=G_{forc}=0$ and $\tau=1$.
 
-The driver routine that calls the routines to calculate tendancies are
+The driver routine that calls the routines to calculate tendencies are
 {\em S/R CALC\_GT} and {\em S/R CALC\_GS} for temperature and salt
 (moisture), respectively. These in turn call a generic advection
 diffusion routine {\em S/R GAD\_CALC\_RHS} that is called with the
-flow field and relevent tracer as arguments and returns the collective
-tendancy due to advection and diffusion. Forcing is add subsequently
-in {\em S/R CALC\_GT} or {\em S/R CALC\_GS} to the same tendancy
+flow field and relevant tracer as arguments and returns the collective
+tendency due to advection and diffusion. Forcing is add subsequently
+in {\em S/R CALC\_GT} or {\em S/R CALC\_GS} to the same tendency
 array.
 
 \fbox{ \begin{minipage}{4.75in}
@@ -68,8 +68,8 @@ $F_r$: {\bf fVerT} (argument)
 
 \end{minipage} }
 
-The space and time discretizations are treated seperately (method of
-lines). Tendancies are calculated at time levels $n$ and $n-1$ and
+The space and time discretization are treated separately (method of
+lines). Tendencies are calculated at time levels $n$ and $n-1$ and
 extrapolated to $n+1/2$ using the Adams-Bashforth method:
 \marginpar{$\epsilon$: {\bf AB\_eps}}
 \begin{equation}
@@ -77,8 +77,8 @@ G^{(n+1/2)} =
 (\frac{3}{2} + \epsilon) G^{(n)} - (\frac{1}{2} + \epsilon) G^{(n-1)}
 \end{equation}
 where $G^{(n)} = G_{adv}^\tau + G_{diff}^\tau + G_{src}^\tau$ at time
-step $n$. The tendancy at $n-1$ is not re-calculated but rather the
-tendancy at $n$ is stored in a global array for later re-use.
+step $n$. The tendency at $n-1$ is not re-calculated but rather the
+tendency at $n$ is stored in a global array for later re-use.
 
 \fbox{ \begin{minipage}{4.75in}
 {\em S/R ADAMS\_BASHFORTH2} ({\em model/src/adams\_bashforth2.F})
@@ -93,7 +93,7 @@ $\epsilon$: {\bf ABeps} (PARAMS.h)
 
 \end{minipage} }
 
-The tracers are stepped forward in time using the extrapolated tendancy:
+The tracers are stepped forward in time using the extrapolated tendency:
 \begin{equation}
 \tau^{(n+1)} = \tau^{(n)} + \Delta t G^{(n+1/2)}
 \end{equation}
@@ -113,7 +113,7 @@ $\Delta t$: {\bf deltaTtracer} (PARAMS.h)
 \end{minipage} }
 
 Strictly speaking the ABII scheme should be applied only to the
-advection terms. However, this scheme is only used in conjuction with
+advection terms. However, this scheme is only used in conjunction with
 the standard second, third and fourth order advection
 schemes. Selection of any other advection scheme disables
 Adams-Bashforth for tracers so that explicit diffusion and forcing use
@@ -171,10 +171,10 @@ commonly used in the field and most familiar.
 \subsection{Centered second order advection-diffusion}
 
 The basic discretization, centered second order, is the default. It is
-designed to be consistant with the continuity equation to facilitate
+designed to be consistent with the continuity equation to facilitate
 conservation properties analogous to the continuum. However, centered
-second order advection is notoriously noisey and must be used in
-conjuction with some finite amount of diffusion to produce a sensible
+second order advection is notoriously noisy and must be used in
+conjunction with some finite amount of diffusion to produce a sensible
 solution.
 
 The advection operator is discretized:
@@ -248,7 +248,7 @@ F_r & = & W \overline{\tau - \frac{1}{6} \delta_{ii} \tau}^k
 \end{eqnarray}
 
 At boundaries, $\delta_{\hat{n}} \tau$ is set to zero allowing
-$\delta_{nn}$ to be evaluated. We are currently examing the accuracy
+$\delta_{nn}$ to be evaluated. We are currently examine the accuracy
 of this boundary condition and the effect on the solution.
 
 \fbox{ \begin{minipage}{4.75in}
@@ -282,8 +282,8 @@ $\tau$: {\bf tracer} (argument)
 
 Centered fourth order advection is formally the most accurate scheme
 we have implemented and can be used to great effect in high resolution
-simultation where dynamical scales are well resolved. However, the
-scheme is noisey like the centered second order method and so must be
+simulation where dynamical scales are well resolved. However, the
+scheme is noisy like the centered second order method and so must be
 used with some finite amount of diffusion. Bi-harmonic is recommended
 since it is more scale selective and less likely to diffuse away the
 well resolved gradient the fourth order scheme worked so hard to
@@ -297,7 +297,7 @@ F_r & = & W \overline{\tau - \frac{1}{6} \delta_{ii} \tau}^k
 \end{eqnarray}
 
 As for the third order scheme, the best discretization near boundaries
-is under investigation but currenlty $\delta_i \tau=0$ on a boundary.
+is under investigation but currently $\delta_i \tau=0$ on a boundary.
 
 \fbox{ \begin{minipage}{4.75in}
 {\em S/R GAD\_C4\_ADV\_X} ({\em gad\_c4\_adv\_x.F})
@@ -423,7 +423,7 @@ $\tau$: {\bf tracer} (argument)
 \subsection{Third order direct space time}
 
 The direct-space-time method deals with space and time discretization
-together (other methods that treat space and time seperately are known
+together (other methods that treat space and time separately are known
 collectively as the ``Method of Lines''). The Lax-Wendroff scheme
 falls into this category; it adds sufficient diffusion to a second
 order flux that the forward-in-time method is stable. The upwind
@@ -441,7 +441,7 @@ where
 d_1 & = & \frac{1}{6} ( 2 - |c| ) ( 1 - |c| ) \\
 d_2 & = & \frac{1}{6} ( 1 - |c| ) ( 1 + |c| )
 \end{eqnarray}
-The coefficients $d_0$ and $d_1$ approach $1/3$ and $1/6$ repectively
+The coefficients $d_0$ and $d_1$ approach $1/3$ and $1/6$ respectively
 as the Courant number, $c$, vanishes. In this limit, the conventional
 third order upwind method is recovered. For finite Courant number, the
 deviations from the linear method are analogous to the diffusion added
@@ -539,7 +539,7 @@ $\tau$: {\bf tracer} (argument)
 \resizebox{5.5in}{!}{\includegraphics{part2/advect-2d-lo-diag.eps}}
 \caption{
 Comparison of advection schemes in two dimensions; diagonal advection
-of a resolved Guassian feature. Courant number is 0.01 with
+of a resolved Gaussian feature. Courant number is 0.01 with
 30$\times$30 points and solutions are shown for T=1/2. White lines
 indicate zero crossing (ie. the presence of false minima).  The left
 column shows the second order schemes; top) centered second order with
@@ -550,7 +550,7 @@ space-time method and bottom) the same with flux limiting. The top
 right panel shows the centered fourth order scheme with
 Adams-Bashforth and right middle panel shows a fourth order variant on
 the DST method. Bottom right panel shows the Superbee flux limiter
-(second order) applied independantly in each direction (method of
+(second order) applied independently in each direction (method of
 lines).
 \label{fig:advect-2d-lo-diag}
 }
@@ -560,7 +560,7 @@ lines).
 \resizebox{5.5in}{!}{\includegraphics{part2/advect-2d-mid-diag.eps}}
 \caption{
 Comparison of advection schemes in two dimensions; diagonal advection
-of a resolved Guassian feature. Courant number is 0.27 with
+of a resolved Gaussian feature. Courant number is 0.27 with
 30$\times$30 points and solutions are shown for T=1/2. White lines
 indicate zero crossing (ie. the presence of false minima).  The left
 column shows the second order schemes; top) centered second order with
@@ -571,7 +571,7 @@ space-time method and bottom) the same with flux limiting. The top
 right panel shows the centered fourth order scheme with
 Adams-Bashforth and right middle panel shows a fourth order variant on
 the DST method. Bottom right panel shows the Superbee flux limiter
-(second order) applied independantly in each direction (method of
+(second order) applied independently in each direction (method of
 lines).
 \label{fig:advect-2d-mid-diag}
 }
@@ -581,7 +581,7 @@ lines).
 \resizebox{5.5in}{!}{\includegraphics{part2/advect-2d-hi-diag.eps}}
 \caption{
 Comparison of advection schemes in two dimensions; diagonal advection
-of a resolved Guassian feature. Courant number is 0.47 with
+of a resolved Gaussian feature. Courant number is 0.47 with
 30$\times$30 points and solutions are shown for T=1/2. White lines
 indicate zero crossings and initial maximum values (ie. the presence
 of false extrema).  The left column shows the second order schemes;
@@ -592,7 +592,7 @@ middle) third order direct space-time method and bottom) the same with
 flux limiting. The top right panel shows the centered fourth order
 scheme with Adams-Bashforth and right middle panel shows a fourth
 order variant on the DST method. Bottom right panel shows the Superbee
-flux limiter (second order) applied independantly in each direction
+flux limiter (second order) applied independently in each direction
 (method of lines).
 \label{fig:advect-2d-hi-diag}
 }
@@ -600,9 +600,9 @@ flux limiter (second order) applied independantly in each direction
 
 
 
-In many of the aforementioned advection schemes the behaviour in
+In many of the aforementioned advection schemes the behavior in
 multiple dimensions is not necessarily as good as the one dimensional
-behaviour. For instance, a shape preserving monotonic scheme in one
+behavior. For instance, a shape preserving monotonic scheme in one
 dimension can have severe shape distortion in two dimensions if the
 two components of horizontal fluxes are treated independently. There
 is a large body of literature on the subject dealing with this problem
@@ -623,7 +623,7 @@ as if in one dimension:
 \end{eqnarray}
 
 In order to incorporate this method into the general model algorithm,
-we compute the effective tendancy rather than update the tracer so
+we compute the effective tendency rather than update the tracer so
 that other terms such as diffusion are using the $n$ time-level and
 not the updated $n+3/3$ quantities:
 \begin{equation}
@@ -669,15 +669,15 @@ stable at high Courant number where the linear schemes weren't. The
 bottom row (left and middle) shows the limited schemes and most
 obvious is the absence of false extrema. The accuracy and stability of
 the unlimited non-linear schemes is retained at high Courant number
-but at low Courant number the tendancy is to loose amplitude in sharp
+but at low Courant number the tendency is to loose amplitude in sharp
 peaks due to diffusion. The one dimensional tests shown in
 Figs.~\ref{fig:advect-1d-lo} and \ref{fig:advect-1d-hi} showed this
-phenomenum.
+phenomenon.
 
 Finally, the bottom left and right panels use the same advection
 scheme but the right does not use the mutli-dimensional method. At low
 Courant number this appears to not matter but for moderate Courant
-number severe distortion of the feature is apparent. Moreoever, the
+number severe distortion of the feature is apparent. Moreover, the
 stability of the multi-dimensional scheme is determined by the maximum
 Courant number applied of each dimension while the stability of the
 method of lines is determined by the sum. Hence, in the high Courant
@@ -698,11 +698,11 @@ introduce more noise. In this case, simplest may be best.
 scheme will give a more accurate solution but scale-selective
 diffusion might need to be employed. The flux limited methods
 offer similar accuracy in this regime.
-\item If your solution has shocks or propagatin fronts then a
+\item If your solution has shocks or propagating fronts then a
 flux limited scheme is almost essential.
 \item If your time-step is limited by advection, the multi-dimensional
-non-linear schemes have the most stablility (upto Courant number 1).
-\item If you need to know how much diffusion/dissipation has occured you
+non-linear schemes have the most stability (up to Courant number 1).
+\item If you need to know how much diffusion/dissipation has occurred you
 will have a lot of trouble figuring it out with a non-linear method.
 \item The presence of false extrema is unphysical and this alone is the
 strongest argument for using a positive scheme.

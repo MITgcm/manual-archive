@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_software/text/sarch.tex,v 1.3 2001/10/22 03:28:33 cnh Exp $
+% $Header: /u/gcmpack/manual/s_software/text/sarch.tex,v 1.4 2001/10/25 18:36:55 cnh Exp $
 
 In this chapter we describe the software architecture and
 implementation strategy for the MITgcm code. The first part of this
@@ -41,7 +41,7 @@ packages operate.
 
 This chapter focuses on describing the {\bf WRAPPER} environment under which
 both the core numerics and the pluggable packages function. The description
-presented here is intended to be a detailed exposistion and contains significant
+presented here is intended to be a detailed exposition and contains significant
 background material, as well as advanced details on working with the WRAPPER. 
 The examples section of this manual (part \ref{part:example}) contains more
 succinct, step-by-step instructions on running basic numerical
@@ -89,7 +89,7 @@ and operating systems. This allows numerical code to be easily retargetted.
 \caption{
 Numerical code is written too fit within a software support
 infrastructure called WRAPPER. The WRAPPER is portable and
-can be sepcialized for a wide range of specific target hardware and 
+can be specialized for a wide range of specific target hardware and 
 programming environments, without impacting numerical code that fits
 within the WRAPPER. Codes that fit within the WRAPPER can generally be
 made to run as fast on a particular platform as codes specially 
@@ -166,7 +166,7 @@ Computationally, associated with each region of physical
 space allocated to a particular logical processor, there will be data 
 structures (arrays, scalar variables etc...) that hold the simulated state of 
 that region. We refer to these data structures as being {\bf owned} by the 
-pprocessor to which their
+processor to which their
 associated region of physical space has been allocated. Individual
 regions that are allocated to processors are called {\bf tiles}. A 
 processor can own more 
@@ -789,7 +789,7 @@ thirty-two grid points, and x and y overlaps of three grid points each.
 There are six tiles allocated to six separate logical processors ({\em nSx=6}).
 This set of values can be used for a cube sphere calculation.
 Each tile of size $32 \times 32$ represents a face of the
-cube. Initialising the tile connectivity correctly ( see section
+cube. Initializing the tile connectivity correctly ( see section
 \ref{sec:cube_sphere_communication}. allows the rotations associated with
 moving between the six cube faces to be embedded within the 
 tile-tile communication code.
@@ -1109,7 +1109,7 @@ This information is held in the variables {\em tileCommModeN},
 This latter set of variables can take one of the following values
 {\em COMM\_NONE}, {\em COMM\_MSG}, {\em COMM\_PUT} and {\em COMM\_GET}.
 A value of {\em COMM\_NONE} is used to indicate that a tile has no
-neighbor to cummnicate with on a particular face. A value
+neighbor to communicate with on a particular face. A value
 of {\em COMM\_MSG} is used to indicated that some form of distributed
 memory communication is required to communicate between
 these tile faces ( see section \ref{sec:distributed_memory_communication}).
@@ -1166,7 +1166,7 @@ the product of the parameters {\em nTx} and {\em nTy} that
 are read from the file {\em eedata}. If the value of {\em nThreads}
 is inconsistent with the number of threads requested from the
 operating system (for example by using an environment
-varialble as described in section \ref{sec:multi_threaded_execution})
+variable as described in section \ref{sec:multi_threaded_execution})
 then usually an error will be reported by the routine 
 {\em CHECK\_THREADS}.\\
 
@@ -1200,7 +1200,7 @@ For an Ultra Sparc system the following code snippet is used
 \begin{verbatim}
 asm("membar #LoadStore|#StoreStore");
 \end{verbatim}
-for an Alpha based sytem the euivalent code reads
+for an Alpha based system the equivalent code reads
 \begin{verbatim}
 asm("mb");
 \end{verbatim}
@@ -1367,7 +1367,7 @@ communications library ( see {\em ini\_jam.F}).
 \item The {\em \_GSUM} and {\em \_EXCH} macro definitions are replaced
 with calls to custom routines ( see {\em gsum\_jam.F} and {\em exch\_jam.F})
 \item a highly specialized form of the exchange operator (optimized
-for overlap regions of width one) is substitued into the elliptic
+for overlap regions of width one) is substituted into the elliptic
 solver routine {\em cg2d.F}.
 \end{itemize}
 Developing specialized code for other libraries follows a similar
@@ -1379,16 +1379,16 @@ Actual {\em \_EXCH} routine code is generated automatically from
 a series of template files, for example {\em exch\_rx.template}.
 This is done to allow a large number of variations on the exchange 
 process to be maintained. One set of variations supports the
-cube sphere grid. Support for a cube sphere gris in MITgcm is based
+cube sphere grid. Support for a cube sphere grid in MITgcm is based
 on having each face of the cube as a separate tile (or tiles).
-The exchage routines are then able to absorb much of the
+The exchange routines are then able to absorb much of the
 detailed rotation and reorientation required when moving around the
 cube grid. The set of {\em \_EXCH} routines that contain the
 word cube in their name perform these transformations.
 They are invoked when the run-time logical parameter
 {\em useCubedSphereExchange} is set true. To facilitate the
 transformations on a staggered C-grid, exchange operations are defined 
-separately for both vector and scalar quantitities and for
+separately for both vector and scalar quantities and for
 grid-centered and for grid-face and corner quantities.
 Three sets of exchange routines are defined. Routines
 with names of the form {\em exch\_rx} are used to exchange
@@ -1453,7 +1453,7 @@ C  :
 C  |
 C  |-THE_MODEL_MAIN :: Primary driver for the MITgcm algorithm
 C    |              :: Called from WRAPPER level numerical
-C    |              :: code innvocation routine. On entry
+C    |              :: code invocation routine. On entry
 C    |              :: to THE_MODEL_MAIN separate thread and
 C    |              :: separate processes will have been established.
 C    |              :: Each thread and process will have a unique ID
@@ -1467,22 +1467,22 @@ C    | |-INI_PARMS :: Routine to set kernel model parameters.
 C    | |           :: By default kernel parameters are read from file 
 C    | |           :: "data" in directory in which code executes.
 C    | |
-C    | |-MON_INIT :: Initialises monitor pacakge ( see pkg/monitor )
+C    | |-MON_INIT :: Initializes monitor package ( see pkg/monitor )
 C    | |
-C    | |-INI_GRID :: Control grid array (vert. and hori.) initialisation.
+C    | |-INI_GRID :: Control grid array (vert. and hori.) initialization.
 C    | | |        :: Grid arrays are held and described in GRID.h.
 C    | | |
-C    | | |-INI_VERTICAL_GRID        :: Initialise vertical grid arrays.
+C    | | |-INI_VERTICAL_GRID        :: Initialize vertical grid arrays.
 C    | | |
-C    | | |-INI_CARTESIAN_GRID       :: Cartesian horiz. grid initialisation
+C    | | |-INI_CARTESIAN_GRID       :: Cartesian horiz. grid initialization
 C    | | |                          :: (calculate grid from kernel parameters).
 C    | | |
 C    | | |-INI_SPHERICAL_POLAR_GRID :: Spherical polar horiz. grid 
-C    | | |                          :: initialisation (calculate grid from 
+C    | | |                          :: initialization (calculate grid from 
 C    | | |                          :: kernel parameters).
 C    | | |
 C    | | |-INI_CURVILINEAR_GRID     :: General orthogonal, structured horiz.
-C    | |                            :: grid initialisations. ( input from raw
+C    | |                            :: grid initializations. ( input from raw
 C    | |                            :: grid files, LONC.bin, DXF.bin etc... )
 C    | |
 C    | |-INI_DEPTHS    :: Read (from "bathyFile") or set bathymetry/orgography.
@@ -1493,7 +1493,7 @@ C    | |
 C    | |-INI_LINEAR_PHSURF :: Set ref. surface Bo_surf
 C    | |
 C    | |-INI_CORI          :: Set coriolis term. zero, f-plane, beta-plane,
-C    | |                   :: sphere optins are coded.
+C    | |                   :: sphere options are coded.
 C    | |
 C    | |-PACAKGES_BOOT      :: Start up the optional package environment.
 C    | |                    :: Runtime selection of active packages.
@@ -1514,7 +1514,7 @@ C    | |
 C    | |-PACKAGES_CHECK
 C    | | |
 C    | | |-KPP_CHECK           :: KPP Package. pkg/kpp
-C    | | |-OBCS_CHECK          :: Open bndy Pacakge. pkg/obcs
+C    | | |-OBCS_CHECK          :: Open bndy Package. pkg/obcs
 C    | | |-GMREDI_CHECK        :: GM Package. pkg/gmredi
 C    | |
 C    | |-PACKAGES_INIT_FIXED
@@ -1534,7 +1534,7 @@ C    |
 C    |-CTRL_UNPACK :: Control vector support package. see pkg/ctrl
 C    |
 C    |-ADTHE_MAIN_LOOP :: Derivative evaluating form of main time stepping loop
-C    !                 :: Auotmatically gerenrated by TAMC/TAF.
+C    !                 :: Auotmatically generated by TAMC/TAF.
 C    |
 C    |-CTRL_PACK   :: Control vector support package. see pkg/ctrl
 C    |
@@ -1548,7 +1548,7 @@ C    | | |
 C    | | |-INI_LINEAR_PHISURF :: Set ref. surface Bo_surf
 C    | | |
 C    | | |-INI_CORI     :: Set coriolis term. zero, f-plane, beta-plane,
-C    | | |              :: sphere optins are coded.
+C    | | |              :: sphere options are coded.
 C    | | |
 C    | | |-INI_CG2D     :: 2d con. grad solver initialisation.
 C    | | |-INI_CG3D     :: 3d con. grad solver initialisation.
@@ -1556,7 +1556,7 @@ C    | | |-INI_MIXING   :: Initialise diapycnal diffusivity.
 C    | | |-INI_DYNVARS  :: Initialise to zero all DYNVARS.h arrays (dynamical
 C    | | |              :: fields).
 C    | | |
-C    | | |-INI_FIELDS   :: Control initialising model fields to non-zero
+C    | | |-INI_FIELDS   :: Control initializing model fields to non-zero
 C    | | | |-INI_VEL    :: Initialize 3D flow field.
 C    | | | |-INI_THETA  :: Set model initial temperature field.
 C    | | | |-INI_SALT   :: Set model initial salinity field.
@@ -1634,7 +1634,7 @@ C/\  | | |-CALC_EXACT_ETA :: Change SSH to flow divergence.
 C/\  | | |-CALC_SURF_DR   :: Calculate the new surface level thickness.
 C/\  | | |-EXF_GETFORCING :: External forcing package. ( pkg/exf )
 C/\  | | |-EXTERNAL_FIELDS_LOAD :: Control loading time dep. external data.
-C/\  | | | |                    :: Simple interpolcation between end-points 
+C/\  | | | |                    :: Simple interpolation between end-points 
 C/\  | | | |                    :: for forcing datasets.
 C/\  | | | |                  
 C/\  | | | |-EXCH :: Sync forcing. in overlap regions.

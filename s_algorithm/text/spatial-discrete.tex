@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/spatial-discrete.tex,v 1.9 2001/10/24 15:21:27 cnh Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/spatial-discrete.tex,v 1.10 2001/10/25 18:36:53 cnh Exp $
 % $Name:  $
 
 \section{Spatial discretization of the dynamical equations}
@@ -8,7 +8,7 @@ method. This amounts to a grid-point method (namely second-order
 centered finite difference) in the fluid interior but allows
 boundaries to intersect a regular grid allowing a more accurate
 representation of the position of the boundary. We treat the
-horizontal and veritical directions as seperable and differently.
+horizontal and vertical directions as separable and differently.
 
 \input{part2/notation}
 
@@ -37,7 +37,7 @@ the lengths $\Delta x_i$:
 \begin{displaymath}
 \Delta x \partial_t \theta + \delta_i ( F ) = 0
 \end{displaymath}
-is exact if $\theta(x)$ is peice-wise constant over the interval
+is exact if $\theta(x)$ is piece-wise constant over the interval
 $\Delta x_i$ or more generally if $\theta_i$ is defined as the average
 over the interval $\Delta x_i$.
 
@@ -59,7 +59,7 @@ is not positioned on a regular or smoothly varying grid. This method
 is used to represent the topography using lopped cell, see
 \cite{Adcroft98}. Subtle difference also appear in more than one
 dimension away from boundaries. This happens because the each
-direction is discretized independantly in the finite difference method
+direction is discretized independently in the finite difference method
 while the integrating over finite volume implicitly treats all
 directions simultaneously. Illustration of this is given in
 \cite{Adcroft02}.
@@ -83,8 +83,8 @@ staggered in space in the form of an Arakawa C grid \cite{Arakawa70}.
 
 Fig. \ref{fig:cgrid3d} shows the components of flow ($u$,$v$,$w$)
 staggered in space such that the zonal component falls on the
-interface between continiuty cells in the zonal direction. Similarly
-for the meridional and vertical directions.  The continiuty cell is
+interface between continuity cells in the zonal direction. Similarly
+for the meridional and vertical directions.  The continuity cell is
 synonymous with tracer cells (they are one and the same).
 
 
@@ -141,20 +141,20 @@ is bordered by the lengths $\Delta x_f$ and $\Delta y_u$.}
 
 The model domain is decomposed into tiles and within each tile a
 quasi-regular grid is used. A tile is the basic unit of domain
-decomposition for parallelization but may be used whether parallized
+decomposition for parallelization but may be used whether parallelized
 or not; see section \ref{sect:tiles} for more details. Although the
 tiles may be patched together in an unstructured manner
 (i.e. irregular or non-tessilating pattern), the interior of tiles is
-a structered grid of quadrilateral cells. The horizontal coordinate
+a structured grid of quadrilateral cells. The horizontal coordinate
 system is orthogonal curvilinear meaning we can not necessarily treat
-the two horizontal directions as seperable. Instead, each cell in the
+the two horizontal directions as separable. Instead, each cell in the
 horizontal grid is described by the length of it's sides and it's
 area.
 
 The grid information is quite general and describes any of the
 available coordinates systems, cartesian, spherical-polar or
 curvilinear. All that is necessary to distinguish between the
-coordinate systems is to initialize the grid data (discriptors)
+coordinate systems is to initialize the grid data (descriptors)
 appropriately.
 
 In the following, we refer to the orientation of quantities on the
@@ -293,7 +293,7 @@ using\-Cartes\-ianGrid} in namelist {\em PARM04} is set to true. The grid
 spacing can be set to uniform via scalars {\bf dXspacing} and {\bf
 dYspacing} in namelist {\em PARM04} or to variable resolution by the
 vectors {\bf DELX} and {\bf DELY}. Units are normally
-meters. Non-dimensional coordinates can be used by interpretting the
+meters. Non-dimensional coordinates can be used by interpreting the
 gravitational constant as the Rayleigh number.
 
 \subsubsection{Spherical-polar coordinates}
@@ -347,7 +347,7 @@ The vertical grid is calculated in subroutine {\em
 INI\_VERTICAL\_GRID} and specified via the vector {\bf DELR} in
 namelist {\em PARM04}. The units of ``r'' are either meters or Pascals
 depending on the isomorphism being used which in turn is dependent
-only on the choise of equation of state.
+only on the choice of equation of state.
 
 There are alternative namelist vectors {\bf DELZ} and {\bf DELP} which
 dictate whether z- or
@@ -405,8 +405,8 @@ difference representation of topography. The method is known to the
 engineering community as {\em intersecting boundary method}. It
 involves allowing the boundary to intersect a grid of cells thereby
 modifying the shape of those cells intersected. We suggested allowing
-the topgoraphy to take on a peice-wise linear representation (shaved
-cells) or a simpler piecewise constant representaion (partial step).
+the topography to take on a piece-wise linear representation (shaved
+cells) or a simpler piecewise constant representation (partial step).
 Both show dramatic improvements in solution compared to the
 traditional full step representation, the piece-wise linear being the
 best. However, the storage requirements are excessive so the simpler
@@ -420,7 +420,7 @@ the thickness of a level is determined at tracer and u points.
 \marginpar{$h_s$: {\bf hFacS}}
 The physical thickness of a tracer cell is given by $h_c(i,j,k) \Delta
 r_f(k)$ and the physical thickness of the open side is given by
-$h_w(i,j,k) \Delta r_f(k)$. Three 3-D discriptors $h_c$, $h_w$ and
+$h_w(i,j,k) \Delta r_f(k)$. Three 3-D descriptors $h_c$, $h_w$ and
 $h_s$ are used to describe the geometry: {\bf hFacC}, {\bf hFacW} and
 {\bf hFacS} respectively. These are calculated in subroutine {\em
 INI\_MASKS\_ETC} along with there reciprocals {\bf RECIP\_hFacC}, {\bf
@@ -484,7 +484,7 @@ A}_c$.  The factors $h_w$ and $h_s$ are non-dimensional fractions
 \marginpar{$h_s$: {\bf hFacS}}
 
 The last equation, the discrete continuity equation, can be summed in
-the vertical to yeild the free-surface equation:
+the vertical to yield the free-surface equation:
 \begin{equation}
 {\cal A}_c \partial_t \eta + \delta_i \sum_k \Delta y_g \Delta r_f h_w
 u + \delta_j \sum_k \Delta x_g \Delta r_f h_s v = {\cal
@@ -503,7 +503,7 @@ derived from the buoyancy equation exactly matches the form derived
 from the pressure gradient terms when forming the kinetic energy
 equation.
 
-In the ocean, using z-ccordinates, the hydrostatic balance terms are
+In the ocean, using z-coordinates, the hydrostatic balance terms are
 discretized:
 \begin{equation}
 \epsilon_{nh} \partial_t w
@@ -523,7 +523,7 @@ the atmosphere.
 
 The difference in approach between ocean and atmosphere occurs because
 of the direct use of the ideal gas equation in forming the potential
-energy conversion term $\alpha \omega$. The form of these consversion
+energy conversion term $\alpha \omega$. The form of these conversion
 terms is discussed at length in \cite{Adcroft01}.
 
 Because of the different representation of hydrostatic balance between

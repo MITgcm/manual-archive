@@ -1,12 +1,12 @@
-% $Header: /u/gcmpack/manual/s_examples/tracer_adjsens/Attic/co2sens.tex,v 1.1.1.1 2001/08/08 16:16:16 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_examples/tracer_adjsens/Attic/co2sens.tex,v 1.2 2001/10/25 18:36:54 cnh Exp $
 % $Name:  $
 
-\section{Example: Centenial Time Scale Sensitivities}
+\section{Example: Centennial Time Scale Sensitivities}
 
 \bodytext{bgcolor="#FFFFFFFF"}
 
 %\begin{center} 
-%{\Large \bf Using MITgcm to Look at Centenial Time Scale
+%{\Large \bf Using MITgcm to Look at Centennial Time Scale
 %Sensitivities}
 %
 %\vspace*{4mm}
@@ -18,8 +18,8 @@
 \subsection{Introduction}
 
 This document describes the fourth example MITgcm experiment.
-This example iilustrates the use of
-the MITgcm to perform sentivity analysis in a
+This example illustrates the use of
+the MITgcm to perform sensitivity analysis in a
 large scale ocean circulation simulation.
 
 \subsection{Overview}
@@ -36,14 +36,14 @@ can be integrated forward for thousands of years on a single
 processor desktop computer.
 \\
 
-The model is forced with climatalogical wind stress data and surface
-flux data from Da Silva \cite{DaSilva94}. Climatalogical data
-from Levitus \cite{Levitus94} is used to initialise the model hydrography.
+The model is forced with climatological wind stress data and surface
+flux data from Da Silva \cite{DaSilva94}. Climatological data
+from Levitus \cite{Levitus94} is used to initialize the model hydrography.
 Levitus data is also used throughout the calculation
 to derive air-sea fluxes of heat at the ocean surface.
-These fluxes are combined with climatalogical estimates of
+These fluxes are combined with climatological estimates of
 surface heat flux and fresh water, resulting in a mixed boundary
-condition of the style decribed in Haney \cite{Haney}.
+condition of the style described in Haney \cite{Haney}.
 Altogether, this yields the following forcing applied
 in the model surface layer.
 
@@ -118,12 +118,12 @@ $
  \Delta z_{20}=815\,{\rm m}
 $ (here the numeric subscript indicates the model level index number, ${\tt k}$).
 The implicit free surface form of the pressure equation described in Marshall et. al 
-\cite{Marshall97a} is employed. A laplacian operator, $\nabla^2$, provides viscous
-dissipation. Thermal and haline diffusion is also represented by a laplacian operator.
+\cite{Marshall97a} is employed. A Laplacian operator, $\nabla^2$, provides viscous
+dissipation. Thermal and haline diffusion is also represented by a Laplacian operator.
 \\
 
 Wind-stress momentum inputs are added to the momentum equations for both
-the zonal flow, $u$ and the merdional flow $v$, according to equations 
+the zonal flow, $u$ and the meridional flow $v$, according to equations 
 (\ref{EQ:global_forcing_fu}) and (\ref{EQ:global_forcing_fv}).
 Thermodynamic forcing inputs are added to the equations for
 potential temperature, $\theta$, and salinity, $S$, according to equations 
@@ -175,7 +175,7 @@ elevation $\eta$ and the hydrostatic pressure.
 
 \subsubsection{Numerical Stability Criteria}
 
-The laplacian dissipation coefficient, $A_{h}$, is set to $400 m s^{-1}$.
+The Laplacian dissipation coefficient, $A_{h}$, is set to $400 m s^{-1}$.
 This value is chosen to yield a Munk layer width \cite{Adcroft_thesis},
 
 \begin{eqnarray}
@@ -190,7 +190,7 @@ boundary layer is well resolved.
 
 \noindent The model is stepped forward with a 
 time step $\delta t=1200$secs. With this time step the stability 
-parameter to the horizontal laplacian friction \cite{Adcroft_thesis}
+parameter to the horizontal Laplacian friction \cite{Adcroft_thesis}
 
 \begin{eqnarray}
 \label{EQ:laplacian_stability}
@@ -240,7 +240,7 @@ S_{a} = \frac{| \vec{u} | \delta t}{ \Delta x}
 limit of 0.5.
 \\
 
-\noindent The stbility parameter for internal gravity waves 
+\noindent The stability parameter for internal gravity waves 
 \cite{Adcroft_thesis}
 
 \begin{eqnarray}
@@ -266,8 +266,8 @@ directory {\it verification/exp1/}.  The experiment files
 \item {\it code/CPP\_OPTIONS.h},
 \item {\it code/SIZE.h}. 
 \end{itemize}
-contain the code customisations and parameter settings for this 
-experiements. Below we describe the customisations
+contain the code customizations and parameter settings for this 
+experiments. Below we describe the customizations
 to these files associated with this experiment.
 
 \subsubsection{File {\it input/data}}
@@ -284,7 +284,7 @@ this line sets
 the initial and reference values of potential temperature at each model
 level in units of $^{\circ}$C.
 The entries are ordered from surface to depth. For each
-depth level the inital and reference profiles will be uniform in
+depth level the initial and reference profiles will be uniform in
 $x$ and $y$.
 
 \fbox{
@@ -296,7 +296,7 @@ $x$ and $y$.
 
 \item Line 6, 
 \begin{verbatim} viscAz=1.E-2, \end{verbatim} 
-this line sets the vertical laplacian dissipation coefficient to
+this line sets the vertical Laplacian dissipation coefficient to
 $1 \times 10^{-2} {\rm m^{2}s^{-1}}$. Boundary conditions
 for this operator are specified later. This variable is copied into
 model general vertical coordinate variable {\bf viscAr}.
@@ -311,7 +311,7 @@ model general vertical coordinate variable {\bf viscAr}.
 \begin{verbatim}
 viscAh=4.E2,
 \end{verbatim} 
-this line sets the horizontal laplacian frictional dissipation coefficient to
+this line sets the horizontal Laplacian frictional dissipation coefficient to
 $1 \times 10^{-2} {\rm m^{2}s^{-1}}$. Boundary conditions
 for this operator are specified later.
 
@@ -320,7 +320,7 @@ for this operator are specified later.
 no_slip_sides=.FALSE.
 \end{verbatim}
 this line selects a free-slip lateral boundary condition for
-the horizontal laplacian friction operator 
+the horizontal Laplacian friction operator 
 e.g. $\frac{\partial u}{\partial y}$=0 along boundaries in $y$ and
 $\frac{\partial v}{\partial x}$=0 along boundaries in $x$.
 
@@ -329,7 +329,7 @@ $\frac{\partial v}{\partial x}$=0 along boundaries in $x$.
 no_slip_bottom=.TRUE.
 \end{verbatim}
 this line selects a no-slip boundary condition for bottom
-boundary condition in the vertical laplacian friction operator 
+boundary condition in the vertical Laplacian friction operator 
 e.g. $u=v=0$ at $z=-H$, where $H$ is the local depth of the domain.
 
 \item Line 10,
@@ -382,8 +382,8 @@ usingSphericalPolarGrid=.TRUE.,
 \end{verbatim}
 This line requests that the simulation be performed in a 
 spherical polar coordinate system. It affects the interpretation of
-grid inoput parameters, for exampl {\bf delX} and {\bf delY} and
-causes the grid generation routines to initialise an internal grid based
+grid input parameters, for example {\bf delX} and {\bf delY} and
+causes the grid generation routines to initialize an internal grid based
 on spherical polar geometry.
 
 \fbox{
@@ -399,7 +399,7 @@ phiMin=0.,
 This line sets the southern boundary of the modeled
 domain to $0^{\circ}$ latitude. This value affects both the
 generation of the locally orthogonal grid that the model
-uses internally and affects the initialisation of the coriolis force.
+uses internally and affects the initialization of the coriolis force.
 Note - it is not required to set
 a longitude boundary, since the absolute longitude does
 not alter the kernel equation discretisation.
@@ -475,12 +475,12 @@ notes.
 \subsubsection{File {\it input/data.pkg}}
 
 This file uses standard default values and does not contain
-customisations for this experiment.
+customizations for this experiment.
 
 \subsubsection{File {\it input/eedata}}
 
 This file uses standard default values and does not contain
-customisations for this experiment.
+customizations for this experiment.
 
 \subsubsection{File {\it input/windx.sin\_y}}
 
@@ -532,13 +532,13 @@ the vertical domain extent in grid points.
 \subsubsection{File {\it code/CPP\_OPTIONS.h}}
 
 This file uses standard default values and does not contain
-customisations for this experiment.
+customizations for this experiment.
 
 
 \subsubsection{File {\it code/CPP\_EEOPTIONS.h}}
 
 This file uses standard default values and does not contain
-customisations for this experiment.
+customizations for this experiment.
 
 \subsubsection{Other Files }
 
@@ -550,6 +550,6 @@ coriolis variables {\bf fCorU}.
 \item {\it model/src/ini\_parms.F},
 \item {\it input/windx.sin\_y},
 \end{itemize}
-contain the code customisations and parameter settings for this 
-experiements. Below we describe the customisations
+contain the code customizations and parameter settings for this 
+experiments. Below we describe the customizations
 to these files associated with this experiment.
