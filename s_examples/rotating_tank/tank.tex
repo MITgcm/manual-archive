@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_examples/rotating_tank/tank.tex,v 1.9 2004/07/27 13:40:09 afe Exp $
+% $Header: /u/gcmpack/manual/s_examples/rotating_tank/tank.tex,v 1.10 2004/10/13 18:52:17 afe Exp $
 % $Name:  $
 
 \bodytext{bgcolor="#FFFFFFFF"}
@@ -18,20 +18,23 @@
 \label{www:tutorials}
 
 This section illustrates an example of MITgcm simulating a laboratory
-experiment on much smaller scales than those common to geophysical
+experiment on much smaller scales than those commonly considered in  
+geophysical
 fluid dynamics.
 
 \subsection{Overview}
 \label{www:tutorials}
                                                                                 
                                                                                 
-This example experiment demonstrates using the MITgcm to simulate
-a laboratory experiment with a rotating tank of water with an ice
+This example configuration demonstrates using the MITgcm to simulate
+a laboratory demonstration using a rotating tank of water with an ice
 bucket in the center. The simulation is configured for a laboratory
 scale on a
 $3^{\circ}$ $\times$ 20cm
 cyclindrical grid with twenty-nine vertical
 levels.
+\\
+example illustration from GFD lab here
 \\
 
 
@@ -46,11 +49,12 @@ levels.
 \label{www:tutorials}
 
  The domain is discretised with 
-a uniform grid spacing in the horizontal set to
- $\Delta x=\Delta y=20$~km, so 
-that there are sixty grid cells in the $x$ and $y$ directions. Vertically the 
-model is configured with a single layer with depth, $\Delta z$, of $5000$~m. 
-
+a uniform cylindrical grid spacing in the horizontal set to
+ $\Delta a=1$~cm and $\Delta \phi=3^{\circ}$, so 
+that there are 120 grid cells in the azimuthal direction and thirty-one grid cells in the radial. Vertically the 
+model is configured with twenty-nine layers of uniform 0.5cm thickness.
+\\
+something about heat flux
 
 \subsection{Code Configuration}
 \label{www:tutorials}
@@ -82,35 +86,36 @@ are
 
 \begin{itemize}
 
-\item Line X, \begin{verbatim} viscAh=5.0E-6, \end{verbatim} this line sets
-the Laplacian friction coefficient to $0.000006 m^2s^{-1}$, which is ususally 
+\item Line 10, \begin{verbatim} viscAh=5.0E-6, \end{verbatim} this line sets
+the Laplacian friction coefficient to $6 \times 10^{-6} m^2s^{-1}$, 
+which is ususally 
 low because of the small scale, presumably.... qqq
 
-\item Line X, \begin{verbatim}f0=0.5 , \end{verbatim} this line sets the 
-coriolis term, and represents a tank spinning at qqq
-\item Line 10, \begin{verbatim} beta=1.E-11, \end{verbatim} this line sets
+\item Line 19, \begin{verbatim}f0=0.5 , \end{verbatim} this line sets the 
+coriolis term, and represents a tank spinning at 2/s
+\item Line 20, \begin{verbatim} beta=1.E-11, \end{verbatim} this line sets
 $\beta$ (the gradient of the coriolis parameter, $f$) to $10^{-11} s^{-1}m^{-1}$
 
-\item Lines 15 and 16
+\item Lines 27 and 28
 \begin{verbatim}
 rigidLid=.TRUE.,
 implicitFreeSurface=.FALSE.,
 \end{verbatim}
 
-these lines do the opposite of the following: 
+qqq these lines do the opposite of the following: 
 suppress the rigid lid formulation of the surface
 pressure inverter and activate the implicit free surface form
 of the pressure inverter.
 
-\item Line 27,
+\item Line 44,
 \begin{verbatim}
-startTime=0,
+nIter=0,
 \end{verbatim}
 this line indicates that the experiment should start from $t=0$
 and implicitly suppresses searching for checkpoint files associated
 with restarting an numerical integration from a previously saved state.
 
-\item Line 30,
+\item Line 47,
 \begin{verbatim}
 deltaT=0.1,
 \end{verbatim}
@@ -118,46 +123,46 @@ This line sets the integration timestep to $0.1s$.  This is an unsually
 small value among the examples due to the small physical scale of the 
 experiment.
 
-\item Line 39,
+\item Line 58,
 \begin{verbatim}
 usingCylindricalGrid=.TRUE.,
 \end{verbatim}
 This line requests that the simulation be performed in a 
 cylindrical coordinate system.
 
-\item Line qqq,
+\item Line 60,
 \begin{verbatim}
 dXspacing=3,
 \end{verbatim}
-This line sets the azimuthal grid spacing between each x-coordinate line
+This line sets the azimuthal grid spacing between each $x$-coordinate line
 in the discrete grid. The syntax indicates that the discrete grid
 should be comprise of $120$ grid lines each separated by $3^{\circ}$.
                                                                                 
 
 
-\item Line qqq,
+\item Line 61,
 \begin{verbatim}
 dYspacing=0.01,
 \end{verbatim}
-This line sets the radial grid spacing between each $\rho$-coordinate line
+This line sets the radial cylindrical grid spacing between each $a$-coordinate line
 in the discrete grid to $1cm$.
 
-\item Line 43,
+\item Line 62,
 \begin{verbatim}
 delZ=29*0.005,
 \end{verbatim}
 This line sets the vertical grid spacing between each z-coordinate line
 in the discrete grid to $5000m$ ($5$~km).
 
-\item Line 46,
+\item Line 68,
 \begin{verbatim}
 bathyFile='bathyPol.bin',
 \end{verbatim}
 This line specifies the name of the file from which the domain
 ``bathymetry'' (tank depth) is read. This file is a two-dimensional 
-($x,y$) map of
+($a,\phi$) map of
 depths. This file is assumed to contain 64-bit binary numbers 
-giving the depth of the model at each grid cell, ordered with the $x$ 
+giving the depth of the model at each grid cell, ordered with the $\phi$ 
 coordinate varying fastest. The points are ordered from low coordinate
 to high coordinate for both axes.  The units and orientation of the
 depths in this file are the same as used in the MITgcm code. In this
@@ -165,12 +170,12 @@ experiment, a depth of $0m$ indicates an area outside of the tank
 and a depth
 f $-0.145m$ indicates the tank itself. 
 
-\item Line 49,
+\item Line 67,
 \begin{verbatim}
 hydrogThetaFile='thetaPol.bin',
 \end{verbatim}
 This line specifies the name of the file from which the initial values 
-of $\theta$ 
+of temperature
 are read. This file is a three-dimensional
 ($x,y,z$) map and is enumerated and formatted in the same manner as the 
 bathymetry file. 
@@ -209,7 +214,9 @@ customizations for this experiment.
 \label{www:tutorials}
 
 The {\it input/thetaPol.bin} file specifies a three-dimensional ($x,y,z$) 
-map of initial values of $\theta$ in degrees Celsius.
+map of initial values of $\theta$ in degrees Celsius.  This particular 
+experiment is set to random values x around 20C to provide initial 
+perturbations.
 
 \subsubsection{File {\it input/bathyPol.bin}}
 \label{www:tutorials}
