@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/text/packages.tex,v 1.1 2004/02/11 18:09:17 edhill Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/text/packages.tex,v 1.2 2004/02/12 03:35:05 edhill Exp $
 % $Name:  $
 
 \section{Using MITgcm Packages}
@@ -63,15 +63,114 @@ inclusion or exclusion and they are all implemented by the
 
 For run--time package control, MITgcm uses flags set through a
 \texttt{data.pkg} file.  While some packages (\textit{eg.}
-\texttt{debug}, \texttt{mnc}, \texttt{cost}) may have their own
-conventions, most follow a simple flag naming convention of the
-form:
+\texttt{debug}, \texttt{mnc}, \texttt{exch2}) may have their own usage
+conventions, most follow a simple flag naming convention of the form:
 \begin{verbatim}
   usePackageName=.TRUE.
 \end{verbatim}
 where the \texttt{usePackageName} variable can activate or disable the
-package at runtime.
+package at runtime.  As mentioned previously, packages must be
+included in order to be activated.  Generally, such mistakes will be
+detected and reported as errors by the code.  However, users should
+still be aware of the dependency.
 
 
-%\subsection{Modifying or Creating Packages}
+\section{Package Coding Standards}
+
+The following sections describe how to modify and/or create new MITgcm
+packages.
+
+\subsection{Packages are Not Libraries}
+
+To a beginner, the MITgcm packages may resemble libraries as used in
+myriad software projects.  While future versions are likely to
+implement packages as libraries (perhaps using FORTRAN90/95 syntax)
+the current packages (FORTRAN77) are \textbf{not} based upon any
+concept of libraries.
+
+\subsubsection{File ``Hiding'' Rules}
+
+Instead, packages should be viewed only as directories containing
+``sets of source files'' that are built using some simple mechanisms
+provided by \texttt{genmake2}.  Conceptually, the build process adds
+files as they are found and proceeds according to the following rules:
+\begin{enumerate}
+\item \texttt{genmake2} locates a ``core'' or main set of source files
+  (the \texttt{-standarddirs} option sets these locations and the
+  default value contains the directories \texttt{eesupp} and
+  \texttt{model}).
+  
+\item \texttt{genmake2} then finds additional source files by
+  inspecting the contents of each of the package directories:
+  \begin{enumerate}
+  \item As the new files are found, they are added to a list of source
+    files.
+
+  \item If there is a file name ``collision'' (that is, if one of the
+    files in a package has the same name as one of the files
+    previously encountered) then the file within the newer (more
+    recently visited) package will superseed (or ``hide'') any
+    previous file(s) with the same name.
+
+  \item Packages are visited (and thus files discovered) {\it in the
+      order that the packages are enabled} within \texttt{genmake2}.
+    Thus, the files in \texttt{PackB} may superseed the files in
+    \texttt{PackA} if \texttt{PackA} is enabled before
+    \texttt{PackB}.  Thus, package ordering can be significant!
+  \end{enumerate}
+\end{enumerate}
+
+These rules were adopted since they provide a relatively simple means
+for rapidly including (or ``hiding'') existing files with modified
+versions.
+
+\subsubsection{Conditional Compilation and \texttt{PACKAGES\_CONFIG.h}}
+
+Given that packages are simply groups of files that may be added or
+removed to form a whole, one may wonder how linking (that is, FORTRAN
+symbol resolution) is handled.  This is the second way that
+\texttt{genmake2} supports the concept of packages.  Basically,
+\texttt{genmake2} creates a \texttt{Makefile} that, in turn, is able
+to create a file called \texttt{PACKAGES\_CONFIG.h} that contains a set
+of C pre-processor (or ``CPP'') directives such as:
+\begin{verbatim}
+   #undef  ALLOW_KPP
+   #undef  ALLOW_LAND
+   ...
+   #define ALLOW_GENERIC_ADVDIFF
+   #define ALLOW_MDSIO
+   ...
+\end{verbatim}
+These CPP symbols are then used throughout the code to conditionally
+isolate variable definitions, function calls, or any other code that
+depends upon the presence or absence of any particular package.
+
+An example illustrating the use of these defines is:
+\begin{verbatim}
+   #ifdef ALLOW_GMREDI
+         IF (useGMRedi) CALL GMREDI_CALC_DIFF(
+        I        bi,bj,iMin,iMax,jMin,jMax,K,
+        I        maskUp,
+        O        KappaRT,KappaRS,
+        I        myThid)
+   #endif
+\end{verbatim}
+which is included from the file
+\filelink{calc\_diffusivity.F}{model-src-calc_diffusivity.F}
+
+There are some benefits to using this technique.  The first is that
+code snippets or subroutines associated with packages can be placed or
+called from almost anywhere else within the code.  The second benefit
+is related to the memory footprint and performance.  Since unused code
+can be removed, there is no performance penalty due to unnecessary
+memory allocation or unused function calls.  The major problems with
+this approach are difficult-to-read and difficult-to-test code caused
+by the numerous CPP statements.  Developers should exerecise some
+discipline and avoid ``smearing'' implementation details across
+numerous files in a haphazard fashion.
+
+
+
+\subsection{Interfaces}
+
 

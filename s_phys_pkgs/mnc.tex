@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/Attic/mnc.tex,v 1.4 2004/02/04 04:49:19 edhill Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/Attic/mnc.tex,v 1.5 2004/02/12 03:35:05 edhill Exp $
 % $Name:  $
 
 \section{NetCDF I/O Integration}
@@ -66,11 +66,99 @@ The two levels of the \texttt{mnc} package are:
 \end{description}
 
 
+\subsection{Using MNC}
+
+\subsubsection{``Grid--Types'' and ``Variable--Types''}
+
+As a convenience for users, the MNC package includes numerous routines
+to aid in the writing of data to NetCDF format.  Probably the biggest
+convenience is the use of pre-defined ``grid types'' and ``variable
+types''.  These ``types'' are simply look-up tables that store
+dimensions, indicies, attributes, and other information that can all
+be retrieved using a single character string.
+
+The ``grid types'' are a way of mapping variables within MITgcm to
+NetCDF arrays.  Within MITgcm, most spatial variables are defined
+using two-- or three--dimensional arrays with ``overlap'' regions (see
+Figures \ref{fig:communication_primitives}, a possible vertical index,
+and \ref{fig:tiling-strategy}) and tile indicies such as the following
+``U'' velocity:
+\begin{verbatim}
+      _RL  uVel (1-OLx:sNx+OLx,1-OLy:sNy+OLy,Nr,nSx,nSy)
+\end{verbatim}
+as defined in \filelink{model/inc/DYNVARS.h}{model-inc-DYNVARS.h}
+
+The grid type is a character string that encodes the presence and
+types associated with the four possible dimensions.  The character
+string follows the format
+\begin{center}
+  \texttt{H0\_H1\_H2\_\_V\_\_T}
+\end{center}
+where the terms \textit{H0,H1,H2,V,T} can be almost any combination of
+the following:
+\begin{center}
+  \begin{tabular}[h]{|ccc|c|c|}\hline
+    \multicolumn{3}{|c|}{Horizontal} & Vertical &  \\
+    Location & Direction & Halo & Location & Time  \\\hline
+    H0  &  H1  &  H2  &  V  &  T  \\\hline
+    \texttt{-} & xy & Hn & \texttt{-} & \texttt{-} \\
+    U  &  x  &  Hy  &  i  &  t  \\
+    V  &  y  &      &  c  &     \\
+    Cen  &   &      &     &     \\
+    Cor  &   &      &     &     \\\hline
+  \end{tabular}
+\end{center}
+A example list of all pre-defined combinations is contained in the
+file
+\begin{center}
+  \texttt{pkg/mnc/pre-defined\_grids.txt}.
+\end{center}
+
+
+\subsubsection{An Example}
+
+Writing variables to NetCDF files can be accomplished in as few as two
+function calls.  The first function call defines a variable type,
+associates it with a name (character string), and provides additional
+information about the indicies for \texttt{bi,bj} dimensions.  The
+second function call will write variable at, if necessary, the
+current time level within the model.
+
+Examples of the initialization calls can be found in the file 
+\begin{center}
+  \filelink{model/src/initialise\_fixed.F}{model-src-initialise_fixed.F}
+\end{center}
+where these four function calls: {\footnotesize
+\begin{verbatim}
+  C     Create MNC definitions for DYNVARS.h variables
+        CALL MNC_CW_ADD_VNAME(myThid, 'iter', '-_-_--__-__t', 0,0)
+        CALL MNC_CW_ADD_VATTR_TEXT(myThid,'iter',1,
+       &     'long_name','iteration_count')
+        CALL MNC_CW_ADD_VNAME(myThid, 'U', 'U_xy_Hn__C__t', 4,5)
+        CALL MNC_CW_ADD_VATTR_TEXT(myThid,'U',1,'units','m/s')
+\end{verbatim} }
+{\noindent initialize two \texttt{VNAME}s and add one attribute to each.}
+    
+The two variables are subsequently written at specific time steps
+within 
+\begin{center}
+  \filelink{model/src/write\_state.F}{model-src-write_state.F}
+\end{center}
+using the function calls: {\footnotesize
+\begin{verbatim}
+  C     Write the DYNVARS.h variables using the MNC package
+        mnc_iter = myIter
+        CALL MNC_CW_RL_W_R(myThid,'state',0,0,'iter',-1,mnc_iter)
+        CALL MNC_CW_RL_W_D(myThid,'state',0,0,'U', 0, uVel)
+\end{verbatim} }
+
+
 \subsection{Key subroutines, parameters and files}
 
 All of the variables used to implement the lookup tables are described
-in \filelink{pkg/mnc/mnc\_common.h}{pkg/mnc/mnc_common}.
+in \filelink{model/src/write\_state.F}{model-src-write_state.F}
 
 
 
 \subsection{Package Reference}
+
