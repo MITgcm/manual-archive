@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/Attic/mnc.tex,v 1.8 2004/04/03 23:05:05 edhill Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/Attic/mnc.tex,v 1.9 2004/04/06 16:48:33 edhill Exp $
 % $Name:  $
 
 \section{NetCDF I/O Integration: MNC}
@@ -117,7 +117,7 @@ file
 The variable type is an association between a variable type name and the
 following items:
 \begin{center}
-  \begin{tabular}[h]{|ll|}\hline
+  \begin{tabular}[h]{|l|l|}\hline
     \textbf{Item}  & \textbf{Purpose}  \\\hline
     grid type  &  defines the in-memory arrangement  \\
     \texttt{bi,bj} dimensions  &  tiling indices, if present  \\\hline
@@ -138,7 +138,7 @@ necessary, the current time level within the model.
 
 Examples of the initialization calls can be found in the file 
 \filelink{model/src/ini\_mnc\_io.F}{model-src-ini_mnc_io.F}
-where these four function calls:
+where these function calls:
 {\footnotesize
 \begin{verbatim}
 C     Create MNC definitions for DYNVARS.h variables
@@ -164,19 +164,18 @@ C     Create MNC definitions for DYNVARS.h variables
      &     'coordinates','XC YC RC iter', myThid)
 \end{verbatim}
 }
-{\noindent initialize two \texttt{VNAME}s and add one NetCDF
-  attribute to each.}
+{\noindent initialize four \texttt{VNAME}s and add one or more NetCDF
+  attributes to each.}
     
-The two variables defined above are subsequently written at specific
+The four variables defined above are subsequently written at specific
 time steps within
 \filelink{model/src/write\_state.F}{model-src-write_state.F}
 using the function calls:
 {\footnotesize
 \begin{verbatim}
 C       Write dynvars using the MNC package
-        mnc_iter = myIter
         CALL MNC_CW_SET_UDIM('state', -1, myThid)
-        CALL MNC_CW_RL_W('D','state',0,0,'iter',mnc_iter, myThid)
+        CALL MNC_CW_RL_W('I','state',0,0,'iter', myIter, myThid)
         CALL MNC_CW_SET_UDIM('state', 0, myThid)
         CALL MNC_CW_RL_W('D','state',0,0,'model_time',myTime, myThid)
         CALL MNC_CW_RL_W('D','state',0,0,'U', uVel, myThid)
@@ -184,7 +183,45 @@ C       Write dynvars using the MNC package
 \end{verbatim}
 }
 
-%\subsection{Key subroutines, parameters and files}
 
-\subsection{Package Reference}
+\subsubsection{Parameters}
+
+All the MNC parameters are contained within a file named
+\texttt{data.mnc}.  If this file does not exist, then the MNC package
+will interpret that as an indication that it is not to be used.  If
+the \texttt{data.mnc} does exist, then it may contain the following
+parameters:
+
+\begin{center}
+  {\footnotesize
+    \begin{tabular}[htb]{|l|l|l|l|}\hline
+      &  &  &  \\
+      \textbf{Name}  &  \textbf{Type}  &  
+      \textbf{Default}  &  \textbf{Description}  \\\hline
+      &  &  &  \\
+      \texttt{useMNC}  &  Logical  & \texttt{.FALSE.}  &  
+      \textbf{overall MNC ON/OFF switch}  \\
+      \texttt{mnc\_echo\_gvtypes}  &  Logical  & \texttt{.FALSE.}  &  
+      echo pre-defined ``types'' to STDOUT?   \\
+      \texttt{mnc\_use\_outdir}  &  Logical  & \texttt{.FALSE.}  &  
+      create a directory for output?  \\
+      \texttt{mnc\_outdir\_str}  &  String  & \texttt{'mnc\_'}  &  
+      output directory name \\
+      \texttt{mnc\_outdir\_date}  &  Logical  & \texttt{.FALSE.}  &  
+      embed date in output directory name?  \\
+      \texttt{mnc\_pickup\_write}  &  Logical  & \texttt{.FALSE.}  &  
+      use MNC to write (create) pickup files?  \\
+      \texttt{mnc\_pickup\_read}  &  Logical  & \texttt{.FALSE.}  &  
+      use MNC to read pickup files?  \\
+      \texttt{mnc\_use\_indir}  &  Logical  & \texttt{.FALSE.}  &  
+      use a directory (path) for input?  \\
+      \texttt{mnc\_indir\_str}  &  String  & \texttt{''}  &  
+      input directory (or path) name  \\
+      \texttt{mnc\_use\_for\_mon}  &  Logical  & \texttt{.FALSE.}  &  
+      write \texttt{monitor} output using MNC?  \\\hline
+    \end{tabular}
+  }
+\end{center}
+
+%\subsection{Package Reference}
 
