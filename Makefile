@@ -1,20 +1,30 @@
+L2H = -image_type png -split 5 -show_section_numbers -link 2 \
+      -address "<a href=mailto:support@mitgcm.org>support@mitgcm.org</a>" \
+      -local_icons -noantialias -notransparent -white
+
 default:
 	@echo "Targets"
-	@echo " make all  - just the tex "
+	@echo " make all  - everything in order"
 	@echo " make tex  - tex and bibliograohy"
 	@echo " make ps   - postscript form of manual"
 	@echo " make pdf  - pdf form of manual"
-	@echo " make html - hypertext form of manual"
+	@echo " make l2h  - latex2html of manual"
+	@echo " make html - hypertext form of manual with substitutions"
+
 all:
 	make tex
+	make ps
+	make pdf
+	make html
 
 tex:
 	TEXINPUTS=.:::texinputs latex manual
 	bibtex manual
 	TEXINPUTS=.:::texinputs latex manual
 	TEXINPUTS=.:::texinputs latex manual | tee warnings
-#	TEXINPUTS=.:::texinputs latex manual
+
 ps: manual.ps
+
 pdf: manual.pdf
 
 manual.ps: manual.dvi
@@ -22,6 +32,14 @@ manual.ps: manual.dvi
 
 manual.pdf: manual.ps
 	ps2pdf -dMaxSubsetPct=100 -dCompatibilityLevel=1.2 -dSubsetFonts=true -dEmbedAllFonts=true manual.ps manual.pdf
+
+clean: 
+	rm -f manual.{aux,bbl,blg,dvi,log,out,toc} 
+Clean:
+	make clean
+	rm -f manual.{ps,pdf}
+	rm -rf manual
+	rm -f manual.tz mbkup.tz
 
 # Note - the noantialias option here does not affect the gif images
 #        that are generated. However, it does make ppmquant to run in
@@ -40,23 +58,16 @@ manual.pdf: manual.ps
 #           /usr/bin/ppmquant.orig 256
 #           !
 
+l2h:
+	latex2html $(L2H) manual
+
+debugl2h:
+	latex2html -debug -nodiscard -ldump $(L2H) manual
 
 html:
-	latex2html -image_type gif -split 5 -show_section_numbers -link 2 -address "<a href=mailto:support@mitgcm.org>support@mitgcm.org</a>" -local_icons -noantialias -white manual
+	make l2h
 	cd manual; tar -czf ../mbkup.tz .
 	cd manual; ../tools/make_mail_subjects.sh
 	cd manual; ../tools/figsub.sh
 	cd manual; ../tools/fix_docref_target.sh
 	cd manual; tar -czf ../manual.tz .
-#	cd /homes/cnh/SEALION_RELEASE/website/online_documents/manual; tar -xzf /homes/cnh/SEALION_RELEASE/manual/HEAD/manual.tz
-#	tar -czf ol.tz on-line-figs
-
-html2:
-	cd manual; tar -xzf ../mbkup.tz .
-	cd manual; ../tools/make_mail_subjects.sh
-	cd manual; ../tools/figsub.sh
-	cd manual; ../tools/fix_docref_target.sh
-	cd manual; tar -czf ../manual.tz .
-	cd /homes/cnh/SEALION_RELEASE/website/online_documents/manual; tar -xzf /homes/cnh/SEALION_RELEASE/manual/HEAD/manual.tz
-#	tar -czf ol.tz on-line-figs
-
