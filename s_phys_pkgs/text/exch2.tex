@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/text/exch2.tex,v 1.6 2004/02/03 19:43:38 afe Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/text/exch2.tex,v 1.7 2004/02/11 20:48:14 afe Exp $
 % $Name:  $
 
 %%  * Introduction
@@ -106,18 +106,47 @@ The following arrays are all of size {\em MAX\_NEIGHBOURS}x{\em NTILES} and
 describe the orientations between the the tiles.
 
 The array {\em exch2\_neighbourId(a,T)} holds the tile number $T_{n}$ for each tile 
-{\em T}'s neighbor tile {\em a}, and {\em exch2\_opposingSend\_record(a,T)} holds 
+{\em T}'s neighbor tile {\em a}.  The neighbor tiles are indexed {\em 1,MAX\_NEIGHBOURS }
+in the order right to left on the north then south edges, and then top to bottom on the east 
+and west edges. maybe throw in a fig here, eh?  
+
+{\em exch2\_opposingSend\_record(a,T)} holds 
 the index c in {\em exch2\_neighbourId(b,$T_{n}$)} that holds the tile number T.
 In other words,
 
 \begin{verbatim}   
-exch2_neighbourId( exch2_opposingSend_record(a,T), exch2_neighbourId(a,T) ) = T
+exch2_neighbourId( exch2_opposingSend_record(a,T), 
+                           exch2_neighbourId(a,T) ) = T
 \end{verbatim}
 
 % {\em exch2\_neighbourId(exch2\_opposingSend\_record(a,T),exch2\_neighbourId(a,T))=T}.
 % alternate version
 
 This is to provide a backreference from the neighbor tiles.
+
+The arrays {\em exch2\_pi }, {\em exch2\_pj }, {\em exch2\_oi }, 
+{\em exch2\_oj }, {\em exch2\_oi\_f }, and {\em exch2\_oj\_f }  specify 
+the transformations in exchanges between the neighboring tiles.  The dimensions  
+of {\em exch2\_pi(t,N,T) } and {\em exch2\_pj(t,N,T) } are the neighbor ID 
+{ \em N } and the tile number {\em T } as explained above, plus the transformation
+vector {\em t }, of length two.  The first element of the transformation vector indicates
+the factor by which variables representing the same vector component  of a tile 
+will be multiplied, and the second element indicates the transform to the 
+variable in the other direction.  As an example, {\em exch2\_pi(1,N,T) } holds the 
+transform of the i-component of a vector variable in tile {\em T } to the i-component of 
+tile  {\em T }'s neighbor  {\em N }, and {\em exch2\_pi(2,N,T) } hold the component 
+of neighbor  {\em N }'s j-component.
+
+Under the current cube topology, one of the two elements of {\em exch2\_pi } or {\em exch2\_pj }
+for a given tile   {\em T } and  neighbor  {\em N } will be 0, reflecting the fact that
+the vector components are orthogonal.  The other element will be 1 or -1, depending on whether
+the components are indexed in the same or opposite directions.  For example, the transform dimension
+of the arrays for all tile neighbors on the same subdomain will be {\em [1 , 0] }, since all tiles on 
+the same subdomain are oriented identically.  Vectors that correspond to the orthogonal dimension with the 
+same index direction will have {\em [0 , 1] }, whereas those in the opposite index direction will have
+{\em [0 , -1] }.
+
+
 
 
 //
