@@ -2,32 +2,6 @@
 
 \begin{figure}
 \begin{center}
-\includegraphics[width=\textwidth,height=.3\textheight]{part3/case_studies/plume_on_slope/dx.eps}
-\end{center}
-\caption{Horizontal grid spacing, $\Delta x$, in the across-slope
-direction for the gravity plume experiment.}
-\label{fig:dx-plume-on-slope}
-\end{figure}
-
-\begin{figure}
-\begin{center}
-\includegraphics[width=\textwidth,height=.3\textheight]{part3/case_studies/plume_on_slope/Depth.eps}
-\end{center}
-\caption{Topography, $h(x)$, used for the gravity plume experiment.}
-\label{fig:depth-plume-on-slope}
-\end{figure}
-
-\begin{figure}
-\begin{center}
-\includegraphics[width=\textwidth,height=.3\textheight]{part3/case_studies/plume_on_slope/Qsurf.eps}
-\end{center}
-\caption{Upward surface heat flux, $Q(x)$, used as forcing in the
-gravity plume experiment.}
-\label{fig:Q-plume-on-slope}
-\end{figure}
-
-\begin{figure}
-\begin{center}
 \includegraphics[width=\textwidth,height=.3\textheight]{part3/case_studies/plume_on_slope/billows.eps}
 \end{center}
 \caption{Temperature after 23~hours of cooling. The cold dense water is
@@ -122,8 +96,34 @@ section~\ref{sect:plume-generating}. Other model parameters are
 specified in file {\tt data} and {\tt data.obcs} and detailed in
 section~\ref{sect:plume-params}.
 
-\subsubsection{Binary input data}
+\subsection{Binary input data}
 \label{sect:plume-generating}
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth,height=.3\textheight]{part3/case_studies/plume_on_slope/dx.eps}
+\end{center}
+\caption{Horizontal grid spacing, $\Delta x$, in the across-slope
+direction for the gravity plume experiment.}
+\label{fig:dx-plume-on-slope}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth,height=.3\textheight]{part3/case_studies/plume_on_slope/Depth.eps}
+\end{center}
+\caption{Topography, $h(x)$, used for the gravity plume experiment.}
+\label{fig:depth-plume-on-slope}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth,height=.3\textheight]{part3/case_studies/plume_on_slope/Qsurf.eps}
+\end{center}
+\caption{Upward surface heat flux, $Q(x)$, used as forcing in the
+gravity plume experiment.}
+\label{fig:Q-plume-on-slope}
+\end{figure}
 
 The domain is $200$~m deep and $6.4$~km across. Uniform resolution of
 $60\times3^1/_3$~m is used in the vertical and variable resolution of
@@ -185,7 +185,7 @@ variable resolution introduce some spatial correlations but this does
 not matter for this experiment. The perturbations have range
 $0-0.01$~$^\circ$K.
 
-\subsubsection{Code configuration}
+\subsection{Code configuration}
 \label{sect:plume-config}
 
 The computational domain (number of points) is specified in {\tt
@@ -204,7 +204,7 @@ of {\tt input/data}.
 namelist {\em PACKAGES} of {\tt input/data.pkg}.
 \end{itemize}
 
-\subsubsection{Model parameters}
+\subsection{Model parameters}
 \label{sect:plume-params}
 
 \begin{table}
@@ -245,7 +245,7 @@ enough diffusion so as to keep the model stable. The time-step is set
 to $20$~s and gives Courant number order one when the flow reaches the
 bottom of the slope.
 
-\subsubsection{Build and run the model}
+\subsection{Build and run the model}
 
 Build the model per usual. For example:
 \begin{verbatim}
