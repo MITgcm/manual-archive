@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_examples/rotating_tank/tank.tex,v 1.5 2004/07/26 18:41:32 afe Exp $
+% $Header: /u/gcmpack/manual/s_examples/rotating_tank/tank.tex,v 1.6 2004/07/26 19:13:08 afe Exp $
 % $Name:  $
 
 \bodytext{bgcolor="#FFFFFFFF"}
@@ -219,17 +219,23 @@ are
 
 \begin{itemize}
 
-\item Line 7, \begin{verbatim} viscAh=4.E2, \end{verbatim} this line sets
-the Laplacian friction coefficient to $400 m^2s^{-1}$
+\item Line X, \begin{verbatim} viscAh=5.0E-6, \end{verbatim} this line sets
+the Laplacian friction coefficient to $0.000006 m^2s^{-1}$, which is ususally 
+low because of the small scale, presumably.... qqq
+
+\item Line X, \begin{verbatim}f0=0.5 , \end{verbatim} this line sets the 
+coriolis term, and represents a tank spinning at qqq
 \item Line 10, \begin{verbatim} beta=1.E-11, \end{verbatim} this line sets
 $\beta$ (the gradient of the coriolis parameter, $f$) to $10^{-11} s^{-1}m^{-1}$
 
 \item Lines 15 and 16
 \begin{verbatim}
-rigidLid=.FALSE.,
-implicitFreeSurface=.TRUE.,
+rigidLid=.TRUE.,
+implicitFreeSurface=.FALSE.,
 \end{verbatim}
-these lines suppress the rigid lid formulation of the surface
+
+these lines do the opposite of the following: 
+suppress the rigid lid formulation of the surface
 pressure inverter and activate the implicit free surface form
 of the pressure inverter.
 
@@ -241,23 +247,17 @@ this line indicates that the experiment should start from $t=0$
 and implicitly suppresses searching for checkpoint files associated
 with restarting an numerical integration from a previously saved state.
 
-\item Line 29,
-\begin{verbatim}
-endTime=12000,
-\end{verbatim}
-this line indicates that the experiment should start finish at $t=12000s$.
-A restart file will be written at this time that will enable the
-simulation to be continued from this point.
-
 \item Line 30,
 \begin{verbatim}
-deltaTmom=1200,
+deltaT=0.1,
 \end{verbatim}
-This line sets the momentum equation timestep to $1200s$.
+This line sets the integration timestep to $0.1s$.  This is an unsually
+small value among the examples due to the small physical scale of the 
+experiment.
 
 \item Line 39,
 \begin{verbatim}
-usingCartesianGrid=.TRUE.,
+usingCylindricalGrid=.TRUE.,
 \end{verbatim}
 This line requests that the simulation be performed in a 
 Cartesian coordinate system.
@@ -334,28 +334,21 @@ customizations for this experiment.
 This file uses standard default values and does not contain
 customizations for this experiment.
 
-\subsubsection{File {\it input/windx.sin\_y}}
+\subsubsection{File {\it input/thetaPol.bin}}
 \label{www:tutorials}
 
-The {\it input/windx.sin\_y} file specifies a two-dimensional ($x,y$) 
-map of wind stress ,$\tau_{x}$, values. The units used are $Nm^{-2}$.
-Although $\tau_{x}$ is only a function of $y$n in this experiment
-this file must still define a complete two-dimensional map in order
-to be compatible with the standard code for loading forcing fields 
-in MITgcm. The included matlab program {\it input/gendata.m} gives a complete
-code for creating the {\it input/windx.sin\_y} file.
+The {\it input/thetaPol.bin} file specifies a three-dimensional ($x,y,z$) 
+map of initial values of $\theta$ in degrees Celsius.
 
-\subsubsection{File {\it input/topog.box}}
+\subsubsection{File {\it input/bathyPol.bin}}
 \label{www:tutorials}
 
 
-The {\it input/topog.box} file specifies a two-dimensional ($x,y$) 
+The {\it input/bathyPol.bin} file specifies a two-dimensional ($x,y$) 
 map of depth values. For this experiment values are either
-$0m$ or {\bf -delZ}m, corresponding respectively to a wall or to deep
-ocean. The file contains a raw binary stream of data that is enumerated
+$0m$ or {\bf -delZ}m, corresponding respectively to outside or inside of
+the tank. The file contains a raw binary stream of data that is enumerated
 in the same way as standard MITgcm two-dimensional, horizontal arrays.
-The included matlab program {\it input/gendata.m} gives a complete
-code for creating the {\it input/topog.box} file.
 
 \subsubsection{File {\it code/SIZE.h}}
 \label{www:tutorials}
