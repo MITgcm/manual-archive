@@ -1,3 +1,4 @@
+% $Header: /u/gcmpack/manual/s_software/text/sarch.tex,v 1.2 2001/10/11 19:12:38 adcroft Exp $
 
 In this chapter we describe the software architecture and
 implementation strategy for the MITgcm code. The first part of this
@@ -11,17 +12,13 @@ Broadly, the goals of the software architecture employed in MITgcm are
 three-fold
  
 \begin{itemize}
-
 \item We wish to be able to study a very broad range
 of interesting and challenging rotating fluids problems.
-
 \item We wish the model code to be readily targeted to
 a wide range of platforms
-
 \item On any given platform we would like to be
 able to achieve performance comparable to an implementation 
 developed and specialized specifically for that platform.
-
 \end{itemize}
 
 These points are summarized in figure \ref{fig:mitgcm_architecture_goals} 
@@ -30,21 +27,16 @@ a software architecture which at the high-level can be viewed as consisting
 of
 
 \begin{enumerate}
-
 \item A core set of numerical and support code. This is discussed in detail in
 section \ref{sec:partII}.
-
 \item A scheme for supporting optional "pluggable" {\bf packages} (containing 
 for example mixed-layer schemes, biogeochemical schemes, atmospheric physics). 
 These packages are used both to overlay alternate dynamics and to introduce 
 specialized physical content onto the core numerical code. An overview of
 the {\bf package} scheme is given at the start of part \ref{part:packages}.
-
-
 \item A support framework called {\bf WRAPPER} (Wrappable Application Parallel 
 Programming Environment Resource), within which the core numerics and pluggable 
 packages operate.
-
 \end{enumerate}
 
 This chapter focuses on describing the {\bf WRAPPER} environment under which
@@ -57,19 +49,20 @@ experiments both sequentially and in parallel. For many projects simply
 starting from an example code and adapting it to suit a particular situation 
 will be all that is required.
 
+
 \begin{figure}
 \begin{center}
- \resizebox{!}{2.5in}{
-  \includegraphics*[1.5in,2.4in][9.5in,6.3in]{part4/mitgcm_goals.eps}
- }
+\resizebox{!}{2.5in}{\includegraphics{part4/mitgcm_goals.eps}}
 \end{center}
-\caption{The MITgcm architecture is designed to allow simulation of a wide 
+\caption{
+The MITgcm architecture is designed to allow simulation of a wide 
 range of physical problems on a wide range of hardware. The computational 
 resource requirements of the applications targeted range from around 
 $10^7$ bytes ( $\approx 10$ megabytes ) of memory to $10^{11}$ bytes
 ( $\approx 100$ gigabytes). Arithmetic operation counts for the applications of 
 interest range from $10^{9}$ floating point operations to more than $10^{17}$ 
-floating point operations.} \label{fig:mitgcm_architecture_goals}
+floating point operations.}
+\label{fig:mitgcm_architecture_goals}
 \end{figure}
 
 \section{WRAPPER}
@@ -87,20 +80,21 @@ The approach taken by the WRAPPER is illustrated in figure
 \ref{fig:fit_in_wrapper} which shows how the WRAPPER serves to insulate code 
 that fits within it from architectural differences between hardware platforms 
 and operating systems. This allows numerical code to be easily retargetted. 
+
+
 \begin{figure}
 \begin{center}
- \resizebox{6in}{4.5in}{
-  \includegraphics*[0.6in,0.7in][9.0in,8.5in]{part4/fit_in_wrapper.eps}
- }
+\resizebox{!}{4.5in}{\includegraphics{part4/fit_in_wrapper.eps}}
 \end{center}
-\caption{ Numerical code is written too fit within a software support
+\caption{
+Numerical code is written too fit within a software support
 infrastructure called WRAPPER. The WRAPPER is portable and
 can be sepcialized for a wide range of specific target hardware and 
 programming environments, without impacting numerical code that fits
 within the WRAPPER. Codes that fit within the WRAPPER can generally be
 made to run as fast on a particular platform as codes specially 
-optimized for that platform.
-} \label{fig:fit_in_wrapper}
+optimized for that platform.}
+\label{fig:fit_in_wrapper}
 \end{figure}
 
 \subsection{Target hardware}
@@ -186,8 +180,8 @@ independently of the other tiles, in a sequential fashion.
 
 \begin{figure}
 \begin{center}
- \resizebox{7in}{3in}{
-  \includegraphics*[0.5in,2.7in][12.5in,6.4in]{part4/domain_decomp.eps}
+ \resizebox{5in}{!}{
+  \includegraphics{part4/domain_decomp.eps}
  }
 \end{center}
 \caption{ The WRAPPER provides support for one and two dimensional 
@@ -222,8 +216,8 @@ variety of different mechanisms to communicate data between tiles.
 
 \begin{figure}
 \begin{center}
- \resizebox{7in}{3in}{
-  \includegraphics*[4.5in,3.7in][12.5in,6.7in]{part4/tiled-world.eps}
+ \resizebox{5in}{!}{
+  \includegraphics{part4/tiled-world.eps}
  }
 \end{center}
 \caption{ A global grid subdivided into tiles.
@@ -404,8 +398,8 @@ highly optimized library.
 
 \begin{figure}
 \begin{center}
- \resizebox{5in}{3in}{
-  \includegraphics*[1.5in,0.7in][7.9in,4.4in]{part4/comm-primm.eps}
+ \resizebox{5in}{!}{
+  \includegraphics{part4/comm-primm.eps}
  }
 \end{center}
 \caption{Three performance critical parallel primititives are provided
@@ -485,8 +479,8 @@ sub-domains.
 
 \begin{figure}
 \begin{center}
- \resizebox{5in}{3in}{
-  \includegraphics*[0.5in,1.3in][7.9in,5.7in]{part4/tiling_detail.eps}
+ \resizebox{5in}{!}{
+  \includegraphics{part4/tiling_detail.eps}
  }
 \end{center}
 \caption{The tiling strategy that the WRAPPER supports allows tiles
@@ -589,8 +583,8 @@ not cause any other problems.
 
 \begin{figure}
 \begin{center}
- \resizebox{5in}{7in}{
-  \includegraphics*[0.5in,0.3in][7.9in,10.7in]{part4/size_h.eps}
+ \resizebox{5in}{!}{
+  \includegraphics{part4/size_h.eps}
  }
 \end{center}
 \caption{ The three level domain decomposition hierarchy employed by the
@@ -812,7 +806,6 @@ to support subsequent calls to communication routines
 by the application code. The startup calling sequence followed by the 
 WRAPPER is shown in figure \ref{fig:wrapper_startup}.
 
-
 \begin{figure}
 \begin{verbatim}
 
@@ -903,25 +896,6 @@ parallelization the compiler may otherwise generate.
 
 \end{enumerate}
 
-
-\paragraph{Environment variables}
-On most systems multi-threaded execution also requires the setting
-of a special environment variable. On many machines this variable
-is called PARALLEL and its values should be set to the number
-of parallel threads required. Generally the help pages associated
-with the multi-threaded compiler on a machine will explain
-how to set the required environment variables for that machines.
-
-\paragraph{Runtime input parameters}
-Finally the file {\em eedata} needs to be configured to indicate
-the number of threads to be used in the x and y directions.
-The variables {\em nTx} and {\em nTy} in this file are used to
-specify the information required. The product of {\em nTx} and
-{\em nTy} must be equal to the number of threads spawned i.e.
-the setting of the environment variable PARALLEL.
-The value of {\em nTx} must subdivide the number of sub-domains
-in x ({\em nSx}) exactly. The value of {\em nTy} must subdivide the 
-number of sub-domains in y ({\em nSy}) exactly. 
 
 An example of valid settings for the {\em eedata} file for a
 domain with two subdomains in y and running with two threads is shown 
@@ -1046,6 +1020,25 @@ Parameter: {\em nPy}
 \end{minipage}
 } \\
 
+
+\paragraph{Environment variables}
+On most systems multi-threaded execution also requires the setting
+of a special environment variable. On many machines this variable
+is called PARALLEL and its values should be set to the number
+of parallel threads required. Generally the help pages associated
+with the multi-threaded compiler on a machine will explain
+how to set the required environment variables for that machines.
+
+\paragraph{Runtime input parameters}
+Finally the file {\em eedata} needs to be configured to indicate
+the number of threads to be used in the x and y directions.
+The variables {\em nTx} and {\em nTy} in this file are used to
+specify the information required. The product of {\em nTx} and
+{\em nTy} must be equal to the number of threads spawned i.e.
+the setting of the environment variable PARALLEL.
+The value of {\em nTx} must subdivide the number of sub-domains
+in x ({\em nSx}) exactly. The value of {\em nTy} must subdivide the 
+number of sub-domains in y ({\em nSy}) exactly. 
 The multiprocess startup of the MITgcm executable {\em mitgcmuv}
 is controlled by the routines {\em EEBOOT\_MINIMAL()} and
 {\em INI\_PROCS()}. The first routine performs basic steps required
@@ -1058,7 +1051,7 @@ number so that process number 0 will create output files
 output files {\bf STDOUT.0001} and {\bf STDERR.0001} etc... These files
 are used for reporting status and configuration information and
 for reporting error conditions on a process by process basis.
-The {{\em EEBOOT\_MINIMAL()} procedure also sets the variables 
+The {\em EEBOOT\_MINIMAL()} procedure also sets the variables 
 {\em myProcId} and {\em MPI\_COMM\_MODEL}.
 These variables are related
 to processor identification are are used later in the routine
@@ -1099,6 +1092,7 @@ Parameter: {\em pidN       }
 The WRAPPER maintains internal information that is used for communication
 operations and that can be customized for different platforms. This section 
 describes the information that is held and used.
+
 \begin{enumerate}
 \item {\bf Tile-tile connectivity information} For each tile the WRAPPER
 sets a flag that sets the tile number to the north, south, east and
@@ -1185,31 +1179,6 @@ Parameter: {\em nTx} \\
 Parameter: {\em nTy} \\
 \end{minipage}
 }
-
-\begin{figure}
-\begin{verbatim}
-C--
-C--  Parallel directives for MIPS Pro Fortran compiler
-C--
-C      Parallel compiler directives for SGI with IRIX
-C$PAR  PARALLEL DO
-C$PAR&  CHUNK=1,MP_SCHEDTYPE=INTERLEAVE,
-C$PAR&  SHARE(nThreads),LOCAL(myThid,I)
-C
-      DO I=1,nThreads
-        myThid = I
-
-C--     Invoke nThreads instances of the numerical model
-        CALL THE_MODEL_MAIN(myThid)
-
-      ENDDO
-\end{verbatim}
-\caption{Prior to transferring control to
-the procedure {\em THE\_MODEL\_MAIN()} the WRAPPER may use
-MP directives to spawn multiple threads.
-} \label{fig:mp_directives}
-\end{figure}
-
 
 \item {\bf memsync flags}
 As discussed in section \ref{sec:memory_consistency}, when using shared memory,
@@ -1344,8 +1313,32 @@ In the case of permanent state information this approach cannot be used
 because there has to be enough storage allocated for all tiles.
 However, the technique can sometimes be a useful scheme for reducing memory 
 requirements in complex physical paramterisations.
-
 \end{enumerate}
+
+\begin{figure}
+\begin{verbatim}
+C--
+C--  Parallel directives for MIPS Pro Fortran compiler
+C--
+C      Parallel compiler directives for SGI with IRIX
+C$PAR  PARALLEL DO
+C$PAR&  CHUNK=1,MP_SCHEDTYPE=INTERLEAVE,
+C$PAR&  SHARE(nThreads),LOCAL(myThid,I)
+C
+      DO I=1,nThreads
+        myThid = I
+
+C--     Invoke nThreads instances of the numerical model
+        CALL THE_MODEL_MAIN(myThid)
+
+      ENDDO
+\end{verbatim}
+\caption{Prior to transferring control to
+the procedure {\em THE\_MODEL\_MAIN()} the WRAPPER may use
+MP directives to spawn multiple threads.
+} \label{fig:mp_directives}
+\end{figure}
+
 
 \subsubsection{Specializing the Communication Code}
 
