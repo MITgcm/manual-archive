@@ -33,4 +33,7 @@ core
 *.toc
 *.dvi
 *.ps
+*.pdf
+*.out
 manual
+warnings
