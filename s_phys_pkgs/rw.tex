@@ -1,5 +1,17 @@
 \section{Basic binary I/O utilities}
-\label{sec:rw}
+\label{sec:pkg:rw}
+The {\tt rw/} package provides a very rudimentary binary I/O capability
+for quickly writing {\bf single record} direct-access Fortran binary files. 
+It is primarily used for writing diagnostic output.
+\subsection{Introduction}
+Package {\tt rw/} is an interface to the more general {\tt mdsio/} package.
+It can be used to write or read direct-access Fortran binary files for 
+two-dimensional XY and three-dimensional XYZ arrays. Each call to an {\tt rw/}
+read or write routine will read (or write) to the first record of a file.
+To write files with multiple records use the package {\tt mdsio/} or the
+package {\tt mnc/ \ref{sec:pkg:mnc}} which produces netCDF \cite{rew:97} 
+based output.
+
 \subsection{Key subroutines, parameters and files}
 \label{sec:pkg:rw:implementation_synopsis}
 \subsection{Package Reference}
