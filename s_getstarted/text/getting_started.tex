@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.6 2001/10/18 18:44:14 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.7 2001/10/21 04:19:40 cnh Exp $
 % $Name:  $
 
 %\section{Getting started}
@@ -36,9 +36,36 @@ A mail to the email list will reach all the developers and be archived
 on the newsgroup. A users email list will be established at some time
 in the future.
 
-
 \section{Obtaining the code}
 \label{sect:obtainingCode}
+
+MITgcm can be downloaded from our system by following
+the instructions below. As a courtesy we ask that you send e-mail to us at
+\begin{rawhtml} <A href=mailto:support@mitgcm.org> \end{rawhtml}
+support@mitgcm.org
+\begin{rawhtml} </A> \end{rawhtml}
+to enable us to keep track of who's using the model and in what application.
+You can download the model two ways:
+
+\begin{enumerate}
+\item Using CVS software. CVS is a freely available source code managment
+tool. To use CVS you need to have the software installed. Many systems
+come with CVS pre-installed, otherwise good places to look for
+the software for a particular platform are
+\begin{rawhtml} <A href=http://www.cvshome.org/ target="idontexist"> \end{rawhtml}
+cvshome.org
+\begin{rawhtml} </A> \end{rawhtml}
+and
+\begin{rawhtml} <A href=http://www.wincvs.org/ target="idontexist"> \end{rawhtml}
+wincvs.org
+\begin{rawhtml} </A> \end{rawhtml}
+.
+
+\item Using a tar file. This method is simple and does not
+require any special software. However, this method does not
+provide easy support for maintenance updates.
+
+\end{enumerate}
 
 If CVS is available on your system, we strongly encourage you to use it. CVS
 provides an efficient and elegant way of organizing your code and keeping
@@ -51,13 +78,13 @@ your .cshrc or .tcshrc:
 % setenv CVSROOT :pserver:cvsanon@mitgcm.org:/u/u0/gcmpack
 \end{verbatim}
 
-To start using CVS, "login" to the server using:
+To start using CVS, register with the MITgcm CVS server using command:
 \begin{verbatim}
 % cvs login ( CVS password: cvsanon )
 \end{verbatim}
 You only need to do ``cvs login'' once.
 
-To obtain the source for the release:
+To obtain the sources for release1 type:
 \begin{verbatim}
 % cvs co -d directory -P -r release1 MITgcmUV
 \end{verbatim}
@@ -66,24 +93,25 @@ This creates a directory called \textit{directory}. If \textit{directory}
 exists this command updates your code based on the repository. Each
 directory in the source tree contains a directory \textit{CVS}. This
 information is required by CVS to keep track of your file versions with
-respect to the repository. Don't edit the files in \textit{CVS}! To obtain a
-different \textit{version} that is not the latest source:
-\begin{verbatim}
-% cvs co -d directory -P -r version MITgcm
-\end{verbatim}
-or the latest development version:
-\begin{verbatim}
-% cvs co -d directory -P MITgcm
-\end{verbatim}
+respect to the repository. Don't edit the files in \textit{CVS}!
+You can also use CVS to download code updates.  More extensive
+information on using CVS for maintaining MITgcm code can be found 
+\begin{rawhtml} <A href=http://mitgcm.org/usingcvstoget.html target="idontexist"> \end{rawhtml}
+here
+\begin{rawhtml} </A> \end{rawhtml} 
+.
+
 
 \paragraph*{Conventional download method}
 \label{sect:conventionalDownload}
 
 If you do not have CVS on your system, you can download the model as a
 tar file from the reference web site at:
+\begin{rawhtml} <A href=http://mitgcm.org/download target="idontexist"> \end{rawhtml}
 \begin{verbatim}
 http://mitgcm.org/download/
 \end{verbatim}
+\begin{rawhtml} </A> \end{rawhtml}
 The tar file still contains CVS information which we urge you not to
 delete; even if you do not use CVS yourself the information can help
 us if you should need to send us your copy of the code.
