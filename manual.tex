@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/manual.tex,v 1.21 2004/02/17 21:58:56 edhill Exp $
+% $Header: /u/gcmpack/manual/manual.tex,v 1.22 2004/03/15 22:39:28 afe Exp $
 % $Name:  $
 
 \documentclass[12pt]{book}
@@ -24,6 +24,21 @@
 \newcommand{\filelink}[2]{
 \htmladdnormallink{\bf \tt #1}{../code_reference/vdb/byname/#2.html}
 }
+
+% afe  Commands to standardize typesetting 
+\newcommand{\file}[1]{
+\texttt{#1}
+}
+
+\newcommand{\sectiontitle}[1]{
+\textsl{#1}
+}
+
+\newcommand{\code}[1]{
+\texttt{#1}
+}
+
+
 
 %eh3 try out the epsfig package
 \usepackage[dvips]{epsfig}
