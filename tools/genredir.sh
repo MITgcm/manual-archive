@@ -9,6 +9,6 @@ MAPPING="mapping.txt"
 
 grep -r CMIREDIR *.html | \
 awk 'BEGIN { FS = ":" } ;
-           { HTMLPATH = "http://mitgcm.org/sealion/online_documents/" } ;
+           { HTMLPATH = "http://mitgcm.org/pelican/online_documents/" } ;
            { print $3 " " HTMLPATH $1}' >> $MAPPING
 
