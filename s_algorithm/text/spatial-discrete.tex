@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/spatial-discrete.tex,v 1.5 2001/08/09 20:45:27 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/spatial-discrete.tex,v 1.6 2001/09/25 20:13:42 adcroft Exp $
 % $Name:  $
 
 \section{Spatial discretization of the dynamical equations}
@@ -454,9 +454,9 @@ $h_s^{-1}$: {\bf RECIP\_hFacS} ({\em GRID.h})
 The core algorithm is based on the ``C grid'' discretization of the
 continuity equation which can be summarized as:
 \begin{eqnarray}
-\partial_t u + \frac{1}{\Delta x_c} \delta_i \left. \frac{ \partial \Phi}{\partial r}\right|_{s} \eta + \frac{\epsilon_{nh}}{\Delta x_c} \delta_i \Phi_{nh}' & = & G_u - \frac{1}{\Delta x_c} \delta_i \Phi_h' \\
-\partial_t v + \frac{1}{\Delta y_c} \delta_j \left. \frac{ \partial \Phi}{\partial r}\right|_{s} \eta + \frac{\epsilon_{nh}}{\Delta y_c} \delta_j \Phi_{nh}' & = & G_v - \frac{1}{\Delta y_c} \delta_j \Phi_h' \\
-\epsilon_{nh} \left( \partial_t w + \frac{1}{\Delta r_c} \delta_k \Phi_{nh}' \right) & = & \epsilon_{nh} G_w + \overline{b}^k - \frac{1}{\Delta r_c} \delta_k \Phi_{h}' \\
+\partial_t u + \frac{1}{\Delta x_c} \delta_i \left. \frac{ \partial \Phi}{\partial r}\right|_{s} \eta + \frac{\epsilon_{nh}}{\Delta x_c} \delta_i \Phi_{nh}' & = & G_u - \frac{1}{\Delta x_c} \delta_i \Phi_h' \label{eq:discrete-momu} \\
+\partial_t v + \frac{1}{\Delta y_c} \delta_j \left. \frac{ \partial \Phi}{\partial r}\right|_{s} \eta + \frac{\epsilon_{nh}}{\Delta y_c} \delta_j \Phi_{nh}' & = & G_v - \frac{1}{\Delta y_c} \delta_j \Phi_h' \label{eq:discrete-momv} \\
+\epsilon_{nh} \left( \partial_t w + \frac{1}{\Delta r_c} \delta_k \Phi_{nh}' \right) & = & \epsilon_{nh} G_w + \overline{b}^k - \frac{1}{\Delta r_c} \delta_k \Phi_{h}' \label{eq:discrete-momw} \\
 \delta_i \Delta y_g \Delta r_f h_w u +
 \delta_j \Delta x_g \Delta r_f h_s v +
 \delta_k {\cal A}_c w & = & {\cal A}_c \delta_k (P-E)_{r=0}
@@ -479,8 +479,9 @@ A}_c$.  The factors $h_w$ and $h_s$ are non-dimensional fractions
 The last equation, the discrete continuity equation, can be summed in
 the vertical to yeild the free-surface equation:
 \begin{equation}
-{\cal A}_c \partial_t \eta + \delta_i \sum_k \Delta y_g \Delta r_f h_w u + \delta_j \sum_k \Delta x_g \Delta r_f h_s v =
-{\cal A}_c(P-E)_{r=0}
+{\cal A}_c \partial_t \eta + \delta_i \sum_k \Delta y_g \Delta r_f h_w
+u + \delta_j \sum_k \Delta x_g \Delta r_f h_s v = {\cal
+A}_c(P-E)_{r=0} \label{eq:discrete-freesurface}
 \end{equation}
 The source term $P-E$ on the rhs of continuity accounts for the local
 addition of volume due to excess precipitation and run-off over
@@ -500,12 +501,14 @@ discretized:
 \begin{equation}
 \epsilon_{nh} \partial_t w
 + g \overline{\rho'}^k + \frac{1}{\Delta z} \delta_k \Phi_h' = \ldots
+\label{eq:discrete_hydro_ocean}
 \end{equation}
 
 In the atmosphere, using p-coordinates, hydrostatic balance is
 discretized:
 \begin{equation}
 \overline{\theta'}^k + \frac{1}{\Delta \Pi} \delta_k \Phi_h' = 0
+\label{eq:discrete_hydro_atmos}
 \end{equation}
 where $\Delta \Pi$ is the difference in Exner function between the
 pressure points. The non-hydrostatic equations are not available in

@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/mom_fluxform.tex,v 1.1 2001/08/09 19:48:39 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/mom_fluxform.tex,v 1.2 2001/09/25 20:13:42 adcroft Exp $
 % $Name:  $
 
 \section{Flux-form momentum equations}
@@ -15,11 +15,11 @@ dissipation and metric forces:
 \marginpar{$G_w$: {\bf Gw} }
 \begin{eqnarray}
 G_u & = & G_u^{adv} + G_u^{cor} + G_u^{h-diss} + G_u^{v-diss} +
-G_u^{metric} + G_u^{nh-metric} \\
+G_u^{metric} + G_u^{nh-metric} \label{eq:gsplit_momu} \\
 G_v & = & G_v^{adv} + G_v^{cor} + G_v^{h-diss} + G_v^{v-diss} +
-G_v^{metric} + G_v^{nh-metric} \\
+G_v^{metric} + G_v^{nh-metric} \label{eq:gsplit_momv} \\
 G_w & = & G_w^{adv} + G_w^{cor} + G_w^{h-diss} + G_w^{v-diss} +
-G_w^{metric} + G_w^{nh-metric}
+G_w^{metric} + G_w^{nh-metric} \label{eq:gsplit_momw}
 \end{eqnarray}
 In the hydrostatic limit, $G_w=0$ and $\epsilon_{nh}=0$, reducing the
 vertical momentum to hydrostatic balance.
@@ -46,15 +46,15 @@ The advective operator is second order accurate in space:
 {\cal A}_w \Delta r_f h_w G_u^{adv} & = &
   \delta_i \overline{ U }^i \overline{ u }^i
 + \delta_j \overline{ V }^i \overline{ u }^j
-+ \delta_k \overline{ W }^i \overline{ u }^k \\
++ \delta_k \overline{ W }^i \overline{ u }^k \label{eq:discrete-momadvu} \\
 {\cal A}_s \Delta r_f h_s G_v^{adv} & = &
   \delta_i \overline{ U }^j \overline{ v }^i
 + \delta_j \overline{ V }^j \overline{ v }^j
-+ \delta_k \overline{ W }^j \overline{ v }^k \\
++ \delta_k \overline{ W }^j \overline{ v }^k \label{eq:discrete-momadvv} \\
 {\cal A}_c \Delta r_c G_w^{adv} & = &
   \delta_i \overline{ U }^k \overline{ w }^i
 + \delta_j \overline{ V }^k \overline{ w }^j
-+ \delta_k \overline{ W }^k \overline{ w }^k \\
++ \delta_k \overline{ W }^k \overline{ w }^k \label{eq:discrete-momadvw}
 \end{eqnarray}
 and because of the flux form does not contribute to the global budget
 of linear momentum. The quantities $U$, $V$ and $W$ are volume fluxes
@@ -63,9 +63,9 @@ defined:
 \marginpar{$V$: {\bf vTrans} }
 \marginpar{$W$: {\bf rTrans} }
 \begin{eqnarray}
-U & = & \Delta y_g \Delta r_f h_w u \\
-V & = & \Delta x_g \Delta r_f h_s v \\
-W & = & {\cal A}_c w
+U & = & \Delta y_g \Delta r_f h_w u \label{eq:utrans} \\
+V & = & \Delta x_g \Delta r_f h_s v \label{eq:vtrans} \\
+W & = & {\cal A}_c w \label{eq:rtrans}
 \end{eqnarray}
 The advection of momentum takes the same form as the advection of
 tracers but by a translated advective flow. Consequently, the
@@ -109,7 +109,8 @@ where the Coriolis parameters $f$ and $f'$ are defined:
 f & = & 2 \Omega \sin{\phi} \\
 f' & = & 2 \Omega \cos{\phi}
 \end{eqnarray}
-when using spherical geometry, otherwise the $\beta$-plane definition is used:
+where $\phi$ is geographic latitude when using spherical geometry,
+otherwise the $\beta$-plane definition is used:
 \begin{eqnarray}
 f & = & f_o + \beta y \\
 f' & = & 0
