@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/manual.tex,v 1.16 2003/08/07 18:27:51 edhill Exp $
+% $Header: /u/gcmpack/manual/manual.tex,v 1.17 2004/01/28 18:19:36 molod Exp $
 % $Name:  $
 
 \documentclass[12pt]{book}
@@ -89,6 +89,22 @@
   pdfkeywords={oceanography, ocean model, general circulation model,
     non-hydrostatic, finite volume, inverse methods, adjoint method} 
   } 
+
+% Some definitions (AMM)
+\def\p#1{{\partial \over {\partial #1}}}
+\def\pp#1#2{{\partial #1 \over {\partial #2}}}
+\def\dd#1#2{{d #1 \over {d #2}}}
+\def\bq{\begin{equation}}
+\def\bqa{\begin{eqnarray}}
+\def\eq{\end{equation}}
+\def\eqa{\end{eqnarray}}
+
+\def\h{ {1\over2} }
+\def\txt{\mbox{$2^\circ$ x $2.5^\circ \,$}}
+\def\fxf{\mbox{$4^\circ$ x $5^\circ \,$}}
+
+\def\blankpage{ \vspace*{\fill} \vspace{5in} \vfill \newpage}
+
 
 \begin{document}
 
