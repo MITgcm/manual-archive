@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/nonlin_frsurf.tex,v 1.7 2001/11/13 20:27:54 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/nonlin_frsurf.tex,v 1.8 2004/10/13 18:56:52 jmc Exp $
 % $Name:  $
 
 
@@ -6,8 +6,8 @@
 \subsection{Non-linear free surface}
 \label{sect:nonlinear-freesurface}
 
-Recently, two options have been added to the model (and have not yet
-been extensively tested) that concern the free surface formulation.
+Recently, new options have been added to the model
+that concern the free surface formulation.
 
 
 \subsubsection{Non-uniform linear-relation for the surface potential}
@@ -51,20 +51,27 @@ pressure $P_o$ ($=R_o$): $b_s = c_p \kappa (P_o / Pc)^{(\kappa - 1)}
 (Non-linear free surface)}
 
 The total thickness of the fluid column is $r_{surf} - R_{fixed} =
-\eta + R_o - R_{fixed}$ In the linear free surface approximation
-(detailed before), only the fixed part of it ($R_o - R_{fixed})$ is
-considered when we integrate the continuity equation or compute tracer
-and momentum advection term.
-
+\eta + R_o - R_{fixed}$. In most applications, the free surface 
+displacements are small compared to the total thickness
+$\eta << H_o = R_o - R_{fixed}$. 
+In the previous sections and in older version of the model,
+the linearized free-surface approximation was made, assuming
+$r_{surf} - R_{fixed} \simeq H_o$ when the horizontal transport is 
+computed, either in the continuity equation or in tracer and momentum 
+advection terms.
 This approximation is dropped when using the non-linear free surface
-formulation.  Here we discuss sections the barotropic part. In
-sections \ref{sect:freesurf-tracer-advection} and
-\ref{sect:freesurf-momentum-advection} we consider the baroclinic
-component.
+formulation and the total thickness, including the time varying part
+$\eta$, is consisdered when computing horizontal transport.
+Implications for the barotropic part are presented hereafter.
+In sections \ref{sect:freesurf-tracer-advection} and
+\ref{sect:freesurf-momentum-advection}, consequences for tracer 
+and momentum are brifly discussed. a more detailed description
+is available in \cite{campin:02}.
 
 
-The continuous form of the model equations remains unchanged, except
-for the 2D continuity equation (\ref{eq:discrete-time-backward-free-surface}) which is now
+In the non-linear formulation, the continuous form of the model equations 
+remains unchanged, except for the 2D continuity equation 
+(\ref{eq:discrete-time-backward-free-surface}) which is now
 integrated from $R_{fixed}(x,y)$ up to $r_{surf}=R_o+\eta$ :
 
 \begin{displaymath}
@@ -77,7 +84,7 @@ integrated from $R_{fixed}(x,y)$ up to $r_{surf}=R_o+\eta$ :
 Since $\eta$ has a direct effect on the horizontal velocity (through
 $\nabla_h \Phi_{surf}$), this adds a non-linear term to the free
 surface equation. Several options for the time discretization of this
-non-linear part have been tested.
+non-linear part can be considered, as detailed below.
 
 If the column thickness is evaluated at time step $n$, and with
 implicit treatment of the surface potential gradient, equations
@@ -115,6 +122,40 @@ column thickness appears only in the integral term of the RHS
 (\ref{eq-solve2D_rhs}) but not directly in the equation
 (\ref{eq-solve2D}).
 
+Those different options (see tab.?? for the one still available)
+have been tested and show litle differences. However, we recommand
+the use of the most precise method (the 1rst one) since the 
+computation cost involved in the solver matrix update are negligeable.
+
+\begin{center}
+ \begin{tabular}[htb]{|l|c|l|}
+   \hline
+   parameter & value & description \\ 
+   \hline
+                   & -1 & linear free-surface, restart from a pickup file \\
+                   &    & produced with \#undef EXACT\_CONSERV code\\
+   \cline{2-3}
+                   & 0 & Linear free-Surface \\ 
+   \cline{2-3}
+    nonlinFreeSurf & 4 & Non-linear free-surface \\
+   \cline{2-3}
+                   & 3 & same as 4 but neglecting
+                           $\int_{R_o}^{R_o+\eta} b' dr $ in $\Phi'_{hyd}$ \\
+   \cline{2-3}
+                   & 2 & same as 3 but do not update cg2d solver matrix \\
+   \cline{2-3}
+                  & 1 & same as 2 but treat momentum as in Linear FS \\
+   \hline
+                  & 0 & do not use $r*$ vertical coordinate (= default)\\
+   \cline{2-3}
+    select\_rStar & 2 & use $r^*$ vertical coordinate \\
+   \cline{2-3}
+                  & 1 & same as 2 but without the contribution of the\\
+                  &   & slope of the coordinate in $\nabla \Phi$ \\
+   \hline
+  \end{tabular}
+\end{center}
+
 
 \subsubsection{Free surface effect on the surface level thickness
 (Non-linear free surface): Tracer advection}
@@ -149,9 +190,13 @@ h^{n+1} \, \theta^{n+1} = h^n \, \theta^n
         - \Delta_t \nabla \cdot (h^n \, \theta^n \, \vec{\bf v}^{n+1})
 \end{eqnarray*}
 
-For Adams-Bashforth time-stepping, we implement this scheme slightly
-differently from the linear free-surface method, using two steps: the
-variation of the water column thickness (from $h^n$ to $h^{n+1}$) is
+The use of a 3 time-levels timestepping scheme such as the Adams-Bashforth
+make the conservation less straitforward.
+The current implementation with the Adams-Bashforth time-stepping
+provides an exact local conservation and prevents any drift in
+the global tracer content (\cite{campin:02}).
+Compared to the linear free-surface method, an additional step is required:
+the variation of the water column thickness (from $h^n$ to $h^{n+1}$) is
 not incorporated directly into the tracer equation.  Instead, the
 model uses the $G_\theta$ terms (first step) as in the linear free
 surface formulation (with the "{\it surface correction}" turned "on",
@@ -189,6 +234,12 @@ surface level to compute the new tracer field.
 (Non-linear free surface): Momentum advection}     
 \label{sect:freesurf-momentum-advection}
 
+With the flux form formulation, advection of momentum
+can be treated exactly as the tracer advection is.
+Here the expansion/reduction factors ($hFacW^{n+1}/hFacW^n$ for $u$
+and $hFacS^{n+1}/hFacS^n$ for $v$) are simply applied in the
+subroutine {\it TIMESTEP}.
+
 Regarding momentum advection,
 the vector invariant formulation is similar to the
 advective form (as opposed to the flux form) and therefore
@@ -197,9 +248,29 @@ free surface effect on the surface level thickness.
 Updating the {\bf hFacC,W,S} and the {\bf recip\_hFac}(s) 
 at one given place (like describe before) is sufficient.
 
-With the flux form formulation, advection of momentum
-can be treated exactly as the tracer advection is.
-Here the expansion/reduction factors ($hFacW^{n+1}/hFacW^n$ for $u$
-and $hFacS^{n+1}/hFacS^n$ for $v$) are simply applied in the
-subroutine {\it TIMESTEP}.
+\subsubsection{Non-linear free surface and vertical resolution}
+\label{sect:nonlin-freesurf-dz_surf}
+
+When the amplitude of the free-surface variations becomes
+as large as the vertical resolution near the surface,
+the surface layer thickness can decrease to nearly zero or
+can even vanishe completly. 
+This later possibility has not been implemented, and a 
+minimum relative thickness is imposed ({\bf hFacInf}, 
+parameter file {\em data}, namelist {\em PARM01}) to prevent 
+numerical instabilities caused by very thin surface level.
+
+A better atlternative to the vanishing level problem has been 
+found and implemented recently, and rely on a different 
+vertical coordinate $r^*$~:
+The time variation ot the total column thickness becomes
+part of the r* coordinate motion, as in a $\sigma_{z},\sigma_{p}$
+model, but the fixed part related to topography is treated
+as in a height or pressure coordinate model.
+A complete description is given in \cite{adcroft:04}. 
+
+The time-stepping implementation of the $r^*$ coordinate is
+identical to the non-linear free-surface in $r$ coordinate,
+and differences appear only in the spacial discretisation.
+\marginpar{needs a subsection ref. here}
 
