@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.11 2001/11/13 16:45:41 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.12 2001/11/13 20:27:54 adcroft Exp $
 % $Name:  $
 
 The equations of motion integrated by the model involve four
@@ -611,7 +611,7 @@ $\eta^{n+1}$: {\bf etaN} (\em DYNVARS.h)
 
 
 Once ${\eta}^{n+1}$ has been found, substituting into
-\ref{eq-tDsC-Hmom} yields $\vec{\bf v}^{n+1}$ if the model is
+\ref{eq:discrete-time-u,eq:discrete-time-v} yields $\vec{\bf v}^{n+1}$ if the model is
 hydrostatic ($\epsilon_{nh}=0$):
 $$
 \vec{\bf v}^{n+1} = \vec{\bf v}^{*}
@@ -621,8 +621,8 @@ $$
 This is known as the correction step. However, when the model is
 non-hydrostatic ($\epsilon_{nh}=1$) we need an additional step and an
 additional equation for $\phi'_{nh}$. This is obtained by substituting
-\ref{eq-tDsC-Hmom} and \ref{eq-tDsC-Vmom} into
-\ref{eq-tDsC-cont}:
+\ref{eq:discrete-time-u}, \ref{eq:discrete-time-v} and \ref{eq:discrete-time-w}
+into continuity:
 \begin{equation}
 \left[ {\bf \nabla}_h^2 + \partial_{rr} \right] {\phi'_{nh}}^{n+1}
 = \frac{1}{\Delta t} \left(
@@ -702,7 +702,8 @@ In the code, $\beta,\gamma$ are defined as parameters, respectively
 {\it implicSurfPress}, {\it implicDiv2DFlow}. They are read from
 the main data file "{\it data}" and are set by default to 1,1.
 
-Equations \ref{eq-tDsC-Hmom} and \ref{eq-tDsC-eta} are modified as follows:
+Equations \ref{eq:ustar-backward-free-surface} --
+\ref{eq:vn+1-backward-free-surface} are modified as follows:
 $$
 \frac{ \vec{\bf v}^{n+1} }{ \Delta t }
 + {\bf \nabla}_h b_s [ \beta {\eta}^{n+1} + (1-\beta) {\eta}^{n} ] 
