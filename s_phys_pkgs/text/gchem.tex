@@ -30,7 +30,7 @@ how they provide examples to use this package.
 {\it GCHEM\_OPTIONS.h} includes the compiler options to be used
 in any experiment. For instance \#define ALLOW\_CFC allows
 the CFC code to be run. An important compiler option is
- \#define PTRACERS\_SEPARATE\_FORCING which determined 
+ \#define GCHEM\_SEPARATE\_FORCING which determined 
 how and when the tracer forcing is applied (see discussion
 on Forcing below).
  There are further runtime parameters
@@ -65,7 +65,7 @@ forcing files that will be needed by the tracer experiment.
 
 There are two routine used to initialize parameters and fields
 needed by the experiment packages. These are
-{\it gchem\_init\_fixed.F} which is called from packages\_init\_fixed.F, and
+{\it gchem\_init\_fixed.F} which is called from \textit{packages\_init\_fixed.F}, and
 {\it gchem\_init\_vari.F} called from 
 packages\_init\_variable.F. The first should
 be used to call a subroutine specific to the tracer experiment
@@ -80,7 +80,7 @@ which sets (or initializes) time fields that will vary with time.
 {{\bf LOADING FIELDS}}\\
 External forcing fields used by the tracer experiment are read
 in by a subroutine (specific to the tracer experiment) called from
-{\it gchem\_fields\_load.F}. This latter is called from forward\_step.F.
+{\it gchem\_fields\_load.F}. This latter is called from \textit{forward\_step.F}.
 
 \vspace{.5cm}
 
@@ -93,35 +93,41 @@ between tracers) to these fields are taken care of by the gchem
 interface. For tracers that are essentially passive (e.g. CFC's)
 but may have some surface boundary conditions
 this can easily be done within the regular tracer timestep. In this case
-{\it gchem\_forcing\_int.F} is called from ptracers\_integrate.F.
+{\it gchem\_calc\_tendency.F} is called from {\it forward\_step.F}, where the 
+reactive (as opposed to the advective diffusive) tendencies are computed.
+These tendencies, stored on the 3D field \textbf{gchemTendency}, are added to
+the passive tracer tendencies \textbf{gPtr} in {\it gchem\_add\_tendency.F}, 
+which is called from {\it ptracers\_forcing.F}.
 For tracers with more complicated dependencies on each other,
 and especially tracers which require a smaller timestep than
 deltaTtracer, it will be easier to use {\it gchem\_forcing\_sep.F}
 which is called from forward\_step.F. There is a 
 compiler option set in {\it GCHEM\_OPTIONS.h} that determines
-which method is used: \#define PTRACERS\_SEPARATE\_FORCING
+which method is used: \#define GCHEM\_SEPARATE\_FORCING
 does the latter where tracers are forced separately from the
-advection-diffusion code, and \#undef PTRACERS\_SEPARATE\_FORCING
+advection-diffusion code, and \#undef GCHEM\_SEPARATE\_FORCING
 includes the forcing in the regular timestepping.
 
 \vspace{.5cm}
 
 \noindent
 {{\bf DIAGNOSTICS}}\\
-This package also includes routines {\it gchem\_monitor.F} and 
-{\it gchem\_mon\_print.F} which print out tracer statistics
-as often as the model dynamic statistic diagnostics (dynsys) are written.
+This package also also used the passive tracer routine {\it ptracers\_monitor.F}
+which prints out tracer statistics 
+as often as the model dynamic statistic diagnostics (dynsys) are written (or
+as prescribed by the runtime flag \textbf{PTRACERS\_monitorFreq}, set in {\it data.ptracers}).
 There is also a placeholder for any tracer experiment
 specific diagnostics to be calculated and printed to files.
 This is done in {\it gchem\_diags.F}. For instance the time average CO2
 air-sea fluxes, and sea surface pH (among others) are written
-out by dic\_biotic\_diags.F which is called from gchem\_diags.F.
+out by {\it dic\_biotic\_diags.F} which is called from {\it gchem\_diags.F}.
 
 \subsection{Do's and Don'ts}
 
-The pkg ptracer is required with use with this pkg.
-By itself, gchem pkg will read in {\bf data.gchem} and will
-write out ptracer diagnostics. It requires tracer experiment
+The pkg ptracer is required with use with this pkg. Also, as usual, the
+runtime flag \textbf{useGCHEM} must be set to \textbf{.TRUE.} in \textbf{data.pkg}.
+By itself, gchem pkg will read in \textbf{data.gchem} and will
+write out gchem diagnostics. It requires tracer experiment
 specific calls to do anything else (for instance the calls
 to dic and cfc pkgs).
 
