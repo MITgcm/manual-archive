@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.16 2004/01/29 03:02:33 edhill Exp $
+% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.17 2004/01/29 15:11:39 edhill Exp $
 % $Name:  $
 
 %\section{Getting started}
@@ -115,9 +115,9 @@ The MITgcm web site contains further directions concerning the source
 code and CVS.  It also contains a web interface to our CVS archive so
 that one may easily view the state of files, revisions, and other
 development milestones:
-\begin{rawhtml} <A href=http://mitgcm.org/download target="idontexist"> \end{rawhtml}
+\begin{rawhtml} <A href=''http://mitgcm.org/download'' target="idontexist"> \end{rawhtml}
 \begin{verbatim}
-http://mitgcm.org/source\_code.html
+http://mitgcm.org/source_code.html
 \end{verbatim}
 \begin{rawhtml} </A> \end{rawhtml}
 
@@ -130,7 +130,7 @@ track of your file versions with respect to the repository. Don't edit
 the files in \textit{CVS}!  You can also use CVS to download code
 updates.  More extensive information on using CVS for maintaining
 MITgcm code can be found
-\begin{rawhtml} <A href=http://mitgcm.org/usingcvstoget.html target="idontexist"> \end{rawhtml}
+\begin{rawhtml} <A href=''http://mitgcm.org/usingcvstoget.html'' target="idontexist"> \end{rawhtml}
 here
 \begin{rawhtml} </A> \end{rawhtml} 
 .
@@ -150,7 +150,11 @@ The tar file still contains CVS information which we urge you not to
 delete; even if you do not use CVS yourself the information can help
 us if you should need to send us your copy of the code.  If a recent
 tar file does not exist, then please contact the developers through
-the MITgcm-support list.
+the 
+\begin{rawhtml} <A href=''mailto:MITgcm-support@mitgcm.org"> \end{rawhtml}
+MITgcm-support@mitgcm.org
+\begin{rawhtml} </A> \end{rawhtml}
+mailing list.
 
 \paragraph*{Upgrading from an earlier version}
 
@@ -178,6 +182,7 @@ If the list of conflicts scrolled off the screen, you can re-issue the
 cvs update command and it will report the conflicts. Conflicts are
 indicated in the code by the delimites ``$<<<<<<<$'', ``======='' and
 ``$>>>>>>>$''. For example,
+{\small
 \begin{verbatim}
 <<<<<<< ini_parms.F
      & bottomDragLinear,myOwnBottomDragCoefficient,
@@ -185,13 +190,16 @@ indicated in the code by the delimites ``$<<<<<<<$'', ``======='' and
      & bottomDragLinear,bottomDragQuadratic,
 >>>>>>> 1.18
 \end{verbatim}
+}
 means that you added ``myOwnBottomDragCoefficient'' to a namelist at
 the same time and place that we added ``bottomDragQuadratic''. You
 need to resolve this conflict and in this case the line should be
 changed to:
+{\small
 \begin{verbatim}
      & bottomDragLinear,bottomDragQuadratic,myOwnBottomDragCoefficient,
 \end{verbatim}
+}
 and the lines with the delimiters ($<<<<<<$,======,$>>>>>>$) be deleted.
 Unless you are making modifications which exactly parallel
 developments we make, these types of conflicts should be rare.
@@ -225,55 +233,62 @@ model code. The execution environment support code is held under the
 \textit{eesupp} directory. The grid point model code is held under the
 \textit{model} directory. Code execution actually starts in the
 \textit{eesupp} routines and not in the \textit{model} routines. For
-this reason the top-level
-\textit{MAIN.F} is in the \textit{eesupp/src} directory. In general,
-end-users should not need to worry about this level. The top-level routine
-for the numerical part of the code is in \textit{model/src/THE\_MODEL\_MAIN.F%
-}. Here is a brief description of the directory structure of the model under
-the root tree (a detailed description is given in section 3: Code structure).
+this reason the top-level \textit{MAIN.F} is in the
+\textit{eesupp/src} directory. In general, end-users should not need
+to worry about this level. The top-level routine for the numerical
+part of the code is in \textit{model/src/THE\_MODEL\_MAIN.F}. Here is
+a brief description of the directory structure of the model under the
+root tree (a detailed description is given in section 3: Code
+structure).
 
 \begin{itemize}
-\item \textit{bin}: this directory is initially empty. It is the default
-directory in which to compile the code.
 
+\item \textit{bin}: this directory is initially empty. It is the
+  default directory in which to compile the code.
+  
 \item \textit{diags}: contains the code relative to time-averaged
-diagnostics. It is subdivided into two subdirectories \textit{inc} and 
-\textit{src} that contain include files (*.\textit{h} files) and Fortran
-subroutines (*.\textit{F} files), respectively.
+  diagnostics. It is subdivided into two subdirectories \textit{inc}
+  and \textit{src} that contain include files (*.\textit{h} files) and
+  Fortran subroutines (*.\textit{F} files), respectively.
 
 \item \textit{doc}: contains brief documentation notes.
-
-\item \textit{eesupp}: contains the execution environment source code. Also
-subdivided into two subdirectories \textit{inc} and \textit{src}.
-
-\item \textit{exe}: this directory is initially empty. It is the default
-directory in which to execute the code.
-
-\item \textit{model}: this directory contains the main source code. Also
-subdivided into two subdirectories \textit{inc} and \textit{src}.
-
-\item \textit{pkg}: contains the source code for the packages. Each package
-corresponds to a subdirectory. For example, \textit{gmredi} contains the
-code related to the Gent-McWilliams/Redi scheme, \textit{aim} the code
-relative to the atmospheric intermediate physics. The packages are described
-in detail in section 3.
-
-\item \textit{tools}: this directory contains various useful tools. For
-example, \textit{genmake2} is a script written in csh (C-shell) that should
-be used to generate your makefile. The directory \textit{adjoint} contains
-the makefile specific to the Tangent linear and Adjoint Compiler (TAMC) that
-generates the adjoint code. The latter is described in details in part V.
-
+  
+\item \textit{eesupp}: contains the execution environment source code.
+  Also subdivided into two subdirectories \textit{inc} and
+  \textit{src}.
+  
+\item \textit{exe}: this directory is initially empty. It is the
+  default directory in which to execute the code.
+  
+\item \textit{model}: this directory contains the main source code.
+  Also subdivided into two subdirectories \textit{inc} and
+  \textit{src}.
+  
+\item \textit{pkg}: contains the source code for the packages. Each
+  package corresponds to a subdirectory. For example, \textit{gmredi}
+  contains the code related to the Gent-McWilliams/Redi scheme,
+  \textit{aim} the code relative to the atmospheric intermediate
+  physics. The packages are described in detail in section 3.
+  
+\item \textit{tools}: this directory contains various useful tools.
+  For example, \textit{genmake2} is a script written in csh (C-shell)
+  that should be used to generate your makefile. The directory
+  \textit{adjoint} contains the makefile specific to the Tangent
+  linear and Adjoint Compiler (TAMC) that generates the adjoint code.
+  The latter is described in details in part V.
+  
 \item \textit{utils}: this directory contains various utilities. The
-subdirectory \textit{knudsen2} contains code and a makefile that
-compute coefficients of the polynomial approximation to the knudsen
-formula for an ocean nonlinear equation of state. The \textit{matlab}
-subdirectory contains matlab scripts for reading model output directly
-into matlab. \textit{scripts} contains C-shell post-processing
-scripts for joining processor-based and tiled-based model output.
+  subdirectory \textit{knudsen2} contains code and a makefile that
+  compute coefficients of the polynomial approximation to the knudsen
+  formula for an ocean nonlinear equation of state. The
+  \textit{matlab} subdirectory contains matlab scripts for reading
+  model output directly into matlab. \textit{scripts} contains C-shell
+  post-processing scripts for joining processor-based and tiled-based
+  model output.
+  
+\item \textit{verification}: this directory contains the model
+  examples. See section \ref{sect:modelExamples}.
 
-\item \textit{verification}: this directory contains the model examples. See
-section \ref{sect:modelExamples}.
 \end{itemize}
 
 \section{Example experiments}
@@ -295,6 +310,7 @@ below.
 \subsection{Full list of model examples}
 
 \begin{enumerate}
+  
 \item \textit{exp0} - single layer, ocean double gyre (barotropic with
   free-surface). This experiment is described in detail in section
   \ref{sect:eg-baro}.
@@ -420,11 +436,11 @@ Each example directory has the following subdirectories:
     of the number of threads to use in $X$ and $Y$ under multithreaded
     execution.
   \end{itemize}
-
-In addition, you will also find in this directory the forcing and
-topography files as well as the files describing the initial state of
-the experiment.  This varies from experiment to experiment. See
-section 2 for more details.
+  
+  In addition, you will also find in this directory the forcing and
+  topography files as well as the files describing the initial state
+  of the experiment.  This varies from experiment to experiment. See
+  section 2 for more details.
 
 \item \textit{results}: this directory contains the output file
   \textit{output.txt} produced by the simulation example. This file is
@@ -432,8 +448,8 @@ section 2 for more details.
   experiment.
 \end{itemize}
 
-Once you have chosen the example you want to run, you are ready to compile
-the code.
+Once you have chosen the example you want to run, you are ready to
+compile the code.
 
 \section{Building the code}
 \label{sect:buildingCode}
@@ -474,7 +490,11 @@ mimic their syntax.
 Through the MITgcm-support list, the MITgcm developers are willing to
 provide help writing or modifing ``optfiles''.  And we encourage users
 to post new ``optfiles'' (particularly ones for new machines or
-architectures) to the MITgcm-support list.
+architectures) to the 
+\begin{rawhtml} <A href=''mailto:MITgcm-support@mitgcm.org"> \end{rawhtml}
+MITgcm-support@mitgcm.org
+\begin{rawhtml} </A> \end{rawhtml}
+list.
 
 To specify an optfile to {\em genmake2}, the syntax is:
 \begin{verbatim}
@@ -707,8 +727,8 @@ obtained from:
 The most important command-line options are:
 \begin{description}
   
-\item[--optfile=/PATH/FILENAME] specifies the optfile that should be
-  used for a particular build.
+\item[\texttt{--optfile=/PATH/FILENAME}] specifies the optfile that
+  should be used for a particular build.
   
   If no "optfile" is specified (either through the command line or the
   MITGCM\_OPTFILE environment variable), genmake2 will try to make a
@@ -719,8 +739,8 @@ The most important command-line options are:
   the user's path.  When these three items have been identified,
   genmake2 will try to find an optfile that has a matching name.
   
-\item[--pdepend=/PATH/FILENAME] specifies the dependency file used for
-  packages.
+\item[\texttt{--pdepend=/PATH/FILENAME}] specifies the dependency file
+  used for packages.
   
   If not specified, the default dependency file {\em pkg/pkg\_depend}
   is used.  The syntax for this file is parsed on a line-by-line basis
@@ -731,16 +751,16 @@ The most important command-line options are:
   assumed that the two packages are compatible and will function
   either with or without each other.
   
-\item[--pdefault='PKG1 PKG2 PKG3 ...'] specifies the default set of
-  packages to be used.
+\item[\texttt{--pdefault='PKG1 PKG2 PKG3 ...'}] specifies the default
+  set of packages to be used.
   
   If not set, the default package list will be read from {\em
     pkg/pkg\_default}
   
-\item[--adof=/path/to/file] specifies the "adjoint" or automatic
-  differentiation options file to be used.  The file is analogous to
-  the ``optfile'' defined above but it specifies information for the
-  AD build process.
+\item[\texttt{--adof=/path/to/file}] specifies the "adjoint" or
+  automatic differentiation options file to be used.  The file is
+  analogous to the ``optfile'' defined above but it specifies
+  information for the AD build process.
   
   The default file is located in {\em
     tools/adjoint\_options/adjoint\_default} and it defines the "TAF"
@@ -749,11 +769,11 @@ The most important command-line options are:
   "STAF" compiler.  As with any compilers, it is helpful to have their
   directories listed in your {\tt \$PATH} environment variable.
   
-\item[--mods='DIR1 DIR2 DIR3 ...'] specifies a list of directories
-  containing ``modifications''.  These directories contain files with
-  names that may (or may not) exist in the main MITgcm source tree but
-  will be overridden by any identically-named sources within the
-  ``MODS'' directories.
+\item[\texttt{--mods='DIR1 DIR2 DIR3 ...'}] specifies a list of
+  directories containing ``modifications''.  These directories contain
+  files with names that may (or may not) exist in the main MITgcm
+  source tree but will be overridden by any identically-named sources
+  within the ``MODS'' directories.
   
   The order of precedence for this "name-hiding" is as follows:
   \begin{itemize}
@@ -766,11 +786,11 @@ The most important command-line options are:
     ``-standarddirs'' option)
   \end{itemize}
   
-\item[--make=/path/to/gmake] Due to the poor handling of soft-links and
-  other bugs common with the \texttt{make} versions provided by
-  commercial Unix vendors, GNU \texttt{make} (sometimes called
-  \texttt{gmake}) should be preferred.  This option provides a means
-  for specifying the make executable to be used.
+\item[\texttt{--make=/path/to/gmake}] Due to the poor handling of
+  soft-links and other bugs common with the \texttt{make} versions
+  provided by commercial Unix vendors, GNU \texttt{make} (sometimes
+  called \texttt{gmake}) should be preferred.  This option provides a
+  means for specifying the make executable to be used.
 
 \end{description}
 
@@ -799,7 +819,7 @@ normally re-direct the {\em stdout} stream as follows:
 % ./mitgcmuv > output.txt
 \end{verbatim}
 
-For the example experiments in {\em vericication}, an example of the
+For the example experiments in {\em verification}, an example of the
 output is kept in {\em results/output.txt} for comparison. You can compare
 your {\em output.txt} with this one to check that the set-up works.
 
@@ -888,123 +908,128 @@ Some examples of reading and visualizing some output in {\em Matlab}:
 \section{Doing it yourself: customizing the code}
 
 When you are ready to run the model in the configuration you want, the
-easiest thing is to use and adapt the setup of the case studies experiment
-(described previously) that is the closest to your configuration. Then, the
-amount of setup will be minimized. In this section, we focus on the setup
-relative to the ''numerical model'' part of the code (the setup relative to
-the ''execution environment'' part is covered in the parallel implementation
-section) and on the variables and parameters that you are likely to change.
+easiest thing is to use and adapt the setup of the case studies
+experiment (described previously) that is the closest to your
+configuration. Then, the amount of setup will be minimized. In this
+section, we focus on the setup relative to the ``numerical model''
+part of the code (the setup relative to the ``execution environment''
+part is covered in the parallel implementation section) and on the
+variables and parameters that you are likely to change.
 
 \subsection{Configuration and setup}
 
-The CPP keys relative to the ''numerical model'' part of the code are all
-defined and set in the file \textit{CPP\_OPTIONS.h }in the directory \textit{%
-model/inc }or in one of the \textit{code }directories of the case study
-experiments under \textit{verification.} The model parameters are defined
-and declared in the file \textit{model/inc/PARAMS.h }and their default
-values are set in the routine \textit{model/src/set\_defaults.F. }The
-default values can be modified in the namelist file \textit{data }which
-needs to be located in the directory where you will run the model. The
-parameters are initialized in the routine \textit{model/src/ini\_parms.F}.
-Look at this routine to see in what part of the namelist the parameters are
-located.
+The CPP keys relative to the ``numerical model'' part of the code are
+all defined and set in the file \textit{CPP\_OPTIONS.h }in the
+directory \textit{ model/inc }or in one of the \textit{code
+}directories of the case study experiments under
+\textit{verification.} The model parameters are defined and declared
+in the file \textit{model/inc/PARAMS.h }and their default values are
+set in the routine \textit{model/src/set\_defaults.F. }The default
+values can be modified in the namelist file \textit{data }which needs
+to be located in the directory where you will run the model. The
+parameters are initialized in the routine
+\textit{model/src/ini\_parms.F}.  Look at this routine to see in what
+part of the namelist the parameters are located.
 
-In what follows the parameters are grouped into categories related to the
-computational domain, the equations solved in the model, and the simulation
-controls.
+In what follows the parameters are grouped into categories related to
+the computational domain, the equations solved in the model, and the
+simulation controls.
 
 \subsection{Computational domain, geometry and time-discretization}
 
-\begin{itemize}
-\item dimensions
-\end{itemize}
+\begin{description}
+\item[dimensions] \ 
+  
+  The number of points in the x, y,\textit{\ }and r\textit{\ 
+  }directions are represented by the variables \textbf{sNx}\textit{,
+  }\textbf{sNy}\textit{, } and \textbf{Nr}\textit{\ }respectively
+  which are declared and set in the file \textit{model/inc/SIZE.h.
+  }(Again, this assumes a mono-processor calculation. For
+  multiprocessor calculations see section on parallel implementation.)
 
-The number of points in the x, y,\textit{\ }and r\textit{\ }directions are
-represented by the variables \textbf{sNx}\textit{, }\textbf{sNy}\textit{, }%
-and \textbf{Nr}\textit{\ }respectively which are declared and set in the
-file \textit{model/inc/SIZE.h. }(Again, this assumes a mono-processor
-calculation. For multiprocessor calculations see section on parallel
-implementation.)
+\item[grid] \ 
+  
+  Three different grids are available: cartesian, spherical polar, and
+  curvilinear (including the cubed sphere). The grid is set through
+  the logical variables \textbf{usingCartesianGrid}\textit{, }\textbf{
+    usingSphericalPolarGrid}\textit{, }and \textit{\ }\textbf{
+    usingCurvilinearGrid}\textit{. }In the case of spherical and
+  curvilinear grids, the southern boundary is defined through the
+  variable \textbf{phiMin} \textit{\ }which corresponds to the
+  latitude of the southern most cell face (in degrees). The resolution
+  along the x and y directions is controlled by the 1D arrays
+  \textbf{delx}\textit{\ }and \textbf{dely}\textit{\ }(in meters in
+  the case of a cartesian grid, in degrees otherwise). The vertical
+  grid spacing is set through the 1D array \textbf{delz }for the ocean
+  (in meters) or \textbf{delp}\textit{\ }for the atmosphere (in Pa).
+  The variable \textbf{ Ro\_SeaLevel} represents the standard position
+  of Sea-Level in ''R'' coordinate. This is typically set to 0m for
+  the ocean (default value) and 10$ ^{5}$Pa for the atmosphere. For
+  the atmosphere, also set the logical variable \textbf{groundAtK1} to
+  '.\texttt{TRUE}.'. which put the first level (k=1) at the lower
+  boundary (ground).
+  
+  For the cartesian grid case, the Coriolis parameter $f$ is set
+  through the variables \textbf{f0}\textit{\ }and
+  \textbf{beta}\textit{\ }which correspond to the reference Coriolis
+  parameter (in s$^{-1}$) and $\frac{\partial f}{ \partial y}$(in
+  m$^{-1}$s$^{-1}$) respectively. If \textbf{beta }\textit{\ } is set
+  to a nonzero value, \textbf{f0}\textit{\ }is the value of $f$ at the
+  southern edge of the domain.
 
-\begin{itemize}
-\item grid
-\end{itemize}
+\item[topography - full and partial cells] \ 
+  
+  The domain bathymetry is read from a file that contains a 2D (x,y)
+  map of depths (in m) for the ocean or pressures (in Pa) for the
+  atmosphere. The file name is represented by the variable
+  \textbf{bathyFile}\textit{. }The file is assumed to contain binary
+  numbers giving the depth (pressure) of the model at each grid cell,
+  ordered with the x coordinate varying fastest. The points are
+  ordered from low coordinate to high coordinate for both axes. The
+  model code applies without modification to enclosed, periodic, and
+  double periodic domains. Periodicity is assumed by default and is
+  suppressed by setting the depths to 0m for the cells at the limits
+  of the computational domain (note: not sure this is the case for the
+  atmosphere). The precision with which to read the binary data is
+  controlled by the integer variable \textbf{readBinaryPrec }which can
+  take the value \texttt{32} (single precision) or \texttt{64} (double
+  precision). See the matlab program \textit{ gendata.m }in the
+  \textit{input }directories under \textit{verification }to see how
+  the bathymetry files are generated for the case study experiments.
+  
+  To use the partial cell capability, the variable
+  \textbf{hFacMin}\textit{\ } needs to be set to a value between 0 and
+  1 (it is set to 1 by default) corresponding to the minimum
+  fractional size of the cell. For example if the bottom cell is 500m
+  thick and \textbf{hFacMin}\textit{\ }is set to 0.1, the actual
+  thickness of the cell (i.e. used in the code) can cover a range of
+  discrete values 50m apart from 50m to 500m depending on the value of
+  the bottom depth (in \textbf{bathyFile}) at this point.
+  
+  Note that the bottom depths (or pressures) need not coincide with
+  the models levels as deduced from \textbf{delz}\textit{\ 
+  }or\textit{\ }\textbf{delp} \textit{. }The model will interpolate
+  the numbers in \textbf{bathyFile} \textit{\ }so that they match the
+  levels obtained from \textbf{delz}\textit{ \ }or\textit{\ 
+  }\textbf{delp}\textit{\ }and \textbf{hFacMin}\textit{. }
+  
+  (Note: the atmospheric case is a bit more complicated than what is
+  written here I think. To come soon...)
 
-Three different grids are available: cartesian, spherical polar, and
-curvilinear (including the cubed sphere). The grid is set through the
-logical variables \textbf{usingCartesianGrid}\textit{, }\textbf{%
-usingSphericalPolarGrid}\textit{, }and \textit{\ }\textbf{%
-usingCurvilinearGrid}\textit{. }In the case of spherical and curvilinear
-grids, the southern boundary is defined through the variable \textbf{phiMin}%
-\textit{\ }which corresponds to the latitude of the southern most cell face
-(in degrees). The resolution along the x and y directions is controlled by
-the 1D arrays \textbf{delx}\textit{\ }and \textbf{dely}\textit{\ }(in meters
-in the case of a cartesian grid, in degrees otherwise). The vertical grid
-spacing is set through the 1D array \textbf{delz }for the ocean (in meters)
-or \textbf{delp}\textit{\ }for the atmosphere (in Pa). The variable \textbf{%
-Ro\_SeaLevel} represents the standard position of Sea-Level in ''R''
-coordinate. This is typically set to 0m for the ocean (default value) and 10$%
-^{5}$Pa for the atmosphere. For the atmosphere, also set the logical
-variable \textbf{groundAtK1} to '.\texttt{TRUE}.'. which put the first level
-(k=1) at the lower boundary (ground).
+\item[time-discretization] \ 
+  
+  The time steps are set through the real variables \textbf{deltaTMom}
+  and \textbf{deltaTtracer} (in s) which represent the time step for
+  the momentum and tracer equations, respectively. For synchronous
+  integrations, simply set the two variables to the same value (or you
+  can prescribe one time step only through the variable
+  \textbf{deltaT}). The Adams-Bashforth stabilizing parameter is set
+  through the variable \textbf{abEps} (dimensionless). The stagger
+  baroclinic time stepping can be activated by setting the logical
+  variable \textbf{staggerTimeStep} to '.\texttt{TRUE}.'.
 
-For the cartesian grid case, the Coriolis parameter $f$ is set through the
-variables \textbf{f0}\textit{\ }and \textbf{beta}\textit{\ }which correspond
-to the reference Coriolis parameter (in s$^{-1}$) and $\frac{\partial f}{%
-\partial y}$(in m$^{-1}$s$^{-1}$) respectively. If \textbf{beta }\textit{\ }%
-is set to a nonzero value, \textbf{f0}\textit{\ }is the value of $f$ at the
-southern edge of the domain.
+\end{description}
 
-\begin{itemize}
-\item topography - full and partial cells
-\end{itemize}
-
-The domain bathymetry is read from a file that contains a 2D (x,y) map of
-depths (in m) for the ocean or pressures (in Pa) for the atmosphere. The
-file name is represented by the variable \textbf{bathyFile}\textit{. }The
-file is assumed to contain binary numbers giving the depth (pressure) of the
-model at each grid cell, ordered with the x coordinate varying fastest. The
-points are ordered from low coordinate to high coordinate for both axes. The
-model code applies without modification to enclosed, periodic, and double
-periodic domains. Periodicity is assumed by default and is suppressed by
-setting the depths to 0m for the cells at the limits of the computational
-domain (note: not sure this is the case for the atmosphere). The precision
-with which to read the binary data is controlled by the integer variable 
-\textbf{readBinaryPrec }which can take the value \texttt{32} (single
-precision) or \texttt{64} (double precision). See the matlab program \textit{%
-gendata.m }in the \textit{input }directories under \textit{verification }to
-see how the bathymetry files are generated for the case study experiments.
-
-To use the partial cell capability, the variable \textbf{hFacMin}\textit{\ }%
-needs to be set to a value between 0 and 1 (it is set to 1 by default)
-corresponding to the minimum fractional size of the cell. For example if the
-bottom cell is 500m thick and \textbf{hFacMin}\textit{\ }is set to 0.1, the
-actual thickness of the cell (i.e. used in the code) can cover a range of
-discrete values 50m apart from 50m to 500m depending on the value of the
-bottom depth (in \textbf{bathyFile}) at this point.
-
-Note that the bottom depths (or pressures) need not coincide with the models
-levels as deduced from \textbf{delz}\textit{\ }or\textit{\ }\textbf{delp}%
-\textit{. }The model will interpolate the numbers in \textbf{bathyFile}%
-\textit{\ }so that they match the levels obtained from \textbf{delz}\textit{%
-\ }or\textit{\ }\textbf{delp}\textit{\ }and \textbf{hFacMin}\textit{. }
-
-(Note: the atmospheric case is a bit more complicated than what is written
-here I think. To come soon...)
-
-\begin{itemize}
-\item time-discretization
-\end{itemize}
-
-The time steps are set through the real variables \textbf{deltaTMom}
-and \textbf{deltaTtracer} (in s) which represent the time step for the
-momentum and tracer equations, respectively. For synchronous
-integrations, simply set the two variables to the same value (or you
-can prescribe one time step only through the variable
-\textbf{deltaT}). The Adams-Bashforth stabilizing parameter is set
-through the variable \textbf{abEps} (dimensionless). The stagger
-baroclinic time stepping can be activated by setting the logical
-variable \textbf{staggerTimeStep} to '.\texttt{TRUE}.'.
 
 \subsection{Equation of state}
 
@@ -1076,94 +1101,96 @@ useCoriolis, momPressureForcing, momStepping}\textit{, }and \textit{\ }%
 Look at the file \textit{model/inc/PARAMS.h }for a precise definition of
 these variables.
 
-\begin{itemize}
-\item initialization
-\end{itemize}
+\begin{description}
+\item[initialization] \ 
+  
+  The velocity components are initialized to 0 unless the simulation
+  is starting from a pickup file (see section on simulation control
+  parameters).
 
-The velocity components are initialized to 0 unless the simulation is
-starting from a pickup file (see section on simulation control parameters).
+\item[forcing] \ 
+  
+  This section only applies to the ocean. You need to generate
+  wind-stress data into two files \textbf{zonalWindFile}\textit{\ }and
+  \textbf{ meridWindFile }corresponding to the zonal and meridional
+  components of the wind stress, respectively (if you want the stress
+  to be along the direction of only one of the model horizontal axes,
+  you only need to generate one file). The format of the files is
+  similar to the bathymetry file. The zonal (meridional) stress data
+  are assumed to be in Pa and located at U-points (V-points). As for
+  the bathymetry, the precision with which to read the binary data is
+  controlled by the variable \textbf{readBinaryPrec}.\textbf{\ } See
+  the matlab program \textit{gendata.m }in the \textit{input
+  }directories under \textit{verification }to see how simple
+  analytical wind forcing data are generated for the case study
+  experiments.
+  
+  There is also the possibility of prescribing time-dependent periodic
+  forcing. To do this, concatenate the successive time records into a
+  single file (for each stress component) ordered in a (x, y, t)
+  fashion and set the following variables:
+  \textbf{periodicExternalForcing }to '.\texttt{TRUE}.',
+  \textbf{externForcingPeriod }to the period (in s) of which the
+  forcing varies (typically 1 month), and \textbf{externForcingCycle
+  }to the repeat time (in s) of the forcing (typically 1 year -- note:
+  \textbf{ externForcingCycle }must be a multiple of
+  \textbf{externForcingPeriod}).  With these variables set up, the
+  model will interpolate the forcing linearly at each iteration.
 
-\begin{itemize}
-\item forcing
-\end{itemize}
+\item[dissipation] \ 
+  
+  The lateral eddy viscosity coefficient is specified through the
+  variable \textbf{viscAh}\textit{\ }(in m$^{2}$s$^{-1}$). The
+  vertical eddy viscosity coefficient is specified through the
+  variable \textbf{viscAz }(in m$^{2}$s$ ^{-1}$) for the ocean and
+  \textbf{viscAp}\textit{\ }(in Pa$^{2}$s$^{-1}$) for the atmosphere.
+  The vertical diffusive fluxes can be computed implicitly by setting
+  the logical variable \textbf{implicitViscosity }to '.\texttt{TRUE}
+  .'. In addition, biharmonic mixing can be added as well through the
+  variable \textbf{viscA4}\textit{\ }(in m$^{4}$s$^{-1}$). On a
+  spherical polar grid, you might also need to set the variable
+  \textbf{cosPower} which is set to 0 by default and which represents
+  the power of cosine of latitude to multiply viscosity. Slip or
+  no-slip conditions at lateral and bottom boundaries are specified
+  through the logical variables \textbf{no\_slip\_sides}\textit{\ }
+  and \textbf{no\_slip\_bottom}. If set to '\texttt{.FALSE.}',
+  free-slip boundary conditions are applied. If no-slip boundary
+  conditions are applied at the bottom, a bottom drag can be applied
+  as well. Two forms are available: linear (set the variable
+  \textbf{bottomDragLinear}\textit{\ }in s$ ^{-1}$) and quadratic (set
+  the variable \textbf{bottomDragQuadratic}\textit{ \ }in m$^{-1}$).
 
-This section only applies to the ocean. You need to generate wind-stress
-data into two files \textbf{zonalWindFile}\textit{\ }and \textbf{%
-meridWindFile }corresponding to the zonal and meridional components of the
-wind stress, respectively (if you want the stress to be along the direction
-of only one of the model horizontal axes, you only need to generate one
-file). The format of the files is similar to the bathymetry file. The zonal
-(meridional) stress data are assumed to be in Pa and located at U-points
-(V-points). As for the bathymetry, the precision with which to read the
-binary data is controlled by the variable \textbf{readBinaryPrec}.\textbf{\ }
-See the matlab program \textit{gendata.m }in the \textit{input }directories
-under \textit{verification }to see how simple analytical wind forcing data
-are generated for the case study experiments. 
+  The Fourier and Shapiro filters are described elsewhere.
 
-There is also the possibility of prescribing time-dependent periodic
-forcing. To do this, concatenate the successive time records into a single
-file (for each stress component) ordered in a (x, y, t) fashion and set the
-following variables: \textbf{periodicExternalForcing }to '.\texttt{TRUE}.', 
-\textbf{externForcingPeriod }to the period (in s) of which the forcing
-varies (typically 1 month), and \textbf{externForcingCycle }to the repeat
-time (in s) of the forcing (typically 1 year -- note: \textbf{%
-externForcingCycle }must be a multiple of \textbf{externForcingPeriod}).
-With these variables set up, the model will interpolate the forcing linearly
-at each iteration.
+\item[C-D scheme] \ 
+  
+  If you run at a sufficiently coarse resolution, you will need the
+  C-D scheme for the computation of the Coriolis terms. The
+  variable\textbf{\ tauCD}, which represents the C-D scheme coupling
+  timescale (in s) needs to be set.
+  
+\item[calculation of pressure/geopotential] \ 
+  
+  First, to run a non-hydrostatic ocean simulation, set the logical
+  variable \textbf{nonHydrostatic} to '.\texttt{TRUE}.'. The pressure
+  field is then inverted through a 3D elliptic equation. (Note: this
+  capability is not available for the atmosphere yet.) By default, a
+  hydrostatic simulation is assumed and a 2D elliptic equation is used
+  to invert the pressure field. The parameters controlling the
+  behaviour of the elliptic solvers are the variables
+  \textbf{cg2dMaxIters}\textit{\ }and \textbf{cg2dTargetResidual } for
+  the 2D case and \textbf{cg3dMaxIters}\textit{\ }and \textbf{
+    cg3dTargetResidual }for the 3D case. You probably won't need to
+  alter the default values (are we sure of this?).
+  
+  For the calculation of the surface pressure (for the ocean) or
+  surface geopotential (for the atmosphere) you need to set the
+  logical variables \textbf{rigidLid} and
+  \textbf{implicitFreeSurface}\textit{\ }(set one to '.
+  \texttt{TRUE}.' and the other to '.\texttt{FALSE}.' depending on how
+  you want to deal with the ocean upper or atmosphere lower boundary).
 
-\begin{itemize}
-\item dissipation
-\end{itemize}
-
-The lateral eddy viscosity coefficient is specified through the variable 
-\textbf{viscAh}\textit{\ }(in m$^{2}$s$^{-1}$). The vertical eddy viscosity
-coefficient is specified through the variable \textbf{viscAz }(in m$^{2}$s$%
-^{-1}$) for the ocean and \textbf{viscAp}\textit{\ }(in Pa$^{2}$s$^{-1}$)
-for the atmosphere. The vertical diffusive fluxes can be computed implicitly
-by setting the logical variable \textbf{implicitViscosity }to '.\texttt{TRUE}%
-.'. In addition, biharmonic mixing can be added as well through the variable 
-\textbf{viscA4}\textit{\ }(in m$^{4}$s$^{-1}$). On a spherical polar grid,
-you might also need to set the variable \textbf{cosPower} which is set to 0
-by default and which represents the power of cosine of latitude to multiply
-viscosity. Slip or no-slip conditions at lateral and bottom boundaries are
-specified through the logical variables \textbf{no\_slip\_sides}\textit{\ }%
-and \textbf{no\_slip\_bottom}. If set to '\texttt{.FALSE.}', free-slip
-boundary conditions are applied. If no-slip boundary conditions are applied
-at the bottom, a bottom drag can be applied as well. Two forms are
-available: linear (set the variable \textbf{bottomDragLinear}\textit{\ }in s$%
-^{-1}$) and quadratic (set the variable \textbf{bottomDragQuadratic}\textit{%
-\ }in m$^{-1}$).
-
-The Fourier and Shapiro filters are described elsewhere.
-
-\begin{itemize}
-\item C-D scheme
-\end{itemize}
-
-If you run at a sufficiently coarse resolution, you will need the C-D scheme
-for the computation of the Coriolis terms. The variable\textbf{\ tauCD},
-which represents the C-D scheme coupling timescale (in s) needs to be set.
-
-\begin{itemize} 
-\item calculation of pressure/geopotential
-\end{itemize} 
-
-First, to run a non-hydrostatic ocean simulation, set the logical variable 
-\textbf{nonHydrostatic} to '.\texttt{TRUE}.'. The pressure field is then
-inverted through a 3D elliptic equation. (Note: this capability is not
-available for the atmosphere yet.) By default, a hydrostatic simulation is
-assumed and a 2D elliptic equation is used to invert the pressure field. The
-parameters controlling the behaviour of the elliptic solvers are the
-variables \textbf{cg2dMaxIters}\textit{\ }and \textbf{cg2dTargetResidual }%
-for the 2D case and \textbf{cg3dMaxIters}\textit{\ }and \textbf{%
-cg3dTargetResidual }for the 3D case. You probably won't need to alter the
-default values (are we sure of this?).
-
-For the calculation of the surface pressure (for the ocean) or surface
-geopotential (for the atmosphere) you need to set the logical variables 
-\textbf{rigidLid} and \textbf{implicitFreeSurface}\textit{\ }(set one to '.%
-\texttt{TRUE}.' and the other to '.\texttt{FALSE}.' depending on how you
-want to deal with the ocean upper or atmosphere lower boundary).
+\end{description} 
 
 \subsection{Tracer equations}
 
@@ -1171,90 +1198,92 @@ This section covers the tracer equations i.e. the potential temperature
 equation and the salinity (for the ocean) or specific humidity (for the
 atmosphere) equation. As for the momentum equations, we only describe for
 now the parameters that you are likely to change. The logical variables 
-\textbf{tempDiffusion}\textit{, }\textbf{tempAdvection}\textit{, }\textbf{%
+\textbf{tempDiffusion}\textit{, }\textbf{tempAdvection}\textit{, }\textbf{
 tempForcing}\textit{,} and \textbf{tempStepping} allow you to turn on/off
 terms in the temperature equation (same thing for salinity or specific
-humidity with variables \textbf{saltDiffusion}\textit{, }\textbf{%
+humidity with variables \textbf{saltDiffusion}\textit{, }\textbf{
 saltAdvection}\textit{\ }etc). These variables are all assumed here to be
 set to '.\texttt{TRUE}.'. Look at file \textit{model/inc/PARAMS.h }for a
 precise definition.
 
-\begin{itemize}
-\item initialization
-\end{itemize}
+\begin{description}
+\item[initialization] \ 
+  
+  The initial tracer data can be contained in the binary files
+  \textbf{ hydrogThetaFile }and \textbf{hydrogSaltFile}. These files
+  should contain 3D data ordered in an (x, y, r) fashion with k=1 as
+  the first vertical level.  If no file names are provided, the
+  tracers are then initialized with the values of \textbf{tRef }and
+  \textbf{sRef }mentioned above (in the equation of state section). In
+  this case, the initial tracer data are uniform in x and y for each
+  depth level.
 
-The initial tracer data can be contained in the binary files \textbf{%
-hydrogThetaFile }and \textbf{hydrogSaltFile}. These files should contain 3D
-data ordered in an (x, y, r) fashion with k=1 as the first vertical level.
-If no file names are provided, the tracers are then initialized with the
-values of \textbf{tRef }and \textbf{sRef }mentioned above (in the equation
-of state section). In this case, the initial tracer data are uniform in x
-and y for each depth level.
+\item[forcing] \ 
+  
+  This part is more relevant for the ocean, the procedure for the
+  atmosphere not being completely stabilized at the moment.
+  
+  A combination of fluxes data and relaxation terms can be used for
+  driving the tracer equations. \ For potential temperature, heat flux
+  data (in W/m$ ^{2}$) can be stored in the 2D binary file
+  \textbf{surfQfile}\textit{. }  Alternatively or in addition, the
+  forcing can be specified through a relaxation term. The SST data to
+  which the model surface temperatures are restored to are supposed to
+  be stored in the 2D binary file \textbf{ thetaClimFile}\textit{.
+  }The corresponding relaxation time scale coefficient is set through
+  the variable \textbf{tauThetaClimRelax}\textit{\ }(in s). The same
+  procedure applies for salinity with the variable names
+  \textbf{EmPmRfile }\textit{, }\textbf{saltClimFile}\textit{, }and
+  \textbf{tauSaltClimRelax} \textit{\ }for freshwater flux (in m/s)
+  and surface salinity (in ppt) data files and relaxation time scale
+  coefficient (in s), respectively. Also for salinity, if the CPP key
+  \textbf{USE\_NATURAL\_BCS} is turned on, natural boundary conditions
+  are applied i.e. when computing the surface salinity tendency, the
+  freshwater flux is multiplied by the model surface salinity instead
+  of a constant salinity value.
+  
+  As for the other input files, the precision with which to read the
+  data is controlled by the variable \textbf{readBinaryPrec}.
+  Time-dependent, periodic forcing can be applied as well following
+  the same procedure used for the wind forcing data (see above).
 
-\begin{itemize} 
-\item forcing
-\end{itemize}
+\item[dissipation] \ 
+  
+  Lateral eddy diffusivities for temperature and salinity/specific
+  humidity are specified through the variables \textbf{diffKhT }and
+  \textbf{diffKhS } (in m$^{2}$/s). Vertical eddy diffusivities are
+  specified through the variables \textbf{diffKzT }and \textbf{diffKzS
+  }(in m$^{2}$/s) for the ocean and \textbf{diffKpT }and
+  \textbf{diffKpS }(in Pa$^{2}$/s) for the atmosphere. The vertical
+  diffusive fluxes can be computed implicitly by setting the logical
+  variable \textbf{implicitDiffusion }to '.\texttt{TRUE} .'. In
+  addition, biharmonic diffusivities can be specified as well through
+  the coefficients \textbf{diffK4T }and \textbf{diffK4S }(in
+  m$^{4}$/s). Note that the cosine power scaling (specified through
+  \textbf{cosPower }- see the momentum equations section) is applied
+  to the tracer diffusivities (Laplacian and biharmonic) as well. The
+  Gent and McWilliams parameterization for oceanic tracers is
+  described in the package section. Finally, note that tracers can be
+  also subject to Fourier and Shapiro filtering (see the corresponding
+  section on these filters).
 
-This part is more relevant for the ocean, the procedure for the atmosphere
-not being completely stabilized at the moment.
+\item[ocean convection] \ 
+  
+  Two options are available to parameterize ocean convection: one is
+  to use the convective adjustment scheme. In this case, you need to
+  set the variable \textbf{cadjFreq}, which represents the frequency
+  (in s) with which the adjustment algorithm is called, to a non-zero
+  value (if set to a negative value by the user, the model will set it
+  to the tracer time step). The other option is to parameterize
+  convection with implicit vertical diffusion. To do this, set the
+  logical variable \textbf{implicitDiffusion }to '.\texttt{TRUE} .'
+  and the real variable \textbf{ivdc\_kappa }to a value (in m$^{2}$/s)
+  you wish the tracer vertical diffusivities to have when mixing
+  tracers vertically due to static instabilities. Note that
+  \textbf{cadjFreq }and \textbf{ivdc\_kappa }can not both have
+  non-zero value.
 
-A combination of fluxes data and relaxation terms can be used for driving
-the tracer equations. \ For potential temperature, heat flux data (in W/m$%
-^{2}$) can be stored in the 2D binary file \textbf{surfQfile}\textit{. }%
-Alternatively or in addition, the forcing can be specified through a
-relaxation term. The SST data to which the model surface temperatures are
-restored to are supposed to be stored in the 2D binary file \textbf{%
-thetaClimFile}\textit{. }The corresponding relaxation time scale coefficient
-is set through the variable \textbf{tauThetaClimRelax}\textit{\ }(in s). The
-same procedure applies for salinity with the variable names \textbf{EmPmRfile%
-}\textit{, }\textbf{saltClimFile}\textit{, }and \textbf{tauSaltClimRelax}%
-\textit{\ }for freshwater flux (in m/s) and surface salinity (in ppt) data
-files and relaxation time scale coefficient (in s), respectively. Also for
-salinity, if the CPP key \textbf{USE\_NATURAL\_BCS} is turned on, natural
-boundary conditions are applied i.e. when computing the surface salinity
-tendency, the freshwater flux is multiplied by the model surface salinity
-instead of a constant salinity value.
-
-As for the other input files, the precision with which to read the data is
-controlled by the variable \textbf{readBinaryPrec}. Time-dependent, periodic
-forcing can be applied as well following the same procedure used for the
-wind forcing data (see above).
-
-\begin{itemize}
-\item dissipation
-\end{itemize}
-
-Lateral eddy diffusivities for temperature and salinity/specific humidity
-are specified through the variables \textbf{diffKhT }and \textbf{diffKhS }%
-(in m$^{2}$/s). Vertical eddy diffusivities are specified through the
-variables \textbf{diffKzT }and \textbf{diffKzS }(in m$^{2}$/s) for the ocean
-and \textbf{diffKpT }and \textbf{diffKpS }(in Pa$^{2}$/s) for the
-atmosphere. The vertical diffusive fluxes can be computed implicitly by
-setting the logical variable \textbf{implicitDiffusion }to '.\texttt{TRUE}%
-.'. In addition, biharmonic diffusivities can be specified as well through
-the coefficients \textbf{diffK4T }and \textbf{diffK4S }(in m$^{4}$/s). Note
-that the cosine power scaling (specified through \textbf{cosPower }- see the
-momentum equations section) is applied to the tracer diffusivities
-(Laplacian and biharmonic) as well. The Gent and McWilliams parameterization
-for oceanic tracers is described in the package section. Finally, note that
-tracers can be also subject to Fourier and Shapiro filtering (see the
-corresponding section on these filters).
-
-\begin{itemize}
-\item ocean convection
-\end{itemize}
-
-Two options are available to parameterize ocean convection: one is to use
-the convective adjustment scheme. In this case, you need to set the variable 
-\textbf{cadjFreq}, which represents the frequency (in s) with which the
-adjustment algorithm is called, to a non-zero value (if set to a negative
-value by the user, the model will set it to the tracer time step). The other
-option is to parameterize convection with implicit vertical diffusion. To do
-this, set the logical variable \textbf{implicitDiffusion }to '.\texttt{TRUE}%
-.' and the real variable \textbf{ivdc\_kappa }to a value (in m$^{2}$/s) you
-wish the tracer vertical diffusivities to have when mixing tracers
-vertically due to static instabilities. Note that \textbf{cadjFreq }and 
-\textbf{ivdc\_kappa }can not both have non-zero value.
+\end{description}
 
 \subsection{Simulation controls}
 
@@ -1265,33 +1294,35 @@ Typically, you will set it to the tracer time step for accelerated runs
 Frequency of checkpointing and dumping of the model state are referenced to
 this clock (see below).
 
-\begin{itemize}
-\item run duration
-\end{itemize}
+\begin{description}
+\item[run duration] \ 
+  
+  The beginning of a simulation is set by specifying a start time (in
+  s) through the real variable \textbf{startTime }or by specifying an
+  initial iteration number through the integer variable
+  \textbf{nIter0}. If these variables are set to nonzero values, the
+  model will look for a ''pickup'' file \textit{pickup.0000nIter0 }to
+  restart the integration\textit{. }The end of a simulation is set
+  through the real variable \textbf{endTime }(in s).  Alternatively,
+  you can specify instead the number of time steps to execute through
+  the integer variable \textbf{nTimeSteps}.
 
-The beginning of a simulation is set by specifying a start time (in s)
-through the real variable \textbf{startTime }or by specifying an initial
-iteration number through the integer variable \textbf{nIter0}. If these
-variables are set to nonzero values, the model will look for a ''pickup''
-file \textit{pickup.0000nIter0 }to restart the integration\textit{. }The end
-of a simulation is set through the real variable \textbf{endTime }(in s).
-Alternatively, you can specify instead the number of time steps to execute
-through the integer variable \textbf{nTimeSteps}. 
+\item[frequency of output] \
+  
+  Real variables defining frequencies (in s) with which output files
+  are written on disk need to be set up. \textbf{dumpFreq }controls
+  the frequency with which the instantaneous state of the model is
+  saved. \textbf{chkPtFreq } and \textbf{pchkPtFreq }control the
+  output frequency of rolling and permanent checkpoint files,
+  respectively. See section 1.5.1 Output files for the definition of
+  model state and checkpoint files. In addition, time-averaged fields
+  can be written out by setting the variable \textbf{taveFreq} (in s).
+  The precision with which to write the binary data is controlled by
+  the integer variable w\textbf{riteBinaryPrec }(set it to \texttt{32}
+  or \texttt{ 64}).
 
-\begin{itemize}
-\item frequency of output
-\end{itemize}
+\end{description}
 
-Real variables defining frequencies (in s) with which output files are
-written on disk need to be set up. \textbf{dumpFreq }controls the frequency
-with which the instantaneous state of the model is saved. \textbf{chkPtFreq }%
-and \textbf{pchkPtFreq }control the output frequency of rolling and
-permanent checkpoint files, respectively. See section 1.5.1 Output files for the
-definition of model state and checkpoint files. In addition, time-averaged
-fields can be written out by setting the variable \textbf{taveFreq} (in s).
-The precision with which to write the binary data is controlled by the
-integer variable w\textbf{riteBinaryPrec }(set it to \texttt{32} or \texttt{%
-64}).
 
 %%% Local Variables: 
 %%% mode: latex

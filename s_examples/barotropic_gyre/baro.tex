@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_examples/barotropic_gyre/baro.tex,v 1.9 2002/05/16 15:54:37 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_examples/barotropic_gyre/baro.tex,v 1.10 2004/01/29 15:11:39 edhill Exp $
 % $Name:  $
 
 \bodytext{bgcolor="#FFFFFFFF"}
@@ -68,12 +68,17 @@ $\tau_0$ is set to $0.1N m^{-2}$.
 Figure \ref{FIG:eg-baro-simulation_config}
 summarizes the configuration simulated.
 
+%% === eh3 ===
 \begin{figure}
-\begin{center}
- \resizebox{7.5in}{5.5in}{
-   \includegraphics*[0.2in,0.7in][10.5in,10.5in]
-    {part3/case_studies/barotropic_gyre/simulation_config.eps} }
-\end{center}
+%% \begin{center}
+%%  \resizebox{7.5in}{5.5in}{
+%%    \includegraphics*[0.2in,0.7in][10.5in,10.5in]
+%%     {part3/case_studies/barotropic_gyre/simulation_config.eps} }
+%% \end{center}
+\centerline{
+  \scalefig{.95}
+  \epsfbox{part3/case_studies/barotropic_gyre/simulation_config.eps}
+}
 \caption{Schematic of simulation domain and wind-stress forcing function 
 for barotropic gyre numerical experiment. The domain is enclosed bu solid
 walls at $x=$~0,1200km and at $y=$~0,1200km.}
