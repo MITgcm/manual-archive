@@ -1,0 +1,301 @@
+
+\section{Adjoint dump \& restart -- divided adjoint (DIVA)
+\label{sec_ad_diva}}
+
+{\it Patrick Heimbach \& Geoffrey Gebbie, MIT/EAPS, 07-Mar-2003}
+
+{\bf 
+NOTE: \\
+THIS SECTION IS SUBJECT TO CHANGE.
+IT REFERS TO TAF-1.4.26.
+
+Previous TAF versions are incomplete and have problems 
+with both TAF options '-pure' and '-mpi'.
+
+The code which is tuned to the DIVA implementation 
+of this TAF version
+is {\it checkpoint50} (MITgcm) and {\it ecco\_c50\_e28} (ECCO).
+}
+
+\subsection{Introduction}
+
+Most high performance computing (HPC) centres require the use
+of batch jobs for code execution. 
+Limits in maximum available CPU time and memory may prevent
+the adjoint code execution from fitting into any of the available
+queues. This presents a serious limit for large scale /
+long time adjoint ocean and climate model integrations.
+The MITgcm itself enables the split of the total model 
+integration into sub-intervals through standard dump/restart 
+of/from the full model state.
+For a similar procedure to run in reverse mode,
+the adjoint model requires, in addition to the model state, 
+the adjoint model state,
+i.e. all variables with derivative information
+which are needed in an adjoint restart.
+This adjoint dump \& restart is also termed 'divided adjoint (DIVA).
+
+For this to work in conjunction with automatic differentiation, 
+an AD tool needs to perform the following tasks:
+%
+\begin{enumerate}
+%
+\item
+%
+identify an adjoint state, i.e. those sensitivities whose
+accumulation is interrupted by a dump/restart and which influence
+the outcome of the gradient.
+Ideally, this state consists of 
+%
+\begin{itemize}
+%
+\item
+the adjoint of the model state,
+%
+\item
+the adjoint of other intermediate results (such as control variables,
+cost function contributions, etc.)
+%
+\item
+bookkeeping indices (such as loop indices, etc.)
+%
+\end{itemize}
+%
+\item
+%
+generate code for storing and reading adjoint state variables
+%
+\item
+generate code for bookkeeping , i.e. maintaining a file
+with index information
+%
+\item
+generate a suitable adjoint loop to propagate adjoint values
+for dump/restart with a minimum overhad of adjoint intermediate
+values.
+%
+\end{enumerate}
+
+TAF (but not TAMC!)
+generates adjoint code which performs the above specified
+tasks. It is closely tied to the adjoint multi-level checkpointing.
+The adjoint state is dumped (and restarted) at each step of the
+outermost checkpointing level and adjoint intergration is performed
+over one outermost checkpointing interval.
+Prior to the adjoint computations, a full foward sweep is performed to 
+generate the outermost (forward state) tapes and to calculate
+the cost function.
+In the current implementation, the forward sweep is
+immediately followed by the first adjoint leg.
+Thus, in theory, the following steps are performed (automatically)
+%
+\begin{itemize}
+%
+\item {\bf 1st model call:} \\
+This is the case if file {\tt costfinal} does {\it not} exist.
+S/R {\tt mdthe\_main\_loop} is called.
+%
+\begin{enumerate}
+%
+\item
+calculate forward trajectory and dump model state after each
+outermost checkpointing interval to files {\tt tapelev3}
+%
+\item
+calculate cost function {\tt fc} and write it to file
+{\tt costfinal}
+%
+\end{enumerate}
+%
+\item{\bf 2nd and all remaining model call:} \\
+This is the case if file {\tt costfinal} {\it does} exist.
+S/R {\tt adthe\_main\_loop} is called.
+%
+\begin{enumerate}
+%
+\item
+(forward run and cost function call is avoided
+since all values are known)
+%
+\begin{itemize}
+%
+\item
+if 1st adjoint leg: \\
+create index file {\tt divided.ctrl} which contains
+info on current checkpointing index $ilev3$
+%
+\item
+if not $i$-th adjoint leg: \\
+adjoint picks up at $ilev3 = nlev3-i+1$ and runs to $nlev3 - i$
+%
+\end{itemize}
+%
+\item
+perform adjoint leg from $nlev3-i+1$ to $nlev3 - i$
+%
+\item
+dump adjoint state to file {\tt snapshot}
+%
+\item
+dump index file {\tt divided.ctrl} for next adjoint leg
+%
+\item
+in the last step the gradient is written.
+%
+\end{enumerate}
+%
+\end{itemize}
+
+A few modififications were performed in the forward code,
+obvious ones such as adding the corresponding TAF-directive
+at the appropriate place, and less obvious ones
+(avoid some re-initializations, when in an intermediate
+adjoint integration interval).
+
+[For TAF-1.4.20 a number of hand-modifications were necessary
+to compensate for TAF bugs.
+Since we refer to TAF-1.4.26 onwards,
+these modifications are not documented here].
+
+\subsection{Recipe 1: single processor}
+
+
+\begin{enumerate}
+
+\item
+In {\tt ECCO\_CPPOPTIONS.h} set:
+%
+{\footnotesize
+\begin{verbatim}
+      #define ALLOW_DIVIDED_ADJOINT
+      #undef  ALLOW_DIVIDED_ADJOINT_MPI
+\end{verbatim}
+}
+
+\item
+Generate adjoint code. 
+Using the TAF option '{\tt -pure}', two codes are generated:
+%
+\begin{itemize}
+%
+\item {\tt mdthe\_main\_loop}: \\
+Is responsible for the forward trajectory, storing of outermost
+checkpoint levels to file, computation of cost function, and
+storing of cost function to file (1st step).
+%
+\item {\tt adthe\_main\_loop}: \\
+Is responsible for computing one adjoint leg, dump adjoint state
+to file and write index info to file (2nd and consecutive steps).
+
+    for adjoint code generation, e.g. add '{\tt -pure}' to
+    TAF option list
+{\footnotesize
+\begin{verbatim}
+    make adtaf
+\end{verbatim}
+}
+%
+
+\item
+One modification needs to be made to adjoint codes in
+S/R adecco\_the\_main\_loop:
+
+There's a remaining issue with the '{\tt -pure}' option.
+The '{\tt call ad...}' 
+between '{\tt call ad...}' and the read of the {\tt snapshot} file
+should be called only in the firt adjoint leg between
+$nlev3$ and $nlev3-1$.
+In the ecco-branch, the following lines should be 
+bracketed by an {\tt if (idivbeg .GE. nchklev\_3) then}, thus:
+
+{\footnotesize
+\begin{verbatim}
+
+...
+      xx_psbar_mean_dummy = onetape_xx_psbar_mean_dummy_3h(1)
+      xx_tbar_mean_dummy = onetape_xx_tbar_mean_dummy_4h(1)
+      xx_sbar_mean_dummy = onetape_xx_sbar_mean_dummy_5h(1)
+      call barrier( mythid )
+cAdd(
+      if (idivbeg .GE. nchklev_3) then
+cAdd)
+
+      call adcost_final( mythid )
+      call barrier( mythid )
+      call adcost_sst( mythid )
+      call adcost_ssh( mythid )
+      call adcost_hyd( mythid )
+      call adcost_averagesfields( mytime,myiter,mythid )
+      call barrier( mythid )
+cAdd(
+      endif
+cAdd)
+
+C----------------------------------------------
+C read snapshot
+C----------------------------------------------
+      if (idivbeg .lt. nchklev_3) then
+        open(unit=77,file='snapshot',status='old',form='unformatted',
+     $iostat=iers)
+...
+
+\end{verbatim}
+}
+
+For the main code, in all likelihood the block which needs to
+be bracketed consists of {\tt adcost\_final} only.
+
+\item
+Now the code can be copied as usual to {\tt adjoint\_model.F}
+and then be compiled:
+%
+{\footnotesize
+\begin{verbatim}
+    make adchange
+    then compile
+\end{verbatim}
+}
+
+\end{itemize}
+
+\end{enumerate}
+
+\subsection{Recipe 2: multi processor (MPI)}
+
+
+\begin{enumerate}
+
+\item
+On the machine where you execute the code
+(most likely not the machine where you run TAF)
+find the includes directory for MPI containing {\tt mpif.h}.
+Either copy {\tt mpif.h} to the machine where you generate the
+{\tt .f} files before TAF-ing, or add the path to the includes
+directory to you genmake {\tt platform} setup,
+TAF needs some MPI parameter settings 
+(essentially {\tt mpi\_comm\_world} and {\tt mpi\_integer})
+to incorporate those in the adjoint code.
+
+\item
+In {\tt ECCO\_CPPOPTIONS.h} set
+%
+{\footnotesize
+\begin{verbatim}
+      #define ALLOW_DIVIDED_ADJOINT
+      #define ALLOW_DIVIDED_ADJOINT_MPI
+\end{verbatim}
+}
+%
+This will include the header file {\tt mpif.h}
+into the top level routine for TAF.
+
+\item
+Add the TAF option '{\tt -mpi}' to the TAF argument list in the makefile.
+
+\item
+Follow the same steps as in {\bf Recipe 1} (previous section).
+
+\end{enumerate}
+
+That's it. Good luck \& have fun.
+
