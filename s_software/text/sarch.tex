@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_software/text/sarch.tex,v 1.7 2002/02/28 19:32:20 cnh Exp $
+% $Header: /u/gcmpack/manual/s_software/text/sarch.tex,v 1.8 2002/04/24 09:00:53 heimbach Exp $
 
 This chapter focuses on describing the {\bf WRAPPER} environment within which
 both the core numerics and the pluggable packages operate. The description
@@ -817,6 +817,7 @@ by the application code. The startup calling sequence followed by the
 WRAPPER is shown in figure \ref{fig:wrapper_startup}.
 
 \begin{figure}
+{\footnotesize
 \begin{verbatim}
 
        MAIN  
@@ -845,6 +846,7 @@ WRAPPER is shown in figure \ref{fig:wrapper_startup}.
 
 
 \end{verbatim}
+}
 \caption{Main stages of the WRAPPER startup procedure.
 This process proceeds transfer of control to application code, which
 occurs through the procedure {\em THE\_MODEL\_MAIN()}.
@@ -1424,6 +1426,7 @@ sequence shown in section \ref{sect:calling_sequence}
 
 WRAPPER layer.
 
+{\footnotesize
 \begin{verbatim}
 
        MAIN  
@@ -1451,9 +1454,11 @@ WRAPPER layer.
        |--THE_MODEL_MAIN   :: Numerical code top-level driver routine
 
 \end{verbatim}
+}
 
 Core equations plus packages.
 
+{\footnotesize
 \begin{verbatim}
 C
 C
@@ -1792,6 +1797,7 @@ C    |-COMM_STATS     :: Summarise inter-proc and inter-thread communication
 C                     :: events.
 C 
 \end{verbatim}
+}
 
 \subsection{Measuring and Characterizing Performance}
 
