@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/Attic/mnc.tex,v 1.7 2004/04/02 15:56:02 edhill Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/Attic/mnc.tex,v 1.8 2004/04/03 23:05:05 edhill Exp $
 % $Name:  $
 
 \section{NetCDF I/O Integration: MNC}
@@ -137,16 +137,31 @@ dimensions.  The second function call will write the data at, if
 necessary, the current time level within the model.
 
 Examples of the initialization calls can be found in the file 
-\filelink{model/src/initialise\_fixed.F}{model-src-initialise_fixed.F}
+\filelink{model/src/ini\_mnc\_io.F}{model-src-ini_mnc_io.F}
 where these four function calls:
 {\footnotesize
 \begin{verbatim}
-  C     Create MNC definitions for DYNVARS.h variables
-        CALL MNC_CW_ADD_VNAME(myThid, 'iter', '-_-_--__-__t', 0,0)
-        CALL MNC_CW_ADD_VATTR_TEXT(myThid,'iter',1,
-       &     'long_name','iteration_count')
-        CALL MNC_CW_ADD_VNAME(myThid, 'U', 'U_xy_Hn__C__t', 4,5)
-        CALL MNC_CW_ADD_VATTR_TEXT(myThid,'U',1,'units','m/s')
+C     Create MNC definitions for DYNVARS.h variables
+      CALL MNC_CW_ADD_VNAME('iter', '-_-_--__-__t', 0,0, myThid)
+      CALL MNC_CW_ADD_VATTR_TEXT('iter',1,
+     &     'long_name','iteration_count', myThid)
+
+      CALL MNC_CW_ADD_VNAME('model_time', '-_-_--__-__t', 0,0, myThid)
+      CALL MNC_CW_ADD_VATTR_TEXT('model_time',1,
+     &     'long_name','Model Time', myThid)
+      CALL MNC_CW_ADD_VATTR_TEXT('model_time',1,'units','s', myThid)
+
+      CALL MNC_CW_ADD_VNAME('U', 'U_xy_Hn__C__t', 4,5, myThid)
+      CALL MNC_CW_ADD_VATTR_TEXT('U',1,'units','m/s', myThid)
+      CALL MNC_CW_ADD_VATTR_TEXT('U',1,
+     &     'coordinates','XU YU RC iter', myThid)
+
+      CALL MNC_CW_ADD_VNAME('T', 'Cen_xy_Hn__C__t', 4,5, myThid)
+      CALL MNC_CW_ADD_VATTR_TEXT('T',1,'units','degC', myThid)
+      CALL MNC_CW_ADD_VATTR_TEXT('T',1,'long_name',
+     &     'potential_temperature', myThid)
+      CALL MNC_CW_ADD_VATTR_TEXT('T',1,
+     &     'coordinates','XC YC RC iter', myThid)
 \end{verbatim}
 }
 {\noindent initialize two \texttt{VNAME}s and add one NetCDF
@@ -158,20 +173,18 @@ time steps within
 using the function calls:
 {\footnotesize
 \begin{verbatim}
-  C     Write the DYNVARS.h variables using the MNC package
+C       Write dynvars using the MNC package
         mnc_iter = myIter
-        CALL MNC_CW_RL_W_R(myThid,'state',0,0,'iter',-1,mnc_iter)
-        CALL MNC_CW_RL_W_D(myThid,'state',0,0,'U', 0, uVel)
+        CALL MNC_CW_SET_UDIM('state', -1, myThid)
+        CALL MNC_CW_RL_W('D','state',0,0,'iter',mnc_iter, myThid)
+        CALL MNC_CW_SET_UDIM('state', 0, myThid)
+        CALL MNC_CW_RL_W('D','state',0,0,'model_time',myTime, myThid)
+        CALL MNC_CW_RL_W('D','state',0,0,'U', uVel, myThid)
+        CALL MNC_CW_RL_W('D','state',0,0,'T', theta, myThid)
 \end{verbatim}
 }
 
-
-\subsection{Key subroutines, parameters and files}
-
-All of the variables used to implement the lookup tables are described
-in \filelink{model/src/write\_state.F}{model-src-write_state.F}
-
-
+%\subsection{Key subroutines, parameters and files}
 
 \subsection{Package Reference}
 
