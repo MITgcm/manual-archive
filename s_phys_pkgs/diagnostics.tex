@@ -6,13 +6,29 @@
 
 \subsection{Introduction}
 
+\noindent
 This section of the documentation describes the Diagnostics package available within 
-the GCM.  In addition to a description of how to set and extract diagnostic quantities, 
-this document also provides a comprehensive list of all available diagnostic quantities 
-and a short description of how they are computed.  It should be noted that this document 
-is not intended to be a complete documentation of the various packages used in the GCM, 
-and the reader should refer to original publications and the appropriate sections of this
-documentation for further insight.
+the GCM.  A large selection of model diagnostics is available for output.  
+In addition to the diagnostic quantities pre-defined in the GCM, there exists
+the option, in any experiment, to define a new diagnostic quantity and include it
+as part of the diagnostic output with the addition of a single subroutine call in the
+routine where the field is computed. As a matter of philosophy, no diagnostic is enabled 
+as default, thus each user must specify the exact diagnostic information required for an 
+experiment.  This is accomplished by enabling the specific diagnostic of interest cataloged 
+in the Diagnostic Menu (see Section \ref{sec:diagnostics:menu}). Instructions for enabling
+diagnostic output and defining new diagnostic quantities are found in Section 
+\ref{sec:diagnostics:usersguide} of this document.
+
+\noindent
+The Diagnostic Menu is a hard-wired enumeration of diagnostic quantities available within 
+the GCM. Once a diagnostic is enabled, the GCM will continually increment an array
+specifically allocated for that diagnostic whenever the appropriate quantity is computed.  
+A counter is defined which records how many times each diagnostic quantity has been 
+incremented.  Several special diagnostics are included in the menu. Quantities refered to 
+as ``Counter Diagnostics'', are defined for selected diagnostics which record the 
+frequency at which a diagnostic is incremented separately for each model grid location.
+Quantitied refered to as ``User Diagnostics'' are included in the menu to facilitate
+defining new diagnostics for a particular experiment.
 
 \subsection{Equations}
 Not relevant.
@@ -20,33 +36,16 @@ Not relevant.
 \subsection{Key Subroutines and Parameters}
 \label{sec:diagnostics:diagover}
 
-A large selection of model diagnostics is available in the GCM.  At the time of
-this writing there are 280 different diagnostic quantities which can be enabled for an
-experiment.  As a matter of philosophy, no diagnostic is enabled as default, thus each 
-user must specify the exact diagnostic information required for an experiment.  This 
-is accomplished by enabling the specific diagnostic of interest cataloged in the 
-Diagnostic Menu (see Section \ref{sec:diagnostics:menu}).
-The Diagnostic Menu is a hard-wired enumeration of diagnostic quantities available within 
-the GCM. Diagnostics are internally referred to by their associated number in the Diagnostic
-Menu.  Once a diagnostic is enabled, the GCM will continually increment an array
-specifically allocated for that diagnostic whenever the associated process for the 
-diagnostic is computed.  Separate arrays are used both for the diagnostic quantity and 
-its diagnostic counter which records how many times each diagnostic quantity has been 
-computed.  In addition special diagnostics, called ``Counter Diagnostics'', records the 
-frequency of diagnostic updates separately for each model grid location.
-
-The diagnostics are computed at various times and places within the GCM.  
-Some diagnostics are computed on the A-grid (such as those within the fizhi routines), 
-while others are computed on the C-grid (those computed during the dynamics time-stepping).  
-Some diagnostics are scalars, while others are vectors.  Each of these possibilities requires
-separate tasks for A-grid to C-grid transformations and coordinate transformations.  Due
-to this complexity, and since the specific diagnostics enabled are User determined at the
-time of the run, 
-a diagnostic parameter has been developed and implemented into the GCM, defined as GDIAG,
-which contains information concerning various grid attributes of each diagnostic.  The GDIAG
-array is internally defined as a character*8 variable, and is equivalenced to 
-a character*1 "parse" array in output in order to extract the grid-attribute information.
-The GDIAG array is described in Table \ref{tab:diagnostics:gdiag.tabl}.
+\noindent
+The diagnostics are computed at various times and places within the GCM. Because the
+MIT GCM may employ a staggered grid, diagnostics may be computed at grid box centers,
+corners, or edges, and at the middle or edge in the vertical. Some diagnostics are scalars, 
+while others are components of vectors. An internal array is defined which contains 
+information concerning various grid attributes of each diagnostic. The GDIAG
+array (in common block \\diagnostics in file diagnostics.h) is internally defined as a 
+character*8 variable, and is equivalenced to a character*1 "parse" array in output in 
+order to extract the grid-attribute information.  The GDIAG array is described in 
+Table \ref{tab:diagnostics:gdiag.tabl}.
 
 \begin{table}
 \caption{Diagnostic Parsing Array}
@@ -77,31 +76,73 @@ Array & Value & Description \\
 \end{center}
 \end{table}
 
+
+\noindent
 As an example, consider a diagnostic whose associated GDIAG parameter is equal
 to ``UU  002''.  From GDIAG we can determine that this diagnostic is a 
 U-vector component located at the C-grid U-point.
 Its corresponding V-component diagnostic is located in Diagnostic \# 002.
 
-In this way, each Diagnostic in the model has its attributes (ie. vector or scalar,
-A-Grid or C-grid, etc.) defined internally.  The Output routines
-use this information in order to determine
-what type of transformations need to be performed.  Thus, all Diagnostic
-interpolations are done at the time of output rather than during each model dynamic step.
-In this way the User now has more flexibility
-in determining the type of gridded data which is output.
 
+\noindent
+In this way, each Diagnostic in the model has its attributes (ie. vector or scalar,
+C-grid location, etc.) defined internally.  The Output routines use this information 
+in order to determine what type of transformations need to be performed.  Any 
+interpolations are done at the time of output rather than during each model step.
+In this way the User has flexibility in determining the type of gridded data which 
+is output.
+
+
+\noindent
 There are several utilities within the GCM available to users to enable, disable,
 clear, write and retrieve model diagnostics, and may be called from any routine.  
 The available utilities and the CALL sequences are listed below.
 
-{\bf fill\_diag}:  This routine will increment 
 
+\noindent
+{\bf fill\_diagnostics}:  This routine will increment the specified diagnostic
+quantity with a field sent through the argument list.
+
+
+\noindent
+\begin{tabbing}
+XXXXXXXXX\=XXXXXX\= \kill
+\>        call fill\_diagnostics (myThid, chardiag, levflg, nlevs, \\
+                bibjflg, bi, bj, arrayin) \\
+\\
+where \>  myThid   \>= Current Process(or) \\
+      \>  chardiag \>= Character *8 expression for diag to fill \\
+      \>  levflg   \>= Integer flag for vertical levels: \\
+      \>           \> 0 indicates multiple levels incremented in qdiag \\
+      \>           \> non-0 (any integer) - WHICH single level to increment. \\
+      \>           \> negative integer - the input data array is single-leveled \\
+      \>           \> positive integer - the input data array is multi-leveled \\
+      \>  nlevs    \>= indicates Number of levels to be filled (1 if levflg <> 0) \\
+      \>           \> positive: fill in "nlevs" levels in the same order as \\
+      \>           \> the input array \\
+      \>           \> negative: fill in -nlevs levels in reverse order. \\
+      \>  bibjflg  \>= Integer flag to indicate instructions for bi bj loop \\
+      \>           \> 0 indicates that the bi-bj loop must be done here \\
+      \>           \> 1 indicates that the bi-bj loop is done OUTSIDE \\
+      \>           \> 2 indicates that the bi-bj loop is done OUTSIDE \\
+      \>           \>    AND that we have been sent a local array \\
+      \>           \> 3 indicates that the bi-bj loop is done OUTSIDE \\
+      \>           \>    AND that we have been sent a local array \\
+      \>           \>    AND that the array has the shadow regions \\
+      \>  bi       \>= X-direction process(or) number - used for bibjflg=1-3 \\
+      \>  bj       \>= Y-direction process(or) number - used for bibjflg=1-3 \\
+      \>  arrayin  \>= Field to increment diagnostics array \\
+\end{tabbing}
+
+
+\noindent
 {\bf setdiag}:  This subroutine enables a diagnostic from the Diagnostic Menu, meaning 
 that space is allocated for the diagnostic and the model routines will increment the 
 diagnostic value during execution.  This routine is the underlying interface
 between the user and the desired diagnostic.  The diagnostic is referenced by its diagnostic
 number from the menu, and its calling sequence is given by:
 
+\noindent
 \begin{tabbing}
 XXXXXXXXX\=XXXXXX\= \kill
 \>        call setdiag (num) \\
@@ -109,6 +150,7 @@ XXXXXXXXX\=XXXXXX\= \kill
 where \>  num   \>= Diagnostic number from menu \\
 \end{tabbing}
 
+\noindent
 {\bf getdiag}:  This subroutine retrieves the value of a model diagnostic.  This routine 
 is particulary useful when called from a user output routine, although it can be called 
 from any routine.  This routine returns the time-averaged value of the diagnostic by
@@ -116,6 +158,7 @@ dividing the current accumulated diagnostic value by its corresponding counter. 
 routine does not change the value of the diagnostic itself, that is, it does not replace 
 the diagnostic with its time-average.  The calling sequence for this routine is givin by:
 
+\noindent
 \begin{tabbing}
 XXXXXXXXX\=XXXXXX\= \kill
 \>        call getdiag (lev,num,qtmp,undef) \\
@@ -126,10 +169,12 @@ where \>  lev   \>= Model Level at which the diagnostic is desired \\
       \>  undef \>= Fill value to be used when diagnostic is undefined \\
 \end{tabbing}
 
+\noindent
 {\bf clrdiag}:  This subroutine initializes the values of model diagnostics to zero, and is
 particularly useful when called from user output routines to re-initialize diagnostics 
 during the run.  The calling sequence is:
 
+\noindent
 \begin{tabbing}
 XXXXXXXXX\=XXXXXX\= \kill
 \>        call clrdiag (num) \\
@@ -137,10 +182,12 @@ XXXXXXXXX\=XXXXXX\= \kill
 where \>  num   \>= Diagnostic number from menu \\
 \end{tabbing}
 
+\noindent
 {\bf zapdiag}:  This entry into subroutine SETDIAG disables model diagnostics, meaning 
 that the diagnostic is no longer available to the user.  The memory previously allocated 
 to the diagnostic is released when ZAPDIAG is invoked.  The calling sequence is given by:
 
+\noindent
 \begin{tabbing}
 XXXXXXXXX\=XXXXXX\= \kill
 \>        call zapdiag (NUM) \\
@@ -148,29 +195,35 @@ XXXXXXXXX\=XXXXXX\= \kill
 where \>  num   \>= Diagnostic number from menu \\
 \end{tabbing}
 
-{\bf diagsize}:  We end this section with a discussion on the manner in which computer 
-memory   is allocated for diagnostics.   All GCM diagnostic quantities are stored in the 
-single diagnostic array QDIAG which is located in diagnostics.h, and has the form:
-
-common /diagnostics/ qdiag(1-Olx,sNx+Olx,1-Olx,sNx+Olx,numdiags,Nsx,Nsy)
-
-where numdiags is an Integer variable which should be
-set equal to the number of enabled diagnostics, and qdiag is a three-dimensional
-array.  The first two-dimensions of qdiag correspond to the horizontal dimension
-of a given diagnostic, while the third dimension of qdiag is used to identify
-specific diagnostic types.
-In order to minimize the memory requirement of the model for diagnostics,
-the default GCM executable is compiled with room for only one horizontal
-diagnostic array, as shown in the above example.  
-In order for the User to enable more than 1 two-dimensional diagnostic,
-the size of the diagnostics common must be expanded to accomodate the desired diagnostics.
-This can be accomplished by manually changing the parameter numdiags in the
-file \filelink{pkg/diagnostics/diagnostics\_SIZE.h}{pkg-diagnostics-diagnostics_SIZE.h}, or by allowing the 
-shell script (???????) to make this
-change based on the choice of diagnostic output made in the namelist.
 
 \subsection{Usage Notes}
 \label{sec:diagnostics:usersguide}
+
+\noindent
+We begin this section with a discussion on the manner in which computer 
+memory is allocated for diagnostics. All GCM diagnostic quantities are stored in the 
+single diagnostic array QDIAG which is located in the file \\
+\filelink{pkg/diagnostics/diagnostics.h}{pkg-diagnostics-diagnostics.h}.
+and has the form:
+
+common /diagnostics/ qdiag(1-Olx,sNx+Olx,1-Olx,sNx+Olx,numdiags,Nsx,Nsy)
+
+\noindent
+where numdiags is an Integer variable which should be set equal to the number of 
+enabled diagnostics, and qdiag is a three-dimensional array.  The first two-dimensions 
+of qdiag correspond to the horizontal dimension of a given diagnostic, while the third 
+dimension of qdiag is used to identify diagnostic fields and levels combined. In order 
+to minimize the memory requirement of the model for diagnostics, the default GCM 
+executable is compiled with room for only one horizontal diagnostic array, or with
+numdiags set to 1. In order for the User to enable more than 1 two-dimensional diagnostic,
+the size of the diagnostics common must be expanded to accomodate the desired diagnostics.
+This can be accomplished by manually changing the parameter numdiags in the
+file \filelink{pkg/diagnostics/diagnostics\_SIZE.h}{pkg-diagnostics-diagnostics_SIZE.h}.
+numdiags should be set greater than or equal to the sum of all the diagnostics activated
+for output each multiplied by the number of levels defined for that diagnostic quantity.
+This is illustrated in the example below:
+
+\noindent
 To use the diagnostics package, other than enabling it in packages.conf
 and turning the usediagnostics flag in data.pkg to .TRUE., a namelist
 must be supplied in the run directory called data.diagnostics. The namelist
@@ -178,27 +231,39 @@ will activate a user-defined list of diagnostics quantities to be computed,
 specify the frequency of output, the number of levels, and the name of
 up to 10 separate output files. A sample data.diagnostics namelist file:
 
-$\#$ Diagnostic Package Choices
- $\&$diagnostics\_list
-  frequency(1) = 10, \
-   levels(1,1) = 1.,2.,3.,4.,5., \
-   fields(1,1) = 'UVEL    ','VVEL    ', \
-   filename(1) = 'diagout1', \
-  frequency(2) = 100, \
-   levels(1,2) = 1.,2.,3.,4.,5., \
-   fields(1,2) = 'THETA   ','SALT    ', \
-   filename(2) = 'diagout2', \
- $\&$end \
+\noindent
+$\#$ Diagnostic Package Choices \\
+ $\&$diagnostics\_list \\
+  frequency(1) = 10, \ \\
+   levels(1,1) = 1.,2.,3.,4.,5., \ \\
+   fields(1,1) = 'UVEL    ','VVEL    ', \ \\
+   filename(1) = 'diagout1', \ \\
+  frequency(2) = 100, \ \\
+   levels(1,2) = 1.,2.,3.,4.,5., \ \\
+   fields(1,2) = 'THETA   ','SALT    ', \ \\
+   filename(2) = 'diagout2', \ \\
+ $\&$end \ \\
 
+\noindent
 In this example, there are two output files that will be generated
 for each tile and for each output time. The first set of output files
-has the prefix diagout1, does time averaging every 10 time steps,
-for fields which are multiple-level fields the levels output are 1-5,
-and the names of diagnostics quantities are UVEL and VVEL.
-The second set of output files
+has the prefix diagout1, does time averaging every 10 time steps
+(frequency is 10), they will write fields which are multiple-level 
+fields and output levels 1-5. The names of diagnostics quantities are 
+UVEL and VVEL.  The second set of output files
 has the prefix diagout2, does time averaging every 100 time steps,
-for fields which are multiple-level fields the levels output are 1-5,
+they include fields which are multiple-level fields, levels output are 1-5,
 and the names of diagnostics quantities are THETA and SALT.
+
+\noindent
+In order to define and include as part of the diagnostic output any field
+that is desired for a particular experiment, two steps must be taken. The
+first is to enable the ``User Diagnostic'' in data.diagnostics. This is
+accomplished by setting one of the fields slots to either UDIAG1 through 
+UDIAG10, for multi-level fields, or SDIAG1 through SDIAG10 for single level
+fields. These are listed in the diagnostics menu. The second step is to
+add a call to fill\_diagnostics from the subroutine in which the quantity
+desired for diagnostic output is computed. 
 
 \newpage
 
