@@ -186,6 +186,7 @@ will activate a user-defined list of diagnostics quantities to be computed,
 specify the frequency of output, the number of levels, and the name of
 up to 10 separate output files. A sample data.diagnostics namelist file:
 
+\begin{verbatim}
 \# Diagnostic Package Choices
  \&diagnostics_list
   frequency(1) = 10, \
@@ -197,6 +198,7 @@ up to 10 separate output files. A sample data.diagnostics namelist file:
    fields(1,2) = 'THETA   ','SALT    ', \
    filename(2) = 'diagout2', \
  \&end \
+\end{verbatim}
 
 In this example, there are two output files that will be generated
 for each tile and for each output time. The first set of output files
