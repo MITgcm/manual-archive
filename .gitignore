@@ -30,5 +30,6 @@ core
 *.log
 *.blg
 *.bbl
+*.toc
 *.dvi
 *.ps
