@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/manual.tex,v 1.22 2004/03/15 22:39:28 afe Exp $
+% $Header: /u/gcmpack/manual/manual.tex,v 1.23 2004/03/16 15:43:05 afe Exp $
 % $Name:  $
 
 \documentclass[12pt]{book}
@@ -18,25 +18,16 @@
 %eh3  Commands to reference either files or symbols within the "HTML-ized"
 %eh3  ("vdb") code.
 %eh3  
-\newcommand{\varlink}[2]{
-\htmladdnormallink{\tt #1}{../code_reference/vdb/byname/#2.html}
-}
-\newcommand{\filelink}[2]{
-\htmladdnormallink{\bf \tt #1}{../code_reference/vdb/byname/#2.html}
-}
+%afe seems like these need to be long, sorry
+\newcommand{\varlink}[2]{\htmladdnormallink{\tt #1}{../code_reference/vdb/byname/#2.html}}
+\newcommand{\filelink}[2]{\htmladdnormallink{\bf \tt #1}{../code_reference/vdb/byname/#2.html}}
 
 % afe  Commands to standardize typesetting 
-\newcommand{\file}[1]{
-\texttt{#1}
-}
+\newcommand{\file}[1]{\texttt{#1}}
 
-\newcommand{\sectiontitle}[1]{
-\textsl{#1}
-}
+\newcommand{\sectiontitle}[1]{\textsl{#1}}
 
-\newcommand{\code}[1]{
-\texttt{#1}
-}
+\newcommand{\code}[1]{\texttt{#1}}
 
 
 
