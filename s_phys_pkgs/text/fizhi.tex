@@ -1,0 +1,889 @@
+\section{Fizhi: High-end Atmospheric Physics}
+
+\subsection{Introduction}
+The fizhi (high-end atmospheric physics) package includes a collection of state-of-the-art
+physical parameterizations for atmospheric radiation, cumulus convection, atmospheric
+boundary layer turbulence, and land surface processes.
+
+% *************************************************************************
+% *************************************************************************
+ 
+\subsection{Equations}
+
+\subsubsection{Moist Convective Processes}
+
+\subsubsubsection{Sub-grid and Large-scale Convection}
+\label{sec:fizhi:mc}
+
+Sub-grid scale cumulus convection is parameterized using the Relaxed Arakawa
+Schubert (RAS) scheme of Moorthi and Suarez (1992), which is a linearized Arakawa Schubert
+type scheme.  RAS predicts the mass flux from an ensemble of clouds.  Each subensemble is identified
+by its entrainment rate and level of neutral bouyancy which are determined by the grid-scale properties.
+
+The thermodynamic variables that are used in RAS to describe the grid scale vertical profile are
+the dry static energy, $s=c_pT +gz$, and the moist static energy, $h=c_p T + gz + Lq$. 
+The conceptual model behind RAS depicts each subensemble as a rising plume cloud, entraining 
+mass from the environment during ascent, and detraining all cloud air at the level of neutral 
+buoyancy. RAS assumes that the normalized cloud mass flux, $\eta$, normalized by the cloud base 
+mass flux, is a linear function of height, expressed as:
+\[
+\pp{\eta(z)}{z} = \lambda \hspace{0.4cm}or\hspace{0.4cm} \pp{\eta(P^{\kappa})}{P^{\kappa}} = 
+-{c_p \over {g}}\theta\lambda
+\]
+where we have used the hydrostatic equation written in the form:
+\[
+\pp{z}{P^{\kappa}} = -{c_p \over {g}}\theta
+\]
+
+The entrainment parameter, $\lambda$, characterizes a particular subensemble based on its
+detrainment level, and is obtained by assuming that the level of detrainment is the level of neutral
+buoyancy, ie., the level at which the moist static energy of the cloud, $h_c$, is equal 
+to the saturation moist static energy of the environment, $h^*$.  Following Moorthi and Suarez (1992),
+$\lambda$ may be written as
+\[
+\lambda = { {h_B - h^*_D} \over { {c_p \over g} {\int_{P_D}^{P_B}\theta(h^*_D-h)dP^{\kappa}}} } ,
+\]
+
+where the subscript $B$ refers to cloud base, and the subscript $D$ refers to the detrainment level.
+
+
+The convective instability is measured in terms of the cloud work function $A$, defined as the
+rate of change of cumulus kinetic energy. The cloud work function is 
+related to the buoyancy, or the difference
+between the moist static energy in the cloud and in the environment:
+\[
+A = \int_{P_D}^{P_B} { {\eta \over {1 + \gamma} } 
+\left[ {{h_c-h^*} \over {P^{\kappa}}} \right] dP^{\kappa}}
+\]
+
+where $\gamma$ is ${L \over {c_p}}\pp{q^*}{T}$ obtained from the Claussius Clapeyron equation,
+and the subscript $c$ refers to the value inside the cloud.
+
+
+To determine the cloud base mass flux, the rate of change of $A$ in time {\em due to dissipation by 
+the clouds} is assumed to approximately balance the rate of change of $A$ {\em due to the generation 
+by the large scale}. This is the quasi-equilibrium assumption, and results in an expression for $m_B$:
+\[
+m_B = {{- \left.{dA \over dt} \right|_{ls}} \over K}
+\]
+
+where $K$ is the cloud kernel, defined as the rate of change of the cloud work function per
+unit cloud base mass flux, and is currently obtained by analytically differentiating the 
+expression for $A$ in time.
+The rate of change of $A$ due to the generation by the large scale can be written as the
+difference between the current $A(t+\Delta t)$ and its equillibrated value after the previous 
+convective time step 
+$A(t)$, divided by the time step. $A(t)$ is approximated as some critical $A_{crit}$,
+computed by Lord (1982) from $in situ$ observations.
+
+
+The predicted convective mass fluxes are used to solve grid-scale temperature
+and moisture budget equations to determine the impact of convection on the large scale fields of
+temperature (through latent heating and compensating subsidence) and moisture (through
+precipitation and detrainment):
+\[
+\left.{\pp{\theta}{t}}\right|_{c} = \alpha { m_B \over {c_p P^{\kappa}}} \eta \pp{s}{p}
+\]
+and
+\[
+\left.{\pp{q}{t}}\right|_{c} = \alpha { m_B \over {L}} \eta (\pp{h}{p}-\pp{s}{p})
+\]
+where $\theta = {T \over P^{\kappa}}$, $P = (p/p_0)$, and $\alpha$ is the relaxation parameter.
+
+As an approximation to a full interaction between the different allowable subensembles,
+many clouds are simulated frequently, each modifying the large scale environment some fraction
+$\alpha$ of the total adjustment. The parameterization thereby ``relaxes'' the large scale environment
+towards equillibrium.  
+
+In addition to the RAS cumulus convection scheme, the fizhi package employs a
+Kessler-type scheme for the re-evaporation of falling rain (Sud and Molod, 1988), which
+correspondingly adjusts the temperature assuming $h$ is conserved. RAS in its current
+formulation assumes that all cloud water is deposited into the detrainment level as rain.
+All of the rain is available for re-evaporation, which begins in the level below detrainment. 
+The scheme accounts for some microphysics such as
+the rainfall intensity, the drop size distribution, as well as the temperature, 
+pressure and relative humidity of the surrounding air.  The fraction of the moisture deficit 
+in any model layer into which the rain may re-evaporate is controlled by a free parameter,
+which allows for a relatively efficient re-evaporation of liquid precipitate and larger rainout
+for frozen precipitation.
+
+Due to the increased vertical resolution near the surface, the lowest model 
+layers are averaged to provide a 50 mb thick sub-cloud layer for RAS.  Each time RAS is
+invoked (every ten simulated minutes), 
+a number of randomly chosen subensembles are checked for the possibility 
+of convection, from just above cloud base to 10 mb.  
+
+Supersaturation or large-scale precipitation is initiated in the fizhi package whenever 
+the relative humidity in any grid-box exceeds a critical value, currently 100 \%.
+The large-scale precipitation re-evaporates during descent to partially saturate 
+lower layers in a process identical to the re-evaporation of convective rain. 
+
+ 
+\subsubsubsection{Cloud Formation}
+\label{sec:fizhi:clouds}
+
+Convective and large-scale cloud fractons which are used for cloud-radiative interactions are determined
+diagnostically as part of the cumulus and large-scale parameterizations.
+Convective cloud fractions produced by RAS are proportional to the 
+detrained liquid water amount given by
+
+\[
+F_{RAS} = \min\left[ {l_{RAS}\over l_c}, 1.0 \right]
+\]
+
+where $l_c$ is an assigned critical value equal to $1.25$ g/kg.
+A memory is associated with convective clouds defined by:
+
+\[
+F_{RAS}^n = \min\left[ F_{RAS} + (1-{\Delta t_{RAS}\over\tau})F_{RAS}^{n-1}, 1.0 \right]
+\]
+
+where $F_{RAS}$ is the instantanious cloud fraction and $F_{RAS}^{n-1}$ is the cloud fraction
+from the previous RAS timestep.  The memory coefficient is computed using a RAS cloud timescale,
+$\tau$, equal to 1 hour.  RAS cloud fractions are cleared when they fall below 5 \%.
+
+Large-scale cloudiness is defined, following Slingo and Ritter (1985), as a function of relative
+humidity:
+
+\[
+F_{LS} = \min\left[ { \left( {RH-RH_c \over 1-RH_c} \right) }^2, 1.0 \right]
+\]
+
+where
+
+\bqa
+RH_c & = & 1-s(1-s)(2-\sqrt{3}+2\sqrt{3} \, s)r \nonumber \\
+   s & = & p/p_{surf} \nonumber \\
+   r & = & \left( {1.0-RH_{min} \over \alpha} \right) \nonumber \\
+RH_{min} & = & 0.75 \nonumber \\
+\alpha & = & 0.573285 \nonumber  .
+\eqa
+
+These cloud fractions are suppressed, however, in regions where the convective
+sub-cloud layer is conditionally unstable.  The functional form of $RH_c$ is shown in
+Figure (\ref{fig:fizhi:rhcrit}).
+
+\begin{figure*}[htbp]
+  \vspace{0.4in}
+  \centerline{  \epsfysize=4.0in  \epsfbox{rhcrit.ps}}
+  \vspace{0.4in}
+  \caption  [Critical Relative Humidity for Clouds.] 
+            {Critical Relative Humidity for Clouds.} 
+  \label{fig:fizhi:rhcrit}
+\end{figure*}
+
+The total cloud fraction in a grid box is determined by the larger of the two cloud fractions:
+
+\[
+F_{CLD} = \max \left[ F_{RAS},F_{LS} \right] .
+\]
+
+Finally, cloud fractions are time-averaged between calls to the radiation packages.
+
+
+\subsubsection{Radiation}
+
+The parameterization of radiative heating in the fizhi package includes effects 
+from both shortwave and longwave processes.
+Radiative fluxes are calculated at each
+model edge-level in both up and down directions.
+The heating rates/cooling rates are then obtained 
+from the vertical divergence of the net radiative fluxes.
+
+The net flux is
+\[
+F = F^\uparrow - F^\downarrow
+\]
+where $F$ is the net flux, $F^\uparrow$ is the upward flux and $F^\downarrow$ is
+the downward flux.
+
+The heating rate due to the divergence of the radiative flux is given by
+\[
+\pp{\rho c_p T}{t} = - \pp{F}{z}
+\]
+or
+\[
+\pp{T}{t} = \frac{g}{c_p \pi} \pp{F}{\sigma}
+\]
+where $g$ is the accelation due to gravity
+and $c_p$ is the heat capacity of air at constant pressure.
+  
+The time tendency for Longwave
+Radiation is updated every 3 hours.  The time tendency for Shortwave Radiation is updated once
+every three hours assuming a normalized incident solar radiation, and subsequently modified at
+every model time step by the true incident radiation.  
+The solar constant value used in the package is equal to 1365 $W/m^2$
+and a $CO_2$ mixing ratio of 330 ppm. 
+For the ozone mixing ratio, monthly mean zonally averaged 
+climatological values specified as a function
+of latitude and height (Rosenfield, et al., 1987) are linearly interpolated to the current time.
+
+
+\subsubsubsection{Shortwave Radiation}
+
+The shortwave radiation package used in the package computes solar radiative 
+heating due to the absoption by water vapor, ozone, carbon dioxide, oxygen,
+clouds, and aerosols and due to the
+scattering by clouds, aerosols, and gases.
+The shortwave radiative processes are described by 
+Chou (1990,1992). This shortwave package
+uses the Delta-Eddington approximation to compute the
+bulk scattering properties of a single layer following King and Harshvardhan (JAS, 1986).
+The transmittance and reflectance of diffuse radiation
+follow the procedures of Sagan and Pollock (JGR, 1967) and Lacis and Hansen (JAS, 1974).
+
+Highly accurate heating rate calculations are obtained through the use
+of an optimal grouping strategy of spectral bands.  By grouping the UV and visible regions
+as indicated in Table \ref{tab:fizhi:solar2}, the Rayleigh scattering and the ozone absorption of solar radiation
+can be accurately computed in the ultraviolet region and the photosynthetically
+active radiation (PAR) region.
+The computation of solar flux in the infrared region is performed with a broadband
+parameterization using the spectrum regions shown in Table \ref{tab:fizhi:solar1}.
+The solar radiation algorithm used in the fizhi package can be applied not only for climate studies but
+also for studies on the photolysis in the upper atmosphere and the photosynthesis in the biosphere.
+
+\begin{table}[htb]
+\begin{center}
+{\bf UV and Visible Spectral Regions} \\
+\vspace{0.1in}
+\begin{tabular}{|c|c|c|} 
+\hline
+Region & Band & Wavelength (micron) \\ \hline
+\hline
+UV-C   &  1.  &  .175 - .225  \\
+       &  2.  &  .225 - .245  \\
+       &      &  .260 - .280  \\
+       &  3.  &  .245 - .260  \\ \hline
+UV-B   &  4.  &  .280 - .295  \\
+       &  5.  &  .295 - .310  \\
+       &  6.  &  .310 - .320  \\ \hline
+UV-A   &  7.  &  .320 - .400  \\ \hline
+PAR    &  8.  &  .400 - .700  \\
+\hline
+\end{tabular}
+\end{center}
+\caption{UV and Visible Spectral Regions used in shortwave radiation package.}
+\label{tab:fizhi:solar2}
+\end{table}
+
+\begin{table}[htb]
+\begin{center}
+{\bf Infrared Spectral Regions} \\
+\vspace{0.1in}
+\begin{tabular}{|c|c|c|} 
+\hline
+Band & Wavenumber(cm$^{-1}$) & Wavelength (micron) \\ \hline
+\hline
+1  &    1000-4400    &    2.27-10.0 \\
+2  &    4400-8200    &    1.22-2.27 \\
+3  &    8200-14300   &    0.70-1.22 \\
+\hline
+\end{tabular}
+\end{center}
+\caption{Infrared Spectral Regions used in shortwave radiation package.}
+\label{tab:fizhi:solar1}
+\end{table}
+
+Within the shortwave radiation package, 
+both ice and liquid cloud particles are allowed to co-exist in any of the model layers. 
+Two sets of cloud parameters are used, one for ice paticles and the other for liquid particles.
+Cloud parameters are defined as the cloud optical thickness and the effective cloud particle size.
+In the fizhi package, the effective radius for water droplets is given as 10 microns,
+while 65 microns is used for ice particles.  The absorption due to aerosols is currently
+set to zero.
+
+To simplify calculations in a cloudy atmosphere, clouds are
+grouped into low ($p>700$ mb), middle (700 mb $\ge p > 400$ mb), and high ($p < 400$ mb) cloud regions. 
+Within each of the three regions, clouds are assumed maximally
+overlapped, and the cloud cover of the group is the maximum
+cloud cover of all the layers in the group.  The optical thickness
+of a given layer is then scaled for both the direct (as a function of the
+solar zenith angle) and diffuse beam radiation 
+so that the grouped layer reflectance is the same as the original reflectance.
+The solar flux is computed for each of the eight cloud realizations possible 
+(see Figure \ref{fig:fizhi:cloud}) within this
+low/middle/high classification, and appropriately averaged to produce the net solar flux.
+
+\begin{figure*}[htbp]
+  \vspace{0.4in}
+  \centerline{  \epsfysize=4.0in  %\epsfbox{rhcrit.ps}
+             }
+  \vspace{0.4in}
+  \caption  {Low-Middle-High Cloud Configurations} 
+  \label{fig:fizhi:cloud}
+\end{figure*}
+
+
+\subsubsubsection{Longwave Radiation}
+
+The longwave radiation package used in the fizhi package is thoroughly described by Chou and Suarez (1994).
+As described in that document, IR fluxes are computed due to absorption by water vapor, carbon
+dioxide, and ozone.  The spectral bands together with their absorbers and parameterization methods,
+configured for the fizhi package, are shown in Table \ref{tab:fizhi:longwave}.
+
+
+\begin{table}[htb]
+\begin{center}
+{\bf IR Spectral Bands} \\
+\vspace{0.1in}
+\begin{tabular}{|c|c|l|c| } 
+\hline
+Band & Spectral Range (cm$^{-1}$) & Absorber & Method \\ \hline
+\hline
+1   & 0-340      & H$_2$O line      & T \\ \hline
+2   & 340-540    & H$_2$O line      & T \\ \hline
+3a  & 540-620    & H$_2$O line      & K \\ 
+3b  & 620-720    & H$_2$O continuum & S \\ 
+3b  & 720-800    & CO$_2$           & T \\ \hline 
+4   & 800-980    & H$_2$O line      & K \\ 
+    &            & H$_2$O continuum & S \\ \hline 
+    &            & H$_2$O line      & K \\ 
+5   & 980-1100   & H$_2$O continuum & S \\ 
+    &            & O$_3$            & T \\ \hline 
+6   & 1100-1380  & H$_2$O line      & K \\ 
+    &            & H$_2$O continuum & S \\ \hline
+7   & 1380-1900  & H$_2$O line      & T \\ \hline 
+8   & 1900-3000  & H$_2$O line      & K \\ \hline 
+\hline
+\multicolumn{4}{|l|}{ \quad K: {\em k}-distribution method with linear pressure scaling } \\
+\multicolumn{4}{|l|}{ \quad T: Table look-up with temperature and pressure scaling } \\
+\multicolumn{4}{|l|}{ \quad S: One-parameter temperature scaling } \\
+\hline
+\end{tabular}
+\end{center}
+\vspace{0.1in}
+\caption{IR Spectral Bands, Absorbers, and Parameterization Method (from Chou and Suarez, 1994)}
+\label{tab:fizhi:longwave}
+\end{table}
+
+
+The longwave radiation package accurately computes cooling rates for the middle and 
+lower atmosphere from 0.01 mb to the surface.  Errors are $<$ 0.4 C day$^{-1}$ in cooling
+rates and $<$ 1\% in fluxes.  From Chou and Suarez, it is estimated that the total effect of 
+neglecting all minor absorption bands and the effects of minor infrared absorbers such as
+nitrous oxide (N$_2$O), methane (CH$_4$), and the chlorofluorocarbons (CFCs), is an underestimate
+of $\approx$ 5 W/m$^2$ in the downward flux at the surface and an overestimate of $\approx$ 3 W/m$^2$
+in the upward flux at the top of the atmosphere.
+
+Similar to the procedure used in the shortwave radiation package, clouds are grouped into
+three regions catagorized as low/middle/high.
+The net clear line-of-site probability $(P)$ between any two levels, $p_1$ and $p_2 \quad (p_2 > p_1)$,  
+assuming randomly overlapped cloud groups, is simply the product of the probabilities within each group:
+
+\[ P_{net} = P_{low} \times P_{mid} \times P_{hi} . \]
+
+Since all clouds within a group are assumed maximally overlapped, the clear line-of-site probability within
+a group is given by:
+
+\[ P_{group} = 1 - F_{max} , \]
+
+where $F_{max}$ is the maximum cloud fraction encountered between $p_1$ and $p_2$ within that group.
+For groups and/or levels outside the range of $p_1$ and $p_2$, a clear line-of-site probability equal to 1 is
+assigned.
+
+
+\subsubsubsection{Cloud-Radiation Interaction}
+\label{sec:fizhi:radcloud}
+
+The cloud fractions and diagnosed cloud liquid water produced by moist processes 
+within the fizhi package are used in the radiation packages to produce cloud-radiative forcing.
+The cloud optical thickness associated with large-scale cloudiness is made
+proportional to the diagnosed large-scale liquid water, $\ell$, detrained due to super-saturation.
+Two values are used corresponding to cloud ice particles and water droplets.
+The range of optical thickness for these clouds is given as
+
+\[ 0.0002 \le \tau_{ice} (mb^{-1}) \le 0.002  \quad\mbox{for}\quad  0 \le \ell \le 2 \quad\mbox{mg/kg} , \]
+\[ 0.02 \le \tau_{h_2o} (mb^{-1}) \le 0.2  \quad\mbox{for}\quad  0 \le \ell \le 10 \quad\mbox{mg/kg} . \]
+
+The partitioning, $\alpha$,  between ice particles and water droplets is achieved through a linear scaling
+in temperature:
+
+\[ 0 \le \alpha \le 1 \quad\mbox{for}\quad  233.15 \le T \le 253.15 . \]
+
+The resulting optical depth associated with large-scale cloudiness is given as
+
+\[ \tau_{LS} = \alpha \tau_{h_2o} + (1-\alpha)\tau_{ice} . \]
+
+The optical thickness associated with sub-grid scale convective clouds produced by RAS is given as
+
+\[ \tau_{RAS} = 0.16 \quad mb^{-1} . \]
+
+The total optical depth in a given model layer is computed as a weighted average between
+the large-scale and sub-grid scale optical depths, normalized by the total cloud fraction in the
+layer:
+
+\[ \tau = \left( {F_{RAS} \,\,\, \tau_{RAS} + F_{LS} \,\,\, \tau_{LS} \over F_{RAS}+F_{LS} } \right) \Delta p, \]
+
+where $F_{RAS}$ and $F_{LS}$ are the time-averaged cloud fractions associated with RAS and large-scale
+processes described in Section \ref{sec:fizhi:clouds}.
+The optical thickness for the longwave radiative feedback is assumed to be 75 $\%$ of these values.
+
+The entire Moist Convective Processes Module is called with a frequency of 10 minutes. 
+The cloud fraction values are time-averaged over the period between Radiation calls (every 3
+hours).  Therefore, in a time-averaged sense, both convective and large-scale 
+cloudiness can exist in a given grid-box.  
+
+\subsubsection{Turbulence}
+Turbulence is parameterized in the fizhi package to account for its contribution to the
+vertical exchange of heat, moisture, and momentum.  
+The turbulence scheme is invoked every 30 minutes, and employs a backward-implicit iterative 
+time scheme with an internal time step of 5 minutes.
+The tendencies of atmospheric state variables due to turbulent diffusion are calculated using
+the diffusion equations:
+
+\[
+{\pp{u}{t}}_{turb} = {\pp{}{z} }{(- \overline{u^{\prime}w^{\prime}})}
+ = {\pp{}{z} }{(K_m \pp{u}{z})}
+\]
+\[
+{\pp{v}{t}}_{turb} = {\pp{}{z} }{(- \overline{v^{\prime}w^{\prime}})}
+ = {\pp{}{z} }{(K_m \pp{v}{z})}
+\]
+\[
+{\pp{T}{t}} = P^{\kappa}{\pp{\theta}{t}}_{turb} = 
+P^{\kappa}{\pp{}{z} }{(- \overline{w^{\prime}\theta^{\prime}})}
+ = P^{\kappa}{\pp{}{z} }{(K_h \pp{\theta_v}{z})}
+\]
+\[
+{\pp{q}{t}}_{turb} = {\pp{}{z} }{(- \overline{w^{\prime}q^{\prime}})}
+ = {\pp{}{z} }{(K_h \pp{q}{z})}
+\]
+
+Within the atmosphere, the time evolution
+of second turbulent moments is explicitly modeled by representing the third moments in terms of 
+the first and second moments.  This approach is known as a second-order closure modeling.
+To simplify and streamline the computation of the second moments, the level 2.5 assumption
+of Mellor and Yamada (1974) and Yamada (1977) is employed, in which only the turbulent 
+kinetic energy (TKE),
+
+\[ {\h}{q^2}={\overline{{u^{\prime}}^2}}+{\overline{{v^{\prime}}^2}}+{\overline{{w^{\prime}}^2}}, \]
+
+is solved prognostically and the other second moments are solved diagnostically.
+The prognostic equation for TKE allows the scheme to simulate 
+some of the transient and diffusive effects in the turbulence. The TKE budget equation
+is solved numerically using an implicit backward computation of the terms linear in $q^2$
+and is written:
+
+\[
+{\dd{}{t} ({{\h} q^2})} - { \pp{}{z} ({ {5 \over 3} {{\lambda}_1} q { \pp {}{z} 
+({\h}q^2)} })} =
+{- \overline{{u^{\prime}}{w^{\prime}}} { \pp{U}{z} }} - {\overline{{v^{\prime}}{w^{\prime}}} 
+{ \pp{V}{z} }} + {{g \over {\Theta_0}}{\overline{{w^{\prime}}{{{\theta}_v}^{\prime}}}} } 
+- { q^3 \over {{\Lambda} _1} }
+\]
+
+where $q$ is the turbulent velocity, ${u^{\prime}}$, ${v^{\prime}}$, ${w^{\prime}}$ and 
+${{\theta}^{\prime}}$ are the fluctuating parts of the velocity components and potential 
+temperature, $U$ and $V$ are the mean velocity components, ${\Theta_0}^{-1}$ is the
+coefficient of thermal expansion, and ${{\lambda}_1}$ and ${{\Lambda} _1}$ are constant
+multiples of the master length scale, $\ell$, which is designed to be a characteristic measure
+of the vertical structure of the turbulent layers.
+
+The first term on the left-hand side represents the time rate of change of TKE, and
+the second term is a representation of the triple correlation, or turbulent
+transport term. The first three terms on the right-hand side represent the sources of
+TKE due to shear and bouyancy, and the last term on the right hand side is the dissipation
+of TKE.
+
+In the level 2.5 approach, the vertical fluxes of the scalars $\theta_v$ and $q$ and the
+wind components $u$ and $v$ are expressed in terms of the diffusion coefficients $K_h$ and
+$K_m$, respectively.  In the statisically realizable level 2.5 turbulence scheme of Helfand
+and Labraga (1988), these diffusion coefficients are expressed as
+
+\[
+K_h 
+ = \left\{ \begin{array}{l@{\quad\mbox{for}\quad}l} q \, \ell \, S_H(G_M,G_H) \, & \mbox{decaying turbulence}
+\\ { q^2 \over {q_e} } \, \ell \, S_{H}(G_{M_e},G_{H_e}) \, & \mbox{growing turbulence} \end{array} \right.
+\]
+
+and
+
+\[
+K_m
+ = \left\{ \begin{array}{l@{\quad\mbox{for}\quad}l} q \, \ell \, S_M(G_M,G_H) \, & \mbox{decaying turbulence}                
+\\ { q^2 \over {q_e} } \, \ell \, S_{M}(G_{M_e},G_{H_e}) \, & \mbox{growing turbulence} \end{array} \right.
+\]
+
+where the subscript $e$ refers to the value under conditions of local equillibrium
+(obtained from the Level 2.0 Model), $\ell$ is the master length scale related to the 
+vertical structure of the atmosphere,
+and $S_M$ and $S_H$ are functions of $G_H$ and $G_M$, the dimensionless buoyancy and
+wind shear parameters, respectively.
+Both $G_H$ and $G_M$, and their equilibrium values $G_{H_e}$ and $G_{M_e}$,
+are functions of the Richardson number:
+
+\[
+{\bf RI} = { { {g \over \theta_v} \pp {\theta_v}{z} } \over { (\pp{u}{z})^2 + (\pp{v}{z})^2 } }
+ =  {  {c_p \pp{\theta_v}{z} \pp{P^ \kappa}{z} } \over { (\pp{u}{z})^2 + (\pp{v}{z})^2 } } .
+\]
+
+Negative values indicate unstable buoyancy and shear, small positive values ($<0.2$)
+indicate dominantly unstable shear, and large positive values indicate dominantly stable
+stratification.
+
+Turbulent eddy diffusion coefficients of momentum, heat and moisture in the surface layer,
+which corresponds to the lowest GCM level (see \ref{tab:fizhi:sigma}),
+are calculated using stability-dependant functions based on Monin-Obukhov theory:
+\[
+{K_m} (surface) = C_u \times u_* = C_D W_s
+\]
+and
+\[
+{K_h} (surface) =  C_t \times u_* = C_H W_s
+\]
+where $u_*=C_uW_s$ is the surface friction velocity,
+$C_D$ is termed the surface drag coefficient, $C_H$ the heat transfer coefficient, 
+and $W_s$ is the magnitude of the surface layer wind.
+
+$C_u$ is the dimensionless exchange coefficient for momentum from the surface layer
+similarity functions: 
+\[
+{C_u} = {u_* \over W_s} = { k \over \psi_{m} }
+\]
+where k is the Von Karman constant and $\psi_m$ is the surface layer non-dimensional 
+wind shear given by
+\[
+\psi_{m} = {\int_{\zeta_{0}}^{\zeta} {\phi_{m} \over \zeta} d \zeta} .
+\]
+Here $\zeta$ is the non-dimensional stability parameter, and
+$\phi_m$ is the similarity function of $\zeta$ which expresses the stability dependance of
+the momentum gradient.  The functional form of $\phi_m$ is specified differently for stable and unstable 
+layers.
+
+$C_t$ is the dimensionless exchange coefficient for heat and 
+moisture from the surface layer similarity functions:
+\[
+{C_t} = -{( {\overline{w^{\prime}\theta^{\prime}}}) \over {u_* \Delta \theta }} =
+-{( {\overline{w^{\prime}q^{\prime}}}) \over {u_* \Delta q }} =
+{ k \over { (\psi_{h} + \psi_{g}) } }
+\]
+where $\psi_h$ is the surface layer non-dimensional temperature gradient given by
+\[
+\psi_{h} = {\int_{\zeta_{0}}^{\zeta} {\phi_{h} \over \zeta} d \zeta} .
+\]
+Here $\phi_h$ is the similarity function of $\zeta$, which expresses the stability dependance of
+the temperature and moisture gradients, and is specified differently for stable and unstable
+layers according to Helfand and Schubert, 1995.
+
+$\psi_g$ is the non-dimensional temperature or moisture gradient in the viscous sublayer, 
+which is the mosstly laminar region between the surface and the tops of the roughness 
+elements, in which temperature and moisture gradients can be quite large.
+Based on Yaglom and Kader (1974):
+\[
+\psi_{g} = { 0.55 (Pr^{2/3} - 0.2) \over \nu^{1/2} }
+(h_{0}u_{*} - h_{0_{ref}}u_{*_{ref}})^{1/2}
+\]
+where Pr is the Prandtl number for air, $\nu$ is the molecular viscosity, $z_{0}$ is the 
+surface roughness length, and the subscript {\em ref} refers to a reference value.
+$h_{0} = 30z_{0}$ with a maximum value over land of 0.01
+ 
+The surface roughness length over oceans is is a function of the surface-stress velocity,
+\[
+{z_0} = c_1u^3_* + c_2u^2_* + c_3u_* + c_4 + {c_5 \over {u_*}}
+\]
+where the constants are chosen to interpolate between the reciprocal relation of
+Kondo(1975) for weak winds, and the piecewise linear relation of Large and Pond(1981)
+for moderate to large winds.  Roughness lengths over land are specified
+from the climatology of Dorman and Sellers (1989).
+
+For an unstable surface layer, the stability functions, chosen to interpolate between the
+condition of small values of $\beta$ and the convective limit, are the KEYPS function 
+(Panofsky, 1973) for momentum, and its generalization for heat and moisture:  
+\[
+{\phi_m}^4 - 18 \zeta {\phi_m}^3 = 1 \hspace{1cm} ; \hspace{1cm} 
+{\phi_h}^2 - 18 \zeta {\phi_h}^3 = 1 \hspace{1cm} .
+\]
+The function for heat and moisture assures non-vanishing heat and moisture fluxes as the wind 
+speed approaches zero. 
+
+For a stable surface layer, the stability functions are the observationally 
+based functions of Clarke (1970),  slightly modified for
+the momemtum flux:  
+\[
+{\phi_m} = { { 1 + 5 {{\zeta}_1} } \over { 1 + 0.00794 {{\zeta}_1}
+(1+ 5 {{\zeta}_1}) } } \hspace{1cm} ; \hspace{1cm}
+{\phi_h} = { { 1 + 5 {{\zeta}_1} } \over { 1 + 0.00794 {\zeta}
+(1+ 5 {{\zeta}_1}) } } .
+\]
+The moisture flux also depends on a specified evapotranspiration
+coefficient, set to unity over oceans and dependant on the climatological ground wetness over
+land.  
+
+Once all the diffusion coefficients are calculated, the diffusion equations are solved numerically
+using an implicit backward operator.
+
+\subsubsubsection{Atmospheric Boundary Layer}
+
+The depth of the atmospheric boundary layer (ABL) is diagnosed by the parameterization as the
+level at which the turbulent kinetic energy is reduced to a tenth of its maximum near surface value.
+The vertical structure of the ABL is explicitly resolved by the lowest few (3-8) model layers.
+
+\subsubsubsection{Surface Energy Budget}
+
+The ground temperature equation is solved as part of the turbulence package
+using a backward implicit time differencing scheme:
+\[
+C_g\pp{T_g}{t} = R_{sw} - R_{lw} + Q_{ice} - H - LE
+\]
+where $R_{sw}$ is the net surface downward shortwave radiative flux and $R_{lw}$ is the
+net surface upward longwave radiative flux. 
+
+$H$ is the upward sensible heat flux, given by:
+\[
+{H} =  P^{\kappa}\rho c_{p} C_{H} W_s (\theta_{surface} - \theta_{NLAY})
+\hspace{1cm}where: \hspace{.2cm}C_H = C_u C_t
+\]
+where $\rho$ = the atmospheric density at the surface, $c_{p}$ is the specific
+heat of air at constant pressure, and $\theta$ represents the potential temperature
+of the surface and of the lowest $\sigma$-level, respectively.
+ 
+The upward latent heat flux, $LE$, is given by
+\[
+{LE} =  \rho \beta L C_{H} W_s (q_{surface} - q_{NLAY})
+\hspace{1cm}where: \hspace{.2cm}C_H = C_u C_t
+\]
+where $\beta$ is the fraction of the potential evapotranspiration actually evaporated,
+L is the latent heat of evaporation, and $q_{surface}$ and $q_{NLAY}$ are the specific
+humidity of the surface and of the lowest $\sigma$-level, respectively.
+
+The heat conduction through sea ice, $Q_{ice}$, is given by
+\[
+{Q_{ice}} = {C_{ti} \over {H_i}} (T_i-T_g)
+\]
+where $C_{ti}$ is the thermal conductivity of ice, $H_i$ is the ice thickness, assumed to
+be $3 \hspace{.1cm} m$ where sea ice is present, $T_i$ is 273 degrees Kelvin, and $T_g$ is the 
+surface temperature of the ice.
+
+$C_g$ is the total heat capacity of the ground, obtained by solving a heat diffusion equation
+for the penetration of the diurnal cycle into the ground (Blackadar, 1977), and is given by:
+\[
+C_g = \sqrt{ {\lambda C_s \over 2\omega} } = \sqrt{(0.386 + 0.536W + 0.15W^2)2\times10^{-3}
+{86400 \over 2 \pi} } \, \, .
+\]
+Here, the thermal conductivity, $\lambda$, is equal to $2\times10^{-3}$ ${ly\over{ sec}}
+{cm \over {^oK}}$,    
+the angular velocity of the earth, $\omega$, is written as $86400$ $sec/day$ divided
+by $2 \pi$ $radians/  
+day$, and the expression for $C_s$, the heat capacity per unit volume at the surface,
+is a function of the ground wetness, $W$.
+
+\subsubsection{Land Surface Processes}
+
+\subsubsubsection{Surface Type}
+The fizhi package surface Types are designated using the Koster-Suarez (1992) mosaic
+philosophy which allows multiple ``tiles'', or multiple surface types, in any one
+grid cell. The Koster-Suarez Land Surface Model (LSM) surface type classifications
+are shown in Table \ref{tab:fizhi:surftype}. The surface types and the percent of the grid
+cell occupied by any surface type were derived from the surface classification of
+Defries and Townshend (1994), and information about the location of permanent
+ice was obtained from the classifications of Dorman and Sellers (1989).
+The surface type for the \txt GCM grid is shown in Figure \ref{fig:fizhi:surftype}.
+The determination of the land or sea category of surface type was made from NCAR's
+10 minute by 10 minute Navy topography 
+dataset, which includes information about the percentage of water-cover at any point.
+The data were averaged to the model's \fxf and \txt grid resolutions,
+and any grid-box whose averaged water percentage was $\geq 60 \%$ was
+defined as a water point. The \fxf grid Land-Water designation was further modified
+subjectively to ensure sufficient representation from small but isolated land and water regions.
+ 
+\begin{table}
+\begin{center}
+{\bf Surface Type Designation} \\
+\vspace{0.1in}
+\begin{tabular}{ |c|l| }
+\hline
+Type & Vegetation Designation \\ \hline
+\hline
+  1 & Broadleaf Evergreen Trees \\ \hline
+  2 & Broadleaf Deciduous Trees \\ \hline
+  3 & Needleleaf Trees \\ \hline
+  4 & Ground Cover \\ \hline   
+  5 & Broadleaf Shrubs \\ \hline
+  6 & Dwarf Trees (Tundra) \\ \hline
+  7 & Bare Soil \\ \hline
+  8 & Desert (Bright) \\ \hline
+  9 & Glacier \\ \hline
+ 10 & Desert (Dark) \\ \hline
+100 & Ocean \\ \hline
+\end{tabular}
+\end{center}
+\caption{Surface type designations used to compute surface roughness (over land) 
+and surface albedo.}
+\label{tab:fizhi:surftype}
+\end{table}
+ 
+ 
+\begin{figure*}[htbp]
+  \centerline{  \epsfysize=7in  \epsfbox{surftypes.ps}}
+  \vspace{0.3in}
+  \caption  {Surface Type Compinations at \txt resolution.}
+  \label{fig:fizhi:surftype}
+\end{figure*}
+
+\begin{figure*}[htbp]
+  \centerline{  \epsfysize=7in  \epsfbox{surftypes.descrip.ps}}
+  \vspace{0.3in}
+  \caption  {Surface Type Descriptions.}
+  \label{fig:fizhi:surftype.desc}
+\end{figure*}
+
+
+\subsubsubsection{Surface Roughness}
+The surface roughness length over oceans is computed iteratively with the wind
+stress by the surface layer parameterization (Helfand and Schubert, 1991).
+It employs an interpolation between the functions of Large and Pond (1981)
+for high winds and of Kondo (1975) for weak winds.
+
+
+\subsubsubsection{Albedo}
+The surface albedo computation, described in Koster and Suarez (1991),
+employs the ``two stream'' approximation used in Sellers' (1987) Simple Biosphere (SiB)
+Model which distinguishes between the direct and diffuse albedos in the visible
+and in the near infra-red spectral ranges. The albedos are functions of the observed
+leaf area index (a description of the relative orientation of the leaves to the
+sun), the greenness fraction, the vegetation type, and the solar zenith angle.
+Modifications are made to account for the presence of snow, and its depth relative
+to the height of the vegetation elements.
+
+\subsubsection{Gravity Wave Drag}
+The fizhi package employs the gravity wave drag scheme of Zhou et al. (1996).
+This scheme is a modified version of Vernekar et al. (1992),
+which was based on Alpert et al. (1988) and Helfand et al. (1987).  
+In this version, the gravity wave stress at the surface is
+based on that derived by Pierrehumbert (1986) and is given by:
+
+\bq
+|\vec{\tau}_{sfc}| = {\rho U^3\over{N \ell^*}} \left(F_r^2 \over{1+F_r^2}\right) \, \, ,
+\eq
+
+where $F_r = N h /U$ is the Froude number, $N$ is the {\em Brunt - V\"{a}is\"{a}l\"{a}} frequency, $U$ is the 
+surface wind speed, $h$ is the standard deviation of the sub-grid scale orography,
+and $\ell^*$ is the wavelength of the monochromatic gravity wave in the direction of the low-level wind.
+A modification introduced by Zhou et al. allows for the momentum flux to
+escape through the top of the model, although this effect is small for the current 70-level model.  
+The subgrid scale standard deviation is defined by $h$, and is not allowed to exceed 400 m. 
+
+The effects of using this scheme within a GCM are shown in Takacs and Suarez (1996).
+Experiments using the gravity wave drag parameterization yielded significant and
+beneficial impacts on both the time-mean flow and the transient statistics of the
+a GCM climatology, and have eliminated most of the worst dynamically driven biases 
+in the a GCM simulation. 
+An examination of the angular momentum budget during climate runs indicates that the 
+resulting gravity wave torque is similar to the data-driven torque produced by a data 
+assimilation which was performed without gravity
+wave drag.  It was shown that the inclusion of gravity wave drag results in 
+large changes in both the mean flow and in eddy fluxes.
+The result is a more
+accurate simulation of surface stress (through a reduction in the surface wind strength), 
+of mountain torque (through a redistribution of mean sea-level pressure), and of momentum
+convergence (through a reduction in the flux of westerly momentum by transient flow eddies).  
+
+
+\subsubsection{Boundary Conditions and other Input Data}
+
+Required fields which are not explicitly predicted or diagnosed during model execution must
+either be prescribed internally or obtained from external data sets.  In the fizhi package these
+fields include:  sea surface temperature, sea ice estent, surface geopotential variance, 
+vegetation index, and the radiation-related background levels of: ozone, carbon dioxide, 
+and stratospheric moisture.
+
+Boundary condition data sets are available at the model's \fxf and \txt 
+resolutions for either climatological or yearly varying conditions. 
+Any frequency of boundary condition data can be used in the fizhi package; 
+however, the current selection of data is summarized in Table \ref{tab:fizhi:bcdata}\@.
+The time mean values are interpolated during each model timestep to the 
+current time. Future model versions will incorporate boundary conditions at
+higher spatial \mbox{($1^\circ$ x $1^\circ$)} resolutions.
+
+\begin{table}[htb]
+\begin{center}
+{\bf Fizhi Input Datasets} \\
+\vspace{0.1in}
+\begin{tabular}{|l|c|r|} \hline
+\multicolumn{1}{|c}{Variable} & \multicolumn{1}{|c}{Frequency} & \multicolumn{1}{|c|}{Years} \\ \hline\hline
+Sea Ice Extent & monthly & 1979-current, climatology \\ \hline
+Sea Ice Extent & weekly  & 1982-current, climatology \\ \hline
+Sea Surface Temperature & monthly & 1979-current, climatology \\ \hline
+Sea Surface Temperature & weekly & 1982-current, climatology \\ \hline
+Zonally Averaged Upper-Level Moisture & monthly  & climatology \\ \hline
+Zonally Averaged Ozone Concentration & monthly  & climatology \\ \hline
+\end{tabular}
+\end{center}
+\caption{Boundary conditions and other input data used in the fizhi package.  Also noted are the
+current years and frequencies available.}
+\label{tab:fizhi:bcdata}
+\end{table}
+
+
+\subsubsubsection{Topography and Topography Variance}
+
+Surface geopotential heights are provided from an averaging of the Navy 10 minute
+by 10 minute dataset supplied by the National Center for Atmospheric Research (NCAR) to the
+model's grid resolution. The original topography is first rotated to the proper grid-orientation
+which is being run, and then  
+averages the data to the model resolution.  
+The averaged topography is then passed through a Lanczos (1966) filter in both dimensions 
+which removes the smallest
+scales while inhibiting Gibbs phenomena.  
+
+In one dimension, we may define a cyclic function in $x$ as:
+\begin{equation}
+f(x) = {a_0 \over 2} + \sum_{k=1}^N \left( a_k \cos(kx) + b_k \sin(kx) \right)
+\label{eq:fizhi:filt}
+\end{equation}
+where $N = { {\rm IM} \over 2 }$ and ${\rm IM}$ is the total number of points in the $x$ direction.
+Defining $\Delta x = { 2 \pi \over {\rm IM}}$, we may define the average of $f(x)$ over a 
+$2 \Delta x$ region as:
+
+\begin{equation}
+\overline {f(x)} = {1 \over {2 \Delta x}} \int_{x-\Delta x}^{x+\Delta x} f(x^{\prime}) dx^{\prime}
+\label{eq:fizhi:fave1}
+\end{equation}
+
+Using equation (\ref{eq:fizhi:filt}) in equation (\ref{eq:fizhi:fave1}) and integrating, we may write:
+ 
+\begin{equation}
+\overline {f(x)} = {a_0 \over 2} + {1 \over {2 \Delta x}}
+\sum_{k=1}^N \left [
+\left. a_k { \sin(kx^{\prime}) \over k } \right /_{x-\Delta x}^{x+\Delta x} -
+\left. b_k { \cos(kx^{\prime}) \over k } \right /_{x-\Delta x}^{x+\Delta x} 
+\right]
+\end{equation}
+or
+
+\begin{equation}
+\overline {f(x)} = {a_0 \over 2} + \sum_{k=1}^N {\sin(k \Delta x) \over {k \Delta x}}
+\left( a_k \cos(kx) + b_k \sin(kx) \right)
+\label{eq:fizhi:fave2}
+\end{equation}
+
+Thus, the Fourier wave amplitudes are simply modified by the Lanczos filter response
+function ${\sin(k\Delta x) \over {k \Delta x}}$.  This may be compared with an $mth$-order 
+Shapiro (1970) filter response function, defined as $1-\sin^m({k \Delta x \over 2})$,
+shown in Figure \ref{fig:fizhi:lanczos}.
+It should be noted that negative values in the topography resulting from
+the filtering procedure are {\em not} filled.
+
+\begin{figure*}[htbp]
+  \centerline{  \epsfysize=7.0in  \epsfbox{lanczos.ps}}
+  \caption{ \label{fig:fizhi:lanczos} Comparison between the Lanczos and $mth$-order Shapiro filter 
+  response functions for $m$ = 2, 4, and 8. }
+\end{figure*}
+
+The standard deviation of the subgrid-scale topography
+is computed from a modified version of the the Navy 10 minute by 10 minute dataset.
+The 10 minute by 10 minute topography is passed through a wavelet
+filter in both dimensions which removes the scale smaller than 20 minutes.
+The topography is then averaged to $1^\circ x 1^\circ$ grid resolution, and then
+re-interpolated back to the 10 minute by 10 minute resolution. 
+The sub-grid scale variance is constructed based on this smoothed dataset.
+
+
+\subsubsubsection{Upper Level Moisture}
+The fizhi package uses climatological water vapor data above 100 mb from the Stratospheric Aerosol and Gas 
+Experiment (SAGE) as input into the model's radiation packages.  The SAGE data is archived
+as monthly zonal means at 5$^\circ$ latitudinal resolution.  The data is interpolated to the
+model's grid location and current time, and blended with the GCM's moisture data.  Below 300 mb,
+the model's moisture data is used.  Above 100 mb, the SAGE data is used.  Between 100 and 300 mb,
+a linear interpolation (in pressure) is performed using the data from SAGE and the GCM. 
+
