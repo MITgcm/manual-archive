@@ -1,0 +1,520 @@
+\section{Gent/McWiliams/Redi SGS Eddy parameterization}
+
+There are two parts to the Redi/GM parameterization of geostrophic
+eddies. The first aims to mix tracer properties along isentropes
+(neutral surfaces) by means of a diffusion operator oriented along the
+local isentropic surface (Redi). The second part, adiabatically
+re-arranges tracers through an advective flux where the advecting flow
+is a function of slope of the isentropic surfaces (GM).
+
+The first GCM implementation of the Redi scheme was by Cox 1987 in the
+GFDL ocean circulation model. The original approach failed to
+distinguish between isopycnals and surfaces of locally referenced
+potential density (now called neutral surfaces) which are proper
+isentropes for the ocean. As will be discussed later, it also appears
+that the Cox implementation is susceptible  to a computational mode.
+Due to this mode, the Cox scheme requires a background lateral
+diffusion to be present to conserve the integrity of the model fields.
+
+The GM parameterization was then added to the GFDL code in the form of
+a non-divergent bolus velocity. The method defines two
+stream-functions expressed in terms of the isoneutral slopes subject
+to the boundary condition of zero value on upper and lower
+boundaries. The horizontal bolus velocities are then the vertical
+derivative of these functions. Here in lies a problem highlighted by
+Griffies et al., 1997: the bolus velocities involve multiple
+derivatives on the potential density field, which can consequently
+give rise to noise. Griffies et al. point out that the GM bolus fluxes
+can be identically written as a skew flux which involves fewer
+differential operators. Further, combining the skew flux formulation
+and Redi scheme, substantial cancellations take place to the point
+that the horizontal fluxes are unmodified from the lateral diffusion
+parameterization.
+
+\subsection{Redi scheme: Isopycnal diffusion}
+
+The Redi scheme diffuses tracers along isopycnals and introduces a
+term in the tendency (rhs) of such a tracer (here $\tau$) of the form:
+\begin{equation}
+\bf{\nabla} \cdot \kappa_\rho \bf{K}_{Redi}  \bf{\nabla} \tau
+\end{equation}
+where $\kappa_\rho$ is the along isopycnal diffusivity and
+$\bf{K}_{Redi}$ is a rank 2 tensor that projects the gradient of
+$\tau$ onto the isopycnal surface. The unapproximated projection tensor is:
+\begin{equation}
+\bf{K}_{Redi} = \left(
+\begin{array}{ccc}
+1 + S_x& S_x S_y & S_x \\
+S_x S_y  & 1 + S_y & S_y \\
+S_x & S_y & |S|^2 \\
+\end{array}
+\right)
+\end{equation}
+Here, $S_x = -\partial_x \sigma / \partial_z \sigma$ and $S_y =
+-\partial_y \sigma / \partial_z \sigma$ are the components of the
+isoneutral slope.
+
+The first point to note is that a typical slope in the ocean interior
+is small, say of the order $10^{-4}$. A maximum slope might be of
+order $10^{-2}$ and only exceeds such in unstratified regions where
+the slope is ill defined. It is therefore justifiable, and
+customary, to make the small slope approximation, $|S| << 1$. The Redi
+projection tensor then becomes:
+\begin{equation}
+\bf{K}_{Redi} = \left(
+\begin{array}{ccc}
+1 & 0 & S_x \\
+0 & 1 & S_y \\
+S_x & S_y & |S|^2 \\
+\end{array}
+\right)
+\end{equation}
+
+
+\subsection{GM parameterization}
+
+The GM parameterization aims to parameterise the ``advective'' or
+``transport'' effect of geostrophic eddies by means of a ``bolus''
+velocity, $\bf{u}^*$. The divergence of this advective flux is added
+to the tracer tendency equation (on the rhs):
+\begin{equation}
+- \bf{\nabla} \cdot \tau \bf{u}^*
+\end{equation}
+
+The bolus velocity is defined as:
+\begin{eqnarray}
+u^* & = & - \partial_z F_x \\
+v^* & = & - \partial_z F_y \\
+w^* & = & \partial_x F_x + \partial_y F_y
+\end{eqnarray}
+where $F_x$ and $F_y$ are stream-functions with boundary conditions
+$F_x=F_y=0$ on upper and lower boundaries. The virtue of casting the
+bolus velocity in terms of these stream-functions is that they are
+automatically non-divergent ($\partial_x u^* + \partial_y v^* = -
+\partial_{xz} F_x - \partial_{yz} F_y = - \partial_z w^*$). $F_x$ and
+$F_y$ are specified in terms of the isoneutral slopes $S_x$ and $S_y$:
+\begin{eqnarray}
+F_x & = & \kappa_{GM} S_x \\
+F_y & = & \kappa_{GM} S_y
+\end{eqnarray}
+This is the form of the GM parameterization as applied by Donabasaglu,
+1997, in MOM versions 1 and 2.
+
+\subsection{Griffies Skew Flux}
+
+Griffies notes that the discretisation of bolus velocities involves
+multiple layers of differencing and interpolation that potentially
+lead to noisy fields and computational modes. He pointed out that the
+bolus flux can be re-written in terms of a non-divergent flux and a
+skew-flux:
+\begin{eqnarray*}
+\bf{u}^* \tau
+& = &
+\left( \begin{array}{c}
+- \partial_z ( \kappa_{GM} S_x ) \tau \\
+- \partial_z ( \kappa_{GM} S_y ) \tau \\
+(\partial_x \kappa_{GM} S_x + \partial_y \kappa_{GM} S_y)\tau
+\end{array} \right)
+\\
+& = &
+\left( \begin{array}{c}
+- \partial_z ( \kappa_{GM} S_x \tau) \\
+- \partial_z ( \kappa_{GM} S_y \tau) \\
+\partial_x ( \kappa_{GM} S_x \tau) + \partial_y ( \kappa_{GM} S_y) \tau)
+\end{array} \right)
++ \left( \begin{array}{c}
+ \kappa_{GM} S_x \partial_z \tau \\
+ \kappa_{GM} S_y \partial_z \tau \\
+- \kappa_{GM} S_x \partial_x \tau - \kappa_{GM} S_y) \partial_y \tau
+\end{array} \right)
+\end{eqnarray*}
+The first vector is non-divergent and thus has no effect on the tracer
+field and can be dropped. The remaining flux can be written:
+\begin{equation}
+\bf{u}^* \tau = - \kappa_{GM} \bf{K}_{GM} \bf{\nabla} \tau
+\end{equation}
+where
+\begin{equation}
+\bf{K}_{GM} =
+\left(
+\begin{array}{ccc}
+0 & 0 & -S_x \\
+0 & 0 & -S_y \\
+S_x & S_y & 0
+\end{array}
+\right)
+\end{equation}
+is an anti-symmetric tensor.
+
+This formulation of the GM parameterization involves fewer derivatives
+than the original and also involves only terms that already appear in
+the Redi mixing scheme. Indeed, a somewhat fortunate cancellation
+becomes apparent when we use the GM parameterization in conjunction
+with the Redi isoneutral mixing scheme:
+\begin{equation}
+\kappa_\rho \bf{K}_{Redi} \bf{\nabla} \tau
+- u^* \tau = 
+( \kappa_\rho \bf{K}_{Redi} + \kappa_{GM} \bf{K}_{GM} ) \bf{\nabla} \tau
+\end{equation}
+In the instance that $\kappa_{GM} = \kappa_{\rho}$ then
+\begin{equation}
+\kappa_\rho \bf{K}_{Redi} + \kappa_{GM} \bf{K}_{GM} =
+\kappa_\rho
+\left( \begin{array}{ccc}
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+2 S_x & 2 S_y & |S|^2 
+\end{array}
+\right)
+\end{equation}
+which differs from the variable laplacian diffusion tensor by only
+two non-zero elements in the $z$-row.
+
+\subsection{Variable $\kappa_{GM}$}
+
+Visbeck et al., 1996, suggest making the eddy coefficient,
+$\kappa_{GM}$, a function of the Eady growth rate,
+$|f|/\sqrt{Ri}$. The formula involves a non-dimensional constant,
+$\alpha$, and a length-scale $L$:
+\begin{displaymath}
+\kappa_{GM} = \alpha L^2 \overline{ \frac{|f|}{\sqrt{Ri}} }^z
+\end{displaymath}
+where the Eady growth rate has been depth averaged (indicated by the
+over-line). A local Richardson number is defined $Ri = N^2 / (\partial
+u/\partial z)^2$ which, when combined with thermal wind gives:
+\begin{displaymath}
+\frac{1}{Ri} = \frac{(\frac{\partial u}{\partial z})^2}{N^2} =
+\frac{ ( \frac{g}{f \rho_o} | {\bf \nabla} \sigma | )^2 }{N^2} =
+\frac{ M^4 }{ |f|^2 N^2 }
+\end{displaymath}
+where $M^2$ is defined $M^2 = \frac{g}{\rho_o} |{\bf \nabla} \sigma|$.
+Substituting into the formula for $\kappa_{GM}$ gives:
+\begin{displaymath}
+\kappa_{GM} = \alpha L^2 \overline{ \frac{M^2}{N} }^z =
+\alpha L^2 \overline{ \frac{M^2}{N^2} N }^z =
+\alpha L^2 \overline{ |S| N }^z
+\end{displaymath}
+
+
+\subsection{Tapering and stability}
+
+Experience with the GFDL model showed that the GM scheme has to be
+matched to the convective parameterization. This was originally
+expressed in connection with the introduction of the KPP boundary
+layer scheme (Large et al., 97) but infact, as subsequent experience
+with the MIT model has found, is necessary for any convective
+parameterization.
+
+\fbox{ \begin{minipage}{4.75in}
+{\em S/R GMREDI\_SLOPE\_LIMIT} ({\em
+pkg/gmredi/gmredi\_slope\_limit.F})
+
+$\sigma_x, s_x$: {\bf SlopeX} (argument)
+
+$\sigma_y, s_y$: {\bf SlopeY} (argument)
+
+$\sigma_z$: {\bf dSigmadRReal} (argument)
+
+$z_\sigma^{*}$: {\bf dRdSigmaLtd} (argument)
+
+\end{minipage} }
+
+
+\subsubsection{Slope clipping}
+
+Deep convection sites and the mixed layer are indicated by
+homogenized, unstable or nearly unstable stratification. The slopes in
+such regions can be either infinite, very large with a sign reversal
+or simply very large. From a numerical point of view, large slopes
+lead to large variations in the tensor elements (implying large bolus
+flow) and can be numerically unstable. This was first reognized by
+Cox, 1987, who implemented ``slope clipping'' in the isopycnal mixing
+tensor. Here, the slope magnitude is simply restricted by an upper
+limit:
+\begin{eqnarray}
+|\nabla \sigma| & = & \sqrt{ \sigma_x^2 + \sigma_y^2 } \\
+S_{lim} & = & - \frac{|\nabla \sigma|}{ S_{max} }
+\;\;\;\;\;\;\;\; \mbox{where $S_{max}$ is a parameter} \\
+\sigma_z^\star & = & \min( \sigma_z , S_{lim} ) \\
+{[s_x,s_y]} & = & - \frac{ [\sigma_x,\sigma_y] }{\sigma_z^\star}
+\end{eqnarray}
+Notice that this algorithm assumes stable stratification through the
+``min'' function. In the case where the fluid is well stratified ($\sigma_z < S_{lim}$) then the slopes evaluate to:
+\begin{equation}
+{[s_x,s_y]} = - \frac{ [\sigma_x,\sigma_y] }{\sigma_z}
+\end{equation}
+while in the limited regions ($\sigma_z > S_{lim}$) the slopes become:
+\begin{equation}
+{[s_x,s_y]} = \frac{ [\sigma_x,\sigma_y] }{|\nabla \sigma|/S_{max}}
+\end{equation}
+so that the slope magnitude is limited $\sqrt{s_x^2 + s_y^2} =
+S_{max}$.
+
+The slope clipping scheme is activated in the model by setting {\bf
+GM\_tap\-er\_scheme = 'clipping'} in {\em data.gmredi}.
+
+Even using slope clipping, it is normally the case that the vertical
+diffusion term (with coefficient $\kappa_\rho{\bf K}_{33} =
+\kappa_\rho S_{max}^2$) is large and must be time-stepped using an
+implicit procedure (see section on discretisation and code later).
+Fig. \ref{fig-mixedlayer} shows the mixed layer depth resulting from
+a) using the GM scheme with clipping and b) no GM scheme (horizontal
+diffusion). The classic result of dramatically reduced mixed layers is
+evident. Indeed, the deep convection sites to just one or two points
+each and are much shallower than we might prefer. This, it turns out,
+is due to the over zealous restratification due to the bolus transport
+parameterization. Limiting the slopes also breaks the adiabatic nature
+of the GM/Redi parameterization, re-introducing diabatic fluxes in
+regions where the limiting is in effect.
+
+\subsubsection{Tapering: Gerdes, Koberle and Willebrand, Clim. Dyn. 1991}
+
+The tapering scheme used in Gerdes et al., 1991, (\cite{gkw91})
+addressed two issues with the clipping method: the introduction of
+large vertical fluxes in addition to convective adjustment fluxes is
+avoided by tapering the GM/Redi slopes back to zero in
+low-stratification regions; the adjustment of slopes is replaced by a
+tapering of the entire GM/Redi tensor. This means the direction of
+fluxes is unaffected as the amplitude is scaled.
+
+The scheme inserts a tapering function, $f_1(S)$, in front of the
+GM/Redi tensor:
+\begin{equation}
+f_1(S) = \min \left[ 1, \left( \frac{S_{max}}{|S|}\right)^2 \right]
+\end{equation}
+where $S_{max}$ is the maximum slope you want allowed. Where the
+slopes, $|S|<S_{max}$ then $f_1(S) = 1$ and the tensor is un-tapered
+but where $|S| \ge S_{max}$ then $f_1(S)$ scales down the tensor so
+that the effective vertical diffusivity term $\kappa f_1(S) |S|^2 =
+\kappa S_{max}^2$.
+
+The GKW tapering scheme is activated in the model by setting {\bf
+GM\_tap\-er\_scheme = 'gkw91'} in {\em data.gmredi}.
+
+\subsection{Tapering: Danabasoglu and McWilliams, J. Clim. 1995}
+
+The tapering scheme used by Danabasoglu and McWilliams, 1995,
+\cite{DM95}, followed a similar procedure but used a different
+tapering function, $f_1(S)$:
+\begin{equation}
+f_1(S) = \frac{1}{2} \left( 1+\tanh \left[ \frac{S_c - |S|}{S_d} \right] \right)
+\end{equation}
+where $S_c = 0.004$ is a cut-off slope and $S_d=0.001$ is a scale over
+which the slopes are smoothly tapered. Functionally, the operates in
+the same way as the GKW91 scheme but has a substantially lower
+cut-off, turning off the GM/Redi SGS parameterization for weaker
+slopes.
+
+The DM tapering scheme is activated in the model by setting {\bf
+GM\_tap\-er\_scheme = 'dm95'} in {\em data.gmredi}.
+
+\subsection{Tapering: Large, Danabasoglu and Doney, JPO 1997}
+
+The tapering used in Large et al., 1997, \cite{ldd97}, is based on the
+DM95 tapering scheme, but also tapers the scheme with an additional
+function of height, $f_2(z)$, so that the GM/Redi SGS fluxes are
+reduced near the surface:
+\begin{equation}
+f_2(S) = \frac{1}{2} \left( 1 + \sin(\pi \frac{z}{D} - \pi/2)\right)
+\end{equation}
+where $D = L_\rho |S|$ is a depth-scale and $L_\rho=c/f$ with
+$c=2$~m~s$^{-1}$.  This tapering with height was introduced to fix
+some spurious interaction with the mixed-layer KPP parameterization.
+
+The LDD tapering scheme is activated in the model by setting {\bf
+GM\_tap\-er\_scheme = 'ldd97'} in {\em data.gmredi}.
+
+
+
+\begin{figure}
+%\includegraphics{mixedlayer-cox.eps}
+%\includegraphics{mixedlayer-diff.eps}
+\caption{Mixed layer depth using GM parameterization with a) Cox slope
+clipping and for comparison b) using horizontal constant diffusion.}
+\ref{fig-mixedlayer}
+\end{figure}
+
+\begin{figure}
+%\includegraphics{slopelimits.eps}
+\caption{Effective slope as a function of ``true'' slope using a) Cox
+slope clipping, b) GKW91 limiting, c) DM95 limiting and d) LDD97
+limiting.}
+\end{figure}
+
+
+%\begin{figure}
+%\includegraphics{coxslope.eps}
+%\includegraphics{gkw91slope.eps}
+%\includegraphics{dm95slope.eps}
+%\includegraphics{ldd97slope.eps}
+%\caption{Effective slope magnitude at 100~m depth evaluated using a)
+%Cox slope clipping, b) GKW91 limiting, c) DM95 limiting and d) LDD97
+%limiting.}
+%\end{figure}
+
+\section{Discretisation and code}
+
+This is the old documentation.....has to be brought upto date with MITgcm.
+
+
+The Gent-McWilliams-Redi parameterization is implemented through the
+package ``gmredi''. There are two necessary calls to ``gmredi''
+routines other than initialization; 1) to calculate the slope tensor
+as a function of the current model state ({\bf gmredi\_calc\_tensor})
+and 2) evaluation of the lateral and vertical fluxes due to gradients
+along isopycnals or bolus transport ({\bf gmredi\_xtransport}, {\bf
+gmredi\_ytransport} and {\bf gmredi-rtransport}).
+
+Each element of the tensor is discretised to be adiabatic and so that
+there would be no flux if the gmredi operator is applied to buoyancy.
+To acheive this we have to consider both these constraints for each
+row of the tensor, each row corresponding to a 'u', 'v' or 'w' point
+on the model grid. 
+
+The code that implements the Redi/GM/Griffies schemes involves an
+original core routine {\bf inc\_tracer()} that is used to calculate
+the tendency in the tracers (namely, salt and potential temperature)
+and a new routine {\bf RediTensor()} that calculates the tensor
+components and $\kappa_{GM}$.
+
+\subsection{subroutine RediTensor()}
+
+{\small
+\begin{verbatim}
+subroutine RediTensor(Temp,Salt,Kredigm,K31,K32,K33, nIter,DumpFlag)
+                      |---in--| |-------out-------|
+! Input
+real Temp(Nx,Ny,Nz)     ! Potential temperature
+real Salt(Nx,Ny,Nz)     ! Salinity
+! Output
+real Kredigm(Nx,Ny,Nz)  ! Redi/GM eddy coefficient
+real K31(Nx,Ny,Nz)      ! Redi/GM (3,1) tensor component
+real K32(Nx,Ny,Nz)      ! Redi/GM (3,2) tensor component
+real K33(Nx,Ny,Nz)      ! Redi/GM (3,3) tensor component
+! Auxiliary input
+integer nIter           ! interation/time-step number
+logical DumpFlag        ! flag to indicate routine should ``dump''
+\end{verbatim}
+}
+
+The subroutine {\bf RediTensor()} is called from {\bf model()} with
+input arguments $T$ and $S$. It returns the 3D-arrays {\tt Kredigm},
+{\t K31}, {\tt K32} and {\tt K33} which represent $\kappa_{GM}$ (at
+$T/S$ points) and the three components of the bottom row in the
+Redi/GM tensor; $2 S_x$, $2 S_y$ and $|S|^2$ respectively, all at $W$
+points.
+
+The discretisations and algorithm within {\bf RediTensor()} are as
+follows.  The routine first calculates the locally reference potential
+density $\sigma_\theta$ from $T$ and $S$ and calculates the potential
+density gradients in subroutine {\bf gradSigma()}:
+
+\centerline{\begin{tabular}{ccl}
+& & \\
+Array & Grid-point & Definition \\
+{\tt SigX} & U &
+$\sigma_x = \frac{1}{\Delta x} \delta_x \sigma|_{z(k)}$
+\\
+{\tt SigY} & V &
+$\sigma_y = \frac{1}{\Delta y} \delta_y \sigma|_{z(k)}$
+\\
+{\tt SigZ} & W &
+$\sigma_z = \frac{1}{\Delta z}
+[ \sigma|_{z(k)}(k-1/2) - \sigma|_{z(k)}(k+1/2) ]$
+\\
+\\
+\end{tabular}}
+
+Note that $\sigma_z$ is the static stability because the potential
+densities are referenced to the same reference level ($W$-level).
+
+The next step calculates the three tensor components {\tt K13}, {\tt
+K23} and {\tt K33} in subroutine {\bf KtensorWface()}. First, the
+lateral gradients $\sigma_x$ and $\sigma_y$ are interpolated to the
+$W$ points and stored in intermediate variables:
+\begin{eqnarray*}
+\mbox{\tt Sx} & = & \overline{ \overline{ \sigma_x }^x }^z \\
+\mbox{\tt Sy} & = & \overline{ \overline{ \sigma_y }^y }^z
+\end{eqnarray*}
+Next, the magnitude of ${\bf \nabla}_z \sigma$ is stored in an intermediate
+variable:
+\begin{displaymath}
+\mbox{\tt Sxy2} = \sqrt{ {\tt Sx}^2 + {\tt Sy}^2 }
+\end{displaymath}
+The stratification ($\sigma_z$) is ``checked'' such that the slope
+vector has magnitude less than or equal to {\tt Smax} and stored in
+an intermediate variable:
+\begin{displaymath}
+\mbox{\tt Sz} = \max ( \sigma_z , - \mbox{\tt Sxy2/Smax} )
+\end{displaymath}
+This guarantees stability and at the same time retains the lateral
+orientation of the slope vector. The tensor components are then calculated:
+\begin{eqnarray*}
+\mbox{\tt K13} & = & -2 {\tt Sx/Sz} \\
+\mbox{\tt K23} & = & -2 {\tt Sx/Sz} \\
+\mbox{\tt K33} & = & ({\tt Sx/Sz})^2 + ({\tt Sy/Sz})^2
+\end{eqnarray*}
+
+Finally, {\tt Kredigm} ($\kappa_{GM}$) is calculated in subroutine
+{\bf GMRediCoefficient()}. First, all the gradients are interpolated
+to the $T/S$ points and stored in intermediate variables:
+\begin{eqnarray*}
+\mbox{\tt Sx} & = & \overline{ \sigma_x }^x \\
+\mbox{\tt Sy} & = & \overline{ \sigma_y }^y \\
+\mbox{\tt Sz} & = & \overline{ \sigma_z }^z
+\end{eqnarray*}
+Again, a nominal stratification is found by ``check'' the magnitude of
+the slope vector but here is converted to a Brunt-Vasala frequency:
+\begin{eqnarray*}
+{\tt M2} & = & \sqrt{ {\tt Sx}^2 + {\tt Sy}^2} \\
+{\tt N2} & = & - \frac{g}{\rho_o} \max ( {\tt Sz} , -{\tt M2 / Smax}
+\end{eqnarray*}
+The magnitude of the slope is then $|S| = {\tt M2}/{\tt N2}$. The Eady
+growth rate is defined as $|f|/\sqrt(Ri) = |S| N$ and is calculated
+as:
+\begin{displaymath}
+{\tt FrRi} = \frac{\tt M2}{\tt N2} ( - \frac{g}{\rho} {\tt Sz} )
+\end{displaymath}
+The Eady growth rate is then averaged over the upper layers (about
+1100m) and $\kappa_{GM}$ specified from this 2D-variable:
+\begin{displaymath}
+{\tt Kredigm} = 0.02 * (200d3 **2) * {\tt FrRi}
+\end{displaymath}
+
+\subsection{subroutine inc\_tracer()}
+
+{\bf inc\-tracer()} is called from {\bf model()} and has {\em four
+new} arguments:
+\begin{verbatim}
+subroutine inc_tracer( ...,Kredigm,K31,K32,K33, ... )
+real Kredigm(Nx,Ny,Nz)  ! Eddy coefficient
+real K31(Nx,Ny,Nz)      ! (3,1) tensor coefficient
+real K32(Nx,Ny,Nz)      ! (3,2) tensor coefficient
+real K33(Nx,Ny,Nz)      ! (3,3) tensor coefficient
+\end{verbatim}
+
+Within the routine, the lateral fluxes, {\tt fluxWest} and {\tt
+fluxSouth}, in the Redi/GM/Griffies scheme are very similar to the
+conventional horizontal diffusion terms except that the diffusion
+coefficient is a function of space and must be interpolated from the
+$T/S$ points:
+\begin{eqnarray*}
+{\tt fluxWest}(\tau) & = & \ldots +
+\overline{\tt Kredigm}^x \partial_x \tau \\
+{\tt fluxSouth}(\tau) & = & \ldots +
+\overline{\tt Kredigm}^y \partial_y \tau
+\end{eqnarray*}
+
+The Redi/GM/Griffies scheme adds three terms to the vertical flux
+({\tt fluxUpper}) in the tracer equation. It is discretise simply:
+\begin{displaymath}
+{\tt fluxUpper}(\tau) = \ldots + \overline{\tt Kredigm}^z 
+\left( 
+{\tt K13} \overline{\partial_x \tau}^{xz} +
+{\tt K23} \overline{\partial_y \tau}^{yz} +
+{\tt K33} \partial_z \tau
+\right)
+\end{displaymath}
+On boundaries, {\tt fluxUpper} is set to zero.
+
+
