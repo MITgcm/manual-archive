@@ -1,11 +1,11 @@
-% $Header: /u/gcmpack/manual/manual.tex,v 1.4 2001/09/26 20:19:41 adcroft Exp $
+% $Header: /u/gcmpack/manual/manual.tex,v 1.5 2001/10/04 19:30:23 heimbach Exp $
 % $Name:  $
 
 \documentclass[12pt]{book}
 
 \usepackage{amsfonts}
 \usepackage{amsmath}
-\usepackage{html}
+\usepackage{/usr/local/pkg/latex2html/current/texinputs/html}
 \usepackage{epsfig}
 \usepackage{graphics,subfigure}
 \usepackage{array}
@@ -26,6 +26,14 @@
 \fancyfoot[RO,LE]{ }
 \renewcommand{\headrulewidth}{0.4pt}
 \renewcommand{\footrulewidth}{0.4pt}
+
+% bibtex stuff
+\newcommand{\BIBPATH}{.}
+\usepackage{natbib}
+\bibliographystyle{\BIBPATH/jmr_my}
+\gdef\harvardleft{[}
+\gdef\harvardright{]}
+\bibpunct{[}{]}{,}{a}{}{,}
 
 % referencing
 \newcommand{\refequ}[1]{equation (\ref{equ:#1})}
@@ -91,4 +99,6 @@
 % Section: ECCO Interface
 \input{part8/part8}
 
+% Section: References:
+\bibliography{\BIBPATH/manual_references}
 \end{document}
