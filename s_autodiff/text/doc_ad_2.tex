@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_autodiff/text/doc_ad_2.tex,v 1.5 2001/10/10 16:06:41 heimbach Exp $
+% $Header: /u/gcmpack/manual/s_autodiff/text/doc_ad_2.tex,v 1.6 2001/10/11 19:37:39 adcroft Exp $
 % $Name:  $
 
 {\sf Automatic differentiation} (AD), also referred to as algorithmic
@@ -570,7 +570,7 @@ point of evaluation has to be recomputed whenever its value is required.
 A method to balance the amount of recomputations vs.
 storage requirements is called {\sf checkpointing}
 (e.g. \cite{res-eta:98}).
-It is depicted in \reffig{3levelcheck} for a 3-level checkpointing
+It is depicted in \ref{fig:3levelcheck} for a 3-level checkpointing
 [as an example, we give explicit numbers for a 3-day 
 integration with a 1-hourly timestep in square brackets].
 \begin{itemize}
@@ -637,20 +637,22 @@ The balance of storage vs. recomputation certainly depends
 on the computing resources available.
 
 \begin{figure}[t!]
-\centering
+\begin{center}
 %\psdraft
-\psfrag{v_k1^lev3}{\mathinfigure{v_{k_{1}^{lev3}}}}
-\psfrag{v_kn-1^lev3}{\mathinfigure{v_{k_{n-1}^{lev3}}}}
-\psfrag{v_kn^lev3}{\mathinfigure{v_{k_{n}^{lev3}}}}
-\psfrag{v_k1^lev2}{\mathinfigure{v_{k_{1}^{lev2}}}}
-\psfrag{v_kn-1^lev2}{\mathinfigure{v_{k_{n-1}^{lev2}}}}
-\psfrag{v_kn^lev2}{\mathinfigure{v_{k_{n}^{lev2}}}}
-\psfrag{v_k1^lev1}{\mathinfigure{v_{k_{1}^{lev1}}}}
-\psfrag{v_kn^lev1}{\mathinfigure{v_{k_{n}^{lev1}}}}
-\mbox{\epsfig{file=part5/checkpointing.eps, width=0.8\textwidth}}
+%\psfrag{v_k1^lev3}{\mathinfigure{v_{k_{1}^{lev3}}}}
+%\psfrag{v_kn-1^lev3}{\mathinfigure{v_{k_{n-1}^{lev3}}}}
+%\psfrag{v_kn^lev3}{\mathinfigure{v_{k_{n}^{lev3}}}}
+%\psfrag{v_k1^lev2}{\mathinfigure{v_{k_{1}^{lev2}}}}
+%\psfrag{v_kn-1^lev2}{\mathinfigure{v_{k_{n-1}^{lev2}}}}
+%\psfrag{v_kn^lev2}{\mathinfigure{v_{k_{n}^{lev2}}}}
+%\psfrag{v_k1^lev1}{\mathinfigure{v_{k_{1}^{lev1}}}}
+%\psfrag{v_kn^lev1}{\mathinfigure{v_{k_{n}^{lev1}}}}
+%\mbox{\epsfig{file=part5/checkpointing.eps, width=0.8\textwidth}}
+\resizebox{5.5in}{!}{\includegraphics{part5/checkpointing.eps}}
 %\psfull
-\caption
-{Schematic view of intermediate dump and restart for 
+\end{center}
+\caption{
+Schematic view of intermediate dump and restart for 
 3-level checkpointing.}
 \label{fig:3levelcheck}
 \end{figure}
@@ -677,7 +679,7 @@ generate a tangent linear or adjoint model of the MITGCM.
 We take as an example the sensitivity of carbon sequestration
 in the ocean.
 The AD-relevant hooks in the code are sketched in 
-\reffig{adthemodel}, \reffig{adthemain}.
+\ref{fig:adthemodel}, \ref{fig:adthemain}.
 
 \subsection{Overview of the experiment}
 
@@ -1262,7 +1264,7 @@ differentiation using the software tool TAMC.
 \label{fig:adthemodel}
 \end{figure}
 
-The basic flow is depicted in \reffig{adthemodel}.
+The basic flow is depicted in \ref{fig:adthemodel}.
 If the option {\tt ALLOW\_AUTODIFF\_TAMC} is defined, the driver routine
 {\it the\_model\_main}, instead of calling {\it the\_main\_loop},
 invokes the adjoint of this routine, {\it adthe\_main\_loop},
