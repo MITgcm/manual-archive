@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_examples/rotating_tank/tank.tex,v 1.6 2004/07/26 19:13:08 afe Exp $
+% $Header: /u/gcmpack/manual/s_examples/rotating_tank/tank.tex,v 1.7 2004/07/26 21:09:47 afe Exp $
 % $Name:  $
 
 \bodytext{bgcolor="#FFFFFFFF"}
@@ -260,57 +260,65 @@ experiment.
 usingCylindricalGrid=.TRUE.,
 \end{verbatim}
 This line requests that the simulation be performed in a 
-Cartesian coordinate system.
+cylindrical coordinate system.
 
-\item Line 41,
+\item Line qqq,
 \begin{verbatim}
-delX=60*20E3,
+dXspacing=3,
 \end{verbatim}
-This line sets the horizontal grid spacing between each x-coordinate line
+This line sets the azimuthal grid spacing between each x-coordinate line
 in the discrete grid. The syntax indicates that the discrete grid
-should be comprise of $60$ grid lines each separated by $20 \times 10^{3}m$
-($20$~km).
+should be comprise of $120$ grid lines each separated by $3^{\circ}$.
+                                                                                
 
-\item Line 42,
+
+\item Line qqq,
 \begin{verbatim}
-delY=60*20E3,
+dYspacing=0.01,
 \end{verbatim}
-This line sets the horizontal grid spacing between each y-coordinate line
-in the discrete grid to $20 \times 10^{3}m$ ($20$~km).
+This line sets the radial grid spacing between each $\rho$-coordinate line
+in the discrete grid to $1cm$.
 
 \item Line 43,
 \begin{verbatim}
-delZ=5000,
+delZ=29*0.005,
 \end{verbatim}
 This line sets the vertical grid spacing between each z-coordinate line
 in the discrete grid to $5000m$ ($5$~km).
 
 \item Line 46,
 \begin{verbatim}
-bathyFile='topog.box'
+bathyFile='bathyPol.bin',
 \end{verbatim}
 This line specifies the name of the file from which the domain
-bathymetry is read. This file is a two-dimensional ($x,y$) map of
+``bathymetry'' (tank depth) is read. This file is a two-dimensional 
+($x,y$) map of
 depths. This file is assumed to contain 64-bit binary numbers 
-giving the depth of the model at each grid cell, ordered with the x 
+giving the depth of the model at each grid cell, ordered with the $x$ 
 coordinate varying fastest. The points are ordered from low coordinate
-to high coordinate for both axes. The units and orientation of the
+to high coordinate for both axes.  The units and orientation of the
 depths in this file are the same as used in the MITgcm code. In this
-experiment, a depth of $0m$ indicates a solid wall and a depth
-of $-5000m$ indicates open ocean. The matlab program
-{\it input/gendata.m} shows an example of how to generate a
-bathymetry file.
-
+experiment, a depth of $0m$ indicates an area outside of the tank
+and a depth
+f $-0.145m$ indicates the tank itself. 
 
 \item Line 49,
 \begin{verbatim}
-zonalWindFile='windx.sin_y'
+hydrogThetaFile='thetaPol.bin',
 \end{verbatim}
-This line specifies the name of the file from which the x-direction
-surface wind stress is read. This file is also a two-dimensional
-($x,y$) map and is enumerated and formatted in the same manner as the 
-bathymetry file. The matlab program {\it input/gendata.m} includes example 
-code to generate a valid {\bf zonalWindFile} file.  
+This line specifies the name of the file from which the initial values 
+of $\theta$ 
+are read. This file is a three-dimensional
+($x,y,z$) map and is enumerated and formatted in the same manner as the 
+bathymetry file. 
+
+\item Line qqq
+\begin{verbatim}
+ tCyl  = 0
+\end{verbatim}
+This line specifies the temperature in degrees Celsius of the interior
+wall of the tank -- usually a bucket of ice water.
+
 
 \end{itemize}
 
@@ -358,19 +366,19 @@ Two lines are customized in this file for the current experiment
 \begin{itemize}
 
 \item Line 39, 
-\begin{verbatim} sNx=60, \end{verbatim} this line sets
+\begin{verbatim} sNx=120, \end{verbatim} this line sets
 the lateral domain extent in grid points for the
 axis aligned with the x-coordinate.
 
 \item Line 40, 
-\begin{verbatim} sNy=60, \end{verbatim} this line sets
+\begin{verbatim} sNy=31, \end{verbatim} this line sets
 the lateral domain extent in grid points for the
 axis aligned with the y-coordinate.
 
 \end{itemize}
 
 \begin{small}
-\input{part3/case_studies/barotropic_gyre/code/SIZE.h}
+\input{part3/case_studies/rotating_tank/code/SIZE.h}
 \end{small}
 
 \subsubsection{File {\it code/CPP\_OPTIONS.h}}
