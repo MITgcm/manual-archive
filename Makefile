@@ -48,7 +48,7 @@ html:
 	cd manual; ../tools/figsub.sh
 	cd manual; ../tools/fix_docref_target.sh
 	cd manual; tar -czf ../manual.tz .
-	cd /homes/cnh/SEALION_RELEASE/website/online_documents/manual; tar -xzf /homes/cnh/SEALION_RELEASE/manual/HEAD/manual.tz
+#	cd /homes/cnh/SEALION_RELEASE/website/online_documents/manual; tar -xzf /homes/cnh/SEALION_RELEASE/manual/HEAD/manual.tz
 #	tar -czf ol.tz on-line-figs
 
 html2:
