@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.3 2001/08/09 20:06:18 jmc Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.4 2001/08/17 18:38:10 jmc Exp $
 % $Name:  $
 
 The convention used in this section is as follows:
@@ -21,29 +21,31 @@ The continuous form of the model equations is:
 
 \begin{eqnarray}
 \partial_t \theta & = & G_\theta
+\label{eq-tCsC-theta}
 \\
 \partial_t S & = & G_s
+\label{eq-tCsC-salt}
 \\
 b' & = & b'(\theta,S,r)
 \\
 \partial_r \phi'_{hyd} & = & -b'
-\label{eq-r-split-hyd}
+\label{eq-tCsC-hyd}
 \\
 \partial_t \vec{\bf v}
 + {\bf \nabla}_h b_s \eta
 + \epsilon_{nh} {\bf \nabla}_h \phi'_{nh}
 & = & \vec{\bf G}_{\vec{\bf v}} 
 - {\bf \nabla}_h \phi'_{hyd}
-\label{eq-r-split-hmom}
+\label{eq-tCsC-Hmom}
 \\
 \epsilon_{nh} \frac {\partial{\dot{r}}}{\partial{t}}
 + \epsilon_{nh} \partial_r \phi'_{nh}
 & = & \epsilon_{nh} G_{\dot{r}} 
-\label{eq-r-split-rdot}
+\label{eq-tCsC-Vmom}
 \\
 {\bf \nabla}_h \cdot \vec{\bf v} + \partial_r \dot{r}
 & = & 0
-\label{eq-r-cont}
+\label{eq-tCsC-cont}
 \end{eqnarray}
 where
 \begin{eqnarray*}
@@ -71,7 +73,7 @@ all the RHS terms except the pressure / geo- potential terms.
 The switch $\epsilon_{nh}$ allows to activate the non hydrostatic
 mode ($\epsilon_{nh}=1$) for the ocean model. Otherwise, 
 in the hydrostatic limit $\epsilon_{nh} = 0$ 
-and equation \ref{eq-r-split-rdot} vanishes.
+and equation \ref{eq-tCsC-Vmom} vanishes.
 
 The equation for $\eta$ is obtained by integrating the 
 continuity equation over the entire depth of the fluid, 
@@ -82,7 +84,7 @@ from $R_{min}(x,y)$ up to $R_o(x,y)$
 \left. \dot{r} \right|_{r=r_{surf}} + \epsilon_{fw} (P-E) =
 - {\bf \nabla} \cdot \int_{R_{min}}^{R_o} \vec{\bf v} dr
 + \epsilon_{fw} (P-E)
-\label{eq-cont-2D}
+\label{eq-tCsC-eta}
 \end{eqnarray}
 
 Where $\epsilon_{fs}$,$\epsilon_{fw}$ are two flags to 
@@ -93,7 +95,7 @@ at the ocean surface (natural BC) ($\epsilon_{fw} = 1$)
 or not ($\epsilon_{fw} = 0$).
 
 The hydrostatic potential is found by
-integrating \ref{eq-r-split-hyd} with the boundary condition that
+integrating \ref{eq-tCsC-hyd} with the boundary condition that
 $\phi'_{hyd}(r=R_o) = 0$:
 \begin{eqnarray*}
 & &
@@ -107,18 +109,26 @@ $\phi'_{hyd}(r=R_o) = 0$:
 
 \subsection{General method}
  
+An overview of the general method is presented hereafter, 
+with explicit references to the Fortran code. This part
+often refers to the discretized equations of the model
+that are detailed in the following sections.
+
 The general algorithm consist in  a "predictor step" that computes
 the forward tendencies ("G" terms") and all 
-the "first guess" values star notation): 
-$\vec{\bf v}^*, \theta^*, S^*$ (and $\dot{r}^*$
-in non-hydrostatic mode). This is done in the routine {\it DYNAMICS}.
+the "first guess" values (star notation): 
+$\theta^*, S^*, \vec{\bf v}^*$ (and $\dot{r}^*$
+in non-hydrostatic mode). This is done in the two routines 
+{\it THERMODYNAMICS} and {\it DYNAMICS}.
 
-Then the implicit terms that appear here on the left hand side (LHS),
+Then the implicit terms that appear on the left hand side (LHS)
+of equations \ref{eq-tDsC-theta} - \ref{eq-tDsC-cont},
 are solved as follows:
 Since implicit vertical diffusion and viscosity terms 
 are independent from the barotropic flow adjustment,
 they are computed first, solving a 3 diagonal Nr x Nr linear system, 
-and incorporated at the end of the {\it DYNAMICS} routines.
+and incorporated at the end of the {\it THERMODYNAMICS} and 
+{\it DYNAMICS} routines.
 Then the surface pressure and non hydrostatic pressure
 are evaluated ({\it SOLVE\_FOR\_PRESSURE}); 
 
@@ -140,25 +150,27 @@ the "target residual" that could be lower than the
 the computer truncation error, and also because some filters 
 might alter the divergence part of the flow field,
 a final evaluation of the surface r anomaly $\eta^{n+1}$
-is performed, according to \ref{eq-rtd-eta} ({\it CALC\_EXACT\_ETA}).
+is performed, according to \ref{eq-tDsC-eta} ({\it CALC\_EXACT\_ETA}).
 This ensures a perfect volume conservation.
 Note that there is no need for an equivalent Non-hydrostatic
 "exact conservation" step, since W is already computed after 
 the filters applied.
 
-optionnal forcing terms (package):\\
 Regarding optional forcing terms (usually part of a "package"), 
-that a account for a specific source or sink term (e.g.: condensation
+that account for a specific source or sink term (e.g.: condensation
 as a sink of water vapor Q), they are generally incorporated 
 in the main algorithm as follows;
 At the the beginning of the time step,
-the additionnal tendencies are computed
+the additional tendencies are computed
 as function of the present state (time step $n$) and external forcing ;
 Then within the main part of model,
 only those new tendencies are added to the model variables.
 
 [more details needed]\\
+
 The atmospheric physics follows this general scheme.
+
+[more about C\_grid, A\_grid conversion \& drag term]\\
 
 \subsection{Standard synchronous time stepping}
 
@@ -169,15 +181,17 @@ as follows:
 \begin{eqnarray}
 \left[ 1 - \partial_r \kappa_v^\theta \partial_r \right]
 \theta^{n+1} & = & \theta^*
+\label{eq-tDsC-theta}
 \\
 \left[ 1 - \partial_r \kappa_v^S \partial_r \right]
 S^{n+1} & = & S^*
+\label{eq-tDsC-salt}
 \\
 %{b'}^{n} & = & b'(\theta^{n},S^{n},r)
 %\partial_r {\phi'_{hyd}}^{n} & = & {-b'}^{n}
 %\\
 {\phi'_{hyd}}^{n} & = & \int_{r'}^{R_o} b'(\theta^{n},S^{n},r) dr
-\label{eq-rtd-hyd}
+\label{eq-tDsC-hyd}
 \\
 \vec{\bf v} ^{n+1}
 + \Delta t {\bf \nabla}_h b_s {\eta}^{n+1}
@@ -185,7 +199,7 @@ S^{n+1} & = & S^*
 - \partial_r A_v \partial_r \vec{\bf v}^{n+1}
 & = &
 \vec{\bf v}^*
-\label{eq-rtd-hmom}
+\label{eq-tDsC-Hmom}
 \\
 \epsilon_{fs} {\eta}^{n+1} + \Delta t
 {\bf \nabla}_h \cdot \int_{R_{min}}^{R_o} \vec{\bf v}^{n+1} dr
@@ -194,17 +208,17 @@ S^{n+1} & = & S^*
 \nonumber
 \\
 % = \epsilon_{fs} {\eta}^{n} & + & \epsilon_{fw} \Delta_t (P-E)^{n} 
-\label{eq-rtd-eta}
+\label{eq-tDsC-eta}
 \\
 \epsilon_{nh} \left( \dot{r} ^{n+1}
 + \Delta t \partial_r {\phi'_{nh}} ^{n+1}
 \right)
 & = & \epsilon_{nh} \dot{r}^*
-\label{eq-rtd-rdot}
+\label{eq-tDsC-Vmom}
 \\
 {\bf \nabla}_h \cdot \vec{\bf v}^{n+1} + \partial_r \dot{r}^{n+1}
 & = & 0
-\label{eq-rtd-cont}
+\label{eq-tDsC-cont}
 \end{eqnarray}
 where
 \begin{eqnarray}
@@ -228,7 +242,7 @@ written separately here.
 
 To ensure a second order time discretization for both 
 momentum and tracer,
-The "G" terms are "extrapolated" forward in time
+The "{\it G}" terms are "extrapolated" forward in time
 (Adams Bashforth time stepping)
 from the values computed at time step $n$ and $n-1$
 to the time $n+1/2$:
@@ -286,7 +300,7 @@ And
 %\\
 %\partial_r {\phi'_{hyd}}^{n+1/2} & = & {-b'}^{n+1/2}
 {\phi'_{hyd}}^{n+1/2} & = & \int_{r'}^{R_o} b'(\theta^{n+1/2},S^{n+1/2},r) dr
-%\label{eq-rtd-hyd}
+%\label{eq-tDsC-hyd}
 \\
 \vec{\bf v} ^{n+1}
 + \Delta t {\bf \nabla}_h b_s {\eta}^{n+1}
@@ -294,7 +308,7 @@ And
 - \partial_r A_v \partial_r \vec{\bf v}^{n+1}
 & = &
 \vec{\bf v}^*
-%\label{eq-rtd-hmom}
+%\label{eq-tDsC-Hmom}
 \\
 \epsilon_{fs} {\eta}^{n+1} + \Delta t
 {\bf \nabla}_h \cdot \int_{R_{min}}^{R_o} \vec{\bf v}^{n+1} dr
@@ -305,11 +319,11 @@ And
 + \Delta t \partial_r {\phi'_{nh}} ^{n+1}
 \right)
 & = & \epsilon_{nh} \dot{r}^*
-%\label{eq-rtd-rdot}
+%\label{eq-tDsC-Vmom}
 \\
 {\bf \nabla}_h \cdot \vec{\bf v}^{n+1} + \partial_r \dot{r}^{n+1}
 & = & 0
-%\label{eq-rtd-cont}
+%\label{eq-tDsC-cont}
 \end{eqnarray*}
 with
 \begin{eqnarray*}
@@ -325,24 +339,24 @@ with
 
 \subsection{Surface pressure}
 
-Substituting \ref{eq-rtd-hmom} into \ref{eq-rtd-cont}, assuming
+Substituting \ref{eq-tDsC-Hmom} into \ref{eq-tDsC-cont}, assuming
 $\epsilon_{nh} = 0$ yields a Helmholtz equation for ${\eta}^{n+1}$:
 \begin{eqnarray}
 \epsilon_{fs} {\eta}^{n+1} -
 {\bf \nabla}_h \cdot \Delta t^2 (R_o-R_{min})
 {\bf \nabla}_h b_s {\eta}^{n+1}
 = {\eta}^*
-\label{solve_2d}
+\label{eq-solve2D}
 \end{eqnarray}
 where
 \begin{eqnarray}
 {\eta}^* = \epsilon_{fs} \: {\eta}^{n} -
 \Delta t {\bf \nabla}_h \cdot \int_{R_{min}}^{R_o} \vec{\bf v}^* dr
 \: + \: \epsilon_{fw} \Delta_t (P-E)^{n} 
-\label{solve_2d_rhs}
+\label{eq-solve2D_rhs}
 \end{eqnarray}
 
-Once ${\eta}^{n+1}$ has been found substituting into \ref{eq-rtd-hmom}
+Once ${\eta}^{n+1}$ has been found substituting into \ref{eq-tDsC-Hmom}
 would yield $\vec{\bf v}^{n+1}$ if the model is hydrostatic
 ($\epsilon_{nh}=0$):
 $$
@@ -353,8 +367,8 @@ $$
 This is known as the correction step. However, when the model is
 non-hydrostatic ($\epsilon_{nh}=1$) we need an additional step and an
 additional equation for $\phi'_{nh}$. This is obtained by
-substituting \ref{eq-rtd-hmom} and \ref{eq-rtd-rdot} into
-\ref{eq-rtd-cont}:
+substituting \ref{eq-tDsC-Hmom} and \ref{eq-tDsC-Vmom} into
+\ref{eq-tDsC-cont}:
 \begin{equation}
 \left[ {\bf \nabla}_h^2 + \partial_{rr} \right] {\phi'_{nh}}^{n+1}
 = \frac{1}{\Delta t} \left(
@@ -384,7 +398,7 @@ without any consequence on the solution.
 Regarding the implementation, all those computation are done
 within the routine {\it SOLVE\_FOR\_PRESSURE} and its dependent 
 {\it CALL}s.
-The standard method to solve the 2D elliptic problem (\ref{solve_2d})
+The standard method to solve the 2D elliptic problem (\ref{eq-solve2D})
 uses the conjugate gradient method (routine {\it CG2D}); The 
 the solver matrix and conjugate gradient operator are only function
 of the discretized domain and are therefore evaluated separately,
@@ -417,7 +431,7 @@ In the code, $\beta,\gamma$ are defined as parameters, respectively
 {\it implicSurfPress}, {\it implicDiv2DFlow}. They are read from
 the main data file "{\it data}" and are set by default to 1,1.
 
-Equations \ref{eq-rtd-hmom} and \ref{eq-rtd-eta} are modified as follows:
+Equations \ref{eq-tDsC-Hmom} and \ref{eq-tDsC-eta} are modified as follows:
 $$
 \frac{ \vec{\bf v}^{n+1} }{ \Delta t }
 + {\bf \nabla}_h b_s [ \beta {\eta}^{n+1} + (1-\beta) {\eta}^{n} ] 
