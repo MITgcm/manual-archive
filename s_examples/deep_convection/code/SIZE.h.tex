@@ -1,0 +1,57 @@
+\begin{verbatim}
+     1	C     /==========================================================\
+     2	C     | SIZE.h Declare size of underlying computational grid.    |
+     3	C     |==========================================================|
+     4	C     | The design here support a three-dimensional model grid   |
+     5	C     | with indices I,J and K. The three-dimensional domain     |
+     6	C     | is comprised of nPx*nSx blocks of size sNx along one axis|
+     7	C     | nPy*nSy blocks of size sNy along another axis and one    |
+     8	C     | block of size Nz along the final axis.                   |
+     9	C     | Blocks have overlap regions of size OLx and OLy along the|
+    10	C     | dimensions that are subdivided.                          |
+    11  C     \==========================================================/
+    12  C     Voodoo numbers controlling data layout.
+    13  C     sNx - No. X points in sub-grid.
+    14  C     sNy - No. Y points in sub-grid.
+    15  C     OLx - Overlap extent in X.
+    16  C     OLy - Overlat extent in Y.
+    17  C     nSx - No. sub-grids in X.
+    18  C     nSy - No. sub-grids in Y.
+    19  C     nPx - No. of processes to use in X.
+    20  C     nPy - No. of processes to use in Y.
+    21  C     Nx  - No. points in X for the total domain.
+    22  C     Ny  - No. points in Y for the total domain.
+    23  C     Nr  - No. points in Z for full process domain.
+    24        INTEGER sNx
+    25        INTEGER sNy
+    26        INTEGER OLx
+    27        INTEGER OLy
+    28        INTEGER nSx
+    29        INTEGER nSy
+    30        INTEGER nPx
+    31	      INTEGER nPy
+    32	      INTEGER Nx
+    33	      INTEGER Ny
+    34	      INTEGER Nr
+    35	      PARAMETER (
+    36	     &           sNx =  64,
+    37	     &           sNy =  64,
+    38	     &           OLx =   3,
+    39	     &           OLy =   3,
+    40	     &           nSx =   1,
+    41	     &           nSy =   1,
+    42	     &           nPx =   1,
+    43	     &           nPy =   1,
+    44	     &           Nx  = sNx*nSx*nPx,
+    45	     &           Ny  = sNy*nSy*nPy,
+    46	     &           Nr  =  20)
+
+    47	C     MAX_OLX  - Set to the maximum overlap region size of any array
+    48	C     MAX_OLY    that will be exchanged. Controls the sizing of exch
+    49	C                routine buufers.
+    50	      INTEGER MAX_OLX
+    51	      INTEGER MAX_OLY
+    52	      PARAMETER ( MAX_OLX = OLx,
+    53	     &            MAX_OLY = OLy )
+
+\end{verbatim}

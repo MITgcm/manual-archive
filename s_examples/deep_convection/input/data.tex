@@ -1,0 +1,60 @@
+\begin{verbatim}
+     1	# Model parameters 
+     2	# Continuous equation parameters
+     3	 &PARM01
+     4	 tRef=20*20.0,
+     5	 sRef=20*35.0,
+     6	 viscAh=0.1,
+     7	 viscAz=0.1,
+     8	 no_slip_sides=.FALSE.,
+     9	 no_slip_bottom=.FALSE.,
+    10	  viscA4=0.E12,
+    11	  diffKhT=0.1,
+    12	  diffKzT=0.1,
+    13	  diffKhS=0.1,
+    14	  diffKzS=0.1,
+    15	  f0=1E-4,
+    16	  beta=0.E-11,
+    17	  tAlpha=2.0E-4,
+    18	  sBeta =0.,
+    19	  gravity=9.81,
+    20	  rhoConst=1000.0,
+    21	  rhoNil=1000.0,
+    22	  heatCapacity_Cp=3900.0,
+    23	  rigidLid=.FALSE.,
+    24	  implicitFreeSurface=.TRUE.,
+    25	  eosType='LINEAR',
+    26	  nonHydrostatic=.TRUE.,
+    27	  readBinaryPrec=64,
+    28	  &
+    29	 # Elliptic solver parameters
+    30	  &PARM02
+    31	  cg2dMaxIters=1000,
+    32	  cg2dTargetResidual=1.E-9,
+    33	  cg3dMaxIters=40,
+    34	  cg3dTargetResidual=1.E-9,
+    35	  &
+    36	 # Time stepping parameters
+    37	  &PARM03
+    38	  nIter0=0,
+    39	  nTimeSteps=1440,
+    40	  deltaT=60,
+    41	  abEps=0.1,
+    42	  pChkptFreq=0.0,
+    43	  chkptFreq=0.0,
+    44	  dumpFreq=600,
+    45	  monitorFreq=1.E-5,
+    46	  &
+    47	 # Gridding parameters
+    48	  &PARM04
+    49	  usingCartesianGrid=.TRUE.,
+    50	  usingSphericalPolarGrid=.FALSE.,
+    51	  dXspacing=50.0,
+    52	   dYspacing=50.0,
+    53	   delZ=20*50.0,
+    54	   &
+    55	  # Input datasets
+    56	   &PARM05
+    57	   surfQfile='Qsurf.bin',
+    58	   &
+\end{verbatim}
