@@ -1,35 +1,76 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/Attic/mnc.tex,v 1.2 2004/01/28 21:27:45 cnh Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/Attic/mnc.tex,v 1.3 2004/01/29 21:12:31 edhill Exp $
 % $Name:  $
 
-%%  * Introduction
-%%    o what it does, citations (refs go into mitgcm_manual.bib, 
-%%      preferably in alphabetic order)
-%%    o Equations 
-%%  * Key subroutines and parameters
-%%  * Reference material (auto generated from Protex and structured comments)
-%%    o automatically inserted at \section{Reference} 
-
-
-\section{MNC: the MITgcm NetCDF Package}
+\section{NetCDF I/O Integration}
 \label{sec:pkg:mnc}
+
+The \texttt{mnc} package is a set of convenience routines written to
+expedite the process of creating, appending, and reading NetCDF files.
+NetCDF is an increasingly popular self-describing file format
+\cite{rew:97} intended primarily for scientific data sets.  An
+extensive collection of NetCDF reference papers, user guides,
+software, FAQs, and other information can be obtained from UCAR's web
+site at:
+\begin{rawhtml} <A href="http://www.unidata.ucar.edu/packages/netcdf/"> \end{rawhtml}
+\begin{verbatim}
+http://www.unidata.ucar.edu/packages/netcdf/
+\end{verbatim}
+\begin{rawhtml} </A> \end{rawhtml}
+
 
 \subsection{Introduction}
 
-The MNC package is a set of convenience routines written to expedite
-the process of creating, appending, and reading NetCDF files.  NetCDF
-is a self-describing file format \cite{rew:97} intended primarily for
-scientific data.  NetCDF reference papers, user guides, FAQs, and other
-information can be obtained from UCAR's web site at:
+The \texttt{mnc} package is a two-level convenience library (or
+``wrapper'') for most of the NetCDF Fortran API.  Its purpose is to
+streamline the user interface to NetCDF by maintaining internal
+relations (``look-up tables'') keyed with strings (or ``names'') and
+entities such as NetCDF files, variables, and attributes.
 
-\begin{itemize}
-\item http://www.unidata.ucar.edu/packages/netcdf/
-\end{itemize}
+The two levels of the \texttt{mnc} package are:
+\begin{description}
+
+\item[Upper level] \ 
+  
+  The upper level contains information about two kinds of
+  associations:
+  \begin{description}
+  \item[Grid type] is lookup table indexed with a grid type name.
+    Each grid type name is associated with a number of dimensions, the
+    dimension sizes (one of which may be unlimited), and starting and
+    ending index arrays.  The intent is to store all the necessary
+    size and shape information for the Fortran arrays containing
+    MITgcm--style ``tile'' variables (that is, a central region
+    surrounded by a variably-sized ``halo'' or exchange region as
+    shown in Figures \ref{fig:communication_primitives} and
+    \ref{fig:tiling-strategy}).
+  
+  \item[Variable type] is a lookup table indexed by a variable type
+    name.  For each name, the table contains a reference to a grid
+    type for the variable and the names and values of various
+    attributes.
+  \end{description}
+  
+  Within the upper level, these associations are not permanently tied
+  to any particular NetCDF file.  This allows the information to be
+  re-used over multiple file reads and writes.
+
+\item[Lower level] \ 
+  
+  In the lower (or internal) level, associations are stored for NetCDF
+  files and many of the entities that they contain including
+  dimensions, variables, and global attributes.  All associations are
+  on a per-file basis.  Thus, each entity is tied to a unique NetCDF
+  file and will be created or destroyed when files are, respectively,
+  opened or closed.
+
+\end{description}
+
+
+\subsection{Key subroutines, parameters and files}
+
+All of the variables used to implement the lookup tables are described
+in \filelink{pkg/mnc/mnc\_common.h}{pkg/mnc/mnc_common.h}.
 
 
 
-
-\subsection{Key Routines}
-
-
-
-\subsection{References}
+\subsection{Package Reference}
