@@ -1,0 +1,8 @@
+#/bin/csh
+
+#To generate manual.tex in this directory:
+
+ sed 's/%tci%//' manual.src > manual_fromjm.tex
+ sed 's/%notci%//' manual.src > manual.tex
+
+#A.

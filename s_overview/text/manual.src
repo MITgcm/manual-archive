@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.4 2001/10/11 19:36:56 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.src,v 1.1 2001/10/11 19:36:56 adcroft Exp $
 % $Name:  $
 
 %tci%\documentclass[12pt]{book}
@@ -36,7 +36,7 @@
 
 % Section: Overview
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.4 2001/10/11 19:36:56 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.src,v 1.1 2001/10/11 19:36:56 adcroft Exp $
 % $Name:  $
 
 \section{Introduction}
@@ -61,7 +61,7 @@ models - see fig
 Fig.1 One model}\ref{fig:onemodel}
 
 %% CNHbegin
-\input{part1/one_model_figure}
+%notci%\input{part1/one_model_figure}
 %% CNHend
 
 \item it has a non-hydrostatic capability and so can be used to study both
@@ -70,7 +70,7 @@ small-scale and large scale processes - see fig
 Fig.2 All scales}\ref{fig:all-scales}
 
 %% CNHbegin
-\input{part1/all_scales_figure}
+%notci%\input{part1/all_scales_figure}
 %% CNHend
 
 \item finite volume techniques are employed yielding an intuitive
@@ -80,7 +80,7 @@ orthogonal curvilinear grids and shaved cells - see fig
 Fig.3 Finite volumes}\ref{fig:finite-volumes}
 
 %% CNHbegin
-\input{part1/fvol_figure}
+%notci%\input{part1/fvol_figure}
 %% CNHend
 
 \item tangent linear and adjoint counterparts are automatically maintained
@@ -98,7 +98,7 @@ We begin by briefly showing some of the results of the model in action to
 give a feel for the wide range of problems that can be addressed using it.
 \pagebreak
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.4 2001/10/11 19:36:56 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.src,v 1.1 2001/10/11 19:36:56 adcroft Exp $
 % $Name:  $
 
 \section{Illustrations of the model in action}
@@ -131,7 +131,7 @@ in Held and Suarez; 1994 designed to test atmospheric hydrodynamical cores -
 there are no mountains or land-sea contrast.
 
 %% CNHbegin
-\input{part1/cubic_eddies_figure}
+%notci%\input{part1/cubic_eddies_figure}
 %% CNHend
 
 As described in Adcroft (2001), a `cubed sphere' is used to discretize the
@@ -147,7 +147,7 @@ discretization approaches.
 A regular spherical lat-lon grid can also be used.
 
 %% CNHbegin
-\input{part1/hs_zave_u_figure}
+%notci%\input{part1/hs_zave_u_figure}
 %% CNHend
 
 \subsection{Ocean gyres}
@@ -171,7 +171,7 @@ warm water northward by the mean flow of the Gulf Stream is also clearly
 visible.
 
 %% CNHbegin
-\input{part1/ocean_gyres_figure}
+%notci%\input{part1/ocean_gyres_figure}
 %% CNHend
 
 
@@ -189,7 +189,7 @@ Fig.E2b shows the meridional overturning circulation of the global ocean in
 Sverdrups.
 
 %%CNHbegin
-\input{part1/global_circ_figure}
+%notci%\input{part1/global_circ_figure}
 %%CNHend
 
 \subsection{Convection and mixing over topography}
@@ -207,7 +207,7 @@ strong, and replaced by lateral entrainment due to the baroclinic
 instability of the along-slope current.
 
 %%CNHbegin
-\input{part1/convect_and_topo}
+%notci%\input{part1/convect_and_topo}
 %%CNHend
 
 \subsection{Boundary forced internal waves}
@@ -225,7 +225,7 @@ using MITgcm's finite volume spatial discretization) where they break under
 nonhydrostatic dynamics.
 
 %%CNHbegin
-\input{part1/boundary_forced_waves}
+%notci%\input{part1/boundary_forced_waves}
 %%CNHend
 
 \subsection{Parameter sensitivity using the adjoint of MITgcm}
@@ -243,7 +243,7 @@ of deep water for the thermohaline circulations. This calculation also
 yields sensitivities to all other model parameters.
 
 %%CNHbegin
-\input{part1/adj_hf_ocean_figure}
+%notci%\input{part1/adj_hf_ocean_figure}
 %%CNHend
 
 \subsection{Global state estimation of the ocean}
@@ -258,7 +258,7 @@ ocean obtained by bringing the model in to consistency with altimetric and
 in-situ observations over the period 1992-1997.
 
 %% CNHbegin
-\input{part1/globes_figure}
+%notci%\input{part1/globes_figure}
 %% CNHend
 
 \subsection{Ocean biogeochemical cycles}
@@ -271,7 +271,7 @@ flux of oxygen and its relation to density outcrops in the southern oceans
 from a single year of a global, interannually varying simulation.
 
 %%CNHbegin
-\input{part1/biogeo_figure}
+%notci%\input{part1/biogeo_figure}
 %%CNHend
 
 \subsection{Simulations of laboratory experiments}
@@ -286,10 +286,10 @@ arrested by its instability in a process analogous to that whic sets the
 stratification of the ACC.
 
 %%CNHbegin
-\input{part1/lab_figure}
+%notci%\input{part1/lab_figure}
 %%CNHend
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.4 2001/10/11 19:36:56 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.src,v 1.1 2001/10/11 19:36:56 adcroft Exp $
 % $Name:  $
 
 \section{Continuous equations in `r' coordinates}
@@ -305,7 +305,7 @@ vertical coordinate `$r$' is interpreted as pressure, $p$, if we are
 modeling the atmosphere and height, $z$, if we are modeling the ocean.
 
 %%CNHbegin
-\input{part1/zandpcoord_figure.tex}
+%notci%\input{part1/zandpcoord_figure.tex}
 %%CNHend
 
 The state of the fluid at any time is characterized by the distribution of
@@ -319,7 +319,7 @@ a generic vertical coordinate, $r$, see fig.5
 Fig.5 The vertical coordinate of model}:
 
 %%CNHbegin
-\input{part1/vertcoord_figure.tex}
+%notci%\input{part1/vertcoord_figure.tex}
 %%CNHend
 
 \begin{equation*}
@@ -668,7 +668,7 @@ OPERATORS.
 Fig.6 Spherical polar coordinate system.}
 
 %%CNHbegin
-\input{part1/sphere_coord_figure.tex}
+%notci%\input{part1/sphere_coord_figure.tex}
 %%CNHend
 
 \subsubsection{Shallow atmosphere approximation}
@@ -788,7 +788,7 @@ stepping forward the horizontal momentum equations; $\dot{r}$ is found by
 stepping forward the vertical momentum equation.
 
 %%CNHbegin
-\input{part1/solution_strategy_figure.tex}
+%notci%\input{part1/solution_strategy_figure.tex}
 %%CNHend
 
 There is no penalty in implementing \textbf{QH} over \textbf{HPE} except, of
@@ -1024,7 +1024,7 @@ to discretize the model.
 Tangent linear and adjoint counterparts of the forward model and described
 in Chapter 5.
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.4 2001/10/11 19:36:56 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.src,v 1.1 2001/10/11 19:36:56 adcroft Exp $
 % $Name:  $
 
 \section{Appendix ATMOSPHERE}
@@ -1151,7 +1151,7 @@ _{h}+\mathbf{\nabla }_{p}\phi ^{\prime } &=&\vec{\mathbf{\mathcal{F}}} \\
 \frac{D\theta }{Dt} &=&\frac{\mathcal{Q}}{\Pi }  \label{eq:atmos-prime}
 \end{eqnarray}
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.4 2001/10/11 19:36:56 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.src,v 1.1 2001/10/11 19:36:56 adcroft Exp $
 % $Name:  $
 
 \section{Appendix OCEAN}
@@ -1367,7 +1367,7 @@ the perturbation density. Nevertheless, it is the hydrostatic ($\epsilon
 _{nh}=0$ form of these equations that are used throughout the ocean modeling
 community and referred to as the primitive equations (HPE).
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.4 2001/10/11 19:36:56 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.src,v 1.1 2001/10/11 19:36:56 adcroft Exp $
 % $Name:  $
 
 \section{Appendix:OPERATORS}
