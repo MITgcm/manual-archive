@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.1.1.1 2001/08/08 16:15:16 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.2 2001/08/09 16:22:09 jmc Exp $
 % $Name:  $
 
 The convention used in this section is as follows:
@@ -76,12 +76,13 @@ The equation for $\eta$ is obtained by integrating the
 continuity equation over the entire depth of the fluid, 
 from $R_{min}(x,y)$ up to $R_o(x,y)$ 
 (Linear free surface):
-\begin{displaymath}
+\begin{eqnarray}
 \epsilon_{fs} \partial_t \eta =
 \left. \dot{r} \right|_{r=r_{surf}} + \epsilon_{fw} (P-E) =
 - {\bf \nabla}_r \cdot \int_{R_{min}}^{R_o} \vec{\bf v} dr
 + \epsilon_{fw} (P-E)
-\end{displaymath}
+\label{eq-cont-2D}
+\end{eqnarray}
 
 Where $\epsilon_{fs}$,$\epsilon_{fw}$ are two flags to 
 distinguish between a free-surface equation ($\epsilon_{fs}=1$) 
@@ -325,19 +326,20 @@ with
 
 Substituting \ref{eq-rtd-hmom} into \ref{eq-rtd-cont}, assuming
 $\epsilon_{nh} = 0$ yields a Helmholtz equation for ${\eta}^{n+1}$:
-$$
+\begin{eqnarray}
 \epsilon_{fs} {\eta}^{n+1} -
 {\bf \nabla}_r \cdot \Delta t^2 (R_o-R_{min})
 {\bf \nabla}_r B_o {\eta}^{n+1}
 = {\eta}^*
 \label{solve_2d}
-$$ 
+\end{eqnarray}
 where
-$$
+\begin{eqnarray}
 {\eta}^* = \epsilon_{fs} \: {\eta}^{n} -
 \Delta t {\bf \nabla}_r \cdot \int_{R_{min}}^{R_o} \vec{\bf v}^* dr
 \: + \: \epsilon_{fw} \Delta_t (P-E)^{n} 
-$$
+\label{solve_2d_rhs}
+\end{eqnarray}
 
 Once ${\eta}^{n+1}$ has been found substituting into \ref{eq-rtd-hmom}
 would yield $\vec{\bf v}^{n+1}$ if the model is hydrostatic
