@@ -31,9 +31,18 @@ ps.gz: manual.ps
 
 pdf: manual.pdf
 
+#eh3 WARNING: due to the make dependencies, using the following rule will 
+#eh3   *always* result in running the "manual.dvi" and "l2h.tgz" rules
+#eh3   *TWICE* due to the "*/*.ps" entry in the dependency list!
+#eh3 html:
+#eh3 	make l2h
+#eh3 	make subfigs
 html:
 	make l2h
-	make subfigs
+	cd manual; ../tools/make_mail_subjects.sh
+	cd manual; ../tools/figsub.sh
+	cd manual; ../tools/fix_docref_target.sh
+	tar -czf manual.tgz manual
 
 l2h: l2h.tgz
 

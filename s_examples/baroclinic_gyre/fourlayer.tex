@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_examples/baroclinic_gyre/fourlayer.tex,v 1.14 2003/07/30 13:42:53 edhill Exp $
+% $Header: /u/gcmpack/manual/s_examples/baroclinic_gyre/fourlayer.tex,v 1.15 2003/08/07 18:27:52 edhill Exp $
 % $Name:  $
 
 \section{Four Layer Baroclinic Ocean Gyre In Spherical Coordinates}
@@ -360,9 +360,9 @@ directory {\it verification/exp2/}.  The experiment files
 \item {\it code/CPP\_OPTIONS.h},
 \item {\it code/SIZE.h}. 
 \end{itemize}
-contain the code customisations and parameter settings for this 
-experiments. Below we describe the customisations
-to these files associated with this experiment.
+contain the code customisations and parameter settings for this
+experiment. Below we describe the customisations to these files
+associated with this experiment.
 
 \subsubsection{File {\it input/data}}
 \label{www:tutorials}
@@ -382,17 +382,19 @@ The entries are ordered from surface to depth. For each
 depth level the initial and reference profiles will be uniform in
 $x$ and $y$. The values specified here are read into the
 variable 
-{\bf
-\begin{rawhtml} <A href=../code_reference/vdb/names/OK.htm> \end{rawhtml}
-tRef
-\begin{rawhtml} </A>\end{rawhtml}
-} 
+\varlink{tRef}{tRef}
+%{\bf
+%\begin{rawhtml} <A href=../code_reference/vdb/names/OK.htm> \end{rawhtml}
+%tRef
+%\begin{rawhtml} </A>\end{rawhtml}
+%} 
 in the model code, by procedure 
-{\it
-\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
-INI\_PARMS
-\begin{rawhtml} </A>\end{rawhtml}
-}.
+\filelink{INI\_PARMS}{model-src-ini_parms.F}
+%{\it
+%\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
+%INI\_PARMS
+%\begin{rawhtml} </A>\end{rawhtml}
+%}.
 
 %% \codelink{var:tref} tRef \endlink
 %% \codelink{file:ini_parms} {\it INI\_PARMS } \endlink
@@ -416,11 +418,12 @@ tRef
 ({\it ini\_theta.F})
 \end{minipage}
 }
-{\bf
-\begin{rawhtml} <A href=../code_reference/vdb/code/98.htm> \end{rawhtml}
-goto code
-\begin{rawhtml} </A>\end{rawhtml}
-}
+\filelink{ini\_theta.F}{model-src-ini_theta.F}
+%{\bf
+%\begin{rawhtml} <A href=../code_reference/vdb/code/98.htm> \end{rawhtml}
+%goto code
+%\begin{rawhtml} </A>\end{rawhtml}
+%}
 
 
 \item Line 6, 
@@ -429,36 +432,41 @@ this line sets the vertical Laplacian dissipation coefficient to
 $1 \times 10^{-2} {\rm m^{2}s^{-1}}$. Boundary conditions
 for this operator are specified later. 
 The variable 
-{\bf 
-\begin{rawhtml} <A href=../code_reference/vdb/names/ZQ.htm> \end{rawhtml}
-viscAz
-\begin{rawhtml} </A>\end{rawhtml}
-}
+\varlink{viscAz}{viscAz}
+%{\bf 
+%\begin{rawhtml} <A href=../code_reference/vdb/names/ZQ.htm> \end{rawhtml}
+%viscAz
+%\begin{rawhtml} </A>\end{rawhtml}
+%}
 is read in the routine
-{\it
-\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
-INI\_PARMS
-\begin{rawhtml} </A>\end{rawhtml}
-}
+\filelink{ini\_parms.F}{model-src-ini_parms.F}
+%{\it
+%\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
+%INI\_PARMS
+%\begin{rawhtml} </A>\end{rawhtml}
+%}
 and is copied into model general vertical coordinate variable 
-{\bf 
-\begin{rawhtml} <A href=../code_reference/vdb/names/PF.htm> \end{rawhtml}
-viscAr
-\begin{rawhtml} </A>\end{rawhtml}
-}. At each time step, the viscous term contribution to the momentum equations
+\varlink{viscAr}{viscAr}
+%{\bf 
+%\begin{rawhtml} <A href=../code_reference/vdb/names/PF.htm> \end{rawhtml}
+%viscAr
+%\begin{rawhtml} </A>\end{rawhtml}
+%}.
+At each time step, the viscous term contribution to the momentum equations
 is calculated in routine
-{\it S/R CALC\_DIFFUSIVITY}.
+%{\it S/R CALC\_DIFFUSIVITY}.
+\varlink{CALC\_DIFFUSIVITY}{CALC_DIFFUSIVITY}
 
 \fbox{
 \begin{minipage}{5.0in}
 {\it S/R CALC\_DIFFUSIVITY}({\it calc\_diffusivity.F})
 \end{minipage}
 }
-{\bf
-\begin{rawhtml} <A href=../code_reference/vdb/code/53.htm> \end{rawhtml}
-goto code
-\begin{rawhtml} </A>\end{rawhtml}
-}
+%{\bf
+%\begin{rawhtml} <A href=../code_reference/vdb/code/53.htm> \end{rawhtml}
+%goto code
+%\begin{rawhtml} </A>\end{rawhtml}
+%}
 
 \item Line 7, 
 \begin{verbatim}
@@ -468,39 +476,47 @@ this line sets the horizontal laplacian frictional dissipation coefficient to
 $1 \times 10^{-2} {\rm m^{2}s^{-1}}$. Boundary conditions
 for this operator are specified later.
 The variable 
-{\bf 
-\begin{rawhtml} <A href=../code_reference/vdb/names/SI.htm> \end{rawhtml}
-viscAh
-\begin{rawhtml} </A>\end{rawhtml}
-}
+\varlink{viscAh}{viscAh}
+%{\bf 
+%\begin{rawhtml} <A href=../code_reference/vdb/names/SI.htm> \end{rawhtml}
+%viscAh
+%\begin{rawhtml} </A>\end{rawhtml}
+%}
 is read in the routine
-{\it
-\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
-INI\_PARMS
-\begin{rawhtml} </A>\end{rawhtml}
-} and applied in routines {\it CALC\_MOM\_RHS} and {\it CALC\_GW}.
+\varlink{INI\_PARMS}{INI_PARMS}
+%{\it
+%\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
+%INI\_PARMS
+%\begin{rawhtml} </A>\end{rawhtml}
+%}
+and applied in routines
+%{\it CALC\_MOM\_RHS} and {\it CALC\_GW}.
+\varlink{CALC\_MOM\_RHS}{CALC_MOM_RHS}
+and
+\varlink{CALC\_GW}{CALC_GW}.
+
 
 \fbox{
 \begin{minipage}{5.0in}
 {\it S/R CALC\_MOM\_RHS}({\it calc\_mom\_rhs.F})
 \end{minipage}
 }
-{\bf
-\begin{rawhtml} <A href=../code_reference/vdb/code/60.htm> \end{rawhtml}
-goto code
-\begin{rawhtml} </A>\end{rawhtml}
-}
+%{\bf
+%\begin{rawhtml} <A href=../code_reference/vdb/code/60.htm> \end{rawhtml}
+%goto code
+%\begin{rawhtml} </A>\end{rawhtml}
+%}
 
 \fbox{
 \begin{minipage}{5.0in}
 {\it S/R CALC\_GW}({\it calc\_gw.F})
 \end{minipage}
 }
-{\bf
-\begin{rawhtml} <A href=../code_reference/vdb/code/58.htm> \end{rawhtml}
-goto code
-\begin{rawhtml} </A>\end{rawhtml}
-}
+%{\bf
+%\begin{rawhtml} <A href=../code_reference/vdb/code/58.htm> \end{rawhtml}
+%goto code
+%\begin{rawhtml} </A>\end{rawhtml}
+%}
 
 \item Lines 8,
 \begin{verbatim}
@@ -511,18 +527,21 @@ the horizontal laplacian friction operator
 e.g. $\frac{\partial u}{\partial y}$=0 along boundaries in $y$ and
 $\frac{\partial v}{\partial x}$=0 along boundaries in $x$.
 The variable
-{\bf
-\begin{rawhtml} <A href=../code_reference/vdb/names/UT.htm> \end{rawhtml}
-no\_slip\_sides
-\begin{rawhtml} </A>\end{rawhtml}
-}
+\varlink{no\_slip\_sides}{no_slip_sides}
+%{\bf
+%\begin{rawhtml} <A href=../code_reference/vdb/names/UT.htm> \end{rawhtml}
+%no\_slip\_sides
+%\begin{rawhtml} </A>\end{rawhtml}
+%}
 is read in the routine
-{\it
-\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
-INI\_PARMS
-\begin{rawhtml} </A>\end{rawhtml}
-} and the boundary condition is evaluated in routine
-{\it S/R CALC\_MOM\_RHS}.
+\varlink{INI\_PARMS}{INI_PARMS}
+%{\it
+%\begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
+%INI\_PARMS
+%\begin{rawhtml} </A>\end{rawhtml}
+%}
+and the boundary condition is evaluated in routine
+%{\it S/R CALC\_MOM\_RHS}.
 
 
 \fbox{

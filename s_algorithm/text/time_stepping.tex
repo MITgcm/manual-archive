@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.15 2002/02/28 19:32:19 cnh Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.16 2003/08/07 18:27:52 edhill Exp $
 % $Name:  $
 
 This chapter lays out the numerical schemes that are
@@ -81,7 +81,7 @@ temporary.}
 \begin{figure}
 \begin{center} \fbox{ \begin{minipage}{4.5in} \begin{tabbing}
 aaa \= aaa \= aaa \= aaa \= aaa \= aaa \kill 
-\proclink{FORWARD\_STEP}{../code/._model_src_forward_step.F} \\
+\filelink{FORWARD\_STEP}{model-src-forward_step.F} \\
 \> DYNAMICS \\
 \>\> TIMESTEP \` $u^*$,$v^*$ (\ref{eq:ustar-rigid-lid},\ref{eq:vstar-rigid-lid}) \\
 \> SOLVE\_FOR\_PRESSURE \\
@@ -91,7 +91,8 @@ aaa \= aaa \= aaa \= aaa \= aaa \= aaa \kill
 \>\> CALC\_GRAD\_PHI\_SURF \` $\nabla \eta^{n+1}$ \\
 \>\> CORRECTION\_STEP \` $u^{n+1}$,$v^{n+1}$ (\ref{eq:un+1-rigid-lid},\ref{eq:vn+1-rigid-lid})
 \end{tabbing} \end{minipage} } \end{center}
-\caption{Calling tree for the pressure method algorihtm}
+\caption{Calling tree for the pressure method algorithm 
+  (\filelink{FORWARD\_STEP}{model-src-forward_step.F})}
 \label{fig:call-tree-pressure-method}
 \end{figure}
 
@@ -173,16 +174,16 @@ The correspondence to the code is as follows:
 \item
 the prognostic phase, equations \ref{eq:ustar-rigid-lid} and \ref{eq:vstar-rigid-lid},
 stepping forward $u^n$ and $v^n$ to $u^{*}$ and $v^{*}$ is coded in
-\proclink{TIMESTEP}{../code/._model_src_timestep.F}
+\filelink{TIMESTEP()}{model-src-timestep.F}
 \item
 the vertical integration, $H \widehat{u^*}$ and $H
 \widehat{v^*}$, divergence and inversion of the elliptic operator in
 equation \ref{eq:elliptic} is coded in 
-\proclink{SOLVE\_FOR\_PRESSURE}{../code/._model_src_solve_for_pressure.F}
+\filelink{SOLVE\_FOR\_PRESSURE()}{model-src-solve_for_pressure.F}
 \item
 finally, the new flow field at time level $n+1$ given by equations
 \ref{eq:un+1-rigid-lid} and \ref{eq:vn+1-rigid-lid} is calculated in 
-\proclink{CORRECTION\_STEP}{../code/._model_src_correction_step.F}.
+\filelink{CORRECTION\_STEP()}{model-src-correction_step.F}.
 \end{itemize}
 The calling tree for these routines is given in
 Fig.~\ref{fig:call-tree-pressure-method}.

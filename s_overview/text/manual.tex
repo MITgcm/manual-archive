@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.16 2002/02/28 19:32:19 cnh Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.17 2003/08/07 18:27:51 edhill Exp $
 % $Name:  $
 
 %tci%\documentclass[12pt]{book}
@@ -34,7 +34,7 @@
 
 % Section: Overview
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.16 2002/02/28 19:32:19 cnh Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.17 2003/08/07 18:27:51 edhill Exp $
 % $Name:  $
 
 This document provides the reader with the information necessary to
@@ -133,7 +133,7 @@ J. Geophysical Res., 104(C12), 29,529-29,547.
 We begin by briefly showing some of the results of the model in action to
 give a feel for the wide range of problems that can be addressed using it.
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.16 2002/02/28 19:32:19 cnh Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.17 2003/08/07 18:27:51 edhill Exp $
 % $Name:  $
 
 \section{Illustrations of the model in action}
@@ -322,7 +322,7 @@ telescoping to $\frac{1}{3}^{\circ}\times\frac{1}{3}^{\circ}$ in the tropics (no
 \subsection{Simulations of laboratory experiments}
 
 Figure \ref{fig:lab-simulation} shows MITgcm being used to simulate a 
-laboratory experiment inquiring in to the dynamics of the Antarctic Circumpolar Current (ACC). An
+laboratory experiment inquiring into the dynamics of the Antarctic Circumpolar Current (ACC). An
 initially homogeneous tank of water ($1m$ in diameter) is driven from its
 free surface by a rotating heated disk. The combined action of mechanical
 and thermal forcing creates a lens of fluid which becomes baroclinically
@@ -334,7 +334,7 @@ stratification of the ACC.
 \input{part1/lab_figure}
 %%CNHend
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.16 2002/02/28 19:32:19 cnh Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.17 2003/08/07 18:27:51 edhill Exp $
 % $Name:  $
 
 \section{Continuous equations in `r' coordinates}
@@ -346,8 +346,8 @@ One system of hydrodynamical equations is written down
 and encoded. The model variables have different interpretations depending on
 whether the atmosphere or ocean is being studied. Thus, for example, the
 vertical coordinate `$r$' is interpreted as pressure, $p$, if we are
-modeling the atmosphere (left hand side of figure \ref{fig:isomorphic-equations})
-and height, $z$, if we are modeling the ocean (right hand side of figure
+modeling the atmosphere (right hand side of figure \ref{fig:isomorphic-equations})
+and height, $z$, if we are modeling the ocean (left hand side of figure
 \ref{fig:isomorphic-equations}).
 
 %%CNHbegin
@@ -471,12 +471,12 @@ in later chapters.
 at fixed and moving $r$ surfaces we set (see figure \ref{fig:zandp-vert-coord}):
 
 \begin{equation}
-\dot{r}=0atr=R_{fixed}(x,y)\text{ (ocean bottom, top of the atmosphere)}
+\dot{r}=0 \text{\ at\ } r=R_{fixed}(x,y)\text{ (ocean bottom, top of the atmosphere)}
 \label{eq:fixedbc}
 \end{equation}
 
 \begin{equation}
-\dot{r}=\frac{Dr}{Dt}atr=R_{moving}\text{ \
+\dot{r}=\frac{Dr}{Dt} \text{\ at\ } r=R_{moving}\text{ \
 (ocean surface,bottom of the atmosphere)}  \label{eq:movingbc}
 \end{equation}
 
@@ -1073,7 +1073,7 @@ to discretize the model.
 Tangent linear and adjoint counterparts of the forward model are described
 in Chapter 5.
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.16 2002/02/28 19:32:19 cnh Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.17 2003/08/07 18:27:51 edhill Exp $
 % $Name:  $
 
 \section{Appendix ATMOSPHERE}
@@ -1200,7 +1200,7 @@ _{h}+\mathbf{\nabla }_{p}\phi ^{\prime } &=&\vec{\mathbf{\mathcal{F}}} \label{eq
 \frac{D\theta }{Dt} &=&\frac{\mathcal{Q}}{\Pi } 
 \end{eqnarray}
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.16 2002/02/28 19:32:19 cnh Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.17 2003/08/07 18:27:51 edhill Exp $
 % $Name:  $
 
 \section{Appendix OCEAN}
@@ -1416,7 +1416,7 @@ the perturbation density. Nevertheless, it is the hydrostatic ($\epsilon
 _{nh}=0$ form of these equations that are used throughout the ocean modeling
 community and referred to as the primitive equations (HPE).
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.16 2002/02/28 19:32:19 cnh Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.17 2003/08/07 18:27:51 edhill Exp $
 % $Name:  $
 
 \section{Appendix:OPERATORS}

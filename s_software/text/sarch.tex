@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_software/text/sarch.tex,v 1.9 2002/04/24 19:23:58 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_software/text/sarch.tex,v 1.10 2003/08/07 18:27:52 edhill Exp $
 
 This chapter focuses on describing the {\bf WRAPPER} environment within which
 both the core numerics and the pluggable packages operate. The description
@@ -97,7 +97,7 @@ and operating systems. This allows numerical code to be easily retargetted.
 \resizebox{!}{4.5in}{\includegraphics{part4/fit_in_wrapper.eps}}
 \end{center}
 \caption{
-Numerical code is written too fit within a software support
+Numerical code is written to fit within a software support
 infrastructure called WRAPPER. The WRAPPER is portable and
 can be specialized for a wide range of specific target hardware and 
 programming environments, without impacting numerical code that fits
@@ -120,7 +120,7 @@ uniprocessor and multi-processor Sun systems with both uniform memory access
 (UMA) and non-uniform memory access (NUMA) designs. Significant work has also 
 been undertaken on x86 cluster systems, Alpha processor based clustered SMP 
 systems, and on cache-coherent NUMA (CC-NUMA) systems from Silicon Graphics. 
-The MITgcm code, operating within the WRAPPER, is also used routinely used on 
+The MITgcm code, operating within the WRAPPER, is also routinely used on 
 large scale MPP systems (for example T3E systems and IBM SP systems). In all 
 cases numerical code, operating within the WRAPPER, performs and scales very 
 competitively with equivalent numerical code that has been modified to contain 
@@ -781,7 +781,7 @@ The global domain size is again ninety grid points in x and
 forty grid points in y. The two sub-domains in each process will be computed 
 sequentially if they are given to a single thread within a single process.
 Alternatively if the code is invoked with multiple threads per process
-the two domains in y may be computed on concurrently.
+the two domains in y may be computed concurrently.
 \item
 \begin{verbatim}
       PARAMETER (

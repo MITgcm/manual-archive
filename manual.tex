@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/manual.tex,v 1.15 2003/07/30 13:42:52 edhill Exp $
+% $Header: /u/gcmpack/manual/manual.tex,v 1.16 2003/08/07 18:27:51 edhill Exp $
 % $Name:  $
 
 \documentclass[12pt]{book}
@@ -14,13 +14,14 @@
 %cnh%\usepackage{array}
 %cnh%\usepackage{multirow}
 
-% Command to reference entries in either "code" or "names"
-% directories of browseable code tree.
-\newcommand{\proclink}[2]{
-\htmladdnormallink{\em #1()}{../../code_reference/vdb/names/#2_docref.html}
+%eh3  Commands to reference either files or symbols within the "HTML-ized"
+%eh3  ("vdb") code.
+%eh3  
+\newcommand{\filelink}[2]{
+\htmladdnormallink{\em #1()}{../code_reference/vdb/byname/#2.html}
 }
 \newcommand{\varlink}[2]{
-\htmladdnormallink{\bf \tt #1}{../../code_reference/vdb/names/#2_docref.html}
+\htmladdnormallink{\bf \tt #1}{../code_reference/vdb/byname/#2.html}
 }
 
 
