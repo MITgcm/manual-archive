@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_software/text/sarch.tex,v 1.16 2004/01/29 16:02:58 afe Exp $
+% $Header: /u/gcmpack/manual/s_software/text/sarch.tex,v 1.17 2004/03/23 15:29:40 afe Exp $
 
 This chapter focuses on describing the {\bf WRAPPER} environment within which
 both the core numerics and the pluggable packages operate. The description
@@ -76,6 +76,9 @@ floating point operations.}
 \end{figure}
 
 \section{WRAPPER}
+\begin{rawhtml}
+<!-- CMIREDIR:wrapper -->
+\end{rawhtml}
 
 A significant element of the software architecture utilized in
 MITgcm is a software superstructure and substructure collectively
@@ -150,6 +153,9 @@ easily be specialized to fit, in a computationally efficient manner, any
 computer architecture currently available to the scientific computing community.
 
 \subsection{Machine model parallelism}
+\begin{rawhtml}
+<!-- CMIREDIR:domain_decomp -->
+\end{rawhtml}
 
  Codes operating under the WRAPPER target an abstract machine that is assumed to
 consist of one or more logical processors that can compute concurrently.  
