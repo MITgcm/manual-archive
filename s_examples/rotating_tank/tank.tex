@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_examples/rotating_tank/tank.tex,v 1.4 2004/07/26 17:52:43 afe Exp $
+% $Header: /u/gcmpack/manual/s_examples/rotating_tank/tank.tex,v 1.5 2004/07/26 18:41:32 afe Exp $
 % $Name:  $
 
 \bodytext{bgcolor="#FFFFFFFF"}
@@ -193,18 +193,19 @@ of 0.5 and limits $\delta t$ to $1200s$.
 \label{www:tutorials}
 \label{SEC:eg-baro-code_config}
 
-The model configuration for this experiment resides under the 
-directory {\it verification/exp0/}.  The experiment files 
+The model configuration for this experiment resides under the
+directory {\it verification/rotatingi\_tank/}.  The experiment files
 \begin{itemize}
 \item {\it input/data}
 \item {\it input/data.pkg}
 \item {\it input/eedata},
-\item {\it input/windx.sin\_y},
-\item {\it input/topog.box},
+\item {\it input/bathyPol.bin},
+\item {\it input/thetaPol.bin},
 \item {\it code/CPP\_EEOPTIONS.h}
 \item {\it code/CPP\_OPTIONS.h},
-\item {\it code/SIZE.h}. 
+\item {\it code/SIZE.h}.
 \end{itemize}
+
 contain the code customizations and parameter settings for this 
 experiments. Below we describe the customizations
 to these files associated with this experiment.
@@ -318,7 +319,7 @@ that are described in the MITgcm Getting Started and MITgcm Parameters
 notes.
 
 \begin{small}
-\input{part3/case_studies/barotropic_gyre/input/data}
+\input{part3/case_studies/rotating_tank/input/data}
 \end{small}
 
 \subsubsection{File {\it input/data.pkg}}
