@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/manual.tex,v 1.9 2001/10/21 04:19:40 cnh Exp $
+% $Header: /u/gcmpack/manual/manual.tex,v 1.10 2001/11/13 15:00:00 adcroft Exp $
 % $Name:  $
 
 \documentclass[12pt]{book}
@@ -9,7 +9,7 @@
 %aja%\usepackage{amsfonts}
 \usepackage{amsmath}
 \usepackage{html}
-\usepackage{graphics}
+\usepackage{graphicx}
 
 %cnh%\usepackage{array}
 %cnh%\usepackage{multirow}
@@ -34,12 +34,13 @@
 %cnh%\renewcommand{\footrulewidth}{0.4pt}
 
 % bibtex stuff
-\newcommand{\BIBPATH}{.}
-\usepackage{natbib}
-\bibliographystyle{\BIBPATH/jmr_my}
-\gdef\harvardleft{[}
-\gdef\harvardright{]}
-\bibpunct{[}{]}{,}{a}{}{,}
+%aja%\newcommand{\BIBPATH}{.}
+%aja%\usepackage{natbib}
+%aja%\bibliographystyle{\BIBPATH/jmr_my}
+%aja%\gdef\harvardleft{[}
+%aja%\gdef\harvardright{]}
+%aja%\bibpunct{[}{]}{,}{a}{}{,}
+\bibliographystyle{plain}
 
 % referencing
 %ph%\newcommand{\refequ}[1]{equation (\ref{equ:#1})}
@@ -64,9 +65,9 @@
 \bodytext{bgcolor="#FFFFFFFF"} 
 
 \tableofcontents
-\pagebreak
+%\pagebreak
 
-\part{MIT GCM basics}
+%\part{MIT GCM basics}
 
 % Section: Overview
 \input{part1/part1}
@@ -85,14 +86,14 @@
 %\pagebreak
 
 
-\part{Adjoint of the MIT GCM}
+%\part{Adjoint of the MIT GCM}
 
 % Section: Automatic Differentiation
 \input{part5/part5}
 %\pagebreak
 
 
-\part{Additional features}
+%\part{Additional features}
 
 % Section: Physical Packages
 \input{part6/part6}
@@ -107,8 +108,9 @@
 %\pagebreak
 
 % Section: References:
-\markboth{BIBLIOGRAPHY}{BIBLIOGRAPHY}
+%\markboth{BIBLIOGRAPHY}{BIBLIOGRAPHY}
 \addcontentsline{toc}{chapter}{BIBLIOGRAPHY}
-\bibliography{\BIBPATH/manual_references}
+%aja%\bibliography{\BIBPATH/manual_references}
+\bibliography{manual_references}
 
 \end{document}
