@@ -1,0 +1,127 @@
+% $Header: /u/gcmpack/manual/s_overview/Attic/appendix_atmos.tex,v 1.1.1.1 2001/08/08 16:16:18 adcroft Exp $
+% $Name:  $
+
+\section{Appendix ATMOSPHERE}
+
+\subsection{Hydrostatic Primitive Equations for the Atmosphere in pressure
+coordinates}
+
+\label{sect-hpe-p}
+
+The hydrostatic primitive equations (HPEs) in p-coordinates are: 
+\begin{eqnarray}
+\frac{D\vec{\mathbf{v}}_{h}}{Dt}+f\hat{\mathbf{k}}\times \vec{\mathbf{v}}%
+_{h}+\mathbf{\nabla }_{p}\phi &=&\vec{\mathbf{\mathcal{F}}}
+\label{eq-p-hmom-start} \\
+\frac{\partial \phi }{\partial p}+\alpha &=&0  \label{eq-p-hydro-start} \\
+\mathbf{\nabla }_{p}\cdot \vec{\mathbf{v}}_{h}+\frac{\partial \omega }{%
+\partial p} &=&0  \label{eq-p-cont-start} \\
+p\alpha &=&RT  \label{eq-p-eos-start} \\
+c_{v}\frac{DT}{Dt}+p\frac{D\alpha }{Dt} &=&\mathcal{Q}  \label{eq-p-firstlaw}
+\end{eqnarray}
+where $\vec{\mathbf{v}}_{h}=(u,v,0)$ is the `horizontal' (on pressure
+surfaces) component of velocity,$\frac{D}{Dt}=\vec{\mathbf{v}}_{h}\cdot 
+\mathbf{\nabla }_{p}+\omega \frac{\partial }{\partial p}$ is the total
+derivative, $f=2\Omega \sin lat$ is the Coriolis parameter, $\phi =gz$ is
+the geopotential, $\alpha =1/\rho $ is the specific volume, $\omega =\frac{Dp%
+}{Dt}$ is the vertical velocity in the $p-$coordinate. Equation \ref
+{eq-p-firstlaw} is the first law of thermodynamics where internal energy $%
+e=c_{v}T$, $T$ is temperature, $Q$ is the rate of heating per unit mass and $%
+p\frac{D\alpha }{Dt}$ is the work done by the fluid in compressing.
+
+It is convenient to cast the heat equation in terms of potential temperature 
+$\theta $ so that it looks more like a generic conservation law.
+Differentiating \ref{eq-p-eos-start} we get: 
+\[
+p\frac{D\alpha }{Dt}+\alpha \frac{Dp}{Dt}=R\frac{DT}{Dt}
+\]
+which, when added to the heat equation \ref{eq-p-firstlaw} and using $%
+c_{p}=c_{v}+R$, gives: 
+\begin{equation}
+c_{p}\frac{DT}{Dt}-\alpha \frac{Dp}{Dt}=\mathcal{Q}
+\label{eq-p-heat-interim}
+\end{equation}
+Potential temperature is defined: 
+\begin{equation}
+\theta =T(\frac{p_{c}}{p})^{\kappa }  \label{eq-potential-temp}
+\end{equation}
+where $p_{c}$ is a reference pressure and $\kappa =R/c_{p}$. For convenience
+we will make use of the Exner function $\Pi (p)$ which defined by: 
+\begin{equation}
+\Pi (p)=c_{p}(\frac{p}{p_{c}})^{\kappa }  \label{Exner}
+\end{equation}
+The following relations will be useful and are easily expressed in terms of
+the Exner function: 
+\[
+c_{p}T=\Pi \theta \;\;;\;\;\frac{\partial \Pi }{\partial p}=\frac{\kappa \Pi 
+}{p}\;\;;\;\;\alpha =\frac{\kappa \Pi \theta }{p}=\frac{\partial \ \Pi }{%
+\partial p}\theta \;\;;\;\;\frac{D\Pi }{Dt}=\frac{\partial \Pi }{\partial p}%
+\frac{Dp}{Dt}
+\]
+where $b=\frac{\partial \ \Pi }{\partial p}\theta $ is the buoyancy.
+
+The heat equation is obtained by noting that 
+\[
+c_{p}\frac{DT}{Dt}=\frac{D(\Pi \theta )}{Dt}=\Pi \frac{D\theta }{Dt}+\theta 
+\frac{D\Pi }{Dt}=\Pi \frac{D\theta }{Dt}+\alpha \frac{Dp}{Dt}
+\]
+and on substituting into (\ref{eq-p-heat-interim}) gives: 
+\begin{equation}
+\Pi \frac{D\theta }{Dt}=\mathcal{Q}  \label{theta-equation}
+\end{equation}
+which is in conservative form.
+
+For convenience in the model we prefer to step forward (\ref{theta-equation}%
+) rather than (\ref{eq-p-firstlaw}).
+
+\subsubsection{Boundary conditions}
+
+The upper and lower boundary conditions are : 
+\begin{eqnarray*}
+\mbox{at the top:}\;\;p=0 &&\text{, }\omega =\frac{Dp}{Dt}=0 \\
+\mbox{at the surface:}\;\;p=p_{s} &&\text{, }\phi =\phi _{topo}=g~Z_{topo}
+\end{eqnarray*}
+In $p$-coordinates, the upper boundary acts like a solid boundary ($\omega
+=0 $); in $z$-coordinates and the lower boundary is analogous to a free
+surface ($\phi $ is imposed and $\omega \neq 0$).
+
+\subsubsection{Splitting the geo-potential}
+
+For the purposes of initialization and reducing round-off errors, the model
+deals with perturbations from reference (or ``standard'') profiles. For
+example, the hydrostatic geopotential associated with the resting atmosphere
+is not dynamically relevant and can therefore be subtracted from the
+equations. The equations written in terms of perturbations are obtained by
+substituting the following definitions into the previous model equations: 
+\begin{eqnarray*}
+\theta &=&\theta _{o}+\theta ^{\prime } \\
+\alpha &=&\alpha _{o}+\alpha ^{\prime } \\
+\phi &=&\phi _{o}+\phi ^{\prime }
+\end{eqnarray*}
+The reference state (indicated by subscript ``0'') corresponds to
+horizontally homogeneous atmosphere at rest ($\theta _{o},\alpha _{o},\phi
+_{o}$) with surface pressure $p_{o}(x,y)$ that satisfies $\phi
+_{o}(p_{o})=g~Z_{topo}$, defined: 
+\begin{eqnarray*}
+\theta _{o}(p) &=&f^{n}(p) \\
+\alpha _{o}(p) &=&\Pi _{p}\theta _{o} \\
+\phi _{o}(p) &=&\phi _{topo}-\int_{p_{0}}^{p}\alpha _{o}dp
+\end{eqnarray*}
+%\begin{eqnarray*}
+%\phi'_\alpha & = & \int^p_{p_o} (\alpha_o -\alpha) dp \\
+%\phi'_s(x,y,t) & = & \int_{p_o}^{p_s} \alpha dp
+%\end{eqnarray*}
+
+The final form of the HPE's in p coordinates is then: 
+\begin{eqnarray}
+\frac{D\vec{\mathbf{v}}_{h}}{Dt}+f\hat{\mathbf{k}}\times \vec{\mathbf{v}}%
+_{h}+\mathbf{\nabla }_{p}\phi ^{\prime } &=&\vec{\mathbf{\mathcal{F}}}
+\label{eq-p-hmom} \\
+\frac{\partial \phi ^{\prime }}{\partial p}+\alpha ^{\prime } &=&0
+\label{eq-p-hydro} \\
+\mathbf{\nabla }_{p}\cdot \vec{\mathbf{v}}_{h}+\frac{\partial \omega }{%
+\partial p} &=&0  \label{eq-p-cont} \\
+\frac{\partial \Pi }{\partial p}\theta ^{\prime } &=&\alpha ^{\prime }
+\label{eq-p-eos} \\
+\frac{D\theta }{Dt} &=&\frac{\mathcal{Q}}{\Pi }  \label{eq-p-heat}
+\end{eqnarray}

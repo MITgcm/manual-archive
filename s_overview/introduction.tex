@@ -1,0 +1,48 @@
+% $Header: /u/gcmpack/manual/s_overview/Attic/introduction.tex,v 1.1.1.1 2001/08/08 16:16:16 adcroft Exp $
+% $Name:  $
+
+\section{Introduction}
+
+This documentation provides the reader with the information necessary to
+carry out numerical experiments using MITgcm. It gives a comprehensive
+description of the continuous equations on which the model is based, the
+numerical algorithms the model employs and a description of the associated
+program code. Along with the hydrodynamical kernel, physical and
+biogeochemical parameterizations of key atmospheric and oceanic processes
+are available. A number of examples illustrating the use of the model in
+both process and general circulation studies of the atmosphere and ocean are
+also presented.
+
+MITgcm has a number of novel aspects:
+
+\begin{itemize}
+\item  it can be used to study both atmospheric and oceanic phenomena; one
+hydrodynamical kernel is used to drive forward both atmospheric and oceanic
+models - see fig.1%
+\marginpar{
+Fig.1 One model}\ref{fig:onemodel}
+
+\item  it has a non-hydrostatic capability and so can be used to study both
+small-scale and large scale processes - see fig.2%
+\marginpar{
+Fig.2 All scales}\ref{fig:all-scales}
+
+\item  finite volume techniques are employed yielding an intuitive
+discretization and support for the treatment of irregular geometries using
+orthogonal curvilinear grids and shaved cells - see fig.3%
+\marginpar{
+Fig.3 Finite volumes}\ref{fig:Finite volumes}
+
+\item  tangent linear and adjoint counterparts are automatically maintained
+along with the forward model, permitting sensitivity and optimization
+studies.
+
+\item  the model is developed to perform efficiently on a wide variety of
+computational platforms.
+\end{itemize}
+
+Key publications reporting on and charting the development of the model are
+listed in Appendix Refs.
+
+We begin by briefly showing some of the results of the model in action to
+give a feel for the wide range of problems that can be addressed using it.

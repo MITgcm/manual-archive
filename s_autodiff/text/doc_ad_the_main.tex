@@ -1,0 +1,53 @@
+% $Header: /u/gcmpack/manual/s_autodiff/text/doc_ad_the_main.tex,v 1.1.1.1 2001/08/08 16:16:26 adcroft Exp $
+% $Name:  $
+
+{\small
+\begin{verbatim}
+   *************
+   the_main_loop
+   *************
+   |
+   |--- initialise_varia
+   |    |
+   |   ...
+   |    |--- packages_init_varia
+   |    |    |
+   |    |   ...
+   |    |    |--- #ifdef ALLOW_ADJOINT_RUN
+   |    |    |          call ctrl_map_ini
+   |    |    |          call cost_ini
+   |    |    |    #endif
+   |    |   ...
+   |    |    o
+   |   ...
+   |    o
+  ...
+   |--- #ifdef ALLOW_ADJOINT_RUN
+   |          call ctrl_map_forcing
+   |    #endif
+  ...
+   |--- #ifdef ALLOW_TAMC_CHECKPOINTING
+              do ilev_3 = 1,nchklev_3
+   |            do ilev_2 = 1,nchklev_2
+   |              do ilev_1 = 1,nchklev_1
+   |                iloop = (ilev_3-1)*nchklev_2*nchklev_1 +
+   |                        (ilev_2-1)*nchklev_1           + ilev_1
+   |    #else
+   |          do iloop = 1, nTimeSteps
+   |    #endif
+   |    |
+   |    |---       call forward_step
+   |    |
+   |    |--- #ifdef ALLOW_COST
+   |    |          call cost_tile
+   |    |    #endif
+   |    |
+   |    |    enddo
+   |    o
+   |
+   |--- #ifdef ALLOW_COST
+   |          call cost_final
+   |    #endif
+   o
+\end{verbatim}
+}

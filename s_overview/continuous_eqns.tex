@@ -1,0 +1,681 @@
+% $Header: /u/gcmpack/manual/s_overview/Attic/continuous_eqns.tex,v 1.1.1.1 2001/08/08 16:16:18 adcroft Exp $
+% $Name:  $
+
+\section{Continuous equations in `r' coordinates}
+
+To render atmosphere and ocean models from one dynamical core we exploit
+`isomorphisms' between equation sets that govern the evolution of the
+respective fluids - see fig.4%
+\marginpar{
+Fig.4. Isomorphisms}. One system of hydrodynamical equations is written down
+and encoded. The model variables have different interpretations depending on
+whether the atmosphere or ocean is being studied. Thus, for example, the
+vertical coordinate `$r$' is interpreted as pressure, $p$, if we are
+modeling the atmosphere and height, $z$, if we are modeling the ocean. A
+complete list of the isomorphisms is given in table 1.%
+\marginpar{
+Table 1. Isomorphisms}
+
+The state of the fluid at any time is characterized by the distribution of
+velocity $\vec{\mathbf{v}}$, active tracers $\theta $ and $S$, a
+`geopotential' $\phi $ and density $\rho =\rho (\theta ,S,p)$ which may
+depend on $\theta $, $S$, and $p$. The equations that govern the evolution
+of these fields, obtained by applying the laws of classical mechanics and
+thermodynamics to a Boussinesq, Navier-Stokes fluid are, written in terms of
+a generic vertical coordinate, $r$, see fig.5%
+\marginpar{
+Fig.5 The vertical coordinate of model}:
+
+\[
+\frac{D\vec{\mathbf{v}_{h}}}{Dt}+\left( 2\vec{\Omega}\times \vec{\mathbf{v}}%
+\right) _{h}+\mathbf{\nabla }_{h}\phi =\left( \mathcal{F}_{\vec{\mathbf{v}}}%
+\mathcal{+D}_{\vec{\mathbf{v}}}\right) _{h}\text{horizontal mtm} 
+\]
+
+\[
+\frac{D\dot{r}}{Dt}+\widehat{k}\cdot \left( 2\vec{\Omega}\times \vec{\mathbf{%
+v}}\right) +\frac{\partial \phi }{\partial r}+b=\left( \mathcal{F}_{\vec{%
+\mathbf{v}}}\mathcal{+D}_{\vec{\mathbf{v}}}\right) _{r}\text{vertical mtm} 
+\]
+
+\begin{equation}
+\mathbf{\nabla }_{h}\cdot \vec{\mathbf{v}}_{h}+\frac{\partial \dot{r}}{%
+\partial r}=0\text{ continuity}  \label{incompressible}
+\end{equation}
+
+\[
+b=b(\theta ,S,r)\text{ equation of state} 
+\]
+
+\[
+\frac{D\theta }{Dt}=\mathcal{F}_{\theta }\text{ }\mathcal{+D}_{\theta }\text{
+potential temperature} 
+\]
+
+\[
+\frac{DS}{Dt}=\mathcal{F}_{S}\text{ }\mathcal{+D}_{S}\text{ humidity/salinity%
+} 
+\]
+
+Here:
+
+\[
+r\text{ is the vertical coordinate} 
+\]
+
+\[
+\frac{D}{Dt}=\frac{\partial }{\partial t}+\vec{\mathbf{v}}\cdot \nabla \text{
+is the total derivative} 
+\]
+
+\[
+\mathbf{\nabla }=\mathbf{\nabla }_{h}+\widehat{k}\frac{\partial }{\partial r}%
+\text{ is the `grad' operator} 
+\]
+with $\mathbf{\nabla }_{h}$ operating in the horizontal and $\widehat{k}%
+\frac{\partial }{\partial r}$ operating in the vertical, where $\widehat{k}$
+is a unit vector in the vertical
+
+\[
+t\text{ is time} 
+\]
+
+\[
+\vec{\mathbf{v}}=(u,v,\dot{r})=(\vec{\mathbf{v}}_{h},\dot{r})\text{ is the
+velocity} 
+\]
+
+\[
+\phi \text{ is the `pressure'/`geopotential'} 
+\]
+
+\[
+\vec{\Omega}\text{ is the Earth's rotation} 
+\]
+
+\[
+b\text{ is the `buoyancy'} 
+\]
+
+\[
+\theta \text{ is potential temperature} 
+\]
+
+\[
+S\text{ is specific humidity in the atmosphere; salinity in the ocean} 
+\]
+
+\[
+\mathcal{F}_{\vec{\mathbf{v}}}\text{ and }\mathcal{D}_{\vec{\mathbf{v}}}%
+\text{ are forcing and dissipation of }\vec{\mathbf{v}} 
+\]
+
+\[
+\mathcal{F}_{\theta }\mathcal{\ }\text{and }\mathcal{D}_{\theta }\text{ are
+forcing and dissipation of }\theta 
+\]
+
+\[
+\mathcal{F}_{S}\mathcal{\ }\text{and }\mathcal{D}_{S}\text{ are forcing and
+dissipation of }S 
+\]
+
+The $\mathcal{F}^{\prime }s$ and $\mathcal{D}^{\prime }s$ are provided by
+extensive `physics' packages for atmosphere and ocean described in section
+?.?.
+
+\subsection{Kinematic Boundary conditions}
+
+\subsubsection{vertical}
+
+at fixed and moving $r$ surfaces we set (see fig.4):
+
+\begin{eqnarray*}
+\dot{r} &=&0\text{ at }r=R_{fixed}(x,y):\text{(ocean bottom, top of the
+atmosphere)} \\
+\dot{r} &=&\frac{Dr}{Dt}\text{ at }r=R_{moving}\text{ (ocean surface, bottom
+of the atmosphere)}
+\end{eqnarray*}
+Here
+
+\[
+R_{moving}=R_{o}+\eta 
+\]
+where $R_{o}(x,y)$ is the `$r-$value' (height or pressure, depending on
+whether we are in the atmosphere or ocean) of the `moving surface' in the
+resting fluid and $\eta $ is the departure from $R_{o}(x,y)$ in the presence
+of motion.
+
+\subsubsection{horizontal}
+
+\[
+\vec{\mathbf{v}}\cdot \vec{\mathbf{n}}=0 
+\]
+where $\vec{\mathbf{n}}$ is the normal to a solid boundary.
+
+\subsection{Atmosphere}
+
+In the atmosphere, see fig. we interpret: 
+\begin{eqnarray}
+r &=&p\text{ is the pressure} \\
+\dot{r} &=&\frac{Dp}{Dt}=\omega \text{ is the vertical velocity in }p\text{
+coordinates} \\
+\phi  &=&g\,z\text{ is the geopotential height} \\
+b &=&\frac{\partial \Pi }{\partial p}\theta \text{ is the buoyancy} \\
+\theta  &=&T(\frac{p_{c}}{p})^{\kappa }\text{ is potential temperature} \\
+S &=&q\text{, the specific humidity}
+\end{eqnarray}
+where
+
+\[
+T\text{is absolute temperature}
+\]
+\[
+p\text{ is the pressure}
+\]
+\begin{eqnarray*}
+&&z\text{ is the height of the pressure surface} \\
+&&g\text{ is the acceleration due to gravity}
+\end{eqnarray*}
+
+In the above the ideal gas law, $p=\rho RT$, has been expressed in terms of
+the Exner function $\Pi (p)$ given by (see Appendix Atmosphere) 
+\[
+\Pi (p)=c_{p}(\frac{p}{p_{c}})^{\kappa } 
+\]
+where $p_{c}$ is a reference pressure and $\kappa =R/c_{p}$ with $R$ the gas
+constant and $c_{p}$ the specific heat of air at constant pressure.
+
+At the top of the atmosphere (which is `fixed' in our $r$ coordinate):
+
+\[
+R_{fixed}=p_{top}=0 
+\]
+In a resting atmosphere the elevation of the mountains at the bottom is
+given by 
+\[
+R_{moving}=R_{o}(x,y)=p_{o}(x,y) 
+\]
+i.e. the (hydrostatic) pressure at the top of the mountains in a resting
+atmosphere.
+
+The boundary conditions at top and bottom are given by:
+
+\begin{eqnarray*}
+&&\omega =0~\text{at }r=R_{fixed}\text{ (top of the atmosphere)} \\
+\omega &=&\frac{Dp_{s}}{Dt}\text{; at }r=R_{moving}\text{ (bottom of the
+atmosphere)}
+\end{eqnarray*}
+
+Then the (hydrostatic form of) eq(\ref{incompressible}) yields a consistent
+set of atmospheric equations which, for convenience, are written out in $p$
+coordinates in Appendix Atmosphere - see eqs(\ref{eq-p-hmom}) to (\ref
+{eq-p-heat}).
+
+\subsection{Ocean}
+
+In the ocean we interpret: 
+\begin{eqnarray}
+r &=&z\text{ is the height} \\
+\dot{r} &=&\frac{Dz}{Dt}=w\text{ is the vertical velocity} \\
+\phi &=&\frac{p}{\rho _{c}}\text{ is the pressure} \\
+b(\theta ,S,r) &=&\frac{g}{\rho _{c}}\left( \rho (\theta ,S,r)-\rho
+_{c}\right) \text{ is the buoyancy}
+\end{eqnarray}
+where $\rho _{c}$ is a fixed reference density of water and $g$ is the
+acceleration due to gravity.\noindent
+
+In the above
+
+At the bottom of the ocean: $R_{fixed}(x,y)=-H(x,y)$.
+
+The surface of the ocean is given by: $R_{moving}=\eta $
+
+The position of the resting free surface of the ocean is given by $%
+R_{o}=Z_{o}=0$.
+
+Boundary conditions are:
+
+\begin{eqnarray*}
+w &=&0~\text{at }r=R_{fixed}\text{ (ocean bottom)} \\
+w &=&\frac{D\eta }{Dt}\text{ at }r=R_{moving}=\eta \text{ (ocean surface)}
+\end{eqnarray*}
+where $\eta $ is the elevation of the free surface.
+
+Then eq(\ref{incompressible}) yields a consistent set of oceanic equations
+which, for convenience, are written out in $z$ coordinates in Appendix Ocean.
+
+\subsection{Hydrostatic, Quasi-hydrostatic, Quasi-nonhydrostatic and
+Non-hydrostatic forms}
+
+Let us separate $\phi $ in to surface, hydrostatic and non-hydrostatic terms:
+
+\begin{equation}
+\phi (x,y,r)=\phi _{s}(x,y)+\phi _{hyd}(x,y,r)+\phi _{nh}(x,y,r)
+\label{pressuresplit}
+\end{equation}
+and write eq(\ref{incompressible}a) in the form:
+
+\begin{equation}
+\frac{\partial \vec{\mathbf{v}_{h}}}{\partial t}+\mathbf{\nabla }_{h}\phi
+_{s}+\mathbf{\nabla }_{h}\phi _{hyd}+\epsilon _{nh}\mathbf{\nabla }_{h}\phi
+_{nh}=\vec{\mathbf{G}}_{\vec{v}_{h}}  \label{hor-mtm}
+\end{equation}
+
+\begin{equation}
+\frac{\partial \phi _{hyd}}{\partial r}=-b  \label{hydro}
+\end{equation}
+
+\begin{equation}
+\epsilon _{nh}\frac{\partial \dot{r}}{\partial t}+\frac{\partial \phi _{nh}}{%
+\partial r}=G_{\dot{r}}  \label{vertmtm}
+\end{equation}
+Here $\epsilon _{nh}$ is a non-hydrostatic parameter.
+
+The $\left( \vec{\mathbf{G}}_{\vec{v}},G_{\dot{r}}\right) $ in eq(\ref
+{hor-mtm}) and (\ref{vertmtm}) represent advective, metric and Coriolis
+terms in the momentum equations. In spherical coordinates they take the form%
+\footnote{%
+In the hydrostatic primitive equations (\textbf{HPE}) all underlined terms
+in (\ref{Gu}), (\ref{Gv}) and (\ref{Gw}) are omitted; the singly-underlined
+terms are included in the quasi-hydrostatic model (\textbf{QH}). The fully
+non-hydrostatic model (\textbf{NH}) includes all terms.}:
+
+\begin{equation}
+\left. 
+\begin{tabular}{l}
+$G_{u}=-\vec{\mathbf{v}}.\nabla u$ \\ 
+$-\left\{ \underline{\frac{u\dot{r}}{{r}}}-\frac{uv\tan lat}{{r}}%
+\right\} $ \\ 
+$-\left\{ -2\Omega v\sin lat+\underline{\underline{2\Omega \dot{r}\cos lat}}%
+\right\} $ \\ 
+$+\mathcal{F}_{u}\mathcal{+D}_{u}$%
+\end{tabular}
+\right\} \left\{ 
+\begin{tabular}{l}
+\textit{advection} \\ 
+\textit{metric} \\ 
+\textit{Coriolis} \\ 
+\textit{\ Forcing/Dissipation}
+\end{tabular}
+\right. \qquad  \label{Gu}
+\end{equation}
+
+\begin{equation}
+\left. 
+\begin{tabular}{l}
+$G_{v}=-\vec{\mathbf{v}}.\nabla v$ \\ 
+$-\left\{ \underline{\frac{v\dot{r}}{{r}}}-\frac{u^{2}\tan lat}{{r}%
+}\right\} $ \\ 
+$-\left\{ -2\Omega u\sin lat\right\} $ \\ 
+$+\mathcal{F}_{v}\mathcal{+D}_{v}$%
+\end{tabular}
+\right\} \left\{ 
+\begin{tabular}{l}
+\textit{advection} \\ 
+\textit{metric} \\ 
+\textit{Coriolis} \\ 
+\textit{\ Forcing/Dissipation}
+\end{tabular}
+\right. \qquad  \label{Gv}
+\end{equation}
+\qquad \qquad \qquad \qquad \qquad
+
+\begin{equation}
+\left. 
+\begin{tabular}{l}
+$G_{\dot{r}}=-\vec{\mathbf{v}}.\nabla \dot{r}$ \\ 
+$+\left\{ \frac{u^{_{^{2}}}+v^{2}}{{{r}}}%
+\right\} $ \\ 
+${+2\Omega u\cos lat}$ \\ 
+$\mathcal{F}_{\dot{r}}\mathcal{+D}_{\dot{r}}$%
+\end{tabular}
+\right\} \left\{ 
+\begin{tabular}{l}
+\textit{advection} \\ 
+\textit{metric} \\ 
+\textit{Coriolis} \\ 
+\textit{\ Forcing/Dissipation}
+\end{tabular}
+\right.  \label{Gw}
+\end{equation}
+\qquad \qquad \qquad \qquad \qquad
+
+In the above `${r}$' is the distance from the center of the earth and `$%
+lat$' is latitude.
+
+Grad and div operators in spherical coordinates are defined in appendix
+OPERATORS.%
+\marginpar{
+Fig.6 Spherical polar coordinate system.}
+
+\subsubsection{Shallow atmosphere approximation}
+
+............................
+
+\subsubsection{Hydrostatic and quasi-hydrostatic forms}
+
+These are discussed at length in Marshall et al (1997a).
+
+In the `hydrostatic primitive equations' (\textbf{HPE)} all the underlined
+terms in Eqs. (\ref{Gu} $\rightarrow $\ \ref{Gw}) are neglected and `${r%
+}$' is replaced by `$a$', the mean radius of the earth. Once the pressure is
+found at one level - e.g. by inverting a 2-d Elliptic equation for $\phi
+_{s} $ at $r=R_{moving}$ - the pressure can be computed at all other levels
+by integration of the hydrostatic relation, eq(\ref{hydro}).
+
+In the `quasi-hydrostatic' equations (\textbf{QH)} strict balance between
+gravity and vertical pressure gradients is not imposed. The $2\Omega u\cos
+\phi $ Coriolis term are not neglected and are balanced by a non-hydrostatic
+contribution to the pressure field: only the terms underlined twice in Eqs. (%
+\ref{Gu} $\rightarrow $\ \ref{Gw}) are set to zero and, simultaneously, the
+shallow atmosphere approximation is relaxed. In \textbf{QH}\ \textit{all}
+the metric terms are retained and the full variation of the radial position
+of a particle monitored. The \textbf{QH}\ vertical momentum equation (\ref
+{vertmtm}) becomes:
+
+\[
+\frac{\partial \phi _{nh}}{\partial r}=2\Omega u\cos lat
+\]
+making a small correction to the hydrostatic pressure.
+
+\textbf{QH} has good energetic credentials - they are the same as for 
+\textbf{HPE}. Importantly, however, it has the same angular momentum
+principle as the full non-hydrostatic model (\textbf{NH)} - see Marshall
+et.al., 1997a. As in \textbf{HPE }only a 2-d elliptic problem need be solved.
+
+\subsubsection{Non-hydrostatic and quasi-nonhydrostatic forms}
+
+The MIT model presently supports a full non-hydrostatic ocean isomorph, but
+only a quasi-non-hydrostatic atmospheric isomorph.
+
+\paragraph{Non-hydrostatic Ocean}
+
+In the non-hydrostatic ocean model all terms in equations (\ref{Gu} $%
+\rightarrow $\ \ref{Gw}) are retained. A three dimensional elliptic equation
+must be solved subject to Neumann boundary conditions (see below). It is
+important to note that use of the full \textbf{NH} does not admit any new
+`fast' waves in to the system - the incompressible condition (\ref
+{incompressible}) has already filtered out acoustic modes. It does, however,
+ensure that the gravity waves are treated accurately with an exact
+dispersion relation. The \textbf{NH} set has a complete angular momentum
+principle and consistent energetics - see White and Bromley, 1995; Marshall
+et.al.\ 1997a.
+
+\paragraph{Quasi-nonhydrostatic Atmosphere}
+
+In the non-hydrostatic version of our atmospheric model we approximate $\dot{%
+r}$ in the vertical momentum eqs(\ref{vertmtm}) and (\ref{Gw}) (but only
+here) by:
+
+\begin{equation}
+\dot{r}=\frac{Dp}{Dt}=\frac{Dp_{hyd}}{Dt}  \label{quasinonhydro}
+\end{equation}
+where $p_{hy}$ is the hydrostatic pressure.
+
+........................................
+
+\subsubsection{Summary of equation sets supported by model}
+
+The key equation sets and isomorphisms are summarised in fig.4.
+
+\paragraph{Atmosphere}
+
+\subparagraph{Hydrostatic and quasi-hydrostatic}
+
+Hydrostatic, and quasi-hydrostatic forms of the compressible non-Boussinesq
+equations in $p-$coordinates are supported\ref{eq-p} - see appendix
+Atmosphere, where they are written out in $p-$coordinates.
+
+\subparagraph{Quasi-nonhydrostatic}
+
+A quasi-nonhydrostatic form is also supported - see appendix Ocean.
+
+\paragraph{Ocean}
+
+\subparagraph{Hydrostatic and quasi-hydrostatic}
+
+Hydrostatic, and quasi-hydrostatic forms of the incompressible Boussinesq
+equations in $z-$coordinates are supported
+
+\subparagraph{Non-hydrostatic }
+
+Non-hydrostatic forms of the incompressible Boussinesq equations in $z-$%
+coordinates are supported.
+
+\subsection{Solution strategy}
+
+The method of solution employed in the \textbf{HPE}, \textbf{QH} and \textbf{%
+NH} models are summarized in Fig.7.%
+\marginpar{
+Fig.7 Solution strategy}
+
+Overview paragraph......
+
+There is no penalty in implementing \textbf{QH} over \textbf{HPE} except, of
+course, some complication that goes with the inclusion of $\cos \phi \ $%
+Coriolis terms and the relaxation of the shallow atmosphere approximation.
+But this leads to negligible increase in computation. In \textbf{NH}, in
+contrast, one additional elliptic equation - a three-dimensional one - must
+be inverted for $p_{nh}$. However the `overhead' of the \textbf{NH} model is
+essentially negligible in the hydrostatic limit (see detailed discussion in
+Marshall et al, 1997) resulting in a non-hydrostatic algorithm that, in the
+hydrostatic limit, is as computationally economic as the \textbf{HPEs}.
+
+\subsection{Finding the pressure field}
+
+Unlike the prognostic variables $u$, $v$, $w$, $\theta $ and $S$, the
+pressure field must be obtained diagnostically. We proceed, as before, by
+dividing the total (pressure/geo) potential in to three parts, a surface
+part, $\phi _{s}(x,y)$, a hydrostatic part $\phi _{hyd}(x,y,r)$ and a
+non-hydrostatic part $\phi _{nh}(x,y,r)$, as in (\ref{pressuresplit}), and
+writing the momentum equation in the form 
+\begin{equation}
+\frac{\partial }{\partial t}\vec{\mathbf{v}_{h}}+\mathbf{\nabla }_{h}\phi
+_{s}+\mathbf{\nabla }_{h}\phi _{hyd}+\epsilon _{nh}\mathbf{\nabla }\phi
+_{nh}=\vec{\mathbf{G}}_{\vec{v}}  \label{mtm-split}
+\end{equation}
+as in (\ref{hor-mtm}).
+
+\subsubsection{Hydrostatic pressure}
+
+Hydrostatic pressure is obtained by integrating (\ref{hydro}) vertically
+from $r=R_{o}$ where $\phi _{hyd}(r=R_{o})=0$, to yield:
+
+\[
+\int_{r}^{R_{o}}\frac{\partial \phi _{hyd}}{\partial r}dr=\left[ \phi
+_{hyd}\right] _{r}^{R_{o}}=\int_{r}^{R_{o}}-bdr 
+\]
+and so
+
+\[
+\phi _{hyd}(x,y,r)=\int_{r}^{R_{o}}bdr 
+\]
+
+\subsubsection{Surface pressure}
+
+The surface pressure equation can be obtained by integrating continuity, (%
+\ref{incompressible})c, vertically from $r=R_{fixed}$ to $r=R_{moving}$
+
+\[
+\int_{R_{fixed}}^{R_{moving}}\left( \mathbf{\nabla }_{h}\cdot \vec{\mathbf{v}%
+}_{h}+\partial _{r}\dot{r}\right) dr=0 
+\]
+
+Thus:
+
+\[
+\frac{\partial \eta }{\partial t}+\vec{\mathbf{v}}.\nabla \eta
++\int_{R_{fixed}}^{R_{moving}}\mathbf{\nabla }_{h}\cdot \vec{\mathbf{v}}%
+_{h}dr=0 
+\]
+where $\eta =R_{moving}-R_{o}$ is the free-surface $r$-anomaly in units of $%
+r $. The above can be rearranged to yield, using Leibnitz's theorem:
+
+\begin{equation}
+\frac{\partial \eta }{\partial t}+\mathbf{\nabla }_{h}\cdot
+\int_{R_{fixed}}^{R_{moving}}\vec{\mathbf{v}}_{h}dr=0
+\label{integralcontinuity}
+\end{equation}
+
+Whether $\phi $ is pressure (ocean model, $p/\rho _{c}$) or geopotential
+(atmospheric model), in (\ref{mtm-split}), the horizontal gradient term can
+be written 
+\begin{equation}
+\mathbf{\nabla }_{h}\phi _{s}=\mathbf{\nabla }_{h}b\eta   \label{link}
+\end{equation}
+where $b$ is the buoyancy.
+
+In the hydrostatic limit ($\epsilon _{nh}=0$), Eqs(\ref{mtm-split}), (\ref
+{integralcontinuity}) and (\ref{link}) can be solved by inverting a 2-d
+elliptic equation for $\phi _{s}$ as described in section ?.?. Both `free
+surface' and `rigid lid' approaches are available.
+
+\subsubsection{Non-hydrostatic pressure}
+
+Taking the horizontal divergence of (\ref{hor-mtm}) and adding $\frac{%
+\partial }{\partial r}$ of (\ref{vertmtm}), invoking the continuity equation
+(\ref{incompressible}), we deduce that:
+
+\begin{equation}
+\nabla _{3}^{2}\phi _{nh}=\nabla .\vec{\mathbf{G}}_{\vec{v}}-\left( \mathbf{%
+\nabla }_{h}^{2}\phi _{s}+\mathbf{\nabla }^{2}\phi _{hyd}\right) =\nabla .%
+\vec{\mathbf{F}}  \label{3dinvert}
+\end{equation}
+
+For a given rhs this 3-d elliptic equation must be inverted for $\phi _{nh}$
+subject to appropriate choice of boundary conditions. This method is usually
+called \textit{The Pressure Method} [Harlow and Welch, 1965; Williams, 1969;
+Potter, 1976]. In the hydrostatic primitive equations case (\textbf{HPE}),
+the 3-d problem does not need to be solved.
+
+\paragraph{Boundary Conditions}
+
+We apply the condition of no normal flow through all solid boundaries - the
+coasts (in the ocean) and the bottom:
+
+\begin{equation}
+\vec{\mathbf{v}}.\widehat{n}=0  \label{nonormalflow}
+\end{equation}
+where $\widehat{n}$ is a vector of unit length normal to the boundary. The
+kinematic condition (\ref{nonormalflow}) is also applied to the vertical
+velocity at $r=R_{moving}$. No-slip $\left( v_{T}=0\right) \ $or slip $%
+\left( \partial v_{T}/\partial n=0\right) \ $conditions are employed on the
+tangential component of velocity, $v_{T}$, at all solid boundaries,
+depending on the form chosen for the dissipative terms in the momentum
+equations - see below.
+
+Eq.(\ref{nonormalflow}) implies, making use of (\ref{mtm-split}), that:
+
+\begin{equation}
+\widehat{n}.\nabla \phi _{nh}=\widehat{n}.\vec{\mathbf{F}}
+\label{inhomneumann}
+\end{equation}
+where
+
+\[
+\vec{\mathbf{F}}=\vec{\mathbf{G}}_{\vec{v}}-\left( \mathbf{\nabla }_{h}\phi
+_{s}+\mathbf{\nabla }\phi _{hyd}\right) 
+\]
+presenting inhomogeneous Neumann boundary conditions to the Elliptic problem
+(\ref{3dinvert}). As shown, for example, by Williams (1969), one can exploit
+classical 3D potential theory and, by introducing an appropriately chosen $%
+\delta $-function sheet of `source-charge', replace the inhomogenous
+boundary condition on pressure by a homogeneous one. The source term $rhs$
+in (\ref{3dinvert}) is the divergence of the vector $\vec{\mathbf{F}}.$ By
+simultaneously setting $
+\begin{array}{l}
+\widehat{n}.\vec{\mathbf{F}}
+\end{array}
+=0$\ and $\widehat{n}.\nabla \phi _{nh}=0\ $on the boundary the following
+self-consistent but simpler homogenised Elliptic problem is obtained:
+
+\[
+\nabla ^{2}\phi _{nh}=\nabla .\widetilde{\vec{\mathbf{F}}}\qquad 
+\]
+where $\widetilde{\vec{\mathbf{F}}}$ is a modified $\vec{\mathbf{F}}$ such
+that $\widetilde{\vec{\mathbf{F}}}.\widehat{n}=0$. As is implied by (\ref
+{inhomneumann}) the modified boundary condition becomes:
+
+\begin{equation}
+\widehat{n}.\nabla \phi _{nh}=0  \label{homneuman}
+\end{equation}
+
+If the flow is `close' to hydrostatic balance then the 3-d inversion
+converges rapidly because $\phi _{nh}\ $is then only a small correction to
+the hydrostatic pressure field (see the discussion in Marshall et al, a,b).
+
+The solution $\phi _{nh}\ $to (\ref{3dinvert}) and (\ref{homneuman}) does
+not vanish at $r=R_{moving}$, and so refines the pressure there.
+
+\subsection{Forcing/dissipation}
+
+\subsubsection{Forcing}
+
+The forcing terms $\mathcal{F}$ on the rhs of the equations are provided by
+`physics packages' described in detail in section ?.?.
+
+\subsubsection{Dissipation}
+
+\paragraph{Momentum}
+
+Many forms of momentum dissipation are available in the model. Laplacian and
+biharmonic frictions are commonly used:
+
+\[
+D_{V}=A_{h}\nabla _{h}^{2}v+A_{v}\frac{\partial ^{2}v}{\partial z^{2}}%
++A_{4}\nabla _{h}^{4}v
+\]
+where $A_{h}$ and $A_{v}\ $are (constant) horizontal and vertical viscosity
+coefficients and $A_{4}\ $is the horizontal coefficient for biharmonic
+friction. These coefficients are the same for all velocity components.
+
+\paragraph{Tracers}
+
+The mixing terms for the temperature and salinity equations have a similar
+form to that of momentum except that the diffusion tensor can be
+non-diagonal and have varying coefficients. $\qquad $%
+\[
+D_{T,S}=\nabla .[\underline{\underline{K}}\nabla (T,S)]+K_{4}\nabla
+_{h}^{4}(T,S)
+\]
+where $\underline{\underline{K}}\ $is the diffusion tensor and the $K_{4}\ $%
+horizontal coefficient for biharmonic diffusion. In the simplest case where
+the subgrid-scale fluxes of heat and salt are parameterized with constant
+horizontal and vertical diffusion coefficients, $\underline{\underline{K}}$,
+reduces to a diagonal matrix with constant coefficients:
+
+\[
+\qquad \qquad \qquad \qquad K=\left( 
+\begin{array}{ccc}
+K_{h} & 0 & 0 \\ 
+0 & K_{h} & 0 \\ 
+0 & 0 & K_{v}
+\end{array}
+\right) \qquad \qquad \qquad 
+\]
+where $K_{h}\ $and $K_{v}\ $are the horizontal and vertical diffusion
+coefficients. These coefficients are the same for all tracers (temperature,
+salinity ... ).
+
+\subsection{Vector invariant form}
+
+For some purposes it is advantageous to write momentum advection in eq(\ref
+{hor-mtm}) and (\ref{vertmtm}) in the (so-called) `vector invariant' form:
+
+\begin{equation}
+\frac{D\vec{\mathbf{v}}}{Dt}=\frac{\partial \vec{\mathbf{v}}}{\partial t}%
++\left( \nabla \times \vec{\mathbf{v}}\right) \times \vec{\mathbf{v}}+\nabla
+\left[ \frac{1}{2}(\vec{\mathbf{v}}\cdot \vec{\mathbf{v}})\right] 
+\label{vecinvariant}
+\end{equation}
+This permits alternative numerical treatments of the non-linear terms based
+on their representation as a vorticity flux. Because gradients of coordinate
+vectors no longer appear on the rhs of (\ref{vecinvariant}) (???), explicit
+representation of the metric terms in (\ref{Gu}), (\ref{Gv}) and (\ref{Gw}),
+can be avoided: information about the geometry is contained in the areas and
+lengths of the volumes used to discretize the model.
+
+\subsection{Adjoint}
+
+......

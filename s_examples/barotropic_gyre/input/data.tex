@@ -1,0 +1,56 @@
+% $Header: /u/gcmpack/manual/s_examples/barotropic_gyre/input/data.tex,v 1.1.1.1 2001/08/08 16:15:59 adcroft Exp $
+% $Name:  $
+
+\begin{verbatim}
+     1	# Model parameters
+     2	# Continuous equation parameters
+     3	 &PARM01
+     4	 tRef=20.,
+     5	 sRef=10.,
+     6	 viscAz=1.E-2,
+     7	 viscAh=4.E2,
+     8	 diffKhT=4.E2,
+     9	 diffKzT=1.E-2,
+    10	 beta=1.E-11,
+    11	 tAlpha=2.E-4,
+    12	 sBeta =0.,
+    13	 gravity=9.81,
+    14	 gBaro=9.81,
+    15	 rigidLid=.FALSE.,
+    16	 implicitFreeSurface=.TRUE.,
+    17	 eosType='LINEAR',
+    18	 readBinaryPrec=64,
+    19	 &
+    20	# Elliptic solver parameters
+    21	 &PARM02
+    22	 cg2dMaxIters=1000,
+    23	 cg2dTargetResidual=1.E-7,
+    24	 &
+    25	# Time stepping parameters
+    26	 &PARM03
+    27	 startTime=0,
+    28	#endTime=311040000,
+    29	 endTime=12000.0,
+    30	 deltaTmom=1200.0,
+    31	 deltaTtracer=1200.0,
+    32	 abEps=0.1,
+    33	 pChkptFreq=2592000.0,
+    34	 chkptFreq=120000.0,
+    35	 dumpFreq=2592000.0,
+    36	 &
+    37	# Gridding parameters
+    38	 &PARM04
+    39	 usingCartesianGrid=.TRUE.,
+    40	 usingSphericalPolarGrid=.FALSE.,
+    41	 delX=60*20E3,
+    42	 delY=60*20E3,
+    43	 delZ=5000.,
+    44	 &
+    45	 &PARM05
+    46	 bathyFile='topog.box',
+    47	 hydrogThetaFile=,
+    48	 hydrogSaltFile=,
+    49	 zonalWindFile='windx.sin_y',
+    50	 meridWindFile=,
+    51	 &
+\end{verbatim}

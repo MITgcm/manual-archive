@@ -1,0 +1,46 @@
+% $Header: /u/gcmpack/manual/s_overview/Attic/appendix_operators.tex,v 1.1.1.1 2001/08/08 16:16:19 adcroft Exp $
+% $Name:  $
+
+\section{Appendix:OPERATORS}
+
+\subsection{Coordinate systems}
+
+\subsubsection{Spherical coordinates}
+
+In spherical coordinates, the velocity components in the zonal, meridional
+and vertical direction respectively, are given by (see Fig.2) :
+
+\[
+u=r\cos \phi \frac{D\lambda }{Dt} 
+\]
+
+\[
+v=r\frac{D\phi }{Dt}\qquad 
+\]
+$\qquad \qquad \qquad \qquad $
+
+\[
+\dot{r}=\frac{Dr}{Dt} 
+\]
+
+Here $\phi $ is the latitude, $\lambda $ the longitude, $r$ the radial
+distance of the particle from the center of the earth, $\Omega $ is the
+angular speed of rotation of the Earth and $D/Dt$ is the total derivative.
+
+Fig.2. The spherical polar velocities $(u,v,\dot{r})$, the latitude is $\phi 
+$ and the longitude $\lambda $.
+
+The `grad' ($\nabla $) and `div' ($\nabla $.) operators are defined by, in
+spherical coordinates:
+
+\[
+\nabla \equiv \left( \frac{1}{r\cos \phi }\frac{\partial }{\partial \lambda }%
+,\frac{1}{r}\frac{\partial }{\partial \phi },\frac{\partial }{\partial r}%
+\right) 
+\]
+
+\[
+\nabla .v\equiv \frac{1}{r\cos \phi }\left\{ \frac{\partial u}{\partial
+\lambda }+\frac{\partial }{\partial \phi }\left( v\cos \phi \right) \right\}
++\frac{1}{r^{2}}\frac{\partial \left( r^{2}\dot{r}\right) }{\partial r} 
+\]

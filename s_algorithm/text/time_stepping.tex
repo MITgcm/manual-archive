@@ -1,0 +1,487 @@
+% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.1.1.1 2001/08/08 16:15:16 adcroft Exp $
+% $Name:  $
+
+The convention used in this section is as follows:
+Time is "discretize" using a time step $\Delta t$   
+and $\Phi^n$ refers to the variable $\Phi$ 
+at time $t = n \Delta t$ . We used the notation $\Phi^{(n)}$
+when time interpolation is required to estimate the value of $\phi$
+at the time $n \Delta t$.
+
+\section{Time Integration}
+
+The discretization in time of the model equations (cf section I )
+does not depend of the discretization in space of each
+term, so that this section can be read independently.
+Also for this purpose, we will refers to the continuous 
+space-derivative form of model equations, and focus on 
+the time discretization.
+ 
+The continuous form of the model equations is:
+
+\begin{eqnarray}
+\partial_t \theta & = & G_\theta
+\\
+\partial_t S & = & G_s
+\\
+b' & = & b'(\theta,S,r)
+\\
+\partial_r \phi'_{hyd} & = & -b'
+\label{eq-r-split-hyd}
+\\
+\partial_t \vec{\bf v}
++ {\bf \nabla}_r B_o \eta
++ \epsilon_{nh} {\bf \nabla}_r \phi'_{nh}
+& = & \vec{\bf G}_{\vec{\bf v}} 
+- {\bf \nabla}_r \phi'_{hyd}
+\label{eq-r-split-hmom}
+\\
+\epsilon_{nh} \frac {\partial{\dot{r}}}{\partial{t}}
++ \epsilon_{nh} \partial_r \phi'_{nh}
+& = & \epsilon_{nh} G_{\dot{r}} 
+\label{eq-r-split-rdot}
+\\
+{\bf \nabla}_r \cdot \vec{\bf v} + \partial_r \dot{r}
+& = & 0
+\label{eq-r-cont}
+\end{eqnarray}
+where
+\begin{eqnarray*}
+G_\theta & = &
+- \vec{\bf v} \cdot {\bf \nabla}_r \theta + {\cal Q}_\theta
+\\
+G_S & = &
+- \vec{\bf v} \cdot {\bf \nabla}_r S + {\cal Q}_S
+\\
+\vec{\bf G}_{\vec{\bf v}}
+& = &
+- \vec{\bf v} \cdot {\bf \nabla}_r \vec{\bf v}
+- f \hat{\bf k} \wedge \vec{\bf v}
++ \vec{\cal F}_{\vec{\bf v}}
+\\
+G_{\dot{r}}
+& = &
+- \vec{\bf v} \cdot {\bf \nabla}_r \dot{r}
++ {\cal F}_{\dot{r}}
+\end{eqnarray*}
+The exact form of all the "{\it G}"s terms is described in the next
+section (). Here its sufficient to mention that they contains
+all the RHS terms except the pressure / geo- potential terms.
+
+The switch $\epsilon_{nh}$ allows to activate the non hydrostatic
+mode ($\epsilon_{nh}=1$) for the ocean model. Otherwise, 
+in the hydrostatic limit $\epsilon_{nh} = 0$ and the 3rd equation vanishes.
+
+The equation for $\eta$ is obtained by integrating the 
+continuity equation over the entire depth of the fluid, 
+from $R_{min}(x,y)$ up to $R_o(x,y)$ 
+(Linear free surface):
+\begin{displaymath}
+\epsilon_{fs} \partial_t \eta =
+\left. \dot{r} \right|_{r=r_{surf}} + \epsilon_{fw} (P-E) =
+- {\bf \nabla}_r \cdot \int_{R_{min}}^{R_o} \vec{\bf v} dr
++ \epsilon_{fw} (P-E)
+\end{displaymath}
+
+Where $\epsilon_{fs}$,$\epsilon_{fw}$ are two flags to 
+distinguish between a free-surface equation ($\epsilon_{fs}=1$) 
+or the rigid-lid approximation ($\epsilon_{fs}=0$);  
+and to distinguish when exchange of Fresh-Water is included 
+at the ocean surface (natural BC) ($\epsilon_{fw} = 1$) 
+or not ($\epsilon_{fw} = 0$).
+
+The hydrostatic potential is found by
+integrating \ref{eq-r-split-hyd} with the boundary condition that
+$\phi'_{hyd}(r=R_o) = 0$:
+\begin{eqnarray*}
+& &
+\int_{r'}^{R_o} \partial_r \phi'_{hyd} dr =
+\left[ \phi'_{hyd} \right]_{r'}^{R_o} =
+\int_{r'}^{R_o} - b' dr
+\\
+\Rightarrow & &
+\phi'_{hyd}(x,y,r') = \int_{r'}^{R_o} b' dr
+\end{eqnarray*}
+
+\subsection{standard synchronous time stepping}
+
+In the standard formulation, the surface pressure is 
+evaluated at time step n+1 (implicit method).
+The above set of equations is then discretized in time 
+as follows:
+\begin{eqnarray}
+\left[ 1 - \partial_r \kappa_v^\theta \partial_r \right]
+\theta^{n+1} & = & \theta^*
+\\
+\left[ 1 - \partial_r \kappa_v^S \partial_r \right]
+S^{n+1} & = & S^*
+\\
+%{b'}^{n} & = & b'(\theta^{n},S^{n},r)
+%\partial_r {\phi'_{hyd}}^{n} & = & {-b'}^{n}
+%\\
+{\phi'_{hyd}}^{n} & = & \int_{r'}^{R_o} b'(\theta^{n},S^{n},r) dr
+\label{eq-rtd-hyd}
+\\
+\vec{\bf v} ^{n+1}
++ \Delta t {\bf \nabla}_r B_o {\eta}^{n+1}
++ \epsilon_{nh} \Delta t {\bf \nabla}_r {\phi'_{nh}}^{n+1}
+- \partial_r A_v \partial_r \vec{\bf v}^{n+1}
+& = &
+\vec{\bf v}^*
+\label{eq-rtd-hmom}
+\\
+\epsilon_{fs} {\eta}^{n+1} + \Delta t
+{\bf \nabla}_r \cdot \int_{R_{min}}^{R_o} \vec{\bf v}^{n+1} dr
+& = & 
+    \epsilon_{fs} {\eta}^{n} + \epsilon_{fw} \Delta_t (P-E)^{n} 
+\nonumber
+\\
+% = \epsilon_{fs} {\eta}^{n} & + & \epsilon_{fw} \Delta_t (P-E)^{n} 
+\label{eq-rtd-eta}
+\\
+\epsilon_{nh} \left( \dot{r} ^{n+1}
++ \Delta t \partial_r {\phi'_{nh}} ^{n+1}
+\right)
+& = & \epsilon_{nh} \dot{r}^*
+\label{eq-rtd-rdot}
+\\
+{\bf \nabla}_r \cdot \vec{\bf v}^{n+1} + \partial_r \dot{r}^{n+1}
+& = & 0
+\label{eq-rtd-cont}
+\end{eqnarray}
+where
+\begin{eqnarray}
+\theta^* & = &
+\theta ^{n} + \Delta t G_{\theta} ^{(n+1/2)}
+\\
+S^* & = &
+S ^{n} + \Delta t G_{S} ^{(n+1/2)}
+\\
+\vec{\bf v}^* & = &
+\vec{\bf v}^{n} + \Delta t \vec{\bf G}_{\vec{\bf v}} ^{(n+1/2)}
++ \Delta t  {\bf \nabla}_r {\phi'_{hyd}}^{(n+1/2)}
+\\
+\dot{r}^* & = &
+\dot{r} ^{n} + \Delta t G_{\dot{r}} ^{(n+1/2)}
+\end{eqnarray}
+
+Note that implicit vertical terms (viscosity and diffusivity) are 
+not considered as part of the "{\it G}" terms, but are 
+written separately here.
+
+To ensure a second order time discretization for both 
+momentum and tracer,
+The "G" terms are "extrapolated" forward in time
+(Adams Bashforth time stepping)
+from the values computed at time step $n$ and $n-1$
+to the time $n+1/2$:
+$$G^{(n+1/2)} = G^n + (1/2+\epsilon_{AB}) (G^n - G^{n-1})$$
+A small number for the parameter $\epsilon_{AB}$ is generally used 
+to stabilize this time stepping.
+
+In the standard non-stagger formulation, 
+the Adams-Bashforth time stepping is also applied to the 
+hydrostatic (pressure / geo-) potential term $\nabla_h \Phi'_{hyd}$. 
+Note that presently, this term is in fact incorporated to the 
+$\vec{\bf G}_{\vec{\bf v}}$ arrays ({\it gU,gV}).
+
+\subsection{general method}
+ 
+The general algorithm consist in  a "predictor step" that computes
+the forward tendencies ("G" terms") and all 
+the "first guess" values star notation): 
+$\vec{\bf v}^*, \theta^*, S^*$ (and $\dot{r}^*$
+in non-hydrostatic mode). This is done in the routine {\it DYNAMICS}.
+
+Then the implicit terms that appear here on the left hand side (LHS),
+are solved as follows:
+Since implicit vertical diffusion and viscosity terms 
+are independent from the barotropic flow adjustment,
+they are computed first, solving a 3 diagonal Nr x Nr linear system, 
+and incorporated at the end of the {\it DYNAMICS} routines.
+Then the surface pressure and non hydrostatic pressure
+are evaluated ({\it SOLVE\_FOR\_PRESSURE}); 
+
+Finally, within a "corrector step', 
+(routine {\it THE\_CORRECTION\_STEP})
+the new values of $u,v,w,\theta,S$ 
+are derived according to the above equations
+(see details in II.1.3). 
+
+At this point, the regular time step is over, but  
+the correction step contains also other optional
+adjustments such as convective adjustment algorithm, or filters 
+(zonal FFT filter, shapiro filter)
+that applied on both momentum and tracer fields.
+just before setting the $n+1$ new time step value.
+
+Since the pressure solver precision is of the order of
+the "target residual" that could be lower than the 
+the computer truncation error, and also because some filters 
+might alter the divergence part of the flow field,
+a final evaluation of the surface r anomaly $\eta^{n+1}$
+is performed, according to \ref{eq-rtd-eta} ({\it CALC\_EXACT\_ETA}).
+This ensures a perfect volume conservation.
+Note that there is no need for an equivalent Non-hydrostatic
+"exact conservation" step, since W is already computed after 
+the filters applied.
+
+optionnal forcing terms (package):\\
+Regarding optional forcing terms (usually part of a "package"), 
+that a account for a specific source or sink term (e.g.: condensation
+as a sink of water vapor Q), they are generally incorporated 
+in the main algorithm as follows;
+At the the beginning of the time step,
+the additionnal tendencies are computed
+as function of the present state (time step $n$) and external forcing ;
+Then within the main part of model,
+only those new tendencies are added to the model variables.
+
+[mode details needed]
+The atmospheric physics follows this general scheme.
+
+\subsection{stagger baroclinic time stepping}
+
+An alternative is to evaluate $\phi'_{hyd}$ with the 
+new tracer fields, and step forward the momentum after.
+This option is known as stagger baroclinic time stepping, 
+since tracer and momentum are step forward in time one after the other.
+It can be activated turning on a running flag parameter 
+{\it staggerTimeStep} in file "{\it data}"). 
+
+The main advantage of this time stepping compared to a synchronous one,
+is a better stability, specially regarding internal gravity waves,
+and a very natural implementation of a 2nd order in time 
+hydrostatic pressure / geo- potential term.
+In the other hand, a synchronous time step might be  better
+for convection problems; Its also make simpler time dependent forcing
+and diagnostic implementation ; and allows a more efficient threading.
+
+Although the stagger time step does not affect deeply the 
+structure of the code --- a switch allows to evaluate the 
+hydrostatic pressure / geo- potential from new $\theta,S$ 
+instead of the Adams-Bashforth estimation ---
+this affect the way the time discretization is presented :
+
+\begin{eqnarray*}
+\left[ 1 - \partial_r \kappa_v^\theta \partial_r \right]
+\theta^{n+1/2} & = & \theta^*
+\\
+\left[ 1 - \partial_r \kappa_v^S \partial_r \right]
+S^{n+1/2} & = & S^*
+\end{eqnarray*}
+with
+\begin{eqnarray*}
+\theta^* & = &
+\theta ^{(n-1/2)} + \Delta t G_{\theta} ^{(n)}
+\\
+S^* & = &
+S ^{(n-1/2)} + \Delta t G_{S} ^{(n)}
+\end{eqnarray*}
+And 
+\begin{eqnarray*}
+%{b'}^{n+1/2} & = & b'(\theta^{n+1/2},S^{n+1/2},r)
+%\\
+%\partial_r {\phi'_{hyd}}^{n+1/2} & = & {-b'}^{n+1/2}
+{\phi'_{hyd}}^{n+1/2} & = & \int_{r'}^{R_o} b'(\theta^{n+1/2},S^{n+1/2},r) dr
+%\label{eq-rtd-hyd}
+\\
+\vec{\bf v} ^{n+1}
++ \Delta t {\bf \nabla}_r B_o {\eta}^{n+1}
++ \epsilon_{nh} \Delta t {\bf \nabla}_r {\phi'_{nh}}^{n+1}
+- \partial_r A_v \partial_r \vec{\bf v}^{n+1}
+& = &
+\vec{\bf v}^*
+%\label{eq-rtd-hmom}
+\\
+\epsilon_{fs} {\eta}^{n+1} + \Delta t
+{\bf \nabla}_r \cdot \int_{R_{min}}^{R_o} \vec{\bf v}^{n+1} dr
+& = & 
+\epsilon_{fs} {\eta}^{n} + \epsilon_{fw} \Delta_t (P-E)^{n} 
+\\
+\epsilon_{nh} \left( \dot{r} ^{n+1}
++ \Delta t \partial_r {\phi'_{nh}} ^{n+1}
+\right)
+& = & \epsilon_{nh} \dot{r}^*
+%\label{eq-rtd-rdot}
+\\
+{\bf \nabla}_r \cdot \vec{\bf v}^{n+1} + \partial_r \dot{r}^{n+1}
+& = & 0
+%\label{eq-rtd-cont}
+\end{eqnarray*}
+with
+\begin{eqnarray*}
+\vec{\bf v}^* & = &
+\vec{\bf v} ^{n} + \Delta t \vec{\bf G}_{\vec{\bf v}} ^{(n+1/2)}
++ \Delta t  {\bf \nabla}_r {\phi'_{hyd}}^{n+1/2}
+\\
+\dot{r}^* & = &
+\dot{r} ^{n} + \Delta t G_{\dot{r}} ^{(n+1/2)}
+\end{eqnarray*}
+
+%---------------------------------------------------------------------
+
+\subsection{surface pressure}
+
+Substituting \ref{eq-rtd-hmom} into \ref{eq-rtd-cont}, assuming
+$\epsilon_{nh} = 0$ yields a Helmholtz equation for ${\eta}^{n+1}$:
+$$
+\epsilon_{fs} {\eta}^{n+1} -
+{\bf \nabla}_r \cdot \Delta t^2 (R_o-R_{min})
+{\bf \nabla}_r B_o {\eta}^{n+1}
+= {\eta}^*
+\label{solve_2d}
+$$ 
+where
+$$
+{\eta}^* = \epsilon_{fs} \: {\eta}^{n} -
+\Delta t {\bf \nabla}_r \cdot \int_{R_{min}}^{R_o} \vec{\bf v}^* dr
+\: + \: \epsilon_{fw} \Delta_t (P-E)^{n} 
+$$
+
+Once ${\eta}^{n+1}$ has been found substituting into \ref{eq-rtd-hmom}
+would yield $\vec{\bf v}^{n+1}$ if the model is hydrostatic
+($\epsilon_{nh}=0$):
+$$
+\vec{\bf v}^{n+1} = \vec{\bf v}^{*}
+- \Delta t {\bf \nabla}_r B_o {\eta}^{n+1}
+$$
+
+This is known as the correction step. However, when the model is
+non-hydrostatic ($\epsilon_{nh}=1$) we need an additional step and an
+additional equation for $\phi'_{nh}$. This is obtained by
+substituting \ref{eq-rtd-hmom} and \ref{eq-rtd-rdot} into
+\ref{eq-rtd-cont}:
+\begin{equation}
+\left[ {\bf \nabla}_r^2 + \partial_{rr} \right] {\phi'_{nh}}^{n+1}
+= \frac{1}{\Delta t} \left(
+{\bf \nabla}_r \cdot \vec{\bf v}^{**} + \partial_r \dot{r}^* \right)
+\end{equation}
+where
+\begin{displaymath}
+\vec{\bf v}^{**} = \vec{\bf v}^* - \Delta t {\bf \nabla}_r B_o {\eta}^{n+1}
+\end{displaymath}
+Note that $\eta^{n+1}$ is also used to update the second RHS term
+$\partial_r \dot{r}^* $ since
+the vertical velocity at the surface ($\dot{r}_{surf}$) 
+is evaluated as $(\eta^{n+1} - \eta^n) / \Delta t$.
+
+Finally, the horizontal velocities at the new time level are found by:
+\begin{equation}
+\vec{\bf v}^{n+1} = \vec{\bf v}^{**}
+- \epsilon_{nh} \Delta t {\bf \nabla}_r {\phi'_{nh}}^{n+1}
+\end{equation}
+and the vertical velocity is found by integrating the continuity
+equation vertically.
+Note that, for convenience regarding the restart procedure,
+the integration of the continuity equation has been 
+moved at the beginning of the time step (instead of at the end),
+without any consequence on the solution.
+
+Regarding the implementation, all those computation are done
+within the routine {\it SOLVE\_FOR\_PRESSURE} and its dependent 
+{\it CALL}s.
+The standard method to solve the 2D elliptic problem (\ref{solve_2d})
+uses the conjugate gradient method (routine {\it CG2D}); The 
+the solver matrix and conjugate gradient operator are only function
+of the discretized domain and are therefore evaluated separately,
+before the time iteration loop, within {\it INI\_CG2D}. 
+The computation of the RHS $\eta^*$ is partly 
+done in {\it CALC\_DIV\_GHAT} and in {\it SOLVE\_FOR\_PRESSURE}.
+
+The same method is applied for the non hydrostatic part, using
+a conjugate gradient 3D solver ({\it CG3D}) that is initialized 
+in {\it INI\_CG3D}. The RHS terms of 2D and 3D problems 
+are computed together, within the same part of the code.
+
+\newpage
+%-----------------------------------------------------------------------------------
+\subsection{Crank-Nickelson barotropic time stepping}
+
+The full implicit time stepping described previously is unconditionally stable
+but damps the fast gravity waves, resulting in a loss of 
+gravity potential energy.
+The modification presented hereafter allows to combine an implicit part
+($\beta,\gamma$) and an explicit part ($1-\beta,1-\gamma$) for the surface
+pressure gradient ($\beta$) and for the barotropic flow divergence ($\gamma$).
+\\
+For instance, $\beta=\gamma=1$ is the previous fully implicit scheme;
+$\beta=\gamma=1/2$ is the non damping (energy conserving), unconditionally
+stable, Crank-Nickelson scheme; $(\beta,\gamma)=(1,0)$ or $=(0,1)$
+corresponds to the forward - backward scheme that conserves energy but is
+only stable for small time steps.\\
+In the code, $\beta,\gamma$ are defined as parameters, respectively 
+{\it implicSurfPress}, {\it implicDiv2DFlow}. They are read from
+the main data file "{\it data}" and are set by default to 1,1.
+
+Equations \ref{eq-rtd-hmom} and \ref{eq-rtd-eta} are modified as follows:
+$$
+\frac{ \vec{\bf v}^{n+1} }{ \Delta t }
++ {\bf \nabla}_r B_o [ \beta {\eta}^{n+1} + (1-\beta) {\eta}^{n} ] 
++ \epsilon_{nh} {\bf \nabla}_r {\phi'_{nh}}^{n+1}
+ = \frac{ \vec{\bf v}^* }{ \Delta t }
+$$
+$$
+\epsilon_{fs} \frac{ {\eta}^{n+1} - {\eta}^{n} }{ \Delta t}
++ {\bf \nabla}_r \cdot \int_{R_{min}}^{R_o} 
+[ \gamma \vec{\bf v}^{n+1} + (1-\gamma) \vec{\bf v}^{n}] dr
+= \epsilon_{fw} (P-E)
+$$
+where:
+\begin{eqnarray*}
+\vec{\bf v}^* & = &
+\vec{\bf v} ^{n} + \Delta t \vec{\bf G}_{\vec{\bf v}} ^{(n+1/2)}
++ (\beta-1) \Delta t {\bf \nabla}_r B_o {\eta}^{n}
++ \Delta t {\bf \nabla}_r {\phi'_{hyd}}^{(n+1/2)}
+\\
+{\eta}^* & = &
+\epsilon_{fs} {\eta}^{n} + \epsilon_{fw} \Delta t (P-E) 
+- \Delta t {\bf \nabla}_r \cdot \int_{R_{min}}^{R_o} 
+[ \gamma \vec{\bf v}^* + (1-\gamma) \vec{\bf v}^{n}] dr
+\end{eqnarray*}
+\\
+In the hydrostatic case ($\epsilon_{nh}=0$),
+this allow to find ${\eta}^{n+1}$, according to:
+$$
+\epsilon_{fs} {\eta}^{n+1} -
+{\bf \nabla}_r \cdot \beta\gamma \Delta t^2 B_o (R_o - R_{min})
+{\bf \nabla}_r {\eta}^{n+1}
+= {\eta}^*
+$$ 
+and then to compute (correction step):
+$$
+\vec{\bf v}^{n+1} = \vec{\bf v}^{*}
+- \beta \Delta t {\bf \nabla}_r B_o {\eta}^{n+1}
+$$
+
+The non-hydrostatic part is solved as described previously. 
+\\ \\
+N.B:
+\\
+ a) The non-hydrostatic part of the code has not yet been 
+updated, %since it falls out of the purpose of this test,
+so that this option cannot be used with $(\beta,\gamma) \neq (1,1)$.
+\\
+b) To remind, the stability criteria with the Crank-Nickelson time stepping
+for the pure linear gravity wave problem in cartesian coordinate is:
+\\
+$\star$~ $\beta + \gamma < 1$ : unstable
+\\
+$\star$~ $\beta \geq 1/2$ and $ \gamma \geq 1/2$ : stable
+\\
+$\star$~ $\beta + \gamma \geq 1$ : stable if
+%, for all wave length $(k\Delta x,l\Delta y)$
+$$ 
+c_{max}^2 (\beta - 1/2)(\gamma - 1/2) + 1 \geq 0
+$$
+$$
+\mbox{with }~
+%c^2 = 2 g H {\Delta t}^2 
+%(\frac{1-cos 2 \pi / k}{\Delta x^2} 
+%+\frac{1-cos 2 \pi / l}{\Delta y^2})
+%$$
+%Practically, the most stringent condition is obtained with $k=l=2$ :
+%$$
+c_{max} =  2 \Delta t \: \sqrt{g H} \: 
+\sqrt{ \frac{1}{\Delta x^2} + \frac{1}{\Delta y^2} }
+$$

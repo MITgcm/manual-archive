@@ -1,0 +1,63 @@
+% $Header: /u/gcmpack/manual/s_overview/Attic/illustration.tex,v 1.1.1.1 2001/08/08 16:16:16 adcroft Exp $
+% $Name:  $
+
+\section{Illustrations of the model in action}
+
+The MITgcm has been designed and used to model a vast range of phenomena,
+from convection on the scale of meters in the ocean to the global pattern of
+atmospheric winds - see fig.2\ref{fig:all-scales}. To give a flavor of the
+kinds of problems the model has been used to study, we briefly describe some
+of them here. A more detailed description of the underlying formulation,
+numerical algorithm and implementation that lie behind these calculations is
+given later. Indeed it is easy to reproduce the results shown here: simply
+download the model (the minimum you need is a PC running linux, together
+with a FORTRAN\ 77 compiler) and follow the examples.
+
+\subsection{Global atmosphere: `Held-Suarez' benchmark}
+
+Fig.E1a.\ref{fig:Held-Suarez} is an instaneous plot of the 500$mb$ height
+field obtained using a 5-level version of the atmospheric pressure isomorph
+run at 300$km$ resolution. We see fully developed baroclinic eddies along
+the northern hemisphere storm track. There are no mountains (but you can
+easily put them in) or land-sea contrast. The model is driven by relaxation
+to a radiative-convective equilibrium profile, following the description set
+out in Held and Suarez; 1994 designed to test atmospheric hydrodynamical
+cores - there are no mountains or land-sea contrast. As decribed in Adcroft
+(2001), `cubed sphere' is used to descretize the globe permitting a uniform
+gridding and obviated the need to fourier filter.
+
+Fig.E1b shows the 5-year mean, zonally averaged potential temperature, zonal
+wind and meridional overturning streamfunction from the 5-level model.
+
+A regular spherical lat-lon grid can also be used.
+
+Results from this integration, together with a 20-level calculation, can be
+found here - link through to channel.
+
+This calculation takes 1 day of computation per year of intergation on a
+pentium IV PC.
+
+\subsection{Ocean gyres}
+
+\subsection{Global ocean circulation}
+
+Fig.E2a shows the pattern of ocean currents at the surface of a 4$^{\circ }$
+global ocean model run with 15 vertical levels. The model is driven using
+monthly-mean winds with mixed boundary conditions on temperature and
+salinity at the surface. Fig.E2b shows the overturning (thermohaline)
+circulation. Lopped cells are used to represent topography on a regular $%
+lat-lon$ grid extending from 70$^{\circ }N$ to 70$^{\circ }S$.
+
+\subsection{Flow over topography}
+
+\subsection{Ocean convection}
+
+Fig.E3 shows convection over a slope using the non-hydrostatic ocean
+isomorph and lopped cells to respresent topography. .....The grid resolution
+is
+
+\subsection{Boundary forced internal waves}
+
+\subsection{Carbon outgassing sensitivity}
+
+Fig.E4 shows....

@@ -1,0 +1,996 @@
+% $Header: /u/gcmpack/manual/s_examples/baroclinic_gyre/fourlayer.tex,v 1.1.1.1 2001/08/08 16:15:41 adcroft Exp $
+% $Name:  $
+
+\section{Example: Four layer Baroclinic Ocean Gyre In Spherical Coordinates}
+
+\bodytext{bgcolor="#FFFFFFFF"}
+
+%\begin{center} 
+%{\Large \bf Using MITgcm to Simulate a Baroclinic Ocean Gyre In Spherical
+%Polar Coordinates}
+%
+%\vspace*{4mm}
+%
+%\vspace*{3mm}
+%{\large May 2001}
+%\end{center}
+
+\subsection{Introduction}
+
+This document describes the second example MITgcm experiment. The first
+example experiment ilustrated how to configure the code for a single layer 
+simulation in a cartesian grid. In this example a similar physical problem
+is simulated, but the code is now configured
+for four layers and in a spherical polar coordinate system.
+
+\subsection{Overview}
+
+This example experiment demonstrates using the MITgcm to simulate
+a baroclinic, wind-forced, ocean gyre circulation. The experiment 
+is a numerical rendition of the gyre circulation problem simliar
+to the problems described analytically by Stommel in 1966 
+\cite{Stommel66} and numerically in Holland et. al \cite{Holland75}.
+\\
+
+In this experiment the model is configured to represent a mid-latitude 
+enclosed sector of fluid on a sphere, $60^{\circ} \times 60^{\circ}$ in 
+lateral extent. The fluid is $2$~km deep and is forced
+by a constant in time zonal wind stress, $\tau_x$, that varies sinusoidally
+in the north-south direction. Topologically the simulated 
+domain is a sector on a sphere and the coriolis parameter, $f$, is defined 
+according to latitude, $\phi$
+
+\begin{equation}
+\label{EQ:fcori}
+f(\phi) = 2 \Omega \sin( \phi )
+\end{equation}
+ 
+\noindent with the rotation rate, $\Omega$ set to $\frac{2 \pi}{86400s}$.
+\\
+  
+ The sinusoidal wind-stress variations are defined according to 
+
+\begin{equation}
+\label{EQ:taux}
+\tau_x(\phi) = \tau_{0}\sin(\pi \frac{\phi}{L_{\phi}})
+\end{equation}
+ 
+\noindent where $L_{\phi}$ is the lateral domain extent ($60^{\circ}$) and 
+$\tau_0$ is set to $0.1N m^{-2}$. 
+\\
+
+Figure \ref{FIG:simulation_config}
+summarises the configuration simulated.
+In contrast to example (1) \cite{baro_gyre_case_study}, the current 
+experiment simulates a spherical polar domain. However, as indicated
+by the axes in the lower left of the figure the model code works internally
+in a locally orthoganal coordinate $(x,y,z)$. In the remainder of this
+document the local coordinate $(x,y,z)$ will be adopted.
+\\
+
+The experiment has four levels in the vertical, each of equal thickness,
+$\Delta z = 500$~m. Initially the fluid is stratified with a reference
+potential temperature profile,
+$\theta_{250}=20^{\circ}$~C,
+$\theta_{750}=10^{\circ}$~C,
+$\theta_{1250}=8^{\circ}$~C,
+$\theta_{1750}=6^{\circ}$~C. The equation of state used in this experiment is 
+linear
+
+\begin{equation}
+\label{EQ:linear1_eos}
+\rho = \rho_{0} ( 1 - \alpha_{\theta}\theta^{'} )
+\end{equation}
+
+\noindent which is implemented in the model as a density anomaly equation
+
+\begin{equation}
+\label{EQ:linear1_eos_pert}
+\rho^{'} = -\rho_{0}\alpha_{\theta}\theta^{'}
+\end{equation}
+
+\noindent with $\rho_{0}=999.8\,{\rm kg\,m}^{-3}$ and 
+$\alpha_{\theta}=2\times10^{-4}\,{\rm degrees}^{-1} $. Integrated forward in
+this configuration the model state variable {\bf theta} is synonomous with
+either in-situ temperature, $T$, or potential temperature, $\theta$. For 
+consistency with later examples, in which the equation of state is
+non-linear, we use $\theta$ to represent temperature here. This is
+the quantity that is carried in the model core equations.
+
+\begin{figure}
+\centerline{
+ \resizebox{7.5in}{5.5in}{
+   \includegraphics*[0.2in,0.7in][10.5in,10.5in]
+   {part3/case_studies/fourlayer_gyre/simulation_config.eps} }
+}
+\caption{Schematic of simulation domain and wind-stress forcing function 
+for the four-layer gyre numerical experiment. The domain is enclosed by solid
+walls at $0^{\circ}$~E, $60^{\circ}$~E, $0^{\circ}$~N and $60^{\circ}$~N.
+In the four-layer case an initial temperature stratification is 
+imposed by setting the potential temperature, $\theta$, in each layer.
+The vertical spacing, $\Delta z$, is constant and equal to $500$m.
+}
+\label{FIG:simulation_config}
+\end{figure}
+
+\subsection{Discrete Numerical Configuration}
+
+ The model is configured in hydrostatic form.  The domain is discretised with 
+a uniform grid spacing in latitude and longitude
+ $\Delta x=\Delta y=1^{\circ}$, so 
+that there are sixty grid cells in the $x$ and $y$ directions. Vertically the 
+model is configured with a four layers with constant depth, 
+$\Delta z$, of $500$~m. 
+The implicit free surface form of the 
+pressure equation described in Marshall et. al \cite{Marshall97a} is 
+employed. 
+A horizontal laplacian operator $\nabla_{h}^2$ provides viscous
+dissipation. The wind-stress momentum input is added to the momentum equation
+for the ``zonal flow'', $u$. Other terms in the model
+are explicitly switched off for this experiement configuration (see section
+\ref{SEC:code_config} ), yielding an active set of equations solved in this 
+configuration as follows
+
+\begin{eqnarray}
+\label{EQ:model_equations}
+\frac{Du}{Dt} - fv + 
+  \frac{1}{\rho}\frac{\partial p^{'}}{\partial x} - 
+  A_{h}\nabla_{h}^2u - A_{z}\frac{\partial^{2}u}{\partial z^{2}} 
+& = &
+\cal{F}
+\\
+\frac{Dv}{Dt} + fu + 
+  \frac{1}{\rho}\frac{\partial p^{'}}{\partial y} - 
+  A_{h}\nabla_{h}^2v - A_{z}\frac{\partial^{2}v}{\partial z^{2}} 
+& = &
+0
+\\
+\frac{\partial \eta}{\partial t} + \nabla_{h}\cdot \vec{u}
+&=&
+0
+\\
+\frac{D\theta}{Dt} -
+ K_{h}\nabla_{h}^2\theta  - K_{z}\frac{\partial^{2}\theta}{\partial z^{2}} 
+& = &
+0
+\\
+g\rho_{0} \eta + \int^{0}_{-z}\rho^{'} dz & = & p^{'}
+\\
+{\cal F} |_{s} & = & \frac{\tau_{x}}{\rho_{0}\Delta z_{s}}
+\\
+{\cal F} |_{i} & = & 0
+\end{eqnarray}
+
+\noindent where $u$ and $v$ are the $x$ and $y$ components of the
+flow vector $\vec{u}$. The suffices ${s},{i}$ indicate surface and
+interior model levels respectively. As described in
+MITgcm Numerical Solution Procedure \cite{MITgcm_Numerical_Scheme}, the time 
+evolution of potential temperature, $\theta$, equation is solved prognostically.
+The total pressure, $p$, is diagnosed by summing pressure due to surface 
+elevation $\eta$ and the hydrostatic pressure.
+\\
+
+\subsubsection{Numerical Stability Criteria}
+
+The laplacian dissipation coefficient, $A_{h}$, is set to $400 m s^{-1}$.
+This value is chosen to yield a Munk layer width \cite{Adcroft_thesis},
+
+\begin{eqnarray}
+\label{EQ:munk_layer}
+M_{w} = \pi ( \frac { A_{h} }{ \beta } )^{\frac{1}{3}}
+\end{eqnarray}
+
+\noindent  of $\approx 100$km. This is greater than the model
+resolution in mid-latitudes $\Delta x$, ensuring that the frictional 
+boundary layer is well resolved.
+\\
+
+\noindent The model is stepped forward with a 
+time step $\delta t=1200$secs. With this time step the stability 
+parameter to the horizontal laplacian friction \cite{Adcroft_thesis}
+
+\begin{eqnarray}
+\label{EQ:laplacian_stability}
+S_{l} = 4 \frac{A_{h} \delta t}{{\Delta x}^2}
+\end{eqnarray}
+
+\noindent evaluates to 0.012, which is well below the 0.3 upper limit
+for stability. 
+\\
+
+\noindent The vertical dissipation coefficient, $A_{z}$, is set to 
+$1\times10^{-2} {\rm m}^2{\rm s}^{-1}$. The associated stability limit
+
+\begin{eqnarray}
+\label{EQ:laplacian_stability_z}
+S_{l} = 4 \frac{A_{z} \delta t}{{\Delta z}^2}
+\end{eqnarray}
+
+\noindent evaluates to $4.8 \times 10^{-5}$ which is again well below
+the upper limit.
+The values of $A_{h}$ and $A_{z}$ are also used for the horizontal ($K_{h}$) 
+and vertical ($K_{z}$) diffusion coefficients for temperature respectively.
+\\
+
+\noindent The numerical stability for inertial oscillations
+\cite{Adcroft_thesis} 
+
+\begin{eqnarray}
+\label{EQ:inertial_stability}
+S_{i} = f^{2} {\delta t}^2
+\end{eqnarray}
+
+\noindent evaluates to $0.0144$, which is well below the $0.5$ upper 
+limit for stability.
+\\
+
+\noindent The advective CFL \cite{Adcroft_thesis} for a extreme maximum 
+horizontal flow
+speed of $ | \vec{u} | = 2 ms^{-1}$
+
+\begin{eqnarray}
+\label{EQ:cfl_stability}
+S_{a} = \frac{| \vec{u} | \delta t}{ \Delta x}
+\end{eqnarray}
+
+\noindent evaluates to $5 \times 10^{-2}$. This is well below the stability 
+limit of 0.5.
+\\
+
+\noindent The stability parameter for internal gravity waves 
+\cite{Adcroft_thesis}
+
+\begin{eqnarray}
+\label{EQ:igw_stability}
+S_{c} = \frac{c_{g} \delta t}{ \Delta x}
+\end{eqnarray}
+
+\noindent evaluates to $5 \times 10^{-2}$. This is well below the linear
+stability limit of 0.25.
+  
+\subsection{Code Configuration}
+\label{SEC:code_config}
+
+The model configuration for this experiment resides under the 
+directory {\it verification/exp1/}.  The experiment files 
+\begin{itemize}
+\item {\it input/data}
+\item {\it input/data.pkg}
+\item {\it input/eedata},
+\item {\it input/windx.sin\_y},
+\item {\it input/topog.box},
+\item {\it code/CPP\_EEOPTIONS.h}
+\item {\it code/CPP\_OPTIONS.h},
+\item {\it code/SIZE.h}. 
+\end{itemize}
+contain the code customisations and parameter settings for this 
+experiements. Below we describe the customisations
+to these files associated with this experiment.
+
+\subsubsection{File {\it input/data}}
+
+This file, reproduced completely below, specifies the main parameters 
+for the experiment. The parameters that are significant for this configuration
+are
+
+\begin{itemize}
+
+\item Line 4, 
+\begin{verbatim} tRef=20.,10.,8.,6., \end{verbatim} 
+this line sets
+the initial and reference values of potential temperature at each model
+level in units of $^{\circ}$C.
+The entries are ordered from surface to depth. For each
+depth level the inital and reference profiles will be uniform in
+$x$ and $y$. The values specified here are read into the
+variable 
+{\bf
+\begin{rawhtml} <A href=../../../code_reference/vdb/names/OK.htm> \end{rawhtml}
+tRef
+\begin{rawhtml} </A>\end{rawhtml}
+} 
+in the model code, by procedure 
+{\it
+\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+INI\_PARMS
+\begin{rawhtml} </A>\end{rawhtml}
+}.
+
+%% \codelink{var:tref} tRef \endlink
+%% \codelink{file:ini_parms} {\it INI\_PARMS } \endlink
+%% \codelink{proc:ini_parms} {\it INI\_PARMS } \endlink
+%% \var{tref}
+%% \proc{ini_parms}
+%% \file{ini_parms}
+\newcommand{\VARtref}{
+{\bf
+\begin{rawhtml} <A href=../../../code_reference/vdb/names/OK.htm> \end{rawhtml}
+tRef
+\begin{rawhtml} </A>\end{rawhtml}
+} 
+}
+
+
+
+\fbox{
+\begin{minipage}{5.0in}
+{\it S/R INI\_THETA}
+({\it ini\_theta.F})
+\end{minipage}
+}
+{\bf
+\begin{rawhtml} <A href=../../../code_reference/vdb/code/98.htm> \end{rawhtml}
+goto code
+\begin{rawhtml} </A>\end{rawhtml}
+}
+
+
+\item Line 6, 
+\begin{verbatim} viscAz=1.E-2, \end{verbatim} 
+this line sets the vertical laplacian dissipation coefficient to
+$1 \times 10^{-2} {\rm m^{2}s^{-1}}$. Boundary conditions
+for this operator are specified later. 
+The variable 
+{\bf 
+\begin{rawhtml} <A href=../../../code_reference/vdb/names/ZQ.htm> \end{rawhtml}
+viscAz
+\begin{rawhtml} </A>\end{rawhtml}
+}
+is read in the routine
+{\it
+\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+INI\_PARMS
+\begin{rawhtml} </A>\end{rawhtml}
+}
+and is copied into model general vertical coordinate variable 
+{\bf 
+\begin{rawhtml} <A href=../../../code_reference/vdb/names/PF.htm> \end{rawhtml}
+viscAr
+\begin{rawhtml} </A>\end{rawhtml}
+}.
+
+\fbox{
+\begin{minipage}{5.0in}
+{\it S/R CALC\_DIFFUSIVITY}({\it calc\_diffusivity.F})
+\end{minipage}
+}
+{\bf
+\begin{rawhtml} <A href=../../../code_reference/vdb/code/53.htm> \end{rawhtml}
+goto code
+\begin{rawhtml} </A>\end{rawhtml}
+}
+
+\item Line 7, 
+\begin{verbatim}
+viscAh=4.E2,
+\end{verbatim} 
+this line sets the horizontal laplacian frictional dissipation coefficient to
+$1 \times 10^{-2} {\rm m^{2}s^{-1}}$. Boundary conditions
+for this operator are specified later.
+The variable 
+{\bf 
+\begin{rawhtml} <A href=../../../code_reference/vdb/names/SI.htm> \end{rawhtml}
+viscAh
+\begin{rawhtml} </A>\end{rawhtml}
+}
+is read in the routine
+{\it
+\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+INI\_PARMS
+\begin{rawhtml} </A>\end{rawhtml}
+}.
+
+\fbox{
+\begin{minipage}{5.0in}
+{\it S/R CALC\_MOM\_RHS}({\it calc\_mom\_rhs.F})
+\end{minipage}
+}
+{\bf
+\begin{rawhtml} <A href=../../../code_reference/vdb/code/60.htm> \end{rawhtml}
+goto code
+\begin{rawhtml} </A>\end{rawhtml}
+}
+
+\fbox{
+\begin{minipage}{5.0in}
+{\it S/R CALC\_GW}({\it calc\_gw.F})
+\end{minipage}
+}
+{\bf
+\begin{rawhtml} <A href=../../../code_reference/vdb/code/58.htm> \end{rawhtml}
+goto code
+\begin{rawhtml} </A>\end{rawhtml}
+}
+
+\item Lines 8,
+\begin{verbatim}
+no_slip_sides=.FALSE.
+\end{verbatim}
+this line selects a free-slip lateral boundary condition for
+the horizontal laplacian friction operator 
+e.g. $\frac{\partial u}{\partial y}$=0 along boundaries in $y$ and
+$\frac{\partial v}{\partial x}$=0 along boundaries in $x$.
+The variable
+{\bf
+\begin{rawhtml} <A href=../../../code_reference/vdb/names/UT.htm> \end{rawhtml}
+no\_slip\_sides
+\begin{rawhtml} </A>\end{rawhtml}
+}
+is read in the routine
+{\it
+\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+INI\_PARMS
+\begin{rawhtml} </A>\end{rawhtml}
+}.
+
+
+\fbox{
+\begin{minipage}{5.0in}
+{\it S/R CALC\_MOM\_RHS}({\it calc\_mom\_rhs.F})
+\end{minipage}
+}
+{\bf
+\begin{rawhtml} <A href=../../../code_reference/vdb/code/60.htm> \end{rawhtml}
+goto code
+\begin{rawhtml} </A>\end{rawhtml}
+}
+
+\item Lines 9,
+\begin{verbatim}
+no_slip_bottom=.TRUE.
+\end{verbatim}
+this line selects a no-slip boundary condition for bottom
+boundary condition in the vertical laplacian friction operator 
+e.g. $u=v=0$ at $z=-H$, where $H$ is the local depth of the domain.
+The variable
+{\bf
+\begin{rawhtml} <A href=../../../code_reference/vdb/names/UK.htm> \end{rawhtml}
+no\_slip\_bottom
+\begin{rawhtml} </A>\end{rawhtml}
+}
+is read in the routine
+{\it
+\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+INI\_PARMS
+\begin{rawhtml} </A>\end{rawhtml}
+}.
+
+\fbox{
+\begin{minipage}{5.0in}
+{\it S/R CALC\_MOM\_RHS}({\it calc\_mom\_rhs.F})
+\end{minipage}
+}
+{\bf
+\begin{rawhtml} <A href=../../../code_reference/vdb/code/60.htm> \end{rawhtml}
+goto code
+\begin{rawhtml} </A>\end{rawhtml}
+}
+
+\item Line 10,
+\begin{verbatim}
+diffKhT=4.E2,
+\end{verbatim}
+this line sets the horizontal diffusion coefficient for temperature
+to $400\,{\rm m^{2}s^{-1}}$. The boundary condition on this
+operator is $\frac{\partial}{\partial x}=\frac{\partial}{\partial y}=0$ at
+all boundaries.
+The variable
+{\bf
+\begin{rawhtml} <A href=../../../code_reference/vdb/names/RC.htm> \end{rawhtml}
+diffKhT
+\begin{rawhtml} </A>\end{rawhtml}
+}
+is read in the routine
+{\it
+\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+INI\_PARMS
+\begin{rawhtml} </A>\end{rawhtml}
+}.
+
+\fbox{ \begin{minipage}{5.0in}
+{\it S/R CALC\_GT}({\it calc\_gt.F})
+\end{minipage}
+}
+{\bf
+\begin{rawhtml} <A href=../../../code_reference/vdb/code/57.htm> \end{rawhtml}
+goto code
+\begin{rawhtml} </A>\end{rawhtml}
+}
+
+\item Line 11,
+\begin{verbatim}
+diffKzT=1.E-2,
+\end{verbatim}
+this line sets the vertical diffusion coefficient for temperature
+to $10^{-2}\,{\rm m^{2}s^{-1}}$. The boundary condition on this
+operator is $\frac{\partial}{\partial z}$ = 0 on all boundaries.
+The variable
+{\bf
+\begin{rawhtml} <A href=../../../code_reference/vdb/names/ZT.htm> \end{rawhtml}
+diffKzT
+\begin{rawhtml} </A>\end{rawhtml}
+}
+is read in the routine
+{\it
+\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+INI\_PARMS
+\begin{rawhtml} </A>\end{rawhtml}
+}.
+It is copied into model general vertical coordinate variable
+{\bf
+\begin{rawhtml} <A href=../../../code_reference/vdb/names/PD.htm> \end{rawhtml}
+diffKrT
+\begin{rawhtml} </A>\end{rawhtml}
+}.
+
+\fbox{ \begin{minipage}{5.0in}
+{\it S/R CALC\_DIFFUSIVITY}({\it calc\_diffusivity.F})
+\end{minipage}
+}
+{\bf
+\begin{rawhtml} <A href=../../../code_reference/vdb/code/53.htm> \end{rawhtml}
+goto code
+\begin{rawhtml} </A>\end{rawhtml}
+}
+
+
+
+\item Line 13,
+\begin{verbatim}
+tAlpha=2.E-4,
+\end{verbatim}
+This line sets the thermal expansion coefficient for the fluid
+to $2 \times 10^{-4}\,{\rm degrees}^{-1}$
+The variable
+{\bf
+\begin{rawhtml} <A href=../../../code_reference/vdb/names/ZV.htm> \end{rawhtml}
+tAlpha 
+\begin{rawhtml} </A>\end{rawhtml}
+}
+is read in the routine
+{\it
+\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+INI\_PARMS
+\begin{rawhtml} </A>\end{rawhtml}
+}.
+
+\fbox{
+\begin{minipage}{5.0in}
+{\it S/R FIND\_RHO}({\it find\_rho.F})
+\end{minipage}
+}
+{\bf
+\begin{rawhtml} <A href=../../../code_reference/vdb/code/79.htm> \end{rawhtml}
+goto code
+\begin{rawhtml} </A>\end{rawhtml}
+}
+
+\item Line 18,
+\begin{verbatim}
+eosType='LINEAR'
+\end{verbatim}
+This line selects the linear form of the equation of state.
+The variable
+{\bf
+\begin{rawhtml} <A href=../../../code_reference/vdb/names/WV.htm> \end{rawhtml}
+eosType
+\begin{rawhtml} </A>\end{rawhtml}
+}
+is read in the routine
+{\it
+\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+INI\_PARMS
+\begin{rawhtml} </A>\end{rawhtml}
+}.
+
+\fbox{
+\begin{minipage}{5.0in}
+{\it S/R FIND\_RHO}({\it find\_rho.F})
+\end{minipage}
+}
+{\bf
+\begin{rawhtml} <A href=../../../code_reference/vdb/code/79.htm> \end{rawhtml}
+goto code
+\begin{rawhtml} </A>\end{rawhtml}
+}
+
+
+
+\item Line 40,
+\begin{verbatim}
+usingSphericalPolarGrid=.TRUE.,
+\end{verbatim}
+This line requests that the simulation be performed in a 
+spherical polar coordinate system. It affects the interpretation of
+grid inoput parameters, for exampl {\bf delX} and {\bf delY} and
+causes the grid generation routines to initialise an internal grid based
+on spherical polar geometry.
+The variable
+{\bf
+\begin{rawhtml} <A href=../../../code_reference/vdb/names/10T.htm> \end{rawhtml}
+usingSphericalPolarGrid
+\begin{rawhtml} </A>\end{rawhtml}
+}
+is read in the routine
+{\it
+\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+INI\_PARMS
+\begin{rawhtml} </A>\end{rawhtml}
+}.
+
+\fbox{
+\begin{minipage}{5.0in}
+{\it S/R INI\_SPEHRICAL\_POLAR\_GRID}({\it ini\_spherical\_polar\_grid.F})
+\end{minipage}
+}
+{\bf
+\begin{rawhtml} <A href=../../../code_reference/vdb/code/97.htm> \end{rawhtml}
+goto code
+\begin{rawhtml} </A>\end{rawhtml}
+}
+
+\item Line 41,
+\begin{verbatim}
+phiMin=0.,
+\end{verbatim}
+This line sets the southern boundary of the modeled
+domain to $0^{\circ}$ latitude. This value affects both the
+generation of the locally orthogonal grid that the model
+uses internally and affects the initialisation of the coriolis force.
+Note - it is not required to set
+a longitude boundary, since the absolute longitude does
+not alter the kernel equation discretisation.
+The variable
+{\bf
+\begin{rawhtml} <A href=../../../code_reference/vdb/names/110.htm> \end{rawhtml}
+phiMin
+\begin{rawhtml} </A>\end{rawhtml}
+}
+is read in the routine
+{\it
+\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+INI\_PARMS
+\begin{rawhtml} </A>\end{rawhtml}
+}.
+
+\fbox{
+\begin{minipage}{5.0in}
+{\it S/R INI\_SPEHRICAL\_POLAR\_GRID}({\it ini\_spherical\_polar\_grid.F})
+\end{minipage}
+}
+{\bf
+\begin{rawhtml} <A href=../../../code_reference/vdb/code/97.htm> \end{rawhtml}
+goto code
+\begin{rawhtml} </A>\end{rawhtml}
+}
+
+\item Line 42,
+\begin{verbatim}
+delX=60*1.,
+\end{verbatim}
+This line sets the horizontal grid spacing between each y-coordinate line
+in the discrete grid to $1^{\circ}$ in longitude.
+The variable
+{\bf
+\begin{rawhtml} <A href=../../../code_reference/vdb/names/10Z.htm> \end{rawhtml}
+delX
+\begin{rawhtml} </A>\end{rawhtml}
+}
+is read in the routine
+{\it
+\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+INI\_PARMS
+\begin{rawhtml} </A>\end{rawhtml}
+}.
+
+\fbox{
+\begin{minipage}{5.0in}
+{\it S/R INI\_SPEHRICAL\_POLAR\_GRID}({\it ini\_spherical\_polar\_grid.F})
+\end{minipage}
+}
+{\bf
+\begin{rawhtml} <A href=../../../code_reference/vdb/code/97.htm> \end{rawhtml}
+goto code
+\begin{rawhtml} </A>\end{rawhtml}
+}
+
+\item Line 43,
+\begin{verbatim}
+delY=60*1.,
+\end{verbatim}
+This line sets the horizontal grid spacing between each y-coordinate line
+in the discrete grid to $1^{\circ}$ in latitude.
+The variable
+{\bf
+\begin{rawhtml} <A href=../../../code_reference/vdb/names/UB.htm> \end{rawhtml}
+delY   
+\begin{rawhtml} </A>\end{rawhtml}
+}
+is read in the routine
+{\it
+\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+INI\_PARMS
+\begin{rawhtml} </A>\end{rawhtml}
+}.
+
+\fbox{
+\begin{minipage}{5.0in}
+{\it S/R INI\_SPEHRICAL\_POLAR\_GRID}({\it ini\_spherical\_polar\_grid.F})
+\end{minipage}
+}
+{\bf
+\begin{rawhtml} <A href=../../../code_reference/vdb/code/97.htm> \end{rawhtml}
+goto code
+\begin{rawhtml} </A>\end{rawhtml}
+}
+
+\item Line 44,
+\begin{verbatim}
+delZ=500.,500.,500.,500.,
+\end{verbatim}
+This line sets the vertical grid spacing between each z-coordinate line
+in the discrete grid to $500\,{\rm m}$, so that the total model depth 
+is $2\,{\rm km}$.
+The variable
+{\bf
+\begin{rawhtml} <A href=../../../code_reference/vdb/names/10W.htm> \end{rawhtml}
+delZ
+\begin{rawhtml} </A>\end{rawhtml}
+}
+is read in the routine
+{\it
+\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+INI\_PARMS
+\begin{rawhtml} </A>\end{rawhtml}
+}.
+It is copied into the internal
+model coordinate variable 
+{\bf 
+\begin{rawhtml} <A href=../../../code_reference/vdb/names/10Y.htm> \end{rawhtml}
+delR
+\begin{rawhtml} </A>\end{rawhtml}
+}. 
+
+\fbox{
+\begin{minipage}{5.0in}
+{\it S/R INI\_VERTICAL\_GRID}({\it ini\_vertical\_grid.F})
+\end{minipage}
+}
+{\bf
+\begin{rawhtml} <A href=../../../code_reference/vdb/code/100.htm> \end{rawhtml}
+goto code
+\begin{rawhtml} </A>\end{rawhtml}
+}
+
+\item Line 47,
+\begin{verbatim}
+bathyFile='topog.box'
+\end{verbatim}
+This line specifies the name of the file from which the domain
+bathymetry is read. This file is a two-dimensional ($x,y$) map of
+depths. This file is assumed to contain 64-bit binary numbers 
+giving the depth of the model at each grid cell, ordered with the x 
+coordinate varying fastest. The points are ordered from low coordinate
+to high coordinate for both axes. The units and orientation of the
+depths in this file are the same as used in the MITgcm code. In this
+experiment, a depth of $0m$ indicates a solid wall and a depth
+of $-2000m$ indicates open ocean. The matlab program
+{\it input/gendata.m} shows an example of how to generate a
+bathymetry file.
+The variable
+{\bf
+\begin{rawhtml} <A href=../../../code_reference/vdb/names/179.htm> \end{rawhtml}
+bathyFile
+\begin{rawhtml} </A>\end{rawhtml}
+}
+is read in the routine
+{\it
+\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+INI\_PARMS
+\begin{rawhtml} </A>\end{rawhtml}
+}.
+
+\fbox{
+\begin{minipage}{5.0in}
+{\it S/R INI\_DEPTHS}({\it ini\_depths.F})
+\end{minipage}
+}
+{\bf
+\begin{rawhtml} <A href=../../../code_reference/vdb/code/88.htm> \end{rawhtml}
+goto code
+\begin{rawhtml} </A>\end{rawhtml}
+}
+
+
+\item Line 50,
+\begin{verbatim}
+zonalWindFile='windx.sin_y'
+\end{verbatim}
+This line specifies the name of the file from which the x-direction
+surface wind stress is read. This file is also a two-dimensional
+($x,y$) map and is enumerated and formatted in the same manner as the 
+bathymetry file. The matlab program {\it input/gendata.m} includes example 
+code to generate a valid 
+{\bf zonalWindFile} 
+file.  
+The variable
+{\bf
+\begin{rawhtml} <A href=../../../code_reference/vdb/names/13W.htm> \end{rawhtml}
+zonalWindFile
+\begin{rawhtml} </A>\end{rawhtml}
+}
+is read in the routine
+{\it
+\begin{rawhtml} <A href=../../../code_reference/vdb/code/94.htm> \end{rawhtml}
+INI\_PARMS
+\begin{rawhtml} </A>\end{rawhtml}
+}.
+
+\fbox{
+\begin{minipage}{5.0in}
+{\it S/R EXTERNAL\_FIELDS\_LOAD}({\it external\_fields\_load.F})
+\end{minipage}
+}
+{\bf
+\begin{rawhtml} <A href=../../../code_reference/vdb/code/75.htm> \end{rawhtml}
+goto code
+\begin{rawhtml} </A>\end{rawhtml}
+}
+
+\end{itemize}
+
+\noindent other lines in the file {\it input/data} are standard values
+that are described in the MITgcm Getting Started and MITgcm Parameters
+notes.
+
+\begin{rawhtml}<PRE>\end{rawhtml}
+\begin{small}
+\input{part3/case_studies/fourlayer_gyre/input/data}
+\end{small}
+\begin{rawhtml}</PRE>\end{rawhtml}
+
+\subsubsection{File {\it input/data.pkg}}
+
+This file uses standard default values and does not contain
+customisations for this experiment.
+
+\subsubsection{File {\it input/eedata}}
+
+This file uses standard default values and does not contain
+customisations for this experiment.
+
+\subsubsection{File {\it input/windx.sin\_y}}
+
+The {\it input/windx.sin\_y} file specifies a two-dimensional ($x,y$) 
+map of wind stress ,$\tau_{x}$, values. The units used are $Nm^{-2}$.
+Although $\tau_{x}$ is only a function of $y$n in this experiment
+this file must still define a complete two-dimensional map in order
+to be compatible with the standard code for loading forcing fields 
+in MITgcm. The included matlab program {\it input/gendata.m} gives a complete
+code for creating the {\it input/windx.sin\_y} file.
+
+\subsubsection{File {\it input/topog.box}}
+
+
+The {\it input/topog.box} file specifies a two-dimensional ($x,y$) 
+map of depth values. For this experiment values are either
+$0m$ or $-2000\,{\rm m}$, corresponding respectively to a wall or to deep
+ocean. The file contains a raw binary stream of data that is enumerated
+in the same way as standard MITgcm two-dimensional, horizontal arrays.
+The included matlab program {\it input/gendata.m} gives a complete
+code for creating the {\it input/topog.box} file.
+
+\subsubsection{File {\it code/SIZE.h}}
+
+Two lines are customized in this file for the current experiment
+
+\begin{itemize}
+
+\item Line 39, 
+\begin{verbatim} sNx=60, \end{verbatim} this line sets
+the lateral domain extent in grid points for the
+axis aligned with the x-coordinate.
+
+\item Line 40, 
+\begin{verbatim} sNy=60, \end{verbatim} this line sets
+the lateral domain extent in grid points for the
+axis aligned with the y-coordinate.
+
+\item Line 49, 
+\begin{verbatim} Nr=4,   \end{verbatim} this line sets
+the vertical domain extent in grid points.
+
+\end{itemize}
+
+\begin{small}
+\include{part3/case_studies/fourlayer_gyre/code/SIZE.h}
+\end{small}
+
+\subsubsection{File {\it code/CPP\_OPTIONS.h}}
+
+This file uses standard default values and does not contain
+customisations for this experiment.
+
+
+\subsubsection{File {\it code/CPP\_EEOPTIONS.h}}
+
+This file uses standard default values and does not contain
+customisations for this experiment.
+
+\subsubsection{Other Files }
+
+Other files relevant to this experiment are
+\begin{itemize}
+\item {\it model/src/ini\_cori.F}. This file initializes the model
+coriolis variables {\bf fCorU} and {\bf fCorV}.
+\item {\it model/src/ini\_spherical\_polar\_grid.F} This file
+initializes the model grid discretisation variables {\bf
+dxF, dyF, dxG, dyG, dxC, dyC}.
+\item {\it model/src/ini\_parms.F}.
+\end{itemize}
+
+\subsection{Running The Example}
+\label{SEC:running_the_example}
+
+\subsubsection{Code Download}
+
+ In order to run the examples you must first download the code distribution.
+Instructions for downloading the code can be found in the Getting Started
+Guide \cite{MITgcm_Getting_Started}.
+
+\subsubsection{Experiment Location}
+
+ This example experiments is located under the release sub-directory
+
+\vspace{5mm}
+{\it verification/exp1/ }
+
+\subsubsection{Running the Experiment}
+
+ To run the experiment
+
+\begin{enumerate}
+\item Set the current directory to {\it input/ }
+
+\begin{verbatim}
+% cd input
+\end{verbatim}
+
+\item Verify that current directory is now correct
+
+\begin{verbatim}
+% pwd
+\end{verbatim}
+
+ You shold see a response on the screen ending in
+
+{\it verification/exp1/input }
+
+
+\item Run the genmake script to create the experiment {\it Makefile}
+
+\begin{verbatim}
+% ../../../tools/genmake -mods=../code
+\end{verbatim}
+
+\item Create a list of header file dependencies in {\it Makefile}
+
+\begin{verbatim}
+% make depend
+\end{verbatim}
+
+\item Build the executable file.
+
+\begin{verbatim}
+% make
+\end{verbatim}
+
+\item Run the {\it mitgcmuv} executable
+
+\begin{verbatim}
+% ./mitgcmuv
+\end{verbatim}
+
+\end{enumerate}
+
+

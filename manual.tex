@@ -1,0 +1,79 @@
+% $Header: /u/gcmpack/manual/manual.tex,v 1.1.1.1 2001/08/08 16:15:12 adcroft Exp $
+% $Name:  $
+
+\documentclass[12pt]{book}
+
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{html}
+\usepackage{epsfig}
+\usepackage{graphics,subfigure}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{fancyhdr}
+\usepackage{psfrag}
+\usepackage{oldgerm}
+\usepackage{palatcm}              % better PDF 
+
+% page headers and footers
+\pagestyle{fancy}
+\fancyhead{}
+\fancyhead[LO]{\slshape \rightmark}
+\fancyhead[RE]{\slshape \leftmark}
+\fancyhead[RO,LE]{\thepage}
+\fancyfoot[CO,CE]{\today}
+\fancyfoot[RO,LE]{ }
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+% referencing
+\newcommand{\refequ}[1]{equation (\ref{equ:#1})}
+\newcommand{\refequbig}[1]{Equation (\ref{equ:#1})}
+\newcommand{\reftab}[1]{Tab.~\ref{tab:#1}}
+\newcommand{\reftabno}[1]{\ref{tab:#1}}
+\newcommand{\reffig}[1]{Fig.~\ref{fig:#1}}
+\newcommand{\reffigno}[1]{\ref{fig:#1}}
+
+% stuff for psfrag
+\newcommand{\textinfigure}[1]{{\footnotesize\textbf{\textsf{#1}}}}
+\newcommand{\mathinfigure}[1]{\small\ensuremath{{#1}}}
+
+
+
+\begin{document}
+
+\tableofcontents
+\pagebreak
+
+% Part: Overview
+\input{part1/part1}
+\pagebreak
+
+% Part: Discretization and Algorithm
+\input{part2/part2}
+\pagebreak
+
+% Part: Getting started
+\input{part3/part3}
+\pagebreak
+
+% Part: Software Architecture
+\input{part4/part4}
+\pagebreak
+
+% Part: Automatic Differentiation
+\input{part5/part5}
+\pagebreak
+
+% Part: Physical Packages
+\input{part6/part6}
+\pagebreak
+
+% Part: Diagnostics
+\input{part7/part7}
+\pagebreak
+
+% Part: ECCO Interface
+\input{part8/part8}
+
+\end{document}

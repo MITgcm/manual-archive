@@ -1,0 +1,555 @@
+% $Header: /u/gcmpack/manual/s_examples/tracer_adjsens/Attic/co2sens.tex,v 1.1.1.1 2001/08/08 16:16:16 adcroft Exp $
+% $Name:  $
+
+\section{Example: Centenial Time Scale Sensitivities}
+
+\bodytext{bgcolor="#FFFFFFFF"}
+
+%\begin{center} 
+%{\Large \bf Using MITgcm to Look at Centenial Time Scale
+%Sensitivities}
+%
+%\vspace*{4mm}
+%
+%\vspace*{3mm}
+%{\large May 2001}
+%\end{center}
+
+\subsection{Introduction}
+
+This document describes the fourth example MITgcm experiment.
+This example iilustrates the use of
+the MITgcm to perform sentivity analysis in a
+large scale ocean circulation simulation.
+
+\subsection{Overview}
+
+This example experiment demonstrates using the MITgcm to simulate
+the planetary ocean circulation. The simulation is configured
+with realistic geography and bathymetry on a
+$4^{\circ} \times 4^{\circ}$ spherical polar grid.
+Twenty vertical layers are used in the vertical, ranging in thickness
+from $50\,{\rm m}$ at the surface to $815\,{\rm m}$ at depth,
+giving a maximum model depth of $6\,{\rm km}$.
+At this resolution, the configuration
+can be integrated forward for thousands of years on a single 
+processor desktop computer.
+\\
+
+The model is forced with climatalogical wind stress data and surface
+flux data from Da Silva \cite{DaSilva94}. Climatalogical data
+from Levitus \cite{Levitus94} is used to initialise the model hydrography.
+Levitus data is also used throughout the calculation
+to derive air-sea fluxes of heat at the ocean surface.
+These fluxes are combined with climatalogical estimates of
+surface heat flux and fresh water, resulting in a mixed boundary
+condition of the style decribed in Haney \cite{Haney}.
+Altogether, this yields the following forcing applied
+in the model surface layer.
+
+\begin{eqnarray}
+\label{EQ:global_forcing}
+\label{EQ:global_forcing_fu}
+{\cal F}_{u} & = & \frac{\tau_{x}}{\rho_{0} \Delta z_{s}}
+\\
+\label{EQ:global_forcing_fv}
+{\cal F}_{v} & = & \frac{\tau_{y}}{\rho_{0} \Delta z_{s}}
+\\
+\label{EQ:global_forcing_ft}
+{\cal F}_{\theta} & = & - \lambda_{\theta} ( \theta - \theta^{\ast} ) 
+ - \frac{1}{C_{p} \rho_{0} \Delta z_{s}}{\cal Q}
+\\
+\label{EQ:global_forcing_fs}
+{\cal F}_{s} & = & - \lambda_{s} ( S - S^{\ast} ) 
+ + \frac{S_{0}}{\Delta z_{s}}({\cal E} - {\cal P} - {\cal R})
+\end{eqnarray}
+
+\noindent where ${\cal F}_{u}$, ${\cal F}_{v}$, ${\cal F}_{\theta}$,
+${\cal F}_{s}$ are the forcing terms in the zonal and meridional
+momentum and in the potential temperature and salinity 
+equations respectively.
+The term $\Delta z_{s}$ represents the top ocean layer thickness.
+It is used in conjunction with the reference density, $\rho_{0}$
+(here set to $999.8\,{\rm kg\,m^{-3}}$), the
+reference salinity, $S_{0}$ (here set to 35ppt),
+and a specific heat capacity $C_{p}$ to convert
+wind-stress fluxes given in ${\rm N}\,m^{-2}$, 
+\\
+
+
+The configuration is illustrated in figure \ref{simulation_config}.
+
+
+\subsection{Discrete Numerical Configuration}
+
+
+ The model is configured in hydrostatic form.  The domain is discretised with 
+a uniform grid spacing in latitude and longitude of
+ $\Delta x=\Delta y=4^{\circ}$, so 
+that there are ninety grid cells in the $x$ and forty in the 
+$y$ direction (Arctic polar regions are not
+included in this experiment). Vertically the 
+model is configured with twenty layers with the following thicknesses
+$\Delta z_{1} = 50\,{\rm m},\,
+ \Delta z_{2} = 50\,{\rm m},\,
+ \Delta z_{3} = 55\,{\rm m},\,
+ \Delta z_{4} = 60\,{\rm m},\,
+ \Delta z_{5} = 65\,{\rm m},\,
+$
+$
+ \Delta z_{6}~=~70\,{\rm m},\,
+ \Delta z_{7}~=~80\,{\rm m},\,
+ \Delta z_{8}~=95\,{\rm m},\,
+ \Delta z_{9}=120\,{\rm m},\,
+ \Delta z_{10}=155\,{\rm m},\,
+$
+$
+ \Delta z_{11}=200\,{\rm m},\,
+ \Delta z_{12}=260\,{\rm m},\,
+ \Delta z_{13}=320\,{\rm m},\,
+ \Delta z_{14}=400\,{\rm m},\,
+ \Delta z_{15}=480\,{\rm m},\,
+$
+$
+ \Delta z_{16}=570\,{\rm m},\,
+ \Delta z_{17}=655\,{\rm m},\,
+ \Delta z_{18}=725\,{\rm m},\,
+ \Delta z_{19}=775\,{\rm m},\,
+ \Delta z_{20}=815\,{\rm m}
+$ (here the numeric subscript indicates the model level index number, ${\tt k}$).
+The implicit free surface form of the pressure equation described in Marshall et. al 
+\cite{Marshall97a} is employed. A laplacian operator, $\nabla^2$, provides viscous
+dissipation. Thermal and haline diffusion is also represented by a laplacian operator.
+\\
+
+Wind-stress momentum inputs are added to the momentum equations for both
+the zonal flow, $u$ and the merdional flow $v$, according to equations 
+(\ref{EQ:global_forcing_fu}) and (\ref{EQ:global_forcing_fv}).
+Thermodynamic forcing inputs are added to the equations for
+potential temperature, $\theta$, and salinity, $S$, according to equations 
+(\ref{EQ:global_forcing_ft}) and (\ref{EQ:global_forcing_fs}).
+This produces a set of equations solved in this configuration as follows:
+% {\fracktur}
+
+
+\begin{eqnarray}
+\label{EQ:model_equations}
+\frac{Du}{Dt} - fv + 
+  \frac{1}{\rho}\frac{\partial p^{'}}{\partial x} - 
+  A_{h}\nabla_{h}^2u - A_{z}\frac{\partial^{2}u}{\partial z^{2}} 
+& = &
+{\cal F}_{u}
+\\
+\frac{Dv}{Dt} + fu + 
+  \frac{1}{\rho}\frac{\partial p^{'}}{\partial y} - 
+  A_{h}\nabla_{h}^2v - A_{z}\frac{\partial^{2}v}{\partial z^{2}} 
+& = &
+{\cal F}_{v}
+\\
+\frac{\partial \eta}{\partial t} + \nabla_{h}\cdot \vec{u}
+&=&
+0
+\\
+\frac{D\theta}{Dt} -
+ K_{h}\nabla_{h}^2\theta  - \Gamma(K_{z})\frac{\partial^{2}\theta}{\partial z^{2}} 
+& = &
+{\cal F}_{\theta}
+\\
+\frac{D s}{Dt} -
+ K_{h}\nabla_{h}^2 s  - \Gamma(K_{z})\frac{\partial^{2} s}{\partial z^{2}} 
+& = &
+{\cal F}_{s}
+\\
+g\rho_{0} \eta + \int^{0}_{-z}\rho^{'} dz & = & p^{'}
+\\
+\end{eqnarray}
+
+\noindent where $u$ and $v$ are the $x$ and $y$ components of the
+flow vector $\vec{u}$. The suffices ${s},{i}$ indicate surface and
+interior model levels respectively. As described in
+MITgcm Numerical Solution Procedure \cite{MITgcm_Numerical_Scheme}, the time 
+evolution of potential temperature, $\theta$, equation is solved prognostically.
+The total pressure, $p$, is diagnosed by summing pressure due to surface 
+elevation $\eta$ and the hydrostatic pressure.
+\\
+
+\subsubsection{Numerical Stability Criteria}
+
+The laplacian dissipation coefficient, $A_{h}$, is set to $400 m s^{-1}$.
+This value is chosen to yield a Munk layer width \cite{Adcroft_thesis},
+
+\begin{eqnarray}
+\label{EQ:munk_layer}
+M_{w} = \pi ( \frac { A_{h} }{ \beta } )^{\frac{1}{3}}
+\end{eqnarray}
+
+\noindent  of $\approx 100$km. This is greater than the model
+resolution in mid-latitudes $\Delta x$, ensuring that the frictional 
+boundary layer is well resolved.
+\\
+
+\noindent The model is stepped forward with a 
+time step $\delta t=1200$secs. With this time step the stability 
+parameter to the horizontal laplacian friction \cite{Adcroft_thesis}
+
+\begin{eqnarray}
+\label{EQ:laplacian_stability}
+S_{l} = 4 \frac{A_{h} \delta t}{{\Delta x}^2}
+\end{eqnarray}
+
+\noindent evaluates to 0.012, which is well below the 0.3 upper limit
+for stability. 
+\\
+
+\noindent The vertical dissipation coefficient, $A_{z}$, is set to 
+$1\times10^{-2} {\rm m}^2{\rm s}^{-1}$. The associated stability limit
+
+\begin{eqnarray}
+\label{EQ:laplacian_stability_z}
+S_{l} = 4 \frac{A_{z} \delta t}{{\Delta z}^2}
+\end{eqnarray}
+
+\noindent evaluates to $4.8 \times 10^{-5}$ which is again well below
+the upper limit.
+The values of $A_{h}$ and $A_{z}$ are also used for the horizontal ($K_{h}$) 
+and vertical ($K_{z}$) diffusion coefficients for temperature respectively.
+\\
+
+\noindent The numerical stability for inertial oscillations
+\cite{Adcroft_thesis} 
+
+\begin{eqnarray}
+\label{EQ:inertial_stability}
+S_{i} = f^{2} {\delta t}^2
+\end{eqnarray}
+
+\noindent evaluates to $0.0144$, which is well below the $0.5$ upper 
+limit for stability.
+\\
+
+\noindent The advective CFL \cite{Adcroft_thesis} for a extreme maximum 
+horizontal flow
+speed of $ | \vec{u} | = 2 ms^{-1}$
+
+\begin{eqnarray}
+\label{EQ:cfl_stability}
+S_{a} = \frac{| \vec{u} | \delta t}{ \Delta x}
+\end{eqnarray}
+
+\noindent evaluates to $5 \times 10^{-2}$. This is well below the stability 
+limit of 0.5.
+\\
+
+\noindent The stbility parameter for internal gravity waves 
+\cite{Adcroft_thesis}
+
+\begin{eqnarray}
+\label{EQ:cfl_stability}
+S_{c} = \frac{c_{g} \delta t}{ \Delta x}
+\end{eqnarray}
+
+\noindent evaluates to $5 \times 10^{-2}$. This is well below the linear
+stability limit of 0.25.
+  
+\subsection{Code Configuration}
+\label{SEC:code_config}
+
+The model configuration for this experiment resides under the 
+directory {\it verification/exp1/}.  The experiment files 
+\begin{itemize}
+\item {\it input/data}
+\item {\it input/data.pkg}
+\item {\it input/eedata},
+\item {\it input/windx.sin\_y},
+\item {\it input/topog.box},
+\item {\it code/CPP\_EEOPTIONS.h}
+\item {\it code/CPP\_OPTIONS.h},
+\item {\it code/SIZE.h}. 
+\end{itemize}
+contain the code customisations and parameter settings for this 
+experiements. Below we describe the customisations
+to these files associated with this experiment.
+
+\subsubsection{File {\it input/data}}
+
+This file, reproduced completely below, specifies the main parameters 
+for the experiment. The parameters that are significant for this configuration
+are
+
+\begin{itemize}
+
+\item Line 4, 
+\begin{verbatim} tRef=20.,10.,8.,6., \end{verbatim} 
+this line sets
+the initial and reference values of potential temperature at each model
+level in units of $^{\circ}$C.
+The entries are ordered from surface to depth. For each
+depth level the inital and reference profiles will be uniform in
+$x$ and $y$.
+
+\fbox{
+\begin{minipage}{5.0in}
+{\it S/R INI\_THETA}({\it ini\_theta.F})
+\end{minipage}
+}
+
+
+\item Line 6, 
+\begin{verbatim} viscAz=1.E-2, \end{verbatim} 
+this line sets the vertical laplacian dissipation coefficient to
+$1 \times 10^{-2} {\rm m^{2}s^{-1}}$. Boundary conditions
+for this operator are specified later. This variable is copied into
+model general vertical coordinate variable {\bf viscAr}.
+
+\fbox{
+\begin{minipage}{5.0in}
+{\it S/R CALC\_DIFFUSIVITY}({\it calc\_diffusivity.F})
+\end{minipage}
+}
+
+\item Line 7, 
+\begin{verbatim}
+viscAh=4.E2,
+\end{verbatim} 
+this line sets the horizontal laplacian frictional dissipation coefficient to
+$1 \times 10^{-2} {\rm m^{2}s^{-1}}$. Boundary conditions
+for this operator are specified later.
+
+\item Lines 8,
+\begin{verbatim}
+no_slip_sides=.FALSE.
+\end{verbatim}
+this line selects a free-slip lateral boundary condition for
+the horizontal laplacian friction operator 
+e.g. $\frac{\partial u}{\partial y}$=0 along boundaries in $y$ and
+$\frac{\partial v}{\partial x}$=0 along boundaries in $x$.
+
+\item Lines 9,
+\begin{verbatim}
+no_slip_bottom=.TRUE.
+\end{verbatim}
+this line selects a no-slip boundary condition for bottom
+boundary condition in the vertical laplacian friction operator 
+e.g. $u=v=0$ at $z=-H$, where $H$ is the local depth of the domain.
+
+\item Line 10,
+\begin{verbatim}
+diffKhT=4.E2,
+\end{verbatim}
+this line sets the horizontal diffusion coefficient for temperature
+to $400\,{\rm m^{2}s^{-1}}$. The boundary condition on this
+operator is $\frac{\partial}{\partial x}=\frac{\partial}{\partial y}=0$ at
+all boundaries.
+
+\item Line 11,
+\begin{verbatim}
+diffKzT=1.E-2,
+\end{verbatim}
+this line sets the vertical diffusion coefficient for temperature
+to $10^{-2}\,{\rm m^{2}s^{-1}}$. The boundary condition on this
+operator is $\frac{\partial}{\partial z}$ = 0 on all boundaries.
+
+\item Line 13,
+\begin{verbatim}
+tAlpha=2.E-4,
+\end{verbatim}
+This line sets the thermal expansion coefficient for the fluid
+to $2 \times 10^{-4}\,{\rm degrees}^{-1}$
+
+\fbox{
+\begin{minipage}{5.0in}
+{\it S/R FIND\_RHO}({\it find\_rho.F})
+\end{minipage}
+}
+
+\item Line 18,
+\begin{verbatim}
+eosType='LINEAR'
+\end{verbatim}
+This line selects the linear form of the equation of state.
+
+\fbox{
+\begin{minipage}{5.0in}
+{\it S/R FIND\_RHO}({\it find\_rho.F})
+\end{minipage}
+}
+
+
+
+\item Line 40,
+\begin{verbatim}
+usingSphericalPolarGrid=.TRUE.,
+\end{verbatim}
+This line requests that the simulation be performed in a 
+spherical polar coordinate system. It affects the interpretation of
+grid inoput parameters, for exampl {\bf delX} and {\bf delY} and
+causes the grid generation routines to initialise an internal grid based
+on spherical polar geometry.
+
+\fbox{
+\begin{minipage}{5.0in}
+{\it S/R INI\_SPEHRICAL\_POLAR\_GRID}({\it ini\_spherical\_polar\_grid.F})
+\end{minipage}
+}
+
+\item Line 41,
+\begin{verbatim}
+phiMin=0.,
+\end{verbatim}
+This line sets the southern boundary of the modeled
+domain to $0^{\circ}$ latitude. This value affects both the
+generation of the locally orthogonal grid that the model
+uses internally and affects the initialisation of the coriolis force.
+Note - it is not required to set
+a longitude boundary, since the absolute longitude does
+not alter the kernel equation discretisation.
+
+\item Line 42,
+\begin{verbatim}
+delX=60*1.,
+\end{verbatim}
+This line sets the horizontal grid spacing between each y-coordinate line
+in the discrete grid to $1^{\circ}$ in longitude.
+
+\item Line 43,
+\begin{verbatim}
+delY=60*1.,
+\end{verbatim}
+This line sets the horizontal grid spacing between each y-coordinate line
+in the discrete grid to $1^{\circ}$ in latitude.
+
+\item Line 44,
+\begin{verbatim}
+delZ=500.,500.,500.,500.,
+\end{verbatim}
+This line sets the vertical grid spacing between each z-coordinate line
+in the discrete grid to $500\,{\rm m}$, so that the total model depth 
+is $2\,{\rm km}$. The variable {\bf delZ} is copied into the internal
+model coordinate variable {\bf delR}
+
+\fbox{
+\begin{minipage}{5.0in}
+{\it S/R INI\_VERTICAL\_GRID}({\it ini\_vertical\_grid.F})
+\end{minipage}
+}
+
+\item Line 47,
+\begin{verbatim}
+bathyFile='topog.box'
+\end{verbatim}
+This line specifies the name of the file from which the domain
+bathymetry is read. This file is a two-dimensional ($x,y$) map of
+depths. This file is assumed to contain 64-bit binary numbers 
+giving the depth of the model at each grid cell, ordered with the x 
+coordinate varying fastest. The points are ordered from low coordinate
+to high coordinate for both axes. The units and orientation of the
+depths in this file are the same as used in the MITgcm code. In this
+experiment, a depth of $0m$ indicates a solid wall and a depth
+of $-2000m$ indicates open ocean. The matlab program
+{\it input/gendata.m} shows an example of how to generate a
+bathymetry file.
+
+
+\item Line 50,
+\begin{verbatim}
+zonalWindFile='windx.sin_y'
+\end{verbatim}
+This line specifies the name of the file from which the x-direction
+surface wind stress is read. This file is also a two-dimensional
+($x,y$) map and is enumerated and formatted in the same manner as the 
+bathymetry file. The matlab program {\it input/gendata.m} includes example 
+code to generate a valid 
+{\bf zonalWindFile} 
+file.  
+
+\end{itemize}
+
+\noindent other lines in the file {\it input/data} are standard values
+that are described in the MITgcm Getting Started and MITgcm Parameters
+notes.
+
+\begin{small}
+% \input{part3/case_studies/carbon_outgassing_sensitivity/input/data}
+\end{small}
+
+\subsubsection{File {\it input/data.pkg}}
+
+This file uses standard default values and does not contain
+customisations for this experiment.
+
+\subsubsection{File {\it input/eedata}}
+
+This file uses standard default values and does not contain
+customisations for this experiment.
+
+\subsubsection{File {\it input/windx.sin\_y}}
+
+The {\it input/windx.sin\_y} file specifies a two-dimensional ($x,y$) 
+map of wind stress ,$\tau_{x}$, values. The units used are $Nm^{-2}$.
+Although $\tau_{x}$ is only a function of $y$n in this experiment
+this file must still define a complete two-dimensional map in order
+to be compatible with the standard code for loading forcing fields 
+in MITgcm. The included matlab program {\it input/gendata.m} gives a complete
+code for creating the {\it input/windx.sin\_y} file.
+
+\subsubsection{File {\it input/topog.box}}
+
+
+The {\it input/topog.box} file specifies a two-dimensional ($x,y$) 
+map of depth values. For this experiment values are either
+$0m$ or $-2000\,{\rm m}$, corresponding respectively to a wall or to deep
+ocean. The file contains a raw binary stream of data that is enumerated
+in the same way as standard MITgcm two-dimensional, horizontal arrays.
+The included matlab program {\it input/gendata.m} gives a complete
+code for creating the {\it input/topog.box} file.
+
+\subsubsection{File {\it code/SIZE.h}}
+
+Two lines are customized in this file for the current experiment
+
+\begin{itemize}
+
+\item Line 39, 
+\begin{verbatim} sNx=60, \end{verbatim} this line sets
+the lateral domain extent in grid points for the
+axis aligned with the x-coordinate.
+
+\item Line 40, 
+\begin{verbatim} sNy=60, \end{verbatim} this line sets
+the lateral domain extent in grid points for the
+axis aligned with the y-coordinate.
+
+\item Line 49, 
+\begin{verbatim} Nr=4,   \end{verbatim} this line sets
+the vertical domain extent in grid points.
+
+\end{itemize}
+
+\begin{small}
+% \include{code/SIZE.h}
+\end{small}
+
+\subsubsection{File {\it code/CPP\_OPTIONS.h}}
+
+This file uses standard default values and does not contain
+customisations for this experiment.
+
+
+\subsubsection{File {\it code/CPP\_EEOPTIONS.h}}
+
+This file uses standard default values and does not contain
+customisations for this experiment.
+
+\subsubsection{Other Files }
+
+Other files relevant to this experiment are
+\begin{itemize}
+\item {\it model/src/ini\_cori.F}. This file initializes the model
+coriolis variables {\bf fCorU}.
+\item {\it model/src/ini\_spherical\_polar\_grid.F}
+\item {\it model/src/ini\_parms.F},
+\item {\it input/windx.sin\_y},
+\end{itemize}
+contain the code customisations and parameter settings for this 
+experiements. Below we describe the customisations
+to these files associated with this experiment.

@@ -1,0 +1,57 @@
+% $Header: /u/gcmpack/manual/s_examples/baroclinic_gyre/input/data.tex,v 1.1.1.1 2001/08/08 16:15:46 adcroft Exp $
+% $Name:  $
+
+\begin{verbatim}
+     1	# Model parameters
+     2	# Continuous equation parameters
+     3	 &PARM01
+     4	 tRef=20.,10.,8.,6.,
+     5	 sRef=10.,10.,10.,10.,
+     6	 viscAz=1.E-2,
+     7	 viscAh=4.E2,
+     8	 no_slip_sides=.FALSE.,
+     9	 no_slip_bottom=.TRUE.,
+    10	 diffKhT=4.E2,
+    11	 diffKzT=1.E-2,
+    12	 beta=1.E-11,
+    13	 tAlpha=2.E-4,
+    14	 sBeta =0.,
+    15	 gravity=9.81,
+    16	 rigidLid=.FALSE.,
+    17	 implicitFreeSurface=.TRUE.,
+    18	 eosType='LINEAR',
+    19	 readBinaryPrec=64,
+    20	 &
+    21	# Elliptic solver parameters
+    22	 &PARM02
+    23	 cg2dMaxIters=1000,
+    24	 cg2dTargetResidual=1.E-13,
+    25	 &
+    26	# Time stepping parameters
+    27	 &PARM03
+    28	 startTime=0.,
+    29	 endTime=12000., 
+    30	 deltaTmom=1200.0,
+    31	 deltaTtracer=1200.0,
+    32	 abEps=0.1,
+    33	 pChkptFreq=17000.0,
+    34	 chkptFreq=0.0,
+    35	 dumpFreq=2592000.0,
+    36	 &
+    37	# Gridding parameters
+    38	 &PARM04
+    39	 usingCartesianGrid=.FALSE.,
+    40	 usingSphericalPolarGrid=.TRUE.,
+    41	 phiMin=0.,
+    42	 delX=60*1.,
+    43	 delY=60*1.,
+    44	 delZ=500.,500.,500.,500.,
+    45	 &
+    46	 &PARM05
+    47	 bathyFile='topog.box',
+    48	 hydrogThetaFile=,
+    49	 hydrogSaltFile=,
+    50	 zonalWindFile='windx.sin_y',
+    51	 meridWindFile=,
+    52	 &
+\end{verbatim}

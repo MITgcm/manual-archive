@@ -1,0 +1,27 @@
+% $Header: /u/gcmpack/manual/s_algorithm/text/notation.tex,v 1.1.1.1 2001/08/08 16:15:21 adcroft Exp $
+% $Name:  $
+
+\section{Notations} 
+
+The notations we use to discribe the discrete formulation 
+of the model are summarised hereafter:\\
+general notation:
+\\ $\Delta x, \Delta y, \Delta r$ grid spacing in X,Y,R directions.
+\\ $A_o$ : Area of the face orthogonal to "o" direction (o=u,v,w ...).
+\\ ${\cal V}_u , {\cal V}_v , {\cal V}_v , {\cal V}_\theta$ :
+Volume of the grid box surrounding $u,v,w,\theta$ point;
+\\ $i,j,k$ : current index relative to X,Y,R directions;
+\\basic operator:
+\\ $\delta_i $ : $\delta_i \Phi = \Phi_{i+1} - \Phi_i $
+\\ $\overline{~}i$ : $\overline{\Phi}^i = ( \Phi_{i+1} + \Phi_i ) / 2 $ 
+\\ $\delta_x $ : $\delta_x \Phi = \frac{1}{\Delta x} \delta_i \Phi $
+\\
+\\ $\overline{\nabla}$ = gradient operator :  
+$\overline{\nabla} \Phi = \{ \delta_x \Phi , \delta_y \Phi \}$
+\\ $\overline{\nabla} \cdot$ = divergence operator :  
+$\overline{\nabla}\cdot \vec{\mathrm{f}}  = 
+\frac{1}{\cal V} \{ \delta_i A_x \mathrm{f}_x 
+                  + \delta_j A_y \mathrm{f}_y \} $
+\\ $\overline{\nabla}^2 $ = Laplacien operator :
+$ \overline{\nabla}^2 \Phi = 
+   \overline{\nabla}\cdot \overline{\nabla}\Phi $
