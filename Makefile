@@ -15,6 +15,7 @@ all:
 	make tex
 	make ps
 	make pdf
+	make ps.gz
 	make html
 
 tex:
@@ -24,6 +25,9 @@ tex:
 	TEXINPUTS=.:::texinputs latex manual | tee warnings
 
 ps: manual.ps
+
+ps.gz: manual.ps
+	gzip -9 -c manual.ps > manual.ps.gz
 
 pdf: manual.pdf
 
