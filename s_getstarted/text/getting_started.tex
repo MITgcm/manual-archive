@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.7 2001/10/21 04:19:40 cnh Exp $
+% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.8 2001/10/22 11:55:47 cnh Exp $
 % $Name:  $
 
 %\section{Getting started}
@@ -180,40 +180,47 @@ section \ref{sect:modelExamples}.
 \section{Example experiments}
 \label{sect:modelExamples}
 
-Now that you have successfully downloaded the model code we recommend that
-you first try to run the examples provided with the base version. You will
-probably want to run the example that is the closest to the configuration
-you will use eventually. The examples are located in subdirectories under
-the directory \textit{verification} and are briefly described below (a full
-description is given in section 2):
+The MITgcm distribution comes with a set of twenty-four pre-configured
+numerical experiments. Some of these examples experiments are tests of 
+individual parts of the model code, but many are fully fledged numerical
+simulations. A few of the examples are used for tutorial documentation
+in sections \ref{sec:eg-baro} - \ref{sec:eg-global}. The other examples
+follow the same general structure as the tutorial examples. However,
+they only include brief instructions in a text file called {\it README}.
+The examples are located in subdirectories under
+the directory \textit{verification}. Each
+example is briefly described below.
 
-\subsection{List of model examples}
+\subsection{Full list of model examples}
 
-\begin{itemize}
+\begin{enumerate}
 \item \textit{exp0} - single layer, ocean double gyre (barotropic with
-free-surface).
+free-surface). This experiment is described in detail in section
+\ref{sec:eg-baro}.
 
-\item \textit{exp1} - 4 layers, ocean double gyre.
+\item \textit{exp1} - Four layer, ocean double gyre. This experiment is described in detail in section
+\ref{sec:eg-baroc}.
 
 \item \textit{exp2} - 4x4 degree global ocean simulation with steady
-climatological forcing.
+climatological forcing. This experiment is described in detail in section
+\ref{sec:eg-global}.
 
-\item \textit{exp4} - flow over a Gaussian bump in open-water or channel
+\item \textit{exp4} - Flow over a Gaussian bump in open-water or channel
 with open boundaries.
 
-\item \textit{exp5} - inhomogenously forced ocean convection in a doubly
+\item \textit{exp5} - Inhomogenously forced ocean convection in a doubly
 periodic box.
 
-\item \textit{front\_relax} - relaxation of an ocean thermal front (test for
+\item \textit{front\_relax} - Relaxation of an ocean thermal front (test for
 Gent/McWilliams scheme). 2D (Y-Z).
 
-\item \textit{internal wave} - ocean internal wave forced by open boundary
+\item \textit{internal wave} - Ocean internal wave forced by open boundary
 conditions.
 
-\item \textit{natl\_box} - eastern subtropical North Atlantic with KPP
+\item \textit{natl\_box} - Eastern subtropical North Atlantic with KPP
 scheme; 1 month integration
 
-\item \textit{hs94.1x64x5} - zonal averaged atmosphere using Held and Suarez
+\item \textit{hs94.1x64x5} - Zonal averaged atmosphere using Held and Suarez
 '94 forcing.
 
 \item \textit{hs94.128x64x5} - 3D atmosphere dynamics using Held and Suarez
@@ -222,24 +229,48 @@ scheme; 1 month integration
 \item \textit{hs94.cs-32x32x5} - 3D atmosphere dynamics using Held and
 Suarez '94 forcing on the cubed sphere.
 
-\item \textit{aim.5l\_zon-ave} - Intermediate Atmospheric physics, 5 layers
-Molteni physics package. Global Zonal Mean configuration, 1x64x5 resolution.
+\item \textit{aim.5l\_zon-ave} - Intermediate Atmospheric physics. Global 
+Zonal Mean configuration, 1x64x5 resolution.
 
 \item \textit{aim.5l\_XZ\_Equatorial\_Slice} - Intermediate Atmospheric
-physics, 5 layers Molteni physics package. Equatorial Slice configuration.
+physics, equatorial Slice configuration.
 2D (X-Z).
 
 \item \textit{aim.5l\_Equatorial\_Channel} - Intermediate Atmospheric
-physics, 5 layers Molteni physics package. 3D Equatorial Channel
-configuration (not completely tested).
+physics. 3D Equatorial Channel configuration.
 
-\item \textit{aim.5l\_LatLon} - Intermediate Atmospheric physics, 5 layers
-Molteni physics package. Global configuration, 128x64x5 resolution.
+\item \textit{aim.5l\_LatLon} - Intermediate Atmospheric physics.
+Global configuration, on latitude longitude grid with 128x64x5 grid points
+($2.8^\circ{\rm degree}$ resolution).
 
-\item \textit{adjustment.128x64x1}
+\item \textit{adjustment.128x64x1} Barotropic adjustment
+problem on latitude longitude grid with 128x64 grid points ($2.8^\circ{\rm degree}$ resolution).
 
 \item \textit{adjustment.cs-32x32x1}
-\end{itemize}
+Barotropic adjustment
+problem on cube sphere grid with 32x32 points per face ( roughly
+$2.8^\circ{\rm degree}$ resolution).
+
+\item \textit{advect\_cs} Two-dimensional passive advection test on
+cube sphere grid.
+
+\item \textit{advect\_xy} Two-dimensional (horizontal plane) passive advection 
+test on cartesian grid.
+
+\item \textit{advect\_yz} Two-dimensional (vertical plane) passive advection test on cartesian grid.
+
+\item \textit{carbon} Simple passive tracer experiment. Includes derivative
+calculation. Described in detail in section \ref{sec:eg-carbon-ad}.
+
+\item \textit{flt\_example} Example of using float package.
+
+\item \textit{global\_ocean.90x40x15} Global circulation with
+GM, flux boundary conditions and poles.
+
+\item \textit{solid-body.cs-32x32x1} Solid body rotation test for cube sphere
+grid.
+
+\end{enumerate}
 
 \subsection{Directory structure of model examples}
 
