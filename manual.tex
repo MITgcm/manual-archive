@@ -1,31 +1,37 @@
-% $Header: /u/gcmpack/manual/manual.tex,v 1.7 2001/10/09 10:48:01 cnh Exp $
+% $Header: /u/gcmpack/manual/manual.tex,v 1.8 2001/10/11 19:42:25 adcroft Exp $
 % $Name:  $
 
 \documentclass[12pt]{book}
 
-\usepackage{amsfonts}
+%To help cross-reference
+%\usepackage{showlabels}
+
+%aja%\usepackage{amsfonts}
 \usepackage{amsmath}
 \usepackage{html}
-\usepackage{epsfig}
-\usepackage{graphics,subfigure}
-\usepackage{array}
-\usepackage{multirow}
-\usepackage{fancyhdr}
-\usepackage{psfrag}
-%\usepackage{oldgerm}
+\usepackage{graphics}
+
+%cnh%\usepackage{array}
+%cnh%\usepackage{multirow}
+
+%ph%\usepackage{epsfig}
+%ph%\usepackage{psfrag}
+%ph%\usepackage{oldgerm}
+
 % I commented the following because it introduced excessive white space
-%\usepackage{palatcm}              % better PDF 
+%aja%\usepackage{palatcm}              % better PDF 
 
 % page headers and footers
+%cnh%\usepackage{fancyhdr}
 %\pagestyle{fancy}
-\fancyhead{}
-\fancyhead[LO]{\slshape \rightmark}
-\fancyhead[RE]{\slshape \leftmark}
-\fancyhead[RO,LE]{\thepage}
-\fancyfoot[CO,CE]{\today}
-\fancyfoot[RO,LE]{ }
-\renewcommand{\headrulewidth}{0.4pt}
-\renewcommand{\footrulewidth}{0.4pt}
+%cnh%\fancyhead{}
+%cnh%\fancyhead[LO]{\slshape \rightmark}
+%cnh%\fancyhead[RE]{\slshape \leftmark}
+%cnh%\fancyhead[RO,LE]{\thepage}
+%cnh%\fancyfoot[CO,CE]{\today}
+%cnh%\fancyfoot[RO,LE]{ }
+%cnh%\renewcommand{\headrulewidth}{0.4pt}
+%cnh%\renewcommand{\footrulewidth}{0.4pt}
 
 % bibtex stuff
 \newcommand{\BIBPATH}{.}
@@ -36,23 +42,21 @@
 \bibpunct{[}{]}{,}{a}{}{,}
 
 % referencing
-\newcommand{\refequ}[1]{equation (\ref{equ:#1})}
-\newcommand{\refequbig}[1]{Equation (\ref{equ:#1})}
-\newcommand{\reftab}[1]{Tab.~\ref{tab:#1}}
-\newcommand{\reftabno}[1]{\ref{tab:#1}}
-\newcommand{\reffig}[1]{Fig.~\ref{fig:#1}}
-\newcommand{\reffigno}[1]{\ref{fig:#1}}
+%ph%\newcommand{\refequ}[1]{equation (\ref{equ:#1})}
+%ph%\newcommand{\refequbig}[1]{Equation (\ref{equ:#1})}
+%ph%\newcommand{\reftab}[1]{Tab.~\ref{tab:#1}}
+%ph%\newcommand{\reftabno}[1]{\ref{tab:#1}}
+%ph%\newcommand{\reffig}[1]{Fig.~\ref{fig:#1}}
+%ph%\newcommand{\reffigno}[1]{\ref{fig:#1}}
 
 % stuff for psfrag
-\newcommand{\textinfigure}[1]{{\footnotesize\textbf{\textsf{#1}}}}
-\newcommand{\mathinfigure}[1]{\small\ensuremath{{#1}}}
+%ph%\newcommand{\textinfigure}[1]{{\footnotesize\textbf{\textsf{#1}}}}
+%ph%\newcommand{\mathinfigure}[1]{\small\ensuremath{{#1}}}
 
 % This allows numbering of subsubsections
 \setcounter{secnumdepth}{3}
 % This changes the the chapter title
 %\renewcommand{\chaptername}{Section}
-
-\usepackage{showlabels}
 
 
 \begin{document}
@@ -64,41 +68,41 @@
 
 % Section: Overview
 \input{part1/part1}
-\pagebreak
+%\pagebreak
 
 % Section: Discretization and Algorithm
 \input{part2/part2}
-\pagebreak
+%\pagebreak
 
 % Section: Getting started
 \input{part3/part3}
-\pagebreak
+%\pagebreak
 
 % Section: Software Architecture
 \input{part4/part4}
-\pagebreak
+%\pagebreak
 
 
 \part{Adjoint of the MIT GCM}
 
 % Section: Automatic Differentiation
 \input{part5/part5}
-\pagebreak
+%\pagebreak
 
 
 \part{Additional features}
 
 % Section: Physical Packages
 \input{part6/part6}
-\pagebreak
+%\pagebreak
 
 % Section: Diagnostics
 \input{part7/part7}
-\pagebreak
+%\pagebreak
 
 % Section: ECCO Interface
 \input{part8/part8}
-\pagebreak
+%\pagebreak
 
 % Section: References:
 \markboth{BIBLIOGRAPHY}{BIBLIOGRAPHY}
