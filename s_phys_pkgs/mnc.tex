@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/Attic/mnc.tex,v 1.13 2004/10/12 21:44:59 edhill Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/Attic/mnc.tex,v 1.14 2004/12/11 22:03:32 edhill Exp $
 % $Name:  $
 
 \section{NetCDF I/O Integration: MNC}
@@ -23,11 +23,49 @@ http://www.unidata.ucar.edu/packages/netcdf/
 
 \subsection{Using MNC}
 
-\subsubsection{MNC Configuration and Inputs}
+\subsubsection{MNC Configuration}
 
-As with all MITgcm packages, MNC can be turned on/off at compile time
-using the \texttt{packages.conf} file or the genmake2
+As with all MITgcm packages, MNC can be turned on or off at compile time
+using the \texttt{packages.conf} file or the \texttt{genmake2}
 \texttt{-enable=mnc} or \texttt{-disable=mnc} switches.
+
+While MNC is likely to work ``as is'', there are a few compile--time
+constants that may need to be increased for simulations that employ
+large numbers of tiles within each process.  Note that the important
+quantity is the maximum number of tiles \textbf{per process}.  Since
+MPI configurations tend to distribute large numbers of tiles over
+relatively large numbers of MPI processes, these constants will rarely
+need to be increased.
+
+If MNC runs out of space within its ``lookup'' tables during a
+simulation, then it will provide an error message along with a
+recommendation of which parameter to increase.  The parameters are all
+located within \filelink{pkg/mnc/mnc\_common.h}{pkg-mnc-mnc_common.h}
+and the ones that may need to be increased are:
+
+\begin{center}
+  {\footnotesize
+    \begin{tabular}[htb]{|l|r|l|}\hline
+      \textbf{Name}  &  
+      \textbf{Default}  &  \textbf{Description}  \\\hline
+      &  &  \\
+      \texttt{MNC\_MAX\_ID}  &  1000  & 
+      \textbf{IDs for various low-level entities}  \\
+      \texttt{MNC\_MAX\_INFO}  &   400  & 
+      \textbf{IDs (mostly for object sizes)}  \\
+      \texttt{MNC\_CW\_MAX\_I}  &  150  & 
+      \textbf{IDs for the ``wrapper'' layer}  \\\hline
+    \end{tabular}
+  }
+\end{center}
+
+In those rare cases where MNC ``out-of-memory'' error messages are
+encountered, it is a good idea to increase the too-small parameter by
+a factor of \textbf{2--10} in order to avoid wasting time on an
+iterative compile--test sequence.
+
+
+\subsubsection{MNC Inputs}
 
 For run-time configuration, most of the MNC--related model parameters
 are contained within a Fortran namelist file called \texttt{data.mnc}.
