@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.13 2001/11/13 20:51:36 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.14 2001/11/14 21:07:13 adcroft Exp $
 % $Name:  $
 
 The equations of motion integrated by the model involve four
@@ -558,19 +558,108 @@ The only difficulty with this approach is apparent in equation
 connecting $u,v^n$ with $G_\theta^{n-1/2}$. The flow used to advect
 tracers around is not naturally located in time. This could be avoided
 by applying the Adams-Bashforth extrapolation to the tracer field
-itself and advection that around but this is not yet available. We're
-not aware of any detrimental effect of this feature. The difficulty
-lies mainly in interpretation of what time-level variables and terms
-correspond to.
+itself and advecting that around but this approach is not yet
+available. We're not aware of any detrimental effect of this
+feature. The difficulty lies mainly in interpretation of what
+time-level variables and terms correspond to.
 
 
 \section{Non-hydrostatic formulation}
 \label{sect:non-hydrostatic}
 
-[to be written...]
+The non-hydrostatic formulation re-introduces the full vertical
+momentum equation and requires the solution of a 3-D elliptic
+equations for non-hydrostatic pressure perturbation. We still
+intergrate vertically for the hydrostatic pressure and solve a 2-D
+elliptic equation for the surface pressure/elevation for this reduces
+the amount of work needed to solve for the non-hydrostatic pressure.
 
-Equation for $w^{n+1}$ will be here as will 3-D elliptic equations.
-\label{eq:discrete-time-w}
+The momentum equations are discretized in time as follows:
+\begin{eqnarray}
+\frac{1}{\Delta t} u^{n+1} + g \partial_x \eta^{n+1} + \partial_x \phi_{nh}^{n+1}
+& = & \frac{1}{\Delta t} u^{n} + G_u^{(n+1/2)} \label{eq:discrete-time-u-nh} \\
+\frac{1}{\Delta t} v^{n+1} + g \partial_y \eta^{n+1} + \partial_y \phi_{nh}^{n+1}
+& = & \frac{1}{\Delta t} v^{n} + G_v^{(n+1/2)} \label{eq:discrete-time-v-nh} \\
+\frac{1}{\Delta t} w^{n+1} + \partial_r \phi_{nh}^{n+1}
+& = & \frac{1}{\Delta t} w^{n} + G_w^{(n+1/2)} \label{eq:discrete-time-w-nh} \\
+\end{eqnarray}
+which must satisfy the discrete-in-time depth integrated continuity,
+equation~\ref{eq:discrete-time-backward-free-surface} and the local continuity equation
+\begin{equation}
+\partial_x u^{n+1} + \partial_y v^{n+1} + \partial_r w^{n+1} = 0
+\label{eq:non-divergence-nh}
+\end{equation}
+As before, the explicit predictions for momentum are consolidated as:
+\begin{eqnarray*}
+u^* & = & u^n + \Delta t G_u^{(n+1/2)} \\
+v^* & = & v^n + \Delta t G_v^{(n+1/2)} \\
+w^* & = & w^n + \Delta t G_w^{(n+1/2)}
+\end{eqnarray*}
+but this time we introduce an intermediate step by splitting the
+tendancy of the flow as follows:
+\begin{eqnarray}
+u^{n+1} = u^{**} - \Delta t \partial_x \phi_{nh}^{n+1}
+& &
+u^{**} = u^{*} - \Delta t g \partial_x \eta^{n+1} \\
+v^{n+1} = v^{**} - \Delta t \partial_y \phi_{nh}^{n+1}
+& &
+v^{**} = v^{*} - \Delta t g \partial_y \eta^{n+1}
+\end{eqnarray}
+Substituting into the depth integrated continuity
+(equation~\ref{eq:discrete-time-backward-free-surface}) gives
+\begin{equation}
+\partial_x H \partial_x \left( g \eta^{n+1} + \widehat{\phi}_{nh}^{n+1} \right)
++
+\partial_y H \partial_y \left( g \eta^{n+1} + \widehat{\phi}_{nh}^{n+1} \right)
+ - \frac{\epsilon_{fs}\eta^*}{\Delta t^2}
+= - \frac{\eta^*}{\Delta t^2}
+\end{equation}
+which is approximated by equation
+\ref{eq:elliptic-backward-free-surface} on the basis that i)
+$\phi_{nh}^{n+1}$ is not yet known and ii) $\nabla \widehat{\phi}_{nh}
+<< g \nabla \eta$. If \ref{eq:elliptic-backward-free-surface} is
+solved accurately then the implication is that $\widehat{\phi}_{nh}
+\approx 0$ so that thet non-hydrostatic pressure field does not drive
+barotropic motion.
+
+The flow must satisfy non-divergence
+(equation~\ref{eq:non-divergence-nh}) locally, as well as depth
+integrated, and this constraint is used to form a 3-D elliptic
+equations for $\phi_{nh}^{n+1}$:
+\begin{equation}
+\partial_{xx} \phi_{nh}^{n+1} + \partial_{yy} \phi_{nh}^{n+1} + 
+\partial_{rr} \phi_{nh}^{n+1} =
+\partial_x u^{**} + \partial_y v^{**} + \partial_r w^{*}
+\end{equation}
+
+The entire algorithm can be summarized as the sequential solution of
+the following equations:
+\begin{eqnarray}
+u^{*} & = & u^{n} + \Delta t G_u^{(n+1/2)} \label{eq:ustar-nh} \\
+v^{*} & = & v^{n} + \Delta t G_v^{(n+1/2)} \label{eq:vstar-nh} \\
+w^{*} & = & w^{n} + \Delta t G_w^{(n+1/2)} \label{eq:wstar-nh} \\
+\eta^* & = & \epsilon_{fs} \left( \eta^{n} +P-E+R \right)- \Delta t 
+  \partial_x H \widehat{u^{*}}
++ \partial_y H \widehat{v^{*}}
+\\
+  \partial_x g H \partial_x \eta^{n+1}
++ \partial_y g H \partial_y \eta^{n+1}
+- \frac{\epsilon_{fs} \eta^{n+1}}{\Delta t^2}
+& = &
+- \frac{\eta^*}{\Delta t^2}
+\label{eq:elliptic-nh}
+\\
+u^{**} & = & u^{*} - \Delta t g \partial_x \eta^{n+1} \label{eq:unx-nh}\\
+v^{**} & = & v^{*} - \Delta t g \partial_y \eta^{n+1} \label{eq:vnx-nh}\\
+\partial_{xx} \phi_{nh}^{n+1} + \partial_{yy} \phi_{nh}^{n+1} + 
+\partial_{rr} \phi_{nh}^{n+1} & = &
+\partial_x u^{**} + \partial_y v^{**} + \partial_r w^{*} \\
+u^{n+1} & = & u^{**} - \Delta t \partial_x \phi_{nh}^{n+1} \label{eq:un+1-nh}\\
+v^{n+1} & = & v^{**} - \Delta t \partial_y \phi_{nh}^{n+1} \label{eq:vn+1-nh}\\
+\partial_r w^{n+1} & = & - \partial_x u^{n+1} - \partial_y v^{n+1}
+\end{eqnarray}
+where the last equation is solved by vertically integrating for
+$w^{n+1}$. 
 
 
 
@@ -623,7 +712,7 @@ $$
 This is known as the correction step. However, when the model is
 non-hydrostatic ($\epsilon_{nh}=1$) we need an additional step and an
 additional equation for $\phi'_{nh}$. This is obtained by substituting
-\ref{eq:discrete-time-u}, \ref{eq:discrete-time-v} and \ref{eq:discrete-time-w}
+\ref{eq:discrete-time-u-nh}, \ref{eq:discrete-time-v-nh} and \ref{eq:discrete-time-w-nh}
 into continuity:
 \begin{equation}
 \left[ {\bf \nabla}_h^2 + \partial_{rr} \right] {\phi'_{nh}}^{n+1}
