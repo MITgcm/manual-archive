@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.17 2004/01/29 15:11:39 edhill Exp $
+% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.18 2004/01/29 19:22:35 edhill Exp $
 % $Name:  $
 
 %\section{Getting started}
@@ -940,78 +940,75 @@ simulation controls.
 \begin{description}
 \item[dimensions] \ 
   
-  The number of points in the x, y,\textit{\ }and r\textit{\ 
-  }directions are represented by the variables \textbf{sNx}\textit{,
-  }\textbf{sNy}\textit{, } and \textbf{Nr}\textit{\ }respectively
-  which are declared and set in the file \textit{model/inc/SIZE.h.
-  }(Again, this assumes a mono-processor calculation. For
-  multiprocessor calculations see section on parallel implementation.)
+  The number of points in the x, y, and r directions are represented
+  by the variables \textbf{sNx}, \textbf{sNy} and \textbf{Nr}
+  respectively which are declared and set in the file
+  \textit{model/inc/SIZE.h}.  (Again, this assumes a mono-processor
+  calculation. For multiprocessor calculations see the section on
+  parallel implementation.)
 
 \item[grid] \ 
   
   Three different grids are available: cartesian, spherical polar, and
-  curvilinear (including the cubed sphere). The grid is set through
-  the logical variables \textbf{usingCartesianGrid}\textit{, }\textbf{
-    usingSphericalPolarGrid}\textit{, }and \textit{\ }\textbf{
-    usingCurvilinearGrid}\textit{. }In the case of spherical and
-  curvilinear grids, the southern boundary is defined through the
-  variable \textbf{phiMin} \textit{\ }which corresponds to the
-  latitude of the southern most cell face (in degrees). The resolution
-  along the x and y directions is controlled by the 1D arrays
-  \textbf{delx}\textit{\ }and \textbf{dely}\textit{\ }(in meters in
-  the case of a cartesian grid, in degrees otherwise). The vertical
-  grid spacing is set through the 1D array \textbf{delz }for the ocean
-  (in meters) or \textbf{delp}\textit{\ }for the atmosphere (in Pa).
-  The variable \textbf{ Ro\_SeaLevel} represents the standard position
-  of Sea-Level in ''R'' coordinate. This is typically set to 0m for
-  the ocean (default value) and 10$ ^{5}$Pa for the atmosphere. For
-  the atmosphere, also set the logical variable \textbf{groundAtK1} to
-  '.\texttt{TRUE}.'. which put the first level (k=1) at the lower
+  curvilinear (which includes the cubed sphere). The grid is set
+  through the logical variables \textbf{usingCartesianGrid},
+  \textbf{usingSphericalPolarGrid}, and \textbf{usingCurvilinearGrid}.
+  In the case of spherical and curvilinear grids, the southern
+  boundary is defined through the variable \textbf{phiMin} which
+  corresponds to the latitude of the southern most cell face (in
+  degrees). The resolution along the x and y directions is controlled
+  by the 1D arrays \textbf{delx} and \textbf{dely} (in meters in the
+  case of a cartesian grid, in degrees otherwise).  The vertical grid
+  spacing is set through the 1D array \textbf{delz} for the ocean (in
+  meters) or \textbf{delp} for the atmosphere (in Pa).  The variable
+  \textbf{Ro\_SeaLevel} represents the standard position of Sea-Level
+  in ``R'' coordinate. This is typically set to 0m for the ocean
+  (default value) and 10$^{5}$Pa for the atmosphere. For the
+  atmosphere, also set the logical variable \textbf{groundAtK1} to
+  \texttt{'.TRUE.'} which puts the first level (k=1) at the lower
   boundary (ground).
   
   For the cartesian grid case, the Coriolis parameter $f$ is set
-  through the variables \textbf{f0}\textit{\ }and
-  \textbf{beta}\textit{\ }which correspond to the reference Coriolis
-  parameter (in s$^{-1}$) and $\frac{\partial f}{ \partial y}$(in
-  m$^{-1}$s$^{-1}$) respectively. If \textbf{beta }\textit{\ } is set
-  to a nonzero value, \textbf{f0}\textit{\ }is the value of $f$ at the
-  southern edge of the domain.
+  through the variables \textbf{f0} and \textbf{beta} which correspond
+  to the reference Coriolis parameter (in s$^{-1}$) and
+  $\frac{\partial f}{ \partial y}$(in m$^{-1}$s$^{-1}$) respectively.
+  If \textbf{beta } is set to a nonzero value, \textbf{f0} is the
+  value of $f$ at the southern edge of the domain.
 
 \item[topography - full and partial cells] \ 
   
   The domain bathymetry is read from a file that contains a 2D (x,y)
   map of depths (in m) for the ocean or pressures (in Pa) for the
   atmosphere. The file name is represented by the variable
-  \textbf{bathyFile}\textit{. }The file is assumed to contain binary
-  numbers giving the depth (pressure) of the model at each grid cell,
-  ordered with the x coordinate varying fastest. The points are
-  ordered from low coordinate to high coordinate for both axes. The
-  model code applies without modification to enclosed, periodic, and
-  double periodic domains. Periodicity is assumed by default and is
+  \textbf{bathyFile}. The file is assumed to contain binary numbers
+  giving the depth (pressure) of the model at each grid cell, ordered
+  with the x coordinate varying fastest. The points are ordered from
+  low coordinate to high coordinate for both axes. The model code
+  applies without modification to enclosed, periodic, and double
+  periodic domains. Periodicity is assumed by default and is
   suppressed by setting the depths to 0m for the cells at the limits
   of the computational domain (note: not sure this is the case for the
   atmosphere). The precision with which to read the binary data is
-  controlled by the integer variable \textbf{readBinaryPrec }which can
+  controlled by the integer variable \textbf{readBinaryPrec} which can
   take the value \texttt{32} (single precision) or \texttt{64} (double
-  precision). See the matlab program \textit{ gendata.m }in the
-  \textit{input }directories under \textit{verification }to see how
+  precision). See the matlab program \textit{gendata.m} in the
+  \textit{input} directories under \textit{verification} to see how
   the bathymetry files are generated for the case study experiments.
   
-  To use the partial cell capability, the variable
-  \textbf{hFacMin}\textit{\ } needs to be set to a value between 0 and
-  1 (it is set to 1 by default) corresponding to the minimum
-  fractional size of the cell. For example if the bottom cell is 500m
-  thick and \textbf{hFacMin}\textit{\ }is set to 0.1, the actual
-  thickness of the cell (i.e. used in the code) can cover a range of
-  discrete values 50m apart from 50m to 500m depending on the value of
-  the bottom depth (in \textbf{bathyFile}) at this point.
+  To use the partial cell capability, the variable \textbf{hFacMin}
+  needs to be set to a value between 0 and 1 (it is set to 1 by
+  default) corresponding to the minimum fractional size of the cell.
+  For example if the bottom cell is 500m thick and \textbf{hFacMin} is
+  set to 0.1, the actual thickness of the cell (i.e. used in the code)
+  can cover a range of discrete values 50m apart from 50m to 500m
+  depending on the value of the bottom depth (in \textbf{bathyFile})
+  at this point.
   
   Note that the bottom depths (or pressures) need not coincide with
-  the models levels as deduced from \textbf{delz}\textit{\ 
-  }or\textit{\ }\textbf{delp} \textit{. }The model will interpolate
-  the numbers in \textbf{bathyFile} \textit{\ }so that they match the
-  levels obtained from \textbf{delz}\textit{ \ }or\textit{\ 
-  }\textbf{delp}\textit{\ }and \textbf{hFacMin}\textit{. }
+  the models levels as deduced from \textbf{delz} or \textbf{delp}.
+  The model will interpolate the numbers in \textbf{bathyFile} so that
+  they match the levels obtained from \textbf{delz} or \textbf{delp}
+  and \textbf{hFacMin}.
   
   (Note: the atmospheric case is a bit more complicated than what is
   written here I think. To come soon...)
@@ -1026,7 +1023,7 @@ simulation controls.
   \textbf{deltaT}). The Adams-Bashforth stabilizing parameter is set
   through the variable \textbf{abEps} (dimensionless). The stagger
   baroclinic time stepping can be activated by setting the logical
-  variable \textbf{staggerTimeStep} to '.\texttt{TRUE}.'.
+  variable \textbf{staggerTimeStep} to \texttt{'.TRUE.'}.
 
 \end{description}
 
@@ -1044,18 +1041,17 @@ humidity profile (in g/kg) for the atmosphere.
 
 The form of the equation of state is controlled by the character
 variables \textbf{buoyancyRelation} and \textbf{eosType}.
-\textbf{buoyancyRelation} is set to '\texttt{OCEANIC}' by default and
-needs to be set to '\texttt{ATMOSPHERIC}' for atmosphere simulations.
-In this case, \textbf{eosType} must be set to '\texttt{IDEALGAS}'.
+\textbf{buoyancyRelation} is set to \texttt{'OCEANIC'} by default and
+needs to be set to \texttt{'ATMOSPHERIC'} for atmosphere simulations.
+In this case, \textbf{eosType} must be set to \texttt{'IDEALGAS'}.
 For the ocean, two forms of the equation of state are available:
-linear (set \textbf{eosType} to '\texttt{LINEAR}') and a polynomial
-approximation to the full nonlinear equation ( set
-\textbf{eosType}\textit{\ }to '\texttt{POLYNOMIAL}'). In the linear
-case, you need to specify the thermal and haline expansion
-coefficients represented by the variables \textbf{tAlpha}\textit{\ 
-  }(in K$^{-1}$) and \textbf{sBeta} (in ppt$^{-1}$). For the nonlinear
-case, you need to generate a file of polynomial coefficients called
-\textit{POLY3.COEFFS}. To do this, use the program
+linear (set \textbf{eosType} to \texttt{'LINEAR'}) and a polynomial
+approximation to the full nonlinear equation ( set \textbf{eosType} to
+\texttt{'POLYNOMIAL'}). In the linear case, you need to specify the
+thermal and haline expansion coefficients represented by the variables
+\textbf{tAlpha} (in K$^{-1}$) and \textbf{sBeta} (in ppt$^{-1}$). For
+the nonlinear case, you need to generate a file of polynomial
+coefficients called \textit{POLY3.COEFFS}. To do this, use the program
 \textit{utils/knudsen2/knudsen2.f} under the model tree (a Makefile is
 available in the same directory and you will need to edit the number
 and the values of the vertical levels in \textit{knudsen2.f} so that
@@ -1063,22 +1059,23 @@ they match those of your configuration).
 
 There there are also higher polynomials for the equation of state:
 \begin{description}
-\item['\texttt{UNESCO}':] The UNESCO equation of state formula of
+\item[\texttt{'UNESCO'}:] The UNESCO equation of state formula of
   Fofonoff and Millard \cite{fofonoff83}. This equation of state
-  assumes in-situ temperature, which is not a model variable; \emph{its use
-  is therefore discouraged, and it is only listed for completeness}.
-\item['\texttt{JMD95Z}':] A modified UNESCO formula by Jackett and
+  assumes in-situ temperature, which is not a model variable; {\em its
+    use is therefore discouraged, and it is only listed for
+    completeness}.
+\item[\texttt{'JMD95Z'}:] A modified UNESCO formula by Jackett and
   McDougall \cite{jackett95}, which uses the model variable potential
-  temperature as input. The '\texttt{Z}' indicates that this equation
+  temperature as input. The \texttt{'Z'} indicates that this equation
   of state uses a horizontally and temporally constant pressure
   $p_{0}=-g\rho_{0}z$. 
-\item['\texttt{JMD95P}':] A modified UNESCO formula by Jackett and
+\item[\texttt{'JMD95P'}:] A modified UNESCO formula by Jackett and
   McDougall \cite{jackett95}, which uses the model variable potential
-  temperature as input. The '\texttt{P}' indicates that this equation
+  temperature as input. The \texttt{'P'} indicates that this equation
   of state uses the actual hydrostatic pressure of the last time
   step. Lagging the pressure in this way requires an additional pickup
   file for restarts.
-\item['\texttt{MDJWF}':] The new, more accurate and less expensive
+\item[\texttt{'MDJWF'}:] The new, more accurate and less expensive
   equation of state by McDougall et~al. \cite{mcdougall03}. It also
   requires lagging the pressure and therefore an additional pickup
   file for restarts.
@@ -1088,18 +1085,19 @@ salinity is required.
 
 \subsection{Momentum equations}
 
-In this section, we only focus for now on the parameters that you are likely
-to change, i.e. the ones relative to forcing and dissipation for example.
-The details relevant to the vector-invariant form of the equations and the
-various advection schemes are not covered for the moment. We assume that you
-use the standard form of the momentum equations (i.e. the flux-form) with
-the default advection scheme. Also, there are a few logical variables that
-allow you to turn on/off various terms in the momentum equation. These
-variables are called \textbf{momViscosity, momAdvection, momForcing,
-useCoriolis, momPressureForcing, momStepping}\textit{, }and \textit{\ }%
-\textbf{metricTerms }and are assumed to be set to '.\texttt{TRUE}.' here.
-Look at the file \textit{model/inc/PARAMS.h }for a precise definition of
-these variables.
+In this section, we only focus for now on the parameters that you are
+likely to change, i.e. the ones relative to forcing and dissipation
+for example.  The details relevant to the vector-invariant form of the
+equations and the various advection schemes are not covered for the
+moment. We assume that you use the standard form of the momentum
+equations (i.e. the flux-form) with the default advection scheme.
+Also, there are a few logical variables that allow you to turn on/off
+various terms in the momentum equation. These variables are called
+\textbf{momViscosity, momAdvection, momForcing, useCoriolis,
+  momPressureForcing, momStepping} and \textbf{metricTerms }and are
+assumed to be set to \texttt{'.TRUE.'} here.  Look at the file
+\textit{model/inc/PARAMS.h }for a precise definition of these
+variables.
 
 \begin{description}
 \item[initialization] \ 
@@ -1111,54 +1109,53 @@ these variables.
 \item[forcing] \ 
   
   This section only applies to the ocean. You need to generate
-  wind-stress data into two files \textbf{zonalWindFile}\textit{\ }and
-  \textbf{ meridWindFile }corresponding to the zonal and meridional
+  wind-stress data into two files \textbf{zonalWindFile} and
+  \textbf{meridWindFile} corresponding to the zonal and meridional
   components of the wind stress, respectively (if you want the stress
   to be along the direction of only one of the model horizontal axes,
   you only need to generate one file). The format of the files is
   similar to the bathymetry file. The zonal (meridional) stress data
   are assumed to be in Pa and located at U-points (V-points). As for
   the bathymetry, the precision with which to read the binary data is
-  controlled by the variable \textbf{readBinaryPrec}.\textbf{\ } See
-  the matlab program \textit{gendata.m }in the \textit{input
-  }directories under \textit{verification }to see how simple
-  analytical wind forcing data are generated for the case study
-  experiments.
+  controlled by the variable \textbf{readBinaryPrec}.  See the matlab
+  program \textit{gendata.m} in the \textit{input} directories under
+  \textit{verification} to see how simple analytical wind forcing data
+  are generated for the case study experiments.
   
   There is also the possibility of prescribing time-dependent periodic
   forcing. To do this, concatenate the successive time records into a
-  single file (for each stress component) ordered in a (x, y, t)
-  fashion and set the following variables:
-  \textbf{periodicExternalForcing }to '.\texttt{TRUE}.',
-  \textbf{externForcingPeriod }to the period (in s) of which the
-  forcing varies (typically 1 month), and \textbf{externForcingCycle
-  }to the repeat time (in s) of the forcing (typically 1 year -- note:
-  \textbf{ externForcingCycle }must be a multiple of
-  \textbf{externForcingPeriod}).  With these variables set up, the
-  model will interpolate the forcing linearly at each iteration.
+  single file (for each stress component) ordered in a (x,y,t) fashion
+  and set the following variables: \textbf{periodicExternalForcing }to
+  \texttt{'.TRUE.'}, \textbf{externForcingPeriod }to the period (in s)
+  of which the forcing varies (typically 1 month), and
+  \textbf{externForcingCycle} to the repeat time (in s) of the forcing
+  (typically 1 year -- note: \textbf{ externForcingCycle} must be a
+  multiple of \textbf{externForcingPeriod}).  With these variables set
+  up, the model will interpolate the forcing linearly at each
+  iteration.
 
 \item[dissipation] \ 
   
   The lateral eddy viscosity coefficient is specified through the
-  variable \textbf{viscAh}\textit{\ }(in m$^{2}$s$^{-1}$). The
-  vertical eddy viscosity coefficient is specified through the
-  variable \textbf{viscAz }(in m$^{2}$s$ ^{-1}$) for the ocean and
-  \textbf{viscAp}\textit{\ }(in Pa$^{2}$s$^{-1}$) for the atmosphere.
-  The vertical diffusive fluxes can be computed implicitly by setting
-  the logical variable \textbf{implicitViscosity }to '.\texttt{TRUE}
-  .'. In addition, biharmonic mixing can be added as well through the
-  variable \textbf{viscA4}\textit{\ }(in m$^{4}$s$^{-1}$). On a
-  spherical polar grid, you might also need to set the variable
-  \textbf{cosPower} which is set to 0 by default and which represents
-  the power of cosine of latitude to multiply viscosity. Slip or
-  no-slip conditions at lateral and bottom boundaries are specified
-  through the logical variables \textbf{no\_slip\_sides}\textit{\ }
-  and \textbf{no\_slip\_bottom}. If set to '\texttt{.FALSE.}',
-  free-slip boundary conditions are applied. If no-slip boundary
-  conditions are applied at the bottom, a bottom drag can be applied
-  as well. Two forms are available: linear (set the variable
-  \textbf{bottomDragLinear}\textit{\ }in s$ ^{-1}$) and quadratic (set
-  the variable \textbf{bottomDragQuadratic}\textit{ \ }in m$^{-1}$).
+  variable \textbf{viscAh} (in m$^{2}$s$^{-1}$). The vertical eddy
+  viscosity coefficient is specified through the variable
+  \textbf{viscAz} (in m$^{2}$s$^{-1}$) for the ocean and
+  \textbf{viscAp} (in Pa$^{2}$s$^{-1}$) for the atmosphere.  The
+  vertical diffusive fluxes can be computed implicitly by setting the
+  logical variable \textbf{implicitViscosity }to \texttt{'.TRUE.'}.
+  In addition, biharmonic mixing can be added as well through the
+  variable \textbf{viscA4} (in m$^{4}$s$^{-1}$). On a spherical polar
+  grid, you might also need to set the variable \textbf{cosPower}
+  which is set to 0 by default and which represents the power of
+  cosine of latitude to multiply viscosity. Slip or no-slip conditions
+  at lateral and bottom boundaries are specified through the logical
+  variables \textbf{no\_slip\_sides} and \textbf{no\_slip\_bottom}. If
+  set to \texttt{'.FALSE.'}, free-slip boundary conditions are
+  applied. If no-slip boundary conditions are applied at the bottom, a
+  bottom drag can be applied as well. Two forms are available: linear
+  (set the variable \textbf{bottomDragLinear} in s$ ^{-1}$) and
+  quadratic (set the variable \textbf{bottomDragQuadratic} in
+  m$^{-1}$).
 
   The Fourier and Shapiro filters are described elsewhere.
 
@@ -1172,49 +1169,49 @@ these variables.
 \item[calculation of pressure/geopotential] \ 
   
   First, to run a non-hydrostatic ocean simulation, set the logical
-  variable \textbf{nonHydrostatic} to '.\texttt{TRUE}.'. The pressure
+  variable \textbf{nonHydrostatic} to \texttt{'.TRUE.'}. The pressure
   field is then inverted through a 3D elliptic equation. (Note: this
   capability is not available for the atmosphere yet.) By default, a
   hydrostatic simulation is assumed and a 2D elliptic equation is used
   to invert the pressure field. The parameters controlling the
   behaviour of the elliptic solvers are the variables
-  \textbf{cg2dMaxIters}\textit{\ }and \textbf{cg2dTargetResidual } for
-  the 2D case and \textbf{cg3dMaxIters}\textit{\ }and \textbf{
-    cg3dTargetResidual }for the 3D case. You probably won't need to
+  \textbf{cg2dMaxIters} and \textbf{cg2dTargetResidual } for
+  the 2D case and \textbf{cg3dMaxIters} and
+  \textbf{cg3dTargetResidual} for the 3D case. You probably won't need to
   alter the default values (are we sure of this?).
   
   For the calculation of the surface pressure (for the ocean) or
   surface geopotential (for the atmosphere) you need to set the
-  logical variables \textbf{rigidLid} and
-  \textbf{implicitFreeSurface}\textit{\ }(set one to '.
-  \texttt{TRUE}.' and the other to '.\texttt{FALSE}.' depending on how
-  you want to deal with the ocean upper or atmosphere lower boundary).
+  logical variables \textbf{rigidLid} and \textbf{implicitFreeSurface}
+  (set one to \texttt{'.TRUE.'} and the other to \texttt{'.FALSE.'}
+  depending on how you want to deal with the ocean upper or atmosphere
+  lower boundary).
 
 \end{description} 
 
 \subsection{Tracer equations}
 
-This section covers the tracer equations i.e. the potential temperature
-equation and the salinity (for the ocean) or specific humidity (for the
-atmosphere) equation. As for the momentum equations, we only describe for
-now the parameters that you are likely to change. The logical variables 
-\textbf{tempDiffusion}\textit{, }\textbf{tempAdvection}\textit{, }\textbf{
-tempForcing}\textit{,} and \textbf{tempStepping} allow you to turn on/off
-terms in the temperature equation (same thing for salinity or specific
-humidity with variables \textbf{saltDiffusion}\textit{, }\textbf{
-saltAdvection}\textit{\ }etc). These variables are all assumed here to be
-set to '.\texttt{TRUE}.'. Look at file \textit{model/inc/PARAMS.h }for a
-precise definition.
+This section covers the tracer equations i.e. the potential
+temperature equation and the salinity (for the ocean) or specific
+humidity (for the atmosphere) equation. As for the momentum equations,
+we only describe for now the parameters that you are likely to change.
+The logical variables \textbf{tempDiffusion} \textbf{tempAdvection}
+\textbf{tempForcing}, and \textbf{tempStepping} allow you to turn
+on/off terms in the temperature equation (same thing for salinity or
+specific humidity with variables \textbf{saltDiffusion},
+\textbf{saltAdvection} etc.). These variables are all assumed here to
+be set to \texttt{'.TRUE.'}. Look at file \textit{model/inc/PARAMS.h}
+for a precise definition.
 
 \begin{description}
 \item[initialization] \ 
   
   The initial tracer data can be contained in the binary files
-  \textbf{ hydrogThetaFile }and \textbf{hydrogSaltFile}. These files
-  should contain 3D data ordered in an (x, y, r) fashion with k=1 as
-  the first vertical level.  If no file names are provided, the
-  tracers are then initialized with the values of \textbf{tRef }and
-  \textbf{sRef }mentioned above (in the equation of state section). In
+  \textbf{hydrogThetaFile} and \textbf{hydrogSaltFile}. These files
+  should contain 3D data ordered in an (x,y,r) fashion with k=1 as the
+  first vertical level.  If no file names are provided, the tracers
+  are then initialized with the values of \textbf{tRef} and
+  \textbf{sRef} mentioned above (in the equation of state section). In
   this case, the initial tracer data are uniform in x and y for each
   depth level.
 
@@ -1224,23 +1221,22 @@ precise definition.
   atmosphere not being completely stabilized at the moment.
   
   A combination of fluxes data and relaxation terms can be used for
-  driving the tracer equations. \ For potential temperature, heat flux
+  driving the tracer equations.  For potential temperature, heat flux
   data (in W/m$ ^{2}$) can be stored in the 2D binary file
-  \textbf{surfQfile}\textit{. }  Alternatively or in addition, the
-  forcing can be specified through a relaxation term. The SST data to
-  which the model surface temperatures are restored to are supposed to
-  be stored in the 2D binary file \textbf{ thetaClimFile}\textit{.
-  }The corresponding relaxation time scale coefficient is set through
-  the variable \textbf{tauThetaClimRelax}\textit{\ }(in s). The same
-  procedure applies for salinity with the variable names
-  \textbf{EmPmRfile }\textit{, }\textbf{saltClimFile}\textit{, }and
-  \textbf{tauSaltClimRelax} \textit{\ }for freshwater flux (in m/s)
-  and surface salinity (in ppt) data files and relaxation time scale
-  coefficient (in s), respectively. Also for salinity, if the CPP key
-  \textbf{USE\_NATURAL\_BCS} is turned on, natural boundary conditions
-  are applied i.e. when computing the surface salinity tendency, the
-  freshwater flux is multiplied by the model surface salinity instead
-  of a constant salinity value.
+  \textbf{surfQfile}.  Alternatively or in addition, the forcing can
+  be specified through a relaxation term. The SST data to which the
+  model surface temperatures are restored to are supposed to be stored
+  in the 2D binary file \textbf{thetaClimFile}. The corresponding
+  relaxation time scale coefficient is set through the variable
+  \textbf{tauThetaClimRelax} (in s). The same procedure applies for
+  salinity with the variable names \textbf{EmPmRfile},
+  \textbf{saltClimFile}, and \textbf{tauSaltClimRelax} for freshwater
+  flux (in m/s) and surface salinity (in ppt) data files and
+  relaxation time scale coefficient (in s), respectively. Also for
+  salinity, if the CPP key \textbf{USE\_NATURAL\_BCS} is turned on,
+  natural boundary conditions are applied i.e. when computing the
+  surface salinity tendency, the freshwater flux is multiplied by the
+  model surface salinity instead of a constant salinity value.
   
   As for the other input files, the precision with which to read the
   data is controlled by the variable \textbf{readBinaryPrec}.
@@ -1250,18 +1246,18 @@ precise definition.
 \item[dissipation] \ 
   
   Lateral eddy diffusivities for temperature and salinity/specific
-  humidity are specified through the variables \textbf{diffKhT }and
-  \textbf{diffKhS } (in m$^{2}$/s). Vertical eddy diffusivities are
-  specified through the variables \textbf{diffKzT }and \textbf{diffKzS
-  }(in m$^{2}$/s) for the ocean and \textbf{diffKpT }and
-  \textbf{diffKpS }(in Pa$^{2}$/s) for the atmosphere. The vertical
-  diffusive fluxes can be computed implicitly by setting the logical
-  variable \textbf{implicitDiffusion }to '.\texttt{TRUE} .'. In
-  addition, biharmonic diffusivities can be specified as well through
-  the coefficients \textbf{diffK4T }and \textbf{diffK4S }(in
+  humidity are specified through the variables \textbf{diffKhT} and
+  \textbf{diffKhS} (in m$^{2}$/s). Vertical eddy diffusivities are
+  specified through the variables \textbf{diffKzT} and
+  \textbf{diffKzS} (in m$^{2}$/s) for the ocean and \textbf{diffKpT
+  }and \textbf{diffKpS} (in Pa$^{2}$/s) for the atmosphere. The
+  vertical diffusive fluxes can be computed implicitly by setting the
+  logical variable \textbf{implicitDiffusion} to \texttt{'.TRUE.'}.
+  In addition, biharmonic diffusivities can be specified as well
+  through the coefficients \textbf{diffK4T} and \textbf{diffK4S} (in
   m$^{4}$/s). Note that the cosine power scaling (specified through
-  \textbf{cosPower }- see the momentum equations section) is applied
-  to the tracer diffusivities (Laplacian and biharmonic) as well. The
+  \textbf{cosPower}---see the momentum equations section) is applied to
+  the tracer diffusivities (Laplacian and biharmonic) as well. The
   Gent and McWilliams parameterization for oceanic tracers is
   described in the package section. Finally, note that tracers can be
   also subject to Fourier and Shapiro filtering (see the corresponding
@@ -1276,50 +1272,50 @@ precise definition.
   value (if set to a negative value by the user, the model will set it
   to the tracer time step). The other option is to parameterize
   convection with implicit vertical diffusion. To do this, set the
-  logical variable \textbf{implicitDiffusion }to '.\texttt{TRUE} .'
-  and the real variable \textbf{ivdc\_kappa }to a value (in m$^{2}$/s)
+  logical variable \textbf{implicitDiffusion} to \texttt{'.TRUE.'}
+  and the real variable \textbf{ivdc\_kappa} to a value (in m$^{2}$/s)
   you wish the tracer vertical diffusivities to have when mixing
   tracers vertically due to static instabilities. Note that
-  \textbf{cadjFreq }and \textbf{ivdc\_kappa }can not both have
-  non-zero value.
+  \textbf{cadjFreq} and \textbf{ivdc\_kappa}can not both have non-zero
+  value.
 
 \end{description}
 
 \subsection{Simulation controls}
 
-The model ''clock'' is defined by the variable \textbf{deltaTClock }(in s)
-which determines the IO frequencies and is used in tagging output.
-Typically, you will set it to the tracer time step for accelerated runs
-(otherwise it is simply set to the default time step \textbf{deltaT}).
-Frequency of checkpointing and dumping of the model state are referenced to
-this clock (see below).
+The model ''clock'' is defined by the variable \textbf{deltaTClock}
+(in s) which determines the IO frequencies and is used in tagging
+output.  Typically, you will set it to the tracer time step for
+accelerated runs (otherwise it is simply set to the default time step
+\textbf{deltaT}).  Frequency of checkpointing and dumping of the model
+state are referenced to this clock (see below).
 
 \begin{description}
 \item[run duration] \ 
   
   The beginning of a simulation is set by specifying a start time (in
-  s) through the real variable \textbf{startTime }or by specifying an
+  s) through the real variable \textbf{startTime} or by specifying an
   initial iteration number through the integer variable
   \textbf{nIter0}. If these variables are set to nonzero values, the
-  model will look for a ''pickup'' file \textit{pickup.0000nIter0 }to
-  restart the integration\textit{. }The end of a simulation is set
-  through the real variable \textbf{endTime }(in s).  Alternatively,
-  you can specify instead the number of time steps to execute through
-  the integer variable \textbf{nTimeSteps}.
+  model will look for a ''pickup'' file \textit{pickup.0000nIter0} to
+  restart the integration. The end of a simulation is set through the
+  real variable \textbf{endTime} (in s).  Alternatively, you can
+  specify instead the number of time steps to execute through the
+  integer variable \textbf{nTimeSteps}.
 
 \item[frequency of output] \
   
   Real variables defining frequencies (in s) with which output files
-  are written on disk need to be set up. \textbf{dumpFreq }controls
+  are written on disk need to be set up. \textbf{dumpFreq} controls
   the frequency with which the instantaneous state of the model is
-  saved. \textbf{chkPtFreq } and \textbf{pchkPtFreq }control the
-  output frequency of rolling and permanent checkpoint files,
-  respectively. See section 1.5.1 Output files for the definition of
-  model state and checkpoint files. In addition, time-averaged fields
-  can be written out by setting the variable \textbf{taveFreq} (in s).
-  The precision with which to write the binary data is controlled by
-  the integer variable w\textbf{riteBinaryPrec }(set it to \texttt{32}
-  or \texttt{ 64}).
+  saved. \textbf{chkPtFreq} and \textbf{pchkPtFreq} control the output
+  frequency of rolling and permanent checkpoint files, respectively.
+  See section 1.5.1 Output files for the definition of model state and
+  checkpoint files. In addition, time-averaged fields can be written
+  out by setting the variable \textbf{taveFreq} (in s).  The precision
+  with which to write the binary data is controlled by the integer
+  variable w\textbf{riteBinaryPrec} (set it to \texttt{32} or
+  \texttt{64}).
 
 \end{description}
 
