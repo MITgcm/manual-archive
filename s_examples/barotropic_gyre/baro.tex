@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_examples/barotropic_gyre/baro.tex,v 1.4 2001/10/25 18:36:54 cnh Exp $
+% $Header: /u/gcmpack/manual/s_examples/barotropic_gyre/baro.tex,v 1.5 2001/11/13 18:19:18 adcroft Exp $
 % $Name:  $
 
 \section{Example: Barotropic Ocean Gyre In Cartesian Coordinates}
@@ -125,7 +125,7 @@ model is configured with a single layer with depth, $\Delta z$, of $5000$~m.
 \subsubsection{Numerical Stability Criteria}
 
 The Laplacian dissipation coefficient, $A_{h}$, is set to $400 m s^{-1}$.
-This value is chosen to yield a Munk layer width \cite{Adcroft_thesis},
+This value is chosen to yield a Munk layer width \cite{adcroft:95},
 
 \begin{eqnarray}
 \label{EQ:munk_layer}
@@ -139,7 +139,7 @@ layer is well resolved.
 
 \noindent The model is stepped forward with a 
 time step $\delta t=1200$secs. With this time step the stability 
-parameter to the horizontal Laplacian friction \cite{Adcroft_thesis}
+parameter to the horizontal Laplacian friction \cite{adcroft:95}
 
 
 
@@ -153,7 +153,7 @@ for stability.
 \\
 
 \noindent The numerical stability for inertial oscillations  
-\cite{Adcroft_thesis} 
+\cite{adcroft:95} 
 
 \begin{eqnarray}
 \label{EQ:inertial_stability}
@@ -164,7 +164,7 @@ S_{i} = f^{2} {\delta t}^2
 limit for stability.
 \\
 
-\noindent The advective CFL \cite{Adcroft_thesis} for an extreme maximum 
+\noindent The advective CFL \cite{adcroft:95} for an extreme maximum 
 horizontal flow speed of $ | \vec{u} | = 2 ms^{-1}$
 
 \begin{eqnarray}
