@@ -44,4 +44,4 @@ html:
 	latex2html -image_type gif -split 5 -show_section_numbers -link 2 -address "<a href=mailto:support@mitgcm.org>support@mitgcm.org</a>" -local_icons -noantialias -white manual
 
 html2:
-	latex2html -image_type gif -split 5 -show_section_numbers -link 2 -address "<a href=mailto:support@mitgc,.org>support@mitgcm.org</a>" -local_icons -white -debug m2
+	latex2html -image_type gif -split 5 -show_section_numbers -link 2 -address "<a href=mailto:support@mitgc,.org>support@mitgcm.org</a>" -noantialias -local_icons -white -debug m2
