@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.4 2001/08/17 18:38:10 jmc Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.5 2001/09/24 19:30:40 jmc Exp $
 % $Name:  $
 
 The convention used in this section is as follows:
@@ -77,12 +77,12 @@ and equation \ref{eq-tCsC-Vmom} vanishes.
 
 The equation for $\eta$ is obtained by integrating the 
 continuity equation over the entire depth of the fluid, 
-from $R_{min}(x,y)$ up to $R_o(x,y)$ 
+from $R_{fixed}(x,y)$ up to $R_o(x,y)$ 
 (Linear free surface):
 \begin{eqnarray}
 \epsilon_{fs} \partial_t \eta =
 \left. \dot{r} \right|_{r=r_{surf}} + \epsilon_{fw} (P-E) =
-- {\bf \nabla} \cdot \int_{R_{min}}^{R_o} \vec{\bf v} dr
+- {\bf \nabla} \cdot \int_{R_{fixed}}^{R_o} \vec{\bf v} dr
 + \epsilon_{fw} (P-E)
 \label{eq-tCsC-eta}
 \end{eqnarray}
@@ -202,7 +202,7 @@ S^{n+1} & = & S^*
 \label{eq-tDsC-Hmom}
 \\
 \epsilon_{fs} {\eta}^{n+1} + \Delta t
-{\bf \nabla}_h \cdot \int_{R_{min}}^{R_o} \vec{\bf v}^{n+1} dr
+{\bf \nabla}_h \cdot \int_{R_{fixed}}^{R_o} \vec{\bf v}^{n+1} dr
 & = & 
     \epsilon_{fs} {\eta}^{n} + \epsilon_{fw} \Delta_t (P-E)^{n} 
 \nonumber
@@ -311,7 +311,7 @@ And
 %\label{eq-tDsC-Hmom}
 \\
 \epsilon_{fs} {\eta}^{n+1} + \Delta t
-{\bf \nabla}_h \cdot \int_{R_{min}}^{R_o} \vec{\bf v}^{n+1} dr
+{\bf \nabla}_h \cdot \int_{R_{fixed}}^{R_o} \vec{\bf v}^{n+1} dr
 & = & 
 \epsilon_{fs} {\eta}^{n} + \epsilon_{fw} \Delta_t (P-E)^{n} 
 \\
@@ -343,7 +343,7 @@ Substituting \ref{eq-tDsC-Hmom} into \ref{eq-tDsC-cont}, assuming
 $\epsilon_{nh} = 0$ yields a Helmholtz equation for ${\eta}^{n+1}$:
 \begin{eqnarray}
 \epsilon_{fs} {\eta}^{n+1} -
-{\bf \nabla}_h \cdot \Delta t^2 (R_o-R_{min})
+{\bf \nabla}_h \cdot \Delta t^2 (R_o-R_{fixed})
 {\bf \nabla}_h b_s {\eta}^{n+1}
 = {\eta}^*
 \label{eq-solve2D}
@@ -351,7 +351,7 @@ $\epsilon_{nh} = 0$ yields a Helmholtz equation for ${\eta}^{n+1}$:
 where
 \begin{eqnarray}
 {\eta}^* = \epsilon_{fs} \: {\eta}^{n} -
-\Delta t {\bf \nabla}_h \cdot \int_{R_{min}}^{R_o} \vec{\bf v}^* dr
+\Delta t {\bf \nabla}_h \cdot \int_{R_{fixed}}^{R_o} \vec{\bf v}^* dr
 \: + \: \epsilon_{fw} \Delta_t (P-E)^{n} 
 \label{eq-solve2D_rhs}
 \end{eqnarray}
@@ -440,7 +440,7 @@ $$
 $$
 $$
 \epsilon_{fs} \frac{ {\eta}^{n+1} - {\eta}^{n} }{ \Delta t}
-+ {\bf \nabla}_h \cdot \int_{R_{min}}^{R_o} 
++ {\bf \nabla}_h \cdot \int_{R_{fixed}}^{R_o} 
 [ \gamma \vec{\bf v}^{n+1} + (1-\gamma) \vec{\bf v}^{n}] dr
 = \epsilon_{fw} (P-E)
 $$
@@ -453,7 +453,7 @@ where:
 \\
 {\eta}^* & = &
 \epsilon_{fs} {\eta}^{n} + \epsilon_{fw} \Delta t (P-E) 
-- \Delta t {\bf \nabla}_h \cdot \int_{R_{min}}^{R_o} 
+- \Delta t {\bf \nabla}_h \cdot \int_{R_{fixed}}^{R_o} 
 [ \gamma \vec{\bf v}^* + (1-\gamma) \vec{\bf v}^{n}] dr
 \end{eqnarray*}
 \\
@@ -461,7 +461,7 @@ In the hydrostatic case ($\epsilon_{nh}=0$),
 this allow to find ${\eta}^{n+1}$, according to:
 $$
 \epsilon_{fs} {\eta}^{n+1} -
-{\bf \nabla}_h \cdot \beta\gamma \Delta t^2 b_s (R_o - R_{min})
+{\bf \nabla}_h \cdot \beta\gamma \Delta t^2 b_s (R_o - R_{fixed})
 {\bf \nabla}_h {\eta}^{n+1}
 = {\eta}^*
 $$ 
