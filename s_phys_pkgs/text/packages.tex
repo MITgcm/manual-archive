@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/text/packages.tex,v 1.4 2004/10/12 18:16:03 edhill Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/text/packages.tex,v 1.5 2004/10/13 12:27:57 cnh Exp $
 % $Name:  $
 
 \section{Using MITgcm Packages}
@@ -240,5 +240,21 @@ outlined here:
 }
 
 
-\subsubsection{Package Startup or Boot Sequence}
+\subsubsection{Adding a package to PARAMS.h and  packages\_boot()}
+
+An MITgcm package directory contains all the code needed for that package apart
+from one variable for each package. This variable is the {\tt use\$\{Pkg\} } 
+flag. This flag, which is of type logical, {\bf must} be declared in the 
+shared header file {\it PARAMS.h} in the {\it PARM\_PACKAGES} block. This 
+convention is used to support a single runtime control file {\it data.pkg} 
+which is read by the startup routine {\it packages\_boot()} and that sets a 
+flag controlling the runtime use of a package. This routine needs to be able to 
+read the flags for packages that were not built at compile time. Therefore
+when adding a new package, in addition to creating the per-package directory
+in the {\it pkg/} subdirectory a developer should add a {\tt use\$\{Pkg\} }
+flag to {\it PARAMS.h} and a {\tt use\$\{Pkg\} } entry to the 
+{\it packages\_boot()} {\it PACKAGES} namelist.
+The only other package specific code that should appear outside the individual 
+package directory are calls to the specific package API.
+
 
