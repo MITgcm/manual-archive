@@ -58,14 +58,17 @@ Clean:
 #           /usr/bin/ppmquant.orig 256
 #           !
 
+html:
+	make l2h
+	make subfigs
+
 l2h:
 	latex2html $(L2H) manual
 
 debugl2h:
 	latex2html -debug -nodiscard -ldump $(L2H) manual
 
-html:
-	make l2h
+subfigs:
 	cd manual; tar -czf ../mbkup.tz .
 	cd manual; ../tools/make_mail_subjects.sh
 	cd manual; ../tools/figsub.sh
