@@ -220,20 +220,183 @@ Example 2: jmin = 3, jmax = 7, mupd = 5   ---> jmax = 2
 
 \newpage
 
-\begin{figure}[b!]
-\input{part8/lsopt_flow_1}
+\begin{figure}
+%\input{part8/lsopt_flow_1}
+{\scriptsize
+\begin{verbatim}
+  lsopt_top
+      |
+      |---- check arguments
+      |---- CALL INSTORE
+      |       |
+      |       |---- determine whether OPWARMI available:
+      |                * if no:  cold start: create OPWARMI
+      |                * if yes: warm start: read from OPWARMI
+      |             create or open OPWARMD
+      |
+      |---- check consistency between OPWARMI and model parameters
+      | 
+      |---- >>> if COLD start: <<<
+      |      |  first simulation with f.g. xx_0; output: first ff_0, gg_0
+      |      |  set first preconditioner value xdiff_0 to 1
+      |      |  store xx(0), gg(0), xdiff(0) to OPWARMD (first 3 entries)
+      |      |
+      |     >>> else: WARM start: <<<
+      |         read xx(i), gg(i) from OPWARMD (first 2 entries)
+      |         for first warm start after cold start, i=0
+      |
+      |
+      |
+      |---- /// if ITMAX > 0: perform optimization (increment loop index i)
+      |      (
+      |      )---- save current values of gg(i-1) -> gold(i-1), ff -> fold(i-1)
+      |      (---- CALL LSUPDXX
+      |      )       |
+      |      (       |---- >>> if jmax=0 <<<
+      |      )       |      |  first optimization after cold start:
+      |      (       |      |  preconditioner estimated via ff_0 - ff_(first guess)
+      |      )       |      |  dd(i-1) = -gg(i-1)*preco
+      |      (       |      |  
+      |      )       |     >>> if jmax > 0 <<<
+      |      (       |         dd(i-1) = -gg(i-1)
+      |      )       |         CALL HESSUPD
+      |      (       |           |
+      |      )       |           |---- dd(i-1) modified via Hessian approx.
+      |      (       |
+      |      )       |---- >>> if <dd,gg> >= 0 <<<
+      |      (       |         ifail = 4
+      |      )       |
+      |      (       |---- compute step size: tact(i-1)
+      |      )       |---- compute update: xdiff(i) = xx(i-1) + tact(i-1)*dd(i-1)
+      |      (
+      |      )---- >>> if ifail = 4 <<<
+      |      (         goto 1000
+      |      )
+      |      (---- CALL OPTLINE / LSLINE
+      |      )       |
+     ...    ...     ...
+\end{verbatim}
+}
 \caption{Flow chart (part 1 of 3)}
 \label{fig:lsoptflow1}
 \end{figure}
 
-\begin{figure}[b!]
-\input{part8/lsopt_flow_2}
+\begin{figure}
+%\input{part8/lsopt_flow_2}
+{\scriptsize
+\begin{verbatim}
+     ...    ...
+      |      )
+      |      (---- CALL OPTLINE / LSLINE
+      |      )       |
+      |      (       |---- /// loop over simulations
+      |      )              (  
+      |      (              )---- CALL SIMUL
+      |      )              (       |
+      |      (              )       |----  input: xdiff(i)
+      |      )              (       |---- output: ff(i), gg(i)
+      |      (              )       |---- >>> if ONLINE <<<
+      |      )              (                 runs model and adjoint
+      |      (              )             >>> if OFFLINE <<<
+      |      )              (                 reads those values from file
+      |      (              )
+      |      )              (---- 1st Wolfe test:
+      |      (              )     ff(i) <= tact*xpara1*<gg(i-1),dd(i-1)>
+      |      )              (
+      |      (              )---- 2nd Wolfe test:
+      |      )              (     <gg(i),dd(i-1)> >= xpara2*<gg(i-1),dd(i-1)>
+      |      (              )
+      |      )              (---- >>> if 1st and 2nd Wolfe tests ok <<<
+      |      (              )      |  320: update xx: xx(i) = xdiff(i)
+      |      )              (      |
+      |      (              )     >>> else if 1st Wolfe test not ok <<<
+      |      )              (      |  500: INTERpolate new tact:
+      |      (              )      |  barr*tact < tact < (1-barr)*tact
+      |      )              (      |  CALL CUBIC
+      |      (              )      |
+      |      )              (     >>> else if 2nd Wolfe test not ok <<<
+      |      (              )         350: EXTRApolate new tact:
+      |      )              (         (1+barmin)*tact < tact < 10*tact
+      |      (              )         CALL CUBIC
+      |      )              (
+      |      (              )---- >>> if new tact > tmax <<<
+      |      )              (      |  ifail = 7
+      |      (              )      |
+      |      )              (---- >>> if new tact < tmin OR tact*dd < machine precision <<<
+      |      (              )      |  ifail = 8
+      |      )              (      |
+      |      (              )---- >>> else <<<
+      |      )              (         update xdiff for new simulation
+      |      (              )
+      |      )             \\\ if nfunc > 1: use inter-/extrapolated tact and xdiff
+      |      (                               for new simulation
+      |      )                               N.B.: new xx is thus not based on new gg, but
+      |      (                                     rather on new step size tact
+      |      )        
+      |      (---- store new values xx(i), gg(i) to OPWARMD (first 2 entries)
+      |      )---- >>> if ifail = 7,8,9 <<<
+      |      (         goto 1000
+      |      )
+     ...    ...
+\end{verbatim}
+}
 \caption{Flow chart (part 2 of 3)}
 \label{fig:lsoptflow2}
 \end{figure}
 
-\begin{figure}[b!]
-\input{part8/lsopt_flow_3}
+\begin{figure}
+%\input{part8/lsopt_flow_3}
+{\scriptsize
+\begin{verbatim}
+     ...    ...
+      |      )        
+      |      (---- store new values xx(i), gg(i) to OPWARMD (first 2 entries)
+      |      )---- >>> if ifail = 7,8,9 <<<
+      |      (         goto 1000
+      |      )
+      |      (---- compute new pointers jmin, jmax to include latest values
+      |      )     gg(i)-gg(i-1), xx(i)-xx(i-1) to Hessian matrix estimate
+      |      (---- store gg(i)-gg(i-1), xx(i)-xx(i-1) to OPWARMD
+      |      )     (entries 2*jmax+2, 2*jmax+3)
+      |      (
+      |      )---- CALL DGSCALE
+      |      (       |
+      |      )       |---- call dostore
+      |      (       |       |
+      |      )       |       |---- read preconditioner of previous iteration diag(i-1)
+      |      (       |             from OPWARMD (3rd entry)
+      |      )       |
+      |      (       |---- compute new preconditioner diag(i), based upon diag(i-1),
+      |      )       |     gg(i)-gg(i-1), xx(i)-xx(i-1)
+      |      (       |
+      |      )       |---- call dostore
+      |      (               |
+      |      )               |---- write new preconditioner diag(i) to OPWARMD (3rd entry)
+      |      (
+      |---- \\\ end of optimization iteration loop
+      |
+      |
+      |
+      |---- CALL OUTSTORE
+      |       |
+      |       |---- store gnorm0, ff(i), current pointers jmin, jmax, iterabs to OPWARMI
+      |
+      |---- >>> if OFFLINE version <<<
+      |         xx(i+1) needs to be computed as input for offline optimization
+      |          |
+      |          |---- CALL LSUPDXX
+      |          |       |
+      |          |       |---- compute dd(i), tact(i) -> xdiff(i+1) = x(i) + tact(i)*dd(i)
+      |          |
+      |          |---- CALL WRITE_CONTROL
+      |          |       |
+      |          |       |---- write xdiff(i+1) to special file for offline optim.
+      |
+      |---- print final information
+      |
+      O
+\end{verbatim}
+}
 \caption{Flow chart (part 3 of 3)}
 \label{fig:lsoptflow3}
 \end{figure}
