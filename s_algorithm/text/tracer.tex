@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/tracer.tex,v 1.3 2001/09/25 20:13:42 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/tracer.tex,v 1.4 2001/09/26 17:00:34 adcroft Exp $
 % $Name:  $
 
 \section{Tracer equations}
@@ -66,18 +66,49 @@ $F_r$: {\bf fVerT} (argument)
 
 \end{minipage} }
 
-
 The space and time discretizations are treated seperately (method of
-lines). The Adams-Bashforth time discretization reads:
+lines). Tendancies are calculated at time levels $n$ and $n-1$ and
+extrapolated to $n+1/2$ using the Adams-Bashforth method:
 \marginpar{$\epsilon$: {\bf AB\_eps}}
-\marginpar{$\Delta t$: {\bf deltaTtracer}}
 \begin{equation}
-\tau^{(n+1)} = \tau^{(n)} + \Delta t \left(
+G^{(n+1/2)} = 
 (\frac{3}{2} + \epsilon) G^{(n)} - (\frac{1}{2} + \epsilon) G^{(n-1)}
-\right)
 \end{equation}
 where $G^{(n)} = G_{adv}^\tau + G_{diff}^\tau + G_{src}^\tau$ at time
-step $n$.
+step $n$. The tendancy at $n-1$ is not re-calculated but rather the
+tendancy at $n$ is stored in a global array for later re-use.
+
+\fbox{ \begin{minipage}{4.75in}
+{\em S/R ADAMS\_BASHFORTH2} ({\em model/src/adams\_bashforth2.F})
+
+$G^{(n+1/2)}$: {\bf gTracer} (argument on exit)
+
+$G^{(n)}$: {\bf gTracer} (argument on entry)
+
+$G^{(n-1)}$: {\bf gTrNm1} (argument)
+
+$\epsilon$: {\bf ABeps} (PARAMS.h)
+
+\end{minipage} }
+
+The tracers are stepped forward in time using the extrapolated tendancy:
+\begin{equation}
+\tau^{(n+1)} = \tau^{(n)} + \Delta t G^{(n+1/2)}
+\end{equation}
+\marginpar{$\Delta t$: {\bf deltaTtracer}}
+
+\fbox{ \begin{minipage}{4.75in}
+{\em S/R TIMESTEP\_TRACER} ({\em model/src/timestep\_tracer.F})
+
+$\tau^{(n+1)}$: {\bf gTracer} (argument on exit)
+
+$\tau^{(n)}$: {\bf tracer} (argument on entry)
+
+$G^{(n+1/2)}$: {\bf gTracer} (argument)
+
+$\Delta t$: {\bf deltaTtracer} (PARAMS.h)
+
+\end{minipage} }
 
 Strictly speaking the ABII scheme should be applied only to the
 advection terms. However, this scheme is only used in conjuction with
@@ -86,18 +117,10 @@ schemes. Selection of any other advection scheme disables
 Adams-Bashforth for tracers so that explicit diffusion and forcing use
 the forward method.
 
-\fbox{ \begin{minipage}{4.75in}
-{\em S/R TIMESTEP\_TRACER} ({\em model/src/timestep\_tracer.F})
 
-$\tau$: {\bf tracer} (argument)
 
-$G^{(n)}$: {\bf gTracer} (argument)
 
-$G^{(n-1)}$: {\bf gTrNm1} (argument)
-
-$\Delta t$: {\bf deltaTtracer} (PARAMS.h)
-
-\end{minipage} }
+\section{Linear advection schemes}
 
 \begin{figure}
 \resizebox{5.5in}{!}{\includegraphics{part2/advect-1d-lo.eps}}
@@ -135,8 +158,6 @@ $\mu=c/(1-c)$.
 \label{fig:advect-1d-hi}
 }
 \end{figure}
-
-\section{Linear advection schemes}
 
 The advection schemes known as centered second order, centered fourth
 order, first order upwind and upwind biased third order are known as
@@ -228,6 +249,32 @@ At boundaries, $\delta_{\hat{n}} \tau$ is set to zero allowing
 $\delta_{nn}$ to be evaluated. We are currently examing the accuracy
 of this boundary condition and the effect on the solution.
 
+\fbox{ \begin{minipage}{4.75in}
+{\em S/R GAD\_U3\_ADV\_X} ({\em gad\_u3\_adv\_x.F})
+
+$F_x$: {\bf uT} (argument)
+
+$U$: {\bf uTrans} (argument)
+
+$\tau$: {\bf tracer} (argument)
+
+{\em S/R GAD\_U3\_ADV\_Y} ({\em gad\_u3\_adv\_y.F})
+
+$F_y$: {\bf vT} (argument)
+
+$V$: {\bf vTrans} (argument)
+
+$\tau$: {\bf tracer} (argument)
+
+{\em S/R GAD\_U3\_ADV\_R} ({\em gad\_u3\_adv\_r.F})
+
+$F_r$: {\bf wT} (argument)
+
+$W$: {\bf rTrans} (argument)
+
+$\tau$: {\bf tracer} (argument)
+
+\end{minipage} }
 
 \subsection{Centered fourth order advection}
 
@@ -249,6 +296,34 @@ F_r & = & W \overline{\tau - \frac{1}{6} \delta_{ii} \tau}^k
 
 As for the third order scheme, the best discretization near boundaries
 is under investigation but currenlty $\delta_i \tau=0$ on a boundary.
+
+\fbox{ \begin{minipage}{4.75in}
+{\em S/R GAD\_C4\_ADV\_X} ({\em gad\_c4\_adv\_x.F})
+
+$F_x$: {\bf uT} (argument)
+
+$U$: {\bf uTrans} (argument)
+
+$\tau$: {\bf tracer} (argument)
+
+{\em S/R GAD\_C4\_ADV\_Y} ({\em gad\_c4\_adv\_y.F})
+
+$F_y$: {\bf vT} (argument)
+
+$V$: {\bf vTrans} (argument)
+
+$\tau$: {\bf tracer} (argument)
+
+{\em S/R GAD\_C4\_ADV\_R} ({\em gad\_c4\_adv\_r.F})
+
+$F_r$: {\bf wT} (argument)
+
+$W$: {\bf rTrans} (argument)
+
+$\tau$: {\bf tracer} (argument)
+
+\end{minipage} }
+
 
 \subsection{First order upwind advection}
 
@@ -315,6 +390,33 @@ only provide the Superbee limiter \cite{Roe85}:
 \psi(r) = \max[0,\min[1,2r],\min[2,r]]
 \end{equation}
 
+\fbox{ \begin{minipage}{4.75in}
+{\em S/R GAD\_FLUXLIMIT\_ADV\_X} ({\em gad\_fluxlimit\_adv\_x.F})
+
+$F_x$: {\bf uT} (argument)
+
+$U$: {\bf uTrans} (argument)
+
+$\tau$: {\bf tracer} (argument)
+
+{\em S/R GAD\_FLUXLIMIT\_ADV\_Y} ({\em gad\_fluxlimit\_adv\_y.F})
+
+$F_y$: {\bf vT} (argument)
+
+$V$: {\bf vTrans} (argument)
+
+$\tau$: {\bf tracer} (argument)
+
+{\em S/R GAD\_FLUXLIMIT\_ADV\_R} ({\em gad\_fluxlimit\_adv\_r.F})
+
+$F_r$: {\bf wT} (argument)
+
+$W$: {\bf rTrans} (argument)
+
+$\tau$: {\bf tracer} (argument)
+
+\end{minipage} }
+
 
 \subsection{Third order direct space time}
 
@@ -353,6 +455,34 @@ large Courant number, where the linear upwind third order method is
 unstable, the scheme is extremely accurate
 (Fig.~\ref{fig:advect-1d-hi}) with only minor overshoots.
 
+\fbox{ \begin{minipage}{4.75in}
+{\em S/R GAD\_DST3\_ADV\_X} ({\em gad\_dst3\_adv\_x.F})
+
+$F_x$: {\bf uT} (argument)
+
+$U$: {\bf uTrans} (argument)
+
+$\tau$: {\bf tracer} (argument)
+
+{\em S/R GAD\_DST3\_ADV\_Y} ({\em gad\_dst3\_adv\_y.F})
+
+$F_y$: {\bf vT} (argument)
+
+$V$: {\bf vTrans} (argument)
+
+$\tau$: {\bf tracer} (argument)
+
+{\em S/R GAD\_DST3\_ADV\_R} ({\em gad\_dst3\_adv\_r.F})
+
+$F_r$: {\bf wT} (argument)
+
+$W$: {\bf rTrans} (argument)
+
+$\tau$: {\bf tracer} (argument)
+
+\end{minipage} }
+
+
 \subsection{Third order direct space time with flux limiting}
 
 The overshoots in the DST3 method can be controlled with a flux limiter.
@@ -373,7 +503,100 @@ and the limiter is the Sweby limiter:
 \psi(r) = \max[0, \min[\min(1,d_0+d_1r],\frac{1-c}{c}r ]]
 \end{equation}
 
+\fbox{ \begin{minipage}{4.75in}
+{\em S/R GAD\_DST3FL\_ADV\_X} ({\em gad\_dst3\_adv\_x.F})
+
+$F_x$: {\bf uT} (argument)
+
+$U$: {\bf uTrans} (argument)
+
+$\tau$: {\bf tracer} (argument)
+
+{\em S/R GAD\_DST3FL\_ADV\_Y} ({\em gad\_dst3\_adv\_y.F})
+
+$F_y$: {\bf vT} (argument)
+
+$V$: {\bf vTrans} (argument)
+
+$\tau$: {\bf tracer} (argument)
+
+{\em S/R GAD\_DST3FL\_ADV\_R} ({\em gad\_dst3\_adv\_r.F})
+
+$F_r$: {\bf wT} (argument)
+
+$W$: {\bf rTrans} (argument)
+
+$\tau$: {\bf tracer} (argument)
+
+\end{minipage} }
+
+
 \subsection{Multi-dimensional advection}
+
+\begin{figure}
+\resizebox{5.5in}{!}{\includegraphics{part2/advect-2d-lo-diag.eps}}
+\caption{
+Comparison of advection schemes in two dimensions; diagonal advection
+of a resolved Guassian feature. Courant number is 0.01 with
+30$\times$30 points and solutions are shown for T=1/2. White lines
+indicate zero crossing (ie. the presence of false minima).  The left
+column shows the second order schemes; top) centered second order with
+Adams-Bashforth, middle) Lax-Wendroff and bottom) Superbee flux
+limited. The middle column shows the third order schemes; top) upwind
+biased third order with Adams-Bashforth, middle) third order direct
+space-time method and bottom) the same with flux limiting. The top
+right panel shows the centered fourth order scheme with
+Adams-Bashforth and right middle panel shows a fourth order variant on
+the DST method. Bottom right panel shows the Superbee flux limiter
+(second order) applied independantly in each direction (method of
+lines).
+\label{fig:advect-2d-lo-diag}
+}
+\end{figure}
+
+\begin{figure}
+\resizebox{5.5in}{!}{\includegraphics{part2/advect-2d-mid-diag.eps}}
+\caption{
+Comparison of advection schemes in two dimensions; diagonal advection
+of a resolved Guassian feature. Courant number is 0.27 with
+30$\times$30 points and solutions are shown for T=1/2. White lines
+indicate zero crossing (ie. the presence of false minima).  The left
+column shows the second order schemes; top) centered second order with
+Adams-Bashforth, middle) Lax-Wendroff and bottom) Superbee flux
+limited. The middle column shows the third order schemes; top) upwind
+biased third order with Adams-Bashforth, middle) third order direct
+space-time method and bottom) the same with flux limiting. The top
+right panel shows the centered fourth order scheme with
+Adams-Bashforth and right middle panel shows a fourth order variant on
+the DST method. Bottom right panel shows the Superbee flux limiter
+(second order) applied independantly in each direction (method of
+lines).
+\label{fig:advect-2d-mid-diag}
+}
+\end{figure}
+
+\begin{figure}
+\resizebox{5.5in}{!}{\includegraphics{part2/advect-2d-hi-diag.eps}}
+\caption{
+Comparison of advection schemes in two dimensions; diagonal advection
+of a resolved Guassian feature. Courant number is 0.47 with
+30$\times$30 points and solutions are shown for T=1/2. White lines
+indicate zero crossings and initial maximum values (ie. the presence
+of false extrema).  The left column shows the second order schemes;
+top) centered second order with Adams-Bashforth, middle) Lax-Wendroff
+and bottom) Superbee flux limited. The middle column shows the third
+order schemes; top) upwind biased third order with Adams-Bashforth,
+middle) third order direct space-time method and bottom) the same with
+flux limiting. The top right panel shows the centered fourth order
+scheme with Adams-Bashforth and right middle panel shows a fourth
+order variant on the DST method. Bottom right panel shows the Superbee
+flux limiter (second order) applied independantly in each direction
+(method of lines).
+\label{fig:advect-2d-hi-diag}
+}
+\end{figure}
+
+
 
 In many of the aforementioned advection schemes the behaviour in
 multiple dimensions is not necessarily as good as the one dimensional
@@ -408,3 +631,77 @@ So that the over all time-stepping looks likes:
 \begin{equation}
 \tau^{n+1} = \tau^{n} + \Delta t \left( G^{n+1/2}_{adv} + G_{diff}(\tau^{n}) + G^{n}_{forcing} \right)
 \end{equation}
+
+\fbox{ \begin{minipage}{4.75in}
+{\em S/R GAD\_ADVECTION} ({\em gad\_advection.F})
+
+$\tau$: {\bf Tracer} (argument)
+
+$G^{n+1/2}_{adv}$: {\bf Gtracer} (argument)
+
+$F_x, F_y, F_r$: {\bf af} (local)
+
+$U$: {\bf uTrans} (local)
+
+$V$: {\bf vTrans} (local)
+
+$W$: {\bf rTrans} (local)
+
+\end{minipage} }
+
+
+\section{Comparison of advection schemes}
+
+Figs.~\ref{fig:advect-2d-lo-diag}, \ref{fig:advect-2d-mid-diag} and
+\ref{fig:advect-2d-hi-diag} show solutions to a simple diagonal
+advection problem using a selection of schemes for low, moderate and
+high Courant numbers, respectively. The top row shows the linear
+schemes, integrated with the Adams-Bashforth method. Theses schemes
+are clearly unstable for the high Courant number and weakly unstable
+for the moderate Courant number. The presence of false extrema is very
+apparent for all Courant numbers. The middle row shows solutions
+obtained with the unlimited but multi-dimensional schemes. These
+solutions also exhibit false extrema though the pattern now shows
+symmetry due to the multi-dimensional scheme. Also, the schemes are
+stable at high Courant number where the linear schemes weren't. The
+bottom row (left and middle) shows the limited schemes and most
+obvious is the absence of false extrema. The accuracy and stability of
+the unlimited non-linear schemes is retained at high Courant number
+but at low Courant number the tendancy is to loose amplitude in sharp
+peaks due to diffusion. The one dimensional tests shown in
+Figs.~\ref{fig:advect-1d-lo} and \ref{fig:advect-1d-hi} showed this
+phenomenum.
+
+Finally, the bottom left and right panels use the same advection
+scheme but the right does not use the mutli-dimensional method. At low
+Courant number this appears to not matter but for moderate Courant
+number severe distortion of the feature is apparent. Moreoever, the
+stability of the multi-dimensional scheme is determined by the maximum
+Courant number applied of each dimension while the stability of the
+method of lines is determined by the sum. Hence, in the high Courant
+number plot, the scheme is unstable.
+
+With many advection schemes implemented in the code two questions
+arise: ``Which scheme is best?'' and ``Why don't you just offer the
+best advection scheme?''. Unfortunately, no one advection scheme is
+``the best'' for all particular applications and for new applications
+it is often a matter of trial to determine which is most
+suitable. Here are some guidelines but these are not the rule;
+\begin{itemize}
+\item If you have a coarsely resolved model, using a
+positive or upwind biased scheme will introduce significant diffusion
+to the solution and using a centered higher order scheme will
+introduce more noise. In this case, simplest may be best.
+\item If you have a high resolution model, using a higher order
+scheme will give a more accurate solution but scale-selective
+diffusion might need to be employed. The flux limited methods
+offer similar accuracy in this regime.
+\item If your solution has shocks or propagatin fronts then a
+flux limited scheme is almost essential.
+\item If your time-step is limited by advection, the multi-dimensional
+non-linear schemes have the most stablility (upto Courant number 1).
+\item If you need to know how much diffusion/dissipation has occured you
+will have a lot of trouble figuring it out with a non-linear method.
+\item The presence of false extrema is unphysical and this alone is the
+strongest argument for using a positive scheme.
+\end{itemize}
