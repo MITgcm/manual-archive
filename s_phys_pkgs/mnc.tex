@@ -1,8 +1,11 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/Attic/mnc.tex,v 1.11 2004/09/22 15:11:32 edhill Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/Attic/mnc.tex,v 1.12 2004/10/12 18:16:03 edhill Exp $
 % $Name:  $
 
 \section{NetCDF I/O Integration: MNC}
 \label{sec:pkg:mnc}
+\begin{rawhtml}
+<!-- CMIREDIR:package_mnc: -->
+\end{rawhtml}
 
 The \texttt{mnc} package is a set of convenience routines written to
 expedite the process of creating, appending, and reading NetCDF files.
@@ -18,7 +21,141 @@ http://www.unidata.ucar.edu/packages/netcdf/
 \begin{rawhtml} </A> \end{rawhtml}
 
 
-\subsection{Introduction}
+\subsection{Using MNC}
+
+\subsubsection{MNC Configuration and Inputs}
+
+As with all MITgcm packages, MNC can be turned on/off at compile time
+using the \texttt{packages.conf} file or the genmake2
+\texttt{-enable=mnc} or \texttt{-disable=mnc} switches.
+
+For run-time configuration, most of the MNC--related model parameters
+are contained within a Fortran namelist file called \texttt{data.mnc}.
+If this file does not exist, then the MNC package will interpret that
+as an indication that it is not to be used.  If the \texttt{data.mnc}
+file does exist, then it may contain the following parameters:
+
+\begin{center}
+  {\footnotesize
+    \begin{tabular}[htb]{|l|c|l|l|}\hline
+      \textbf{Name}  &  \textbf{T}  &  
+      \textbf{Default}  &  \textbf{Description}  \\\hline
+      &  &  &  \\
+      \texttt{useMNC}  &  L  & \texttt{.FALSE.}  &  
+      \textbf{overall MNC ON/OFF switch}  \\
+      \texttt{mnc\_echo\_gvtypes}  &  L  & \texttt{.FALSE.}  &  
+      echo pre-defined ``types'' (debugging)   \\
+      \texttt{mnc\_use\_outdir}  &  L  & \texttt{.FALSE.}  &  
+      create a directory for output  \\
+      \texttt{mnc\_outdir\_str}  &  S  & \texttt{'mnc\_'}  &  
+      output directory name \\
+      \texttt{mnc\_outdir\_date}  &  L  & \texttt{.FALSE.}  &  
+      embed date in the output dir name  \\
+      \texttt{pickup\_write\_mnc}  &  L  & \texttt{.FALSE.}  &  
+      use MNC to write (create) pickup files  \\
+      \texttt{pickup\_read\_mnc}  &  L  & \texttt{.FALSE.}  &  
+      use MNC to read pickup files  \\
+      \texttt{mnc\_use\_indir}  &  L  & \texttt{.FALSE.}  &  
+      use a directory (path) for input  \\
+      \texttt{mnc\_indir\_str}  &  S  & \texttt{''}  &  
+      input directory (or path) name  \\
+      \texttt{snapshot\_mnc}  &  L  & \texttt{.FALSE.}  &  
+      write \texttt{snapshot} (instantaneous) w/MNC  \\
+      \texttt{monitor\_mnc}  &  L  & \texttt{.FALSE.}  &  
+      write \texttt{monitor} w/MNC  \\
+      \texttt{timeave\_mnc}  &  L  & \texttt{.FALSE.}  &  
+      write \texttt{timeave} w/MNC  \\
+      \texttt{autodiff\_mnc}  &  L  & \texttt{.FALSE.}  &  
+      write \texttt{autodiff} w/MNC  \\\hline
+    \end{tabular}
+  }
+\end{center}
+
+Additional MNC--related parameters are contained within the main
+\texttt{data} namelist file and in some of the namelist files for
+individual packages.  These options are:
+\begin{center}
+  {\footnotesize
+    \begin{tabular}[htb]{|l|c|l|l|}\hline
+      \textbf{Name}  &  \textbf{T}  &  
+      \textbf{Default}  &  \textbf{Description}  \\\hline
+      \multicolumn{4}{|c|}{\ }  \\
+      \multicolumn{4}{|c|}{Main namelist file: 
+        ``\textbf{data}''}  \\\hline
+      \texttt{snapshot\_ioinc}  &  L  & \texttt{.FALSE.}  &  
+      write \texttt{snapshot} ``inclusively''  \\
+      \texttt{timeave\_ioinc}  &  L  & \texttt{.FALSE.}  &  
+      write \texttt{timeave} ``inclusively''  \\
+      \texttt{monitor\_ioinc}  &  L  & \texttt{.FALSE.}  &  
+      write \texttt{monitor} ``inclusively''  \\
+      \texttt{the\_run\_name}  &  C  & ``name...''  &  
+      name is included in all MNC output  \\\hline
+      \multicolumn{4}{|c|}{\ }  \\
+      \multicolumn{4}{|c|}{Diagnostics namelist file: 
+        ``\textbf{data.diagnostics}''}  \\\hline
+      \texttt{diag\_mnc}  &  L  & \texttt{.FALSE.}  &  
+      write \texttt{diagnostics} w/MNC  \\
+      \texttt{diag\_ioinc}  &  L  & \texttt{.FALSE.}  &  
+      write \texttt{diagnostics} ``inclusively''  \\\hline
+    \end{tabular}
+  }
+\end{center}
+
+By default, turning on MNC for a particular output type will result in
+turning off all the corresponding (usually, default) MDSIO or STDOUT
+output mechanisms.  In other words, output defaults to being an
+exclusive selection.  To enable multiple kinds of simultaneous output,
+flags of the form \texttt{NAME\_ioinc} have been created where
+\texttt{NAME} corresponds to the various MNC output flags.  When a
+\texttt{NAME\_ioinc} flag is set to \texttt{.TRUE.}, then multiple
+simultaneous forms of output are allowed for the \texttt{NAME} output
+mechanism.  The intent of this design is that typical users will only
+want one kind of output while people debugging the code (particularly
+the I/O routines) may want simultaneous types of output.
+
+This ``inclusive'' versus ``exclusive'' design is easily applied in
+cases where three or more kinds of output may be generated.  Thus, it
+can be readily extended to additional new output types (eg. HDF5).
+
+Input types are always exclusive.
+
+\subsubsection{MNC Output}
+
+While NetCDF files are supposed to be ``self-describing'', it is
+helpful to note the following:
+
+\begin{itemize}
+\item The constraints placed upon the ``unlimited'' (or ``record'')
+  dimension inherent with NetCDF v3.x make it very inefficient to put
+  variables written at potentially different intervals within the same
+  file.  For this reason, MNC output is split into a few file ``base
+  names'' which try to reflect the nature of their content.
+  
+\item All MNC output is currently done in a ``tile-per-file'' fashion
+  since most NetCDF v3.x implementions cannot write safely within MPI
+  or multi-threaded environments.  This tiling is done in a global
+  fashion and the tile numbers are appended to the base names
+  described above.  Some scripts to ``assemble'' output are available
+  (\texttt{MITgcm/utils/matlab}).  More general manipulations can be
+  accomplished with the
+  \begin{rawhtml}
+    <A href="http://nco.sourceforge.net"> 
+  \end{rawhtml} 
+\begin{verbatim}
+NetCDF Operators (or ``NCO'') at http://nco.sourceforge.net
+\end{verbatim}
+  \begin{rawhtml} </A> \end{rawhtml}
+  which is a very powerful and convenient set of tools for working
+  with all NetCDF files.
+  
+\item MNC does not (yet) provide a mechanism for reading information
+  from a single ``global'' file as can be done with the MDSIO
+  package.
+
+\end{itemize}
+
+
+\subsection{MNC Internals}
 
 The \texttt{mnc} package is a two-level convenience library (or
 ``wrapper'') for most of the NetCDF Fortran API.  Its purpose is to
@@ -66,9 +203,7 @@ The two levels of the \texttt{mnc} package are:
 \end{description}
 
 
-\subsection{Using MNC}
-
-\subsubsection{Grid--Types and Variable--Types}
+\subsubsection{MNC Grid--Types and Variable--Types}
 
 As a convenience for users, the MNC package includes numerous routines
 to aid in the writing of data to NetCDF format.  Probably the biggest
@@ -127,7 +262,7 @@ and is used by the \texttt{mnc\_cw\_*\_[R|W]} subroutines for reading
 and writing variables.
 
 
-\subsubsection{An Example}
+\subsubsection{Using MNC: Examples}
 
 Writing variables to NetCDF files can be accomplished in as few as two
 function calls.  The first function call defines a variable type,
@@ -183,91 +318,31 @@ C       Write dynvars using the MNC package
 \end{verbatim}
 }
 
+While it is easiest to write variables within typical 2D and 3D fields
+where all data is known at a given time, it is also possible to write
+fields where only a portion (\textit{eg.} a ``slab'' or ``slice'') is
+known at a given instant.  An example is provided within
+\filelink{pkg/mom\_vecinv/mom\_vecinv.F}{pkg-mom_vecinv-mom_vecinv.F}
+where an offset vector is used: {\footnotesize
+\begin{verbatim}
+       IF (useMNC .AND. snapshot_mnc) THEN
+         CALL MNC_CW_RL_W_OFFSET('D','mom_vi',bi,bj, 'fV', uCf,
+   &          offsets, myThid)
+         CALL MNC_CW_RL_W_OFFSET('D','mom_vi',bi,bj, 'fU', vCf,
+   &          offsets, myThid)
+       ENDIF
+\end{verbatim}
+}
+to write a 3D field one depth slice at a time.
 
-\subsubsection{Parameters}
+Each element in the offset vector corresponds (in order) to the
+dimensions of the ``full'' (or virtual) array and specifies which are
+known at the time of the call.  A zero within the offset array means
+that all values along that dimension are available while a positive
+integer means that only values along that index of the dimension are
+available.  In all cases, the matrix passed is assumed to start (that
+is, have an in-memory structure) coinciding with the start of the
+specified slice.  Thus, using this offset array mechanism, a slice
+can be written along any single dimension or combinations of
+dimensions.
 
-Most of the MNC--related parameters are contained within a Fortran
-namelist file called \texttt{data.mnc}.  If this file does not exist,
-then the MNC package will interpret that as an indication that it is
-not to be used.  If the \texttt{data.mnc} file does exist, then it may
-contain the following parameters:
-
-\begin{center}
-  {\footnotesize
-    \begin{tabular}[htb]{|l|c|l|l|}\hline
-      \textbf{Name}  &  \textbf{T}  &  
-      \textbf{Default}  &  \textbf{Description}  \\\hline
-      &  &  &  \\
-      \texttt{useMNC}  &  L  & \texttt{.FALSE.}  &  
-      \textbf{overall MNC ON/OFF switch}  \\
-      \texttt{mnc\_echo\_gvtypes}  &  L  & \texttt{.FALSE.}  &  
-      echo pre-defined ``types'' (debugging)   \\
-      \texttt{mnc\_use\_outdir}  &  L  & \texttt{.FALSE.}  &  
-      create a directory for output  \\
-      \texttt{mnc\_outdir\_str}  &  S  & \texttt{'mnc\_'}  &  
-      output directory name \\
-      \texttt{mnc\_outdir\_date}  &  L  & \texttt{.FALSE.}  &  
-      embed date in the output dir name  \\
-      \texttt{pickup\_write\_mnc}  &  L  & \texttt{.FALSE.}  &  
-      use MNC to write (create) pickup files  \\
-      \texttt{pickup\_read\_mnc}  &  L  & \texttt{.FALSE.}  &  
-      use MNC to read pickup files  \\
-      \texttt{mnc\_use\_indir}  &  L  & \texttt{.FALSE.}  &  
-      use a directory (path) for input  \\
-      \texttt{mnc\_indir\_str}  &  S  & \texttt{''}  &  
-      input directory (or path) name  \\
-      \texttt{snapshot\_mnc}  &  L  & \texttt{.FALSE.}  &  
-      write \texttt{snapshot} (instantaneous) w/MNC  \\
-      \texttt{monitor\_mnc}  &  L  & \texttt{.FALSE.}  &  
-      write \texttt{monitor} w/MNC  \\
-      \texttt{timeave\_mnc}  &  L  & \texttt{.FALSE.}  &  
-      write \texttt{timeave} w/MNC  \\\hline
-    \end{tabular}
-  }
-\end{center}
-
-Additional MNC--related parameters are contained within the main
-\texttt{data} namelist file and in some of the namelist files for
-individual packages.  These options are:
-\begin{center}
-  {\footnotesize
-    \begin{tabular}[htb]{|l|c|l|l|}\hline
-      \textbf{Name}  &  \textbf{T}  &  
-      \textbf{Default}  &  \textbf{Description}  \\\hline
-      \multicolumn{4}{|c|}{\ }  \\
-      \multicolumn{4}{|c|}{Main namelist file: 
-        ``\textbf{data}''}  \\\hline
-      \texttt{snapshot\_ioinc}  &  L  & \texttt{.FALSE.}  &  
-      write \texttt{snapshot} ``inclusively''  \\
-      \texttt{timeave\_ioinc}  &  L  & \texttt{.FALSE.}  &  
-      write \texttt{timeave} ``inclusively''  \\
-      \texttt{monitor\_ioinc}  &  L  & \texttt{.FALSE.}  &  
-      write \texttt{monitor} ``inclusively''  \\\hline
-      \multicolumn{4}{|c|}{\ }  \\
-      \multicolumn{4}{|c|}{Diagnostics namelist file: 
-        ``\textbf{data.diagnostics}''}  \\\hline
-      \texttt{diag\_mnc}  &  L  & \texttt{.FALSE.}  &  
-      write \texttt{diagnostics} w/MNC  \\
-      \texttt{diag\_ioinc}  &  L  & \texttt{.FALSE.}  &  
-      write \texttt{diagnostics} ``inclusively''  \\\hline
-    \end{tabular}
-  }
-\end{center}
-
-By default, turning on MNC for a particular output stream will result
-in turning off all the corresponding (usually, default) MDSIO or
-STDOUT output mechanisms.  In other words, output defaults to being an
-exclusive selection.  To enable multiple kinds of simultaneous output,
-flags of the form \texttt{NAME\_ioinc} can be used where \texttt{NAME}
-corresponds to the various MNC output flags.  When a
-\texttt{NAME\_ioinc} flag is set to \texttt{.TRUE.}, then multiple
-forms of output are allowed for the \texttt{NAME} output mechanism.
-The intent of this design is that typical users will only want one
-kind of output while people debugging the code (particularly the I/O
-routines) may want simultaneous types of output.
-
-This ``inclusive'' versus ``exclusive'' design is easily applied in
-cases where three or more kinds of output may be generated.  Thus, it
-can be readily extended to additional new output types (eg. HDF5).
-
-Input types are always exclusive.

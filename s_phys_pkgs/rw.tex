@@ -1,9 +1,13 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/Attic/rw.tex,v 1.5 2004/01/29 21:12:31 edhill Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/Attic/rw.tex,v 1.6 2004/10/12 18:16:03 edhill Exp $
 % $Name:  $
 
 
 \section{RW Basic binary I/O utilities}
 \label{sec:pkg:rw}
+\begin{rawhtml}
+<!-- CMIREDIR:package_rw: -->
+\end{rawhtml}
+
 The {\tt rw} package provides a very rudimentary binary I/O capability
 for quickly writing {\it single record} direct-access Fortran binary files. 
 It is primarily used for writing diagnostic output.
@@ -13,36 +17,25 @@ Package {\tt rw} is an interface to the more general {\tt mdsio} package.
 The {\tt rw} package can be used to write or read direct-access Fortran 
 binary files for two-dimensional XY and three-dimensional XYZ arrays. 
 The arrays are assumed to have been declared according to the standard
-MITgcm two-dimensional or the-dimensional floating point array type 
-(see figure \ref{fig:pkg:rw:standarddeclaration}).
-
-\begin[h]{figure}
-{\small
+MITgcm two-dimensional or three-dimensional floating point array type:
 \begin{verbatim}
 C     Example of declaring a standard two dimensional "long" 
 C     floating point type array (the _RL macro is usually 
 C     mapped to 64-bit floats in most configurations)
       _RL anArray(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
 \end{verbatim}
-}
-\caption{An example of the fixed form Fortran declaration for a 
-standard MITgcm two-dimensional array type.  }
-\label{fig:pkg:rw:standarddeclaration}
-\end{figure}
 
 Each call to an {\tt rw} read or write routine will read (or write) to
 the first record of a file. To write direct access Fortran files with
 multiple records use the package {\tt mdsio} (see section
-\ref{sec:pkg:mdsio}). To write self-describing files that contain
+\ref{sec:pkg:mdsio}).  To write self-describing files that contain
 embedded information describing the variables being written and the
 spatial and temporal locations of those variables use the package {\tt
   mnc} (see section \ref{sec:pkg:mnc}) which produces
 \htlink{netCDF}{http://www.unidata.ucar.edu/packages/netcdf}
 \cite{rew:97} based output.
 
-\subsection{Key subroutines, parameters and files}
-\label{sec:pkg:rw:implementation_synopsis}
-The {\tt rw} package has 
+%% \subsection{Key subroutines, parameters and files}
+%% \label{sec:pkg:rw:implementation_synopsis}
+%% The {\tt rw} package has 
 
-
-\subsection{Package Reference}
