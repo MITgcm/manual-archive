@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_overview/Attic/appendix_atmos.tex,v 1.2 2001/09/11 14:34:38 cnh Exp $
+% $Header: /u/gcmpack/manual/s_overview/Attic/appendix_atmos.tex,v 1.3 2001/09/26 14:53:10 cnh Exp $
 % $Name:  $
 
 \section{Appendix ATMOSPHERE}
@@ -78,11 +78,11 @@ For convenience in the model we prefer to step forward (\ref{theta-equation}%
 \subsubsection{Boundary conditions}
 
 The upper and lower boundary conditions are : 
-\begin{eqnarray*}
+\begin{eqnarray}
 \mbox{at the top:}\;\;p=0 &&\text{, }\omega =\frac{Dp}{Dt}=0 \\
 \mbox{at the surface:}\;\;p=p_{s} &&\text{, }\phi =\phi _{topo}=g~Z_{topo}
 \label{eq:boundary-condition-atmosphere}
-\end{eqnarray*}
+\end{eqnarray}
 In $p$-coordinates, the upper boundary acts like a solid boundary ($\omega
 =0 $); in $z$-coordinates and the lower boundary is analogous to a free
 surface ($\phi $ is imposed and $\omega \neq 0$).
@@ -95,11 +95,11 @@ example, the hydrostatic geopotential associated with the resting atmosphere
 is not dynamically relevant and can therefore be subtracted from the
 equations. The equations written in terms of perturbations are obtained by
 substituting the following definitions into the previous model equations: 
-\begin{eqnarray*}
+\begin{eqnarray}
 \theta &=&\theta _{o}+\theta ^{\prime } \label{eq:atmos-ref-prof-theta} \\
 \alpha &=&\alpha _{o}+\alpha ^{\prime }  \label{eq:atmos-ref-prof-alpha}\\
 \phi &=&\phi _{o}+\phi ^{\prime } \label{eq:atmos-ref-prof-phi}
-\end{eqnarray*}
+\end{eqnarray}
 The reference state (indicated by subscript ``0'') corresponds to
 horizontally homogeneous atmosphere at rest ($\theta _{o},\alpha _{o},\phi
 _{o}$) with surface pressure $p_{o}(x,y)$ that satisfies $\phi
