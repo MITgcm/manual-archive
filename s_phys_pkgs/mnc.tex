@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/Attic/mnc.tex,v 1.12 2004/10/12 18:16:03 edhill Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/Attic/mnc.tex,v 1.13 2004/10/12 21:44:59 edhill Exp $
 % $Name:  $
 
 \section{NetCDF I/O Integration: MNC}
@@ -148,9 +148,16 @@ NetCDF Operators (or ``NCO'') at http://nco.sourceforge.net
   which is a very powerful and convenient set of tools for working
   with all NetCDF files.
   
+\item On many systems, NetCDF has practical file size limits on the
+  order of 2--4GB (the maximium memory addressable with 32bit
+  pointers) due to a lack of operating system, compiler, and/or
+  library support.  In cases where this limit is reached, it is
+  generally a good idea to reduce write frequencies or restart from
+  pickups.
+  
 \item MNC does not (yet) provide a mechanism for reading information
   from a single ``global'' file as can be done with the MDSIO
-  package.
+  package.  This is in progress.
 
 \end{itemize}
 
