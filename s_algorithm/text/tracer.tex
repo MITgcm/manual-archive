@@ -1,0 +1,43 @@
+% $Header: /u/gcmpack/manual/s_algorithm/text/tracer.tex,v 1.1 2001/08/09 19:48:39 adcroft Exp $
+% $Name:  $
+
+\section{Tracer equations}
+
+The tracer equations are discretized consistantly with the continuity
+equation to facilitate conservation properties analogous to the
+continuum:
+\begin{equation}
+{\cal A}_c \Delta r_f h_c \partial_\theta
++ \delta_i U \overline{ \theta }^i
++ \delta_j V \overline{ \theta }^j
++ \delta_k W \overline{ \theta }^k
+= {\cal A}_c \Delta r_f h_c {\cal S}_\theta + \theta {\cal A}_c \delta_k (P-E)_{r=0}
+\end{equation}
+The quantities $U$, $V$ and $W$ are volume fluxes defined:
+\marginpar{$U$: {\bf uTrans} }
+\marginpar{$V$: {\bf vTrans} }
+\marginpar{$W$: {\bf rTrans} }
+\begin{eqnarray}
+U & = & \Delta y_g \Delta r_f h_w u \\
+V & = & \Delta x_g \Delta r_f h_s v \\
+W & = & {\cal A}_c w
+\end{eqnarray}
+${\cal S}$ represents the ``parameterized'' SGS processes and
+physics associated with the tracer. For instance, potential
+temperature equation in the ocean has is forced by surface and
+partially penetrating heat fluxes:
+\begin{equation}
+{\cal A}_c \Delta r_f h_c {\cal S}_\theta = \frac{1}{c_p \rho_o} \delta_k {\cal A}_c {\cal Q}
+\end{equation}
+while the salt equation has no real sources, ${\cal S}=0$, which
+leaves just the $P-E$ term.
+
+The continuity equation can be recovered by setting ${\cal Q}=0$ and
+$\theta=1$. The term $\theta (P-E)_{r=0}$ is required to retain local
+conservation of $\theta$. Global conservation is not possible using
+the flux-form (as here) and a linearized free-surface
+(\cite{Griffies00,Campin02}).
+
+
+
+
