@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/mom_fluxform.tex,v 1.6 2001/10/25 18:36:53 cnh Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/mom_fluxform.tex,v 1.7 2001/11/13 18:15:26 adcroft Exp $
 % $Name:  $
 
 \section{Flux-form momentum equations}
@@ -291,7 +291,7 @@ handled using the lopped cells.
 The no-slip condition defines the normal gradient of a tangential flow
 such that the flow is zero on the boundary. Rather than modify the
 stresses by using complicated functions of the masks and ``ghost''
-points (see \cite{Adcroft+Marshall98}) we add the boundary stresses as
+points (see \cite{adcroft:98}) we add the boundary stresses as
 an additional source term in cells next to solid boundaries. This has
 the advantage of being able to cope with ``thin walls'' and also makes
 the interior stress calculation (code) independent of the boundary
@@ -343,9 +343,9 @@ In the interior the vertical stresses are discretized:
 \tau_{33} & = & A_v \frac{1}{\Delta r_f} \delta_k w
 \end{eqnarray}
 It should be noted that in the non-hydrostatic form, the stress tensor
-is even less consistent than for the hydrostatic (see Wazjowicz
-\cite{Waojz}). It is well known how to do this properly (see Griffies
-\cite{Griffies}) and is on the list of to-do's.
+is even less consistent than for the hydrostatic (see
+\cite{wajsowicz:93}). It is well known how to do this properly (see 
+\cite{griffies:00}) and is on the list of to-do's.
 
 \fbox{ \begin{minipage}{4.75in}
 {\em S/R MOM\_U\_RVISCLFUX} ({\em mom\_u\_rviscflux.F})

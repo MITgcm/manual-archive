@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/spatial-discrete.tex,v 1.10 2001/10/25 18:36:53 cnh Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/spatial-discrete.tex,v 1.11 2001/11/13 18:15:26 adcroft Exp $
 % $Name:  $
 
 \section{Spatial discretization of the dynamical equations}
@@ -57,12 +57,12 @@ recovers the same ODE's resulting from finite differencing for the
 interior of a fluid. Differences arise at boundaries where a boundary
 is not positioned on a regular or smoothly varying grid. This method
 is used to represent the topography using lopped cell, see
-\cite{Adcroft98}. Subtle difference also appear in more than one
+\cite{adcroft:97}. Subtle difference also appear in more than one
 dimension away from boundaries. This happens because the each
 direction is discretized independently in the finite difference method
 while the integrating over finite volume implicitly treats all
 directions simultaneously. Illustration of this is given in
-\cite{Adcroft02}.
+\cite{ac:02}.
 
 \subsection{C grid staggering of variables}
 
@@ -79,7 +79,7 @@ equations. }
 The basic algorithm employed for stepping forward the momentum
 equations is based on retaining non-divergence of the flow at all
 times. This is most naturally done if the components of flow are
-staggered in space in the form of an Arakawa C grid \cite{Arakawa70}.
+staggered in space in the form of an Arakawa C grid \cite{arakawa:77}.
 
 Fig. \ref{fig:cgrid3d} shows the components of flow ($u$,$v$,$w$)
 staggered in space such that the zonal component falls on the
@@ -400,7 +400,7 @@ thickness of the open side is given by $h_w(i,j,k) \Delta r_f(k)$.}
 \label{fig:hfacs}
 \end{figure}
 
-\cite{Adcroft97} presented two alternatives to the step-wise finite
+\cite{adcroft:97} presented two alternatives to the step-wise finite
 difference representation of topography. The method is known to the
 engineering community as {\em intersecting boundary method}. It
 involves allowing the boundary to intersect a grid of cells thereby
@@ -524,7 +524,7 @@ the atmosphere.
 The difference in approach between ocean and atmosphere occurs because
 of the direct use of the ideal gas equation in forming the potential
 energy conversion term $\alpha \omega$. The form of these conversion
-terms is discussed at length in \cite{Adcroft01}.
+terms is discussed at length in \cite{adcroft:02}.
 
 Because of the different representation of hydrostatic balance between
 ocean and atmosphere there is no elegant way to represent both systems
