@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.18 2004/01/29 19:22:35 edhill Exp $
+% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.19 2004/02/16 02:27:33 edhill Exp $
 % $Name:  $
 
 %\section{Getting started}
@@ -79,6 +79,9 @@ provide easy support for maintenance updates.
 
 \end{enumerate}
 
+\subsubsection{Checkout from CVS}
+\label{sect:cvs_checkout}
+
 If CVS is available on your system, we strongly encourage you to use it. CVS
 provides an efficient and elegant way of organizing your code and keeping
 track of your changes. If CVS is not available on your machine, you can also
@@ -121,6 +124,28 @@ http://mitgcm.org/source_code.html
 \end{verbatim}
 \begin{rawhtml} </A> \end{rawhtml}
 
+As a convenience, the MITgcm CVS server contains aliases which are
+named subsets of the codebase.  These aliases can be especially
+helpful when used over slow internet connections or on machines with
+restricted storage space.  Table \ref{tab:cvsModules} contains a list
+of CVS aliases
+\begin{table}[htb]
+  \centering
+  \begin{tabular}[htb]{|lp{3.25in}|}\hline
+    \textbf{Alias Name}    &  \textbf{Information (directories) Contained}  \\\hline
+    \texttt{MITgcm\_code}  &  Only the source code -- none of the verification examples.  \\
+    \texttt{MITgcm\_verif\_basic}
+    &  Source code plus a small set of the verification examples 
+    (\texttt{global\_ocean.90x40x15}, \texttt{aim.5l\_cs}, \texttt{hs94.128x64x5}, 
+    \texttt{front\_relax}, and \texttt{plume\_on\_slope}).  \\
+    \texttt{MITgcm\_verif\_atmos}  &  Source code plus all of the atmospheric examples.  \\
+    \texttt{MITgcm\_verif\_ocean}  &  Source code plus all of the oceanic examples.  \\
+    \texttt{MITgcm\_verif\_all}    &  Source code plus all of the
+    verification examples. \\\hline
+  \end{tabular}
+  \caption{MITgcm CVS Modules}
+  \label{tab:cvsModules}
+\end{table}
 
 The checkout process creates a directory called \textit{MITgcm}. If
 the directory \textit{MITgcm} exists this command updates your code
@@ -134,9 +159,17 @@ MITgcm code can be found
 here
 \begin{rawhtml} </A> \end{rawhtml} 
 .
+It is important to note that the CVS aliases in Table
+\ref{tab:cvsModules} cannot be used in conjunction with the CVS
+\texttt{-d DIRNAME} option.  However, the \texttt{MITgcm} directories
+they create can be changed to a different name following the check-out:
+\begin{verbatim}
+   %  cvs co MITgcm_verif_basic
+   %  mv MITgcm MITgcm_verif_basic
+\end{verbatim}
 
 
-\paragraph*{Conventional download method}
+\subsubsection{Conventional download method}
 \label{sect:conventionalDownload}
 
 If you do not have CVS on your system, you can download the model as a
@@ -156,7 +189,7 @@ MITgcm-support@mitgcm.org
 \begin{rawhtml} </A> \end{rawhtml}
 mailing list.
 
-\paragraph*{Upgrading from an earlier version}
+\subsubsection{Upgrading from an earlier version}
 
 If you already have an earlier version of the code you can ``upgrade''
 your copy instead of downloading the entire repository again. First,
