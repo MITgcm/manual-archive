@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_overview/Attic/continuous_eqns.tex,v 1.1.1.1 2001/08/08 16:16:18 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_overview/Attic/continuous_eqns.tex,v 1.2 2001/09/11 14:03:33 cnh Exp $
 % $Name:  $
 
 \section{Continuous equations in `r' coordinates}
@@ -202,9 +202,11 @@ atmosphere.
 The boundary conditions at top and bottom are given by:
 
 \begin{eqnarray*}
-&&\omega =0~\text{at }r=R_{fixed}\text{ (top of the atmosphere)} \\
+&&\omega =0~\text{at }r=R_{fixed} \label{eq:fixed-bc-atmos}
+\text{ (top of the atmosphere)} \\
 \omega &=&\frac{Dp_{s}}{Dt}\text{; at }r=R_{moving}\text{ (bottom of the
 atmosphere)}
+\label{eq:moving-bc-atmos}
 \end{eqnarray*}
 
 Then the (hydrostatic form of) eq(\ref{incompressible}) yields a consistent
@@ -216,11 +218,15 @@ coordinates in Appendix Atmosphere - see eqs(\ref{eq-p-hmom}) to (\ref
 
 In the ocean we interpret: 
 \begin{eqnarray}
-r &=&z\text{ is the height} \\
-\dot{r} &=&\frac{Dz}{Dt}=w\text{ is the vertical velocity} \\
-\phi &=&\frac{p}{\rho _{c}}\text{ is the pressure} \\
+r &=&z\text{ is the height} 
+\label{eq:ocean-z}\\
+\dot{r} &=&\frac{Dz}{Dt}=w\text{ is the vertical velocity} 
+\label{eq:ocean-w}\\
+\phi &=&\frac{p}{\rho _{c}}\text{ is the pressure} 
+\label{eq:ocean-p}\\
 b(\theta ,S,r) &=&\frac{g}{\rho _{c}}\left( \rho (\theta ,S,r)-\rho
 _{c}\right) \text{ is the buoyancy}
+\label{eq:ocean-b}
 \end{eqnarray}
 where $\rho _{c}$ is a fixed reference density of water and $g$ is the
 acceleration due to gravity.\noindent
@@ -237,8 +243,10 @@ R_{o}=Z_{o}=0$.
 Boundary conditions are:
 
 \begin{eqnarray*}
-w &=&0~\text{at }r=R_{fixed}\text{ (ocean bottom)} \\
-w &=&\frac{D\eta }{Dt}\text{ at }r=R_{moving}=\eta \text{ (ocean surface)}
+w &=&0~\text{at }r=R_{fixed}\text{ (ocean bottom)} 
+\label{eq:fixed-bc-ocean}\\
+w &=&\frac{D\eta }{Dt}\text{ at }r=R_{moving}=\eta \text{ (ocean surface)
+\label{eq:moving-bc-ocean}}
 \end{eqnarray*}
 where $\eta $ is the elevation of the free surface.
 
@@ -252,23 +260,23 @@ Let us separate $\phi $ in to surface, hydrostatic and non-hydrostatic terms:
 
 \begin{equation}
 \phi (x,y,r)=\phi _{s}(x,y)+\phi _{hyd}(x,y,r)+\phi _{nh}(x,y,r)
-\label{pressuresplit}
+\label{eq:phi-split}
 \end{equation}
 and write eq(\ref{incompressible}a) in the form:
 
 \begin{equation}
 \frac{\partial \vec{\mathbf{v}_{h}}}{\partial t}+\mathbf{\nabla }_{h}\phi
 _{s}+\mathbf{\nabla }_{h}\phi _{hyd}+\epsilon _{nh}\mathbf{\nabla }_{h}\phi
-_{nh}=\vec{\mathbf{G}}_{\vec{v}_{h}}  \label{hor-mtm}
+_{nh}=\vec{\mathbf{G}}_{\vec{v}_{h}}  \label{eq:mom-h}
 \end{equation}
 
 \begin{equation}
-\frac{\partial \phi _{hyd}}{\partial r}=-b  \label{hydro}
+\frac{\partial \phi _{hyd}}{\partial r}=-b  \label{eq:hydrostatic}
 \end{equation}
 
 \begin{equation}
 \epsilon _{nh}\frac{\partial \dot{r}}{\partial t}+\frac{\partial \phi _{nh}}{%
-\partial r}=G_{\dot{r}}  \label{vertmtm}
+\partial r}=G_{\dot{r}}  \label{eq:mom-w}
 \end{equation}
 Here $\epsilon _{nh}$ is a non-hydrostatic parameter.
 
@@ -298,7 +306,7 @@ $+\mathcal{F}_{u}\mathcal{+D}_{u}$%
 \textit{Coriolis} \\ 
 \textit{\ Forcing/Dissipation}
 \end{tabular}
-\right. \qquad  \label{Gu}
+\right. \qquad  \label{eq:gu-speherical}
 \end{equation}
 
 \begin{equation}
@@ -317,7 +325,7 @@ $+\mathcal{F}_{v}\mathcal{+D}_{v}$%
 \textit{Coriolis} \\ 
 \textit{\ Forcing/Dissipation}
 \end{tabular}
-\right. \qquad  \label{Gv}
+\right. \qquad  \label{eq:gv-spherical}
 \end{equation}
 \qquad \qquad \qquad \qquad \qquad
 
@@ -337,7 +345,7 @@ $\mathcal{F}_{\dot{r}}\mathcal{+D}_{\dot{r}}$%
 \textit{Coriolis} \\ 
 \textit{\ Forcing/Dissipation}
 \end{tabular}
-\right.  \label{Gw}
+\right.  \label{eq:gw-spherical}
 \end{equation}
 \qquad \qquad \qquad \qquad \qquad
 
@@ -409,7 +417,7 @@ r}$ in the vertical momentum eqs(\ref{vertmtm}) and (\ref{Gw}) (but only
 here) by:
 
 \begin{equation}
-\dot{r}=\frac{Dp}{Dt}=\frac{Dp_{hyd}}{Dt}  \label{quasinonhydro}
+\dot{r}=\frac{Dp}{Dt}=\frac{Dp_{hyd}}{Dt}  \label{eq:quasi-nh-w}
 \end{equation}
 where $p_{hy}$ is the hydrostatic pressure.
 
@@ -469,13 +477,8 @@ pressure field must be obtained diagnostically. We proceed, as before, by
 dividing the total (pressure/geo) potential in to three parts, a surface
 part, $\phi _{s}(x,y)$, a hydrostatic part $\phi _{hyd}(x,y,r)$ and a
 non-hydrostatic part $\phi _{nh}(x,y,r)$, as in (\ref{pressuresplit}), and
-writing the momentum equation in the form 
-\begin{equation}
-\frac{\partial }{\partial t}\vec{\mathbf{v}_{h}}+\mathbf{\nabla }_{h}\phi
-_{s}+\mathbf{\nabla }_{h}\phi _{hyd}+\epsilon _{nh}\mathbf{\nabla }\phi
-_{nh}=\vec{\mathbf{G}}_{\vec{v}}  \label{mtm-split}
-\end{equation}
-as in (\ref{hor-mtm}).
+writing the momentum equation
+as in (\ref{eq:mom-h}).
 
 \subsubsection{Hydrostatic pressure}
 
@@ -488,9 +491,10 @@ _{hyd}\right] _{r}^{R_{o}}=\int_{r}^{R_{o}}-bdr
 \]
 and so
 
-\[
+\begin{equation}
 \phi _{hyd}(x,y,r)=\int_{r}^{R_{o}}bdr 
-\]
+\label{eq:hydro-phi}
+\end{equation}
 
 \subsubsection{Surface pressure}
 
@@ -515,14 +519,15 @@ r $. The above can be rearranged to yield, using Leibnitz's theorem:
 \begin{equation}
 \frac{\partial \eta }{\partial t}+\mathbf{\nabla }_{h}\cdot
 \int_{R_{fixed}}^{R_{moving}}\vec{\mathbf{v}}_{h}dr=0
-\label{integralcontinuity}
+\label{eq:free-surface}
 \end{equation}
 
 Whether $\phi $ is pressure (ocean model, $p/\rho _{c}$) or geopotential
 (atmospheric model), in (\ref{mtm-split}), the horizontal gradient term can
 be written 
 \begin{equation}
-\mathbf{\nabla }_{h}\phi _{s}=\mathbf{\nabla }_{h}b\eta   \label{link}
+\mathbf{\nabla }_{h}\phi _{s}=\mathbf{\nabla }_{h}b\eta   
+\label{eq:phi-surf}
 \end{equation}
 where $b$ is the buoyancy.
 
@@ -540,7 +545,7 @@ Taking the horizontal divergence of (\ref{hor-mtm}) and adding $\frac{%
 \begin{equation}
 \nabla _{3}^{2}\phi _{nh}=\nabla .\vec{\mathbf{G}}_{\vec{v}}-\left( \mathbf{%
 \nabla }_{h}^{2}\phi _{s}+\mathbf{\nabla }^{2}\phi _{hyd}\right) =\nabla .%
-\vec{\mathbf{F}}  \label{3dinvert}
+\vec{\mathbf{F}}  \label{eq:3d-invert}
 \end{equation}
 
 For a given rhs this 3-d elliptic equation must be inverted for $\phi _{nh}$
@@ -569,7 +574,7 @@ Eq.(\ref{nonormalflow}) implies, making use of (\ref{mtm-split}), that:
 
 \begin{equation}
 \widehat{n}.\nabla \phi _{nh}=\widehat{n}.\vec{\mathbf{F}}
-\label{inhomneumann}
+\label{eq:inhom-neumann-nh}
 \end{equation}
 where
 
@@ -598,7 +603,7 @@ that $\widetilde{\vec{\mathbf{F}}}.\widehat{n}=0$. As is implied by (\ref
 {inhomneumann}) the modified boundary condition becomes:
 
 \begin{equation}
-\widehat{n}.\nabla \phi _{nh}=0  \label{homneuman}
+\widehat{n}.\nabla \phi _{nh}=0  \label{eq:hom-neumann-nh}
 \end{equation}
 
 If the flow is `close' to hydrostatic balance then the 3-d inversion
@@ -622,10 +627,11 @@ The forcing terms $\mathcal{F}$ on the rhs of the equations are provided by
 Many forms of momentum dissipation are available in the model. Laplacian and
 biharmonic frictions are commonly used:
 
-\[
+\begin{equation}
 D_{V}=A_{h}\nabla _{h}^{2}v+A_{v}\frac{\partial ^{2}v}{\partial z^{2}}%
 +A_{4}\nabla _{h}^{4}v
-\]
+\label{eq:dissipation}
+\end{equation}
 where $A_{h}$ and $A_{v}\ $are (constant) horizontal and vertical viscosity
 coefficients and $A_{4}\ $is the horizontal coefficient for biharmonic
 friction. These coefficients are the same for all velocity components.
@@ -635,17 +641,18 @@ friction. These coefficients are the same for all velocity components.
 The mixing terms for the temperature and salinity equations have a similar
 form to that of momentum except that the diffusion tensor can be
 non-diagonal and have varying coefficients. $\qquad $%
-\[
+\begin{equation}
 D_{T,S}=\nabla .[\underline{\underline{K}}\nabla (T,S)]+K_{4}\nabla
 _{h}^{4}(T,S)
-\]
+\label{eq:diffusion}
+\end{equation}
 where $\underline{\underline{K}}\ $is the diffusion tensor and the $K_{4}\ $%
 horizontal coefficient for biharmonic diffusion. In the simplest case where
 the subgrid-scale fluxes of heat and salt are parameterized with constant
 horizontal and vertical diffusion coefficients, $\underline{\underline{K}}$,
 reduces to a diagonal matrix with constant coefficients:
 
-\[
+\begin{equation}
 \qquad \qquad \qquad \qquad K=\left( 
 \begin{array}{ccc}
 K_{h} & 0 & 0 \\ 
@@ -653,7 +660,8 @@ K_{h} & 0 & 0 \\
 0 & 0 & K_{v}
 \end{array}
 \right) \qquad \qquad \qquad 
-\]
+\label{eq:diagonal-diffusion-tensor}
+\end{equation}
 where $K_{h}\ $and $K_{v}\ $are the horizontal and vertical diffusion
 coefficients. These coefficients are the same for all tracers (temperature,
 salinity ... ).
@@ -667,7 +675,7 @@ For some purposes it is advantageous to write momentum advection in eq(\ref
 \frac{D\vec{\mathbf{v}}}{Dt}=\frac{\partial \vec{\mathbf{v}}}{\partial t}%
 +\left( \nabla \times \vec{\mathbf{v}}\right) \times \vec{\mathbf{v}}+\nabla
 \left[ \frac{1}{2}(\vec{\mathbf{v}}\cdot \vec{\mathbf{v}})\right] 
-\label{vecinvariant}
+\label{eq:vi-identity}
 \end{equation}
 This permits alternative numerical treatments of the non-linear terms based
 on their representation as a vorticity flux. Because gradients of coordinate
