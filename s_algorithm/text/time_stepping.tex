@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.16 2003/08/07 18:27:52 edhill Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.17 2004/10/13 18:50:54 jmc Exp $
 % $Name:  $
 
 This chapter lays out the numerical schemes that are
@@ -87,7 +87,7 @@ aaa \= aaa \= aaa \= aaa \= aaa \= aaa \kill
 \> SOLVE\_FOR\_PRESSURE \\
 \>\> CALC\_DIV\_GHAT \` $H\widehat{u^*}$,$H\widehat{v^*}$ (\ref{eq:elliptic}) \\
 \>\> CG2D \` $\eta^{n+1}$ (\ref{eq:elliptic}) \\
-\> THE\_CORRECTION\_STEP  \\
+\> MOMENTUM\_CORRECTION\_STEP  \\
 \>\> CALC\_GRAD\_PHI\_SURF \` $\nabla \eta^{n+1}$ \\
 \>\> CORRECTION\_STEP \` $u^{n+1}$,$v^{n+1}$ (\ref{eq:un+1-rigid-lid},\ref{eq:vn+1-rigid-lid})
 \end{tabbing} \end{minipage} } \end{center}
@@ -294,8 +294,9 @@ FORWARD\_STEP \\
 \> THERMODYNAMICS \\
 \>\> CALC\_GT \\
 \>\>\> GAD\_CALC\_RHS \` $G_\theta^n = G_\theta( u, \theta^n )$ \\
-\>\>\> EXTERNAL\_FORCING \` $G_\theta^n = G_\theta^n + {\cal Q}$ \\
+\>either\>\> EXTERNAL\_FORCING \` $G_\theta^n = G_\theta^n + {\cal Q}$ \\
 \>\>\> ADAMS\_BASHFORTH2 \` $G_\theta^{(n+1/2)}$ (\ref{eq:adams-bashforth2}) \\
+\>or\>\> EXTERNAL\_FORCING \` $G_\theta^{(n+1/2)} = G_\theta^{(n+1/2)} + {\cal Q}$ \\
 \>\> TIMESTEP\_TRACER \` $\tau^*$ (\ref{eq:taustar}) \\
 \>\> IMPLDIFF \` $\tau^{(n+1)}$ (\ref{eq:tau-n+1-implicit})
 \end{tabbing} \end{minipage} } \end{center}
@@ -332,6 +333,10 @@ simpler to include these terms and this can be justified if the flow
 and forcing evolves smoothly. Problems can, and do, arise when forcing
 or motions are high frequency and this corresponds to a reduced
 stability compared to a simple forward time-stepping of such terms.
+The model offers the possibility to leave the forcing term outside the 
+Adams-Bashforth extrapolation, by turning off the logical flag 
+{\bf forcing\_In\_AB } (parameter file {\em data}, namelist {\em PARM01}, 
+default value = True).
 
 A stability analysis for an oscillation equation should be given at this point.
 \marginpar{AJA needs to find his notes on this...}
@@ -343,7 +348,11 @@ A stability analysis for a relaxation equation should be given at this point.
 \section{Implicit time-stepping: backward method}
 
 Vertical diffusion and viscosity can be treated implicitly in time
-using the backward method which is an intrinsic scheme. For tracers,
+using the backward method which is an intrinsic scheme. 
+Recently, the option to treat the vertical advection 
+implicitly has been added, but not yet tested; therefore, 
+the description hereafter is limited to diffusion and viscosity.
+For tracers,
 the time discretized equation is:
 \begin{equation}
 \tau^{n+1} - \Delta t \partial_r \kappa_v \partial_r \tau^{n+1} =
@@ -374,7 +383,7 @@ Fig.~\ref{fig:call-tree-adams-bashforth} shows the calling sequence for
 stepping forward a tracer variable such as temperature.
 
 In order to fit within the pressure method, the implicit viscosity
-must not alter the barotropic flow. In other words, it can on ly
+must not alter the barotropic flow. In other words, it can only
 redistribute momentum in the vertical. The upshot of this is that
 although vertical viscosity may be backward implicit and
 unconditionally stable, no-slip boundary conditions may not be made
@@ -402,9 +411,12 @@ is solved to yield the state variables at time level $n+1$. }
 \end{figure}
 
 \begin{figure}
-\begin{center} \fbox{ \begin{minipage}{4.5in} \begin{tabbing}
+\begin{center} \fbox{ \begin{minipage}{4.7in} \begin{tabbing}
 aaa \= aaa \= aaa \= aaa \= aaa \= aaa \kill 
 FORWARD\_STEP \\
+\>\> EXTERNAL\_FIELDS\_LOAD\\
+\>\> DO\_ATMOSPHERIC\_PHYS \\
+\>\> DO\_OCEANIC\_PHYS \\
 \> THERMODYNAMICS \\
 \>\> CALC\_GT \\
 \>\>\> GAD\_CALC\_RHS \` $G_\theta^n = G_\theta( u, \theta^n )$ (\ref{eq:Gt-n-sync})\\
@@ -417,16 +429,27 @@ FORWARD\_STEP \\
 \>\> MOM\_FLUXFORM or MOM\_VECINV \` $G_{\vec{\bf v}}^n$ (\ref{eq:Gv-n-sync})\\
 \>\> TIMESTEP \` $\vec{\bf v}^*$ (\ref{eq:Gv-n+5-sync}, \ref{eq:vstar-sync}) \\
 \>\> IMPLDIFF \` $\vec{\bf v}^{**}$ (\ref{eq:vstarstar-sync}) \\
+\> UPDATE\_R\_STAR or UPDATE\_SURF\_DR \` (NonLin-FS only)\\
 \> SOLVE\_FOR\_PRESSURE \\
 \>\> CALC\_DIV\_GHAT \` $\eta^*$ (\ref{eq:nstar-sync}) \\
 \>\> CG2D \` $\eta^{n+1}$ (\ref{eq:elliptic-sync}) \\
-\> THE\_CORRECTION\_STEP  \\
+\> MOMENTUM\_CORRECTION\_STEP  \\
 \>\> CALC\_GRAD\_PHI\_SURF \` $\nabla \eta^{n+1}$ \\
-\>\> CORRECTION\_STEP \` $u^{n+1}$,$v^{n+1}$ (\ref{eq:v-n+1-sync})
+\>\> CORRECTION\_STEP \` $u^{n+1}$,$v^{n+1}$ (\ref{eq:v-n+1-sync})\\
+\> TRACERS\_CORRECTION\_STEP  \\
+\>\> CYCLE\_TRACER \` $\theta^{n+1}$ \\
+\>\> FILTER \` Shapiro Filter, Zonal Filter (FFT) \\
+\>\> CONVECTIVE\_ADJUSTMENT \` \\
 \end{tabbing} \end{minipage} } \end{center}
 \caption{
 Calling tree for the overall synchronous algorithm using
-Adams-Bashforth time-stepping.}
+Adams-Bashforth time-stepping. 
+The place where the model geometry
+({\em hFac} factors) is updated is added here but is only relevant 
+for the non-linear free-surface algorithm.
+For completeness, the external forcing,
+ocean and atmospheric physics have been added, although they are mainly 
+optional}
 \label{fig:call-tree-adams-bashforth-sync}
 \end{figure}
 
@@ -455,11 +478,11 @@ G_{\theta,S}^{(n+1/2)} & = & (3/2+\epsilon_{AB}) G_{\theta,S}^{n}-(1/2+\epsilon_
 \label{eq:vstar-sync} \\
 \vec{\bf v}^{**} & = & {\cal L}_{\vec{\bf v}}^{-1} ( \vec{\bf v}^* )
 \label{eq:vstarstar-sync} \\
-\eta^* & = & \epsilon_{fs} \left( \eta^{n} +P-E+R \right)- \Delta t 
+\eta^* & = & \epsilon_{fs} \left( \eta^{n} + \Delta t (P-E) \right)- \Delta t 
   \nabla \cdot H \widehat{ \vec{\bf v}^{**} }
 \label{eq:nstar-sync} \\
-\nabla \cdot g H \nabla \eta^{n+1} - \frac{\epsilon_{fs} \eta^{n+1}}{\Delta t^2}
-& = & - \frac{\eta^*}{\Delta t^2}
+\nabla \cdot g H \nabla \eta^{n+1} & - & \frac{\epsilon_{fs} \eta^{n+1}}{\Delta t^2}
+~ = ~ - \frac{\eta^*}{\Delta t^2}
 \label{eq:elliptic-sync} \\
 \vec{\bf v}^{n+1} & = & \vec{\bf v}^{*} - \Delta t g \nabla \eta^{n+1}
 \label{eq:v-n+1-sync}
@@ -478,7 +501,7 @@ accelerations, stepping forward and solving of implicit viscosity and
 surface pressure gradient terms, corresponding to equations
 \ref{eq:Gv-n-sync} to \ref{eq:v-n+1-sync}.
 These operations are carried out in subroutines {\em DYNAMCIS}, {\em
-SOLVE\_FOR\_PRESSURE} and {\em THE\_CORRECTION\_STEP}. This, then,
+SOLVE\_FOR\_PRESSURE} and {\em MOMENTUM\_CORRECTION\_STEP}. This, then,
 represents an entire algorithm for stepping forward the model one
 time-step. The corresponding calling tree is given in
 \ref{fig:call-tree-adams-bashforth-sync}.
@@ -494,18 +517,18 @@ time-step. The corresponding calling tree is given in
 A schematic of the explicit Adams-Bashforth and implicit time-stepping
 phases of the algorithm but with staggering in time of thermodynamic
 variables with the flow. Explicit thermodynamics tendencies are
-evaluated at time level $n-1/2$ as a function of the thermodynamics
-state at that time level $n$ and flow at time $n$ (dotted arrow). The
-explicit tendency from the previous time level, $n-3/2$, is used to
-extrapolate tendencies to $n$ (dashed arrow). This extrapolated
+evaluated at time level $n$ as a function of the thermodynamics
+state at that time level $n$ and flow at time $n+1/2$ (dotted arrow). The
+explicit tendency from the previous time level, $n-1$, is used to
+extrapolate tendencies to $n+1/2$ (dashed arrow). This extrapolated
 tendency allows thermo-dynamics variables to be stably integrated
-forward-in-time to render an estimate ($*$-variables) at the $n+1/2$
+forward-in-time to render an estimate ($*$-variables) at the $n+1$
 time level (solid arc-arrow). The implicit-in-time operator ${\cal
 L_{\theta,S}}$ is solved to yield the thermodynamic variables at time
-level $n+1/2$. These are then used to calculate the hydrostatic
+level $n+1$. These are then used to calculate the hydrostatic
 pressure/geo-potential, $\phi_{hyd}$ (vertical arrows). The
-hydrostatic pressure gradient is evaluated directly an time level
-$n+1/2$ in stepping forward the flow variables from $n$ to $n+1$
+hydrostatic pressure gradient is evaluated directly at time level
+$n+1$ in stepping forward the flow variables from $n+1/2$ to $n+3/2$
 (solid arc-arrow). }
 \label{fig:adams-bashforth-staggered}
 \end{figure}
@@ -516,55 +539,100 @@ circumstance, it is more efficient to stagger in time the
 thermodynamic variables with the flow
 variables. Fig.~\ref{fig:adams-bashforth-staggered} illustrates the
 staggering and algorithm. The key difference between this and
-Fig.~\ref{fig:adams-bashforth-sync} is that the new thermodynamics
-fields are used to compute the hydrostatic pressure at time level
-$n+1/2$. The essentially allows the gravity wave terms to leap-frog in
+Fig.~\ref{fig:adams-bashforth-sync} is that the thermodynamic variables 
+are solved after the dynamics, using the recently updated flow field.
+This essentially allows the gravity wave terms to leap-frog in
 time giving second order accuracy and more stability.
 
-The essential change in the staggered algorithm is the calculation of
-hydrostatic pressure which, in the context of the synchronous
-algorithm involves replacing equation \ref{eq:phi-hyd-sync} with
-\begin{displaymath}
-\phi_{hyd}^n = \int b(\theta^{n+1},S^{n+1}) dr
-\end{displaymath}
-but the pressure gradient must also be taken out of the
+The essential change in the staggered algorithm is that the 
+thermodynamics solver is delayed from half a time step, 
+allowing the use of the most recent velocities to compute 
+the advection terms. Once the thermodynamics fields are
+updated, the hydrostatic pressure is computed 
+to step frowrad the dynamics
+Note that the pressure gradient must also be taken out of the
 Adams-Bashforth extrapolation. Also, retaining the integer time-levels,
 $n$ and $n+1$, does not give a user the sense of where variables are
 located in time.  Instead, we re-write the entire algorithm,
 \ref{eq:Gt-n-sync} to \ref{eq:v-n+1-sync}, annotating the
 position in time of variables appropriately:
 \begin{eqnarray}
-G_{\theta,S}^{n-1/2} & = & G_{\theta,S} ( u^n, \theta^{n-1/2}, S^{n-1/2} )
-\label{eq:Gt-n-staggered} \\
-G_{\theta,S}^{(n)} & = & (3/2+\epsilon_{AB}) G_{\theta,S}^{n-1/2}-(1/2+\epsilon_{AB}) G_{\theta,S}^{n-3/2}
-\label{eq:Gt-n+5-staggered} \\
-(\theta^*,S^*) & = & (\theta^{n},S^{n}) + \Delta t G_{\theta,S}^{(n)}
-\label{eq:tstar-staggered} \\
-(\theta^{n+1/2},S^{n+1/2}) & = & {\cal L}^{-1}_{\theta,S} (\theta^*,S^*)
-\label{eq:t-n+1-staggered} \\
-\phi^{n+1/2}_{hyd} & = & \int b(\theta^{n+1/2},S^{n+1/2}) dr
-\label{eq:phi-hyd-staggered} \\
-\vec{\bf G}_{\vec{\bf v}}^{n} & = & \vec{\bf G}_{\vec{\bf v}} ( \vec{\bf v}^n )
+\vec{\bf G}_{\vec{\bf v}}^{n-1/2} & = & \vec{\bf G}_{\vec{\bf v}} ( \vec{\bf v}^{n-1/2} )
 \label{eq:Gv-n-staggered} \\
-\vec{\bf G}_{\vec{\bf v}}^{(n+1/2)} & = & (3/2 + \epsilon_{AB} ) \vec{\bf G}_{\vec{\bf v}}^{n} - (1/2 + \epsilon_{AB} ) \vec{\bf G}_{\vec{\bf v}}^{n-1}
+\vec{\bf G}_{\vec{\bf v}}^{(n)} & = & (3/2 + \epsilon_{AB} ) \vec{\bf G}_{\vec{\bf v}}^{n-1/2} - (1/2 + \epsilon_{AB} ) \vec{\bf G}_{\vec{\bf v}}^{n-3/2}
 \label{eq:Gv-n+5-staggered} \\
-\vec{\bf v}^{*} & = & \vec{\bf v}^{n} + \Delta t \left( \vec{\bf G}_{\vec{\bf v}}^{(n+1/2)} - \nabla \phi_{hyd}^{n+1/2} \right)
+\phi^{n}_{hyd} & = & \int b(\theta^{n},S^{n}) dr
+\label{eq:phi-hyd-staggered} \\
+\vec{\bf v}^{*} & = & \vec{\bf v}^{n-1/2} + \Delta t \left( \vec{\bf G}_{\vec{\bf v}}^{(n)} - \nabla \phi_{hyd}^{n} \right)
 \label{eq:vstar-staggered} \\
 \vec{\bf v}^{**} & = & {\cal L}_{\vec{\bf v}}^{-1} ( \vec{\bf v}^* )
 \label{eq:vstarstar-staggered} \\
-\eta^* & = & \epsilon_{fs} \left( \eta^{n} +P-E+R \right)- \Delta t 
+\eta^* & = & \epsilon_{fs} \left( \eta^{n-1/2} + \Delta t (P-E)^n \right)- \Delta t 
   \nabla \cdot H \widehat{ \vec{\bf v}^{**} }
 \label{eq:nstar-staggered} \\
-\nabla \cdot g H \nabla \eta^{n+1} - \frac{\epsilon_{fs} \eta^{n+1}}{\Delta t^2}
-& = & - \frac{\eta^*}{\Delta t^2}
+\nabla \cdot g H \nabla \eta^{n+1/2} & - & \frac{\epsilon_{fs} \eta^{n+1/2}}{\Delta t^2}
+~ = ~ - \frac{\eta^*}{\Delta t^2}
 \label{eq:elliptic-staggered} \\
-\vec{\bf v}^{n+1} & = & \vec{\bf v}^{*} - \Delta t g \nabla \eta^{n+1}
-\label{eq:v-n+1-staggered}
+\vec{\bf v}^{n+1/2} & = & \vec{\bf v}^{*} - \Delta t g \nabla \eta^{n+1/2}
+\label{eq:v-n+1-staggered} \\
+G_{\theta,S}^{n} & = & G_{\theta,S} ( u^{n+1/2}, \theta^{n}, S^{n} )
+\label{eq:Gt-n-staggered} \\
+G_{\theta,S}^{(n+1/2)} & = & (3/2+\epsilon_{AB}) G_{\theta,S}^{n}-(1/2+\epsilon_{AB}) G_{\theta,S}^{n-1}
+\label{eq:Gt-n+5-staggered} \\
+(\theta^*,S^*) & = & (\theta^{n},S^{n}) + \Delta t G_{\theta,S}^{(n+1/2)}
+\label{eq:tstar-staggered} \\
+(\theta^{n+1},S^{n+1}) & = & {\cal L}^{-1}_{\theta,S} (\theta^*,S^*)
+\label{eq:t-n+1-staggered} \\
 \end{eqnarray}
-The calling sequence is unchanged from
-Fig.~\ref{fig:call-tree-adams-bashforth-sync}. The staggered algorithm
-is activated with the run-time flag {\bf staggerTimeStep=.TRUE.} in
-{\em PARM01} of {\em data}.
+The corresponding calling tree is given in
+\ref{fig:call-tree-adams-bashforth-staggered}.
+The staggered algorithm is activated with the run-time flag 
+{\bf staggerTimeStep=.TRUE.} in parameter file {\em data},
+namelist {\em PARM01}.
+
+\begin{figure}
+\begin{center} \fbox{ \begin{minipage}{4.7in} \begin{tabbing}
+aaa \= aaa \= aaa \= aaa \= aaa \= aaa \kill 
+FORWARD\_STEP \\
+\>\> EXTERNAL\_FIELDS\_LOAD\\
+\>\> DO\_ATMOSPHERIC\_PHYS \\
+\>\> DO\_OCEANIC\_PHYS \\
+\> DYNAMICS \\
+\>\> CALC\_PHI\_HYD \` $\phi_{hyd}^n$ (\ref{eq:phi-hyd-staggered}) \\
+\>\> MOM\_FLUXFORM or MOM\_VECINV \` $G_{\vec{\bf v}}^{n-1/2}$ 
+    (\ref{eq:Gv-n-staggered})\\
+\>\> TIMESTEP \` $\vec{\bf v}^*$ (\ref{eq:Gv-n+5-staggered}, 
+                                  \ref{eq:vstar-staggered}) \\
+\>\> IMPLDIFF \` $\vec{\bf v}^{**}$ (\ref{eq:vstarstar-staggered}) \\
+\> UPDATE\_R\_STAR or UPDATE\_SURF\_DR \` (NonLin-FS only)\\
+\> SOLVE\_FOR\_PRESSURE \\
+\>\> CALC\_DIV\_GHAT \` $\eta^*$ (\ref{eq:nstar-staggered}) \\
+\>\> CG2D \` $\eta^{n+1/2}$ (\ref{eq:elliptic-staggered}) \\
+\> MOMENTUM\_CORRECTION\_STEP  \\
+\>\> CALC\_GRAD\_PHI\_SURF \` $\nabla \eta^{n+1/2}$ \\
+\>\> CORRECTION\_STEP \` $u^{n+1/2}$,$v^{n+1/2}$ (\ref{eq:v-n+1-staggered})\\
+\> THERMODYNAMICS \\
+\>\> CALC\_GT \\
+\>\>\> GAD\_CALC\_RHS \` $G_\theta^n = G_\theta( u, \theta^n )$ 
+     (\ref{eq:Gt-n-staggered})\\
+\>\>\> EXTERNAL\_FORCING \` $G_\theta^n = G_\theta^n + {\cal Q}$ \\
+\>\>\> ADAMS\_BASHFORTH2 \` $G_\theta^{(n+1/2)}$ (\ref{eq:Gt-n+5-staggered}) \\
+\>\> TIMESTEP\_TRACER \` $\tau^*$ (\ref{eq:tstar-staggered}) \\
+\>\> IMPLDIFF \` $\tau^{(n+1)}$ (\ref{eq:t-n+1-staggered}) \\
+\> TRACERS\_CORRECTION\_STEP  \\
+\>\> CYCLE\_TRACER \` $\theta^{n+1}$ \\
+\>\> FILTER \` Shapiro Filter, Zonal Filter (FFT) \\
+\>\> CONVECTIVE\_ADJUSTMENT \` \\
+\end{tabbing} \end{minipage} } \end{center}
+\caption{
+Calling tree for the overall staggered algorithm using
+Adams-Bashforth time-stepping. 
+The place where the model geometry
+({\em hFac} factors) is updated is added here but is only relevant 
+for the non-linear free-surface algorithm.
+}
+\label{fig:call-tree-adams-bashforth-staggered}
+\end{figure}
 
 The only difficulty with this approach is apparent in equation
 \ref{eq:Gt-n-staggered} and illustrated by the dotted arrow
@@ -651,14 +719,15 @@ the following equations:
 u^{*} & = & u^{n} + \Delta t G_u^{(n+1/2)} \label{eq:ustar-nh} \\
 v^{*} & = & v^{n} + \Delta t G_v^{(n+1/2)} \label{eq:vstar-nh} \\
 w^{*} & = & w^{n} + \Delta t G_w^{(n+1/2)} \label{eq:wstar-nh} \\
-\eta^* & = & \epsilon_{fs} \left( \eta^{n} +P-E+R \right)- \Delta t 
+\eta^* ~ = ~ \epsilon_{fs} \left( \eta^{n} + \Delta t (P-E) \right)
+& - & \Delta t 
   \partial_x H \widehat{u^{*}}
 + \partial_y H \widehat{v^{*}}
 \\
   \partial_x g H \partial_x \eta^{n+1}
 + \partial_y g H \partial_y \eta^{n+1}
-- \frac{\epsilon_{fs} \eta^{n+1}}{\Delta t^2}
-& = &
+& - & \frac{\epsilon_{fs} \eta^{n+1}}{\Delta t^2}
+~ = ~
 - \frac{\eta^*}{\Delta t^2}
 \label{eq:elliptic-nh}
 \\
