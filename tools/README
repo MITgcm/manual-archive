@@ -1,0 +1,46 @@
+
+Scripts for manipulating and otherwise disassembling l2h output.
+
+Driver for generating the latest manual from sources in CVS repo.
+=================================================================
+generate_latest_manual.sh  - This is coded for running on twain.lcs.mit.edu, which is the
+                             only machine (apart from my laptop) with an l2h setup that can
+                             cope with the manual.
+                             It is run periodically by cron to keep the sealion-manual-latest
+                             page up to date.
+
+Adding subjects to the mailto: ref.
+===================================
+make_mail_subjects.sh   - Find mailto: block and substitutes mailto:support@mitgcm.org?subject=....
+make_mail_subjects.awk    where subject is the files TITLE block.
+
+Finding figures and making substitutions in l2h output
+======================================================
+
+figsub.sh        - Finds figures that have been "rawhtml" MITGCM_INSERT_FIGURE_BEGIN
+figsub.awk            marked for substitution.
+                      Extracts html and records line numders
+                      Output is written to 
+                      figsub/filename/SUBNUM/extracted_html
+                      figsub/filename/SUBNUM/startline
+                      figsub/filename/SUBNUM/endline
+                      where SUBNUM is the number of the current "rawhtml" marked region 
+                      from file filename.
+
+caption.sh       - Finds the caption within "extracted_html"
+caption_do.sh      and writes it to figsub/filename/SUBNUM/extracted_html_caption
+caption.awk     
+
+img.sh           - Finds the IMG section that follows the CAPTION ( note captions
+img_do.sh          can contain IMG ). This IMG should be the figure.
+img.awk            It is written to figsub/filename/SUBNUM/extracted_html_img
+
+labels.sh        - Finds the <A NAME=> entries from figsub/filename/SUBNUM/extracted_html.
+labels_do.sh       These are the labels that are used as cross-reference targets within
+labels.awk         the on-line document.
+                   The entries are written to figsub/filename/SUBNUM/extracted_html_labels
+
+fignum.sh        - Finds the <STRONG>...</STRONG> entry at the top of the _catpion extract.
+fignum_do.sh       The text inbetween the markers should be the figure number.
+fignum.awk         The entry is written to figsub/filename/SUBNUM/extracted_html_fignum
+
