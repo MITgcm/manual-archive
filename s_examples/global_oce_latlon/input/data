@@ -1,3 +1,4 @@
+\begin{verbatim}
 # ====================
 # | Model parameters |
 # ====================
@@ -80,3 +81,4 @@
  thetaClimFile='SST.bin'
  saltClimFile='SSS.bin'
  &
+\end{verbatim}

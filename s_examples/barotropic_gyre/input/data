@@ -1,3 +1,4 @@
+\begin{verbatim}
 # Model parameters
 # Continuous equation parameters
  &PARM01
@@ -49,3 +50,4 @@
  zonalWindFile='windx.sin_y',
  meridWindFile=,
  &
+\end{verbatim}

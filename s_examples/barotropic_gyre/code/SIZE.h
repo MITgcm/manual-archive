@@ -1,4 +1,5 @@
-C $Header: /u/gcmpack/manual/s_examples/barotropic_gyre/code/SIZE.h,v 1.1.1.1 2001/08/08 16:15:58 adcroft Exp $
+\begin{verbatim}
+C $Header: /u/gcmpack/manual/s_examples/barotropic_gyre/code/SIZE.h,v 1.2 2001/09/27 00:58:17 cnh Exp $
 C $Name:  $
 C
 C     /==========================================================\
@@ -56,3 +57,4 @@ C                routine buufers.
       PARAMETER ( MAX_OLX = OLx,
      &            MAX_OLY = OLy )
 
+\end{verbatim}
