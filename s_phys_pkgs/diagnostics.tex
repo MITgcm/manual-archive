@@ -6,8 +6,8 @@
 
 \subsection{Introduction}
 
-This section of the documentation describes the Diagnostics Utilities available within 
-the GCM.  In addition to a description on how to set and extract diagnostic quantities, 
+This section of the documentation describes the Diagnostics package available within 
+the GCM.  In addition to a description of how to set and extract diagnostic quantities, 
 this document also provides a comprehensive list of all available diagnostic quantities 
 and a short description of how they are computed.  It should be noted that this document 
 is not intended to be a complete documentation of the various packages used in the GCM, 
@@ -22,25 +22,23 @@ Not relevant.
 
 A large selection of model diagnostics is available in the GCM.  At the time of
 this writing there are 280 different diagnostic quantities which can be enabled for an
-experiment.  As a matter of philosophy, no diagnostic is enabled as default, thus each user must
-specify the exact diagnostic information required for an experiment.  This is accomplished by
-enabling the specific diagnostic of interest cataloged in the 
+experiment.  As a matter of philosophy, no diagnostic is enabled as default, thus each 
+user must specify the exact diagnostic information required for an experiment.  This 
+is accomplished by enabling the specific diagnostic of interest cataloged in the 
 Diagnostic Menu (see Section \ref{sec:diagnostics:menu}).
-The Diagnostic Menu is a hard-wired enumeration of diagnostic quantities available within the
-GCM.  Diagnostics are internally referred to by their associated number in the Diagnostic
+The Diagnostic Menu is a hard-wired enumeration of diagnostic quantities available within 
+the GCM. Diagnostics are internally referred to by their associated number in the Diagnostic
 Menu.  Once a diagnostic is enabled, the GCM will continually increment an array
-specifically allocated for that diagnostic whenever the associated process for the diagnostic is
-computed.  Separate arrays are used both for the diagnostic quantity and its diagnostic counter
-which records how many times each diagnostic quantity has been computed.  In addition 
-special diagnostics, called
-``Counter Diagnostics'', records the frequency of diagnostic updates separately for each 
-model grid location.
+specifically allocated for that diagnostic whenever the associated process for the 
+diagnostic is computed.  Separate arrays are used both for the diagnostic quantity and 
+its diagnostic counter which records how many times each diagnostic quantity has been 
+computed.  In addition special diagnostics, called ``Counter Diagnostics'', records the 
+frequency of diagnostic updates separately for each model grid location.
 
 The diagnostics are computed at various times and places within the GCM.  
-Some diagnostics are computed on the geophysical A-grid (such as 
-those within the Physics routines), while others are computed on the C-grid 
-(those computed during the dynamics time-stepping).  Some diagnostics are 
-scalars, while others are vectors.  Each of these possibilities requires
+Some diagnostics are computed on the A-grid (such as those within the fizhi routines), 
+while others are computed on the C-grid (those computed during the dynamics time-stepping).  
+Some diagnostics are scalars, while others are vectors.  Each of these possibilities requires
 separate tasks for A-grid to C-grid transformations and coordinate transformations.  Due
 to this complexity, and since the specific diagnostics enabled are User determined at the
 time of the run, 
@@ -93,79 +91,73 @@ In this way the User now has more flexibility
 in determining the type of gridded data which is output.
 
 There are several utilities within the GCM available to users to enable, disable,
-clear, and retrieve model diagnostics, and may be called from any user-supplied application
-and/or output routine.  The available utilities and the CALL sequences are listed below.
+clear, write and retrieve model diagnostics, and may be called from any routine.  
+The available utilities and the CALL sequences are listed below.
 
+{\bf fill\_diag}:  This routine will increment 
 
-{\bf SETDIAG}:  This subroutine enables a diagnostic from the Diagnostic Menu, meaning that 
-space is allocated for the diagnostic and the
-model routines will increment the diagnostic value during execution.  This routine is useful when
-called from either user application routines or user output routines, and is the underlying interface
+{\bf setdiag}:  This subroutine enables a diagnostic from the Diagnostic Menu, meaning 
+that space is allocated for the diagnostic and the model routines will increment the 
+diagnostic value during execution.  This routine is the underlying interface
 between the user and the desired diagnostic.  The diagnostic is referenced by its diagnostic
 number from the menu, and its calling sequence is given by:
 
 \begin{tabbing}
 XXXXXXXXX\=XXXXXX\= \kill
-\>        CALL SETDIAG (NUM) \\
+\>        call setdiag (num) \\
 \\
-where \>  NUM   \>= Diagnostic number from menu \\
+where \>  num   \>= Diagnostic number from menu \\
 \end{tabbing}
 
-
-{\bf GETDIAG}:  This subroutine retrieves the value of a model diagnostic.  This routine is
-particulary useful when called from a user output routine, although it can be called from an
-application routine as well.  This routine returns the time-averaged value of the diagnostic by
-dividing the current accumulated diagnostic value by its corresponding counter.  This routine does
-not change the value of the diagnostic itself, that is, it does not replace the diagnostic with its
-time-average.  The calling sequence for this routine is givin by:
+{\bf getdiag}:  This subroutine retrieves the value of a model diagnostic.  This routine 
+is particulary useful when called from a user output routine, although it can be called 
+from any routine.  This routine returns the time-averaged value of the diagnostic by
+dividing the current accumulated diagnostic value by its corresponding counter.  This 
+routine does not change the value of the diagnostic itself, that is, it does not replace 
+the diagnostic with its time-average.  The calling sequence for this routine is givin by:
 
 \begin{tabbing}
 XXXXXXXXX\=XXXXXX\= \kill
-\>        CALL GETDIAG (LEV,NUM,QTMP,UNDEF) \\
+\>        call getdiag (lev,num,qtmp,undef) \\
 \\
-where \>  LEV   \>= Model Level at which the diagnostic is desired \\
-      \>  NUM   \>= Diagnostic number from menu \\
-      \>  QTMP  \>= Time-Averaged Diagnostic Output \\
-      \>  UNDEF \>= Fill value to be used when diagnostic is undefined \\
+where \>  lev   \>= Model Level at which the diagnostic is desired \\
+      \>  num   \>= Diagnostic number from menu \\
+      \>  qtmp  \>= Time-Averaged Diagnostic Output \\
+      \>  undef \>= Fill value to be used when diagnostic is undefined \\
 \end{tabbing}
 
-{\bf CLRDIAG}:  This subroutine initializes the values of model diagnostics to zero, and is
-particularly useful when called from user output routines to re-initialize diagnostics during the
-run.  The calling sequence is:
-
+{\bf clrdiag}:  This subroutine initializes the values of model diagnostics to zero, and is
+particularly useful when called from user output routines to re-initialize diagnostics 
+during the run.  The calling sequence is:
 
 \begin{tabbing}
 XXXXXXXXX\=XXXXXX\= \kill
-\>        CALL CLRDIAG (NUM) \\
+\>        call clrdiag (num) \\
 \\
-where \>  NUM   \>= Diagnostic number from menu \\
+where \>  num   \>= Diagnostic number from menu \\
 \end{tabbing}
 
-
-
-{\bf ZAPDIAG}:  This entry into subroutine SETDIAG disables model diagnostics, meaning that the
-diagnostic is no longer available to the user.  The memory previously allocated to the diagnostic
-is released when ZAPDIAG is invoked.  The calling sequence is given by:
-
+{\bf zapdiag}:  This entry into subroutine SETDIAG disables model diagnostics, meaning 
+that the diagnostic is no longer available to the user.  The memory previously allocated 
+to the diagnostic is released when ZAPDIAG is invoked.  The calling sequence is given by:
 
 \begin{tabbing}
 XXXXXXXXX\=XXXXXX\= \kill
-\>        CALL ZAPDIAG (NUM) \\
+\>        call zapdiag (NUM) \\
 \\
-where \>  NUM   \>= Diagnostic number from menu \\
+where \>  num   \>= Diagnostic number from menu \\
 \end{tabbing}
 
-{\bf DIAGSIZE}:  We end this section with a discussion on the manner in which computer memory   
-is allocated for diagnostics.   
-All GCM diagnostic quantities are stored in the single
-diagnostic array QDIAG which is located in diagnostics.h, and has the form:
+{\bf diagsize}:  We end this section with a discussion on the manner in which computer 
+memory   is allocated for diagnostics.   All GCM diagnostic quantities are stored in the 
+single diagnostic array QDIAG which is located in diagnostics.h, and has the form:
 
 common /diagnostics/ qdiag(1-Olx,sNx+Olx,1-Olx,sNx+Olx,numdiags,Nsx,Nsy)
 
 where numdiags is an Integer variable which should be
-set equal to the number of enabled diagnostics, and QDIAG is a three-dimensional
-array.  The first two-dimensions of QDIAG correspond to the horizontal dimension
-of a given diagnostic, while the third dimension of QDIAG is used to identify
+set equal to the number of enabled diagnostics, and qdiag is a three-dimensional
+array.  The first two-dimensions of qdiag correspond to the horizontal dimension
+of a given diagnostic, while the third dimension of qdiag is used to identify
 specific diagnostic types.
 In order to minimize the memory requirement of the model for diagnostics,
 the default GCM executable is compiled with room for only one horizontal
@@ -186,9 +178,14 @@ will activate a user-defined list of diagnostics quantities to be computed,
 specify the frequency of output, the number of levels, and the name of
 up to 10 separate output files. A sample data.diagnostics namelist file:
 
+<<<<<<< diagnostics.tex
+$\#$ Diagnostic Package Choices
+ $\&$diagnostics\_list
+=======
 \begin{verbatim}
 \# Diagnostic Package Choices
  \&diagnostics_list
+>>>>>>> 1.4
   frequency(1) = 10, \
    levels(1,1) = 1.,2.,3.,4.,5., \
    fields(1,1) = 'UVEL    ','VVEL    ', \
@@ -197,8 +194,12 @@ up to 10 separate output files. A sample data.diagnostics namelist file:
    levels(1,2) = 1.,2.,3.,4.,5., \
    fields(1,2) = 'THETA   ','SALT    ', \
    filename(2) = 'diagout2', \
+<<<<<<< diagnostics.tex
+ $\&$end \
+=======
  \&end \
 \end{verbatim}
+>>>>>>> 1.4
 
 In this example, there are two output files that will be generated
 for each tile and for each output time. The first set of output files
@@ -651,9 +652,8 @@ is time-averaged over its diagnostic output frequency:
 {\bf DIAGNOSTIC} = {1 \over TTOT} \sum_{t=1}^{t=TTOT} diag(t)
 \]
 where $TTOT = {{\bf NQDIAG} \over \Delta t}$, {\bf NQDIAG} is the 
-output frequency of the diagnositc, and $\Delta t$ is
-the timestep over which the diagnostic is updated.  For further information on how
-to set the diagnostic output frequency {\bf NQDIAG}, please see Part III, A User's Guide.
+output frequency of the diagnostic, and $\Delta t$ is
+the timestep over which the diagnostic is updated.  
 
 {\bf 1)  \underline {UFLUX} Surface Zonal Wind Stress on the Atmosphere ($Newton/m^2$) } 
 
