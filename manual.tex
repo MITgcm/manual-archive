@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/manual.tex,v 1.24 2004/03/22 02:08:30 edhill Exp $
+% $Header: /u/gcmpack/manual/manual.tex,v 1.25 2004/03/31 19:44:10 edhill Exp $
 % $Name:  $
 
 \documentclass[12pt]{book}
@@ -24,16 +24,44 @@
 
 % afe  Commands to standardize typesetting 
 \newcommand{\file}[1]{\texttt{#1}}
-
 \newcommand{\sectiontitle}[1]{\textsl{#1}}
-
 \newcommand{\code}[1]{\texttt{#1}}
 
-
-
-%eh3 try out the epsfig package
+%%  EH3 : try out the epsfig package
 \usepackage[dvips]{epsfig}
 \def\scalefig#1{\epsfxsize #1\textwidth}
+
+%EH3% ==========================================================
+%EH3%  ***   PRIVATE SECTIONS   ******   PRIVATE SECTIONS   ***
+%EH3%
+%EH3%  Directions: To build the ``private'' or ``local-only'' 
+%EH3%    version of this manual, then edit the following so 
+%EH3%    they appear as:
+%EH3%
+%EH3%    % \includecomment{versionprivate}
+%EH3%    \excludecoment{versionprivate}
+%EH3%
+%EH3%    The default is to include everything which is:
+%EH3%
+%EH3%    \includecomment{versionprivate}
+%EH3%    % \excludecoment{versionprivate}
+
+%\includecomment{versionprivate}
+\excludecomment{versionprivate}
+
+%EH3%
+%EH3%    To use this comment, simply bracket any part of the 
+%EH3%    manual with two lines that contain ONLY the following
+%EH3%    pair:
+%EH3%
+%EH3%      \begin{versionprivate}
+%EH3%      \end{versionprivate}
+%EH3%
+%EH3%    with NO additional comments or other commands on the
+%EH3%    lines containing the \begin{...}\end{...} statements.
+%EH3%
+%EH3%  ***   PRIVATE SECTIONS   ******   PRIVATE SECTIONS   ***
+%EH3% ==========================================================
 
 
 %ph%\usepackage{epsfig}

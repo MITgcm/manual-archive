@@ -2,48 +2,6 @@
 #      -address "<a href=mailto:support@mitgcm.org>support@mitgcm.org</a>" \
 #      -local_icons -noantialias -notransparent -white
 
-PROTEX_PKGS = \
-   aim \
-   aim_compon_interf \
-   aim_ocn_coupler \
-   aim_v23 \
-   autodiff \
-   bulk_force \
-   cal \
-   cd_code \
-   cfc \
-   compon_communic \
-   cost \
-   ctrl \
-   debug \
-   dic \
-   ecco \
-   exch2 \
-   exf \
-   fizhi \
-   flt \
-   gchem \
-   generic_advdiff \
-   gmredi \
-   grdchk \
-   gridalt \
-   kpp \
-   land \
-   mdsio \
-   mnc \
-   mom_fluxform \
-   mom_vecinv \
-   monitor \
-   obcs \
-   ocn_compon_interf \
-   ptracers \
-   rw \
-   sbo \
-   seaice \
-   shap_filt \
-   thsice \
-   timeave \
-   zonal_filt 
 
 L2H = -image_type png -split 5 -show_section_numbers -link 2 \
       -address "<a href=mailto:support@mitgcm.org>mitgcm-support@dev.mitgcm.org</a>" \
@@ -64,9 +22,6 @@ all:
 	make pdf
 	make ps.gz
 	make html
-
-pt_files:
-	./run_protex $(PROTEX_PKGS)
 
 tex: manual.dvi
 
