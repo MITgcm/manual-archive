@@ -9,10 +9,11 @@ all:
 	make tex
 
 tex:
-	latex manual
+	TEXINPUTS=.:::texinputs latex manual
 	bibtex manual
-	latex manual
-	latex manual | tee warnings
+	TEXINPUTS=.:::texinputs latex manual
+	TEXINPUTS=.:::texinputs latex manual | tee warnings
+#	TEXINPUTS=.:::texinputs latex manual
 ps: manual.ps
 pdf: manual.pdf
 
