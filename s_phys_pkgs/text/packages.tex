@@ -1,0 +1,77 @@
+% $Header: /u/gcmpack/manual/s_phys_pkgs/text/packages.tex,v 1.1 2004/02/11 18:09:17 edhill Exp $
+% $Name:  $
+
+\section{Using MITgcm Packages}
+
+The set of packages that will be used within a partiucular model can
+be configured using a combination of both ``compile--time'' and
+``run--time'' options.  Compile--time options are those used to select
+which packages will be ``compiled in'' or implemented within the
+program.  Packages excluded at compile time are completely absent from
+the executable program(s) and thus cannot be later activated by any
+set of subsequent run--time options.
+
+\subsection{Package Inclusion/Exclusion}
+
+There are numerous ways that one can specify compile--time package
+inclusion or exclusion and they are all implemented by the
+\texttt{genmake2} program which was previously described in Section
+\ref{sect:buildingCode}.  The options are as follows:
+\begin{enumerate}
+\item Setting the \texttt{genamake2} options \texttt{--enable PKG}
+  and/or \texttt{--disable PKG} specifies inclusion or exclusion.
+  This method is intended as a convenient way to perform a single
+  (perhaps for a quick test) compilation.
+  
+\item By creating a text file with the name \texttt{packages.conf} in
+  either the local build directory or the \texttt{-mods=DIR}
+  directory, one can specify a list of packages (one package per line,
+  with '\texttt{\#}' as the comment character) to be included.  Since
+  the \texttt{packages.conf} file can be saved, this is the preferred
+  method for setting and recording (for future reference) the package
+  configuration.
+  
+\item For convenience, a list of ``standard'' package groups is
+  contained in the \texttt{pkg/pkg\_groups} file.  By selecting one of
+  the package group names in the \texttt{packages.conf} file, one
+  automatically obtains all packages in that group.
+
+\item By default (that is, if a \texttt{packages.conf} file is not
+  found), the \texttt{genmake2} program will use the contents of the
+  \texttt{pkg/pkg\_default} file to obtain a list of packages.
+
+\item To help prevent users from creating unusable package groups, the
+  \texttt{genmake2} program will parse the contents of the
+  \texttt{pkg/pkg\_depend} file to determine:
+  \begin{itemize}
+  \item whether any two requested packages cannot be simultaneously
+    included (\textit{eg.} \textit{seaice} and \textit{thsice} are
+    mutually exclusive),
+  \item whether additional packages must be included in order to
+    satisfy package dependencies (\textit{eg.} \textit{rw} depends
+    upon functionality within the \textit{mdsio} package), and
+  \item whether the set of all requested packages is compatible with
+    the dependencies (and producing an error if they aren't).
+  \end{itemize}
+  Thus, as a result of the dependencies, additional packages may be
+  added to those originally requested.
+
+\end{enumerate}
+
+
+\subsection{Package Activation}
+
+For run--time package control, MITgcm uses flags set through a
+\texttt{data.pkg} file.  While some packages (\textit{eg.}
+\texttt{debug}, \texttt{mnc}, \texttt{cost}) may have their own
+conventions, most follow a simple flag naming convention of the
+form:
+\begin{verbatim}
+  usePackageName=.TRUE.
+\end{verbatim}
+where the \texttt{usePackageName} variable can activate or disable the
+package at runtime.
+
+
+%\subsection{Modifying or Creating Packages}
+

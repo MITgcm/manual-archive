@@ -1,13 +1,31 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/text/top_section.tex,v 1.24 2004/02/04 04:49:19 edhill Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/text/top_section.tex,v 1.25 2004/02/11 18:09:17 edhill Exp $
 % $Name:  $
 
 \chapter{Physical Parameterization and Packages}
 
-In this chapter the schemes for parameterizing processes
-that are not represented explicitly in MITgcm are described.
-Some of these processes are sub-grid scale (SGS) phenomena,
-other processes, such as open-boundaries, are external to the
-simulation.
+Within this chapter, the MITgcm ``packages'' are described.
+Initially, ``packages'' were conceived to group source code files
+together based upon their functionality.  Each package was assigned a
+separate subdirectory (within \texttt{pkg}) and, usually, contained
+source code for implimenting different physical parametizations.  This
+was a convenient method for both segregating and rapidly including or
+excluding parameterizations during the software build process.
+
+Over time, package use increased.  The number of packages has grown
+and they have evolved to contain much of the model functionality
+including momentum schemes, I/O utilities, diagnostics, ``exchange''
+algorithms, and numerous other processes that have no direct
+connection to any specific physical parameterizations.  The following
+sections describe how to use the existing packages and how to modify
+them or create new ones.
+
+%% In this chapter the schemes for parameterizing processes that are not
+%% represented explicitly in MITgcm are described.  Some of these
+%% processes are sub-grid scale (SGS) phenomena, other processes, such as
+%% open-boundaries, are external to the simulation.
+
+\newpage
+\input{part6/packages.tex}
 
 \newpage
 \input{part6/gmredi.tex}
