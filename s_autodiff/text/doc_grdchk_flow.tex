@@ -1,0 +1,36 @@
+\begin{figure}[h!]
+
+{\scriptsize
+\begin{verbatim}
+
+   the_model_main
+   |
+   |-- ctrl_unpack
+   |-- adthe_main_loop            - unperturbed cost function and
+   |-- ctrl_pack                    adjoint gradient are computed here
+   |
+   |-- grdchk_main
+       |
+       |-- grdchk_init
+       |-- do icomp=...           - loop over control vector elements
+           |
+           |-- grdchk_loc         - determine location of icomp on grid
+           |
+           |-- grdchk_getxx       - get control vector component from file
+           |                        perturb it and write back to file
+           |-- grdchk_getadxx     - get gradient component calculated 
+           |                        via adjoint
+           |-- the_main_loop      - forward run and cost evaluation
+           |                        with perturbed control vector element
+           |-- calculate ratio of adj. vs. finite difference gradient
+           |
+           |-- grdchk_setxx       - Reset control vector element
+           |
+           |-- grdchk_print       - print results
+
+\end{verbatim}
+}
+
+\caption{~}
+\label{fig:grdchkflow}
+\end{figure}

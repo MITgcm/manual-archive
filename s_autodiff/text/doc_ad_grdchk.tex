@@ -1,0 +1,84 @@
+
+%**********************************************************************
+\section{The gradient check package}
+\label{sect:ad_gradient_check}
+\label{sec_ad_radient_check}
+%**********************************************************************
+
+An indispensable test to validate the gradient computed
+via the adjoint is a comparison against finite difference
+gradients.
+The gradient check package {\it pkg/grdchk} enables such tests
+in a straightforward and easy manner.
+The driver routine {\it grdchk\_main} is called from
+{\it the\_model\_main} after the gradient has been computed
+via the adjoint model (cf. flow chart ???).
+
+The gradient check proceeds as follows:
+The $i-$th component of the gradient $ (\nabla _{u}{\cal J}^T)_i $
+is compared with  the following finite-difference gradient:
+\[
+\left(\nabla _{u}{\cal J}^T  \right)_i \quad \text{ vs. } \quad
+\frac{\partial {\cal J}}{\partial u_i} \, = \,
+\frac{ {\cal J}(u_i + \epsilon) - {\cal J}(u_i)}{\epsilon}
+\]
+A gradient check at point $u_i$ may generally considered to be successful
+if the deviation of the ratio between the adjoint and the 
+finite difference gradient from unity is less than 1 percent,
+\[
+1 \, - \, 
+\frac{({\rm grad}{\cal J})_i (\text{adjoint})}
+{({\rm grad}{\cal J})_i (\text{finite difference})} \, < 1 \%
+\]
+
+\subsection{Code description}
+~
+
+\subsection{Code configuration}
+%
+The relevant CPP precompile options are set
+in the following files:
+%
+\begin{itemize}
+%
+\item {\it .genmakerc} \\
+option {\tt grdchk} is added to the {\bf enable list}
+(alternatively, {\it genmake} may be invoked with the
+option {\tt -enable=grdchk}).
+%
+\item {\it CPP\_OPTIONS.h} \\
+Together with the flag 
+{\bf ALLOW\_ADJOINT\_RUN}, define the flag
+{\bf ALLOW\_GRADIENT\_CHECK}.
+%
+\end{itemize}
+
+The relevant runtime flags are set in the files
+%
+\begin{itemize}
+%
+\item {\it data.pkg} \\
+Set {\bf useGrdchk = .TRUE.}
+%
+\item {\it data.grdchk}
+%
+\begin{itemize}
+%
+\item {\bf grdchk\_eps}
+~
+\item {\bf nbeg}
+~
+\item {\bf nstep}
+~
+\item {\bf nend}
+~
+\item {\bf grdchkvarindex}
+~
+%
+\end{itemize}
+%
+\end{itemize}
+
+
+\input{part5/doc_grdchk_flow}
+
