@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_software/text/sarch.tex,v 1.10 2003/08/07 18:27:52 edhill Exp $
+% $Header: /u/gcmpack/manual/s_software/text/sarch.tex,v 1.11 2004/01/28 19:33:04 afe Exp $
 
 This chapter focuses on describing the {\bf WRAPPER} environment within which
 both the core numerics and the pluggable packages operate. The description
@@ -661,6 +661,12 @@ Within a {\em bi}, {\em bj} loop
 computation is performed concurrently over as many processes and threads
 as there are physical processors available to compute.
 
+An exception to the the use of {\em bi} and {\em bj} in loops arises in the
+exchange routines used when the exch2 package is used with the cubed 
+sphere.  In this case {\em bj} is generally set to 1 and the loop runs from 
+1,{\em bi}.  Within the loop {\em bi} is used to retrieve the tile number,
+which is then used to reference exchange parameters.
+
 The amount of computation that can be embedded
 a single loop over {\em bi} and {\em bj} varies for different parts of the
 MITgcm algorithm. Figure \ref{fig:bibj_extract} shows a code extract
@@ -929,7 +935,7 @@ File: {\em eesupp/inc/MAIN\_PDIRECTIVES1.h}\\
 File: {\em eesupp/inc/MAIN\_PDIRECTIVES2.h}\\
 File: {\em model/src/THE\_MODEL\_MAIN.F}\\
 File: {\em eesupp/src/MAIN.F}\\
-File: {\em tools/genmake}\\
+File: {\em tools/genmake2}\\
 File: {\em eedata}\\
 CPP:  {\em TARGET\_SUN}\\
 CPP:  {\em TARGET\_DEC}\\
@@ -984,7 +990,7 @@ Parameter:  {\em nPy}
 
 Additionally, compile time options are required to link in the 
 MPI libraries and header files. Examples of these options 
-can be found in the {\em genmake} script that creates makefiles
+can be found in the {\em genmake2} script that creates makefiles
 for compilation. When this script is executed with the {bf -mpi}
 flag it will generate a makefile that includes
 paths for search for MPI head files and for linking in 
@@ -1006,7 +1012,7 @@ local configuration of your system.\\
 
 \fbox{ 
 \begin{minipage}{4.75in}
-File: {\em tools/genmake}
+File: {\em tools/genmake2}
 \end{minipage}
 } \\
 \paragraph{\bf Execution} The mechanics of starting a program in 
