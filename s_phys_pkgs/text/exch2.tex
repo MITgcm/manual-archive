@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/text/exch2.tex,v 1.4 2004/01/29 17:55:35 afe Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/text/exch2.tex,v 1.5 2004/01/29 21:03:53 afe Exp $
 % $Name:  $
 
 %%  * Introduction
@@ -62,8 +62,8 @@ x axis) and y-axis variable {\em bj} is generally ignored within the package.
 
 \subsubsection{One-Dimensional Arrays}
 
-The following arrays are indexed to the tile number, and the indices are
-omitted in their descriptions.
+The following arrays are of size {\em NTILES}, are indexed to the tile number, 
+and the indices are omitted in their descriptions.
 
 The arrays {\em exch2\_tnx} and {\em exch2\_tny} 
 express the x and y dimensions of each tile.  At present for each tile
@@ -72,32 +72,54 @@ and {\em exch2\_tny = sNy}, as assigned in {\em SIZE.h}.  Future releases of
 MITgcm are to allow varying tile sizes.
 
 The location of the tiles' Cartesian origin within a subdomain are determined 
-by the arrays {\em exch2\_tbasex} and {\em exch2\_tbasey}.  These
+by the arrays {\em exch2\_tbasex} and {\em exch2\_tbasey}.  These variables
+are used to relate the location of the edges of the tiles to each other.  As 
+an example, in the default six-tile topology (the degenerate case) 
+each index in these arrays are 
+set to 0.  The twenty-four, 32x32 cube face case discussed above will have
+values of 0 or 16, depending on the quadrant the tile falls within the 
+subdomain.  {\em exch2\_myFace} contains the number of the 
+cubeface/subdomain of each tile, numbered 1-6 in the case of the standard
+cube topology.  
+
+The arrays {\em exch2\_txglobalo} and {\em exch2\_txglobalo} are similar to
+{\em exch2\_tbasex} and {\em exch2\_tbasey}, but locate the tiles within
+the global address space, similar to that used by global files.  
+
+The arrays {\em exch2\_isWedge}, {\em exch2\_isEedge}, {\em exch2\_isSedge}, 
+and {\em exch2\_isNedge} are set to 1 if the indexed tile lies on the edge
+of a subdomain, 0 if not.  The values are used within the topology generator
+to determine the orientation of neighboring tiles and to indicate whether 
+a tile lies on the corner of a subdomain.  The latter case indicates 
+special exchange and numerical handling for the singularities at the eight 
+corners of the cube.  {\em exch2\_isNedge} contains a count of how many
+neighboring tiles each tile has, and is used for setting bounds for looping
+over neighboring tiles.  {\em exch2\_tProc} holds the process rank of each tile,
+and is used in interprocess communication.
 
 \subsubsection{Two-Dimensional Arrays}
+
+The following arrays are all of size {\em MAX\_NEIGHBOURS}x{\em NTILES} and
+describe the orientations between the the tiles.
+
+The array {\em exch2\_neighbourId(a,T)} holds the tile number $T_{n}$ for each tile 
+{\em T}'s neighbor tile {\em a}, and {\em exch2\_opposingSend\_record(a,T)} holds 
+the index c in {\em exch2\_neighbourId(b,$T_{n}$)} that holds the tile number T.
+In other words,
+
+\begin{verbatim}   
+exch2_neighbourId( exch2_opposingSend_record(a,T), exch2_neighbourId(a,T) ) = T
+\end{verbatim}
+
+{\em exch2\_neighbourId(exch2\_opposingSend\_record(a,T),exch2\_neighbourId(a,T))=T}.
+This is to provide a backreference from the neighbor tiles.
 
 
 //
 
 \begin{verbatim}
-C      NTILES            :: Number of tiles in this topology 
-C      MAX_NEIGHBOURS    :: Maximum number of neighbours any tile has.
-C      exch2_domain_nxt  :: Total domain length in tiles. 
-C      exch2_domain_nyt  :: Maximum domain height in tiles. 
-C      exch2_tnx         :: Size in X for each tile.                  
-C      exch2_tny         :: Size in Y for each tile.                  
-C      exch2_tbasex      :: Tile offset in X within its sub-domain (cube face)
-C      exch2_tbasey      :: Tile offset in Y within its sub-domain (cube face)
-C      exch2_tglobalxlo  :: Tile base X index within global index space.
-C      exch2_tglobalylo  :: Tile base Y index within global index space.
-C      exch2_isWedge     :: 0 if West not at domain edge, 1 if it is.   
-C      exch2_isNedge     :: 0 if North not at domain edge, 1 if it is.   
-C      exch2_isEedge     :: 0 if East not at domain edge, 1 if it is.   
-C      exch2_isSedge     :: 0 if South not at domain edge, 1 if it is.   
-C      exch2_myFace      :: Cube face number used for I/O.               
-C      exch2_nNeighbours :: Tile neighbour entries count.               
-C      exch2_tProc       :: Rank of process owning tile                 
-C                        :: (filled at run time).                       
+
+
 C      exch2_neighbourId :: Tile number for each neighbour entry.        
 C      exch2_opposingSend_record :: Record for entry in target tile send 
 C                                :: list that has this tile and face     
