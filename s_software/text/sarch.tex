@@ -1,10 +1,20 @@
-% $Header: /u/gcmpack/manual/s_software/text/sarch.tex,v 1.6 2001/11/13 20:13:55 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_software/text/sarch.tex,v 1.7 2002/02/28 19:32:20 cnh Exp $
 
-In this chapter we describe the software architecture and
-implementation strategy for the MITgcm code. The first part of this
-chapter discusses the MITgcm architecture at an abstract level. In the second 
-part of the chapter we described practical details of the MITgcm implementation 
-and of current tools and operating system features that are employed.
+This chapter focuses on describing the {\bf WRAPPER} environment within which
+both the core numerics and the pluggable packages operate. The description
+presented here is intended to be a detailed exposition and contains significant
+background material, as well as advanced details on working with the WRAPPER. 
+The tutorial sections of this manual (see Chapters
+\ref{chap:tutorialI}, \ref{chap:tutorialII} and \ref{chap:tutorialIII}) 
+contain more succinct, step-by-step instructions on running basic numerical
+experiments, of varous types, both sequentially and in parallel. For many 
+projects simply starting from an example code and adapting it to suit a 
+particular situation 
+will be all that is required.
+The first part of this chapter discusses the MITgcm architecture at an 
+abstract level. In the second part of the chapter we described practical 
+details of the MITgcm implementation and of current tools and operating system 
+features that are employed.
 
 \section{Overall architectural goals}
 

@@ -43,6 +43,20 @@ manual.pdf: manual.ps
 
 html:
 	latex2html -image_type gif -split 5 -show_section_numbers -link 2 -address "<a href=mailto:support@mitgcm.org>support@mitgcm.org</a>" -local_icons -noantialias -white manual
+	cd manual; tar -czf ../mbkup.tz .
+	cd manual; ../tools/make_mail_subjects.sh
+	cd manual; ../tools/figsub.sh
+	cd manual; ../tools/fix_docref_target.sh
+	cd manual; tar -czf ../manual.tz .
+	cd /homes/cnh/SEALION_RELEASE/website/online_documents/manual; tar -xzf /homes/cnh/SEALION_RELEASE/manual/HEAD/manual.tz
+#	tar -czf ol.tz on-line-figs
 
 html2:
-	latex2html -image_type gif -split 5 -show_section_numbers -link 2 -address "<a href=mailto:support@mitgc,.org>support@mitgcm.org</a>" -noantialias -local_icons -white -debug m2
+	cd manual; tar -xzf ../mbkup.tz .
+	cd manual; ../tools/make_mail_subjects.sh
+	cd manual; ../tools/figsub.sh
+	cd manual; ../tools/fix_docref_target.sh
+	cd manual; tar -czf ../manual.tz .
+	cd /homes/cnh/SEALION_RELEASE/website/online_documents/manual; tar -xzf /homes/cnh/SEALION_RELEASE/manual/HEAD/manual.tz
+#	tar -czf ol.tz on-line-figs
+

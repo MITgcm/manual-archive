@@ -1,6 +1,17 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.14 2001/11/14 21:07:13 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.15 2002/02/28 19:32:19 cnh Exp $
 % $Name:  $
 
+This chapter lays out the numerical schemes that are
+employed in the core MITgcm algorithm. Whenever possible
+links are made to actual program code in the MITgcm implementation.
+The chapter begins with a discussion of the temporal discretization
+used in MITgcm. This discussion is followed by sections that
+describe the spatial discretization. The schemes employed for momentum
+terms are described first, afterwards the schemes that apply to
+passive and dynamically active tracers are described.
+
+
+\section{Time-stepping}
 The equations of motion integrated by the model involve four
 prognostic equations for flow, $u$ and $v$, temperature, $\theta$, and
 salt/moisture, $S$, and three diagnostic equations for vertical flow,
@@ -70,7 +81,7 @@ temporary.}
 \begin{figure}
 \begin{center} \fbox{ \begin{minipage}{4.5in} \begin{tabbing}
 aaa \= aaa \= aaa \= aaa \= aaa \= aaa \kill 
-FORWARD\_STEP \\
+\proclink{FORWARD\_STEP}{../code/._model_src_forward_step.F} \\
 \> DYNAMICS \\
 \>\> TIMESTEP \` $u^*$,$v^*$ (\ref{eq:ustar-rigid-lid},\ref{eq:vstar-rigid-lid}) \\
 \> SOLVE\_FOR\_PRESSURE \\
@@ -162,15 +173,16 @@ The correspondence to the code is as follows:
 \item
 the prognostic phase, equations \ref{eq:ustar-rigid-lid} and \ref{eq:vstar-rigid-lid},
 stepping forward $u^n$ and $v^n$ to $u^{*}$ and $v^{*}$ is coded in
-{\em TIMESTEP.F}
+\proclink{TIMESTEP}{../code/._model_src_timestep.F}
 \item
 the vertical integration, $H \widehat{u^*}$ and $H
 \widehat{v^*}$, divergence and inversion of the elliptic operator in
-equation \ref{eq:elliptic} is coded in {\em
-SOLVE\_FOR\_PRESSURE.F}
+equation \ref{eq:elliptic} is coded in 
+\proclink{SOLVE\_FOR\_PRESSURE}{../code/._model_src_solve_for_pressure.F}
 \item
 finally, the new flow field at time level $n+1$ given by equations
-\ref{eq:un+1-rigid-lid} and \ref{eq:vn+1-rigid-lid} is calculated in {\em CORRECTION\_STEP.F}.
+\ref{eq:un+1-rigid-lid} and \ref{eq:vn+1-rigid-lid} is calculated in 
+\proclink{CORRECTION\_STEP}{../code/._model_src_correction_step.F}.
 \end{itemize}
 The calling tree for these routines is given in
 Fig.~\ref{fig:call-tree-pressure-method}.

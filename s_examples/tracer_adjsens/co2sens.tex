@@ -1,7 +1,8 @@
-% $Header: /u/gcmpack/manual/s_examples/tracer_adjsens/Attic/co2sens.tex,v 1.5 2001/11/13 19:01:42 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_examples/tracer_adjsens/Attic/co2sens.tex,v 1.6 2002/02/28 19:32:19 cnh Exp $
 % $Name:  $
 
-\section{Example: Centennial Time Scale Sensitivities}
+\section{Centennial Time Scale Tracer Injection}
+\label{sect:eg-simple-tracer}
 
 \bodytext{bgcolor="#FFFFFFFF"}
 
@@ -48,18 +49,18 @@ Altogether, this yields the following forcing applied
 in the model surface layer.
 
 \begin{eqnarray}
-\label{EQ:global_forcing}
-\label{EQ:global_forcing_fu}
+\label{EQ:eg-simple-tracer-global_forcing}
+\label{EQ:eg-simple-tracer-global_forcing_fu}
 {\cal F}_{u} & = & \frac{\tau_{x}}{\rho_{0} \Delta z_{s}}
 \\
-\label{EQ:global_forcing_fv}
+\label{EQ:eg-simple-tracer-global_forcing_fv}
 {\cal F}_{v} & = & \frac{\tau_{y}}{\rho_{0} \Delta z_{s}}
 \\
-\label{EQ:global_forcing_ft}
+\label{EQ:eg-simple-tracer-global_forcing_ft}
 {\cal F}_{\theta} & = & - \lambda_{\theta} ( \theta - \theta^{\ast} ) 
  - \frac{1}{C_{p} \rho_{0} \Delta z_{s}}{\cal Q}
 \\
-\label{EQ:global_forcing_fs}
+\label{EQ:eg-simple-tracer-global_forcing_fs}
 {\cal F}_{s} & = & - \lambda_{s} ( S - S^{\ast} ) 
  + \frac{S_{0}}{\Delta z_{s}}({\cal E} - {\cal P} - {\cal R})
 \end{eqnarray}
@@ -124,16 +125,16 @@ dissipation. Thermal and haline diffusion is also represented by a Laplacian ope
 
 Wind-stress momentum inputs are added to the momentum equations for both
 the zonal flow, $u$ and the meridional flow $v$, according to equations 
-(\ref{EQ:global_forcing_fu}) and (\ref{EQ:global_forcing_fv}).
+(\ref{EQ:eg-simple-tracer-global_forcing_fu}) and (\ref{EQ:eg-simple-tracer-global_forcing_fv}).
 Thermodynamic forcing inputs are added to the equations for
 potential temperature, $\theta$, and salinity, $S$, according to equations 
-(\ref{EQ:global_forcing_ft}) and (\ref{EQ:global_forcing_fs}).
+(\ref{EQ:eg-simple-tracer-global_forcing_ft}) and (\ref{EQ:eg-simple-tracer-global_forcing_fs}).
 This produces a set of equations solved in this configuration as follows:
 % {\fracktur}
 
 
 \begin{eqnarray}
-\label{EQ:model_equations}
+\label{EQ:eg-simple-tracer-model_equations}
 \frac{Du}{Dt} - fv + 
   \frac{1}{\rho}\frac{\partial p^{'}}{\partial x} - 
   A_{h}\nabla_{h}^2u - A_{z}\frac{\partial^{2}u}{\partial z^{2}} 
@@ -179,7 +180,7 @@ The Laplacian dissipation coefficient, $A_{h}$, is set to $400 m s^{-1}$.
 This value is chosen to yield a Munk layer width \cite{adcroft:95},
 
 \begin{eqnarray}
-\label{EQ:munk_layer}
+\label{EQ:eg-simple-tracer-munk_layer}
 M_{w} = \pi ( \frac { A_{h} }{ \beta } )^{\frac{1}{3}}
 \end{eqnarray}
 
@@ -193,7 +194,7 @@ time step $\delta t=1200$secs. With this time step the stability
 parameter to the horizontal Laplacian friction \cite{adcroft:95}
 
 \begin{eqnarray}
-\label{EQ:laplacian_stability}
+\label{EQ:eg-simple-tracer-laplacian_stability}
 S_{l} = 4 \frac{A_{h} \delta t}{{\Delta x}^2}
 \end{eqnarray}
 
@@ -205,7 +206,7 @@ for stability.
 $1\times10^{-2} {\rm m}^2{\rm s}^{-1}$. The associated stability limit
 
 \begin{eqnarray}
-\label{EQ:laplacian_stability_z}
+\label{EQ:eg-simple-tracer-laplacian_stability_z}
 S_{l} = 4 \frac{A_{z} \delta t}{{\Delta z}^2}
 \end{eqnarray}
 
@@ -219,7 +220,7 @@ and vertical ($K_{z}$) diffusion coefficients for temperature respectively.
 \cite{adcroft:95} 
 
 \begin{eqnarray}
-\label{EQ:inertial_stability}
+\label{EQ:eg-simple-tracer-inertial_stability}
 S_{i} = f^{2} {\delta t}^2
 \end{eqnarray}
 
@@ -232,7 +233,7 @@ horizontal flow
 speed of $ | \vec{u} | = 2 ms^{-1}$
 
 \begin{eqnarray}
-\label{EQ:cfl_stability}
+\label{EQ:eg-simple-tracer-cfl_stability}
 S_{a} = \frac{| \vec{u} | \delta t}{ \Delta x}
 \end{eqnarray}
 
@@ -244,7 +245,7 @@ limit of 0.5.
 \cite{adcroft:95}
 
 \begin{eqnarray}
-\label{EQ:cfl_stability}
+\label{EQ:eg-simple-tracer-igw_stability}
 S_{c} = \frac{c_{g} \delta t}{ \Delta x}
 \end{eqnarray}
 

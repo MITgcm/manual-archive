@@ -1,4 +1,4 @@
-\section{Example: Surface driven convection}
+\section{Surface Driven Convection}
 \label{sect:eg-bconv}
 
 \bodytext{bgcolor="#FFFFFFFF"}
@@ -22,10 +22,10 @@
 for the surface driven convection experiment. The domain is doubly periodic
 with an initially uniform temperature of 20 $^oC$. 
 }
-\label{FIG:simulation_config}
+\label{FIG:eg-bconv-simulation_config}
 \end{figure}
 
-This experiment, figure \ref{FIG:simulation_config}, showcasing MITgcm's non-hydrostatic capability, was designed to explore 
+This experiment, figure \ref{FIG:eg-bconv-simulation_config}, showcasing MITgcm's non-hydrostatic capability, was designed to explore 
 the temporal and spatial characteristics of convection plumes as they might exist during a 
 period of oceanic deep convection. It is
 
@@ -50,14 +50,14 @@ uniform reference potential temperature $\theta = $ 20 $^o$C. The equation of st
 used in this experiment is linear
 
 \begin{equation}
-\label{EQ:linear1_eos}
+\label{EQ:eg-bconv-linear1_eos}
 \rho = \rho_{0} ( 1 - \alpha_{\theta}\theta^{'} )
 \end{equation}
 
 \noindent which is implemented in the model as a density anomaly equation
 
 \begin{equation}
-\label{EQ:linear1_eos_pert}
+\label{EQ:eg-bconv-linear1_eos_pert}
 \rho^{'} = -\rho_{0}\alpha_{\theta}\theta^{'}
 \end{equation}
 
@@ -72,9 +72,10 @@ the quantity that is carried in the model core equations.
 As the fluid in the surface layer is cooled (at a mean rate of 800 Wm$^2$), it becomes 
 convectively unstable and 
 overturns, at first close to the grid-scale, but, as the flow matures, on larger scales 
-(figures \ref{FIG:vertsection} and \ref{FIG:horizsection}), under the influence of 
+(figures \ref{FIG:eg-bconv-vertsection} and \ref{FIG:eg-bconv-horizsection}), under the influence of 
 rotation ($f_o = 10^{-4}$ s$^{-1}$) .
 
+\begin{rawhtml}MITGCM_INSERT_FIGURE_BEGIN surf-convection-vertsection\end{rawhtml}
 \begin{figure}
 \begin{center}
  \resizebox{15cm}{10cm}{
@@ -83,9 +84,12 @@ rotation ($f_o = 10^{-4}$ s$^{-1}$) .
 \end{center}
 \caption{
 }
-\label{FIG:vertsection}
+\label{FIG:eg-bconv-vertsection}
+\label{fig:surf-convection-vertsection}
 \end{figure}
+\begin{rawhtml}MITGCM_INSERT_FIGURE_END\end{rawhtml}
 
+\begin{rawhtml}MITGCM_INSERT_FIGURE_BEGIN surf-convection-horizsection\end{rawhtml}
 \begin{figure}
 \begin{center}
  \resizebox{10cm}{10cm}{
@@ -94,8 +98,10 @@ rotation ($f_o = 10^{-4}$ s$^{-1}$) .
 \end{center}
 \caption{
 }
-\label{FIG:horizsection}
+\label{FIG:eg-bconv-horizsection}
+\label{fig:surf-convection-horizsection}
 \end{figure}
+\begin{rawhtml}MITGCM_INSERT_FIGURE_END\end{rawhtml}
 
 Model parameters are specified in file {\it input/data}. The grid dimensions are
 prescribed in {\it code/SIZE.h}. The forcing (file {\it input/Qsurf.bin}) is specified 
@@ -111,11 +117,11 @@ The implicit free surface form of the
 pressure equation described in Marshall et. al \cite{marshall:97a} is
 employed. A horizontal Laplacian operator $\nabla_{h}^2$ provides viscous
 dissipation. The thermodynamic forcing appears as a sink in the potential temperature, 
-$\theta$, equation (\ref{EQ:global_forcing_ft}). This produces a set of equations 
+$\theta$, equation (\ref{EQ:eg-bconv-global_forcing_ft}). This produces a set of equations 
 solved in this configuration as follows:
 
 \begin{eqnarray}
-\label{EQ:model_equations}
+\label{EQ:eg-bconv-model_equations}
 \frac{Du}{Dt} - fv + 
   \frac{1}{\rho}\frac{\partial p^{'}}{\partial x} - 
   \nabla_{h}\cdot A_{h}\nabla_{h}u - 
@@ -190,7 +196,7 @@ For an extreme maximum flow speed of $ | \vec{u} | = 1 ms^{-1}$, at a resolution
 50 m, the implied maximum timestep for stability, $\delta t_u$ is 
 
 \begin{eqnarray}
-\label{EQ:advectiveCFLcondition}
+\label{EQ:eg-bconv-advectiveCFLcondition}
 %\delta t_u = \frac{\Delta x}{| \vec{u} \} = 50 s
 \end{eqnarray}
 
@@ -669,7 +675,7 @@ cg3dTargetResidual=1.E-9,
 \end{verbatim}
 Sets the tolerance which the three-dimensional, conjugate
 gradient solver will use to test for convergence in equation 
-\ref{EQ:congrad_3d_resid} to $1 \times 10^{-9}$.
+\ref{EQ:eg-bconv-congrad_3d_resid} to $1 \times 10^{-9}$.
 The solver will iterate until the 
 tolerance falls below this value or until the maximum number of
 solver iterations is reached. Used in routine
@@ -801,7 +807,7 @@ directed upwards, according to the model's sign convention, $Q$ is positive.
 \end{center}
 \caption{
 }
-\label{FIG:Qsurf}
+\label{FIG:eg-bconv-Qsurf}
 \end{figure}
 
 \subsection{Running the example}

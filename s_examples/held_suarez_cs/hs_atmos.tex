@@ -1,8 +1,8 @@
-% $Header: /u/gcmpack/manual/s_examples/global_oce_latlon/climatalogical_ogcm.tex,v 1.8 2002/02/28 19:32:19 cnh Exp $
+% $Header: /u/gcmpack/manual/s_examples/held_suarez_cs/Attic/hs_atmos.tex,v 1.1 2002/02/28 19:32:19 cnh Exp $
 % $Name:  $
 
-\section{Global Ocean Simulation at 4$^\circ$ Resolution}
-\label{sect:eg-global}
+\section{Held-Suarez Atmospheric Simulation at 2.8$^\circ$ Resolution}
+\label{sect:eg-hs}
 
 \bodytext{bgcolor="#FFFFFFFF"}
 
@@ -16,6 +16,14 @@
 %{\large May 2001}
 %\end{center}
 
+\subsection{Introduction}
+
+This document describes the third example MITgcm experiment. The first
+two examples illustrated how to configure the code for hydrostatic idealized
+geophysical fluids simulations. This example illustrates the use of
+the MITgcm for large scale ocean circulation simulation.
+
+\subsection{Overview}
 
 This example experiment demonstrates using the MITgcm to simulate
 the planetary ocean circulation. The simulation is configured
@@ -28,7 +36,6 @@ At this resolution, the configuration
 can be integrated forward for thousands of years on a single 
 processor desktop computer.
 \\
-\subsection{Overview}
 
 The model is forced with climatological wind stress data and surface
 flux data from DaSilva \cite{DaSilva94}. Climatological data
@@ -42,18 +49,18 @@ Altogether, this yields the following forcing applied
 in the model surface layer.
 
 \begin{eqnarray}
-\label{EQ:eg-global-global_forcing}
-\label{EQ:eg-global-global_forcing_fu}
+\label{EQ:eg-hs-global_forcing}
+\label{EQ:eg-hs-global_forcing_fu}
 {\cal F}_{u} & = & \frac{\tau_{x}}{\rho_{0} \Delta z_{s}}
 \\
-\label{EQ:eg-global-global_forcing_fv}
+\label{EQ:eg-hs-global_forcing_fv}
 {\cal F}_{v} & = & \frac{\tau_{y}}{\rho_{0} \Delta z_{s}}
 \\
-\label{EQ:eg-global-global_forcing_ft}
+\label{EQ:eg-hs-global_forcing_ft}
 {\cal F}_{\theta} & = & - \lambda_{\theta} ( \theta - \theta^{\ast} ) 
  - \frac{1}{C_{p} \rho_{0} \Delta z_{s}}{\cal Q}
 \\
-\label{EQ:eg-global-global_forcing_fs}
+\label{EQ:eg-hs-global_forcing_fs}
 {\cal F}_{s} & = & - \lambda_{s} ( S - S^{\ast} ) 
  + \frac{S_{0}}{\Delta z_{s}}({\cal E} - {\cal P} - {\cal R})
 \end{eqnarray}
@@ -80,9 +87,18 @@ have units of ${\rm N}~{\rm m}^{-2}$. The temperature forcing fields
 ($\theta^{\ast}$ and $Q$) have units of $^{\circ}{\rm C}$ and ${\rm W}~{\rm m}^{-2}$
 respectively. The salinity forcing fields ($S^{\ast}$ and 
 $\cal{E}-\cal{P}-\cal{R}$) have units of ${\rm ppt}$ and ${\rm m}~{\rm s}^{-1}$
-respectively. The source files and procedures for ingesting this data into the
-simulation are described in the experiment configuration discussion in section
-\ref{SEC:eg-global-clim_ocn_examp_exp_config}.
+respectively.
+\\
+
+
+Figures (\ref{FIG:sim_config_tclim}-\ref{FIG:sim_config_empmr}) show the
+relaxation temperature ($\theta^{\ast}$) and salinity ($S^{\ast}$) fields,
+the wind stress components ($\tau_x$ and $\tau_y$), the heat flux ($Q$)
+and the net fresh water flux (${\cal E} - {\cal P} - {\cal R}$) used
+in equations \ref{EQ:eg-hs-global_forcing_fu}-\ref{EQ:eg-hs-global_forcing_fs}. The figures
+also indicate the lateral extent and coastline used in the experiment.
+Figure ({\ref{FIG:model_bathymetry}) shows the depth contours of the model
+domain.
 
 
 \subsection{Discrete Numerical Configuration}
@@ -96,7 +112,7 @@ meridional direction. The internal model coordinate variables
 $x$ and $y$ are initialized according to
 \begin{eqnarray}
 x=r\cos(\phi),~\Delta x & = &r\cos(\Delta \phi) \\
-y=r\lambda,~\Delta y &= &r\Delta \lambda 
+y=r\lambda,~\Delta x &= &r\Delta \lambda 
 \end{eqnarray}
 
 Arctic polar regions are not
@@ -130,23 +146,21 @@ $
  \Delta z_{18}=725\,{\rm m},\,
  \Delta z_{19}=775\,{\rm m},\,
  \Delta z_{20}=815\,{\rm m}
-$ (here the numeric subscript indicates the model level index number, ${\tt k}$) to
-give a total depth, $H$, of $-5450{\rm m}$.
+$ (here the numeric subscript indicates the model level index number, ${\tt k}$).
 The implicit free surface form of the pressure equation described in Marshall et. al 
 \cite{marshall:97a} is employed. A Laplacian operator, $\nabla^2$, provides viscous
 dissipation. Thermal and haline diffusion is also represented by a Laplacian operator.
 
-Wind-stress forcing is added to the momentum equations in (\ref{EQ:eg-global-model_equations}) 
-for both the zonal flow, $u$ and the meridional flow $v$, according to equations 
-(\ref{EQ:eg-global-global_forcing_fu}) and (\ref{EQ:eg-global-global_forcing_fv}).
-Thermodynamic forcing inputs are added to the equations 
-in (\ref{EQ:eg-global-model_equations}) for
+Wind-stress forcing is added to the momentum equations for both
+the zonal flow, $u$ and the meridional flow $v$, according to equations 
+(\ref{EQ:eg-hs-global_forcing_fu}) and (\ref{EQ:eg-hs-global_forcing_fv}).
+Thermodynamic forcing inputs are added to the equations for
 potential temperature, $\theta$, and salinity, $S$, according to equations 
-(\ref{EQ:eg-global-global_forcing_ft}) and (\ref{EQ:eg-global-global_forcing_fs}).
+(\ref{EQ:eg-hs-global_forcing_ft}) and (\ref{EQ:eg-hs-global_forcing_fs}).
 This produces a set of equations solved in this configuration as follows:
 
 \begin{eqnarray}
-\label{EQ:eg-global-model_equations}
+\label{EQ:eg-hs-model_equations}
 \frac{Du}{Dt} - fv + 
   \frac{1}{\rho}\frac{\partial p^{'}}{\partial x} - 
   \nabla_{h}\cdot A_{h}\nabla_{h}u - 
@@ -207,7 +221,7 @@ elevation $\eta$ and the hydrostatic pressure.
 The Laplacian dissipation coefficient, $A_{h}$, is set to $5 \times 10^5 m s^{-1}$.
 This value is chosen to yield a Munk layer width \cite{adcroft:95},
 \begin{eqnarray}
-\label{EQ:eg-global-munk_layer}
+\label{EQ:eg-hs-munk_layer}
 M_{w} = \pi ( \frac { A_{h} }{ \beta } )^{\frac{1}{3}}
 \end{eqnarray}
 
@@ -221,7 +235,7 @@ time step $\delta t_{\theta}=30~{\rm hours}$ for thermodynamic variables and
 $\delta t_{v}=40~{\rm minutes}$ for momentum terms. With this time step, the stability 
 parameter to the horizontal Laplacian friction \cite{adcroft:95}
 \begin{eqnarray}
-\label{EQ:eg-global-laplacian_stability}
+\label{EQ:eg-hs-laplacian_stability}
 S_{l} = 4 \frac{A_{h} \delta t_{v}}{{\Delta x}^2}
 \end{eqnarray}
 
@@ -233,7 +247,7 @@ $\phi=80^{\circ}$ where $\Delta x=r\cos(\phi)\Delta \phi\approx 77{\rm km}$.
 \noindent The vertical dissipation coefficient, $A_{z}$, is set to 
 $1\times10^{-3} {\rm m}^2{\rm s}^{-1}$. The associated stability limit
 \begin{eqnarray}
-\label{EQ:eg-global-laplacian_stability_z}
+\label{EQ:eg-hs-laplacian_stability_z}
 S_{l} = 4 \frac{A_{z} \delta t_{v}}{{\Delta z}^2}
 \end{eqnarray}
 
@@ -248,13 +262,13 @@ and $3 \times 10^{-5}~{\rm m}^{2}{\rm s}^{-1}$ respectively. The stability limit
 related to $K_{h}$ will be at $\phi=80^{\circ}$ where $\Delta x \approx 77 {\rm km}$. 
 Here the stability parameter 
 \begin{eqnarray} 
-\label{EQ:eg-global-laplacian_stability_xtheta}
+\label{EQ:eg-hs-laplacian_stability_xtheta}
 S_{l} = \frac{4 K_{h} \delta t_{\theta}}{{\Delta x}^2} 
 \end{eqnarray}
 evaluates to $0.07$, well below the stability limit of $S_{l} \approx 0.5$. The 
 stability parameter related to $K_{z}$
 \begin{eqnarray} 
-\label{EQ:eg-global-laplacian_stability_ztheta}
+\label{EQ:eg-hs-laplacian_stability_ztheta}
 S_{l} = \frac{4 K_{z} \delta t_{\theta}}{{\Delta z}^2} 
 \end{eqnarray}
 evaluates to $0.005$ for $\min(\Delta z)=50{\rm m}$, well below the stability limit 
@@ -265,7 +279,7 @@ of $S_{l} \approx 0.5$.
 \cite{adcroft:95} 
 
 \begin{eqnarray}
-\label{EQ:eg-global-inertial_stability}
+\label{EQ:eg-hs-inertial_stability}
 S_{i} = f^{2} {\delta t_v}^2
 \end{eqnarray}
 
@@ -278,7 +292,7 @@ horizontal flow
 speed of $ | \vec{u} | = 2 ms^{-1}$
 
 \begin{eqnarray}
-\label{EQ:eg-global-cfl_stability}
+\label{EQ:eg-hs-cfl_stability}
 S_{a} = \frac{| \vec{u} | \delta t_{v}}{ \Delta x}
 \end{eqnarray}
 
@@ -291,7 +305,7 @@ with a maximum speed of $c_{g}=10~{\rm ms}^{-1}$
 \cite{adcroft:95}
 
 \begin{eqnarray}
-\label{EQ:eg-global-gfl_stability}
+\label{EQ:eg-hs-gfl_stability}
 S_{c} = \frac{c_{g} \delta t_{v}}{ \Delta x}
 \end{eqnarray}
 
@@ -299,12 +313,10 @@ S_{c} = \frac{c_{g} \delta t_{v}}{ \Delta x}
 stability limit of 0.5.
   
 \subsection{Experiment Configuration}
-\label{SEC:eg-global-clim_ocn_examp_exp_config}
+\label{SEC:eg-hs_examp_exp_config}
 
 The model configuration for this experiment resides under the 
-directory {\it tutorial\_examples/global\_ocean\_circulation/}.  
-The experiment files 
-
+directory {\it verification/exp2/}.  The experiment files 
 \begin{itemize}
 \item {\it input/data}
 \item {\it input/data.pkg}
@@ -323,18 +335,6 @@ The experiment files
 contain the code customizations and parameter settings for these
 experiments. Below we describe the customizations
 to these files associated with this experiment.
-
-\subsubsection{Driving Datasets}
-
-Figures (\ref{FIG:sim_config_tclim}-\ref{FIG:sim_config_empmr}) show the
-relaxation temperature ($\theta^{\ast}$) and salinity ($S^{\ast}$) fields,
-the wind stress components ($\tau_x$ and $\tau_y$), the heat flux ($Q$)
-and the net fresh water flux (${\cal E} - {\cal P} - {\cal R}$) used
-in equations \ref{EQ:global_forcing_fu}-\ref{EQ:global_forcing_fs}. The figures
-also indicate the lateral extent and coastline used in the experiment.
-Figure ({\ref{FIG:model_bathymetry}) shows the depth contours of the model
-domain.
-
 
 \subsubsection{File {\it input/data}}
 
@@ -508,7 +508,7 @@ cg2dTargetResidual=1.E-13,
 \end{verbatim}
 Sets the tolerance which the two-dimensional, conjugate
 gradient solver will use to test for convergence in equation 
-\ref{EQ:congrad_2d_resid} to $1 \times 10^{-13}$.
+\ref{EQ:eg-hs-congrad_2d_resid} to $1 \times 10^{-13}$.
 Solver will iterate until 
 tolerance falls below this value or until the maximum number of
 solver iterations is reached.\\
