@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_autodiff/text/doc_ad_2.tex,v 1.14 2002/02/28 19:32:20 cnh Exp $
+% $Header: /u/gcmpack/manual/s_autodiff/text/doc_ad_2.tex,v 1.15 2002/04/24 11:01:46 heimbach Exp $
 % $Name:  $
 
 {\sf Automatic differentiation} (AD), also referred to as algorithmic
@@ -557,8 +557,11 @@ Because of the local character of the derivative
 (a derivative is defined w.r.t. a point along the trajectory),
 the intermediate results of the model trajectory
 $\vec{v}^{(\lambda+1)}={\cal M}_{\lambda}(v^{(\lambda)})$ 
-are needed to evaluate the intermediate Jacobian 
+may be required to evaluate the intermediate Jacobian 
 $M_{\lambda}|_{\vec{v}^{(\lambda)}} \, \delta \vec{v}^{(\lambda)} $.
+This is the case e.g. for nonlinear expressions
+(momentum advection, nonlinear equation of state), state-dependent
+conditional statements (parameterization schemes).
 In the forward mode, the intermediate results are required
 in the same order as computed by the full forward model ${\cal M}$,
 but in the reverse mode they are required in the reverse order.
@@ -569,7 +572,7 @@ point of evaluation has to be recomputed whenever its value is required.
 
 A method to balance the amount of recomputations vs.
 storage requirements is called {\sf checkpointing}
-(e.g. \cite{res-eta:98}).
+(e.g. \cite{gri:92}, \cite{res-eta:98}).
 It is depicted in \ref{fig:3levelcheck} for a 3-level checkpointing
 [as an example, we give explicit numbers for a 3-day 
 integration with a 1-hourly timestep in square brackets].
@@ -580,19 +583,20 @@ In a first step, the model trajectory is subdivided into
 $ {n}^{lev3} $ subsections [$ {n}^{lev3} $=3 1-day intervals],
 with the label $lev3$ for this outermost loop.
 The model is then integrated along the full trajectory,
-and the model state stored only at every $ k_{i}^{lev3} $-th timestep 
+and the model state stored to disk only at every $ k_{i}^{lev3} $-th timestep 
 [i.e. 3 times, at
 $ i = 0,1,2 $ corresponding to $ k_{i}^{lev3} = 0, 24, 48 $].
+In addition, the cost function is computed, if needed.
 %
 \item [$lev2$]
 In a second step each subsection itself is divided into
-$ {n}^{lev2} $ sub-subsections
+$ {n}^{lev2} $ subsections
 [$ {n}^{lev2} $=4 6-hour intervals per subsection].
 The model picks up at the last outermost dumped state 
 $ v_{k_{n}^{lev3}} $ and is integrated forward in time along
 the last subsection, with the label $lev2$ for this  
 intermediate loop. 
-The model state is now stored at every $ k_{i}^{lev2} $-th 
+The model state is now stored to disk at every $ k_{i}^{lev2} $-th 
 timestep 
 [i.e. 4 times, at
 $ i = 0,1,2,3 $ corresponding to $ k_{i}^{lev2} = 48, 54, 60, 66 $].
@@ -600,23 +604,23 @@ $ i = 0,1,2,3 $ corresponding to $ k_{i}^{lev2} = 48, 54, 60, 66 $].
 \item [$lev1$]
 Finally, the model picks up at the last intermediate dump state
 $ v_{k_{n}^{lev2}} $ and is integrated forward in time along
-the last sub-subsection, with the label $lev1$ for this  
+the last subsection, with the label $lev1$ for this  
 intermediate loop.
-Within this sub-subsection only, the model state is stored
-at every timestep 
+Within this sub-subsection only, parts of the model state is stored
+to memory at every timestep 
 [i.e. every hour $ i=0,...,5$ corresponding to 
 $ k_{i}^{lev1} = 66, 67, \ldots, 71 $].
-Thus, the  final state $ v_n = v_{k_{n}^{lev1}} $ is reached
-and the model state of all proceeding timesteps along the last
-sub-subsections are available, enabling integration backwards
-in time along the last sub-subsection.
-Thus, the adjoint can be computed along this last 
-sub-subsection $k_{n}^{lev2}$. 
+The  final state $ v_n = v_{k_{n}^{lev1}} $ is reached
+and the model state of all preceding timesteps along the last
+innermost subsection are available, enabling integration backwards
+in time along the last subsection.
+The adjoint can thus be computed along this last 
+subsection $k_{n}^{lev2}$. 
 %
 \end{itemize}
 %
 This procedure is repeated consecutively for each previous
-sub-subsection $k_{n-1}^{lev2}, \ldots, k_{1}^{lev2} $
+subsection $k_{n-1}^{lev2}, \ldots, k_{1}^{lev2} $
 carrying the adjoint computation to the initial time 
 of the subsection $k_{n}^{lev3}$.
 Then, the procedure is repeated for the previous subsection
@@ -627,14 +631,17 @@ $k_{1}^{lev3}$.
 For the full model trajectory of
 $ n^{lev3} \cdot n^{lev2} \cdot n^{lev1} $ timesteps
 the required storing of the model state was significantly reduced to
-$ n^{lev1} + n^{lev2} + n^{lev3} $
+$ n^{lev2} + n^{lev3} $ to disk and roughly $ n^{lev1} $ to memory
 [i.e. for the 3-day integration with a total oof 72 timesteps
-the model state was stored 13 times].
+the model state was stored 7 times to disk and roughly 6 times
+to memory].
 This saving in memory comes at a cost of a required
 3 full forward integrations of the model (one for each
 checkpointing level).
-The balance of storage vs. recomputation certainly depends
-on the computing resources available.
+The optimal balance of storage vs. recomputation certainly depends
+on the computing resources available and may be adjusted by
+adjusting the partitioning among the 
+$ n^{lev3}, \,\, n^{lev2}, \,\, n^{lev1} $.
 
 \begin{figure}[t!]
 \begin{center}
@@ -682,7 +689,7 @@ If the option {\tt ALLOW\_AUTODIFF\_TAMC} is defined, the driver routine
 {\it the\_model\_main}, instead of calling {\it the\_main\_loop},
 invokes the adjoint of this routine, {\it adthe\_main\_loop},
 which is the toplevel routine in terms of reverse mode computation.
-The routine {\it adthe\_main\_loop} has been generated using TAMC.
+The routine {\it adthe\_main\_loop} has been generated by TAMC.
 It contains both the forward integration of the full model, 
 any additional storing that is required for efficient checkpointing, 
 and the reverse integration of the adjoint model.
@@ -690,8 +697,10 @@ The structure of {\it adthe\_main\_loop} has been strongly
 simplified for clarification; in particular, no checkpointing
 procedures are shown here.
 Prior to the call of {\it adthe\_main\_loop}, the routine
-{\it ctrl\_unpack} is invoked to unpack the control vector,
-and following that call, the routine {\it ctrl\_pack}
+{\it ctrl\_unpack} is invoked to unpack the control vector
+or initialise the control variables.
+Following the call of {\it adthe\_main\_loop}, 
+the routine {\it ctrl\_pack}
 is invoked to pack the control vector
 (cf. Section \ref{section_ctrl}).
 If gradient checks are to be performed, the option 
@@ -706,11 +715,14 @@ the gradient has been computed via the adjoint
 The cost function $ {\cal J} $ is referred to as the {\sf dependent variable}.
 It is a function of the input variables $ \vec{u} $ via the composition
 $ {\cal J}(\vec{u}) \, = \, {\cal J}(M(\vec{u})) $. 
-The input is referred to as the
+The input are referred to as the
 {\sf independent variables} or {\sf control variables}.
 All aspects relevant to the treatment of the cost function $ {\cal J} $
 (parameter setting, initialization, accumulation, 
 final evaluation), are controlled by the package {\it pkg/cost}.
+The aspects relevant to the treatment of the independent variables
+are controlled by the package {\it pkg/ctrl} and will be treated
+in the next section.
 
 \input{part5/doc_cost_flow}
 
@@ -745,19 +757,22 @@ Call {\it genmake} with the option
 {\tt genmake -enable=cost}.
 %
 \end{enumerate}
+N.B.: In general the following packages ought to be enabled
+simultaneously: {\it autodiff, cost, ctrl}.
 The basic CPP option to enable the cost function is {\bf ALLOW\_COST}.
 Each specific cost function contribution has its own option.
 For the present example the option is {\bf ALLOW\_COST\_TRACER}.
 All cost-specific options are set in {\it ECCO\_CPPOPTIONS.h}
 Since the cost function is usually used in conjunction with
 automatic differentiation, the CPP option
-{\bf ALLOW\_ADJOINT\_RUN} should be defined
-(file {\it CPP\_OPTIONS.h}).
+{\bf ALLOW\_ADJOINT\_RUN} (file {\it CPP\_OPTIONS.h}) and
+{\bf ALLOW\_AUTODIFF\_TAMC} (file {\it ECCO\_CPPOPTIONS.h})
+should be defined.
 
 \subsubsection{Initialization}
 %
 The initialization of the {\it cost} package is readily enabled
-as soon as the CPP option {\bf ALLOW\_ADJOINT\_RUN} is defined.
+as soon as the CPP option {\bf ALLOW\_COST} is defined.
 %
 \begin{itemize}
 %
@@ -831,7 +846,7 @@ from each contribution and sums over all tiles:
 \begin{equation}
 {\cal J} \, = \, 
 {\rm fc} \, = \, 
-{\rm mult\_tracer} \sum_{bi,\,bj}^{nSx,\,nSy}
+{\rm mult\_tracer} \sum_{\text{global sum}} \sum_{bi,\,bj}^{nSx,\,nSy}
 {\rm objf\_tracer}(bi,bj) \, + \, ...
 \end{equation}
 %
@@ -879,7 +894,8 @@ are controlled by the package {\it pkg/ctrl}.
 %
 To enable the directory to be included to the compile list,
 {\bf ctrl} has to be added to the {\bf enable} list in
-{\it .genmakerc} (or {\it genmake} itself).
+{\it .genmakerc} or in {\it genmake} itself (analogous to {\it cost}
+package, cf. previous section).
 Each control variable is enabled via its own CPP option
 in {\it ECCO\_CPPOPTIONS.h}.
 
@@ -1023,7 +1039,8 @@ in the code takes on the form
 %
 Note, that reading an active variable corresponds
 to a variable assignment. Its derivative corresponds
-to a write statement of the adjoint variable.
+to a write statement of the adjoint variable, followed by
+a reset.
 The 'active file' routines have been designed
 to support active read and corresponding adjoint active write
 operations (and vice versa).
@@ -1140,9 +1157,13 @@ at intermediate times can be written using S/R
 {\it addummy\_in\_stepping}.
 This routine is part of the adjoint support package 
 {\it pkg/autodiff} (cf.f. below).
+The procedure is enabled using via the CPP-option
+{\bf ALLOW\_AUTODIFF\_MONITOR} (file {\it ECCO\_CPPOPTIONS.h}).
 To be part of the adjoint code, the corresponding S/R
 {\it dummy\_in\_stepping} has to be called in the forward
 model (S/R {\it the\_main\_loop}) at the appropriate place.
+The adjoint common blocks are extracted from the adjoint code
+via the header file {\it adcommon.h}.
 
 {\it dummy\_in\_stepping} is essentially empty,
 the corresponding adjoint routine is hand-written rather
@@ -1169,6 +1190,12 @@ the common blocks
 {\bf /adtr1\_r/}, {\bf /adffields/},
 which have been extracted from the adjoint code to enable
 access to the adjoint variables.
+
+{\bf WARNING:} If the structure of the common blocks
+{\bf /dynvars\_r/}, {\bf /dynvars\_cd/}, etc., changes
+similar changes will occur in the adjoint common blocks.
+Therefore, consistency between the TAMC-generated common blocks
+and those in {\it adcommon.h} have to be checked.
 %
 \end{itemize}
 
