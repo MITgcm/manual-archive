@@ -1,7 +1,8 @@
-% $Header: /u/gcmpack/manual/s_examples/baroclinic_gyre/fourlayer.tex,v 1.12 2002/02/28 19:32:19 cnh Exp $
+% $Header: /u/gcmpack/manual/s_examples/baroclinic_gyre/fourlayer.tex,v 1.13 2002/05/16 15:54:37 adcroft Exp $
 % $Name:  $
 
 \section{Four Layer Baroclinic Ocean Gyre In Spherical Coordinates}
+\label{www:tutorials}
 \label{sect:eg-fourlayer}
 
 \bodytext{bgcolor="#FFFFFFFF"}
@@ -26,6 +27,7 @@ is simulated, but the code is now configured
 for four layers and in a spherical polar coordinate system.
 
 \subsection{Overview}
+\label{www:tutorials}
 
 This example experiment demonstrates using the MITgcm to simulate
 a baroclinic, wind-forced, ocean gyre circulation. The experiment 
@@ -118,6 +120,7 @@ The vertical spacing, $\Delta z$, is constant and equal to $500$m.
 \end{figure}
 
 \subsection{Equations solved}
+\label{www:tutorials}
 For this problem
 the implicit free surface, {\bf HPE} (see section \ref{sect:hydrostatic_and_quasi-hydrostatic_forms}) form of the 
 equations described in Marshall et. al \cite{marshall:97a} are
@@ -202,6 +205,7 @@ e.g. $\frac{\partial \theta}{\partial \varphi}=
 
 
 \subsection{Discrete Numerical Configuration}
+\label{www:tutorials}
 
  The domain is discretised with 
 a uniform grid spacing in latitude and longitude
@@ -261,6 +265,7 @@ field solution method is described in sections
 \ref{sect:finding_the_pressure_field}.
 
 \subsubsection{Numerical Stability Criteria}
+\label{www:tutorials}
 
 The Laplacian viscosity coefficient, $A_{h}$, is set to $400 m s^{-1}$.
 This value is chosen to yield a Munk layer width,
@@ -340,6 +345,7 @@ S_{c} = \frac{c_{g} \delta t}{ \Delta x}
 stability limit of 0.25.
   
 \subsection{Code Configuration}
+\label{www:tutorials}
 \label{SEC:eg_fourl_code_config}
 
 The model configuration for this experiment resides under the 
@@ -359,6 +365,7 @@ experiments. Below we describe the customisations
 to these files associated with this experiment.
 
 \subsubsection{File {\it input/data}}
+\label{www:tutorials}
 
 This file, reproduced completely below, specifies the main parameters 
 for the experiment. The parameters that are significant for this configuration
@@ -946,16 +953,19 @@ goto code
 \begin{rawhtml}</PRE>\end{rawhtml}
 
 \subsubsection{File {\it input/data.pkg}}
+\label{www:tutorials}
 
 This file uses standard default values and does not contain
 customisations for this experiment.
 
 \subsubsection{File {\it input/eedata}}
+\label{www:tutorials}
 
 This file uses standard default values and does not contain
 customisations for this experiment.
 
 \subsubsection{File {\it input/windx.sin\_y}}
+\label{www:tutorials}
 
 The {\it input/windx.sin\_y} file specifies a two-dimensional ($x,y$) 
 map of wind stress ,$\tau_{x}$, values. The units used are $Nm^{-2}$ (the
@@ -969,6 +979,7 @@ The included matlab program {\it input/gendata.m} gives a complete
 code for creating the {\it input/windx.sin\_y} file.
 
 \subsubsection{File {\it input/topog.box}}
+\label{www:tutorials}
 
 
 The {\it input/topog.box} file specifies a two-dimensional ($x,y$) 
@@ -980,6 +991,7 @@ The included matlab program {\it input/gendata.m} gives a complete
 code for creating the {\it input/topog.box} file.
 
 \subsubsection{File {\it code/SIZE.h}}
+\label{www:tutorials}
 
 Two lines are customized in this file for the current experiment
 
@@ -1006,17 +1018,20 @@ the vertical domain extent in grid points.
 \end{small}
 
 \subsubsection{File {\it code/CPP\_OPTIONS.h}}
+\label{www:tutorials}
 
 This file uses standard default values and does not contain
 customisations for this experiment.
 
 
 \subsubsection{File {\it code/CPP\_EEOPTIONS.h}}
+\label{www:tutorials}
 
 This file uses standard default values and does not contain
 customisations for this experiment.
 
 \subsubsection{Other Files }
+\label{www:tutorials}
 
 Other files relevant to this experiment are
 \begin{itemize}
@@ -1029,15 +1044,18 @@ dxF, dyF, dxG, dyG, dxC, dyC}.
 \end{itemize}
 
 \subsection{Running The Example}
+\label{www:tutorials}
 \label{SEC:running_the_example}
 
 \subsubsection{Code Download}
+\label{www:tutorials}
 
  In order to run the examples you must first download the code distribution.
 Instructions for downloading the code can be found in section
 \ref{sect:obtainingCode}.
 
 \subsubsection{Experiment Location}
+\label{www:tutorials}
 
  This example experiments is located under the release sub-directory
 
@@ -1045,6 +1063,7 @@ Instructions for downloading the code can be found in section
 {\it verification/exp2/ }
 
 \subsubsection{Running the Experiment}
+\label{www:tutorials}
 
  To run the experiment
 

@@ -1,7 +1,8 @@
-% $Header: /u/gcmpack/manual/s_examples/tracer_adjsens/Attic/co2sens.tex,v 1.6 2002/02/28 19:32:19 cnh Exp $
+% $Header: /u/gcmpack/manual/s_examples/tracer_adjsens/Attic/co2sens.tex,v 1.7 2002/05/16 15:54:37 adcroft Exp $
 % $Name:  $
 
 \section{Centennial Time Scale Tracer Injection}
+\label{www:tutorials}
 \label{sect:eg-simple-tracer}
 
 \bodytext{bgcolor="#FFFFFFFF"}
@@ -17,6 +18,7 @@
 %\end{center}
 
 \subsection{Introduction}
+\label{www:tutorials}
 
 This document describes the fourth example MITgcm experiment.
 This example illustrates the use of
@@ -24,6 +26,7 @@ the MITgcm to perform sensitivity analysis in a
 large scale ocean circulation simulation.
 
 \subsection{Overview}
+\label{www:tutorials}
 
 This example experiment demonstrates using the MITgcm to simulate
 the planetary ocean circulation. The simulation is configured
@@ -82,6 +85,7 @@ The configuration is illustrated in figure \ref{simulation_config}.
 
 
 \subsection{Discrete Numerical Configuration}
+\label{www:tutorials}
 
 
  The model is configured in hydrostatic form.  The domain is discretised with 
@@ -175,6 +179,7 @@ elevation $\eta$ and the hydrostatic pressure.
 \\
 
 \subsubsection{Numerical Stability Criteria}
+\label{www:tutorials}
 
 The Laplacian dissipation coefficient, $A_{h}$, is set to $400 m s^{-1}$.
 This value is chosen to yield a Munk layer width \cite{adcroft:95},
@@ -253,6 +258,7 @@ S_{c} = \frac{c_{g} \delta t}{ \Delta x}
 stability limit of 0.25.
   
 \subsection{Code Configuration}
+\label{www:tutorials}
 \label{SEC:code_config}
 
 The model configuration for this experiment resides under the 
@@ -272,6 +278,7 @@ experiments. Below we describe the customizations
 to these files associated with this experiment.
 
 \subsubsection{File {\it input/data}}
+\label{www:tutorials}
 
 This file, reproduced completely below, specifies the main parameters 
 for the experiment. The parameters that are significant for this configuration
@@ -474,16 +481,19 @@ notes.
 \end{small}
 
 \subsubsection{File {\it input/data.pkg}}
+\label{www:tutorials}
 
 This file uses standard default values and does not contain
 customizations for this experiment.
 
 \subsubsection{File {\it input/eedata}}
+\label{www:tutorials}
 
 This file uses standard default values and does not contain
 customizations for this experiment.
 
 \subsubsection{File {\it input/windx.sin\_y}}
+\label{www:tutorials}
 
 The {\it input/windx.sin\_y} file specifies a two-dimensional ($x,y$) 
 map of wind stress ,$\tau_{x}$, values. The units used are $Nm^{-2}$.
@@ -494,6 +504,7 @@ in MITgcm. The included matlab program {\it input/gendata.m} gives a complete
 code for creating the {\it input/windx.sin\_y} file.
 
 \subsubsection{File {\it input/topog.box}}
+\label{www:tutorials}
 
 
 The {\it input/topog.box} file specifies a two-dimensional ($x,y$) 
@@ -505,6 +516,7 @@ The included matlab program {\it input/gendata.m} gives a complete
 code for creating the {\it input/topog.box} file.
 
 \subsubsection{File {\it code/SIZE.h}}
+\label{www:tutorials}
 
 Two lines are customized in this file for the current experiment
 
@@ -531,17 +543,20 @@ the vertical domain extent in grid points.
 \end{small}
 
 \subsubsection{File {\it code/CPP\_OPTIONS.h}}
+\label{www:tutorials}
 
 This file uses standard default values and does not contain
 customizations for this experiment.
 
 
 \subsubsection{File {\it code/CPP\_EEOPTIONS.h}}
+\label{www:tutorials}
 
 This file uses standard default values and does not contain
 customizations for this experiment.
 
 \subsubsection{Other Files }
+\label{www:tutorials}
 
 Other files relevant to this experiment are
 \begin{itemize}

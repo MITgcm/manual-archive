@@ -1,4 +1,5 @@
 \section{Surface Driven Convection}
+\label{www:tutorials}
 \label{sect:eg-bconv}
 
 \bodytext{bgcolor="#FFFFFFFF"}
@@ -39,6 +40,7 @@ period of oceanic deep convection. It is
 \end{itemize}
 
 \subsection{Overview}
+\label{www:tutorials}
 
 The model domain consists of an approximately 3
 km square by 1 km deep box of initially
@@ -108,6 +110,7 @@ prescribed in {\it code/SIZE.h}. The forcing (file {\it input/Qsurf.bin}) is spe
 in a binary data file generated using the Matlab script {\it input/gendata.m}.
 
 \subsection{Equations solved}
+\label{www:tutorials}
 
 The model is configured in nonhydrostatic form, that is, all terms in the Navier 
 Stokes equations are retained and the pressure field is found, subject to appropriate
@@ -177,12 +180,14 @@ equations and continuity (see section \ref{sec:finding_the_pressure_field}).
 \\
 
 \subsection{Discrete numerical configuration}
+\label{www:tutorials}
 
 The domain is discretised with a uniform grid spacing in each direction. There are 64
 grid cells in directions $x$ and $y$ and 20 vertical levels thus the domain
 comprises a total of just over 80 000 gridpoints.
 
 \subsection{Numerical stability criteria and other considerations}
+\label{www:tutorials}
 
 For a heat flux of 800 Wm$^2$ and a rotation rate of $10^{-4}$ s$^{-1}$ the
 plume-scale can be expected to be a few hundred meters guiding our choice of grid
@@ -208,6 +213,7 @@ diffusion coefficient $\kappa_h (=
 correlated over 50 m.  
 
 \subsection{Experiment configuration}
+\label{www:tutorials}
 
 The model configuration for this experiment resides under the directory
 {\it verification/convection/}. The experiment files
@@ -224,16 +230,19 @@ contain the code customisations and parameter settings for this
 experiment. Below we describe these experiment-specific customisations.
 
 \subsubsection{File {\it code/CPP\_EEOPTIONS.h}}
+\label{www:tutorials}
 
 This file uses standard default values and does not contain
 customisations for this experiment.
 
 \subsubsection{File {\it code/CPP\_OPTIONS.h}}
+\label{www:tutorials}
 
 This file uses standard default values and does not contain
 customisations for this experiment.
 
 \subsubsection{File {\it code/SIZE.h}}
+\label{www:tutorials}
 
 Three lines are customized in this file. These prescribe the domain grid dimensions.
 \begin{itemize}
@@ -261,6 +270,7 @@ the vertical domain extent in grid points.
 \begin{rawhtml}</PRE>\end{rawhtml}
 
 \subsubsection{File {\it input/data}}
+\label{www:tutorials}
 
 This file, reproduced completely below, specifies the main parameters 
 for the experiment. The parameters that are significant for this configuration
@@ -778,17 +788,20 @@ S/R EXTERNAL\_FORCING\_SURF ({\it external\_forcing\_surf.F})
 
 
 \subsubsection{File {\it input/data.pkg}}
+\label{www:tutorials}
 
 This file uses standard default values and does not contain
 customisations for this experiment.
 
 \subsubsection{File {\it input/eedata}}
+\label{www:tutorials}
 
 This file uses standard default values and does not contain
 customisations for this experiment.
 
 
 \subsubsection{File {\it input/Qsurf.bin}}
+\label{www:tutorials}
 
 The file {\it input/Qsurf.bin} specifies a two-dimensional ($x,y$) 
 map of heat flux values where 
@@ -811,13 +824,16 @@ directed upwards, according to the model's sign convention, $Q$ is positive.
 \end{figure}
 
 \subsection{Running the example}
+\label{www:tutorials}
 
 \subsubsection{Code download}
+\label{www:tutorials}
 
 In order to run the examples you must first download the code distribution.
 Instructions for downloading the code can be found in \ref{sect:obtainingCode}.
 
 \subsubsection{Experiment Location}
+\label{www:tutorials}
 
  This example experiments is located under the release sub-directory
 
@@ -825,6 +841,7 @@ Instructions for downloading the code can be found in \ref{sect:obtainingCode}.
 {\it verification/convection/ }
 
 \subsubsection{Running the Experiment}
+\label{www:tutorials}
 
  To run the experiment
 

@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_examples/barotropic_gyre/baro.tex,v 1.8 2002/02/28 19:32:19 cnh Exp $
+% $Header: /u/gcmpack/manual/s_examples/barotropic_gyre/baro.tex,v 1.9 2002/05/16 15:54:37 adcroft Exp $
 % $Name:  $
 
 \bodytext{bgcolor="#FFFFFFFF"}
@@ -27,6 +27,7 @@ configure the MITgcm code and input files for each experiment.
 
 \section{Barotropic Ocean Gyre In Cartesian Coordinates}
 \label{sect:eg-baro}
+\label{www:tutorials}
 
 
 This example experiment demonstrates using the MITgcm to simulate
@@ -80,6 +81,7 @@ walls at $x=$~0,1200km and at $y=$~0,1200km.}
 \end{figure}
 
 \subsection{Equations Solved}
+\label{www:tutorials}
 The model is configured in hydrostatic form. The implicit free surface form of the
 pressure equation described in Marshall et. al \cite{marshall:97a} is
 employed.
@@ -114,6 +116,7 @@ flow vector $\vec{u}$.
 
 
 \subsection{Discrete Numerical Configuration}
+\label{www:tutorials}
 
  The domain is discretised with 
 a uniform grid spacing in the horizontal set to
@@ -122,6 +125,7 @@ that there are sixty grid cells in the $x$ and $y$ directions. Vertically the
 model is configured with a single layer with depth, $\Delta z$, of $5000$~m. 
 
 \subsubsection{Numerical Stability Criteria}
+\label{www:tutorials}
 
 The Laplacian dissipation coefficient, $A_{h}$, is set to $400 m s^{-1}$.
 This value is chosen to yield a Munk layer width \cite{adcroft:95},
@@ -175,6 +179,7 @@ S_{a} = \frac{| \vec{u} | \delta t}{ \Delta x}
 of 0.5 and limits $\delta t$ to $1200s$.
 
 \subsection{Code Configuration}
+\label{www:tutorials}
 \label{SEC:eg-baro-code_config}
 
 The model configuration for this experiment resides under the 
@@ -194,6 +199,7 @@ experiments. Below we describe the customizations
 to these files associated with this experiment.
 
 \subsubsection{File {\it input/data}}
+\label{www:tutorials}
 
 This file, reproduced completely below, specifies the main parameters 
 for the experiment. The parameters that are significant for this configuration
@@ -305,16 +311,19 @@ notes.
 \end{small}
 
 \subsubsection{File {\it input/data.pkg}}
+\label{www:tutorials}
 
 This file uses standard default values and does not contain
 customizations for this experiment.
 
 \subsubsection{File {\it input/eedata}}
+\label{www:tutorials}
 
 This file uses standard default values and does not contain
 customizations for this experiment.
 
 \subsubsection{File {\it input/windx.sin\_y}}
+\label{www:tutorials}
 
 The {\it input/windx.sin\_y} file specifies a two-dimensional ($x,y$) 
 map of wind stress ,$\tau_{x}$, values. The units used are $Nm^{-2}$.
@@ -325,6 +334,7 @@ in MITgcm. The included matlab program {\it input/gendata.m} gives a complete
 code for creating the {\it input/windx.sin\_y} file.
 
 \subsubsection{File {\it input/topog.box}}
+\label{www:tutorials}
 
 
 The {\it input/topog.box} file specifies a two-dimensional ($x,y$) 
@@ -336,6 +346,7 @@ The included matlab program {\it input/gendata.m} gives a complete
 code for creating the {\it input/topog.box} file.
 
 \subsubsection{File {\it code/SIZE.h}}
+\label{www:tutorials}
 
 Two lines are customized in this file for the current experiment
 
@@ -358,12 +369,14 @@ axis aligned with the y-coordinate.
 \end{small}
 
 \subsubsection{File {\it code/CPP\_OPTIONS.h}}
+\label{www:tutorials}
 
 This file uses standard default values and does not contain
 customizations for this experiment.
 
 
 \subsubsection{File {\it code/CPP\_EEOPTIONS.h}}
+\label{www:tutorials}
 
 This file uses standard default values and does not contain
 customizations for this experiment.
