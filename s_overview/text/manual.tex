@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.9 2001/11/13 20:13:07 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.10 2001/11/13 20:35:51 cnh Exp $
 % $Name:  $
 
 %tci%\documentclass[12pt]{book}
@@ -34,7 +34,7 @@
 
 % Section: Overview
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.9 2001/11/13 20:13:07 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.10 2001/11/13 20:35:51 cnh Exp $
 % $Name:  $
 
 \section{Introduction}
@@ -89,7 +89,7 @@ listed in an Appendix.
 We begin by briefly showing some of the results of the model in action to
 give a feel for the wide range of problems that can be addressed using it.
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.9 2001/11/13 20:13:07 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.10 2001/11/13 20:35:51 cnh Exp $
 % $Name:  $
 
 \section{Illustrations of the model in action}
@@ -102,7 +102,7 @@ of them here. A more detailed description of the underlying formulation,
 numerical algorithm and implementation that lie behind these calculations is
 given later. Indeed many of the illustrative examples shown below can be
 easily reproduced: simply download the model (the minimum you need is a PC
-running linux, together with a FORTRAN\ 77 compiler) and follow the examples
+running Linux, together with a FORTRAN\ 77 compiler) and follow the examples
 described in detail in the documentation.
 
 \subsection{Global atmosphere: `Held-Suarez' benchmark}
@@ -126,7 +126,7 @@ there are no mountains or land-sea contrast.
 %% CNHend
 
 As described in Adcroft (2001), a `cubed sphere' is used to discretize the
-globe permitting a uniform gridding and obviated the need to Fourier filter.
+globe permitting a uniform griding and obviated the need to Fourier filter.
 The `vector-invariant' form of MITgcm supports any orthogonal curvilinear
 grid, of which the cubed sphere is just one of many choices.
 
@@ -231,7 +231,7 @@ data assimilation studies.
 
 As one example of application of the MITgcm adjoint, Figure \ref{fig:hf-sensitivity}
 maps the gradient $\frac{\partial J}{\partial \mathcal{H}}$where $J$ is the magnitude
-of the overturning streamfunction shown in figure \ref{fig:large-scale-circ}
+of the overturning stream-function shown in figure \ref{fig:large-scale-circ}
 at 60$^{\circ }$N and $
 \mathcal{H}(\lambda,\varphi)$ is the mean, local air-sea heat flux over
 a 100 year period. We see that $J$ is
@@ -248,7 +248,7 @@ yields sensitivities to all other model parameters.
 An important application of MITgcm is in state estimation of the global
 ocean circulation. An appropriately defined `cost function', which measures
 the departure of the model from observations (both remotely sensed and
-insitu) over an interval of time, is minimized by adjusting `control
+in-situ) over an interval of time, is minimized by adjusting `control
 parameters' such as air-sea fluxes, the wind field, the initial conditions
 etc. Figure \ref{fig:assimilated-globes} shows an estimate of the time-mean
 surface elevation of the ocean obtained by bringing the model in to
@@ -277,7 +277,7 @@ telescoping to $\frac{1}{3}^{\circ}\times\frac{1}{3}^{\circ}$ in the tropics (no
 \subsection{Simulations of laboratory experiments}
 
 Figure \ref{fig:lab-simulation} shows MITgcm being used to simulate a 
-laboratory experiment enquiring in to the dynamics of the Antarctic Circumpolar Current (ACC). An
+laboratory experiment inquiring in to the dynamics of the Antarctic Circumpolar Current (ACC). An
 initially homogeneous tank of water ($1m$ in diameter) is driven from its
 free surface by a rotating heated disk. The combined action of mechanical
 and thermal forcing creates a lens of fluid which becomes baroclinically
@@ -289,7 +289,7 @@ stratification of the ACC.
 \input{part1/lab_figure}
 %%CNHend
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.9 2001/11/13 20:13:07 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.10 2001/11/13 20:35:51 cnh Exp $
 % $Name:  $
 
 \section{Continuous equations in `r' coordinates}
@@ -432,7 +432,7 @@ at fixed and moving $r$ surfaces we set (see figure \ref{fig:zandp-vert-coord}):
 
 \begin{equation}
 \dot{r}=\frac{Dr}{Dt}atr=R_{moving}\text{ \
-(oceansurface,bottomoftheatmosphere)}  \label{eq:movingbc}
+(ocean surface,bottom of the atmosphere)}  \label{eq:movingbc}
 \end{equation}
 
 Here
@@ -1028,7 +1028,7 @@ to discretize the model.
 Tangent linear and adjoint counterparts of the forward model are described
 in Chapter 5.
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.9 2001/11/13 20:13:07 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.10 2001/11/13 20:35:51 cnh Exp $
 % $Name:  $
 
 \section{Appendix ATMOSPHERE}
@@ -1155,7 +1155,7 @@ _{h}+\mathbf{\nabla }_{p}\phi ^{\prime } &=&\vec{\mathbf{\mathcal{F}}} \label{eq
 \frac{D\theta }{Dt} &=&\frac{\mathcal{Q}}{\Pi } 
 \end{eqnarray}
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.9 2001/11/13 20:13:07 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.10 2001/11/13 20:35:51 cnh Exp $
 % $Name:  $
 
 \section{Appendix OCEAN}
@@ -1178,7 +1178,7 @@ _{h}+\frac{\partial w}{\partial z} &=&0 \label{eq-zns-cont}\\
 \label{eq:non-boussinesq}
 \end{eqnarray}
 These equations permit acoustics modes, inertia-gravity waves,
-non-hydrostatic motions, a geostrophic (Rossby) mode and a thermo-haline
+non-hydrostatic motions, a geostrophic (Rossby) mode and a thermohaline
 mode. As written, they cannot be integrated forward consistently - if we
 step $\rho $ forward in (\ref{eq-zns-cont}), the answer will not be
 consistent with that obtained by stepping (\ref{eq-zns-heat}) and (\ref
@@ -1371,7 +1371,7 @@ the perturbation density. Nevertheless, it is the hydrostatic ($\epsilon
 _{nh}=0$ form of these equations that are used throughout the ocean modeling
 community and referred to as the primitive equations (HPE).
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.9 2001/11/13 20:13:07 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.10 2001/11/13 20:35:51 cnh Exp $
 % $Name:  $
 
 \section{Appendix:OPERATORS}
