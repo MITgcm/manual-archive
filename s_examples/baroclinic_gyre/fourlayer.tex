@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_examples/baroclinic_gyre/fourlayer.tex,v 1.4 2001/10/24 19:43:07 cnh Exp $
+% $Header: /u/gcmpack/manual/s_examples/baroclinic_gyre/fourlayer.tex,v 1.5 2001/10/24 23:14:44 cnh Exp $
 % $Name:  $
 
 \section{Example: Four layer Baroclinic Ocean Gyre In Spherical Coordinates}
@@ -37,8 +37,8 @@ to the problems described analytically by Stommel in 1966
 In this experiment the model is configured to represent a mid-latitude 
 enclosed sector of fluid on a sphere, $60^{\circ} \times 60^{\circ}$ in 
 lateral extent. The fluid is $2$~km deep and is forced
-by a constant in time zonal wind stress, $\tau_x$, that varies sinusoidally
-in the north-south direction. Topologically the simulated 
+by a constant in time zonal wind stress, $\tau_{\lambda}$, that varies 
+sinusoidally in the north-south direction. Topologically the simulated 
 domain is a sector on a sphere and the coriolis parameter, $f$, is defined 
 according to latitude, $\varphi$
 
@@ -54,7 +54,7 @@ f(\varphi) = 2 \Omega \sin( \varphi )
 
 \begin{equation}
 \label{EQ:taux}
-\tau_x(\varphi) = \tau_{0}\sin(\pi \frac{\varphi}{L_{\varphi}})
+\tau_{\lambda}(\varphi) = \tau_{0}\sin(\pi \frac{\varphi}{L_{\varphi}})
 \end{equation}
  
 \noindent where $L_{\varphi}$ is the lateral domain extent ($60^{\circ}$) and 
@@ -64,7 +64,7 @@ $\tau_0$ is set to $0.1N m^{-2}$.
 Figure \ref{FIG:simulation_config}
 summarises the configuration simulated.
 In contrast to the example in section \ref{sec:eg-baro}, the 
-current experiment simulates a spherical polar domain. However, as indicated
+current experiment simulates a spherical polar domain. As indicated
 by the axes in the lower left of the figure the model code works internally
 in a locally orthoganal coordinate $(x,y,z)$. For this experiment description 
 of this document the local orthogonal model coordinate $(x,y,z)$ is synonomous 
@@ -95,7 +95,7 @@ linear
 
 \noindent with $\rho_{0}=999.8\,{\rm kg\,m}^{-3}$ and 
 $\alpha_{\theta}=2\times10^{-4}\,{\rm degrees}^{-1} $. Integrated forward in
-this configuration the model state variable {\bf theta} is synonomous with
+this configuration the model state variable {\bf theta} is equivalent to
 either in-situ temperature, $T$, or potential temperature, $\theta$. For 
 consistency with later examples, in which the equation of state is
 non-linear, we use $\theta$ to represent temperature here. This is
@@ -110,7 +110,7 @@ the quantity that is carried in the model core equations.
 \caption{Schematic of simulation domain and wind-stress forcing function 
 for the four-layer gyre numerical experiment. The domain is enclosed by solid
 walls at $0^{\circ}$~E, $60^{\circ}$~E, $0^{\circ}$~N and $60^{\circ}$~N.
-In the four-layer case an initial temperature stratification is 
+An initial stratification is 
 imposed by setting the potential temperature, $\theta$, in each layer.
 The vertical spacing, $\Delta z$, is constant and equal to $500$m.
 }
@@ -119,14 +119,16 @@ The vertical spacing, $\Delta z$, is constant and equal to $500$m.
 
 \subsection{Equations solved}
 
-The implicit free surface form of the 
-pressure equation described in Marshall et. al \cite{Marshall97a} is 
-employed. 
+The implicit free surface {\bf HPE} form of the 
+equations described in Marshall et. al \cite{Marshall97a} is 
+employed. The flow is three-dimensional with just temperature, $\theta$, as 
+an active tracer.  The equation of state is linear.
 A horizontal laplacian operator $\nabla_{h}^2$ provides viscous
-dissipation. The wind-stress momentum input is added to the momentum equation
-for the ``zonal flow'', $u$. Other terms in the model
+dissipation and provides a diffusive sub-grid scale closure for the 
+temperature equation. A wind-stress momentum forcing is added to the momentum 
+equation for the zonal flow, $u$. Other terms in the model
 are explicitly switched off for this experiement configuration (see section
-\ref{SEC:code_config} ). This yields an active set of equations in 
+\ref{SEC:eg_fourl_code_config} ). This yields an active set of equations
 solved in this configuration, written in spherical polar coordinates as 
 follows
 
@@ -136,7 +138,7 @@ follows
   \frac{1}{\rho}\frac{\partial p^{\prime}}{\partial \lambda} - 
   A_{h}\nabla_{h}^2u - A_{z}\frac{\partial^{2}u}{\partial z^{2}} 
 & = &
-\cal{F}
+\cal{F}_{\lambda}
 \\
 \frac{Dv}{Dt} + fu + 
   \frac{1}{\rho}\frac{\partial p^{\prime}}{\partial \varphi} - 
@@ -144,40 +146,64 @@ follows
 & = &
 0
 \\
-\frac{\partial \eta}{\partial t} + \frac{\partial H \hat{u}}{\partial \lambda} +
-\frac{\partial H \hat{v}}{\partial \varphi}
+\frac{\partial \eta}{\partial t} + \frac{\partial H \widehat{u}}{\partial \lambda} +
+\frac{\partial H \widehat{v}}{\partial \varphi}
 &=&
 0
+\label{eq:fourl_example_continuity}
 \\
 \frac{D\theta}{Dt} -
  K_{h}\nabla_{h}^2\theta  - K_{z}\frac{\partial^{2}\theta}{\partial z^{2}} 
 & = &
 0
+\label{eq:eg_fourl_theta}
 \\
 p^{\prime} & = &
 g\rho_{0} \eta + \int^{0}_{-z}\rho^{\prime} dz
 \\
 \rho^{\prime} & = &- \alpha_{\theta}\rho_{0}\theta^{\prime}
 \\
-{\cal F} |_{s} & = & \frac{\tau_{x}}{\rho_{0}\Delta z_{s}}
+{\cal F}_{\lambda} |_{s} & = & \frac{\tau_{\lambda}}{\rho_{0}\Delta z_{s}}
 \\
-{\cal F} |_{i} & = & 0
+{\cal F}_{\lambda} |_{i} & = & 0
 \end{eqnarray}
 
 \noindent where $u$ and $v$ are the components of the horizontal
 flow vector $\vec{u}$ on the sphere ($u=\dot{\lambda},v=\dot{\varphi}$).
-The terms $H\hat{u}$ and $H\hat{v}$ are the components of the term
-integrated in eqaution \ref{eq:free-surface}, as descirbed in section
+The terms $H\widehat{u}$ and $H\widehat{v}$ are the components of the vertical
+integral term given in equation \ref{eq:free-surface} and
+explained in more detail in section \ref{sect:pressure-method-linear-backward}.
+However, for the problem presented here, the continuity relation (equation
+\ref{eq:fourl_example_continuity}) differs from the general form given
+in section \ref{sect:pressure-method-linear-backward},
+equation \ref{eq:linear-free-surface=P-E+R}, because the source terms
+${\cal P}-{\cal E}+{\cal R}$ 
+are all $0$.
 
-The suffices ${s},{i}$ indicate surface and interior of the domain.
-The forcing $\cal F$ is only applied at the surface.
 The pressure field, $p^{\prime}$, is separated into a barotropic part
 due to variations in sea-surface height, $\eta$, and a hydrostatic
-part due to variations in density, $\rho^{\prime}$, over the water column.
+part due to variations in density, $\rho^{\prime}$, integrated
+through the water column.
+
+The suffices ${s},{i}$ indicate surface and interior of the domain.
+The windstress forcing, ${\cal F}_{\lambda}$, is applied in the surface layer 
+by a source term in the zonal momentum equation. In the ocean interior
+this term is zero.
+
+In the momentum equations
+lateral and vertical boundary conditions for the $\nabla_{h}^{2}$
+and $\frac{\partial^{2}}{\partial z^{2}}$ operators are specified
+when the numerical simulation is run - see section 
+\ref{SEC:eg_fourl_code_config}. For temperature
+the boundary condition is ``zero-flux'' 
+e.g. $\frac{\partial \theta}{\partial \varphi}=
+\frac{\partial \theta}{\partial \lambda}=\frac{\partial \theta}{\partial z}=0$.
+
+
 
 \subsection{Discrete Numerical Configuration}
 
- The model is configured in hydrostatic form.  The domain is discretised with 
+ The domain is discretised with 
 a uniform grid spacing in latitude and longitude
  $\Delta \lambda=\Delta \varphi=1^{\circ}$, so 
 that there are sixty grid cells in the zonal and meridional directions. 
@@ -218,10 +244,16 @@ $\Delta x_v$, $\Delta y_u$: {\bf DXv}, {\bf DYu} ({\em GRID.h})
 
 As described in \ref{sec:tracer_equations}, the time evolution of potential 
 temperature, 
-$\theta$, equation is solved prognostically.
-The pressure forces that drive the fluid motions, (
+$\theta$, (equation \ref{eq:eg_fourl_theta})
+is evaluated prognostically. The centered second-order scheme with
+Adams-Bashforth time stepping described in section 
+\ref{sec:tracer_equations_abII} is used to step forward the temperature 
+equation. The pressure forces that drive the fluid motions, (
 $\frac{\partial p^{'}}{\partial \lambda}$ and $\frac{\partial p^{'}}{\partial \varphi}$), are found by summing pressure due to surface 
-elevation $\eta$ and the hydrostatic pressure.
+elevation $\eta$ and the hydrostatic pressure. The hydrostatic part of the 
+pressure is evaluated explicitly by integrating density. The sea-surface
+height, $\eta$, is solved for implicitly as described in section 
+\ref{sect:pressure-method-linear-backward}.
 
 \subsubsection{Numerical Stability Criteria}
 
@@ -302,7 +334,7 @@ S_{c} = \frac{c_{g} \delta t}{ \Delta x}
 stability limit of 0.25.
   
 \subsection{Code Configuration}
-\label{SEC:code_config}
+\label{SEC:eg_fourl_code_config}
 
 The model configuration for this experiment resides under the 
 directory {\it verification/exp1/}.  The experiment files 
