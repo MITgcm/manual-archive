@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/text/exch2.tex,v 1.19 2004/05/10 21:39:11 afe Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/text/exch2.tex,v 1.20 2004/10/12 15:47:40 edhill Exp $
 % $Name:  $
 
 %%  * Introduction
@@ -44,43 +44,54 @@ file for single-processor execution.
 \subsection{Invoking exch2}
 
 To use exch2 with the cubed sphere, the following conditions must be
-met: \\
+met:
 
-$\bullet$ The exch2 package is included when \file{genmake2} is run.
-  The easiest way to do this is to add the line \code{exch2} to the
-  \file{profile.conf} file -- see Section
-  \ref{sect:buildingCode} \sectiontitle{Building the code} for general
-  details. \\
-
-$\bullet$ An example of \file{W2\_EXCH2\_TOPOLOGY.h} and
+\begin{itemize}
+\item The exch2 package is included when \file{genmake2} is run.  The
+  easiest way to do this is to add the line \code{exch2} to the
+  \file{profile.conf} file -- see Section \ref{sect:buildingCode}
+  \sectiontitle{Building the code} for general details.
+  
+\item An example of \file{W2\_EXCH2\_TOPOLOGY.h} and
   \file{w2\_e2setup.F} must reside in a directory containing files
-  symbolically linked by the \file{genmake2} script.  The safest place to
-  put these is the directory indicated in the \code{-mods=DIR} command
-  line modifier (typically \file{../code}), or the build directory.
-  The default versions of these files reside in \file{pkg/exch2} and
-  are linked automatically if no other versions exist elsewhere in the
-  build path, but they should be left untouched to avoid breaking
-  configurations other than the one you intend to modify.\\
-
-$\bullet$ Files containing grid parameters, named
-  \file{tile00$n$.mitgrid} where $n$=\code{(1:6)} (one per subdomain),
-  must be in the working directory when the MITgcm executable is run.
-  These files are provided in the example experiments for cubed sphere
-  configurations with 32$\times$32 cube sides 
-  -- please contact MITgcm support if you want to generate
-  files for other configurations. \\
-
-$\bullet$ As always when compiling MITgcm, the file \file{SIZE.h} must
-  be placed where \file{genmake2} will find it.  In particular for
-  exch2, the domain decomposition specified in \file{SIZE.h} must
-  correspond with the particular configuration's topology specified in
+  symbolically linked by the \file{genmake2} script.  The safest place
+  to put these is the directory indicated in the \code{-mods=DIR}
+  command line modifier (typically \file{../code}), or the build
+  directory.  The default versions of these files reside in
+  \file{pkg/exch2} and are linked automatically if no other versions
+  exist elsewhere in the build path, but they should be left untouched
+  to avoid breaking configurations other than the one you intend to
+  modify.
+  
+\item Files containing grid parameters, named \file{tile00$n$.mitgrid}
+  where $n$=\code{(1:6)} (one per subdomain), must be in the working
+  directory when the MITgcm executable is run.  These files are
+  provided in the example experiments for cubed sphere configurations
+  with 32$\times$32 cube sides -- please contact
+  \begin{rawhtml}
+    <A href=''mailto:mitgcm-support@dev.mitgcm.org"> 
+  \end{rawhtml} 
+\begin{verbatim}
+MITgcm-support@mitgcm.org
+\end{verbatim}
+  \begin{rawhtml} </A> \end{rawhtml}
+  if you want to generate files for other configurations.
+  
+\item As always when compiling MITgcm, the file \file{SIZE.h} must be
+  placed where \file{genmake2} will find it.  In particular for exch2,
+  the domain decomposition specified in \file{SIZE.h} must correspond
+  with the particular configuration's topology specified in
   \file{W2\_EXCH2\_TOPOLOGY.h} and \file{w2\_e2setup.F}.  Domain
   decomposition issues particular to exch2 are addressed in Section
   \ref{sec:topogen} \sectiontitle{Generating Topology Files for exch2}
-  and \ref{sec:exch2mpi} \sectiontitle{exch2, SIZE.h, and Multiprocessing}; a more
-  general background on the subject relevant to MITgcm is presented in
-  Section \ref{sect:specifying_a_decomposition}
-  \sectiontitle{Specifying a decomposition}.\\
+  and \ref{sec:exch2mpi} \sectiontitle{exch2, SIZE.h, and
+    Multiprocessing}; a more general background on the subject
+  relevant to MITgcm is presented in Section
+  \ref{sect:specifying_a_decomposition} \sectiontitle{Specifying a
+    decomposition}.
+\end{itemize}
+
+
 
 At the time of this writing the following examples use exch2 and may
 be used for guidance:
@@ -300,7 +311,7 @@ equal \code{1} throughout the package. \\
 
 The following arrays are of length \code{NTILES} and are indexed to
 the tile number, which is indicated in the diagrams with the notation
-\textsf{t}$n$.  The indices are omitted in the descriptions. \\
+\code{tn}.  The indices are omitted in the descriptions. \\
 
 The arrays \varlink{exch2\_tnx}{exch2_tnx} and
 \varlink{exch2\_tny}{exch2_tny} express the $x$ and $y$ dimensions of
@@ -328,11 +339,11 @@ files. \\
 
 The array \varlink{exch2\_myFace}{exch2_myFace} contains the number of
 the subdomain of each tile, in a range \code{(1:6)} in the case of the
-standard cube topology and indicated by \textbf{\textsf{f}}$n$ in
-figures \ref{fig:12tile} and
-\ref{fig:24tile}. \varlink{exch2\_nNeighbours}{exch2_nNeighbours}
-contains a count of the neighboring tiles each tile has, and sets 
-the bounds for looping over neighboring tiles.
+standard cube topology and indicated by \textbf{\textsf{fn}} in
+figures \ref{fig:12tile} and \ref{fig:24tile}. The
+\varlink{exch2\_nNeighbours}{exch2_nNeighbours} variable contains a
+count of the neighboring tiles each tile has, and sets the bounds for
+looping over neighboring tiles.  And
 \varlink{exch2\_tProc}{exch2_tProc} holds the process rank of each
 tile, and is used in interprocess communication.  \\
 
