@@ -1,0 +1,98 @@
+\section {DIC Package} 
+
+\subsection {Introduction}
+This is one of the biogeochemical packages handled from the
+pkg gchem. The main purpose of this package is to consider
+the cycling of carbon in the ocean. It also looks at the
+cycling of phosphorous and oxygen. There are five tracers
+$DIC$, $ALK$, $PO4$, $DOP$ and $O2$. The air-sea exchange
+of CO$_2$ and O$_2$ are handled as in the OCMIP experiments
+(reference). The export of biological matter is computed
+as a function of available light and PO$_4$. This export is
+remineralized at depth according to a Martin curve (again,
+this is the same as in the OCMIP experiments). There is
+also a representation of the carbonate flux handled as in
+the OCMIP experiments. The air-sea exchange on CO$_2$
+is affected by temperature, salinity and the pH of the
+surface waters. The pH is determined following the
+method of Follows et al. 
+
+\subsection {Key subroutines and parameters}
+
+\noindent
+{{\bf INITIALIZATION}} \\
+{\it DIC\_ABIOTIC.h} contains the common block for the 
+parameters and fields needed to calculate the air-sea
+flux of $CO_2$ and $O_2$. The fixed parameters are set in
+{\it dic\_abiotic\_param} which is called from {\it gchem\_init\_fixed.F}.
+The parameters needed for the biotic part of the calculations
+are initialized in {\it dic\_biotic\_param} and are stored
+in {\it DIC\_BIOTIC.h}. The first guess of pH is calculated
+in {\it dic\_surfforcing\_init.F}.
+
+\vspace{.5cm}
+
+\noindent
+{{\bf LOADING FIELDS}}\\
+The air-sea exchange of $CO_2$ and $O_2$ need wind, atmospheric
+pressure (although the current version has this hardwired to 1),
+and sea-ice coverage. The calculation of pH needs silica fields.
+These fields are read in in {\it dic\_fields\_load.F}. These
+fields are initialized to zero in {\it dic\_ini\_forcing.F}.
+The fields for interpolating are in common block in 
+{\it DIC\_LOAD.h}.
+
+\vspace{.5cm}
+
+\noindent
+{{\bf FORCING}}\\
+The tracers are advected-diffused in {\it ptracers\_integrate.F}.
+The updated tracers are passed to {\it dic\_biotic\_forcing.F}
+where the effects of the air-sea exchange and biological
+activity and remineralization are calculated and the tracers
+are updated for a second time. Below we discuss the 
+subroutines called from {\it dic\_biotic\_forcing.F}.
+
+
+Air-sea exchange of $CO_2$ is calculated in {\it dic\_surfforcing}.
+Air-Sea Exchange of $CO_2$ depends on T,S and pH. The determination
+of pH is done in {\it carbon\_chem.F}. There are three subroutines
+in this file: {\it carbon\_coeffs} which determines the coefficients
+for the carbon chemistry equations; {\it calc\_pco2} which calculates
+the pH using a Newton-Raphson method; and {\it calc\_pco2\_approx}
+which uses the much more efficient method of Follows et al.
+The latter is hard-wired into this package, the former is kept
+here for completeness.
+
+Biological productivity is determined following
+McKinely et al. and is calculated in {\it bio\_export.F}
+The light in each latitude band is calculate in {\it insol.F}.
+The formation of hard tissue (carbonate) is linked to
+the biological productivity and has an effect on the
+alkalinity - the flux of carbonate is calculated in
+{\it car\_flux.F}. The flux of phosphate to depth where
+it instantly remineralized is calculated in {\it phos\_flux.F}.
+
+Alkalinity tendency comes from changes to the salinity from
+addition/subtraction of freshwater in the surface. This
+is handled in {\it alk\_surfforcing.F}.
+
+Oxygen air-sea exchange is calculated in {\it o2\_surfforcing.F}.
+ 
+\vspace{.5cm}
+
+\noindent
+{{\bf DIAGNOSTICS}}\\
+Averages of air-sea exchanges, biological productivity,
+carbonate activity and pH are calculated. These are
+initialized to zero in {\it dic\_biotic\_init} and
+are stored in common block in {\it DIC\_BIOTIC.h}.
+
+\subsection{Do's and Don'ts}
+
+This package must be run with both ptracers and gchem enabled.
+It is set up for 5 tracers, but there is the provision of
+a 6th tracer (iron) that is not discussed here.
+
+\subsection{Reference Material}
+

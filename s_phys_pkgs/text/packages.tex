@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/text/packages.tex,v 1.2 2004/02/12 03:35:05 edhill Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/text/packages.tex,v 1.3 2004/02/12 16:40:28 edhill Exp $
 % $Name:  $
 
 \section{Using MITgcm Packages}
@@ -88,7 +88,7 @@ implement packages as libraries (perhaps using FORTRAN90/95 syntax)
 the current packages (FORTRAN77) are \textbf{not} based upon any
 concept of libraries.
 
-\subsubsection{File ``Hiding'' Rules}
+\subsubsection{File Inclusion Rules}
 
 Instead, packages should be viewed only as directories containing
 ``sets of source files'' that are built using some simple mechanisms
@@ -111,12 +111,14 @@ files as they are found and proceeds according to the following rules:
     previously encountered) then the file within the newer (more
     recently visited) package will superseed (or ``hide'') any
     previous file(s) with the same name.
-
+    
   \item Packages are visited (and thus files discovered) {\it in the
       order that the packages are enabled} within \texttt{genmake2}.
     Thus, the files in \texttt{PackB} may superseed the files in
-    \texttt{PackA} if \texttt{PackA} is enabled before
-    \texttt{PackB}.  Thus, package ordering can be significant!
+    \texttt{PackA} if \texttt{PackA} is enabled before \texttt{PackB}.
+    Thus, package ordering can be significant!  For this reason,
+    \texttt{genmake2} honors the order in which packages are
+    specified.
   \end{enumerate}
 \end{enumerate}
 
@@ -157,20 +159,82 @@ An example illustrating the use of these defines is:
 \end{verbatim}
 which is included from the file
 \filelink{calc\_diffusivity.F}{model-src-calc_diffusivity.F}
+and shows how both the compile--time \texttt{ALLOW\_GMREDI} flag and the
+run--time \texttt{useGMRedi} are nested.
 
-There are some benefits to using this technique.  The first is that
-code snippets or subroutines associated with packages can be placed or
-called from almost anywhere else within the code.  The second benefit
-is related to the memory footprint and performance.  Since unused code
-can be removed, there is no performance penalty due to unnecessary
-memory allocation or unused function calls.  The major problems with
-this approach are difficult-to-read and difficult-to-test code caused
-by the numerous CPP statements.  Developers should exerecise some
-discipline and avoid ``smearing'' implementation details across
-numerous files in a haphazard fashion.
+There are some benefits to using the technique described here.  The
+first is that code snippets or subroutines associated with packages
+can be placed or called from almost anywhere else within the code.
+The second benefit is related to memory footprint and performance.
+Since unused code can be removed, there is no performance penalty due
+to unnecessary memory allocation, unused function calls, or extra
+run-time \texttt{IF (...)} conditions.  The major problems with this
+approach are the potentially difficult-to-read and difficult-to-debug
+code caused by an overuse of CPP statements.  So while it can be done,
+developers should exerecise some discipline and avoid unnecesarily
+``smearing'' their package implementation details across numerous
+files.
 
 
+\subsubsection{Package Startup or Boot Sequence}
 
-\subsection{Interfaces}
+Calls to package routines within the core code timestepping loop can
+vary.  However, all packages should follow a required "boot" sequence
+outlined here:
 
+{\footnotesize
+\begin{verbatim}
+    1. S/R PACKAGES_BOOT()
+            :
+        CALL OPEN_COPY_DATA_FILE( 'data.pkg', 'PACKAGES_BOOT', ... )
+ 
+
+    2. S/R PACKAGES_READPARMS()
+            :
+        #ifdef ALLOW_${PKG}
+          if ( use${Pkg} )
+     &       CALL ${PKG}_READPARMS( retCode )
+        #endif
+
+    3. S/R PACKAGES_INIT_FIXED()
+            :
+        #ifdef ALLOW_${PKG}
+          if ( use${Pkg} )
+     &       CALL ${PKG}_INIT_FIXED( retCode )
+        #endif
+
+    4. S/R PACKAGES_CHECK()
+            :
+        #ifdef ALLOW_${PKG}
+          if ( use${Pkg} )
+     &       CALL ${PKG}_CHECK( retCode )
+        #else
+          if ( use${Pkg} )
+     &       CALL PACKAGES_CHECK_ERROR('${PKG}')
+        #endif
+
+    5. S/R PACKAGES_INIT_VARIABLES()
+            :
+        #ifdef ALLOW_${PKG}
+          if ( use${Pkg} )
+     &       CALL ${PKG}_INIT_VARIA( )
+        #endif
+
+     6. S/R DO_THE_MODEL_IO
+
+        #ifdef ALLOW_${PKG}
+          if ( use${Pkg} )
+     &       CALL ${PKG}_DIAGS( )
+        #endif
+
+     7. S/R PACKAGES_WRITE_PICKUP()
+
+        #ifdef ALLOW_${PKG}
+          if ( use${Pkg} )
+     &       CALL ${PKG}_WRITE_PICKUP( )
+        #endif\end{verbatim}
+}
+
+
+\subsubsection{Package Startup or Boot Sequence}
 
