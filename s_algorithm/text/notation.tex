@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/notation.tex,v 1.1.1.1 2001/08/08 16:15:21 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/notation.tex,v 1.2 2001/08/08 18:28:56 adcroft Exp $
 % $Name:  $
 
 \section{Notations} 
@@ -12,16 +12,16 @@ general notation:
 Volume of the grid box surrounding $u,v,w,\theta$ point;
 \\ $i,j,k$ : current index relative to X,Y,R directions;
 \\basic operator:
-\\ $\delta_i $ : $\delta_i \Phi = \Phi_{i+1} - \Phi_i $
-\\ $\overline{~}i$ : $\overline{\Phi}^i = ( \Phi_{i+1} + \Phi_i ) / 2 $ 
+\\ $\delta_i $ : $\delta_i \Phi = \Phi_{i+1/2} - \Phi_{i-1/2} $
+\\ $\overline{~}i$ : $\overline{\Phi}^i = ( \Phi_{i+1/2} + \Phi_{i-1/2} ) / 2 $ 
 \\ $\delta_x $ : $\delta_x \Phi = \frac{1}{\Delta x} \delta_i \Phi $
 \\
 \\ $\overline{\nabla}$ = gradient operator :  
 $\overline{\nabla} \Phi = \{ \delta_x \Phi , \delta_y \Phi \}$
 \\ $\overline{\nabla} \cdot$ = divergence operator :  
 $\overline{\nabla}\cdot \vec{\mathrm{f}}  = 
-\frac{1}{\cal V} \{ \delta_i A_x \mathrm{f}_x 
-                  + \delta_j A_y \mathrm{f}_y \} $
+\frac{1}{\cal A} \{ \delta_i \Delta y \mathrm{f}_x 
+                  + \delta_j \Delta x \mathrm{f}_y \} $
 \\ $\overline{\nabla}^2 $ = Laplacien operator :
 $ \overline{\nabla}^2 \Phi = 
    \overline{\nabla}\cdot \overline{\nabla}\Phi $
