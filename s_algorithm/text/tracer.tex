@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/tracer.tex,v 1.10 2001/11/13 18:15:26 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/tracer.tex,v 1.11 2001/11/13 19:01:42 adcroft Exp $
 % $Name:  $
 
 \section{Tracer equations}
@@ -387,7 +387,7 @@ r = \frac{ \tau_{i-1} - \tau_{i-2} }{ \tau_{i} - \tau_{i-1} } & \forall & u > 0
 r = \frac{ \tau_{i+1} - \tau_{i} }{ \tau_{i} - \tau_{i-1} } & \forall & u < 0
 \end{eqnarray}
 as it's argument. There are many choices of limiter function but we
-only provide the Superbee limiter \cite{Roe85}:
+only provide the Superbee limiter \cite{roe:85}:
 \begin{equation}
 \psi(r) = \max[0,\min[1,2r],\min[2,r]]
 \end{equation}

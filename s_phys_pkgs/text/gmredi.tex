@@ -240,7 +240,7 @@ $z_\sigma^{*}$: {\bf dRdSigmaLtd} (argument)
 \begin{center}
 \resizebox{5.0in}{3.0in}{\includegraphics{part6/tapers.eps}}
 \end{center}
-\caption{Taper functions used in GKW91 and DM95.}
+\caption{Taper functions used in GKW99 and DM95.}
 \label{fig:tapers}
 \end{figure}
 
@@ -303,7 +303,7 @@ regions where the limiting is in effect.
 
 \subsubsection{Tapering: Gerdes, Koberle and Willebrand, Clim. Dyn. 1991}
 
-The tapering scheme used in Gerdes et al., 1991, (\cite{gkw91})
+The tapering scheme used in Gerdes et al., 1999, (\cite{gkw:99})
 addressed two issues with the clipping method: the introduction of
 large vertical fluxes in addition to convective adjustment fluxes is
 avoided by tapering the GM/Redi slopes back to zero in
@@ -328,7 +328,7 @@ GM\_tap\-er\_scheme = 'gkw91'} in {\em data.gmredi}.
 \subsection{Tapering: Danabasoglu and McWilliams, J. Clim. 1995}
 
 The tapering scheme used by Danabasoglu and McWilliams, 1995,
-\cite{DM95}, followed a similar procedure but used a different
+\cite{dm:95}, followed a similar procedure but used a different
 tapering function, $f_1(S)$:
 \begin{equation}
 f_1(S) = \frac{1}{2} \left( 1+\tanh \left[ \frac{S_c - |S|}{S_d} \right] \right)
@@ -344,7 +344,7 @@ GM\_tap\-er\_scheme = 'dm95'} in {\em data.gmredi}.
 
 \subsection{Tapering: Large, Danabasoglu and Doney, JPO 1997}
 
-The tapering used in Large et al., 1997, \cite{ldd97}, is based on the
+The tapering used in Large et al., 1997, \cite{ldd:97}, is based on the
 DM95 tapering scheme, but also tapers the scheme with an additional
 function of height, $f_2(z)$, so that the GM/Redi SGS fluxes are
 reduced near the surface:
