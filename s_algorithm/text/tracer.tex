@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/tracer.tex,v 1.18 2004/10/16 03:40:13 edhill Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/tracer.tex,v 1.19 2004/10/17 04:14:21 jmc Exp $
 % $Name:  $
 
 \section{Tracer equations}
@@ -679,13 +679,13 @@ $W$: {\bf rTrans} (local)
    \hline \hline
    centered $2^{nd}$order & 2 &  Yes & No & 3 pts & linear \\
    \hline
-   $3^{rd}$order upwind   & 3 &  Yes & No & 5 pts & linear/tracer\\
+   $3^{rd}$order upwind   & 3 &  Yes & No & 5 pts & linear/$\tau$\\
    \hline
    centered $4^{th}$order & 4 &  Yes & No & 5 pts & linear \\
    \hline \hline
 %  Lax-Wendroff       & 10 &  No & Yes & 3 pts & linear/tracer, non-linear/flow\\
 %  \hline
-   $3^{rd}$order DST & 30 &  No & Yes & 5 pts & linear/tracer, non-linear/flow\\
+   $3^{rd}$order DST & 30 &  No & Yes & 5 pts & linear/$\tau$, non-linear/v\\
    \hline \hline
    $2^{nd}$order Flux Limiters & 77 &  No & Yes & 5 pts & non-linear \\
    \hline
@@ -695,7 +695,7 @@ $W$: {\bf rTrans} (local)
  \caption{Summary of the different advection schemes available in MITgcm.
           ``A.B.'' stands for Adams-Bashforth and ``DST'' for direct space time.
           The code corresponds to the number used to select the corresponding
-          advection scheme in the parameter file (e.g., {\em tempAdvScheme=3} in
+          advection scheme in the parameter file (e.g., {\bf tempAdvScheme}=3 in
           file {\em data} selects the $3^{rd}$ order upwind advection scheme 
           for temperature).
    }

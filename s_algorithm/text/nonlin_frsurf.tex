@@ -1,76 +1,115 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/nonlin_frsurf.tex,v 1.8 2004/10/13 18:56:52 jmc Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/nonlin_frsurf.tex,v 1.9 2004/10/17 04:14:21 jmc Exp $
 % $Name:  $
 
 
 
-\subsection{Non-linear free surface}
+\subsection{Non-linear free-surface}
 \label{sect:nonlinear-freesurface}
 
 Recently, new options have been added to the model
 that concern the free surface formulation.
 
 
-\subsubsection{Non-uniform linear-relation for the surface potential}
+\subsubsection{pressure/geo-potential and free surface}
 
-The linear relation between surface pressure/geo-potential
-($\Phi_{surf}$) and surface displacement ($\eta$) could be considered
-to be a constant ($b_s=$ constant)
-\marginpar{add a reference to part.1 here}
-but is in fact dependent on the position ($x,y,r$)
-since we linearize:
-$$\Phi_{surf}=\int_{R_o}^{R_o+\eta} b dr \simeq b_s \eta
-~\mathrm{with}~ b_s = b(\theta,S,r)_{r=R_o} 
-\simeq b_s(\theta_{ref}(R_o),S_{ref}(R_o),R_o)$$
-Note that, for convenience, the effect on $b_s$ of the local surface
-$\theta,S$ are not considered here, but are incorporated in to
-$\Phi'_{hyd}$.
+For the atmosphere, since $\phi = \phi_{topo} - \int^p_{p_s} \alpha dp$,
+subtracting the reference state defined in section
+\ref{sec:hpe-p-geo-potential-split}~:\\
+$$
+\phi_o = \phi_{topo} - \int^p_{p_o} \alpha_o dp  
+\hspace{5mm}\mathrm{with}\hspace{3mm} \phi_o(p_o)=\phi_{topo}
+$$
+we get:
+$$
+\phi' = \phi - \phi_o = \int^{p_s}_p \alpha dp - \int^{p_o}_p \alpha_o dp
+$$
+For the ocean, the reference state is simpler since $\rho_c$ does not dependent
+on $z$ ($b_o=g$) and the surface reference position is uniformly $z=0$ ($R_o=0$),
+and the same subtraction leads to a similar relation.
+For both fluid, using the isomorphic notations, we can write:
+$$ 
+\phi' = \int^{r_{surf}}_r b~ dr - \int^{R_o}_r b_o dr
+$$
+\begin{eqnarray}
+\mathrm{and~re~write:}\hspace{10mm}
+\phi' = \int^{r_{surf}}_{R_o} b~ dr & + & \int^{R_o}_r (b - b_o) dr
+\label{eq:split-phi-Ro} \\ 
+\mathrm{or:}\hspace{10mm}
+\phi' = \int^{r_{surf}}_{R_o} b_o dr & + & \int^{r_{surf}}_r (b - b_o) dr
+\label{eq:split-phi-bo}
+\end{eqnarray}
 
-For the ocean, $b_s = g \rho_{surf} / \rho_o \simeq g$ is a very good
-approximation since the relative difference in surface density are
-usually small and only due to local $\theta,S$ gradients (because the
-upper surface, $R_o = 0$, is essentially flat). Therefore, they can
-easily be incorporated in $\Phi'_{hyd}$.
+In section \ref{sec:finding_the_pressure_field}, following eq.\ref{eq:split-phi-Ro},
+the pressure/geo-potential $\phi'$ has been separated into surface ($\phi_s$),
+and hydrostatic anomaly ($\phi'_{hyd}$).
+In this section, the split between $\phi_s$ and $\phi'_{hyd}$ is 
+made according to equation \ref{eq:split-phi-bo}. This slightly
+different definition reflects the actual implementation in the code 
+and is valid for both linear and non-linear
+free-surface formulation, in both r-coordinate and r*-coordinate.
 
+Because the linear free-surface approximation ignore the tracer content
+of the fluid parcel between $R_o$ and $r_{surf}=R_o+\eta$, 
+for consistency reasons, this part is also neglected in $\phi'_{hyd}$~:
+$$
+\phi'_{hyd} = \int^{r_{surf}}_r (b - b_o) dr \simeq \int^{R_o}_r (b - b_o) dr
+$$
+Note that in this case, the two definitions of $\phi_s$ and $\phi'_{hyd}$ 
+from equation \ref{eq:split-phi-Ro} and \ref{eq:split-phi-bo} converge toward 
+the same (approximated) expressions: $\phi_s = \int^{r_{surf}}_{R_o} b_o dr$ 
+and $\phi'_{hyd}=\int^{R_o}_r b' dr$.\\
+On the contrary, the unapproximated formulation ("non-linear free-surface",
+see the next section) retains the full expression:
+$\phi'_{hyd} = \int^{r_{surf}}_r (b - b_o) dr $~.
+This is obtained by selecting {\bf nonlinFreeSurf}=4 in parameter
+file {\em data}.\\
+
+Regarding the surface potential: 
+$$\phi_s = \int_{R_o}^{R_o+\eta} b_o dr = b_s \eta
+\hspace{5mm}\mathrm{with}\hspace{5mm} 
+b_s = \frac{1}{\eta} \int_{R_o}^{R_o+\eta} b_o dr $$
+$b_s \simeq b_o(R_o)$ is an excellent approximation (better than 
+the usual numerical truncation, since generally $|\eta|$ is smaller 
+than the vertical grid increment).
+
+For the ocean, $\phi_s = g \eta$ and $b_s = g$ is uniform.
 For the atmosphere, however, because of topographic effects, the
-reference surface pressure $R_o$ has large spatial variations that
+reference surface pressure $R_o=p_o$ has large spatial variations that
 are responsible for significant $b_s$ variations (from 0.8 to 1.2
-$[m^3/kg]$). For this reason, we use a non-uniform linear coefficient
-$b_s$.
-
-In practice, in an oceanic configuration or when the default value
-(TRUE) of the parameter {\bf uniformLin\_PhiSurf} is used, then $b_s$
-is simply set to $g$ for the ocean and $1.$ for the atmosphere.
-Turning {\bf uniformLin\_PhiSurf} to "FALSE", tells the code to
-evaluate $b_s$ from the reference vertical profile $\theta_{ref}$
-({\it S/R INI\_LINEAR\_PHISURF}) according to the reference surface
-pressure $P_o$ ($=R_o$): $b_s = c_p \kappa (P_o / Pc)^{(\kappa - 1)}
-\theta_{ref}(P_o)$
+$[m^3/kg]$). For this reason, when {\bf uniformLin\_PhiSurf} {\em=.FALSE.} 
+(parameter file {\em data}, namelist {\em PARAM01})
+a non-uniform linear coefficient $b_s$ is used and computed
+({\it S/R INI\_LINEAR\_PHISURF}) according to the reference surface 
+pressure $p_o$:
+$b_s = b_o(R_o) = c_p \kappa (p_o / P^o_{SL})^{(\kappa - 1)} \theta_{ref}(p_o)$.
+with $P^o_{SL}$ the mean sea-level pressure.
 
 
 \subsubsection{Free surface effect on column total thickness
-(Non-linear free surface)}
+(Non-linear free-surface)}
 
 The total thickness of the fluid column is $r_{surf} - R_{fixed} =
 \eta + R_o - R_{fixed}$. In most applications, the free surface 
 displacements are small compared to the total thickness
-$\eta << H_o = R_o - R_{fixed}$. 
+$\eta \ll H_o = R_o - R_{fixed}$. 
 In the previous sections and in older version of the model,
 the linearized free-surface approximation was made, assuming
-$r_{surf} - R_{fixed} \simeq H_o$ when the horizontal transport is 
-computed, either in the continuity equation or in tracer and momentum 
+$r_{surf} - R_{fixed} \simeq H_o$ when computing horizontal transports,
+either in the continuity equation or in tracer and momentum 
 advection terms.
-This approximation is dropped when using the non-linear free surface
+This approximation is dropped when using the non-linear free-surface
 formulation and the total thickness, including the time varying part
-$\eta$, is consisdered when computing horizontal transport.
+$\eta$, is considered when computing horizontal transports.
 Implications for the barotropic part are presented hereafter.
-In sections \ref{sect:freesurf-tracer-advection} and
-\ref{sect:freesurf-momentum-advection}, consequences for tracer 
-and momentum are brifly discussed. a more detailed description
-is available in \cite{campin:02}.
+In section \ref{sect:freesurf-tracer-advection} consequences for 
+tracer conservation is briefly discussed (more details can be 
+found in \cite{campin:02})~; the general time-stepping is presented 
+in section \ref{sect:nonlin-freesurf-timestepping} with some 
+limitations regarding the vertical resolution in section 
+\ref{sect:nonlin-freesurf-dz_surf}.
 
-
-In the non-linear formulation, the continuous form of the model equations 
-remains unchanged, except for the 2D continuity equation 
+In the non-linear formulation, the continuous form of the model 
+equations remains unchanged, except for the 2D continuity equation 
 (\ref{eq:discrete-time-backward-free-surface}) which is now
 integrated from $R_{fixed}(x,y)$ up to $r_{surf}=R_o+\eta$ :
 
@@ -122,12 +161,14 @@ column thickness appears only in the integral term of the RHS
 (\ref{eq-solve2D_rhs}) but not directly in the equation
 (\ref{eq-solve2D}).
 
-Those different options (see tab.?? for the one still available)
-have been tested and show litle differences. However, we recommand
+Those different options (see Table \ref{tab:nonLinFreeSurf_flags})
+have been tested and show little differences. However, we recommend
 the use of the most precise method (the 1rst one) since the 
-computation cost involved in the solver matrix update are negligeable.
+computation cost involved in the solver matrix update is negligible.
 
-\begin{center}
+\begin{table}[htb]
+%\begin{center}
+\centering
  \begin{tabular}[htb]{|l|c|l|}
    \hline
    parameter & value & description \\ 
@@ -135,7 +176,7 @@ computation cost involved in the solver matrix update are negligeable.
                    & -1 & linear free-surface, restart from a pickup file \\
                    &    & produced with \#undef EXACT\_CONSERV code\\
    \cline{2-3}
-                   & 0 & Linear free-Surface \\ 
+                   & 0 & Linear free-surface \\ 
    \cline{2-3}
     nonlinFreeSurf & 4 & Non-linear free-surface \\
    \cline{2-3}
@@ -154,11 +195,13 @@ computation cost involved in the solver matrix update are negligeable.
                   &   & slope of the coordinate in $\nabla \Phi$ \\
    \hline
   \end{tabular}
-\end{center}
+  \caption{Non-linear free-surface flags}
+  \label{tab:nonLinFreeSurf_flags}
+%\end{center}
+\end{table}
 
 
-\subsubsection{Free surface effect on the surface level thickness
-(Non-linear free surface): Tracer advection}
+\subsubsection{Tracer conservation with non-linear free-surface}
 \label{sect:freesurf-tracer-advection}
 
 To ensure global tracer conservation (i.e., the total amount) as well
@@ -167,31 +210,33 @@ be consistent with the way the continuity equation is integrated, both
 in the barotropic part (to find $\eta$) and baroclinic part (to find
 $w = \dot{r}$).
 
-To illustrate this, consider the shallow water model, with uniform
-Cartesian horizontal grid:
+To illustrate this, consider the shallow water model, with a source
+of fresh water (P):
 $$
-\partial_t h + \nabla \cdot h \vec{\bf v} = 0
+\partial_t h + \nabla \cdot h \vec{\bf v} = P
 $$
 where $h$ is the total thickness of the water column.
 To conserve the tracer $\theta$ we have to discretize:
 $$
-\partial_t (h \theta) + \nabla \cdot ( h \theta \vec{\bf v})= 0
+\partial_t (h \theta) + \nabla \cdot ( h \theta \vec{\bf v})
+  = P \theta_{\mathrm{rain}}
 $$
 Using the implicit (non-linear) free surface described above (section
 \ref{sect:pressure-method-linear-backward}) we have:
 \begin{eqnarray*}
-h^{n+1} = h^{n} - \Delta_t \nabla \cdot (h^n \, \vec{\bf v}^{n+1} ) \\
+h^{n+1} = h^{n} - \Delta t \nabla \cdot (h^n \, \vec{\bf v}^{n+1} ) + \Delta t P \\
 \end{eqnarray*}
 The discretized form of the tracer equation must adopt the same
 ``form'' in the computation of tracer fluxes, that is, the same value
 of $h$, as used in the continuity equation:
 \begin{eqnarray*}
 h^{n+1} \, \theta^{n+1} = h^n \, \theta^n 
-        - \Delta_t \nabla \cdot (h^n \, \theta^n \, \vec{\bf v}^{n+1})
+        - \Delta t \nabla \cdot (h^n \, \theta^n \, \vec{\bf v}^{n+1})
+        + \Delta t P \theta_{rain}
 \end{eqnarray*}
 
-The use of a 3 time-levels timestepping scheme such as the Adams-Bashforth
-make the conservation less straitforward.
+The use of a 3 time-levels time-stepping scheme such as the Adams-Bashforth
+make the conservation sightly tricky.
 The current implementation with the Adams-Bashforth time-stepping
 provides an exact local conservation and prevents any drift in
 the global tracer content (\cite{campin:02}).
@@ -208,59 +253,165 @@ $$
 Then, in a second step, the thickness variation (expansion/reduction)
 is taken into account:
 $$
-\theta^{n+1} = \theta^n + \Delta_t \frac{h^n}{h^{n+1}} G_\theta^{(n+1/2)} 
+\theta^{n+1} = \theta^n + \Delta t \frac{h^n}{h^{n+1}} 
+   \left( G_\theta^{(n+1/2)} + P (\theta_{\mathrm{rain}} - \theta^n )/h^n \right)
+%\theta^{n+1} = \theta^n + \frac{\Delta t}{h^{n+1}} 
+%   \left( h^n G_\theta^{(n+1/2)} + P (\theta_{\mathrm{rain}} - \theta^n ) \right)
 $$
 Note that with a simple forward time step (no Adams-Bashforth), 
+these two formulations are equivalent,  
 since
 $
-\dot{r}_{surf}^{n+1} 
-= - \nabla \cdot (h^n \, \vec{\bf v}^{n+1} ) = (h^{n+1} - h^{n})
-/ \Delta_t
+(h^{n+1} - h^{n})/ \Delta t = 
+P - \nabla \cdot (h^n \, \vec{\bf v}^{n+1} ) = P + \dot{r}_{surf}^{n+1}
 $
-these two formulations are equivalent. 
 
-Implementation in the MITgcm is as follows.  The model ``geometry''
+\subsubsection{Time stepping implementation of the
+non-linear free-surface}     
+\label{sect:nonlin-freesurf-timestepping}
+
+The grid cell thickness was hold constant with the linear
+free-surface~; with the non-linear free-surface, it is now varying 
+in time, at least at the surface level.
+This implies some modifications of the general algorithm described 
+earlier in sections \ref{sect:adams-bashforth-sync} and 
+\ref{sect:adams-bashforth-staggered}.
+
+A simplified version of the staggered in time, non-linear 
+free-surface algorithm is detailed hereafter, and can be compared 
+to the equivalent linear free-surface case (eq. \ref{eq:Gv-n-staggered}
+to \ref{eq:t-n+1-staggered}) and can also be easily transposed
+to the synchronous time-stepping case.
+Among the simplifications, salinity equation, implicit operator
+and detailed elliptic equation are omitted. Surface forcing is
+explicitly written as fluxes of temperature, fresh water and
+momentum, $Q^{n+1/2}, P^{n+1/2}, F_{\bf v}^n$ respectively.
+$h^n$ and $dh^n$ are the column and grid box thickness in r-coordinate.
+%-------------------------------------------------------------
+\begin{eqnarray}
+\phi^{n}_{hyd} & = & \int b(\theta^{n},S^{n},r) dr
+\label{eq:phi-hyd-nlfs} \\
+\vec{\bf G}_{\vec{\bf v}}^{n-1/2}\hspace{-2mm} & = & 
+\vec{\bf G}_{\vec{\bf v}} (dh^{n-1},\vec{\bf v}^{n-1/2})
+\hspace{+2mm};\hspace{+2mm}
+\vec{\bf G}_{\vec{\bf v}}^{(n)} =  
+   \frac{3}{2} \vec{\bf G}_{\vec{\bf v}}^{n-1/2} 
+-  \frac{1}{2} \vec{\bf G}_{\vec{\bf v}}^{n-3/2}
+\label{eq:Gv-n-nlfs} \\
+%\vec{\bf G}_{\vec{\bf v}}^{(n)} & = & 
+%   \frac{3}{2} \vec{\bf G}_{\vec{\bf v}}^{n-1/2} 
+%-  \frac{1}{2} \vec{\bf G}_{\vec{\bf v}}^{n-3/2}
+%\label{eq:Gv-n+5-nlfs} \\
+%\vec{\bf v}^{*} & = & \vec{\bf v}^{n-1/2} + \frac{\Delta t}{dh^{n}} \left(
+%dh^{n-1}\vec{\bf G}_{\vec{\bf v}}^{(n)} + F_{\vec{\bf v}}^{n} \right)
+\vec{\bf v}^{*} & = & \vec{\bf v}^{n-1/2} + \Delta t \frac{dh^{n-1}}{dh^{n}} \left(
+\vec{\bf G}_{\vec{\bf v}}^{(n)} + F_{\vec{\bf v}}^{n}/dh^{n-1} \right)
+- \Delta t \nabla \phi_{hyd}^{n}
+\label{eq:vstar-nlfs} \\
+  \mathrm{update}\hspace{-4mm} & & \hspace{-4mm}\mathrm{
+  model~geometry~:~{\bf hFac}}(dh^n)\nonumber \\
+\eta^{n+1/2} \hspace{-2mm} & = & 
+\eta^{n-1/2} + \Delta t P^{n+1/2} - \Delta t
+  \nabla \cdot \int \vec{\bf v}^{n+1/2} dh^{n} \nonumber \\
+             & = & \eta^{n-1/2} + \Delta t P^{n+1/2} - \Delta t
+  \nabla \cdot \int \!\!\! \left( \vec{\bf v}^* - g \Delta t \nabla \eta^{n+1/2} \right) dh^{n}
+\label{eq:nstar-nlfs} \\
+\vec{\bf v}^{n+1/2}\hspace{-2mm} & = & 
+\vec{\bf v}^{*} - g \Delta t \nabla \eta^{n+1/2}
+\label{eq:v-n+1-nlfs} \\
+h^{n+1} & = & h^{n} + \Delta t P^{n+1/2} - \Delta t
+  \nabla \cdot \int \vec{\bf v}^{n+1/2} dh^{n}
+\label{eq:h-n+1-nlfs} \\
+G_{\theta}^{n} & = & G_{\theta} ( dh^{n}, u^{n+1/2}, \theta^{n} )
+\hspace{+2mm};\hspace{+2mm}
+G_{\theta}^{(n+1/2)} = \frac{3}{2} G_{\theta}^{n} - \frac{1}{2} G_{\theta}^{n-1}
+\label{eq:Gt-n-nlfs} \\
+%\theta^{n+1} & = &\theta^{n} + \frac{\Delta t}{dh^{n+1}} \left( dh^n 
+%G_{\theta}^{(n+1/2)} + Q^{n+1/2} + P^{n+1/2} (\theta_{\mathrm{rain}}-\theta^n) \right)
+\theta^{n+1} & = &\theta^{n} + \Delta t \frac{dh^n}{dh^{n+1}} \left( 
+G_{\theta}^{(n+1/2)}
++( P^{n+1/2} (\theta_{\mathrm{rain}}-\theta^n) + Q^{n+1/2})/dh^n \right)
+\nonumber \\
+& & \label{eq:t-n+1-nlfs}
+\end{eqnarray}
+%-------------------------------------------------------------
+Two steps have been added to linear free-surface algorithm 
+(eq. \ref{eq:Gv-n-staggered} to \ref{eq:t-n+1-staggered}):
+Firstly, the model ``geometry''
 (here the {\bf hFacC,W,S}) is updated just before entering {\it
-SOLVE\_FOR\_PRESSURE}, using the current $\eta$ field.  Then, at the
-end of the time step, the variables are advanced in time, so that
-$\eta^n$ replaces $\eta^{n-1}$.  At the next time step, the tracer
-tendency ($G_\theta$) is computed using the same geometry, which is
-now consistent with $\eta^{n-1}$.  Finally, in S/R {\it
-TIMESTEP\_TRACER}, the expansion/reduction ratio is applied to the
-surface level to compute the new tracer field.
+SOLVE\_FOR\_PRESSURE}, using the current $dh^{n}$ field.
+Secondly, the vertically integrated continuity equation 
+(eq.\ref{eq:h-n+1-nlfs}) has been added ({\bf exactConserv}{\em =TRUE},
+in parameter file {\em data}, namelist {\em PARM01})
+just before computing the vertical velocity, in subroutine
+{\em INTEGR\_CONTINUITY}. This ensures that tracer and continuity equation
+discretization  a Although this equation might appear 
+redundant with eq.\ref{eq:nstar-nlfs}, the integrated column
+thickness $h^{n+1}$ can be different from $\eta^{n+1/2} + H$~:
+\begin{itemize}
+\item when Crank-Nickelson time-stepping is used (see section
+\ref{sect:freesurf-CrankNick}).
+\item when filters are applied to the flow field, after
+(\ref{eq:v-n+1-nlfs}) and alter the divergence of the flow.
+\item when the solver does not iterate until convergence~;
+ for example, because a too large residual target was set
+ ({\bf cg2dTargetResidual}, parameter file {\em data}, namelist
+ {\em PARM02}).
+\end{itemize}\noindent
+In this staggered time-stepping algorithm, the momentum tendencies
+are computed using $dh^{n-1}$ geometry factors.
+(eq.\ref{eq:Gv-n-nlfs}) and then rescaled in subroutine {\it TIMESTEP},
+(eq.\ref{eq:vstar-nlfs}), similarly to tracer tendencies (see section
+\ref{sect:freesurf-tracer-advection}).
+The tracers are stepped forward later, using the recently updated
+flow field ${\bf v}^{n+1/2}$ and the corresponding model geometry
+$dh^{n}$ to compute the tendencies (eq.\ref{eq:Gt-n-nlfs});
+Then the tendencies are rescaled by $dh^n/dh^{n+1}$ to derive
+the new tracers values $(\theta,S)^{n+1}$ (eq.\ref{eq:t-n+1-nlfs},
+in subroutine {\em CALC\_GT, CALC\_GS}).
 
+Note that the fresh-water input is added in a consistent way in the 
+continuity equation and in the tracer equation, taking into account
+the fresh-water temperature $\theta_{\mathrm{rain}}$.
 
-\subsubsection{Free surface effect on the surface level thickness
-(Non-linear free surface): Momentum advection}     
-\label{sect:freesurf-momentum-advection}
+Regarding the restart procedure,
+two 2.D fields $h^{n-1}$ and $(h^n-h^{n-1})/\Delta t$ 
+in addition to the standard
+state variables and tendencies ($\eta^{n-1/2}$, ${\bf v}^{n-1/2}$,
+$\theta^n$, $S^n$, ${\bf G}_{\bf v}^{n-3/2}$, $G_{\theta,S}^{n-1}$)
+are stored in a "{\em pickup}" file.
+The model restarts reading this "{\em pickup}" file,
+then update the model geometry according to $h^{n-1}$,
+and compute $h^n$ and the vertical velocity
+%$h^n=h^{n-1} + \Delta t [(h^n-h^{n-1})/\Delta t]$,
+before starting the main calling sequence (eq.\ref{eq:phi-hyd-nlfs} 
+to \ref{eq:t-n+1-nlfs}, {\em S/R FORWARD\_STEP}).
+\\
 
-With the flux form formulation, advection of momentum
-can be treated exactly as the tracer advection is.
-Here the expansion/reduction factors ($hFacW^{n+1}/hFacW^n$ for $u$
-and $hFacS^{n+1}/hFacS^n$ for $v$) are simply applied in the
-subroutine {\it TIMESTEP}.
+\fbox{ \begin{minipage}{4.75in}
+{\em INTEGR\_CONTINUITY} ({\em integr\_continuity.F})
 
-Regarding momentum advection,
-the vector invariant formulation is similar to the
-advective form (as opposed to the flux form) and therefore
-does not need specific modification to include the 
-free surface effect on the surface level thickness.
-Updating the {\bf hFacC,W,S} and the {\bf recip\_hFac}(s) 
-at one given place (like describe before) is sufficient.
+$h^{n+1} -H_o$: {\bf etaH} ({\em DYNVARS.h})
 
-\subsubsection{Non-linear free surface and vertical resolution}
+$h^{n} -H_o$: {\bf etaHnm1} ({\em SURFACE.h})
+
+$h^{n+1}-h^{n}/\Delta t$: {\bf dEtaHdt} ({\em SURFACE.h})
+
+\end{minipage} }
+
+\subsubsection{Non-linear free-surface and vertical resolution}
 \label{sect:nonlin-freesurf-dz_surf}
 
 When the amplitude of the free-surface variations becomes
 as large as the vertical resolution near the surface,
 the surface layer thickness can decrease to nearly zero or
-can even vanishe completly. 
+can even vanish completely. 
 This later possibility has not been implemented, and a 
 minimum relative thickness is imposed ({\bf hFacInf}, 
 parameter file {\em data}, namelist {\em PARM01}) to prevent 
 numerical instabilities caused by very thin surface level.
 
-A better atlternative to the vanishing level problem has been 
+A better alternative to the vanishing level problem has been 
 found and implemented recently, and rely on a different 
 vertical coordinate $r^*$~:
 The time variation ot the total column thickness becomes
@@ -271,6 +422,6 @@ A complete description is given in \cite{adcroft:04}.
 
 The time-stepping implementation of the $r^*$ coordinate is
 identical to the non-linear free-surface in $r$ coordinate,
-and differences appear only in the spacial discretisation.
+and differences appear only in the spacial discretization.
 \marginpar{needs a subsection ref. here}
 
