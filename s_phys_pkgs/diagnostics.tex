@@ -6,14 +6,13 @@
 
 \subsection{Introduction}
 
-This section of the documentation describes the Diagnostics Utilities available within the GCM.  
-In addition to
-a description on how to set and extract diagnostic quantities, this document also provides a
-comprehensive list of all available diagnostic quantities and a short description of how they are
-computed.  It should be noted that this document is not intended to be a complete documentation
-of the various packages used in the GCM, and the reader should
-refer to original publications for further insight.
-
+This section of the documentation describes the Diagnostics Utilities available within 
+the GCM.  In addition to a description on how to set and extract diagnostic quantities, 
+this document also provides a comprehensive list of all available diagnostic quantities 
+and a short description of how they are computed.  It should be noted that this document 
+is not intended to be a complete documentation of the various packages used in the GCM, 
+and the reader should refer to original publications and the appropriate sections of this
+documentation for further insight.
 
 \subsection{Equations}
 Not relevant.
@@ -22,7 +21,7 @@ Not relevant.
 \label{sec:diagnostics:diagover}
 
 A large selection of model diagnostics is available in the GCM.  At the time of
-this writing there are 92 different diagnostic quantities which can be enabled for an
+this writing there are 280 different diagnostic quantities which can be enabled for an
 experiment.  As a matter of philosophy, no diagnostic is enabled as default, thus each user must
 specify the exact diagnostic information required for an experiment.  This is accomplished by
 enabling the specific diagnostic of interest cataloged in the 
@@ -68,9 +67,8 @@ Array & Value & Description \\
   parse(2)   & $\rightarrow$ U &  C-Grid U-Point                    \\ 
              & $\rightarrow$ V &  C-Grid V-Point                    \\ 
              & $\rightarrow$ M &  C-Grid Mass Point                 \\ 
-             & $\rightarrow$ Z &  C-Grid Vorticity Point            \\ \hline
-  parse(3)   & $\rightarrow$ R &  Computed on the Rotated Grid      \\ 
-             & $\rightarrow$ G &  Computed on the Geophysical Grid  \\ \hline
+             & $\rightarrow$ Z &  C-Grid Vorticity (Corner) Point   \\ \hline
+  parse(3)   & $\rightarrow$ R &  Not Currently in Use              \\ \hline
   parse(4)   & $\rightarrow$ P &  Positive Definite Diagnostic      \\ \hline
   parse(5)   & $\rightarrow$ C &  Counter Diagnostic                \\
              & $\rightarrow$ D &  Disabled Diagnostic for output    \\ \hline
@@ -82,14 +80,14 @@ Array & Value & Description \\
 \end{table}
 
 As an example, consider a diagnostic whose associated GDIAG parameter is equal
-to ``UUR 002''.  From GDIAG we can determine that this diagnostic is a 
-U-vector component located at the C-grid U-point within the Rotated framework.
+to ``UU  002''.  From GDIAG we can determine that this diagnostic is a 
+U-vector component located at the C-grid U-point.
 Its corresponding V-component diagnostic is located in Diagnostic \# 002.
 
 In this way, each Diagnostic in the model has its attributes (ie. vector or scalar,
-rotated or geophysical, A-Grid or C-grid, etc.) defined internally.  The Output routines
+A-Grid or C-grid, etc.) defined internally.  The Output routines
 use this information in order to determine
-what type of rotations and/or transformations need to be performed.  Thus, all Diagnostic
+what type of transformations need to be performed.  Thus, all Diagnostic
 interpolations are done at the time of output rather than during each model dynamic step.
 In this way the User now has more flexibility
 in determining the type of gridded data which is output.
@@ -160,28 +158,55 @@ where \>  NUM   \>= Diagnostic number from menu \\
 {\bf DIAGSIZE}:  We end this section with a discussion on the manner in which computer memory   
 is allocated for diagnostics.   
 All GCM diagnostic quantities are stored in the single
-diagnostic array QDIAG which is located in the DIAG COMMON, having the form:
+diagnostic array QDIAG which is located in diagnostics.h, and has the form:
 
-\begin{tabbing}
-XXXXXXXXX\=XXXXXX\= \kill
-\>        COMMON /DIAG/ NDIAG\_MAX,QDIAG(IM,JM,1) \\
-\\
-\end{tabbing}
+common /diagnostics/ qdiag(1-Olx,sNx+Olx,1-Olx,sNx+Olx,numdiags,Nsx,Nsy)
 
-where NDIAG\_MAX is an Integer variable which should be
+where numdiags is an Integer variable which should be
 set equal to the number of enabled diagnostics, and QDIAG is a three-dimensional
 array.  The first two-dimensions of QDIAG correspond to the horizontal dimension
 of a given diagnostic, while the third dimension of QDIAG is used to identify
 specific diagnostic types.
-In order to minimize the maximum memory requirement used by the model,
+In order to minimize the memory requirement of the model for diagnostics,
 the default GCM executable is compiled with room for only one horizontal
 diagnostic array, as shown in the above example.  
 In order for the User to enable more than 1 two-dimensional diagnostic,
-the size of the DIAG COMMON must be expanded to accomodate the desired diagnostics.
+the size of the diagnostics common must be expanded to accomodate the desired diagnostics.
 This can be accomplished by manually changing the parameter numdiags in the
-file \filelink{FORWARD\_STEP}{pkg-diagnostics-diagnostics_SIZE.h}, or by allowing the 
+file \filelink{pkg/diagnostics/diagnostics\_SIZE.h}{pkg-diagnostics-diagnostics_SIZE.h}, or by allowing the 
 shell script (???????) to make this
 change based on the choice of diagnostic output made in the namelist.
+
+\subsection{Usage Notes}
+\label{sec:diagnostics:usersguide}
+To use the diagnostics package, other than enabling it in packages.conf
+and turning the usediagnostics flag in data.pkg to .TRUE., a namelist
+must be supplied in the run directory called data.diagnostics. The namelist
+will activate a user-defined list of diagnostics quantities to be computed,
+specify the frequency of output, the number of levels, and the name of
+up to 10 separate output files. A sample data.diagnostics namelist file:
+
+\# Diagnostic Package Choices
+ \&diagnostics_list
+  frequency(1) = 10, \
+   levels(1,1) = 1.,2.,3.,4.,5., \
+   fields(1,1) = 'UVEL    ','VVEL    ', \
+   filename(1) = 'diagout1', \
+  frequency(2) = 100, \
+   levels(1,2) = 1.,2.,3.,4.,5., \
+   fields(1,2) = 'THETA   ','SALT    ', \
+   filename(2) = 'diagout2', \
+ \&end \
+
+In this example, there are two output files that will be generated
+for each tile and for each output time. The first set of output files
+has the prefix diagout1, does time averaging every 10 time steps,
+for fields which are multiple-level fields the levels output are 1-5,
+and the names of diagnostics quantities are UVEL and VVEL.
+The second set of output files
+has the prefix diagout2, does time averaging every 100 time steps,
+for fields which are multiple-level fields the levels output are 1-5,
+and the names of diagnostics quantities are THETA and SALT.
 
 \newpage
 
