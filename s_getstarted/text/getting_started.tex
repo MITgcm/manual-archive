@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.11 2001/12/04 18:08:34 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.12 2001/12/05 15:49:39 adcroft Exp $
 % $Name:  $
 
 %\section{Getting started}
@@ -116,17 +116,80 @@ The tar file still contains CVS information which we urge you not to
 delete; even if you do not use CVS yourself the information can help
 us if you should need to send us your copy of the code.
 
+\paragraph*{Upgrading from an earlier version}
+
+If you already have an earlier version of the code you can ``upgrade''
+your copy instead of downloading the entire repository again. First,
+``cd'' (change directory) to the top of your working copy:
+\begin{verbatim}
+% cd MITgcm
+\end{verbatim}
+and then issue the cvs update command:
+\begin{verbatim}
+% cvs -q update -r release1_beta1 -d -P
+\end{verbatim}
+This will update the ``tag'' to ``release1\_beta1'', add any new
+directories (-d) and remove any empty directories (-P). The -q option
+means be quiet which will reduce the number of messages you'll see in
+the terminal. If you have modified the code prior to upgrading, CVS
+will try to merge your changes with the upgrades. If there is a
+conflict between your modifications and the upgrade, it will report
+that file with a ``C'' in front, e.g.:
+\begin{verbatim}
+C model/src/ini_parms.F
+\end{verbatim}
+If the list of conflicts scrolled off the screen, you can re-issue the
+cvs update command and it will report the conflicts. Conflicts are
+indicated in the code by the delimites ``<<<<<<<'', ``======='' and
+``>>>>>>>''. For example,
+\begin{verbatim}
+<<<<<<< ini_parms.F
+     & bottomDragLinear,myOwnBottomDragCoefficient,
+=======
+     & bottomDragLinear,bottomDragQuadratic,
+>>>>>>> 1.18
+\end{verbatim}
+means that you added ``myOwnBottomDragCoefficient'' to a namelist at
+the same time and place that we added ``bottomDragQuadratic''. You
+need to resolve this conflict and in this case the line should be
+changed to:
+\begin{verbatim}
+     & bottomDragLinear,bottomDragQuadratic,myOwnBottomDragCoefficient,
+\end{verbatim}
+and the lines with the delimiters (<<<<<<,======,>>>>>>) be deleted.
+Unless you are making modifications which exactly parallel
+developments we make, these types of conflicts should be rare.
+
+\paragraph*{Upgrading to the current pre-release version}
+
+We don't make a ``release'' for every little patch and bug fix in
+order to keep the frequency of upgrades to a minimum. However, if you
+have run into a problem for which ``we have already fixed in the
+latest code'' and we haven't made a ``tag'' or ``release'' since that
+patch then you'll need to get the latest code:
+\begin{verbatim}
+% cvs -q update -A -d -P
+\end{verbatim}
+Unlike, the ``check-out'' and ``update'' procedures above, there is no
+``tag'' or release name. The -A tells CVS to upgrade to the
+very latest version. As a rule, we don't recommend this since you
+might upgrade while we are in the processes of checking in the code so
+that you may only have part of a patch. Using this method of updating
+also means we can't tell what version of the code you are working
+with. So please be sure you understand what you're doing.
+
 \section{Model and directory structure}
 
-The ``numerical'' model is contained within a execution environment support
-wrapper. This wrapper is designed to provide a general framework for
-grid-point models. MITgcmUV is a specific numerical model that uses the
-framework. Under this structure the model is split into execution
-environment support code and conventional numerical model code. The
-execution environment support code is held under the \textit{eesupp}
-directory. The grid point model code is held under the \textit{model}
-directory. Code execution actually starts in the \textit{eesupp} routines
-and not in the \textit{model} routines. For this reason the top-level 
+The ``numerical'' model is contained within a execution environment
+support wrapper. This wrapper is designed to provide a general
+framework for grid-point models. MITgcmUV is a specific numerical
+model that uses the framework. Under this structure the model is split
+into execution environment support code and conventional numerical
+model code. The execution environment support code is held under the
+\textit{eesupp} directory. The grid point model code is held under the
+\textit{model} directory. Code execution actually starts in the
+\textit{eesupp} routines and not in the \textit{model} routines. For
+this reason the top-level
 \textit{MAIN.F} is in the \textit{eesupp/src} directory. In general,
 end-users should not need to worry about this level. The top-level routine
 for the numerical part of the code is in \textit{model/src/THE\_MODEL\_MAIN.F%
