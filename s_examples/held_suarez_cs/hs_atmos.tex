@@ -1,7 +1,8 @@
-% $Header: /u/gcmpack/manual/s_examples/held_suarez_cs/Attic/hs_atmos.tex,v 1.3 2003/08/07 18:27:52 edhill Exp $
+% $Header: /u/gcmpack/manual/s_examples/held_suarez_cs/Attic/hs_atmos.tex,v 1.4 2004/10/12 17:14:02 cnh Exp $
 % $Name:  $
 
-\section{Held-Suarez Atmospheric Simulation at 2.8$^\circ$ Resolution}
+\section{Held-Suarez forcing atmospheric simulation on a latitude-longitude grid 2.8$^\circ$ resolution and on
+a cube-sphere grid with 32 square cube faces.}
 \label{www:tutorials}
 \label{sect:eg-hs}
 
@@ -20,23 +21,31 @@
 \subsection{Introduction}
 \label{www:tutorials}
 
-This document describes the third example MITgcm experiment. The first
-two examples illustrated how to configure the code for hydrostatic idealized
-geophysical fluids simulations. This example illustrates the use of
-the MITgcm for large scale ocean circulation simulation.
+This example illustrates the use of the MITgcm for large scale atmospheric 
+circulation simulation. Two simulations are described
+\begin{itemize}
+\item global atmospheric circulation on a latitude-longitude grid and 
+\item global atmospheric circulation on a cube-sphere grid
+\end{itemize}
+The examples show how to use the isomorphic 'p-coordinate' scheme in
+MITgcm to enable atmospheric simulation.
+
+
 
 \subsection{Overview}
 \label{www:tutorials}
 
 This example experiment demonstrates using the MITgcm to simulate
-the planetary ocean circulation. The simulation is configured
-with realistic geography and bathymetry on a
-$4^{\circ} \times 4^{\circ}$ spherical polar grid.
-Twenty levels are used in the vertical, ranging in thickness
-from $50\,{\rm m}$ at the surface to $815\,{\rm m}$ at depth,
-giving a maximum model depth of $6\,{\rm km}$.
+the planetary atmospheric circulation in two different ways. 
+In both cases the simulation is configured with flat orography.
+In the first case shown a $2.8^{\circ} \times 2.8^{\circ}$ spherical polar 
+horizontal grid is employed. In the second case a cube-sphere horizontal
+grid is used that projects a cube with face size of $32 \times 32$ onto a
+sphere.
+Five pressurce corrdinate levels are used in the vertical, ranging in thickness
+from $100\,{\rm mb}$ at the bottom of the atmosphere to $300\,{\rm mb}$ in the middle atmosphere.
 At this resolution, the configuration
-can be integrated forward for thousands of years on a single 
+can be integrated forward for many years on a single 
 processor desktop computer.
 \\
 
