@@ -1,40 +1,49 @@
-% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.3 2001/10/11 19:18:41 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.4 2001/10/15 19:35:11 adcroft Exp $
 % $Name:  $
 
-\section{Getting started}
+%\section{Getting started}
 
-In this part, we describe how to use the model. In the first section, we
-provide enough information to help you get started with the model. We
-believe the best way to familiarize yourself with the model is to run the
-case study examples provided with the base version. Information on how to
-obtain, compile, and run the code is found there as well as a brief
-description of the model structure directory and the case study examples.
-The latter and the code structure are described more fully in sections 2 and
-3, respectively. In section 4, we provide information on how to customize
-the code when you are ready to try implementing the configuration you have
-in mind.
+In this section, we describe how to use the model. In the first
+section, we provide enough information to help you get started with
+the model. We believe the best way to familiarize yourself with the
+model is to run the case study examples provided with the base
+version. Information on how to obtain, compile, and run the code is
+found there as well as a brief description of the model structure
+directory and the case study examples.  The latter and the code
+structure are described more fully in chapters
+\ref{chap:discretization} and \ref{chap:sarch}, respectively. Here, in
+this section, we provide information on how to customize the code when
+you are ready to try implementing the configuration you have in mind.
 
-\subsection{Obtaining the code}
+\section{Where to find information}
+\label{sect:whereToFindInfo}
 
-The reference web site for the model is:
+A web site is maintained for release 1 (Sealion) of MITgcm:
 \begin{verbatim}
-http://mitgcm.org
+http://mitgcm.org/sealion
 \end{verbatim}
+Here you will find an on-line version of this document, a
+``browsable'' copy of the code and a searchable database of the model
+and site, as well as links for downloading the model and
+documentation, to data-sources and other related sites.
 
-On this site, you can download the model as well as find useful information,
-some of which might overlap with what is written here. There is also a
-support news group for the model located at (send your message to \texttt{%
-support@mitgcm.org}):
+There is also a support news group for the model that you can email at
+\texttt{support@mitgcm.org} or browse at:
 \begin{verbatim}
 news://mitgcm.org/mitgcm.support
 \end{verbatim}
+A mail to the email list will reach all the developers and be archived
+on the newsgroup. A users email list will be established at some time
+in the future.
+
+
+\section{Obtaining the code}
+\label{sect:obtainingCode}
 
 If CVS is available on your system, we strongly encourage you to use it. CVS
 provides an efficient and elegant way of organizing your code and keeping
 track of your changes. If CVS is not available on your machine, you can also
 download a tar file.
-
-\subsubsection{Using CVS}
 
 Before you can use CVS, the following environment variable has to be set in
 your .cshrc or .tcshrc:
@@ -62,14 +71,19 @@ or the latest development version:
 % cvs co -d directory -P MITgcm
 \end{verbatim}
 
-\subsubsection{other methods}
+\paragraph*{Conventional download method}
+\label{sect:conventionalDownload}
 
-You can download the model as a tar file from the reference web site at:
+If you do not have CVS on your system, you can download the model as a
+tar file from the reference web site at:
 \begin{verbatim}
 http://mitgcm.org/download/
 \end{verbatim}
+The tar file still contains CVS information which we urge you not to
+delete; even if you do not use CVS yourself the information can help
+us if you should need to send us your copy of the code.
 
-\subsection{Model and directory structure}
+\section{Model and directory structure}
 
 The ``numerical'' model is contained within a execution environment support
 wrapper. This wrapper is designed to provide a general framework for
@@ -119,18 +133,19 @@ the makefile specific to the Tangent linear and Adjoint Compiler (TAMC) that
 generates the adjoint code. The latter is described in details in part V.
 
 \item \textit{utils}: this directory contains various utilities. The
-subdirectory \textit{knudsen2} contains code and a makefile that compute
-coefficients of the polynomial approximation to the knudsen formula for an
-ocean nonlinear equation of state. The \textit{matlab} subdirectory contains
-matlab scripts for reading model output directly into matlab. \textit{scripts%
-} contains C-shell post-processing scripts for joining processor-based and
-tiled-based model output.
+subdirectory \textit{knudsen2} contains code and a makefile that
+compute coefficients of the polynomial approximation to the knudsen
+formula for an ocean nonlinear equation of state. The \textit{matlab}
+subdirectory contains matlab scripts for reading model output directly
+into matlab. \textit{scripts} contains C-shell post-processing
+scripts for joining processor-based and tiled-based model output.
 
 \item \textit{verification}: this directory contains the model examples. See
-below.
+section \ref{sect:modelExamples}.
 \end{itemize}
 
-\subsection{Model examples}
+\section{Example experiments}
+\label{sect:modelExamples}
 
 Now that you have successfully downloaded the model code we recommend that
 you first try to run the examples provided with the base version. You will
@@ -139,7 +154,7 @@ you will use eventually. The examples are located in subdirectories under
 the directory \textit{verification} and are briefly described below (a full
 description is given in section 2):
 
-\subsubsection{List of model examples}
+\subsection{List of model examples}
 
 \begin{itemize}
 \item \textit{exp0} - single layer, ocean double gyre (barotropic with
@@ -193,7 +208,7 @@ Molteni physics package. Global configuration, 128x64x5 resolution.
 \item \textit{adjustment.cs-32x32x1}
 \end{itemize}
 
-\subsubsection{Directory structure of model examples}
+\subsection{Directory structure of model examples}
 
 Each example directory has the following subdirectories:
 
@@ -245,9 +260,165 @@ comparison with your own output when you run the experiment.
 Once you have chosen the example you want to run, you are ready to compile
 the code.
 
-\subsection{Compiling the code}
+\section{Building the code}
+\label{sect:buildingCode}
 
-\subsubsection{The script \textit{genmake}}
+To compile the code, we use the {\em make} program. This uses a file
+({\em Makefile}) that allows us to pre-process source files, specify
+compiler and optimization options and also figures out any file
+dependancies. We supply a script ({\em genmake}), described in section
+\ref{sect:genmake}, that automatically creates the {\em Makefile} for
+you. You then need to build the dependancies and compile the code.
+
+As an example, let's assume that you want to build and run experiment
+\textit{verification/exp2}. The are multiple ways and places to actually
+do this but here let's build the code in
+\textit{verification/exp2/input}:
+\begin{verbatim}
+% cd verification/exp2/input
+\end{verbatim}
+First, build the {\em Makefile}:
+\begin{verbatim}
+% ../../../tools/genmake -mods=../code
+\end{verbatim}
+The command line option tells {\em genmake} to override model source
+code with any files in the directory {\em ./code/}.
+
+If there is no \textit{.genmakerc} in the \textit{input} directory, you have
+to use the following options when invoking \textit{genmake}:
+\begin{verbatim}
+% ../../../tools/genmake  -mods=../code
+\end{verbatim}
+
+Next, create the dependancies:
+\begin{verbatim}
+% make depend
+\end{verbatim}
+This modifies {\em Makefile} by attaching a [long] list of files on
+which other files depend. The purpose of this is to reduce
+re-compilation if and when you start to modify the code. {\tt make
+depend} also created links from the model source to this directory.
+
+Now compile the code:
+\begin{verbatim}
+% make
+\end{verbatim}
+The {\tt make} command creates an executable called \textit{mitgcmuv}.
+
+Now you are ready to run the model. General instructions for doing so are
+given in section \ref{sect:runModel}. Here, we can run the model with:
+\begin{verbatim}
+./mitgcmuv > output.txt
+\end{verbatim}
+where we are re-directing the stream of text output to the file {\em
+output.txt}.
+
+
+\subsection{Building/compiling the code elsewhere}
+
+In the example above (section \ref{sect:buildingCode}) we built the
+executable in the {\em input} directory of the experiment for
+convenience. You can also configure and compile the code in other
+locations, for example on a scratch disk with out having to copy the
+entire source tree. The only requirement to do so is you have {\tt
+genmake} in your path or you know the absolute path to {\tt genmake}.
+
+The following sections outline some possible methods of organizing you
+source and data.
+
+\subsubsection{Building from the {\em ../code directory}}
+
+This is just as simple as building in the {\em input/} directory:
+\begin{verbatim}
+% cd verification/exp2/code
+% ../../../tools/genmake
+% make depend
+% make
+\end{verbatim}
+However, to run the model the executable ({\em mitgcmuv}) and input
+files must be in the same place. If you only have one calculation to make:
+\begin{verbatim}
+% cd ../input
+% cp ../code/mitgcmuv ./
+% ./mitgcmuv > output.txt
+\end{verbatim}
+or if you will be making muliple runs with the same executable:
+\begin{verbatim}
+% cd ../
+% cp -r input run1
+% cp code/mitgcmuv run1
+% cd run1
+% ./mitgcmuv > output.txt
+\end{verbatim}
+
+\subsubsection{Building from a new directory}
+
+Since the {\em input} directory contains input files it is often more
+useful to keep {\em input} prestine and build in a new directory
+within {\em verification/exp2/}:
+\begin{verbatim}
+% cd verification/exp2
+% mkdir build
+% cd build
+% ../../../tools/genmake -mods=../code
+% make depend
+% make
+\end{verbatim}
+This builds the code exactly as before but this time you need to copy
+either the executable or the input files or both in order to run the
+model. For example,
+\begin{verbatim}
+% cp ../input/* ./
+% ./mitgcmuv > output.txt
+\end{verbatim}
+or if you tend to make multiple runs with the same executable then
+running in a new directory each time might be more appropriate:
+\begin{verbatim}
+% cd ../
+% mkdir run1
+% cp build/mitgcmuv run1/
+% cp input/* run1/
+% cd run1
+% ./mitgcmuv > output.txt
+\end{verbatim}
+
+\subsubsection{Building from on a scratch disk}
+
+Model object files and output data can use up large amounts of disk
+space so it is often the case that you will be operating on a large
+scratch disk. Assuming the model source is in {\em ~/MITgcm} then the
+following commands will build the model in {\em /scratch/exp2-run1}:
+\begin{verbatim}
+% cd /scratch/exp2-run1
+% ~/MITgcm/tools/genmake -rootdir=~/MITgcm -mods=~/MITgcm/verification/exp2/code
+% make depend
+% make
+\end{verbatim}
+To run the model here, you'll need the input files:
+\begin{verbatim}
+% cp ~/MITgcm/verification/exp2/input/* ./
+% ./mitgcmuv > output.txt
+\end{verbatim}
+
+As before, you could build in one directory and make multiple runs of
+the one experiment:
+\begin{verbatim}
+% cd /scratch/exp2
+% mkdir build
+% cd build
+% ~/MITgcm/tools/genmake -rootdir=~/MITgcm -mods=~/MITgcm/verification/exp2/code
+% make depend
+% make
+% cd ../
+% cp -r ~/MITgcm/verification/exp2/input run2
+% cd run2
+% ./mitgcmuv > output.txt
+\end{verbatim}
+
+
+
+\subsection{\textit{genmake}}
+\label{sect:genmake}
 
 To compile the code, use the script \textit{genmake} located in the \textit{%
 tools} directory. \textit{genmake} is a script that generates the makefile.
@@ -348,53 +519,37 @@ For some of the examples, there is a file called \textit{.genmakerc} in the
 that particular example. In this way you don't need to type the options when
 invoking \textit{genmake}.
 
-\subsubsection{Compiling}
 
-Let's assume that you want to run, say, example \textit{exp2} in the \textit{%
-input} directory. To compile the code, type the following commands from the
-model root tree:
+\section{Running the model}
+\label{sect:runModel}
+
+If compilation finished succesfuully (section \ref{sect:buildModel})
+then an executable called {\em mitgcmuv} will now exist in the local
+directory.
+
+To run the model as a single process (ie. not in parallel) simply
+type:
 \begin{verbatim}
-% cd verification/exp2/input
-% ../../../tools/genmake
-% make depend
-% make
+% ./mitgcmuv
+\end{verbatim}
+The ``./'' is a safe-guard to make sure you use the local executable
+in case you have others that exist in your path (surely odd if you
+do!). The above command will spew out many lines of text output to
+your screen.  This output contains details such as parameter values as
+well as diagnostics such as mean Kinetic energy, largest CFL number,
+etc. It is worth keeping this text output with the binary output so we
+normally re-direct the {\em stdout} stream as follows:
+\begin{verbatim}
+% ./mitgcmuv > output.txt
 \end{verbatim}
 
-If there is no \textit{.genmakerc} in the \textit{input} directory, you have
-to use the following options when invoking \textit{genmake}:
-\begin{verbatim}
-% ../../../tools/genmake  -mods=../code
-\end{verbatim}
+For the example experiments in {\em vericication}, an example of the
+output is kept in {\em results/output.txt} for comparison. You can compare
+your {\em output.txt} with this one to check that the set-up works.
 
-In addition, you will probably want to disable some of the packages. Taking
-again the case of \textit{exp2}, the full \textit{genmake} command will
-probably look like this:
-\begin{verbatim}
-% ../../../tools/genmake  -mods=../code  -disable=kpp,gmredi,aim,...
-\end{verbatim}
 
-The make command creates an executable called \textit{mitgcmuv}.
 
-Note that you can compile and run the code in another directory than \textit{%
-input}. You just need to make sure that you copy the input data files into
-the directory where you want to run the model. For example to compile from 
-\textit{code}:
-\begin{verbatim}
-% cd verification/exp2/code
-% ../../../tools/genmake
-% make depend
-% make
-\end{verbatim}
-
-\subsection{Running the model}
-
-The first thing to do is to run the code by typing \textit{mitgcmuv} and see
-what happens. You can compare what you get with what is in the \textit{%
-results} directory. Unless noted otherwise, most examples are set up to run
-for a few time steps only so that you can quickly figure out whether the
-model is working or not.
-
-\subsubsection{Output files}
+\subsection{Output files}
 
 The model produces various output files. At a minimum, the instantaneous
 ``state'' of the model is written out, which is made of the following files:
@@ -445,7 +600,7 @@ as the pickup files but are named differently. Their name contain the chain
 used to restart the model but are overwritten every other time they are
 output to save disk space during long integrations.
 
-\subsubsection{Looking at the output}
+\subsection{Looking at the output}
 
 All the model data are written according to a ``meta/data'' file format.
 Each variable is associated with two files with suffix names \textit{.data}
@@ -459,11 +614,22 @@ written in this format. The matlab scripts are located in the directory
 \textit{utils/matlab} under the root tree. The script \textit{rdmds.m} reads
 the data. Look at the comments inside the script to see how to use it.
 
-\section{Code structure}
+Some examples of reading and visualizing some output in {\em Matlab}:
+\begin{verbatim}
+% matlab
+>> H=rdmds('Depth');
+>> contourf(H');colorbar;
+>> title('Depth of fluid as used by model');
+
+>> eta=rdmds('Eta',10);
+>> imagesc(eta');axis ij;colorbar;
+>> title('Surface height at iter=10');
+
+>> eta=rdmds('Eta',[0:10:100]);
+>> for n=1:11; imagesc(eta(:,:,n)');axis ij;colorbar;pause(.5);end
+\end{verbatim}
 
 \section{Doing it yourself: customizing the code}
-
-\subsection{\protect\bigskip Configuration and setup}
 
 When you are ready to run the model in the configuration you want, the
 easiest thing is to use and adapt the setup of the case studies experiment
@@ -472,6 +638,8 @@ amount of setup will be minimized. In this section, we focus on the setup
 relative to the ''numerical model'' part of the code (the setup relative to
 the ''execution environment'' part is covered in the parallel implementation
 section) and on the variables and parameters that you are likely to change.
+
+\subsection{\protect\bigskip Configuration and setup}
 
 The CPP keys relative to the ''numerical model'' part of the code are all
 defined and set in the file \textit{CPP\_OPTIONS.h }in the directory \textit{%
@@ -489,7 +657,7 @@ In what follows the parameters are grouped into categories related to the
 computational domain, the equations solved in the model, and the simulation
 controls.
 
-\subsubsection{Computational domain, geometry and time-discretization}
+\subsection{Computational domain, geometry and time-discretization}
 
 \begin{itemize}
 \item dimensions
@@ -581,7 +749,7 @@ parameter is set through the variable \textbf{abEps }(dimensionless). The
 stagger baroclinic time stepping can be activated by setting the logical
 variable \textbf{staggerTimeStep }to '.\texttt{TRUE}.'.
 
-\subsubsection{Equation of state}
+\subsection{Equation of state}
 
 First, because the model equations are written in terms of perturbations, a
 reference thermodynamic state needs to be specified. This is done through
@@ -610,7 +778,7 @@ available in the same directory and you will need to edit the number and the
 values of the vertical levels in \textit{knudsen2.f }so that they match
 those of your configuration). \textit{\ }
 
-\subsubsection{Momentum equations}
+\subsection{Momentum equations}
 
 In this section, we only focus for now on the parameters that you are likely
 to change, i.e. the ones relative to forcing and dissipation for example.
@@ -714,7 +882,7 @@ geopotential (for the atmosphere) you need to set the logical variables
 \texttt{TRUE}.' and the other to '.\texttt{FALSE}.' depending on how you
 want to deal with the ocean upper or atmosphere lower boundary).
 
-\subsubsection{Tracer equations}
+\subsection{Tracer equations}
 
 This section covers the tracer equations i.e. the potential temperature
 equation and the salinity (for the ocean) or specific humidity (for the
@@ -805,7 +973,7 @@ wish the tracer vertical diffusivities to have when mixing tracers
 vertically due to static instabilities. Note that \textbf{cadjFreq }and 
 \textbf{ivdc\_kappa }can not both have non-zero value.
 
-\subsubsection{Simulation controls}
+\subsection{Simulation controls}
 
 The model ''clock'' is defined by the variable \textbf{deltaTClock }(in s)
 which determines the IO frequencies and is used in tagging output.
