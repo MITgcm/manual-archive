@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/spatial-discrete.tex,v 1.7 2001/09/26 21:59:33 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/spatial-discrete.tex,v 1.8 2001/09/28 14:09:55 adcroft Exp $
 % $Name:  $
 
 \section{Spatial discretization of the dynamical equations}
@@ -17,13 +17,13 @@ horizontal and veritical directions as seperable and differently.
 
 The finite volume method is used to discretize the equations in
 space. The expression ``finite volume'' actually has two meanings; one
-is the method of cut or instecting boundaries (shaved or lopped cells
-in our terminology) and the other is non-linear interpolation methods
-that can deal with non-smooth solutions such as shocks (i.e. flux
-limiters for advection). Both make use of the integral form of the
-conservation laws to which the {\it weak solution} is a solution on
-each finite volume of (sub-domain). The weak solution can be
-constructed outof piece-wise constant elements or be
+is the method of embedded or intersecting boundaries (shaved or lopped
+cells in our terminology) and the other is non-linear interpolation
+methods that can deal with non-smooth solutions such as shocks
+(i.e. flux limiters for advection). Both make use of the integral form
+of the conservation laws to which the {\it weak solution} is a
+solution on each finite volume of (sub-domain). The weak solution can
+be constructed out of piece-wise constant elements or be
 differentiable. The differentiable equations can not be satisfied by
 piece-wise constant functions.
 

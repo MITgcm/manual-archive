@@ -170,6 +170,23 @@ In the instance that $\kappa_{GM} = \kappa_{\rho}$ then
 which differs from the variable laplacian diffusion tensor by only
 two non-zero elements in the $z$-row.
 
+\fbox{ \begin{minipage}{4.75in}
+{\em S/R GMREDI\_CALC\_TENSOR} ({\em pkg/gmredi/gmredi\_calc\_tensor.F})
+
+$\sigma_x$: {\bf SlopeX} (argument on entry)
+
+$\sigma_y$: {\bf SlopeY} (argument on entry)
+
+$\sigma_z$: {\bf SlopeY} (argument)
+
+$S_x$: {\bf SlopeX} (argument on exit)
+
+$S_y$: {\bf SlopeY} (argument on exit)
+
+\end{minipage} }
+
+
+
 \subsection{Variable $\kappa_{GM}$}
 
 Visbeck et al., 1996, suggest making the eddy coefficient,
@@ -218,6 +235,23 @@ $\sigma_z$: {\bf dSigmadRReal} (argument)
 $z_\sigma^{*}$: {\bf dRdSigmaLtd} (argument)
 
 \end{minipage} }
+
+\begin{figure}
+\begin{center}
+\resizebox{5.0in}{3.0in}{\includegraphics{part6/tapers.eps}}
+\end{center}
+\caption{Taper functions used in GKW91 and DM95.}
+\label{fig:tapers}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\resizebox{5.0in}{3.0in}{\includegraphics{part6/effective_slopes.eps}}
+\end{center}
+\caption{Effective slope as a function of ``true'' slope using Cox
+slope clipping, GKW91 limiting and DM95 limiting.}
+\label{fig:effective_slopes}
+\end{figure}
 
 
 \subsubsection{Slope clipping}
@@ -326,6 +360,7 @@ GM\_tap\-er\_scheme = 'ldd97'} in {\em data.gmredi}.
 
 
 
+
 \begin{figure}
 %\includegraphics{mixedlayer-cox.eps}
 %\includegraphics{mixedlayer-diff.eps}
@@ -334,187 +369,6 @@ clipping and for comparison b) using horizontal constant diffusion.}
 \ref{fig-mixedlayer}
 \end{figure}
 
-\begin{figure}
-%\includegraphics{slopelimits.eps}
-\caption{Effective slope as a function of ``true'' slope using a) Cox
-slope clipping, b) GKW91 limiting, c) DM95 limiting and d) LDD97
-limiting.}
-\end{figure}
 
-
-%\begin{figure}
-%\includegraphics{coxslope.eps}
-%\includegraphics{gkw91slope.eps}
-%\includegraphics{dm95slope.eps}
-%\includegraphics{ldd97slope.eps}
-%\caption{Effective slope magnitude at 100~m depth evaluated using a)
-%Cox slope clipping, b) GKW91 limiting, c) DM95 limiting and d) LDD97
-%limiting.}
-%\end{figure}
-
-\section{Discretisation and code}
-
-This is the old documentation.....has to be brought upto date with MITgcm.
-
-
-The Gent-McWilliams-Redi parameterization is implemented through the
-package ``gmredi''. There are two necessary calls to ``gmredi''
-routines other than initialization; 1) to calculate the slope tensor
-as a function of the current model state ({\bf gmredi\_calc\_tensor})
-and 2) evaluation of the lateral and vertical fluxes due to gradients
-along isopycnals or bolus transport ({\bf gmredi\_xtransport}, {\bf
-gmredi\_ytransport} and {\bf gmredi-rtransport}).
-
-Each element of the tensor is discretised to be adiabatic and so that
-there would be no flux if the gmredi operator is applied to buoyancy.
-To acheive this we have to consider both these constraints for each
-row of the tensor, each row corresponding to a 'u', 'v' or 'w' point
-on the model grid. 
-
-The code that implements the Redi/GM/Griffies schemes involves an
-original core routine {\bf inc\_tracer()} that is used to calculate
-the tendency in the tracers (namely, salt and potential temperature)
-and a new routine {\bf RediTensor()} that calculates the tensor
-components and $\kappa_{GM}$.
-
-\subsection{subroutine RediTensor()}
-
-{\small
-\begin{verbatim}
-subroutine RediTensor(Temp,Salt,Kredigm,K31,K32,K33, nIter,DumpFlag)
-                      |---in--| |-------out-------|
-! Input
-real Temp(Nx,Ny,Nz)     ! Potential temperature
-real Salt(Nx,Ny,Nz)     ! Salinity
-! Output
-real Kredigm(Nx,Ny,Nz)  ! Redi/GM eddy coefficient
-real K31(Nx,Ny,Nz)      ! Redi/GM (3,1) tensor component
-real K32(Nx,Ny,Nz)      ! Redi/GM (3,2) tensor component
-real K33(Nx,Ny,Nz)      ! Redi/GM (3,3) tensor component
-! Auxiliary input
-integer nIter           ! interation/time-step number
-logical DumpFlag        ! flag to indicate routine should ``dump''
-\end{verbatim}
-}
-
-The subroutine {\bf RediTensor()} is called from {\bf model()} with
-input arguments $T$ and $S$. It returns the 3D-arrays {\tt Kredigm},
-{\t K31}, {\tt K32} and {\tt K33} which represent $\kappa_{GM}$ (at
-$T/S$ points) and the three components of the bottom row in the
-Redi/GM tensor; $2 S_x$, $2 S_y$ and $|S|^2$ respectively, all at $W$
-points.
-
-The discretisations and algorithm within {\bf RediTensor()} are as
-follows.  The routine first calculates the locally reference potential
-density $\sigma_\theta$ from $T$ and $S$ and calculates the potential
-density gradients in subroutine {\bf gradSigma()}:
-
-\centerline{\begin{tabular}{ccl}
-& & \\
-Array & Grid-point & Definition \\
-{\tt SigX} & U &
-$\sigma_x = \frac{1}{\Delta x} \delta_x \sigma|_{z(k)}$
-\\
-{\tt SigY} & V &
-$\sigma_y = \frac{1}{\Delta y} \delta_y \sigma|_{z(k)}$
-\\
-{\tt SigZ} & W &
-$\sigma_z = \frac{1}{\Delta z}
-[ \sigma|_{z(k)}(k-1/2) - \sigma|_{z(k)}(k+1/2) ]$
-\\
-\\
-\end{tabular}}
-
-Note that $\sigma_z$ is the static stability because the potential
-densities are referenced to the same reference level ($W$-level).
-
-The next step calculates the three tensor components {\tt K13}, {\tt
-K23} and {\tt K33} in subroutine {\bf KtensorWface()}. First, the
-lateral gradients $\sigma_x$ and $\sigma_y$ are interpolated to the
-$W$ points and stored in intermediate variables:
-\begin{eqnarray*}
-\mbox{\tt Sx} & = & \overline{ \overline{ \sigma_x }^x }^z \\
-\mbox{\tt Sy} & = & \overline{ \overline{ \sigma_y }^y }^z
-\end{eqnarray*}
-Next, the magnitude of ${\bf \nabla}_z \sigma$ is stored in an intermediate
-variable:
-\begin{displaymath}
-\mbox{\tt Sxy2} = \sqrt{ {\tt Sx}^2 + {\tt Sy}^2 }
-\end{displaymath}
-The stratification ($\sigma_z$) is ``checked'' such that the slope
-vector has magnitude less than or equal to {\tt Smax} and stored in
-an intermediate variable:
-\begin{displaymath}
-\mbox{\tt Sz} = \max ( \sigma_z , - \mbox{\tt Sxy2/Smax} )
-\end{displaymath}
-This guarantees stability and at the same time retains the lateral
-orientation of the slope vector. The tensor components are then calculated:
-\begin{eqnarray*}
-\mbox{\tt K13} & = & -2 {\tt Sx/Sz} \\
-\mbox{\tt K23} & = & -2 {\tt Sx/Sz} \\
-\mbox{\tt K33} & = & ({\tt Sx/Sz})^2 + ({\tt Sy/Sz})^2
-\end{eqnarray*}
-
-Finally, {\tt Kredigm} ($\kappa_{GM}$) is calculated in subroutine
-{\bf GMRediCoefficient()}. First, all the gradients are interpolated
-to the $T/S$ points and stored in intermediate variables:
-\begin{eqnarray*}
-\mbox{\tt Sx} & = & \overline{ \sigma_x }^x \\
-\mbox{\tt Sy} & = & \overline{ \sigma_y }^y \\
-\mbox{\tt Sz} & = & \overline{ \sigma_z }^z
-\end{eqnarray*}
-Again, a nominal stratification is found by ``check'' the magnitude of
-the slope vector but here is converted to a Brunt-Vasala frequency:
-\begin{eqnarray*}
-{\tt M2} & = & \sqrt{ {\tt Sx}^2 + {\tt Sy}^2} \\
-{\tt N2} & = & - \frac{g}{\rho_o} \max ( {\tt Sz} , -{\tt M2 / Smax}
-\end{eqnarray*}
-The magnitude of the slope is then $|S| = {\tt M2}/{\tt N2}$. The Eady
-growth rate is defined as $|f|/\sqrt(Ri) = |S| N$ and is calculated
-as:
-\begin{displaymath}
-{\tt FrRi} = \frac{\tt M2}{\tt N2} ( - \frac{g}{\rho} {\tt Sz} )
-\end{displaymath}
-The Eady growth rate is then averaged over the upper layers (about
-1100m) and $\kappa_{GM}$ specified from this 2D-variable:
-\begin{displaymath}
-{\tt Kredigm} = 0.02 * (200d3 **2) * {\tt FrRi}
-\end{displaymath}
-
-\subsection{subroutine inc\_tracer()}
-
-{\bf inc\-tracer()} is called from {\bf model()} and has {\em four
-new} arguments:
-\begin{verbatim}
-subroutine inc_tracer( ...,Kredigm,K31,K32,K33, ... )
-real Kredigm(Nx,Ny,Nz)  ! Eddy coefficient
-real K31(Nx,Ny,Nz)      ! (3,1) tensor coefficient
-real K32(Nx,Ny,Nz)      ! (3,2) tensor coefficient
-real K33(Nx,Ny,Nz)      ! (3,3) tensor coefficient
-\end{verbatim}
-
-Within the routine, the lateral fluxes, {\tt fluxWest} and {\tt
-fluxSouth}, in the Redi/GM/Griffies scheme are very similar to the
-conventional horizontal diffusion terms except that the diffusion
-coefficient is a function of space and must be interpolated from the
-$T/S$ points:
-\begin{eqnarray*}
-{\tt fluxWest}(\tau) & = & \ldots +
-\overline{\tt Kredigm}^x \partial_x \tau \\
-{\tt fluxSouth}(\tau) & = & \ldots +
-\overline{\tt Kredigm}^y \partial_y \tau
-\end{eqnarray*}
-
-The Redi/GM/Griffies scheme adds three terms to the vertical flux
-({\tt fluxUpper}) in the tracer equation. It is discretise simply:
-\begin{displaymath}
-{\tt fluxUpper}(\tau) = \ldots + \overline{\tt Kredigm}^z 
-\left( 
-{\tt K13} \overline{\partial_x \tau}^{xz} +
-{\tt K23} \overline{\partial_y \tau}^{yz} +
-{\tt K33} \partial_z \tau
-\right)
-\end{displaymath}
-On boundaries, {\tt fluxUpper} is set to zero.
 
 

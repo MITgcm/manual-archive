@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.6 2001/09/26 20:19:52 adcroft Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.7 2001/09/28 14:09:56 adcroft Exp $
 % $Name:  $
 
 The convention used in this section is as follows:
@@ -237,7 +237,27 @@ stepping is also applied to the hydrostatic pressure/geo-potential
 gradient, $\nabla_h \Phi'_{hyd}$.  Note that presently, this term is in
 fact incorporated to the $\vec{\bf G}_{\vec{\bf v}}$ arrays ({\bf
 gU,gV}).
-\marginpar{JMC: Clarify this term?}
+\marginpar{JMC: Clarify ``this term''?}
+
+\fbox{ \begin{minipage}{4.75in}
+{\em S/R TIMESTEP} ({\em timestep.F})
+
+$G_u^n$: {\bf Gu} ({\em DYNVARS.h})
+
+$G_u^{n-1}, u^*$: {\bf GuNm1} ({\em DYNVARS.h})
+
+$G_v^n$: {\bf Gv} ({\em DYNVARS.h})
+
+$G_v^{n-1}, v^*$: {\bf GvNm1} ({\em DYNVARS.h})
+
+$G_u^{(n+1/2)}$: {\bf GuTmp} (local)
+
+$G_v^{(n+1/2)}$: {\bf GvTmp} (local)
+
+\end{minipage} }
+
+
+
 
 
 \subsection{Stagger baroclinic time stepping}
@@ -300,6 +320,20 @@ where
 \label{eq-solve2D_rhs}
 \end{eqnarray}
 
+\fbox{ \begin{minipage}{4.75in}
+{\em S/R SOLVE\_FOR\_PRESSURE} ({\em solve\_for\_pressure.F})
+
+$u^*$: {\bf GuNm1} ({\em DYNVARS.h})
+
+$v^*$: {\bf GvNm1} ({\em DYNVARS.h})
+
+$\eta^*$: {\bf cg2d\_b} (\em SOLVE\_FOR\_PRESSURE.h)
+
+$\eta^{n+1}$: {\bf etaN} (\em DYNVARS.h)
+
+\end{minipage} }
+
+
 Once ${\eta}^{n+1}$ has been found, substituting into
 \ref{eq-tDsC-Hmom} yields $\vec{\bf v}^{n+1}$ if the model is
 hydrostatic ($\epsilon_{nh}=0$):
@@ -338,6 +372,25 @@ procedure, the vertical integration of the continuity equation has
 been moved to the beginning of the time step (instead of at the end),
 without any consequence on the solution.
 
+\fbox{ \begin{minipage}{4.75in}
+{\em S/R CORRECTION\_STEP} ({\em correction\_step.F})
+
+$\eta^{n+1}$: {\bf etaN} (\em DYNVARS.h)
+
+$\phi_{nh}^{n+1}$: {\bf phi\_nh} (\em DYNVARS.h)
+
+$u^*$: {\bf GuNm1} ({\em DYNVARS.h})
+
+$v^*$: {\bf GvNm1} ({\em DYNVARS.h})
+
+$u^{n+1}$: {\bf uVel} ({\em DYNVARS.h})
+
+$v^{n+1}$: {\bf vVel} ({\em DYNVARS.h})
+
+\end{minipage} }
+
+
+
 Regarding the implementation of the surface pressure solver, all
 computation are done within the routine {\it SOLVE\_FOR\_PRESSURE} and
 its dependent calls.  The standard method to solve the 2D elliptic
@@ -352,6 +405,7 @@ The same method is applied for the non hydrostatic part, using a
 conjugate gradient 3D solver ({\it CG3D}) that is initialized in {\it
 INI\_CG3D}. The RHS terms of 2D and 3D problems are computed together
 at the same point in the code.
+
 
 
 \subsection{Crank-Nickelson barotropic time stepping}
