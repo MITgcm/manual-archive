@@ -1,0 +1,20 @@
+PS
+SOURCES .MIT .LOCAL .PEOPLE .CNH .v30i103
+ toNaN 0.0 replaceNaN 
+ time AVERAGE 
+ longitude 1E 360E definite-integral 
+ depth integral  
+ latitude cosd  223000 mul
+ mul
+ 1000000 div
+SOURCES .MIT .LOCAL .PEOPLE .CNH .v30ctl 
+ toNaN 0.0 replaceNaN 
+ time AVERAGE 
+ longitude 1E 360E definite-integral 
+ depth integral  
+ latitude cosd  223000 mul
+ mul
+ 1000000 div
+sub
+[depth latitude] REORDER
+latitude depth fig- colors | contours -fig
