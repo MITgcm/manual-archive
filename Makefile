@@ -39,7 +39,7 @@ Clean:
 	make clean
 	rm -f manual.{ps,pdf}
 	rm -rf manual
-	rm -f manual.tz mbkup.tz
+	rm -f manual.{tz,tgz} mbkup.{tz,tgz}
 
 # Note - the noantialias option here does not affect the gif images
 #        that are generated. However, it does make ppmquant to run in
@@ -69,8 +69,8 @@ debugl2h:
 	latex2html -debug -nodiscard -ldump $(L2H) manual
 
 subfigs:
-	cd manual; tar -czf ../mbkup.tz .
+	tar -czf mbkup.tgz manual
 	cd manual; ../tools/make_mail_subjects.sh
 	cd manual; ../tools/figsub.sh
 	cd manual; ../tools/fix_docref_target.sh
-	cd manual; tar -czf ../manual.tz .
+	tar -czf manual.tgz manual

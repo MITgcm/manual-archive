@@ -35,5 +35,7 @@ core
 *.ps
 *.pdf
 *.out
+*.tz
+*.tgz
 manual
 warnings
