@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_examples/held_suarez_cs/Attic/hs_atmos.tex,v 1.5 2004/10/13 05:06:26 cnh Exp $
+% $Header: /u/gcmpack/manual/s_examples/held_suarez_cs/Attic/hs_atmos.tex,v 1.6 2004/10/13 14:04:56 cnh Exp $
 % $Name:  $
 
 \section[Held-Suarez Atmosphere MITgcm Example]{Held-Suarez forcing atmospheric simulation on a latitude-longitude grid 2.8$^\circ$ resolution and on
@@ -51,50 +51,40 @@ from Held and Suarez \cite{held-suar:94}. Initial conditions are a
 statically stable thermal gradient and no motion. The atmosphere 
 in these experiments is dry and the only active ``physics'' are the
 terms in the Held and Suarez \cite{held-suar:94} formula. The
-MITgcm intermediate atmospheric physics package (see \ref{sec:aim}) and
+MITgcm intermediate atmospheric physics package (see \ref{sec:pkg:aim}) and
 MITgcm high-end physics package ( see \ref{sec:pkg:fizhi}) are turned off.
-Altogether, this yields the following forcing that is applied to
-the fluid:
+Altogether, this yields the following forcing 
+(from Held and Suarez \cite{held-suar:94}) that is applied to the fluid:
 
 \begin{eqnarray}
 \label{EQ:eg-hs-global_forcing}
 \label{EQ:eg-hs-global_forcing_fu}
-\vec{{\cal F}_{u}} & = & -k_{v}(\sigma)\vec{v}
+\vec{{\cal F}_{u}} & = & -k_{v}(p)\vec{u}
 \\
 \label{EQ:eg-hs-global_forcing_ft}
-{\cal F}_{\theta} & = & - \lambda_{\theta} ( \theta - \theta^{\ast} ) 
- - \frac{1}{C_{p} \rho_{0} \Delta z_{s}}{\cal Q}
+{\cal F}_{\theta} & = & -k_{T}(\phi,p)[\theta-\theta_{eq}(\phi,p)]
 \\
-\label{EQ:eg-hs-global_forcing_fs}
-{\cal F}_{s} & = & - \lambda_{s} ( S - S^{\ast} ) 
- + \frac{S_{0}}{\Delta z_{s}}({\cal E} - {\cal P} - {\cal R})
 \end{eqnarray}
 
-\noindent where ${\cal F}_{u}$, ${\cal F}_{v}$, ${\cal F}_{\theta}$,
-${\cal F}_{s}$ are the forcing terms in the zonal and meridional
-momentum and in the potential temperature and salinity
+\noindent where ${\vec{\cal F}_{u}}$, ${\cal F}_{\theta}$,
+are the forcing terms in the zonal and meridional
+momentum and in the potential temperature
 equations respectively.
-The term $\Delta z_{s}$ represents the top ocean layer thickness in
-meters.
-It is used in conjunction with a reference density, $\rho_{0}$
-(here set to $999.8\,{\rm kg\,m^{-3}}$), a
-reference salinity, $S_{0}$ (here set to 35~ppt),
-and a specific heat capacity, $C_{p}$ (here set to
-$4000~{\rm J}~^{\circ}{\rm C}^{-1}~{\rm kg}^{-1}$), to convert
-input dataset values into time tendencies of
-potential temperature (with units of $^{\circ}{\rm C}~{\rm s}^{-1}$),
-salinity (with units ${\rm ppt}~s^{-1}$) and
-velocity (with units ${\rm m}~{\rm s}^{-2}$).
-The externally supplied forcing fields used in this
-experiment are $\tau_{x}$, $\tau_{y}$, $\theta^{\ast}$, $S^{\ast}$,
-$\cal{Q}$ and $\cal{E}-\cal{P}-\cal{R}$. The wind stress fields ($\tau_x$, $\tau_y$)
-have units of ${\rm N}~{\rm m}^{-2}$. The temperature forcing fields
-($\theta^{\ast}$ and $Q$) have units of $^{\circ}{\rm C}$ and ${\rm W}~{\rm m}^{-2}$
-respectively. The salinity forcing fields ($S^{\ast}$ and 
-$\cal{E}-\cal{P}-\cal{R}$) have units of ${\rm ppt}$ and ${\rm m}~{\rm s}^{-1}$
-respectively.
+The term $k_{v}$ in equation (\ref{EQ:eg-hs-global_forcing_fu}) applies a
+linear frictional drag (Rayleigh damping) that is active within the
+planetary boundary layer. It is defined so as to decay with
+height according to
+\begin{eqnarray}
+\label{EQ:eg-hs-define_kv}
+k_{v} & = & k_{f}{\rm max}(0,(p_{\rm{k}}/p^{0}_{s}-\sigma_{b})/(1-\sigma_{b}))
 \\
+\sigma_{b} & = & 0.7
+\\
+k_{f} & = & 1{\rm day}^{-1}
+\end{eqnarray}
 
+where $p_{\rm{k}}$ is the pressure level of the cell center for level $\rm{k}$ 
+and $p^{0}_{s}$ is the pressure at the base of the atmospheric column.
 
 Figures (\ref{FIG:sim_config_tclim}-\ref{FIG:sim_config_empmr}) show the
 relaxation temperature ($\theta^{\ast}$) and salinity ($S^{\ast}$) fields,
