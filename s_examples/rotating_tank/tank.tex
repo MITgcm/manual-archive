@@ -1,0 +1,254 @@
+% $Header: /u/gcmpack/manual/s_examples/rotating_tank/tank.tex,v 1.1 2004/06/22 15:07:37 afe Exp $
+% $Name:  $
+
+\bodytext{bgcolor="#FFFFFFFF"}
+
+%\begin{center} 
+%{\Large \bf Using MITgcm to Simulate a Rotating Tank in Cylindrical 
+%Coordinates}
+%
+%\vspace*{4mm}
+%
+%\vspace*{3mm}
+%{\large June 2004}
+%\end{center}
+
+This is the first in a series of tutorials describing
+example MITgcm numerical experiments. The example experiments 
+include both straightforward examples of idealized geophysical 
+fluid simulations and more involved cases encompassing
+large scale modeling and
+automatic differentiation. Both hydrostatic and non-hydrostatic 
+experiments are presented, as well as experiments employing
+Cartesian, spherical-polar and cube-sphere coordinate systems.
+These ``case study'' documents include information describing
+the experimental configuration and detailed information on how to
+configure the MITgcm code and input files for each experiment.
+
+\section{Barotropic Ocean Gyre In Cartesian Coordinates}
+\label{sect:eg-baro}
+\label{www:tutorials}
+
+
+
+\subsection{Equations Solved}
+\label{www:tutorials}
+The model is configured in hydrostatic form. The implicit free surface form of the
+
+
+\subsection{Discrete Numerical Configuration}
+\label{www:tutorials}
+
+ The domain is discretised with 
+a uniform grid spacing in the horizontal set to
+ $\Delta x=\Delta y=20$~km, so 
+that there are sixty grid cells in the $x$ and $y$ directions. Vertically the 
+model is configured with a single layer with depth, $\Delta z$, of $5000$~m. 
+
+\subsubsection{Numerical Stability Criteria}
+\label{www:tutorials}
+
+
+\subsection{Code Configuration}
+\label{www:tutorials}
+\label{SEC:eg-baro-code_config}
+
+The model configuration for this experiment resides under the 
+directory {\it verification/exp0/}.  The experiment files 
+\begin{itemize}
+\item {\it input/data}
+\item {\it input/data.pkg}
+\item {\it input/eedata},
+\item {\it input/windx.sin\_y},
+\item {\it input/topog.box},
+\item {\it code/CPP\_EEOPTIONS.h}
+\item {\it code/CPP\_OPTIONS.h},
+\item {\it code/SIZE.h}. 
+\end{itemize}
+contain the code customizations and parameter settings for this 
+experiments. Below we describe the customizations
+to these files associated with this experiment.
+
+\subsubsection{File {\it input/data}}
+\label{www:tutorials}
+
+This file, reproduced completely below, specifies the main parameters 
+for the experiment. The parameters that are significant for this configuration
+are
+
+\begin{itemize}
+
+\item Line 7, \begin{verbatim} viscAh=4.E2, \end{verbatim} this line sets
+the Laplacian friction coefficient to $400 m^2s^{-1}$
+\item Line 10, \begin{verbatim} beta=1.E-11, \end{verbatim} this line sets
+$\beta$ (the gradient of the coriolis parameter, $f$) to $10^{-11} s^{-1}m^{-1}$
+
+\item Lines 15 and 16
+\begin{verbatim}
+rigidLid=.FALSE.,
+implicitFreeSurface=.TRUE.,
+\end{verbatim}
+these lines suppress the rigid lid formulation of the surface
+pressure inverter and activate the implicit free surface form
+of the pressure inverter.
+
+\item Line 27,
+\begin{verbatim}
+startTime=0,
+\end{verbatim}
+this line indicates that the experiment should start from $t=0$
+and implicitly suppresses searching for checkpoint files associated
+with restarting an numerical integration from a previously saved state.
+
+\item Line 29,
+\begin{verbatim}
+endTime=12000,
+\end{verbatim}
+this line indicates that the experiment should start finish at $t=12000s$.
+A restart file will be written at this time that will enable the
+simulation to be continued from this point.
+
+\item Line 30,
+\begin{verbatim}
+deltaTmom=1200,
+\end{verbatim}
+This line sets the momentum equation timestep to $1200s$.
+
+\item Line 39,
+\begin{verbatim}
+usingCartesianGrid=.TRUE.,
+\end{verbatim}
+This line requests that the simulation be performed in a 
+Cartesian coordinate system.
+
+\item Line 41,
+\begin{verbatim}
+delX=60*20E3,
+\end{verbatim}
+This line sets the horizontal grid spacing between each x-coordinate line
+in the discrete grid. The syntax indicates that the discrete grid
+should be comprise of $60$ grid lines each separated by $20 \times 10^{3}m$
+($20$~km).
+
+\item Line 42,
+\begin{verbatim}
+delY=60*20E3,
+\end{verbatim}
+This line sets the horizontal grid spacing between each y-coordinate line
+in the discrete grid to $20 \times 10^{3}m$ ($20$~km).
+
+\item Line 43,
+\begin{verbatim}
+delZ=5000,
+\end{verbatim}
+This line sets the vertical grid spacing between each z-coordinate line
+in the discrete grid to $5000m$ ($5$~km).
+
+\item Line 46,
+\begin{verbatim}
+bathyFile='topog.box'
+\end{verbatim}
+This line specifies the name of the file from which the domain
+bathymetry is read. This file is a two-dimensional ($x,y$) map of
+depths. This file is assumed to contain 64-bit binary numbers 
+giving the depth of the model at each grid cell, ordered with the x 
+coordinate varying fastest. The points are ordered from low coordinate
+to high coordinate for both axes. The units and orientation of the
+depths in this file are the same as used in the MITgcm code. In this
+experiment, a depth of $0m$ indicates a solid wall and a depth
+of $-5000m$ indicates open ocean. The matlab program
+{\it input/gendata.m} shows an example of how to generate a
+bathymetry file.
+
+
+\item Line 49,
+\begin{verbatim}
+zonalWindFile='windx.sin_y'
+\end{verbatim}
+This line specifies the name of the file from which the x-direction
+surface wind stress is read. This file is also a two-dimensional
+($x,y$) map and is enumerated and formatted in the same manner as the 
+bathymetry file. The matlab program {\it input/gendata.m} includes example 
+code to generate a valid {\bf zonalWindFile} file.  
+
+\end{itemize}
+
+\noindent other lines in the file {\it input/data} are standard values
+that are described in the MITgcm Getting Started and MITgcm Parameters
+notes.
+
+%%\begin{small}
+%%\input{part3/case_studies/barotropic_gyre/input/data}
+%%\end{small}
+
+\subsubsection{File {\it input/data.pkg}}
+\label{www:tutorials}
+
+This file uses standard default values and does not contain
+customizations for this experiment.
+
+\subsubsection{File {\it input/eedata}}
+\label{www:tutorials}
+
+This file uses standard default values and does not contain
+customizations for this experiment.
+
+\subsubsection{File {\it input/windx.sin\_y}}
+\label{www:tutorials}
+
+The {\it input/windx.sin\_y} file specifies a two-dimensional ($x,y$) 
+map of wind stress ,$\tau_{x}$, values. The units used are $Nm^{-2}$.
+Although $\tau_{x}$ is only a function of $y$n in this experiment
+this file must still define a complete two-dimensional map in order
+to be compatible with the standard code for loading forcing fields 
+in MITgcm. The included matlab program {\it input/gendata.m} gives a complete
+code for creating the {\it input/windx.sin\_y} file.
+
+\subsubsection{File {\it input/topog.box}}
+\label{www:tutorials}
+
+
+The {\it input/topog.box} file specifies a two-dimensional ($x,y$) 
+map of depth values. For this experiment values are either
+$0m$ or {\bf -delZ}m, corresponding respectively to a wall or to deep
+ocean. The file contains a raw binary stream of data that is enumerated
+in the same way as standard MITgcm two-dimensional, horizontal arrays.
+The included matlab program {\it input/gendata.m} gives a complete
+code for creating the {\it input/topog.box} file.
+
+\subsubsection{File {\it code/SIZE.h}}
+\label{www:tutorials}
+
+Two lines are customized in this file for the current experiment
+
+\begin{itemize}
+
+\item Line 39, 
+\begin{verbatim} sNx=60, \end{verbatim} this line sets
+the lateral domain extent in grid points for the
+axis aligned with the x-coordinate.
+
+\item Line 40, 
+\begin{verbatim} sNy=60, \end{verbatim} this line sets
+the lateral domain extent in grid points for the
+axis aligned with the y-coordinate.
+
+\end{itemize}
+
+\begin{small}
+\input{part3/case_studies/barotropic_gyre/code/SIZE.h}
+\end{small}
+
+\subsubsection{File {\it code/CPP\_OPTIONS.h}}
+\label{www:tutorials}
+
+This file uses standard default values and does not contain
+customizations for this experiment.
+
+
+\subsubsection{File {\it code/CPP\_EEOPTIONS.h}}
+\label{www:tutorials}
+
+This file uses standard default values and does not contain
+customizations for this experiment.
+
