@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_software/text/sarch.tex,v 1.13 2004/01/28 20:27:54 afe Exp $
+% $Header: /u/gcmpack/manual/s_software/text/sarch.tex,v 1.14 2004/01/28 20:38:28 afe Exp $
 
 This chapter focuses on describing the {\bf WRAPPER} environment within which
 both the core numerics and the pluggable packages operate. The description
@@ -1067,7 +1067,7 @@ in the header file {\em EESUPPORT.h} for use by
 communication routines.  The above does not hold when the 
 exch2 package is used -- exch2 sets its own parameters to 
 specify the global indices of tiles and their relationships
-to each other.
+to each other.  See exch2 docs for details??.
 \\
 
 \fbox{ 
@@ -1096,7 +1096,8 @@ describes the information that is held and used.
 \item {\bf Tile-tile connectivity information} For each tile the WRAPPER
 sets a flag that sets the tile number to the north, south, east and
 west of that tile. This number is unique over all tiles in a 
-configuration. The number is held in the variables {\em tileNo}
+configuration. Except when using the exch2 package,
+the number is held in the variables {\em tileNo}
 ( this holds the tiles own number), {\em tileNoN}, {\em tileNoS},
 {\em tileNoE} and {\em tileNoW}. A parameter is also stored with each tile
 that specifies the type of communication that is used between tiles.
@@ -1120,6 +1121,12 @@ of the WRAPPER exchange primitive
 {\em ini\_communication\_patterns()} is responsible for setting the
 communication mode values for each tile.
 \\
+
+When using the cubed sphere configuration with the exch2 package, the 
+relationships between tiles and their communication methods are set 
+by the package in other variables.  See the exch2 docs for details.??
+
+
 
 \fbox{ 
 \begin{minipage}{4.75in}
