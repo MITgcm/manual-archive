@@ -88,7 +88,7 @@ html:
 	cd manual; ../tools/make_mail_subjects.sh
 	cd manual; ../tools/figsub.sh
 	cd manual; ../tools/fix_docref_target.sh
-	cd manual; ../tools/genredir.sh; mv mapping.txt ..
+	cd manual; ../tools/genredir.sh
 	tar -czf manual.tgz manual
 
 l2h: l2h.tgz

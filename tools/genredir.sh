@@ -3,8 +3,9 @@
 MAPPING="mapping.txt"
 
 # these are not quite recompiled oddballs
-echo "manual http://mitgcm.org/sealion/" >> $MAPPING
-echo "hydrodynamics http://paoc.mit.edu/cmi/development/hydrodynamics.htm" >> $MAPPING
+# afe: now done properly
+#echo "manual http://mitgcm.org/sealion/" >> $MAPPING
+#echo "hydrodynamics http://paoc.mit.edu/cmi/development/hydrodynamics.htm" >> $MAPPING
 
 grep -r CMIREDIR *.html | \
 awk 'BEGIN { FS = ":" } ;
