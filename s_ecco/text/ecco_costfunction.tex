@@ -1,0 +1,229 @@
+\section{The ECCO state estimation cost function DRAFT!!!
+\label{sectioneccocost}}
+
+The current ECCO state estimation covers an $nYears = 11$ year
+model trajectory.
+A variety of data sets enter a least squares cost function,
+in addition to penalty terms which constrain deviations
+of control variables beyound their a priori errors.
+
+\subsection{Sea surface height from TOPEX/Poseidon and ERS-1/2 altimetry}
+
+Altimetric SSH contributions from T/P and ERS-1/2 are four-fold:
+%
+\begin{enumerate}
+%
+\item 
+an $nYears$ time mean SSH misfit between
+model and T/P
+%
+\item
+daily SSH anomaly misfits between T/P and model
+%
+\item
+daily SSH anomaly misfits between ERS-1/2 and model
+%
+\item
+daily absolute SSH misfit between T/P and model,
+weighted by the full geoid error covariance.
+%
+\end{enumerate}
+
+\subsubsection{Input fields}
+~
+
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{lllc}
+\hline \hline
+~&~&~&~\\
+field & file name & deccription & unit \\
+~&~&~&~\\
+\hline
+~&~&~&~\\
+{\it psbar} & {\tt psbarfile} & daily model mean SSH fields & [m] \\
+{\it tpmean} & {\tt topexmeanfile} & $nYears$ T/P mean & [cm] \\
+{\it tpobs}  & {\tt topexfile} & daily T/P SSH anomalies & [cm] \\
+{\it erspobs}  & {\tt ersfile} & daily ERS-1/2 SSH anomalies & [cm] \\
+{\it wp} & {\tt geoid\_errfile} & diagonal of geoid error covariance & [m] \\
+{\it wtp, wers} & {\tt ssh\_errfile} & rms of SSH anomalies & [cm] \\
+~&~&~&~\\
+\hline \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+
+\subsubsection{$nYears$ time mean SSH misfit}
+
+\begin{enumerate}
+%
+\item
+Compute 11yr model mean spatial distribution
+%
+\begin{equation}
+psmean(i,j)\, =\, 
+\frac{1}{nDaysRec} \sum_{i=1}^{nDaysRec}
+psbar(i,j)
+\end{equation}
+%
+\item
+Compute global offset between 11-yr model and T/P mean:
+%
+\begin{equation}
+\begin{split}
+offset & = \, \overline{tpmean} \, - \, \overline{psmean} \\
+~ & = \, \frac{1}{normaliz.} \sum_{i,j}
+\left\{ tpmean(i,j) \, - \, psmean(i,j) \right\} 
+\cdot cosphi(i,j) \cdot tpmeanmask(i,j)
+\end{split}
+\end{equation}
+%
+\item
+Misfits are computed w.r.t. global $offset$. 
+\\
+First spatial distribution:
+%
+\begin{equation}
+\begin{split}
+cost\_ssh\_mean(i,j) & = \,
+\frac{1}{wp^2} \left\{ \,
+\left[ \, psmean(i,j) - \overline{psmean} \, \right] \, - \,
+\left[ \, tpmean(i,j) - \overline{tpmean} \, \right] \, \right\}^2 \\ 
+~ & = \, \frac{1}{wp^2} \left\{ \,
+psmean(i,j) \, - \, tpmean(i,j) \, + \, offset \, \right\}^2
+\end{split}
+\end{equation}
+
+%
+Finally, sum over all spatial entries:
+\begin{equation}
+\overline{cost\_ssh\_mean} \, = \,
+\sum_{i,j} cost\_ssh\_mean(i,j)
+\end{equation}
+
+
+
+\end{enumerate}
+
+\subsubsection{Misfit of daily SSH anomalies}
+
+Computation is same for T/P and ERS-1/2.
+Here we write out computation for T/P.
+
+\begin{enumerate}
+%
+\item
+Compute difference in anomalies:
+
+\begin{equation}
+\begin{split}
+cost\_ssh\_anom(i,j,t) & = \, \frac{1}{wtp^2} \left\{ \, 
+\left[ \, psbar(i,j,t) - psmean(i,j) \, \right] \, - \, 
+\left[ \, tpobs(i,j,t) \, \right] \,
+\right\}^2
+\end{split}
+\end{equation}
+%
+where $t$ denotes time (day) index, and
+where it is assumed that $ nYears$ mean T/P spatial distribution
+$tpmean(i,j)$ has already been removed from data $tpobs(i,j)$!
+
+\item
+Sum over all spatial points and all times
+
+\begin{equation}
+\begin{split}
+\overline{cost\_ssh\_anom} & = \, \sum_{t} \sum_{i,j}
+cost\_ssh\_anom(i,j,t)
+\end{split}
+\end{equation}
+
+\end{enumerate}
+
+\subsubsection{Flow chart}
+
+\begin{verbatim}
+
+cost_ssh
+|
+|- < compute nYears model mean >
+|
+|- < read nYears T/P mean >
+|  CALL COST_READTOPEXMEAN
+|
+|- < compute global T/P vs. model offset >
+|
+|- < compute cost_hmean >
+|  CALL COST_SSH_MEAN
+|
+|- < ... >
+
+\end{verbatim}
+
+\subsubsection{Weights}
+
+\begin{itemize}
+%
+\item
+All data are currently masked to zero where less than 13 depth levels,
+mimicing no contribution for depth less than 1000m.
+%
+\item
+$cosphi$ term in weights is set to 1.
+%
+\item
+bad T/P and ERS-1/2 values are flagged $ \le \, -9990. $
+%
+\item
+T/P and ERS-1/2 data $ \le \, 1.\exp^{-8}$ cm are flagged as bad values
+%
+\item
+$wp$ is read from {\tt geoid\_errfile}
+and $1/wp^2$ is pre-computed in {\tt ecco\_cost\_weights}
+%
+\end{itemize}
+
+\paragraph{$wp$ for SSH mean misfit} ~
+
+$1/wp^2$ is pre-computed in {\tt ecco\_cost\_weights}; \\
+$wp$ is read from {\tt geoid\_errfile};
+
+\paragraph{$wtp$ and $wers$ for SSH anomaly misfit} ~
+
+$1/wtp^2$, $1/wers^2$ are pre-computed in {\tt ecco\_cost\_weights}; \\
+%
+\begin{itemize}
+%
+\item
+$wtp$, $wers$ are read from single {\tt ssh\_errfile}
+%
+\item
+both are converted to meters and halved \\
+$ wtp \, \longrightarrow \, wtp \cdot 0.01 \cdot 0.5 $
+%
+\item
+ERS error is set to T/P error + 5cm \\
+$ wers \, = \, wtp \, + 0.5cm $
+%
+\end{itemize}
+
+\subsubsection{Cost diagnostics}
+
+\begin{itemize}
+%
+\item
+Map out $ cost\_ssh\_mean(i,j) $
+%
+\item
+Map out $ cost\_ssh\_anom(i,j,t) $ averaged over 1 month, i.e.
+\[
+\frac{1}{\text{monthly entries}} \sum_{t}^{monthly} cost\_ssh\_anom(i,j,t)
+\]
+%
+\item
+sum over daily entries and plot daily average as function of time. i.e.
+\[
+\frac{1}{\text{daily entries}} \sum_{i,j} cost\_ssh\_anom(i,j,t)
+\]
+\end{itemize}
