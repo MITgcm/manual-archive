@@ -1,0 +1,35 @@
+#! /usr/bin/env bash
+#
+# $Header: /u/gcmpack/manual/Attic/run_protex,v 1.1 2004/02/04 04:49:19 edhill Exp $
+# $Name:  $
+
+#  Script to generate the protex output and, for each MITgcm package,
+#  place it in the file: "manual/part6/pt_$PACKAGENAME.tex"
+
+pkg_dir=
+for i in .. ../.. ../../.. ; do
+    if test -d "$i/MITgcm/pkg" ; then
+	pkg_dir="$i/MITgcm/pkg"
+	break
+    fi
+done
+if test "x$pkg_dir" = x ; then
+    echo "ERROR: Cannot find MITgcm pkg dir" 1>&2
+    exit 1
+fi
+echo "MITgcm package dir: $pkg_dir"
+echo "Processing packages:"
+
+for pkg ; do
+
+    echo "  $pkg"
+    pr_out="./part6/pt_"$pkg".tex"
+    echo -n "" > $pr_out
+    for i in "$pkg_dir/$pkg/"*.[hF] ; do
+	./protex -b7 $i >> $pr_out
+    done
+
+done
+
+echo "Done."
+
