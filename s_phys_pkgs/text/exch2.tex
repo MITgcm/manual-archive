@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/text/exch2.tex,v 1.1 2004/01/28 17:55:15 afe Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/text/exch2.tex,v 1.2 2004/01/28 18:08:22 afe Exp $
 % $Name:  $
 
 %%  * Introduction
@@ -13,6 +13,14 @@
 \section{exch2: Extended Cubed Sphere Exchange}
 
 \subsection{Introduction}
+
+The exch2 package is an extension to the original cubed sphere exchanges
+to allow more flexible domain decomposition and parallelization.  Cube faces
+(subdomain) may be divided into whatever number of tiles that divide evenly
+into the grid point dimensions of the subdomain.  Furthermore, the individual
+tiles may be run on different processors in any combination, (tone this down 
+a bit), and whether exchanges between particular tiles occur between different
+processors is decided at runtime.
 
 
 
