@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/manual.tex,v 1.10 2001/11/13 15:00:00 adcroft Exp $
+% $Header: /u/gcmpack/manual/manual.tex,v 1.11 2001/11/13 16:45:58 adcroft Exp $
 % $Name:  $
 
 \documentclass[12pt]{book}
@@ -59,6 +59,24 @@
 % This changes the the chapter title
 %\renewcommand{\chaptername}{Section}
 
+
+% This allows hyperlinks in PDF
+% hyperref package and colors for hyperref package 
+\usepackage{color} 
+\usepackage[dvips]{hyperref} 
+\definecolor{darkgreen}{rgb}{0,0.4,0} 
+\definecolor{darkblue}{rgb}{0,0,0.4} 
+\definecolor{darkred}{rgb}{0.5,0,0} 
+\hypersetup{breaklinks=true, 
+  colorlinks=true, 
+  linkcolor=darkgreen,
+  citecolor=darkblue,
+  pagecolor=darkred,
+  pdftitle={MITgcm Release 1 Documentation}, 
+  pdfauthor={support@mitgcm.org}, 
+  pdfkeywords={oceanography, ocean model, general circulation model,
+    non-hydrostatic, finite volume, inverse methods, adjoint method} 
+  } 
 
 \begin{document}
 
