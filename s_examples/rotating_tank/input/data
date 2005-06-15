@@ -11,19 +11,16 @@
  viscAz=5.0E-6,
  no_slip_sides=.FALSE.,
  no_slip_bottom=.FALSE.,
- viscA4=0.E12,
  diffKhT=2.5E-6,
  diffKzT=2.5E-6,
  diffKhS=1.0E-6,
  diffKzS=1.0E-6,
  f0=0.5,
- beta=0.E-11,
- tAlpha=2.0E-4,
  sBeta =0.,
  gravity=9.81,
  rhoConst=1000.0,
  rhoNil=1000.0,
- heatCapacity_Cp=3900.0,
+# heatCapacity_Cp=3900.0,
  rigidLid=.TRUE.,
  implicitFreeSurface=.FALSE.,
  eosType='LINEAR',
@@ -50,6 +47,7 @@
  chkptFreq=1.0,
  dumpFreq=1.0,
  monitorFreq=0.1,
+ outputTypesInclusive=.TRUE.,
  &
 
 # Gridding parameters
@@ -66,6 +64,7 @@
  &PARM05
  hydrogThetaFile='thetaPol.bin',
  bathyFile='bathyPol.bin',
- tCyl  = 0
+ tCylIn  = 0
+ tCylOut  = 20
  &
 \end{verbatim}
