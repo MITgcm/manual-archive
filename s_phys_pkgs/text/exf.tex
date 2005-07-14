@@ -31,7 +31,9 @@ output is listed in Section \ref{sec:pkg:exf:fields_diagnostics}.
 
 %----------------------------------------------------------------------
 
-\subsection{EXF configuration \& compiling
+\subsection{EXF configuration, compiling \& running}
+
+\subsubsection{Compile-time options
 \label{sec:pkg:exf:config}}
 
 As with all MITgcm packages, EXF can be turned on or off at compile time
@@ -47,9 +49,9 @@ Table \ref{tab:pkg:exf:cpp} summarizes these options.
   \label{tab:pkg:exf:cpp}
   {\footnotesize
     \begin{tabular}{|l|l|}
-      \hline
+      \hline 
       \textbf{CPP option}  &  \textbf{Description}  \\
-      \hline
+      \hline \hline
         \texttt{EXF\_VERBOSE} & 
           verbose mode (recommended only for testing) \\
         \texttt{ALLOW\_ATM\_TEMP} & 
@@ -64,13 +66,13 @@ Table \ref{tab:pkg:exf:cpp} summarizes these options.
         \texttt{USE\_EXF\_INTERPOLATION} & enable on-the-fly bilinear or bicubic interpolation of input fields \\
       \hline
         \texttt{ALLOW\_CLIMTEMP\_RELAXATION} & 
-          relaxation to 3-D potential temperature field \\
+          relaxation to 3-D potential temperature climatology \\
         \texttt{ALLOW\_CLIMSALT\_RELAXATION} & 
-          relaxation to 3-D salinity field \\
+          relaxation to 3-D salinity climatology \\
         \texttt{ALLOW\_CLIMSST\_RELAXATION} &
-          relaxation to 2-D SST relaxation \\
+          relaxation to 2-D SST climatology \\
         \texttt{ALLOW\_CLIMSSS\_RELAXATION} &
-          relaxation to 2-D SSS relaxation  \\
+          relaxation to 2-D SSS climatology  \\
       \hline
         \texttt{SHORTWAVE\_HEATING} & in \texttt{CPP\_OPTIONS.h}: enable shortwave radiation \\
         \texttt{ATMOSPHERIC\_LOADING} &  in \texttt{CPP\_OPTIONS.h}: enable surface pressure forcing \\
@@ -83,8 +85,42 @@ Table \ref{tab:pkg:exf:cpp} summarizes these options.
 
 %----------------------------------------------------------------------
 
-\subsection{EXF runtime parameters
+\subsubsection{Run-time parameters
 \label{sec:pkg:exf:runtime}}
+
+Run-time parameters are set in files \texttt{data.pkg},
+and \texttt{data.pkg\_clim} (for relaxation/climatological fields).
+Run-time parameters may be broken into 2 categories:
+(i) general flags and parameters, and
+(ii) attributes for each forcing and climatological field.
+
+\paragraph{General flags and parameters}
+
+\begin{table}[h!]
+  \label{tab:pkg:exf:runtime_flags}
+  {\footnotesize
+    \begin{tabular}{|l|cl|}
+      \hline 
+      \textbf{Flag/parameter} & \textbf{default} &  \textbf{Description}  \\
+      \hline \hline
+        useExfCheckRange & \texttt{.TRUE.} & ~ \\
+        useExfYearlyFields & \texttt{.FALSE.} & ~ \\
+        twoDigitYear & \texttt{.FALSE.} & ~ \\
+        repeatPeriod & \texttt{0.0} & ~ \\
+        windstressmax & \texttt{2.0} & ~ \\
+        exf\_albedo & \texttt{0.1} & ~ \\
+        exf\_iprec  & \texttt{32} & ~ \\
+        exf\_yftype & \texttt{'RL'} & ~ \\
+      \hline
+    \end{tabular}
+  }
+  \caption{~}
+\end{table}
+
+
+\paragraph{Field attributes}
+
+
 
 %----------------------------------------------------------------------
 
