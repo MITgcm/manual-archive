@@ -5,11 +5,6 @@
 \end{rawhtml}
 
 \subsection {Introduction} 
-To take advantage of a `high end' turbulence parameterization
-(and convection parameterization), the vertical resolution near the surface
-must be increased substantially as compared to the vertical resolution needed
-aloft. This cannot be accomplished if the high end physics is computed using 
-the $p^*$ coordinate currently in use in the MIT gcm. 
 
 The gridalt package was developed to allow the high end atmospheric physics 
 (fizhi) physics to be run on a separate grid from the hydrodynamics. The package
@@ -23,7 +18,7 @@ levels. This is illustrated as follows:
 \begin{figure}[htbp]
 \vspace*{-0.4in}
 \begin{center}
-\includegraphics[height=2.4in]{vertical.eps}
+\includegraphics[height=2.4in]{part6/vertical.eps}
 \end{center}
 \end{figure}
 
@@ -60,7 +55,7 @@ state variables on the $p^*$ grid on some time scale, $\gamma$.
 \subsection {Dos and donts}
 
 In the context of a Held-Suarez type of model experiment (located
-in the fizhi-hs.cs-32x32x10 verification experiment) with
+in the fizhi-gridalt-hs verification experiment) with
 topography, the forcing terms which represent the physics are computed on 
 the modified grid. The forcing terms are computed as functions of the
 state variables on the modified grid. The tendencies are then interpolated
