@@ -218,7 +218,7 @@ executable is compiled with room for only one horizontal diagnostic array, or wi
 numdiags set to 1. In order for the User to enable more than 1 two-dimensional diagnostic,
 the size of the diagnostics common must be expanded to accomodate the desired diagnostics.
 This can be accomplished by manually changing the parameter numdiags in the
-file \filelink{pkg/diagnostics/diagnostics\_SIZE.h}{pkg-diagnostics-diagnostics_SIZE.h}.
+file \filelink{pkg/diagnostics/diagnostics\_SIZE.h}{pkg-diagnostics-diagnostics\_SIZE.h}.
 numdiags should be set greater than or equal to the sum of all the diagnostics activated
 for output each multiplied by the number of levels defined for that diagnostic quantity.
 This is illustrated in the example below:
@@ -270,91 +270,131 @@ desired for diagnostic output is computed.
 \subsubsection{GCM Diagnostic Menu}
 \label{sec:diagnostics:menu}
 
-\begin{tabular}{lllll}
+\begin{tabular}{llll}
 \hline\hline
-N & NAME & UNITS & LEVELS & DESCRIPTION \\
+ NAME & UNITS & LEVELS & DESCRIPTION \\
 \hline
 
 &\\
-84 & SDIAG1   &             &    1  
+ SDIAG1   &             &    1  
          &\begin{minipage}[t]{3in}
           {User-Defined Surface Diagnostic-1} 
          \end{minipage}\\
-85 & SDIAG2   &             &    1  
+ SDIAG2   &             &    1  
          &\begin{minipage}[t]{3in}
           {User-Defined Surface Diagnostic-2} 
          \end{minipage}\\
-86 & UDIAG1   &             &    Nrphys
+ UDIAG1   &             &    Nrphys
          &\begin{minipage}[t]{3in}
           {User-Defined Upper-Air Diagnostic-1} 
          \end{minipage}\\
-87 & UDIAG2   &             &    Nrphys
+ UDIAG2   &             &    Nrphys
          &\begin{minipage}[t]{3in}
           {User-Defined Upper-Air Diagnostic-2} 
          \end{minipage}\\
-124& SDIAG3   &             &    1  
+ SDIAG3   &             &    1  
          &\begin{minipage}[t]{3in}
           {User-Defined Surface Diagnostic-3} 
          \end{minipage}\\
-125& SDIAG4   &             &    1  
+ SDIAG4   &             &    1  
          &\begin{minipage}[t]{3in}
           {User-Defined Surface Diagnostic-4} 
          \end{minipage}\\
-126& SDIAG5   &             &    1  
+ SDIAG5   &             &    1  
          &\begin{minipage}[t]{3in}
           {User-Defined Surface Diagnostic-5} 
          \end{minipage}\\
-127& SDIAG6   &             &    1  
+ SDIAG6   &             &    1  
          &\begin{minipage}[t]{3in}
           {User-Defined Surface Diagnostic-6} 
          \end{minipage}\\
-128& SDIAG7   &             &    1  
+ SDIAG7   &             &    1  
          &\begin{minipage}[t]{3in}
           {User-Defined Surface Diagnostic-7} 
          \end{minipage}\\
-129& SDIAG8   &             &    1  
+ SDIAG8   &             &    1  
          &\begin{minipage}[t]{3in}
           {User-Defined Surface Diagnostic-8} 
          \end{minipage}\\
-130& SDIAG9   &             &    1  
+ SDIAG9   &             &    1  
          &\begin{minipage}[t]{3in}
           {User-Defined Surface Diagnostic-9} 
          \end{minipage}\\
-131& SDIAG10  &             &    1  
+ SDIAG10  &             &    1  
          &\begin{minipage}[t]{3in}
           {User-Defined Surface Diagnostic-1-} 
          \end{minipage}\\
-132& UDIAG3   &             &    Nrphys  
+ UDIAG3   &             &    Nrphys  
          &\begin{minipage}[t]{3in}
           {User-Defined Multi-Level Diagnostic-3} 
          \end{minipage}\\
-133& UDIAG4   &             &    Nrphys  
+ UDIAG4   &             &    Nrphys  
          &\begin{minipage}[t]{3in}
           {User-Defined Multi-Level Diagnostic-4} 
          \end{minipage}\\
-134& UDIAG5   &             &    Nrphys  
+ UDIAG5   &             &    Nrphys  
          &\begin{minipage}[t]{3in}
           {User-Defined Multi-Level Diagnostic-5} 
          \end{minipage}\\
-135& UDIAG6   &             &    Nrphys  
+ UDIAG6   &             &    Nrphys  
          &\begin{minipage}[t]{3in}
           {User-Defined Multi-Level Diagnostic-6} 
          \end{minipage}\\
-136& UDIAG7   &             &    Nrphys  
+ UDIAG7   &             &    Nrphys  
          &\begin{minipage}[t]{3in}
           {User-Defined Multi-Level Diagnostic-7} 
          \end{minipage}\\
-137& UDIAG8   &             &    Nrphys  
+ UDIAG8   &             &    Nrphys  
          &\begin{minipage}[t]{3in}
           {User-Defined Multi-Level Diagnostic-8} 
          \end{minipage}\\
-138& UDIAG9   &             &    Nrphys  
+ UDIAG9   &             &    Nrphys  
          &\begin{minipage}[t]{3in}
           {User-Defined Multi-Level Diagnostic-9} 
          \end{minipage}\\
-139& UDIAG10  &             &    Nrphys  
+ UDIAG10  &             &    Nrphys  
          &\begin{minipage}[t]{3in}
           {User-Defined Multi-Level Diagnostic-10} 
+         \end{minipage}\\
+ SDIAGC   &             &    1  
+         &\begin{minipage}[t]{3in}
+          {User-Defined Counted Surface Diagnostic} 
+         \end{minipage}\\
+ SDIAGCC  &             &    1  
+         &\begin{minipage}[t]{3in}
+          {User-Defined Counted Surface Diagnostic Counter} 
+         \end{minipage}\\
+ ETAN     & $(hPa,m)$ &    1
+         &\begin{minipage}[t]{3in}
+          {Perturbation of Surface (pressure, height)} 
+         \end{minipage}\\
+ ETANSQ   & $(hPa^2,m^2)$ & 1
+         &\begin{minipage}[t]{3in}
+          {Square of Perturbation of Surface (pressure, height)} 
+         \end{minipage}\\
+ DETADT2  & ${r-unit}^2/s^2$ & 1
+         &\begin{minipage}[t]{3in}
+          {Square of Eta (Surf.P,SSH) Tendency} 
+         \end{minipage}\\
+ THETA    & $deg K$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Potential Temperature} 
+         \end{minipage}\\
+ SST      & $deg K$ & 1
+         &\begin{minipage}[t]{3in}
+          {Sea Surface Temperature} 
+         \end{minipage}\\
+ SALT     & $g/kg$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Salt (or Water Vapor Mixing Ratio)} 
+         \end{minipage}\\
+ SSS      & $g/kg$ & 1
+         &\begin{minipage}[t]{3in}
+          {Sea Surface Salinity} 
+         \end{minipage}\\
+ SALTanom & $g/kg$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Salt anomaly (=SALT-35)} 
          \end{minipage}\\
 \end{tabular}
 \vspace{1.5in}
@@ -362,143 +402,291 @@ N & NAME & UNITS & LEVELS & DESCRIPTION \\
 
 \newpage
 \vspace*{\fill}
-\begin{tabular}{lllll}
+\begin{tabular}{llll}
 \hline\hline
-N & NAME & UNITS & LEVELS & DESCRIPTION \\
+ NAME & UNITS & LEVELS & DESCRIPTION \\
 \hline
 
 &\\
-238& ETAN     & $(hPa,m)$ &    1
-         &\begin{minipage}[t]{3in}
-          {Perturbation of Surface (pressure, height)} 
-         \end{minipage}\\
-239& ETANSQ   & $(hPa^2,m^2)$ & 1
-         &\begin{minipage}[t]{3in}
-          {Square of Perturbation of Surface (pressure, height)} 
-         \end{minipage}\\
-240& THETA    & $deg K$ & Nr
-         &\begin{minipage}[t]{3in}
-          {Potential Temperature} 
-         \end{minipage}\\
-241& SALT     & $g/kg$ & Nr
-         &\begin{minipage}[t]{3in}
-          {Salt (or Water Vapor Mixing Ratio)} 
-         \end{minipage}\\
-242& UVEL     & $m/sec$ & Nr
+ UVEL     & $m/sec$ & Nr
          &\begin{minipage}[t]{3in}
           {U-Velocity} 
          \end{minipage}\\
-243& VVEL     & $m/sec$ & Nr
+ VVEL     & $m/sec$ & Nr
          &\begin{minipage}[t]{3in}
           {V-Velocity} 
          \end{minipage}\\
-244& WVEL     & $m/sec$ & Nr
+ UVEL\_k2  & $m/sec$ & 1
+         &\begin{minipage}[t]{3in}
+          {U-Velocity} 
+         \end{minipage}\\
+ VVEL\_k2  & $m/sec$ & 1
+         &\begin{minipage}[t]{3in}
+          {V-Velocity} 
+         \end{minipage}\\
+ WVEL     & $m/sec$ & Nr
          &\begin{minipage}[t]{3in}
           {Vertical-Velocity} 
          \end{minipage}\\
-245& THETASQ  & $deg^2$ & Nr
+ THETASQ  & $deg^2$ & Nr
          &\begin{minipage}[t]{3in}
           {Square of Potential Temperature} 
          \end{minipage}\\
-246& SALTSQ   & $g^2/{kg}^2$ & Nr
+ SALTSQ   & $g^2/{kg}^2$ & Nr
          &\begin{minipage}[t]{3in}
           {Square of Salt (or Water Vapor Mixing Ratio)} 
          \end{minipage}\\
-247& UVELSQ   & $m^2/sec^2$ & Nr
+ SALTSQan & $g^2/{kg}^2$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Square of Salt anomaly (=SALT-35)} 
+         \end{minipage}\\
+ UVELSQ   & $m^2/sec^2$ & Nr
          &\begin{minipage}[t]{3in}
           {Square of U-Velocity} 
          \end{minipage}\\
-248& VVELSQ   & $m^2/sec^2$ & Nr
+ VVELSQ   & $m^2/sec^2$ & Nr
          &\begin{minipage}[t]{3in}
           {Square of V-Velocity} 
          \end{minipage}\\
-249& WVELSQ   & $m^2/sec^2$ & Nr
+ WVELSQ   & $m^2/sec^2$ & Nr
          &\begin{minipage}[t]{3in}
           {Square of Vertical-Velocity} 
          \end{minipage}\\
-250& UVELVVEL & $m^2/sec^2$ & Nr
+ UV\_VEL\_C & $m^2/sec^2$ & Nr
          &\begin{minipage}[t]{3in}
-          {Meridional Transport of Zonal Momentum} 
+          {Meridional Transport of Zonal Momentum (cell center)} 
          \end{minipage}\\
-251& UVELMASS & $m/sec$ & Nr
+ UV\_VEL\_Z & $m^2/sec^2$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Meridional Transport of Zonal Momentum (corner)} 
+         \end{minipage}\\
+ WU\_VEL   & $m^2/sec^2$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Vertical Transport of Zonal Momentum (cell center)} 
+         \end{minipage}\\
+ WV\_VEL   & $m^2/sec^2$ & Nr
+         &\begin{minipage}[t]{3in}
+          {Vertical Transport of Meridional Momentum (cell center)} 
+         \end{minipage}\\
+ UVELMASS & $m/sec$ & Nr
          &\begin{minipage}[t]{3in}
           {Zonal Mass-Weighted Component of Velocity} 
          \end{minipage}\\
-252& VVELMASS & $m/sec$ & Nr
+ VVELMASS & $m/sec$ & Nr
          &\begin{minipage}[t]{3in}
           {Meridional Mass-Weighted Component of Velocity} 
          \end{minipage}\\
-253& WVELMASS & $m/sec$ & Nr
+ WVELMASS & $m/sec$ & Nr
          &\begin{minipage}[t]{3in}
           {Vertical Mass-Weighted Component of Velocity} 
          \end{minipage}\\
-254& UTHMASS  & $m-deg/sec$ & Nr
+ UTHMASS  & $m-deg/sec$ & Nr
          &\begin{minipage}[t]{3in}
           {Zonal Mass-Weight Transp of Pot Temp} 
          \end{minipage}\\
-255& VTHMASS  & $m-deg/sec$ & Nr
+ VTHMASS  & $m-deg/sec$ & Nr
          &\begin{minipage}[t]{3in}
           {Meridional Mass-Weight Transp of Pot Temp} 
          \end{minipage}\\
-256& WTHMASS  & $m-deg/sec$ & Nr
+ WTHMASS  & $m-deg/sec$ & Nr
          &\begin{minipage}[t]{3in}
           {Vertical Mass-Weight Transp of Pot Temp} 
          \end{minipage}\\
-257& USLTMASS & $m-kg/sec-kg$ & Nr
+ USLTMASS & $m-kg/sec-kg$ & Nr
          &\begin{minipage}[t]{3in}
           {Zonal Mass-Weight Transp of Salt (or W.Vap Mix Rat.)} 
          \end{minipage}\\
-258& VSLTMASS & $m-kg/sec-kg$ & Nr
+ VSLTMASS & $m-kg/sec-kg$ & Nr
          &\begin{minipage}[t]{3in}
           {Meridional Mass-Weight Transp of Salt (or W.Vap Mix Rat.)} 
          \end{minipage}\\
-259& WSLTMASS & $m-kg/sec-kg$ & Nr
+ WSLTMASS & $m-kg/sec-kg$ & Nr
          &\begin{minipage}[t]{3in}
           {Vertical Mass-Weight Transp of Salt (or W.Vap Mix Rat.)} 
          \end{minipage}\\
-260& UVELTH   & $m-deg/sec$ & Nr
+ UVELTH   & $m-deg/sec$ & Nr
          &\begin{minipage}[t]{3in}
           {Zonal Transp of Pot Temp} 
          \end{minipage}\\
-261& VVELTH   & $m-deg/sec$ & Nr
+ VVELTH   & $m-deg/sec$ & Nr
          &\begin{minipage}[t]{3in}
           {Meridional Transp of Pot Temp} 
          \end{minipage}\\
-262& WVELTH   & $m-deg/sec$ & Nr
+ WVELTH   & $m-deg/sec$ & Nr
          &\begin{minipage}[t]{3in}
           {Vertical Transp of Pot Temp} 
          \end{minipage}\\
-263& UVELSLT  & $m-kg/sec-kg$ & Nr
+ UVELSLT  & $m-kg/sec-kg$ & Nr
          &\begin{minipage}[t]{3in}
           {Zonal Transp of Salt (or W.Vap Mix Rat.)} 
          \end{minipage}\\
-264& VVELSLT  & $m-kg/sec-kg$ & Nr
+ VVELSLT  & $m-kg/sec-kg$ & Nr
          &\begin{minipage}[t]{3in}
           {Meridional Transp of Salt (or W.Vap Mix Rat.)} 
          \end{minipage}\\
-265& WVELSLT  & $m-kg/sec-kg$ & Nr
+ WVELSLT  & $m-kg/sec-kg$ & Nr
          &\begin{minipage}[t]{3in}
           {Vertical Transp of Salt (or W.Vap Mix Rat.)} 
          \end{minipage}\\
-275& WSLTMASS & $m-kg/sec-kg$ & Nr
+\end{tabular}
+\vspace{1.5in}
+\vfill
+
+\newpage
+\vspace*{\fill}
+\begin{tabular}{llll}
+\hline\hline
+ NAME & UNITS & LEVELS & DESCRIPTION \\
+\hline
+
+&\\
+ RHOAnoma & $kg/m^3  $  &  Nr  
          &\begin{minipage}[t]{3in}
-          {Vertical Mass-Weight Transp of Salt (or W.Vap Mix Rat.)} 
+          {Density Anomaly (=Rho-rhoConst)}
          \end{minipage}\\
-298& VISCA4   & $m^4/sec$ & 1
+ RHOANOSQ & $kg^2/m^6$  &  Nr  
          &\begin{minipage}[t]{3in}
-          {Biharmonic Viscosity Coefficient} 
+          {Square of Density Anomaly (=(Rho-rhoConst))}
          \end{minipage}\\
-299& VISCAH   & $m^2/sec$ & 1
+ URHOMASS & $kg/m^2/s$  &  Nr  
          &\begin{minipage}[t]{3in}
-          {Harmonic Viscosity Coefficient} 
+          {Zonal Transport of Density}
          \end{minipage}\\
-300& DRHODR   & $kg/m^3/{r-unit}$ & Nr
+ VRHOMASS & $kg/m^2/s$  &  Nr  
+         &\begin{minipage}[t]{3in}
+          {Meridional Transport of Density}
+         \end{minipage}\\
+ WRHOMASS & $kg/m^2/s$  &  Nr  
+         &\begin{minipage}[t]{3in}
+          {Vertical Transport of Potential Density}
+         \end{minipage}\\
+ PHIHYD   & $m^2/s^2 $  &  Nr  
+         &\begin{minipage}[t]{3in}
+          {Hydrostatic (ocean) pressure / (atmos) geo-Potential}
+         \end{minipage}\\
+ PHIHYDSQ & $m^4/s^4 $  &  Nr  
+         &\begin{minipage}[t]{3in}
+          {Square of Hyd. (ocean) press / (atmos) geoPotential}
+         \end{minipage}\\
+ PHIBOT   & $m^2/s^2 $  &  Nr  
+         &\begin{minipage}[t]{3in}
+          {ocean bottom pressure / top. atmos geo-Potential}
+         \end{minipage}\\
+ PHIBOTSQ & $m^4/s^4 $  &  Nr  
+         &\begin{minipage}[t]{3in}
+          {Square of ocean bottom pressure / top. geo-Potential}
+         \end{minipage}\\
+ DRHODR   & $kg/m^3/{r-unit}$ & Nr
          &\begin{minipage}[t]{3in}
           {Stratification: d.Sigma/dr} 
          \end{minipage}\\
-301& DETADT2  & ${r-unit}^2/s^2$ & 1
+ VISCA4   & $m^4/sec$ & 1
          &\begin{minipage}[t]{3in}
-          {Square of Eta (Surf.P,SSH) Tendency} 
+          {Biharmonic Viscosity Coefficient} 
+         \end{minipage}\\
+ VISCAH   & $m^2/sec$ & 1
+         &\begin{minipage}[t]{3in}
+          {Harmonic Viscosity Coefficient} 
+         \end{minipage}\\
+ TAUX     & $N/m^2        $ & 1 
+         &\begin{minipage}[t]{3in}
+          {zonal surface wind stress, >0 increases uVel}
+         \end{minipage}\\
+ TAUY     & $N/m^2        $ & 1 
+         &\begin{minipage}[t]{3in}
+          {meridional surf. wind stress, >0 increases vVel}
+         \end{minipage}\\
+ TFLUX    & $W/m^2        $ & 1 
+         &\begin{minipage}[t]{3in}
+          {net surface heat flux, >0 increases theta}
+         \end{minipage}\\
+ TRELAX   & $W/m^2        $ & 1 
+         &\begin{minipage}[t]{3in}
+          {surface temperature relaxation, >0 increases theta}
+         \end{minipage}\\
+ TICE     & $W/m^2        $ & 1 
+         &\begin{minipage}[t]{3in}
+          {heat from melt/freeze of sea-ice, >0 increases theta}
+         \end{minipage}\\
+ SFLUX    & $g/m^2/s      $ & 1 
+         &\begin{minipage}[t]{3in}
+          {net surface salt flux, >0 increases salt}
+         \end{minipage}\\
+ SRELAX   & $g/m^2/s      $ & 1 
+         &\begin{minipage}[t]{3in}
+          {surface salinity relaxation, >0 increases salt}
+         \end{minipage}\\
+ PRESSURE & $Pa           $ & Nr 
+         &\begin{minipage}[t]{3in}
+          {Atmospheric Pressure (Pa)}
+         \end{minipage}\\
+ ADVr\_TH  & $K.Pa.m^2/s   $ & Nr 
+         &\begin{minipage}[t]{3in}
+          {Vertical   Advective Flux of Pot.Temperature}
+         \end{minipage}\\
+ ADVx\_TH  & $K.Pa.m^2/s   $ & Nr 
+         &\begin{minipage}[t]{3in}
+          {Zonal      Advective Flux of Pot.Temperature}
+         \end{minipage}\\
+ ADVy\_TH  & $K.Pa.m^2/s   $ & Nr 
+         &\begin{minipage}[t]{3in}
+          {Meridional Advective Flux of Pot.Temperature}
+         \end{minipage}\\
+ DFrE\_TH  & $K.Pa.m^2/s   $ & Nr 
+         &\begin{minipage}[t]{3in}
+          {Vertical Diffusive Flux of Pot.Temperature (Explicit part)}
+         \end{minipage}\\
+ DIFx\_TH  & $K.Pa.m^2/s   $ & Nr 
+         &\begin{minipage}[t]{3in}
+          {Zonal      Diffusive Flux of Pot.Temperature}
+         \end{minipage}\\
+ DIFy\_TH  & $K.Pa.m^2/s   $ & Nr 
+         &\begin{minipage}[t]{3in}
+          {Meridional Diffusive Flux of Pot.Temperature}
+         \end{minipage}\\
+ DFrI\_TH  & $K.Pa.m^2/s   $ & Nr 
+         &\begin{minipage}[t]{3in}
+          {Vertical Diffusive Flux of Pot.Temperature (Implicit part)}
+         \end{minipage}\\
+ ADVr\_SLT & $g/kg.Pa.m^2/s$ & Nr 
+         &\begin{minipage}[t]{3in}
+          {Vertical   Advective Flux of Water-Vapor}
+         \end{minipage}\\
+ ADVx\_SLT & $g/kg.Pa.m^2/s$ & Nr 
+         &\begin{minipage}[t]{3in}
+          {Zonal      Advective Flux of Water-Vapor}
+         \end{minipage}\\
+ ADVy\_SLT & $g/kg.Pa.m^2/s$ & Nr 
+         &\begin{minipage}[t]{3in}
+          {Meridional Advective Flux of Water-Vapor}
+         \end{minipage}\\
+\end{tabular}
+\vspace{1.5in}
+\vfill
+
+\newpage
+\vspace*{\fill}
+\begin{tabular}{llll}
+\hline\hline
+ NAME & UNITS & LEVELS & DESCRIPTION \\
+\hline
+
+&\\
+ DFrE\_SLT & $g/kg.Pa.m^2/s$ & Nr 
+         &\begin{minipage}[t]{3in}
+          {Vertical Diffusive Flux of Water-Vapor (Explicit part)}
+         \end{minipage}\\
+ DIFx\_SLT & $g/kg.Pa.m^2/s$ & Nr 
+         &\begin{minipage}[t]{3in}
+          {Zonal      Diffusive Flux of Water-Vapor}
+         \end{minipage}\\
+ DIFy\_SLT & $g/kg.Pa.m^2/s$ & Nr 
+         &\begin{minipage}[t]{3in}
+          {Meridional Diffusive Flux of Water-Vapor}
+         \end{minipage}\\
+ DFrI\_SLT & $g/kg.Pa.m^2/s$ & Nr 
+         &\begin{minipage}[t]{3in}
+          {Vertical Diffusive Flux of Water-Vapor (Implicit part)}
          \end{minipage}\\
 \end{tabular}
 \vspace{1.5in}
