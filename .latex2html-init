@@ -5,10 +5,15 @@ $WHITE_BACKGROUND = 1;
 # Tell LATEX:
 $LATEX_COLOR = "\\pagecolor{white}";
 
-# $PSTOIMG = "$PERL /home/barnett/lib/pstoimg";
+$PSTOIMG = "$PERL /mnt/disk2_ext3/home/cnh/src/MITgcm_doc/pstoimg";
+# $PSTOIMG = "$PERL sxfdsfdfsdsf";
 
 # use GIF rather than PNG:
 # $IMAGE_TYPE  = $IMAGE_TYPES[1];
+# $ANTI_ALIAS = 1;
+
+# $VERBOSITY = 8;
+# $DEBUG = 1;
 
 
 # $ICONSERVER = "http://monsoon.harvard.edu/~barnett/icons";
