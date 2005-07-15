@@ -59,14 +59,17 @@ Table \ref{tab:pkg:exf:cpp} summarizes these options.
         \texttt{ALLOW\_ATM\_WIND} & 
           compute wind stress from wind speed input\\
         \texttt{ALLOW\_BULKFORMULAE} & 
-          is used if either ALLOW\_ATM\_TEMP or ALLOW\_ATM\_WIND is enabled \\
+          is used if \texttt{ALLOW\_ATM\_TEMP} or 
+          \texttt{ALLOW\_ATM\_WIND} is enabled \\
         \texttt{EXF\_READ\_EVAP} & read evaporation instead of computing it \\
         \texttt{ALLOW\_RUNOFF} & read time-constant river/glacier run-off field \\
         \texttt{ALLOW\_DOWNWARD\_RADIATION} & compute net from downward or downward from net radiation \\
         \texttt{USE\_EXF\_INTERPOLATION} & enable on-the-fly bilinear or bicubic interpolation of input fields \\
       \hline
+         \multicolumn{2}{|c|}{\textit{used in conjunction with relaxation to prescribed (climatological) fields}} \\
+         \hline
         \texttt{ALLOW\_CLIMTEMP\_RELAXATION} & 
-          relaxation to 3-D potential temperature climatology \\
+          relaxation to 3-D temperature climatology \\
         \texttt{ALLOW\_CLIMSALT\_RELAXATION} & 
           relaxation to 3-D salinity climatology \\
         \texttt{ALLOW\_CLIMSST\_RELAXATION} &
@@ -74,8 +77,10 @@ Table \ref{tab:pkg:exf:cpp} summarizes these options.
         \texttt{ALLOW\_CLIMSSS\_RELAXATION} &
           relaxation to 2-D SSS climatology  \\
       \hline
-        \texttt{SHORTWAVE\_HEATING} & in \texttt{CPP\_OPTIONS.h}: enable shortwave radiation \\
-        \texttt{ATMOSPHERIC\_LOADING} &  in \texttt{CPP\_OPTIONS.h}: enable surface pressure forcing \\
+         \multicolumn{2}{|c|}{\textit{these are set outside of EXF in} \texttt{CPP\_OPTIONS.h}} \\
+         \hline
+        \texttt{SHORTWAVE\_HEATING} & enable shortwave radiation \\
+        \texttt{ATMOSPHERIC\_LOADING} & enable surface pressure forcing \\
       \hline
     \end{tabular}
   }
@@ -89,28 +94,42 @@ Table \ref{tab:pkg:exf:cpp} summarizes these options.
 \label{sec:pkg:exf:runtime}}
 
 Run-time parameters are set in files \texttt{data.pkg},
-and \texttt{data.pkg\_clim} (for relaxation/climatological fields).
+and \texttt{data.pkg\_clim} (for relaxation/climatological fields)
+which are read in \texttt{exf\_readparms.F}.
 Run-time parameters may be broken into 2 categories:
 (i) general flags and parameters, and
 (ii) attributes for each forcing and climatological field.
 
 \paragraph{General flags and parameters}
 
+~
+
 \begin{table}[h!]
   \label{tab:pkg:exf:runtime_flags}
   {\footnotesize
-    \begin{tabular}{|l|cl|}
+    \begin{tabular}{|l|c|l|}
       \hline 
       \textbf{Flag/parameter} & \textbf{default} &  \textbf{Description}  \\
       \hline \hline
-        useExfCheckRange & \texttt{.TRUE.} & ~ \\
-        useExfYearlyFields & \texttt{.FALSE.} & ~ \\
-        twoDigitYear & \texttt{.FALSE.} & ~ \\
-        repeatPeriod & \texttt{0.0} & ~ \\
-        windstressmax & \texttt{2.0} & ~ \\
-        exf\_albedo & \texttt{0.1} & ~ \\
-        exf\_iprec  & \texttt{32} & ~ \\
-        exf\_yftype & \texttt{'RL'} & ~ \\
+        useExfCheckRange & \texttt{.TRUE.} & 
+           check range of input fields and stop if out of range \\
+        useExfYearlyFields & \texttt{.FALSE.} & 
+           append current year postfix of form \texttt{\_YYYY} on filename \\
+        twoDigitYear & \texttt{.FALSE.} & 
+           instead of appending \texttt{\_YYYY} append  \texttt{YY} \\
+        repeatPeriod & \texttt{0.0} & $ > 0 $ : 
+           cycle through all input fields at the same period (in seconds) \\
+        ~            & ~            & $ = 0 $ :
+           use period assigned to each field \\
+        exf\_offset\_atemp & \texttt{0.0} & set to 273.16 to convert from deg. Kelvin (assumed input) to Celsius \\
+        windstressmax & \texttt{2.0} & 
+           max. allowed wind stress $N/m^2$ \\
+        exf\_albedo & \texttt{0.1} & 
+          surface albedo used to compute downward vs. net radiative fluxes \\
+        exf\_iprec  & \texttt{32} & 
+          precision of input fields (32-bit or 64-bit) \\
+        exf\_yftype & \texttt{'RL'} & 
+          precision of arrays ('RL' vs. 'RS') \\
       \hline
     \end{tabular}
   }
@@ -118,145 +137,224 @@ Run-time parameters may be broken into 2 categories:
 \end{table}
 
 
-\paragraph{Field attributes}
+\paragraph{Field attributes} ~ \\
+%
+All EXF fields are listed in Section \ref{sec:pkg:exf:fields_units}.
+Each field has a number of attributes which can be customized.
+They are summarized in
+Table \ref{tab:pkg:exf:runtime_attributes}.
+To obtain an attribute for a specific field, e.g. \texttt{uwind}
+prepend the field name to the listed attribute, e.g. for attribute
+\texttt{period} this yields \texttt{uwindperiod}:
+%
+\begin{eqnarray*}
+  \begin{array}{cccccc}
+    ~ & \texttt{field} & \& & \texttt{attribute} & \longrightarrow & \texttt{parameter} \\
+    \text{e.g.} & \text{uwind} & \& & \text{period} & \longrightarrow & \text{uwindperiod} \\
+  \end{array}
+\end{eqnarray*}
+%
 
+\begin{table}[h!]
+  \label{tab:pkg:exf:runtime_attributes}
+  {\footnotesize
+    \begin{tabular}{|l|c|l|}
+      \hline 
+      \textbf{attribute} &  \textbf{Default} &  \textbf{Description}  \\
+      \hline \hline
+         \textit{field}\texttt{file} & ' ' & 
+           filename; if left empty no file will be read; \texttt{const} will be used instead \\
+         \textit{field}\texttt{const} & 0. &
+           constant that will be used if no file is read  \\
+         \textit{field}\texttt{startdate1} & 0. & 
+           format: \texttt{YYYYMMDD}; start year (YYYY), month (MM), day (YY) \\
+           ~&~& of field to determine record number \\
+         \textit{field}\texttt{startdate2} & 0. &
+           format: \texttt{HHMMSS}; start hour (HH), minute (MM), second(SS) \\
+           ~&~& of field to determine record number\\
+         \textit{field}\texttt{period} & 0. &
+           interval in seconds between two records \\
+         \texttt{exf\_inscal\_}\textit{field}& ~ & 
+           optional rescaling of input fields to comply with EXF units \\
+         \texttt{exf\_outscal\_}\textit{field}& ~ &
+           optional rescaling of EXF fields when mapped onto MITgcm fields \\
+         \hline
+         \multicolumn{3}{|c|}{\textit{used in conjunction with} 
+                              \texttt{EXF\_USE\_INTERPOLATION}} \\
+         \hline
+         \textit{field}\texttt{\_lon0} & $thetaMin+delX/2$  & 
+           starting longitude of input \\
+         \textit{field}\texttt{\_lon\_inc} & $delX$ &
+           increment in longitude of input \\
+         \textit{field}\texttt{\_lat0} &  $phiMin+delY/2$ &
+           starting latitude of input \\
+         \textit{field}\texttt{\_lat\_inc} & $delY$ &
+           increment in latitude of input \\
+         \textit{field}\texttt{\_nlon} & $Nx$ &
+           number of grid points in longitude of input \\
+         \textit{field}\texttt{\_nlat} & $Ny$ &
+           number of grid points in longitude of input \\
+      \hline
+    \end{tabular}
+   }
+   \caption{\newline
+            Note one exception for the default of 
+            \texttt{atempconst} = celsius2K = 273.16}
+\end{table}
 
+\paragraph{Example configuration} ~ \\
+%
+The following block is taken from the \texttt{data.exf} file
+of the veification experiment \texttt{global\_with\_exf/}.
+It defines attributes for the heat flux variable \texttt{hflux}:
+
+\begin{verbatim}
+ hfluxfile       = 'ncep_qnet.bin',
+ hfluxstartdate1 = 19920101,
+ hfluxstartdate2 = 000000,
+ hfluxperiod     = 2592000.0,
+ hflux_lon0      = 2
+ hflux_lon_inc   = 4
+ hflux_lat0      = -78
+ hflux_lat_inc   = 39*4
+ hflux_nlon      = 90
+ hflux_nlat      = 40
+\end{verbatim}
+
+EXF will read a file of name 'ncep\_qnet.bin'.
+Its first record represents January 1st, 1991 at 00:00 UTC.
+Next record is 2592000 seconds (or 30 days) later.
+Interpolation on-the-fly is used (in the present case trivially
+on the same grid, but included nevertheless for illustration), 
+and input field grid starting coordinates and increments are 
+supplied as well.
 
 %----------------------------------------------------------------------
 
-\subsection{EXF fields and units
+\subsection{EXF input fields and units
 \label{sec:pkg:exf:fields_units}}
 
 The following list is taken from the header file \texttt{exf\_fields.h}.
+It comprises all EXF input fields.
 
-{\footnotesize
+Output fields which EXF provides to the MITgcm are fields
+\textbf{fu}, \textbf{fv}, \textbf{Qnet}, \textbf{Qsw}, \textbf{EmPmR},
+and \textbf{pload}. They are defined in \texttt{FFIELDS.h}.
+
+{\scriptsize
 \begin{verbatim}
 
-
-
+c----------------------------------------------------------------------
+c               |
+c     field     :: Description
+c               |
+c----------------------------------------------------------------------
 c     ustress   :: Zonal surface wind stress in N/m^2
-c                  > 0 for increase in uVel, which is west to
-c                      east for cartesian and spherical polar grids
-c                  Typical range: -0.5 < ustress < 0.5
-c                  Southwest C-grid U point
-c                  Input field
-c
+c               |  > 0 for increase in uVel, which is west to
+c               |      east for cartesian and spherical polar grids
+c               |  Typical range: -0.5 < ustress < 0.5
+c               |  Southwest C-grid U point
+c               |  Input field
+c----------------------------------------------------------------------
 c     vstress   :: Meridional surface wind stress in N/m^2
-c                  > 0 for increase in vVel, which is south to
-c                      north for cartesian and spherical polar grids
-c                  Typical range: -0.5 < vstress < 0.5
-c                  Southwest C-grid V point
-c                  Input field
-c
+c               |  > 0 for increase in vVel, which is south to
+c               |      north for cartesian and spherical polar grids
+c               |  Typical range: -0.5 < vstress < 0.5
+c               |  Southwest C-grid V point
+c               |  Input field
+c----------------------------------------------------------------------
 c     hflux     :: Net upward surface heat flux in W/m^2 
-c                  excluding shortwave (on input)
-c                  hflux = latent + sensible + lwflux
-c                  > 0 for decrease in theta (ocean cooling)
-c                  Typical range: -250 < hflux < 600
-c                  Southwest C-grid tracer point
-c                  Input field
-c
+c               |  excluding shortwave (on input)
+c               |  hflux = latent + sensible + lwflux
+c               |  > 0 for decrease in theta (ocean cooling)
+c               |  Typical range: -250 < hflux < 600
+c               |  Southwest C-grid tracer point
+c               |  Input field
+c----------------------------------------------------------------------
 c     sflux     :: Net upward freshwater flux in m/s
-c                  sflux = evap - precip - runoff
-c                  > 0 for increase in salt (ocean salinity)
-c                  Typical range: -1e-7 < sflux < 1e-7
-c                  Southwest C-grid tracer point
-c                  Input field
-c
+c               |  sflux = evap - precip - runoff
+c               |  > 0 for increase in salt (ocean salinity)
+c               |  Typical range: -1e-7 < sflux < 1e-7
+c               |  Southwest C-grid tracer point
+c               |  Input field
+c----------------------------------------------------------------------
 c     swflux    :: Net upward shortwave radiation in W/m^2
-c                  swflux = - ( swdown - ice and snow absorption - reflected )
-c                  > 0 for decrease in theta (ocean cooling)
-c                  Typical range: -350 < swflux < 0
-c                  Southwest C-grid tracer point
-c                  Input field
-c
+c               |  swflux = - ( swdown - ice and snow absorption - reflected )
+c               |  > 0 for decrease in theta (ocean cooling)
+c               |  Typical range: -350 < swflux < 0
+c               |  Southwest C-grid tracer point
+c               |  Input field
+c----------------------------------------------------------------------
 c     uwind     :: Surface (10-m) zonal wind velocity in m/s
-c                  > 0 for increase in uVel, which is west to
-c                      east for cartesian and spherical polar grids
-c                  Typical range: -10 < uwind < 10
-c                  Southwest C-grid U point
-c                  Input or input/output field
-c
+c               |  > 0 for increase in uVel, which is west to
+c               |      east for cartesian and spherical polar grids
+c               |  Typical range: -10 < uwind < 10
+c               |  Southwest C-grid U point
+c               |  Input or input/output field
+c----------------------------------------------------------------------
 c     vwind     :: Surface (10-m) meridional wind velocity in m/s
-c                  > 0 for increase in vVel, which is south to
-c                      north for cartesian and spherical polar grids
-c                  Typical range: -10 < vwind < 10
-c                  Southwest C-grid V point
-c                  Input or input/output field
-c
+c               |  > 0 for increase in vVel, which is south to
+c               |      north for cartesian and spherical polar grids
+c               |  Typical range: -10 < vwind < 10
+c               |  Southwest C-grid V point
+c               |  Input or input/output field
+c----------------------------------------------------------------------
 c     atemp     :: Surface (2-m) air temperature in deg K
-c                  Typical range: 200 < atemp < 300
-c                  Southwest C-grid tracer point
-c                  Input or input/output field
-c
+c               |  Typical range: 200 < atemp < 300
+c               |  Southwest C-grid tracer point
+c               |  Input or input/output field
+c----------------------------------------------------------------------
 c     aqh       :: Surface (2m) specific humidity in kg/kg
-c                  Typical range: 0 < aqh < 0.02
-c                  Southwest C-grid tracer point
-c                  Input or input/output field
-c
+c               |  Typical range: 0 < aqh < 0.02
+c               |  Southwest C-grid tracer point
+c               |  Input or input/output field
+c----------------------------------------------------------------------
 c     lwflux    :: Net upward longwave radiation in W/m^2
-c                  lwflux = - ( lwdown - ice and snow absorption - emitted )
-c                  > 0 for decrease in theta (ocean cooling)
-c                  Typical range: -20 < lwflux < 170
-c                  Southwest C-grid tracer point
-c                  Input field
-c
+c               |  lwflux = - ( lwdown - ice and snow absorption - emitted )
+c               |  > 0 for decrease in theta (ocean cooling)
+c               |  Typical range: -20 < lwflux < 170
+c               |  Southwest C-grid tracer point
+c               |  Input field
+c----------------------------------------------------------------------
 c     evap      :: Evaporation in m/s
-c                  > 0 for increase in salt (ocean salinity)
-c                  Typical range: 0 < evap < 2.5e-7
-c                  Southwest C-grid tracer point
-c                  Input, input/output, or output field
-c
+c               |  > 0 for increase in salt (ocean salinity)
+c               |  Typical range: 0 < evap < 2.5e-7
+c               |  Southwest C-grid tracer point
+c               |  Input, input/output, or output field
+c----------------------------------------------------------------------
 c     precip    :: Precipitation in m/s
-c                  > 0 for decrease in salt (ocean salinity)
-c                  Typical range: 0 < precip < 5e-7
-c                  Southwest C-grid tracer point
-c                  Input or input/output field
-c
+c               |  > 0 for decrease in salt (ocean salinity)
+c               |  Typical range: 0 < precip < 5e-7
+c               |  Southwest C-grid tracer point
+c               |  Input or input/output field
+c----------------------------------------------------------------------
 c     runoff    :: River and glacier runoff in m/s
-c                  > 0 for decrease in salt (ocean salinity)
-c                  Typical range: 0 < runoff < ????
-c                  Southwest C-grid tracer point
-c                  Input or input/output field
-c                  !!! WATCH OUT: Default exf_inscal_runoff !!!
-c                  !!! in exf_readparms.F is not 1.0        !!!
-c
+c               |  > 0 for decrease in salt (ocean salinity)
+c               |  Typical range: 0 < runoff < ????
+c               |  Southwest C-grid tracer point
+c               |  Input or input/output field
+c               |  !!! WATCH OUT: Default exf_inscal_runoff !!!
+c               |  !!! in exf_readparms.F is not 1.0        !!!
+c----------------------------------------------------------------------
 c     swdown    :: Downward shortwave radiation in W/m^2
-c                  > 0 for increase in theta (ocean warming)
-c                  Typical range: 0 < swdown < 450
-c                  Southwest C-grid tracer point
-c                  Input/output field
-c
+c               |  > 0 for increase in theta (ocean warming)
+c               |  Typical range: 0 < swdown < 450
+c               |  Southwest C-grid tracer point
+c               |  Input/output field
+c----------------------------------------------------------------------
 c     lwdown    :: Downward longwave radiation in W/m^2
-c                  > 0 for increase in theta (ocean warming)
-c                  Typical range: 50 < lwdown < 450
-c                  Southwest C-grid tracer point
-c                  Input/output field
-c
+c               |  > 0 for increase in theta (ocean warming)
+c               |  Typical range: 50 < lwdown < 450
+c               |  Southwest C-grid tracer point
+c               |  Input/output field
+c----------------------------------------------------------------------
 c     apressure :: Atmospheric pressure field in N/m^2
-c                  > 0 for ????
-c                  Typical range: ???? < apressure < ????
-c                  Southwest C-grid tracer point
-c                  Input field
-C
-C
-c     NOTES:
-c     ======
-c
-c     Input and output units and sign conventions can be customized
-c     using variables exf_inscal_* and exf_outscal_*, which are set
-c     by exf_readparms.F
-c
-c     Output fields fu, fv, Qnet, Qsw, and EmPmR are
-c     defined in FFIELDS.h
-c
-c     #ifndef SHORTWAVE_HEATING, hflux includes shortwave,
-c     that is, hflux = latent + sensible + lwflux +swflux
-c
-c     If (EXFwindOnBgrid .EQ. .TRUE.), uwind and vwind are
-c     defined on northeast B-grid U and V points, respectively.
-c
-c     Arrays *0 and *1 below are used for temporal interpolation.
+c               |  > 0 for ????
+c               |  Typical range: ???? < apressure < ????
+c               |  Southwest C-grid tracer point
+c               |  Input field
+c----------------------------------------------------------------------
+
 \end{verbatim}
 }
 
@@ -264,6 +362,96 @@ c     Arrays *0 and *1 below are used for temporal interpolation.
 
 \subsection{Key subroutines
 \label{sec:pkg:exf:subroutines}}
+
+\subsubsection{Top-level routine: \texttt{exf\_getforcing.F}}
+
+{\scriptsize
+\begin{verbatim}
+
+C     !CALLING SEQUENCE:
+c ...
+c  exf_getforcing (TOP LEVEL ROUTINE)
+c  |
+c  |-- exf_getclim (get climatological fields used e.g. for relax.)
+c  |   |--- exf_set_climtemp (relax. to 3-D temperature field)
+c  |   |--- exf_set_climsalt (relax. to 3-D salinity field)
+c  |   |--- exf_set_climsst  (relax. to 2-D SST field)
+c  |   |--- exf_set_climsss  (relax. to 2-D SSS field)
+c  |   o
+c  |
+c  |-- exf_getffields <- this one does almost everything
+c  |   |   1. reads in fields, either flux or atmos. state,
+c  |   |      depending on CPP options (for each variable two fields
+c  |   |      consecutive in time are read in and interpolated onto
+c  |   |      current time step).
+c  |   |   2. If forcing is atmos. state and control is atmos. state,
+c  |   |      then the control variable anomalies are read here
+c  |   |          * ctrl_getatemp
+c  |   |          * ctrl_getaqh
+c  |   |          * ctrl_getuwind
+c  |   |          * ctrl_getvwind
+c  |   |      If forcing and control are fluxes, then
+c  |   |      controls are added later.
+c  |   o
+c  |
+c  |-- exf_check_range
+c  |   |   1. Check whether read fields are within assumed range
+c  |   |      (may capture mismatches in units)
+c  |   o
+c  |
+c  |-- exf_bulkformulae
+c  |   |   1. Compute net or downwelling radiative fluxes via
+c  |   |      Stefan-Boltzmann law in case only one is known.
+c  |   |   2. Compute air-sea momentum and buoyancy fluxes from
+c  |   |      atmospheric state following Large and Pond, JPO, 1981/82
+c  |   o
+c  |
+c  |-- < add time-mean river runoff here, if available >
+c  |
+c  |-- < update tile edges here >
+c  |
+c  |-- exf_getsurfacefluxes
+c  |   |   1. If forcing and control are fluxes, then
+c  |   |      controls are added here.
+c  |   o
+c  |
+c  |-- < treatment of hflux w.r.t. swflux >
+c  |
+c  |-- exf_diagnostics_fill
+c  |   |   1. Do EXF-related diagnostics output here.
+c  |   o
+c  |
+c  |-- exf_mapfields
+c  |   |   1. Map the EXF variables onto the core MITgcm
+c  |   |      forcing fields.
+c  |   o
+c  |
+c  |-- exf_bulkformulae
+c  |   If ALLOW_BULKFORMULAE, compute fluxes via bulkformulae
+c  |
+c  |-- exf_getsurfacefluxes
+c  |   If forcing and control is flux, then the
+c  |   control vector anomalies are read here
+c  |      * ctrl_getheatflux
+c  |      * ctrl_getsaltflux
+c  |      * ctrl_getzonstress
+c  |      * call ctrl_getmerstress
+c  |
+c  |-- exf_mapfields
+c  |   Forcing fields from exf package are mapped onto
+c  |   mitgcm forcing arrays.
+c  |   Mapping enables a runtime rescaling of fields
+
+\end{verbatim}
+}
+
+\subsubsection{Bulk formula routine: \texttt{exf\_bulkformulae.F}}
+
+\subsubsection{Generic I/O routine: \texttt{exf\_set\_gen.F}}
+
+\subsubsection{Interpolation routine: \texttt{exf\_interp.F}}
+
+\subsubsection{Header routines}
 
 %----------------------------------------------------------------------
 
@@ -275,34 +463,38 @@ Diagnostics output is available via the diagnostics package
 Available output fields are summarized in 
 Table \ref{tab:pkg:exf:diagnostics}.
 
-\begin{table}
+\begin{table}[h!]
 \label{tab:pkg:exf:diagnostics}
-\caption{~}
 {\footnotesize
 \begin{verbatim}
 ------------------------------------------------------
  <-Name->|Levs|grid|<--  Units   -->|<- Tile (max=80c)
 ------------------------------------------------------
- EXFlwdn |  1 | SM |W/m^2           |Downward longwave radiation, >0 increases theta
- EXFswdn |  1 | SM |W/m^2           |Downward shortwave radiation, >0 increases theta
- EXFqnet |  1 | SM |W/m^2           |Net upward heat flux (turb+rad), >0 decreases theta
- EXFtaux |  1 | SU |N/m^2           |zonal surface wind stress, >0 increases uVel
- EXFtauy |  1 | SV |N/m^2           |meridional surface wind stress, >0 increases vVel
- EXFuwind|  1 | SM |m/s             |zonal 10-m wind speed, >0 increases uVel
- EXFvwind|  1 | SM |m/s             |meridional 10-m wind speed, >0 increases uVel
- EXFatemp|  1 | SM |degK            |surface (2-m) air temperature
- EXFaqh  |  1 | SM |kg/kg           |surface (2-m) specific humidity
- EXFevap |  1 | SM |m/s             |evaporation, > 0 increases salinity
- EXFpreci|  1 | SM |m/s             |evaporation, > 0 decreases salinity
- EXFempmr|  1 | SM |m/s             |net upward freshwater flux, > 0 increases salinity
- EXFpress|  1 | SM |N/m^2           |atmospheric pressure field
+ EXFlwdn |  1 | SM | W/m^2          | Downward longwave radiation, >0 increases theta
+ EXFswdn |  1 | SM | W/m^2          | Downward shortwave radiation, >0 increases theta
+ EXFqnet |  1 | SM | W/m^2          | Net upward heat flux (turb+rad), >0 decreases theta
+ EXFtaux |  1 | SU | N/m^2          | zonal surface wind stress, >0 increases uVel
+ EXFtauy |  1 | SV | N/m^2          | meridional surface wind stress, >0 increases vVel
+ EXFuwind|  1 | SM | m/s            | zonal 10-m wind speed, >0 increases uVel
+ EXFvwind|  1 | SM | m/s            | meridional 10-m wind speed, >0 increases uVel
+ EXFatemp|  1 | SM | degK           | surface (2-m) air temperature
+ EXFaqh  |  1 | SM | kg/kg          | surface (2-m) specific humidity
+ EXFevap |  1 | SM | m/s            | evaporation, > 0 increases salinity
+ EXFpreci|  1 | SM | m/s            | evaporation, > 0 decreases salinity
+ EXFempmr|  1 | SM | m/s            | net upward freshwater flux, > 0 increases salinity
+ EXFpress|  1 | SM | N/m^2          | atmospheric pressure field
 \end{verbatim}
 }
+\caption{~}
 \end{table}
 
 %----------------------------------------------------------------------
 
 \subsection{Reference experiments}
+
+\subsubsection{global\_with\_exf}
+
+\subsubsection{lab\_sea}
 
 %----------------------------------------------------------------------
 
