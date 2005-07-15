@@ -1,6 +1,6 @@
 #! /usr/bin/perl -w
 ##############################################################################
-# $Id: pstoimg,v 1.3 2005/07/15 13:29:25 cnh Exp $
+# $Id: pstoimg,v 1.4 2005/07/15 13:37:56 cnh Exp $
 #
 # pstoimg
 #
@@ -15,6 +15,12 @@
 ##############################################################################
 #
 # $Log: pstoimg,v $
+# Revision 1.4  2005/07/15 13:37:56  cnh
+# Seems to work on faulks as well now - yeah (I hope).
+# Only took staying up all night and some 5000+ attempts.
+# Not sure why nobody fixed this before :-)!
+# For my next trick ---- protex!!!
+#
 # Revision 1.3  2005/07/15 13:29:25  cnh
 # Tidying paths to make it work elsewhere - maybe?
 #
@@ -257,7 +263,7 @@ BEGIN {
 use L2hos; # load OS-specific stuff
 
 my $RELEASE = '2002-2-1';
-my ($VERSION) = q$Revision: 1.3 $ =~ /:\s*(\S+)/;
+my ($VERSION) = q$Revision: 1.4 $ =~ /:\s*(\S+)/;
 
 $| = 1; # unbuffer STDOUT
 
@@ -277,8 +283,6 @@ my @IMAGE_TYPES = qw(png gif);
 my $PNMCROP = '/usr/bin/pnmcrop -verbose ';
 my $PNMCROPOPT = '';
 $PNMCROPOPT = '-sides';
-# $PNMCROPOPT = '-white';
-# $PNMCROPOPT = '-black';
 my $PPMQUANT = '/usr/bin/ppmquant';
 my $PNMFLIP = '/usr/bin/pnmflip';
 my $PNMCAT = '/usr/bin/pnmcat';
