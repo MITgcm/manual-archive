@@ -1,6 +1,6 @@
 #! /usr/bin/perl -w
 ##############################################################################
-# $Id: pstoimg,v 1.2 2005/07/15 13:20:56 cnh Exp $
+# $Id: pstoimg,v 1.3 2005/07/15 13:29:25 cnh Exp $
 #
 # pstoimg
 #
@@ -15,6 +15,9 @@
 ##############################################################################
 #
 # $Log: pstoimg,v $
+# Revision 1.3  2005/07/15 13:29:25  cnh
+# Tidying paths to make it work elsewhere - maybe?
+#
 # Revision 1.2  2005/07/15 13:20:56  cnh
 # Slight change to the fix - plus relative path in .latex2html-init
 #
@@ -254,7 +257,7 @@ BEGIN {
 use L2hos; # load OS-specific stuff
 
 my $RELEASE = '2002-2-1';
-my ($VERSION) = q$Revision: 1.2 $ =~ /:\s*(\S+)/;
+my ($VERSION) = q$Revision: 1.3 $ =~ /:\s*(\S+)/;
 
 $| = 1; # unbuffer STDOUT
 
@@ -271,21 +274,20 @@ my $GSALIASDEVICE = 'ppmraw';
 # Supported format(s)
 my @IMAGE_TYPES = qw(png gif);
 # Netpbm
-my $PNMCROP = '/home/cnh/downloads/netpbm-10.19bin/bin/pnmcrop -verbose';
-# my $PNMCROP = '/bin/cat';
+my $PNMCROP = '/usr/bin/pnmcrop -verbose ';
 my $PNMCROPOPT = '';
-# $PNMCROPOPT = '-sides';
+$PNMCROPOPT = '-sides';
 # $PNMCROPOPT = '-white';
-$PNMCROPOPT = '-black';
-my $PPMQUANT = '/home/cnh/downloads/netpbm-10.19bin/bin/ppmquant';
-my $PNMFLIP = '/home/cnh/downloads/netpbm-10.19bin/bin/pnmflip';
-my $PNMCAT = '/home/cnh/downloads/netpbm-10.19bin/bin/pnmcat';
-my $PNMFILE = '/home/cnh/downloads/netpbm-10.19bin/bin/pnmfile';
-my $PBMMAKE = '/home/cnh/downloads/netpbm-10.19bin/bin/pbmmake';
+# $PNMCROPOPT = '-black';
+my $PPMQUANT = '/usr/bin/ppmquant';
+my $PNMFLIP = '/usr/bin/pnmflip';
+my $PNMCAT = '/usr/bin/pnmcat';
+my $PNMFILE = '/usr/bin/pnmfile';
+my $PBMMAKE = '/usr/bin/pbmmake';
 # GIF support
-my $PPMTOGIF = '/home/cnh/downloads/netpbm-10.19bin/bin/ppmtogif';
+my $PPMTOGIF = '/usr/bin/ppmtogif';
 # PNG support
-my $PNMTOPNG = '/home/cnh/downloads/netpbm-10.19bin/bin/pnmtopng';
+my $PNMTOPNG = '/usr/bin/pnmtopng';
 # Temporary diskspace
 my $def_tmp = '/tmp'; # Space for temporary files
 
@@ -298,8 +300,7 @@ my $PAGE_HMARGIN = 72;       # dvips margin: 1 inch = 72pt
 my $PAGE_VMARGIN = 72;       # dvips margin: 1 inch = 72pt
 
 # The color to be made transparent
-# my $trans_color = '#ffffff';
-my $trans_color = '#000000';
+my $trans_color = '#ffffff';
 
 ###############################################################################
 # Default settings
@@ -1113,7 +1114,7 @@ sub crop_scale_etc {
   $EXTRA_CROP =~ s/v/rl/gi; # crop vertically
   while ($EXTRA_CROP =~ /([atblrs])/gi) {
     my $edge = $1;
-    my $croparg = ' ';
+    my $croparg = '';
     if($edge =~ /b/i) {
       $croparg = "-bot $PNMCROPOPT ";
     } elsif($edge =~ /[tlr]/i) {
@@ -1128,13 +1129,10 @@ sub crop_scale_etc {
         $cmd = '';
       }
       my ($type,$width,$height) = get_image_geometry($in);
-      #CNH add begin
-      ###CNH next
-      #CNH add end
       next unless($type); # skip if no geometry
       if(&do_cmd_norename("$PNMCROP $PNMCROPOPT -bot < $in",$tmp)) {
         my ($type,$width,$height2) = get_image_geometry($tmp);
-        if($type && ($height - $height2) < 30 ) {
+        if($type && ($height - $height2) < 3 ) {
           # command succeeded and shaved less than 3 rows
           if($opt{debug}&&(-f $tmp)) {
             L2hos->Copy($tmp,$in);
