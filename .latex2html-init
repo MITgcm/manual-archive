@@ -6,6 +6,7 @@ $WHITE_BACKGROUND = 1;
 $LATEX_COLOR = "\\pagecolor{white}";
 
 $PSTOIMG = "$PERL /mnt/disk2_ext3/home/cnh/src/MITgcm_doc/pstoimg";
+$PSTOIMG = "$PERL ../pstoimg";
 # $PSTOIMG = "$PERL sxfdsfdfsdsf";
 
 # use GIF rather than PNG:

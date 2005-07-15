@@ -1,6 +1,6 @@
 #! /usr/bin/perl -w
 ##############################################################################
-# $Id: pstoimg,v 1.1 2005/07/15 13:07:23 cnh Exp $
+# $Id: pstoimg,v 1.2 2005/07/15 13:20:56 cnh Exp $
 #
 # pstoimg
 #
@@ -15,6 +15,9 @@
 ##############################################################################
 #
 # $Log: pstoimg,v $
+# Revision 1.2  2005/07/15 13:20:56  cnh
+# Slight change to the fix - plus relative path in .latex2html-init
+#
 # Revision 1.1  2005/07/15 13:07:23  cnh
 # More cunning tricks to get rid of black lines
 #  pnmcrop is junk!
@@ -251,7 +254,7 @@ BEGIN {
 use L2hos; # load OS-specific stuff
 
 my $RELEASE = '2002-2-1';
-my ($VERSION) = q$Revision: 1.1 $ =~ /:\s*(\S+)/;
+my ($VERSION) = q$Revision: 1.2 $ =~ /:\s*(\S+)/;
 
 $| = 1; # unbuffer STDOUT
 
@@ -1119,7 +1122,8 @@ sub crop_scale_etc {
       #RRM: shave at most 1-2 rows of white from the bottom
       if($cmd) {
         # Terminate command pipe
-        $cmd .= "| pnmcrop -white -bot -verbose | pamcut -bottom 200 -pad | pnmcrop -black -bot -verbose";
+        ### CNH trick to get rid of black lines at bottom of some equations
+        $cmd .= "| pnmcrop -white -bot -verbose | pnmcrop -black -bot -verbose | pnmcrop -white -bot -verbose | pnmcrop -black -bot -verbose";
         &do_cmd($in,$tmp,$cmd) || return 0; # failure
         $cmd = '';
       }
