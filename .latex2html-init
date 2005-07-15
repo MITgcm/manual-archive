@@ -1,0 +1,16 @@
+# Force white background and black text
+$BODYTEXT = "text=\"\#000000\" bgcolor=\"\#FFFFFF\"";
+# This ensures that some figures do not end up with a grey background
+$WHITE_BACKGROUND = 1;
+# Tell LATEX:
+$LATEX_COLOR = "\\pagecolor{white}";
+
+# $PSTOIMG = "$PERL /home/barnett/lib/pstoimg";
+
+# use GIF rather than PNG:
+# $IMAGE_TYPE  = $IMAGE_TYPES[1];
+
+
+# $ICONSERVER = "http://monsoon.harvard.edu/~barnett/icons";
+
+1;      # This must be the last line
