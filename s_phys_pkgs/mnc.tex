@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/Attic/mnc.tex,v 1.14 2004/12/11 22:03:32 edhill Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/Attic/mnc.tex,v 1.15 2005/07/18 14:00:00 edhill Exp $
 % $Name:  $
 
 \section{NetCDF I/O Integration: MNC}
@@ -19,6 +19,16 @@ site at:
 http://www.unidata.ucar.edu/packages/netcdf/
 \end{verbatim}
 \begin{rawhtml} </A> \end{rawhtml}
+
+Since it is a ``wrapper'' for netCDF, MNC depends upon the Fortran-77
+interface included with the standard netCDF v3.x library which is
+often called \texttt{libnetcdf.a}.  Please contact your local systems
+administrators or the
+\begin{rawhtml} <A href="mailto:mitgcm-support@mitgcm.org"> \end{rawhtml}
+MITgcm-support
+\begin{rawhtml} </A> \end{rawhtml}
+list for help building and installing netCDF for your particular
+platform.
 
 
 \subsection{Using MNC}
@@ -67,12 +77,8 @@ iterative compile--test sequence.
 
 \subsubsection{MNC Inputs}
 
-For run-time configuration, most of the MNC--related model parameters
-are contained within a Fortran namelist file called \texttt{data.mnc}.
-If this file does not exist, then the MNC package will interpret that
-as an indication that it is not to be used.  If the \texttt{data.mnc}
-file does exist, then it may contain the following parameters:
-
+Like most MITgcm packages, all of MNC can be turned on/off at runtime
+using a single flag in \texttt{data.pkg}
 \begin{center}
   {\footnotesize
     \begin{tabular}[htb]{|l|c|l|l|}\hline
@@ -80,123 +86,275 @@ file does exist, then it may contain the following parameters:
       \textbf{Default}  &  \textbf{Description}  \\\hline
       &  &  &  \\
       \texttt{useMNC}  &  L  & \texttt{.FALSE.}  &  
-      \textbf{overall MNC ON/OFF switch}  \\
-      \texttt{mnc\_echo\_gvtypes}  &  L  & \texttt{.FALSE.}  &  
-      echo pre-defined ``types'' (debugging)   \\
-      \texttt{mnc\_use\_outdir}  &  L  & \texttt{.FALSE.}  &  
-      create a directory for output  \\
-      \texttt{mnc\_outdir\_str}  &  S  & \texttt{'mnc\_'}  &  
-      output directory name \\
-      \texttt{mnc\_outdir\_date}  &  L  & \texttt{.FALSE.}  &  
-      embed date in the output dir name  \\
-      \texttt{pickup\_write\_mnc}  &  L  & \texttt{.FALSE.}  &  
-      use MNC to write (create) pickup files  \\
-      \texttt{pickup\_read\_mnc}  &  L  & \texttt{.FALSE.}  &  
-      use MNC to read pickup files  \\
-      \texttt{mnc\_use\_indir}  &  L  & \texttt{.FALSE.}  &  
-      use a directory (path) for input  \\
-      \texttt{mnc\_indir\_str}  &  S  & \texttt{''}  &  
-      input directory (or path) name  \\
-      \texttt{snapshot\_mnc}  &  L  & \texttt{.FALSE.}  &  
-      write \texttt{snapshot} (instantaneous) w/MNC  \\
-      \texttt{monitor\_mnc}  &  L  & \texttt{.FALSE.}  &  
-      write \texttt{monitor} w/MNC  \\
-      \texttt{timeave\_mnc}  &  L  & \texttt{.FALSE.}  &  
-      write \texttt{timeave} w/MNC  \\
-      \texttt{autodiff\_mnc}  &  L  & \texttt{.FALSE.}  &  
-      write \texttt{autodiff} w/MNC  \\\hline
+      overall MNC ON/OFF switch  \\\hline
     \end{tabular}
   }
 \end{center}
 
-Additional MNC--related parameters are contained within the main
-\texttt{data} namelist file and in some of the namelist files for
-individual packages.  These options are:
+One important MNC--related flag is present in the main \texttt{data}
+namelist file in the \texttt{PARM03} section and it is:
 \begin{center}
   {\footnotesize
     \begin{tabular}[htb]{|l|c|l|l|}\hline
       \textbf{Name}  &  \textbf{T}  &  
       \textbf{Default}  &  \textbf{Description}  \\\hline
-      \multicolumn{4}{|c|}{\ }  \\
-      \multicolumn{4}{|c|}{Main namelist file: 
-        ``\textbf{data}''}  \\\hline
-      \texttt{snapshot\_ioinc}  &  L  & \texttt{.FALSE.}  &  
-      write \texttt{snapshot} ``inclusively''  \\
-      \texttt{timeave\_ioinc}  &  L  & \texttt{.FALSE.}  &  
-      write \texttt{timeave} ``inclusively''  \\
-      \texttt{monitor\_ioinc}  &  L  & \texttt{.FALSE.}  &  
-      write \texttt{monitor} ``inclusively''  \\
-      \texttt{the\_run\_name}  &  C  & ``name...''  &  
-      name is included in all MNC output  \\\hline
-      \multicolumn{4}{|c|}{\ }  \\
-      \multicolumn{4}{|c|}{Diagnostics namelist file: 
-        ``\textbf{data.diagnostics}''}  \\\hline
-      \texttt{diag\_mnc}  &  L  & \texttt{.FALSE.}  &  
-      write \texttt{diagnostics} w/MNC  \\
-      \texttt{diag\_ioinc}  &  L  & \texttt{.FALSE.}  &  
-      write \texttt{diagnostics} ``inclusively''  \\\hline
+      &  &  &  \\
+      \texttt{outputTypesInclusive}  &  L  & \texttt{.FALSE.}  &  
+      use all available output ``types''  \\\hline
+    \end{tabular}
+  }
+\end{center}
+which specifies that turning on MNC for a particular type of output
+should not simultaneously turn off the default output method as it
+normally does.  Usually, this option is only used for debugging
+purposes since it is inefficient to write output types using both MNC
+and MDSIO or ASCII output.  This option can also be helpful when
+transitioning from MDSIO to MNC since the output can be readily
+compared.
+
+For run-time configuration, most of the MNC--related model parameters
+are contained within a Fortran namelist file called
+\texttt{data.mnc}.  The availabe parameters currently include:
+\begin{center}
+  {\footnotesize
+    \begin{tabular}[htb]{|l|c|l|l|}\hline
+      \textbf{Name}  &  \textbf{T}  &  
+      \textbf{Default}  &  \textbf{Description}  \\\hline
+      &  &  &  \\
+      \texttt{mnc\_use\_outdir}  &  L  & \texttt{.FALSE.}  &  
+      create a directory for output  \\
+      \ \ \texttt{mnc\_outdir\_str}  &  S  & \texttt{'mnc\_'}  &  
+      output directory name \\
+      \ \ \texttt{mnc\_outdir\_date}  &  L  & \texttt{.FALSE.}  &  
+      embed date in the outdir name  \\
+      \ \ \texttt{mnc\_outdir\_num}  &  L  & \texttt{.FALSE.}  &  
+      optional  \\
+      \texttt{pickup\_write\_mnc}  &  L  & \texttt{.FALSE.}  &  
+      use MNC to write pickup files  \\
+      \texttt{pickup\_read\_mnc}  &  L  & \texttt{.FALSE.}  &  
+      use MNC to read pickup files  \\
+      \texttt{mnc\_use\_indir}  &  L  & \texttt{.FALSE.}  &  
+      use a directory (path) for input  \\
+      \ \ \texttt{mnc\_indir\_str}  &  S  & \texttt{''}  &  
+      input directory (or path) name  \\
+      \texttt{snapshot\_mnc}  &  L  & \texttt{.FALSE.}  &  
+      write \texttt{snapshot} output w/MNC  \\
+      \texttt{monitor\_mnc}  &  L  & \texttt{.FALSE.}  &  
+      write \texttt{monitor} output w/MNC  \\
+      \texttt{timeave\_mnc}  &  L  & \texttt{.FALSE.}  &  
+      write \texttt{timeave} output w/MNC  \\
+      \texttt{autodiff\_mnc}  &  L  & \texttt{.FALSE.}  &  
+      write \texttt{autodiff} output w/MNC  \\
+      \texttt{mnc\_max\_fsize}  &  R  & 2.1e+09  &  
+      max allowable file size  \\
+      \texttt{readgrid\_mnc}  &  L  &  \texttt{.FALSE.}  &  
+      read grid quantities using MNC  \\
+      \texttt{mnc\_echo\_gvtypes}  &  L  & \texttt{.FALSE.}  &  
+      list pre-defined ``types'' (debug)   \\\hline
     \end{tabular}
   }
 \end{center}
 
-By default, turning on MNC for a particular output type will result in
-turning off all the corresponding (usually, default) MDSIO or STDOUT
-output mechanisms.  In other words, output defaults to being an
-exclusive selection.  To enable multiple kinds of simultaneous output,
-flags of the form \texttt{NAME\_ioinc} have been created where
-\texttt{NAME} corresponds to the various MNC output flags.  When a
-\texttt{NAME\_ioinc} flag is set to \texttt{.TRUE.}, then multiple
-simultaneous forms of output are allowed for the \texttt{NAME} output
-mechanism.  The intent of this design is that typical users will only
-want one kind of output while people debugging the code (particularly
-the I/O routines) may want simultaneous types of output.
+Unlike the older MDSIO method, MNC has the ability to create or use
+existing output directories.  If either \texttt{mnc\_outdir\_date} or
+\texttt{mnc\_outdir\_num} is true, then MNC will try to create
+directories on a \textit{PER PROCESS} basis for its output.  This
+means that a single directory will be created for a non-MPI run and
+multiple directories (one per MPI process) will be created for an MPI
+run.  This approach was chosen since it works safely on both shared
+global file systems (such as NFS and AFS) and on local
+(per-compute-node) file systems.  And if both
+\texttt{mnc\_outdir\_date} and \texttt{mnc\_outdir\_num} are false,
+then the MNC package will assume that the directory specified in
+\texttt{mnc\_outdir\_str} already exists and will use it.  This allows
+the user to create and specify directories outside of the model.
 
-This ``inclusive'' versus ``exclusive'' design is easily applied in
-cases where three or more kinds of output may be generated.  Thus, it
-can be readily extended to additional new output types (eg. HDF5).
+For input, MNC can use a single global input directory.  This is a
+just convenience that allows MNC to gather all of its input files from a
+path other than the current working directory.  As with MDSIO, the
+default is to use the current working directory.
 
-Input types are always exclusive.
+The flags \texttt{snapshot\_mnc}, \texttt{monitor\_mnc},
+\texttt{timeave\_mnc}, and \texttt{autodiff\_mnc} allow the user to
+turn on MNC for particular ``types'' of output.  If a type is
+selected, then MNC will be used for all output that matches that type.
+This applies to output from the main model and from all of the
+optional MITgcm packages.  Mostly, the names used here correspond to
+the names used for the output frequencies in the main \texttt{data}
+namelist file.
+
+The \texttt{mnc\_max\_fsize} parameter is a convenience added to help
+users work around common file size limitations.  On many computer
+systems, either the opterating system, the file system(s), and/or the
+netCDF libraries are unable to handle files greater than two or four
+gigabytes in size.  The MNC package is able to work within this
+limitation by creating new files which grow along the netCDF
+``unlimited'' (usually, time) dimension.  The default value for this
+parameter is just slightly less than 2GB which is safe on virtually
+all operating systems.  Essentially, this feature is a way to
+intelligently and automatically split files output along the unlimited
+dimension.  On systems that support large file sizes, these splits can
+be readily concatenated (that is, un-done) using tools such as the
+netCDF Operators (with \texttt{ncrcat}) which is available at:
+\begin{rawhtml} <A href="http://nco.sourceforge.net/"> \end{rawhtml}
+\begin{verbatim}
+http://nco.sourceforge.net/
+\end{verbatim}
+\begin{rawhtml} </A> \end{rawhtml}
+
+Additional MNC--related parameters may be contained within each
+package.  Please see the individual packages for descriptions of their
+use of MNC.
+
 
 \subsubsection{MNC Output}
 
-While NetCDF files are supposed to be ``self-describing'', it is
-helpful to note the following:
+Depending upon the flags used, MNC will produce zero or more
+directories containing one or more netCDF files as output.  These
+files are either mostly or entirely compliant with the netCDF ``CF''
+convention (v1.0) and any conformance issues will be fixed over time.
+The patterns used for file names are:
+\begin{center}
+\texttt{BASENAME.nIter0.tileNum.seqNum.nc}
+\end{center}
+and an example is:
+\begin{center}
+\texttt{grid.0000000000.000001.0000.nc}
+\end{center}
+where \texttt{BASENAME} is the name selected to represent a set of
+variables written together, \texttt{nIter0} is the starting iteration
+number as specified in the main \texttt{data} namelist input file and
+written in a zero-filled 10-digit format, \texttt{tileNum} is the
+six-digit zero-filled tile number, \texttt{seqnum} is a four-digit
+zero-filled sequence number used when maximum allowable files sizes
+are too small to contain all of the output for a particular type
+within one run (new files are created with sequential numbers as files
+reach the maximum file size limit), and \texttt{.nc} is the file
+suffix specified by the current netCDF ``CF'' conventions.
+
+Some example \texttt{BASENAME} values are:
+\begin{description}
+\item[grid] contains the variables that describe the various grid
+  constants related to locations, lengths, areas, etc.
+\item[state] contains the variables output at the snapshot or
+  \texttt{dumpFreq} time frequency
+\item[pickup.ckptA, pickup.ckptB] are the ``rolling'' checkpoint files
+\item[tave] contains the time-averaged quantities from the main model
+\end{description}
+
+All MNC output is currently done in a ``file-per-tile'' fashion since
+most NetCDF v3.x implementions cannot write safely within MPI or
+multi-threaded environments.  This tiling is done in a global fashion
+and the tile numbers are appended to the base names as described
+above.  Some scripts to manipulate MNC output are available at
+\texttt{MITgcm/utils/matlab/} which includes a spatial ``assembly''
+script called \texttt{MITgcm/utils/matlab/mnc\_assembly.m}.
+
+More general manipulations can be performed on netCDF files with 
+\begin{rawhtml} <A href="http://nco.sourceforge.net"> \end{rawhtml} 
+\begin{verbatim}
+the NetCDF Operators (``NCO'')
+at http://nco.sourceforge.net
+\end{verbatim}
+\begin{rawhtml} </A> \end{rawhtml}
+or with
+\begin{rawhtml} <A href=''http://www.mpimet.mpg.de/~cdo/"> \end{rawhtml} 
+\begin{verbatim}
+the Climate Data Operators (``CDO'') 
+at http://www.mpimet.mpg.de/~cdo/
+\end{verbatim}
+\begin{rawhtml} </A> \end{rawhtml}
+
+Unlike the older MDSIO routines, MNC reads and writes variables on
+different ``grids'' depending upon their location on, for instance, an
+Arakawa C--grid.  The following table provides examples:
+\begin{center}
+  {\footnotesize
+    \begin{tabular}[htb]{|l|c|c|c|}\hline
+      \textbf{Name}  &  \textbf{C--grid location}  &  
+      \textbf{\# in X}  &  \textbf{\# in Y}  \\\hline
+      Temperature & mass & \texttt{sNx} & \texttt{sNy} \\
+      Salinity & mass & \texttt{sNx} & \texttt{sNy} \\
+      U velocity & U & \texttt{sNx+1} & \texttt{sNy} \\
+      V velocity & V & \texttt{sNx} & \texttt{sNy+1} \\
+      Vorticity & vorticity & \texttt{sNx+1} & \texttt{sNy+1} \\\hline
+    \end{tabular}
+  }
+\end{center}
+and the intent is two--fold:
+\begin{enumerate}
+\item For some grid topologies it is impossible to output all
+  quantities using only \texttt{sNx,sNy} arrays for every tile.  Two
+  examples of this failure are the missing corners problem for
+  vorticity values on the cubesphere and the velocity edge values for
+  some open--boundary domains.
+\item Writing quantities located on velocity or vorticity points with
+  the above scheme introduces a very small data redundancy.  However,
+  any slight inconvenience is easily offset by the ease with which one
+  can, on every individual tile, interpolate these values to mass
+  points without having to perform an ``exchange'' (or
+  ``halo-filling'') operation to collect the values from neighboring
+  tiles.  This makes the most common post--processing operations much
+  easier to implement.
+\end{enumerate}
+
+
+\subsection{MNC Troubleshooting}
+
+\subsubsection{Build Troubleshooting}
+
+In order to build MITgcm with MNC enabled, the netCDF v3.x Fortran-77
+(not Fortran-90) library must be available.  This library is compposed
+of a single header file (called \texttt{netcdf.inc}) and a single
+library file (usually called \texttt{libnetcdf.a}) and it must be
+built with the same compiler (or a binary-compatible compiler) with
+compatible compiler options as the one used to build MITgcm.
+
+For more details concerning the netCDF build and install process,
+please visit the netCDF home page at:
+\begin{rawhtml} <A href="http://www.unidata.ucar.edu/packages/netcdf/"> \end{rawhtml}
+\begin{verbatim}
+http://www.unidata.ucar.edu/packages/netcdf/
+\end{verbatim}
+\begin{rawhtml} </A> \end{rawhtml} 
+which includes an extensive list of known--good netCDF configurations
+for various platforms
+
+\subsubsection{Runtime Troubleshooting}
+
+Please be aware of the following:
 
 \begin{itemize}
+\item As a safety feature, the MNC package does not, by default, allow
+  pre-existing files to be appended to or overwritten.  This is in
+  contrast to the older MDSIO package which will, without any warning,
+  overwrite existing files.  If MITgcm aborts with an error message
+  about the inability to open or write to a netCDF file, please check
+  \textbf{first} whether you are attempting to overwrite files from a
+  previous run.
+
 \item The constraints placed upon the ``unlimited'' (or ``record'')
   dimension inherent with NetCDF v3.x make it very inefficient to put
   variables written at potentially different intervals within the same
-  file.  For this reason, MNC output is split into a few file ``base
-  names'' which try to reflect the nature of their content.
+  file.  For this reason, MNC output is split into groups of files
+  which attempt to reflect the nature of their content.
   
-\item All MNC output is currently done in a ``tile-per-file'' fashion
-  since most NetCDF v3.x implementions cannot write safely within MPI
-  or multi-threaded environments.  This tiling is done in a global
-  fashion and the tile numbers are appended to the base names
-  described above.  Some scripts to ``assemble'' output are available
-  (\texttt{MITgcm/utils/matlab}).  More general manipulations can be
-  accomplished with the
-  \begin{rawhtml}
-    <A href="http://nco.sourceforge.net"> 
-  \end{rawhtml} 
-\begin{verbatim}
-NetCDF Operators (or ``NCO'') at http://nco.sourceforge.net
-\end{verbatim}
-  \begin{rawhtml} </A> \end{rawhtml}
-  which is a very powerful and convenient set of tools for working
-  with all NetCDF files.
+\item On many systems, netCDF has practical file size limits on the
+  order of 2--4GB (the maximium memory addressable with 32bit pointers
+  or pointer differences) due to a lack of operating system, compiler,
+  and/or library support.  The latest revisions of netCDF v3.x have
+  large file support and, on some operating systems, file sizes are
+  only limited by available disk space.
   
-\item On many systems, NetCDF has practical file size limits on the
-  order of 2--4GB (the maximium memory addressable with 32bit
-  pointers) due to a lack of operating system, compiler, and/or
-  library support.  In cases where this limit is reached, it is
-  generally a good idea to reduce write frequencies or restart from
-  pickups.
+\item There is an 80 character limit to the total length of all file
+  names.  This limit includes the directory (or path) since paths and
+  file names are internally appended.  Generally, file names will not
+  exceed the limit and paths can usually be shortened using, for
+  example, soft links.
   
 \item MNC does not (yet) provide a mechanism for reading information
   from a single ``global'' file as can be done with the MDSIO
   package.  This is in progress.
-
 \end{itemize}
 
 
