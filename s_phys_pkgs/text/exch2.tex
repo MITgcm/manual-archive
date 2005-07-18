@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/text/exch2.tex,v 1.23 2005/06/10 19:34:09 afe Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/text/exch2.tex,v 1.24 2005/07/18 20:45:27 molod Exp $
 % $Name:  $
 
 %%  * Introduction
@@ -10,11 +10,11 @@
 %%    o automatically inserted at \section{Reference} 
 
 
-\section{exch2: Extended Cubed Sphere \mbox{Topology}}
+\subsection{exch2: Extended Cubed Sphere \mbox{Topology}}
 \label{sec:exch2}
 
 
-\subsection{Introduction}
+\subsubsection{Introduction}
 
 The \texttt{exch2} package extends the original cubed sphere topology
 configuration to allow more flexible domain decomposition and
@@ -41,7 +41,7 @@ of these files with alternate topologies are provided under
 \file{utils/exch2/code-mods} along with the appropriate \file{SIZE.h}
 file for single-processor execution.
 
-\subsection{Invoking exch2}
+\subsubsection{Invoking exch2}
 
 To use exch2 with the cubed sphere, the following conditions must be
 met: \\
@@ -96,7 +96,7 @@ verification/hs94.cs-32x32x5
 
 
 
-\subsection{Generating Topology Files for exch2}
+\subsubsection{Generating Topology Files for exch2}
 \label{sec:topogen}
 
 Alternate cubed sphere topologies may be created using the Matlab
@@ -182,7 +182,7 @@ by their tile number in the topology, separated by a newline. \\
 
 
 
-\subsection{exch2, SIZE.h, and Multiprocessing}
+\subsubsection{exch2, SIZE.h, and Multiprocessing}
 \label{sec:exch2mpi}
 
 Once the topology configuration files are created, the Fortran
@@ -271,7 +271,7 @@ figure \ref{fig:24tile} running on six processors:
 
 
 
-\subsection{Key Variables}
+\subsubsection{Key Variables}
 
 The descriptions of the variables are divided up into scalars,
 one-dimensional arrays indexed to the tile number, and two and
@@ -281,7 +281,7 @@ scalars are common to every part of the topology, the tile-indexed
 arrays to individual tiles, and the arrays indexed by tile and
 neighbor to relationships between tiles and their neighbors. \\
 
-\subsubsection{Scalars}
+Scalars:
 
 The number of tiles in a particular topology is set with the parameter
 \code{NTILES}, and the maximum number of neighbors of any tiles by
@@ -304,7 +304,7 @@ are stored internally in a range from \code{\varlink{bi}{bi}=(1:NTILES)} in the
 $x$ axis, and the $y$ axis variable \varlink{bj}{bj} is assumed to 
 equal \code{1} throughout the package. \\
 
-\subsubsection{Arrays indexed to tile number}
+Arrays indexed to tile number:
 
 The following arrays are of length \code{NTILES} and are indexed to
 the tile number, which is indicated in the diagrams with the notation
@@ -357,7 +357,7 @@ exchange and numerical handling for the singularities at the eight
 corners of the cube. \\
 
 
-\subsubsection{Arrays Indexed to Tile Number and Neighbor}
+Arrays Indexed to Tile Number and Neighbor:
 
 The following arrays have vectors of length \code{MAX\_NEIGHBOURS} and
 \code{NTILES} and describe the orientations between the the tiles. \\
@@ -501,7 +501,7 @@ western halo region of \code{Tn}. The range of
 width of \code{T}'s northern edge, expanded by one into the halo. \\
 
 
-\subsection{Key Routines}
+\subsubsection{Key Routines}
 
 Most of the subroutines particular to exch2 handle the exchanges
 themselves and are of the same format as those described in

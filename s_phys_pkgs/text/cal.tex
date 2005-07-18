@@ -1,4 +1,4 @@
-\section{CAL: The calendar package
+\subsection{CAL: The calendar package
 \label{sectioncal}}
 \begin{rawhtml}
 <!-- CMIREDIR:sectioncal: -->
@@ -17,7 +17,7 @@ are still pending e.g. the availability of the Julian Calendar,
 to be able to resolve fractions of a second, and to have a time-
 step that is longer than one day.
 
-\subsection{Basic assumptions for the calendar tool}
+\subsubsection{Basic assumptions for the calendar tool}
 
     It is assumed that the SMALLEST TIME INTERVAL to be resolved is
     ONE SECOND.
@@ -29,7 +29,7 @@ step that is longer than one day.
     Not each individual routine depends on these assumptions; there
     are only a few places where they enter.
 
-\subsection{Format of calendar dates}
+\subsubsection{Format of calendar dates}
 
     In this calendar tool a complete date specification is defined
     as the following integer array:
@@ -62,7 +62,7 @@ c               refdate(3) =        1
 c               refdate(4) =        1
 \end{verbatim}
 
-\subsection{Calendar dates and time intervals}
+\subsubsection{Calendar dates and time intervals}
 
     Subtracting calendar dates yields time intervals.
     Time intervals have the following format:
@@ -80,7 +80,7 @@ c           datediff(4) =     -1
     calendar dates. Time intervals can be added to and be
     subtracted from each other.
 
-\subsection{Using the calendar together with MITgcm}
+\subsubsection{Using the calendar together with MITgcm}
 
     Each routine has as an argument the thread number that it is
     belonging to, even if this number is not used in the routine
@@ -128,9 +128,9 @@ c         #endif
     than checkpoint 25 which do not have the global variable
     *nEndIter*.
 
-\subsection{The individual calendars}
+\subsubsection{The individual calendars}
 
-\subsubsection{Simple model calendar}
+Simple model calendar:
 
           This calendar can be used by defining
 
@@ -143,7 +143,7 @@ c                  TheCalendar='model'
           In this case a year is assumed to have 360 days. The
           model year is divided into 12 months with 30 days each.
 
-\subsubsection{Gregorian Calendar}
+Gregorian Calendar:
 
           This calendar can be used by defining
 
@@ -153,7 +153,7 @@ c                  TheCalendar='gregorian'
 
           in the calendar's data file "data.cal".
 
-\subsection{Short routine description}
+\subsubsection{Short routine description}
 
 {\footnotesize
 \begin{verbatim}

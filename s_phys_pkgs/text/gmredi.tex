@@ -1,4 +1,4 @@
-\section{GMREDI: Gent/McWiliams/Redi SGS Eddy Parameterization}
+\subsection{GMREDI: Gent/McWiliams/Redi SGS Eddy Parameterization}
 \label{sec:pkg:gmredi}
 \begin{rawhtml}
 <!-- CMIREDIR:gmredi: -->
@@ -35,7 +35,7 @@ and Redi scheme, substantial cancellations take place to the point
 that the horizontal fluxes are unmodified from the lateral diffusion
 parameterization.
 
-\subsection{Redi scheme: Isopycnal diffusion}
+\subsubsection{Redi scheme: Isopycnal diffusion}
 
 The Redi scheme diffuses tracers along isopycnals and introduces a
 term in the tendency (rhs) of such a tracer (here $\tau$) of the form:
@@ -75,7 +75,7 @@ S_x & S_y & |S|^2 \\
 \end{equation}
 
 
-\subsection{GM parameterization}
+\subsubsection{GM parameterization}
 
 The GM parameterization aims to parameterise the ``advective'' or
 ``transport'' effect of geostrophic eddies by means of a ``bolus''
@@ -104,7 +104,7 @@ F_y & = & \kappa_{GM} S_y
 This is the form of the GM parameterization as applied by Donabasaglu,
 1997, in MOM versions 1 and 2.
 
-\subsection{Griffies Skew Flux}
+\subsubsection{Griffies Skew Flux}
 
 Griffies notes that the discretisation of bolus velocities involves
 multiple layers of differencing and interpolation that potentially
@@ -191,7 +191,7 @@ $S_y$: {\bf SlopeY} (argument on exit)
 
 
 
-\subsection{Variable $\kappa_{GM}$}
+\subsubsection{Variable $\kappa_{GM}$}
 
 Visbeck et al., 1996, suggest making the eddy coefficient,
 $\kappa_{GM}$, a function of the Eady growth rate,
@@ -217,7 +217,7 @@ Substituting into the formula for $\kappa_{GM}$ gives:
 \end{displaymath}
 
 
-\subsection{Tapering and stability}
+\subsubsection{Tapering and stability}
 
 Experience with the GFDL model showed that the GM scheme has to be
 matched to the convective parameterization. This was originally
@@ -258,7 +258,7 @@ slope clipping, GKW91 limiting and DM95 limiting.}
 \end{figure}
 
 
-\subsubsection{Slope clipping}
+Slope clipping:
 
 Deep convection sites and the mixed layer are indicated by
 homogenized, unstable or nearly unstable stratification. The slopes in
@@ -305,7 +305,7 @@ parameterization. Limiting the slopes also breaks the adiabatic nature
 of the GM/Redi parameterization, re-introducing diabatic fluxes in
 regions where the limiting is in effect.
 
-\subsubsection{Tapering: Gerdes, Koberle and Willebrand, Clim. Dyn. 1991}
+Tapering: Gerdes, Koberle and Willebrand, Clim. Dyn. 1991:
 
 The tapering scheme used in Gerdes et al., 1999, (\cite{gkw:99})
 addressed two issues with the clipping method: the introduction of
@@ -329,7 +329,7 @@ that the effective vertical diffusivity term $\kappa f_1(S) |S|^2 =
 The GKW tapering scheme is activated in the model by setting {\bf
 GM\_tap\-er\_scheme = 'gkw91'} in {\em data.gmredi}.
 
-\subsection{Tapering: Danabasoglu and McWilliams, J. Clim. 1995}
+\subsubsection{Tapering: Danabasoglu and McWilliams, J. Clim. 1995}
 
 The tapering scheme used by Danabasoglu and McWilliams, 1995,
 \cite{dm:95}, followed a similar procedure but used a different
@@ -346,7 +346,7 @@ slopes.
 The DM tapering scheme is activated in the model by setting {\bf
 GM\_tap\-er\_scheme = 'dm95'} in {\em data.gmredi}.
 
-\subsection{Tapering: Large, Danabasoglu and Doney, JPO 1997}
+\subsubsection{Tapering: Large, Danabasoglu and Doney, JPO 1997}
 
 The tapering used in Large et al., 1997, \cite{ldd:97}, is based on the
 DM95 tapering scheme, but also tapers the scheme with an additional
@@ -376,7 +376,7 @@ clipping and for comparison b) using horizontal constant diffusion.}
 \label{fig-mixedlayer}
 \end{figure}
 
-\subsection{Package Reference}
+\subsubsection{Package Reference}
 % DO NOT EDIT HERE
 
 

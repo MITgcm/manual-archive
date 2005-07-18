@@ -1,11 +1,36 @@
-% $Header: /u/gcmpack/manual/s_outp_pkgs/text/top_section.tex,v 1.7 2005/07/15 18:53:06 cnh Exp $
+% $Header: /u/gcmpack/manual/s_outp_pkgs/text/top_section.tex,v 1.8 2005/07/18 20:45:28 molod Exp $
 % $Name:  $
 
-\chapter{Pre-processsing and Post-processing Tools}
+\chapter{Diagnostics and I/O - Packages II and Matlab Tools}
 \begin{rawhtml}
 <!-- CMIREDIR:processing_tools: -->
 <!-- CMIREDIR:diagnostics_and_tools: -->
 \end{rawhtml}
+
+\section{Diagnostics and I/O}
+
+The MITgcm has several packages that are related to the output
+produced during a model integration that is used for analysis
+of the results. The packages are related to the choice of output
+fields and to the format of the model output.
+
+\newpage
+\input{part7/diagnostics.tex}
+
+\newpage
+\input{part7/mnc.tex}
+
+\newpage
+\input{part7/mdsio.tex}
+
+\newpage
+\input{part7/monitor.tex}
+
+\newpage
+\input{part7/rw.tex}
+
+\newpage
+\section{Pre- and Post- Processing Scripts and Utilities}
 
 There are numerous tools for pre-processing data, converting model
 output and analysis written in Matlab, fortran (f77 and f90) and perl.
@@ -15,19 +40,19 @@ As yet they remain undocumented although many are self-documenting
 Here we'll summarize what is available but this is an ever growing resource
 so this may not cover everything that is out there:
 
-\section{Utilities supplied with the model}
+\subsection{Utilities supplied with the model}
 
 We supply some basic scripts with the model to facilitate conversion or reading
 of data into analysis software.
 
-\subsection{utils/scripts}
+\subsubsection{utils/scripts}
 
 In the directory {\em utils/scripts} you will find {\em joinds} and {\em joinmds}:
 these are perl scripts used from joining the multi-part files created by
 MITgcm. {\bf Use {\em joinmds} always}. You will only need {\em joinds} if you
 are working with output older than two years (prior to c23).
 
-\subsection{utils/matlab}
+\subsubsection{utils/matlab}
 
 In the directory {\em utils/matlab} you will find several Matlab scripts
 (.m or dot-em files). The priniciple script is {\em rdmds.m} used for reading
@@ -43,7 +68,7 @@ Another useful script scans the terminal output file for "monitor" information.
 Most other scripts are for working in the curvilinear coordinate systems which
 as yet are unpublished and undocumented.
 
-\section{Pre-processing software}
+\subsection{Pre-processing software}
 
 There is a suite of pre-processing software for intepolating bathymetry
 and forcing data, written by Adcroft and Biastoch. At some point,

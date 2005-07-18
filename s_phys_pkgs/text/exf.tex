@@ -1,11 +1,11 @@
-\section{EXF: The external forcing package
+\subsection{EXF: The external forcing package
 \label{sec:pkg:exf}}
 \begin{rawhtml}
 <!-- CMIREDIR:sectionexf: -->
 \end{rawhtml}
 
 
-\subsection{Introduction
+\subsubsection{Introduction
 \label{sec:pkg:exf:intro}}
 
 The external forcing package, in conjunction with the
@@ -31,9 +31,9 @@ output is listed in Section \ref{sec:pkg:exf:fields_diagnostics}.
 
 %----------------------------------------------------------------------
 
-\subsection{EXF configuration, compiling \& running}
+\subsubsection{EXF configuration, compiling \& running}
 
-\subsubsection{Compile-time options
+\paragraph{Compile-time options
 \label{sec:pkg:exf:config}}
 
 As with all MITgcm packages, EXF can be turned on or off at compile time
@@ -231,7 +231,7 @@ supplied as well.
 
 %----------------------------------------------------------------------
 
-\subsection{EXF input fields and units
+\subsubsection{EXF input fields and units
 \label{sec:pkg:exf:fields_units}}
 
 The following list is taken from the header file \texttt{exf\_fields.h}.
@@ -360,10 +360,10 @@ c----------------------------------------------------------------------
 
 %----------------------------------------------------------------------
 
-\subsection{Key subroutines
+\subsubsection{Key subroutines
 \label{sec:pkg:exf:subroutines}}
 
-\subsubsection{Top-level routine: \texttt{exf\_getforcing.F}}
+Top-level routine: \texttt{exf\_getforcing.F}
 
 {\scriptsize
 \begin{verbatim}
@@ -445,17 +445,17 @@ c  |   Mapping enables a runtime rescaling of fields
 \end{verbatim}
 }
 
-\subsubsection{Bulk formula routine: \texttt{exf\_bulkformulae.F}}
+Bulk formula routine: \texttt{exf\_bulkformulae.F}
 
-\subsubsection{Generic I/O routine: \texttt{exf\_set\_gen.F}}
+Generic I/O routine: \texttt{exf\_set\_gen.F}
 
-\subsubsection{Interpolation routine: \texttt{exf\_interp.F}}
+Interpolation routine: \texttt{exf\_interp.F}
 
-\subsubsection{Header routines}
+Header routines
 
 %----------------------------------------------------------------------
 
-\subsection{EXF diagnostics
+\subsubsection{EXF diagnostics
 \label{sec:pkg:exf:diagnostics}}
 
 Diagnostics output is available via the diagnostics package
@@ -490,12 +490,12 @@ Table \ref{tab:pkg:exf:diagnostics}.
 
 %----------------------------------------------------------------------
 
-\subsection{Reference experiments}
+\subsubsection{Reference experiments}
 
-\subsubsection{global\_with\_exf}
+global\_with\_exf:
 
-\subsubsection{lab\_sea}
+lab\_sea:
 
 %----------------------------------------------------------------------
 
-\subsection{References}
+\subsubsection{References}

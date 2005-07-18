@@ -1,7 +1,7 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/text/top_section.tex,v 1.32 2005/07/14 21:04:52 heimbach Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/text/top_section.tex,v 1.33 2005/07/18 20:45:27 molod Exp $
 % $Name:  $
 
-\chapter{Physical Parameterization and Packages}
+\chapter{Physical Parameterizations - Packages I}
 \begin{rawhtml}
 <!-- CMIREDIR:packages: -->
 \end{rawhtml}
@@ -26,42 +26,64 @@ existing packages and how to modify them and create new ones.
 %% processes are sub-grid scale (SGS) phenomena, other processes, such as
 %% open-boundaries, are external to the simulation.
 
+% Overview
 \newpage
 \input{part6/packages.tex}
 
+% Packages Related to Hydrodynamical Kernel
 \newpage
-\input{part6/gmredi.tex}
+\section{Packages Related to Hydrodynamical Kernel}
+\input{part6/generic_advdiff.tex}
 
 \newpage
-\input{part6/dic.tex}
+\input{part6/zonal_filt.tex}
+
+\newpage
+\input{part6/exch2.tex}
+
+\newpage
+\input{part6/gridalt.tex}
+
+% Some Mention of Packages that are part of the main model document
+
+% Ocean Packages
+\newpage
+\section{Ocean Packages}
+\input{part6/gmredi.tex}
 
 \newpage
 \input{part6/kpp.tex}
 
 \newpage
-\input{part6/thsice.tex}
-
-\newpage
-\input{part6/seaice.tex}
-
-\newpage
 \input{part6/bulk_force.tex}
-
-\newpage
-\input{part6/cal.tex}
 
 \newpage
 \input{part6/exf.tex}
 
 \newpage
-\input{part6/generic_advdiff.tex}
+\input{part6/cal.tex}
 
+\section{Atmosphere Packages}
 \newpage
 \input{part6/aim.tex}
 
 \newpage
 \input{part6/land.tex}
 
+%% FIZHI is *** PRIVATE ***
+%\begin{versionprivate}
+  \newpage
+  \input{part6/fizhi.tex}
+%\end{versionprivate}
+
+\section{Sea Ice Packages}
+\newpage
+\input{part6/thsice.tex}
+
+\newpage
+\input{part6/seaice.tex}
+
+\section{Packages Related to Coupled Model}
 \newpage
 \input{part6/aim_compon_interf.tex}
 
@@ -71,35 +93,9 @@ existing packages and how to modify them and create new ones.
 \newpage
 \input{part6/component_communications.tex}
 
-\newpage
-\input{part6/mnc.tex}
-
-\newpage
-\input{part6/mdsio.tex}
-
-\newpage
-\input{part6/monitor.tex}
-
-\newpage
-\input{part6/exch2.tex}
-
-\newpage
-\input{part6/gridalt.tex}
-
-%% FIZHI is *** PRIVATE ***
-%\begin{versionprivate}
-  \newpage
-  \input{part6/fizhi.tex}
-%\end{versionprivate}
-
-\newpage
-\input{part6/diagnostics.tex}
-
-\newpage
-\input{part6/rw.tex}
-
-\newpage
-\input{part6/zonal_filt.tex}
-
+\section{Biogeochemistry Packages}
 \newpage
 \input{part6/gchem.tex}
+
+\newpage
+\input{part6/dic.tex}

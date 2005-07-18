@@ -1,11 +1,11 @@
-\section{Fizhi: High-end Atmospheric Physics}
+\subsection{Fizhi: High-end Atmospheric Physics}
 \label{sec:pkg:fizhi}
 \begin{rawhtml}
 <!-- CMIREDIR:package_fizhi: -->
 \end{rawhtml}
 \input{texinputs/epsf.tex}
 
-\subsection{Introduction}
+\subsubsection{Introduction}
 The fizhi (high-end atmospheric physics) package includes a collection of state-of-the-art
 physical parameterizations for atmospheric radiation, cumulus convection, atmospheric
 boundary layer turbulence, and land surface processes.
@@ -13,9 +13,9 @@ boundary layer turbulence, and land surface processes.
 % *************************************************************************
 % *************************************************************************
  
-\subsection{Equations}
+\subsubsection{Equations}
 
-\subsubsection{Moist Convective Processes}
+Moist Convective Processes:
 
 \paragraph{Sub-grid and Large-scale Convection}
 \label{sec:fizhi:mc}
@@ -186,7 +186,7 @@ F_{CLD} = \max \left[ F_{RAS},F_{LS} \right] .
 Finally, cloud fractions are time-averaged between calls to the radiation packages.
 
 
-\subsubsection{Radiation}
+Radiation:
 
 The parameterization of radiative heating in the fizhi package includes effects 
 from both shortwave and longwave processes.
@@ -428,7 +428,8 @@ The cloud fraction values are time-averaged over the period between Radiation ca
 hours).  Therefore, in a time-averaged sense, both convective and large-scale 
 cloudiness can exist in a given grid-box.  
 
-\subsubsection{Turbulence}
+Turbulence:
+
 Turbulence is parameterized in the fizhi package to account for its contribution to the
 vertical exchange of heat, moisture, and momentum.  
 The turbulence scheme is invoked every 30 minutes, and employs a backward-implicit iterative 
@@ -672,7 +673,7 @@ by $2 \pi$ $radians/
 day$, and the expression for $C_s$, the heat capacity per unit volume at the surface,
 is a function of the ground wetness, $W$.
 
-\subsubsection{Land Surface Processes}
+Land Surface Processes:
 
 \paragraph{Surface Type}
 The fizhi package surface Types are designated using the Koster-Suarez (1992) mosaic
@@ -750,7 +751,8 @@ sun), the greenness fraction, the vegetation type, and the solar zenith angle.
 Modifications are made to account for the presence of snow, and its depth relative
 to the height of the vegetation elements.
 
-\subsubsection{Gravity Wave Drag}
+Gravity Wave Drag:
+
 The fizhi package employs the gravity wave drag scheme of Zhou et al. (1996).
 This scheme is a modified version of Vernekar et al. (1992),
 which was based on Alpert et al. (1988) and Helfand et al. (1987).  
@@ -784,7 +786,7 @@ of mountain torque (through a redistribution of mean sea-level pressure), and of
 convergence (through a reduction in the flux of westerly momentum by transient flow eddies).  
 
 
-\subsubsection{Boundary Conditions and other Input Data}
+Boundary Conditions and other Input Data:
 
 Required fields which are not explicitly predicted or diagnosed during model execution must
 either be prescribed internally or obtained from external data sets.  In the fizhi package these
@@ -893,9 +895,9 @@ the model's moisture data is used.  Above 100 mb, the SAGE data is used.  Betwee
 a linear interpolation (in pressure) is performed using the data from SAGE and the GCM. 
 
 
-\subsection{Fizhi Diagnostics}
+\subsubsection{Fizhi Diagnostics}
 
-\subsubsection{Fizhi Diagnostic Menu}
+Fizhi Diagnostic Menu:
 \label{sec:fizhi-diagnostics:menu}
 
 \begin{tabular}{llll}
@@ -1424,7 +1426,7 @@ a linear interpolation (in pressure) is performed using the data from SAGE and t
 
 \newpage
 
-\subsubsection{Fizhi Diagnostic Description}
+Fizhi Diagnostic Description:
 
 In this section we list and describe the diagnostic quantities available within the 
 GCM.  The diagnostics are listed in the order that they appear in the 
@@ -3025,8 +3027,8 @@ q^{n+1} = (\pi q)^{n+1} / \pi^{n+1}
 \]
 
 
-\subsection{Key subroutines, parameters and files}
+\subsubsection{Key subroutines, parameters and files}
 
-\subsection{Dos and donts}
+\subsubsection{Dos and donts}
 
-\subsection{Fizhi Reference}
+\subsubsection{Fizhi Reference}

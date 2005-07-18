@@ -1,10 +1,10 @@
-\section {DIC Package} 
+\subsection {DIC Package} 
 \label{sec:pkg:dic}
 \begin{rawhtml}
 <!-- CMIREDIR:package_dic: -->
 \end{rawhtml}
 
-\subsection {Introduction}
+\subsubsection {Introduction}
 This is one of the biogeochemical packages handled from the
 pkg gchem. The main purpose of this package is to consider
 the cycling of carbon in the ocean. It also looks at the
@@ -21,7 +21,7 @@ is affected by temperature, salinity and the pH of the
 surface waters. The pH is determined following the
 method of Follows et al. 
 
-\subsection {Key subroutines and parameters}
+\subsubsection {Key subroutines and parameters}
 
 \noindent
 {{\bf INITIALIZATION}} \\
@@ -92,11 +92,11 @@ carbonate activity and pH are calculated. These are
 initialized to zero in {\it dic\_biotic\_init} and
 are stored in common block in {\it DIC\_BIOTIC.h}.
 
-\subsection{Do's and Don'ts}
+\subsubsection{Do's and Don'ts}
 
 This package must be run with both ptracers and gchem enabled.
 It is set up for 5 tracers, but there is the provision of
 a 6th tracer (iron) that is not discussed here.
 
-\subsection{Reference Material}
+\subsubsection{Reference Material}
 
