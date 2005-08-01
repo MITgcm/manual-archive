@@ -4,6 +4,7 @@
 <!-- CMIREDIR:sectionexf: -->
 \end{rawhtml}
 
+Authors: Patrick Heimbach and Dimitris Menemenlis
 
 \subsubsection{Introduction
 \label{sec:pkg:exf:intro}}
@@ -35,12 +36,23 @@ output is listed in Section \ref{sec:pkg:exf:fields_diagnostics}.
 
 \paragraph{Compile-time options
 \label{sec:pkg:exf:config}}
+~
 
 As with all MITgcm packages, EXF can be turned on or off at compile time
-using the \texttt{packages.conf} file or the \texttt{genmake2}
-\texttt{-enable=exf} or \texttt{-disable=exf} switches.
+%
+\begin{itemize}
+%
+\item
+using the \texttt{packages.conf} file by adding \texttt{exf} to it,
+%
+\item
+or using \texttt{genmake2} adding
+\texttt{-enable=exf} or \texttt{-disable=exf} switches
+%
+\end{itemize}
+(see Section \ref{sect:buildingCode}).
 
-Parts of the exf code can be enabled or disabled at compile time
+Parts of the EXF code can be enabled or disabled at compile time
 via CPP preprocessor flags. These options are set in either
 \texttt{EXF\_OPTIONS.h} or in \texttt{ECCO\_CPPOPTIONS.h}.
 Table \ref{tab:pkg:exf:cpp} summarizes these options.
@@ -93,17 +105,25 @@ Table \ref{tab:pkg:exf:cpp} summarizes these options.
 \subsubsection{Run-time parameters
 \label{sec:pkg:exf:runtime}}
 
-Run-time parameters are set in files \texttt{data.pkg},
-and \texttt{data.pkg\_clim} (for relaxation/climatological fields)
+Run-time parameters are set in files 
+\texttt{data.pkg}, \texttt{data.exf}, and 
+\texttt{data.exf\_clim} (for relaxation/climatological fields)
 which are read in \texttt{exf\_readparms.F}.
-Run-time parameters may be broken into 2 categories:
-(i) general flags and parameters, and
-(ii) attributes for each forcing and climatological field.
+Run-time parameters may be broken into 3 categories:
+(i) switching on/off the package at runtime,
+(ii) general flags and parameters, and
+(iii) attributes for each forcing and climatological field.
+
+\paragraph{Enabling the package}
+~ \\
+%
+A package is usually switched on/off at runtime by setting
+(e.g. for EXF) \texttt{useEXF = .TRUE.} in \texttt{data.pkg}.
+For EXF this flag is omitted, i.e. EXF is always ON if it is compiled.
 
 \paragraph{General flags and parameters}
-
-~
-
+~ \\
+%
 \begin{table}[h!]
   \label{tab:pkg:exf:runtime_flags}
   {\footnotesize
@@ -137,7 +157,8 @@ Run-time parameters may be broken into 2 categories:
 \end{table}
 
 
-\paragraph{Field attributes} ~ \\
+\paragraph{Field attributes} 
+~ \\
 %
 All EXF fields are listed in Section \ref{sec:pkg:exf:fields_units}.
 Each field has a number of attributes which can be customized.
@@ -241,7 +262,7 @@ Output fields which EXF provides to the MITgcm are fields
 \textbf{fu}, \textbf{fv}, \textbf{Qnet}, \textbf{Qsw}, \textbf{EmPmR},
 and \textbf{pload}. They are defined in \texttt{FFIELDS.h}.
 
-{\scriptsize
+{\footnotesize
 \begin{verbatim}
 
 c----------------------------------------------------------------------
@@ -365,7 +386,7 @@ c----------------------------------------------------------------------
 
 Top-level routine: \texttt{exf\_getforcing.F}
 
-{\scriptsize
+{\footnotesize
 \begin{verbatim}
 
 C     !CALLING SEQUENCE:
