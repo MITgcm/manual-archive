@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/manual.tex,v 1.31 2005/07/14 20:39:23 cnh Exp $
+% $Header: /u/gcmpack/manual/manual.tex,v 1.32 2005/08/01 22:14:19 jmc Exp $
 % $Name:  $
 
 \documentclass[10pt]{book}
@@ -90,7 +90,10 @@
 %aja%\gdef\harvardleft{[}
 %aja%\gdef\harvardright{]}
 %aja%\bibpunct{[}{]}{,}{a}{}{,}
-\bibliographystyle{plain}
+%\bibliographystyle{plain}
+%-jmc: try agu bib-style (give author names & year instead of just a number)
+\usepackage[square]{natbib}
+\bibliographystyle{agu}
 
 % referencing
 %ph%\newcommand{\refequ}[1]{equation (\ref{equ:#1})}
