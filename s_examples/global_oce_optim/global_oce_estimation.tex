@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_examples/global_oce_optim/global_oce_estimation.tex,v 1.3 2005/08/02 19:54:53 dfer Exp $
+% $Header: /u/gcmpack/manual/s_examples/global_oce_optim/global_oce_estimation.tex,v 1.4 2005/08/02 20:44:02 dfer Exp $
 % $Name:  $
 
 \section[Global Ocean State Estimation Example]{Global Ocean State Estimation at 4$^\circ$ Resolution}
@@ -177,8 +177,26 @@ respectively, the sensitivity of the cost function to Qnetm and the perturbation
 to Qnetm (zero at the first iteration). Two other files called ecco\_cost.. and
 ecco\_ctrl are also generated. They essentially contains the same information as the
 adxx\_* and xx\_* files, but in a compressed format. These two file are the only ones
-involved in the communication between the model \it{mitgcmuv\_ad} and the line search optim.x. the cost one contains the cost function and the cost function
-sensitivity to the control variables. It is an ouptu of mitgcmuv\_ad. The ctrl one contain the correction to Qnetm.
+involved in the communication between the adjoint model \it{mitgcmuv\_ad} and the
+line-search algorithm \it{optim.x}. The ecco\_cost*n is an ouput of the adjoint model
+at iteration $n$ and an input of the line-search. The latter returns an updated
+perturbation in ecco\_ctrl*n+1 to be used as an input of the adjoint model at iteration n+1. 
 
-Move these two files to OPTIM, open data.optim, the iteration number should be
-set to 0. 
+At the first iteration, move these two files ecco\_cost and ecco\_ctrl 
+to OPTIM/, open data.optim and check the iteration number is set to 0.
+The target cost function \it{fmin} needs to be specified: a rule of thumb 
+suggest it should be set to about 0.95-0.90 times the value of the cost
+function at the first iteration. This value is only used at the first
+iteration and does not need to be updated afterwards. 
+However, it implicitly specifies the "pace" at which the cost function is
+going down (if you are lucky and it goes down). More in the ECCO section maybe ?
+
+Once this is done, run the line-search algorithm:
+\begin{verbatim}
+% ./optim.x
+\end{verbatim}
+which produces the updated perturbation for iterations 1 ecco\_ctrl\_1.
+
+The following iterations can be executed automatically using the shell script \it{cycle}
+found in input\_ad/.
+
