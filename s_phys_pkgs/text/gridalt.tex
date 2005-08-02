@@ -6,59 +6,130 @@
 
 \subsubsection {Introduction} 
 
-The gridalt package was developed to allow the high end atmospheric physics 
-(fizhi) physics to be run on a separate grid from the hydrodynamics. The package
-could (with some user modification) be used in conjunction with other packages 
-or for other calculations within the GCM. For the case of the atmospheric 
-physics, a modified $p^*$ coordinate, which adds additional levels between
-the lower levels of the existing $p^*$ grid (and perhaps between the levels near 
-the tropopause as well), is implemented. The vertical discretization is
-different for each grid point, although it consist of the same number of 
-levels. This is illustrated as follows:
+The gridalt package is designed to allow different components of the MITgcm to
+be run using horizontal and/or vertical grids which are different from the main 
+model grid. The gridalt routines handle the definition of the all the various
+alternative grid(s) and the mappings between them and the MITgcm grid.
+The implementation of the gridalt package which allows the high end atmospheric 
+physics (fizhi) to be run on a high resolution and quasi terrain-following vertical 
+grid is documented here.  The package has also (with some user modifications) been used 
+for other calculations within the GCM. 
+
+The rationale for implementing the atmospheric physics on a high resolution vertical
+grid involves the fact that the MITgcm $p^*$ (or any pressure-type) coordinate cannot 
+maintain the vertical resolution near the surface as the bottom topography rises above
+sea level. The vertical length scales near the ground are small and can vary 
+on small time scales, and the vertical grid must be adequate to resolve them.
+Many studies with both regional and global atmospheric models have demonstrated the 
+improvements in the simulations when the vertical resolution near the surface is 
+increased (\cite{bm:99,Inn:01,wo:98,breth:99}). Some of the benefit of increased resolution 
+near the surface is realized by employing the higher resolution for the computation of the 
+forcing due to turbulent and convective processes in the atmosphere.  
+
+The parameterizations of atmospheric subgrid scale processes are all essentially
+one-dimensional in nature, and the computation of the terms in the equations of
+motion due to these processes can be performed for the air column over one grid point 
+at a time.  The vertical grid on which these computations take place can therefore be 
+entirely independant of the grid on which the equations of motion are integrated, and 
+the 'tendency' terms can be interpolated to the vertical grid on which the equations
+of motion are integrated. A modified $p^*$ coordinate, which adjusts to the local 
+terrain and adds additional levels between the lower levels of the existing $p^*$ grid 
+(and perhaps between the levels near the tropopause as well), is implemented. The 
+vertical discretization is different for each grid point, although it consist of the 
+same number of levels. Additional 'sponge' levels aloft are added when needed. The levels 
+of the physics grid are constrained to fit exactly into the existing $p^*$ grid, simplifying 
+the mapping between the two vertical coordinates.  This is illustrated as follows:
+
 \begin{figure}[htbp]
 \vspace*{-0.4in}
 \begin{center}
 \includegraphics[height=2.4in]{part6/vertical.eps}
+\caption{Vertical discretization for the MITgcm (dark grey lines) and for the
+atmospheric physics (light grey lines). In this implementation, all MITgcm level
+interfaces must coincide with atmospheric physics level interfaces.}
+must be entirely
 \end{center}
 \end{figure}
 
-\vspace*{-0.5in}
-In addition to computing the physical forcing terms of the momentum,
-thermodynamic and humidity equations on the modified (higher resolution)
-grid, the higher resolution structure of the atmosphere (the boundary
-layer) is retained between calculations. This neccessitates a second 
-set of evolution equations for the atmospheric state variables on the 
-modified grid. If the equations for the evolution of the state
-on $p^*$ can be expressed as:
+The algorithm presented here retains the state variables on the high resolution 'physics'
+grid as well as on the coarser resolution 'dynamics` grid, and ensures that the two 
+estimates of the state 'agree' on the coarse resolution grid.  It would have been possible 
+to implement a technique in which the tendencies due to atmospheric physics are computed 
+on the high resolution grid and the state variables are retained at low resolution only. 
+This, however, for the case of the turbulence parameterization,  would mean that the 
+turbulent kinetic energy source terms, and all the turbulence terms that are written 
+in terms of gradients of the mean flow, cannot really be computed making use of the fine 
+structure in the vertical. 
+
+\subsubsection{Equations on Both Grids}
+
+In addition to computing the physical forcing terms of the momentum, thermodynamic and humidity 
+equations on the modified (higher resolution) grid, the higher resolution structure of the 
+atmosphere (the boundary layer) is retained between physics calculations. This neccessitates
+a second set of evolution equations for the atmospheric state variables on the modified grid. 
+If the equation for the evolution of $U$ on $p^*$ can be expressed as:
 \[
 \left . {\partial U \over {\partial t}} \right |_{p^*}^{total} = 
 \left . {\partial U \over {\partial t}} \right |_{p^*}^{dynamics} + 
 \left . {\partial U \over {\partial t}} \right |_{p^*}^{physics}
 \]
-where the physics forcing terms on $p^*$ have been computed from a
-mapping from the modified grid, then an additional set of equations
-to govern the evolution of $U$ on the modified grid are written:
+where the physics forcing terms on $p^*$ have been mapped from the modified grid, then an additional 
+equation to govern the evolution of $U$ (for example) on the modified grid is written:
 \[
 \left . {\partial U \over {\partial t}} \right |_{p^{*m}}^{total} = 
 \left . {\partial U \over {\partial t}} \right |_{p^{*m}}^{dynamics} + 
 \left . {\partial U \over {\partial t}} \right |_{p^{*m}}^{physics} +
 \gamma ({\left . U \right |_{p^*}} - {\left . U \right |_{p^{*m}}})
 \]
-where $p^{*m}$ refers to the modified higher resolution grid, and
-the dynamics forcing terms have been mapped from the $p^*$ space.
-The last term on the RHS is a relaxation term, meant to constrain
-the state variables on the modified vertical grid to `track' the
-state variables on the $p^*$ grid on some time scale, $\gamma$.
+where $p^{*m}$ refers to the modified higher resolution grid, and the dynamics forcing terms have 
+been mapped from $p^*$ space.  The last term on the RHS is a relaxation term, meant to constrain
+the state variables on the modified vertical grid to `track' the state variables on the $p^*$ grid 
+on some time scale, governed by $\gamma$. In the present implementation, $\gamma = 1$, requiring
+an immediate agreement between the two 'states'.
+
+\subsubsection{Time stepping Sequence}
+If we write $T_{phys}$ as the temperature (or any other state variable) on the high
+resolution physics grid, and $T_{dyn}$ as the temperature on the coarse vertical resolution
+dynamics grid, then:
+
+\begin{enumerate}
+%\itemsep{-0.05in}
+
+\item{Compute the tendency due to physics processes.}
+
+\item{Advance the physics state: ${T^{n+1}^{**}}_{phys}(l) = {T^n}_{phys}(l) + \delta T_{phys}$.}
+
+\item{Interpolate the physics tendency to the dynamics grid, and advance the dynamics
+state by physics and dynamics tendencies:
+${T^{n+1}}_{dyn}(L) = {T^n}_{dyn}(L) + \delta T_{dyn}(L) + [\delta T _{phys}(l)](L)$.}
+
+\item{Interpolate the dynamics tendency to the physics grid, and update the physics
+grid due to dynamics tendencies: 
+${T^{n+1}^*}_{phys}(l)$ = ${T^{n+1}^{**}}_{phys}(l) + {\delta T_{dyn}(L)}(l)$.}
+
+\item{Apply correction term to physics state to account for divergence from dynamics state:
+${T^{n+1}}_{phys}(l)$ = ${T^{n+1}^*}_{phys}(l) + \gamma \{  T_{dyn}(L) - [T_{phys}(l)](L) \}(l)$.} \\
+Where $\gamma=1$ here. 
+
+\end{enumerate}
+
+\subsubsection{Interpolation}
+In order to minimize the correction terms for the state variables on the alternative,
+higher resolution grid, the vertical interpolation scheme must be constructed so that
+a dynamics-to-physics interpolation can be exactly reversed with a physics-to-dynamics mapping.
+The simple scheme employed to achieve this is:
+
+Coarse to fine:\
+For all physics layers l in dynamics layer L, $ T_{phys}(l) = \{T_{dyn}(L)\} = T_{dyn}(L) $.
+
+Fine to coarse:\
+For all physics layers l in dynamics layer L, $T_{dyn}(L) = [T_{phys}(l)] = \int{T_{phys} dp } $.
+
+Where $\{\}$ is defined as the dynamics-to-physics operator and $[ ]$ is the physics-to-dynamics operator, $T$ stands for any state variable, and the subscripts $phys$ and $dyn$ stand for variables on
+the physics and dynamics grids, respectively.
 
 \subsubsection {Key subroutines, parameters and files } 
 
 \subsubsection {Dos and donts}
-
-In the context of a Held-Suarez type of model experiment (located
-in the fizhi-gridalt-hs verification experiment) with
-topography, the forcing terms which represent the physics are computed on 
-the modified grid. The forcing terms are computed as functions of the
-state variables on the modified grid. The tendencies are then interpolated
-to the standard grid
 
 \subsubsection {Gridalt Reference} 
