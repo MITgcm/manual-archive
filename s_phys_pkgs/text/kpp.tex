@@ -1,5 +1,5 @@
 \subsection{KPP: Nonlocal K-Profile Parameterization for 
-Diapycnal Mixing}
+Vertical Mixing}
 
 \label{sec:pkg:kpp}
 \begin{rawhtml}
@@ -11,9 +11,68 @@ Authors: Dimitris Menemenlis and Patrick Heimbach
 \subsubsection{Introduction
 \label{sec:pkg:kpp:intro}}
 
+The nonlocal K-Profile Parameterization (KPP) scheme
+of \cite{lar-eta:94} unifies the treatment of a variety of 
+unresolved processes involved in vertical mixing. 
+To consider it as one mixing scheme is, in the view of the authors,
+somewhat misleading since it consists of several entities
+to deal with distinct mixing processes in the ocean's surface 
+boundary layer, and the interior:
+%
+\begin{enumerate}
+%
+\item
+mixing in the interior is goverened by
+shear instability (modeled as function of the local gradient
+Richardson number), internal wave activity (assumed constant),
+and double-diffusion (not implemented here).
+%
+\item
+a boundary layer depth $h$ or \texttt{hbl} is determined
+at each grid point, based on a critical value of turbulent
+processes parameterized by a bulk Richardson number;
+%
+\item
+mixing is strongly enhanced in the boundary layer under the
+stabilizing or destabilizing influence of surface forcing 
+(buoyancy and momentum) enabling boundary layer properties
+to penetrate well into the thermocline; 
+mixing is represented through a polynomial profile whose 
+coefficients are determined subject to several contraints;
+%
+\item
+the boundary-layer profile is made to agree with similarity
+theory of turbulence and is matched, in the asymptotic sense
+(function and derivative agree at the boundary),
+to the interior thus fixing the polynomial coefficients; 
+matching allows for some fraction of the boundary layer mixing
+to affect the interior, and vice versa;
+%
+\item
+a ``non-local'' term $\hat{\gamma}$ or \texttt{ghat}
+which is independent of the vertical property gradient further 
+enhances mixing where the water column is unstable
+%
+\end{enumerate}
+%
+The scheme has been extensively compared to observations
+(see e.g. \cite{lar-eta:97}) and is now coomon in many
+ocean models.
+
+The following sections will describe the KPP package
+configuration and compiling (\ref{sec:pkg:kpp:comp}),
+the settings and choices of runtime parameters
+(\ref{sec:pkg:kpp:runtime}),
+more detailed description of equations to which these
+parameters relate (\ref{sec:pkg:kpp:equations}),
+and key subroutines where they are used (\ref{sec:pkg:kpp:subroutines}),
+and diagnostics output of KPP-derived diffusivities, viscosities
+and boundary-layer/mixed-layer depths.
+
 %----------------------------------------------------------------------
 
-\subsubsection{KPP configuration and compiling}
+\subsubsection{KPP configuration and compiling
+\label{sec:pkg:kpp:comp}}
 
 As with all MITgcm packages, KPP can be turned on or off at compile time
 %
@@ -34,6 +93,7 @@ via CPP preprocessor flags. These options are set in
 \texttt{KPP\_OPTIONS.h}. Table \ref{tab:pkg:kpp:cpp} summarizes them.
 
 \begin{table}[h!]
+\centering
   \label{tab:pkg:kpp:cpp}
   {\footnotesize
     \begin{tabular}{|l|l|}
@@ -67,7 +127,6 @@ via CPP preprocessor flags. These options are set in
   }
   \caption{~}
 \end{table}
-
 
 
 %----------------------------------------------------------------------
@@ -104,7 +163,12 @@ kernel need to be set in conjunction with KPP:
 \paragraph{Package flags and parameters}
 ~ \\
 %
+Table \ref{tab:pkg:kpp:runtime_flags} summarizes the
+runtime flags that are set in \texttt{data.pkg}, and
+their default values.
+
 \begin{table}[h!]
+\centering
   \label{tab:pkg:kpp:runtime_flags}
   {\footnotesize
     \begin{tabular}{|l|c|l|}
@@ -210,6 +274,84 @@ kernel need to be set in conjunction with KPP:
 \subsubsection{Equations
 \label{sec:pkg:kpp:equations}}
 
+We restrict ourselves to writing out only the essential equations
+that relate to main processes and parameters mentioned above.
+We closely follow the notation of \cite{lar-eta:94}.
+
+\paragraph{Mixing in the boundary layer} ~ \\
+%
+~
+
+The vertical fluxes $\overline{wx}$
+of momentum and tracer properties $X$
+is composed of a gradient-flux term (proportional to
+the vertical property divergence $\partial_z X$), and
+a ``nonlocal'' term $\gamma_x$ that enhances the
+gradient-flux mixing coefficient $K_x$
+%
+\begin{equation}
+\overline{wx}(d) \, = \, -K_x \left(
+\frac{\partial X}{\partial z} \, - \, \gamma_x \right)
+\end{equation}
+
+\begin{itemize}
+%
+\item
+\textit{Boundary layer mixing profile} \\
+%
+It is expressed as the product of the boundary layer depth $h$,
+a depth-dependent turbulent velocity scale $w_x(\sigma)$ and a
+non-dimensional shape function $G(\sigma)$
+%
+\begin{equation}
+K_x(\sigma) \, = \, h \, w_x(\sigma) \, G(\sigma)
+\end{equation}
+%
+with dimensionless vertical coordinate $\sigma = d/h$.
+For details of $ w_x(\sigma)$ and $G(\sigma)$ we refer to
+\cite{lar-eta:94}.
+
+%
+\item
+\textit{Nonlocal mixing term} \\
+%
+The nonlocal transport term $\gamma$ is nonzero only for
+tracers in unstable (convective) forcing conditions.
+Thus, depending on the  stability parameter $\zeta = d/L$ 
+(with depth $d$, Monin-Obukhov length scale $L$)
+it has the following form:
+%
+\begin{eqnarray}
+\begin{array}{cl}
+\gamma_x \, = \, 0 & \zeta \, \ge \, 0 \\
+~ & ~ \\
+\left.
+\begin{array}{c}
+\gamma_m \, = \, 0 \\
+ ~ \\
+\gamma_s \, = \, C_s 
+\frac{\overline{w s_0}}{w_s(\sigma) h} \\
+ ~ \\
+\gamma_{\theta} \, = \, C_s
+\frac{\overline{w \theta_0}+\overline{w \theta_R}}{w_s(\sigma) h} \\
+\end{array}
+\right\} 
+&
+\zeta \, < \, 0 \\
+\end{array}
+\end{eqnarray}
+
+\end{itemize}
+
+
+\paragraph{Mixing in the interior} ~ \\
+%
+~
+
+\paragraph{Implicit time integration} ~ \\
+%
+~
+
 %----------------------------------------------------------------------
 
 \subsubsection{Key subroutines
@@ -294,18 +436,20 @@ find diffusivities at kbl-1 grid level
 %
 \end{enumerate}
 
-\paragraph{kpp\_calc\_diff\_t/s, kpp\_calc\_visc:} ~  \\
+\paragraph{kpp\_calc\_diff\_t/\_s, kpp\_calc\_visc:} ~  \\
 %
 Add contribution to net diffusivity/viscosity from 
 KPP diffusivity/viscosity.
 
-\paragraph{kpp\_transport\_t/s/ptr:} ~ \\
+\paragraph{kpp\_transport\_t/\_s/\_ptr:} ~ \\
 %
 Add non local KPP transport term (ghat) to diffusive
 temperature/salinity/passive tracer flux.
 The nonlocal transport term is nonzero only for scalars
 in unstable (convective) forcing conditions. 
 
+\paragraph{Flow chart:} ~ \\
+%
 {\footnotesize
 \begin{verbatim}
 
@@ -345,6 +489,7 @@ Available output fields are summarized in
 Table \ref{tab:pkg:kpp:diagnostics}.
 
 \begin{table}[h!]
+\centering
 \label{tab:pkg:kpp:diagnostics}
 {\footnotesize
 \begin{verbatim}
@@ -374,3 +519,4 @@ natl\_box:
 %----------------------------------------------------------------------
 
 \subsubsection{References}
+
