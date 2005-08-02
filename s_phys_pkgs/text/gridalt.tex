@@ -47,7 +47,6 @@ the mapping between the two vertical coordinates.  This is illustrated as follow
 \caption{Vertical discretization for the MITgcm (dark grey lines) and for the
 atmospheric physics (light grey lines). In this implementation, all MITgcm level
 interfaces must coincide with atmospheric physics level interfaces.}
-must be entirely
 \end{center}
 \end{figure}
 
@@ -97,7 +96,7 @@ dynamics grid, then:
 
 \item{Compute the tendency due to physics processes.}
 
-\item{Advance the physics state: ${T^{n+1}^{**}}_{phys}(l) = {T^n}_{phys}(l) + \delta T_{phys}$.}
+\item{Advance the physics state: ${{T^{n+1}}^{**}}_{phys}(l) = {T^n}_{phys}(l) + \delta T_{phys}$.}
 
 \item{Interpolate the physics tendency to the dynamics grid, and advance the dynamics
 state by physics and dynamics tendencies:
@@ -105,10 +104,10 @@ ${T^{n+1}}_{dyn}(L) = {T^n}_{dyn}(L) + \delta T_{dyn}(L) + [\delta T _{phys}(l)]
 
 \item{Interpolate the dynamics tendency to the physics grid, and update the physics
 grid due to dynamics tendencies: 
-${T^{n+1}^*}_{phys}(l)$ = ${T^{n+1}^{**}}_{phys}(l) + {\delta T_{dyn}(L)}(l)$.}
+${{T^{n+1}}^*}_{phys}(l)$ = ${{T^{n+1}}^{**}}_{phys}(l) + {\delta T_{dyn}(L)}(l)$.}
 
 \item{Apply correction term to physics state to account for divergence from dynamics state:
-${T^{n+1}}_{phys}(l)$ = ${T^{n+1}^*}_{phys}(l) + \gamma \{  T_{dyn}(L) - [T_{phys}(l)](L) \}(l)$.} \\
+${T^{n+1}}_{phys}(l)$ = ${{T^{n+1}}^*}_{phys}(l) + \gamma \{  T_{dyn}(L) - [T_{phys}(l)](L) \}(l)$.} \\
 Where $\gamma=1$ here. 
 
 \end{enumerate}
