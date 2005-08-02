@@ -9,13 +9,13 @@
 This model overlays the dissolved inorganic carbon biogeochemistry
 model (the ``dic'' package) over a 2.8$^o$ global physical model. The
 physical model has 15 levels, and is forced with a climatological
-annual cycle of surface wind stresses [Trenberth \textit{et al.},
-1989], surface heat and freshwater fluxes [Jiang \textit{et al.},
-1999] with additional relaxation toward climatological sea surface
-temperature and salinity [Levitus and Boyer, 1994; Levitus \textit{et
-  al.}, 1994].  It uses the Gent and and McWilliams [1990] eddy
-parameterization scheme, has an implicit free-surface, implicit
-vertical diffusion and uses the convective adjustment scheme.
+annual cycle of surface wind stresses \cite{Trenberth_etal_89},
+surface heat and freshwater fluxes \citre{jiang99} with additional
+relaxation toward climatological sea surface temperature and salinity
+\cite{lev:94a,Levitus94}.  It uses the Gent and and McWilliams
+\cite{gen-mcw:90} eddy parameterization scheme, has an implicit
+free-surface, implicit vertical diffusion and uses the convective
+adjustment scheme.
 
 The biogeochemical model considers the coupled cycles of carbon,
 oxygen, phosphorus and alkalinity.  A simplified parameterization of
@@ -28,12 +28,11 @@ exported as particulate to depth [Yamanaka and Tajika, 1997] where it
 is remineralized according to the empirical power law relationship
 determined by Martin et al [1987].  The fate of carbon is linked to
 that of phosphorus by the Redfield ratio. Carbonate chemistry is
-explicitly solved [Follows {\it et al.}, 2005] and the air-sea
-exchange of CO$_2$ is parameterized with a uniform gas transfer
-coefficient following Wanninkhof [1992]. Oxygen is also linked to
-phosphorus by the Redfield ratio, and oxygen air-sea exchange also
-follows Wanninkhof [1992].  For more details see Dutkiewicz {\it et
-  al.}, 2005.
+explicitly solved \cite{Follows_etal_05} and the air-sea exchange of
+CO$_2$ is parameterized with a uniform gas transfer coefficient
+following \cite{Wanninkhof_92}. Oxygen is also linked to phosphorus by
+the Redfield ratio, and oxygen air-sea exchange also follows
+\cite{Wanninkhof_92}.  For more details see \cite{Dutkiewicz_etal_05}.
 
 The example setup described here shows the physical model after 5900
 years of spin-up and the biogeochemistry after 2900 years of spin-up.
@@ -108,8 +107,8 @@ where:
 \end{itemize}
 
 These terms (for the first four tracers) are described more in
-Dutkiewicz {\it et al.} (2005) and by McKinley {\it et al.} (2004) for
-the terms relating to oxygen.
+\cite{Dutkiewicz_etal_05} and by \cite{McKinley_etal_04} for the terms
+relating to oxygen.
 
 
 \subsection{Code configuration}
