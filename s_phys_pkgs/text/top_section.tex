@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/text/top_section.tex,v 1.33 2005/07/18 20:45:27 molod Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/text/top_section.tex,v 1.34 2005/08/02 21:21:05 cnh Exp $
 % $Name:  $
 
 \chapter{Physical Parameterizations - Packages I}
@@ -6,20 +6,68 @@
 <!-- CMIREDIR:packages: -->
 \end{rawhtml}
 
-Within this chapter, the MITgcm ``packages'' are described.
-Initially, ``packages'' were conceived to group source code files
-together based upon their functionality.  Each package was assigned a
-separate subdirectory (within \texttt{pkg}) and, usually, contained
-source code for implimenting different physical parametizations.  This
-was a convenient method for both segregating and rapidly including or
-excluding parameterizations during the software build process.
+In this chapter and in the following chapter, the MITgcm ``packages'' are 
+described. While you can carry out many experiments with MITgcm by starting 
+from case studies in section \ref{sect:tutorials}, configuring
+a brand new experiment or making major changes to an experimental configuration
+requires some knowledge of the {\it packages}
+that make up the full MITgcm code. Packages are used in MITgcm to
+help organize and layer various code building blocks that are assembled 
+and selected to perform a specific experiment. Each of the specific experiments
+described in section \ref{sect:tutorials} uses a particular combination
+of packages.
+Figure \ref{fig:package_organigramme} shows the full set of packages that
+are available. As shown in the figure packages are classified into different 
+groupings that layer on top of each other. The top layer packages are 
+generally specialized to specific simulation types. In this layer there are
+packages that deal with biogeochemical processes, ocean interior
+and boundary layer processes, atmospheric processes, sea-ice, coupled 
+simulations and state estimation.
+Below this layer are a set of general purpose
+numerical and computational packages. The general purpose numerical packages
+provide code for kernel numerical alogorithms
+that apply to
+many different simulation types. Similarly, the general purpose computational 
+packages implement non-numerical alogorithms that provide parallelism,
+I/O and time-keeping functions that are used in many different scenarios.
 
-Over time, package use has increased.  The number of packages has
-grown and they have evolved to contain much of the model functionality
-including momentum schemes, I/O utilities, diagnostics, ``exchange''
-algorithms for domain decomposition, and numerous physical
-parameterizations.  The following sections describe how to use the
-existing packages and how to modify them and create new ones.
+
+\begin{figure}
+\begin{minipage}{12cm}
+\marginsize{0cm}{0cm}{0cm}{0cm}
+%% \scalefig{0.6}
+%% \epsfbox{part6/organigramme_mitgcm_pkg.eps}
+\epsfig{file=part6/organigramme_mitgcm_pkg.eps, angle=-90, scale=0.85, width=17cm}
+\end{minipage}
+\label{fig:package_organigramme}
+\caption{ Hierarchy of code layers that are assembled to make up an MITgcm 
+simulation. Conceptually (and in terms of code organization) MITgcm consists
+of several layers. At the base is a layer of core software that provides a 
+basic numerical and computational foundation for MITgcm simulations. This 
+layer is shown marked {\bf Foundation Code} at the bottom of the figure
+and corresponds to code in the italicised subdirectories on the figure.
+This layer is not organized into packages. All code above the foundation layer
+is organized as packages.  Much of the code in MITgcm is contained in packages 
+which serve as a useful way of organizing and layering the different levels of 
+functionality that make up the full MITgcm software distribution.
+The figure shows the different packages in MITgcm as boxes containing bold 
+face upper case names.  Directly above the foundation layer are two layers of 
+general purpose infrastructure software that consist of computational and 
+numerical packages.  These general purpose packages can be applied to both 
+online and offline simulations and are used in many different physical 
+simulation types.  Above these layers are more specialized packages.  }
+\end{figure}
+
+The following sections describe the packages shown in 
+figure \ref{fig:package_organiigramme}. The sections
+layout the algorithms implemented in each package 
+and describe how to use the package. A synopsis of the function
+of each package is given in table \ref{tab:package_summary_tab}.
+Organizationally package code is assigned a
+separate subdirectory in the MITgcm code distribution
+(within the source code directory \texttt{pkg}).
+The name of this subdirectory is used as the package name in
+table \ref{tab:package_summary_tab}.
 
 %% In this chapter the schemes for parameterizing processes that are not
 %% represented explicitly in MITgcm are described.  Some of these
