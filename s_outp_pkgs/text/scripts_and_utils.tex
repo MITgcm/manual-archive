@@ -1,0 +1,62 @@
+\section{Pre-- and Post--Processing Scripts and Utilities}
+
+There are numerous tools for pre-processing data, converting model
+output and analysis written in Matlab, fortran (f77 and f90) and perl.
+As yet they remain undocumented although many are self-documenting
+(Matlab routines have "help" written into them).
+
+Here we'll summarize what is available but this is an ever growing
+resource so this may not cover everything that is out there:
+
+\subsection{Utilities supplied with the model}
+
+We supply some basic scripts with the model to facilitate conversion
+or reading of data into analysis software.
+
+\subsubsection{utils/scripts}
+
+In the directory {\em utils/scripts} you will find {\em joinds} and
+{\em joinmds}: these are perl scripts used from joining the multi-part
+files created by MITgcm. {\bf Use {\em joinmds} always}. You will only
+need {\em joinds} if you are working with output older than two years
+(prior to c23).
+
+\subsubsection{utils/matlab}
+
+In the directory {\em utils/matlab} you will find several Matlab
+scripts (.m or dot-em files). The priniciple script is {\em rdmds.m}
+used for reading the multi-part model output files in to matlab. Place
+the scripts in your matlab path or change the path appropriately, then
+at the matlab prompt type:
+\begin{verbatim}
+  >> help rdmds
+\end{verbatim}
+to get help on how to use rdmds.
+
+Another useful script scans the terminal output file for "monitor"
+information.
+
+Most other scripts are for working in the curvilinear coordinate
+systems which as yet are unpublished and undocumented.
+
+\subsubsection{MNC Utils}
+
+The MITgcm netCDF integration is relatively new and its format is
+still evolving.  The following scripts and utilities have been written
+to help manipulate MNC files:
+\begin{description}
+\item[Tile Assembly:] a matlab script {\em
+    utils/matlab/mnc\_assembly.m} is available for spatially
+  ``assembling'' MNC output.
+
+%\item[]
+\end{description}
+
+
+\subsection{Pre-processing software}
+
+There is a suite of pre-processing software for intepolating
+bathymetry and forcing data, written by Adcroft and Biastoch. At some
+point, these will be made available for download. If you are in need
+of such software, contact one of them.
+
