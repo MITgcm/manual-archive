@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_examples/global_oce_optim/global_oce_estimation.tex,v 1.2 2005/08/02 19:19:11 dfer Exp $
+% $Header: /u/gcmpack/manual/s_examples/global_oce_optim/global_oce_estimation.tex,v 1.3 2005/08/02 19:54:53 dfer Exp $
 % $Name:  $
 
 \section[Global Ocean State Estimation Example]{Global Ocean State Estimation at 4$^\circ$ Resolution}
@@ -8,7 +8,9 @@
 <!-- CMIREDIR:eg-global_state_estimate: -->
 \end{rawhtml}
 
-1) Overview: Mean surface heat flux as a  control variable : Qnetm
+\subsection{Overview}
+
+Mean surface heat flux as a  control variable : Qnetm
 
 This experiment illustrates the optimization (or data-assimilation) capacity
 of the MITgcm. Using an ocean configuration with realistic geography and bathymetry on a
@@ -61,41 +63,47 @@ one for the line-search algorithmi (offline optimization). The implementation of
 the control variable $Q_\mathrm{netm}$, the cost function $J$ and the I/O required
 for the commmunication betwwen the model and the line-search are described in details 
 in section 2. The compilation of the two executables is given in section 3.
- A method to run the experiment is described in section 4.
+A method to run the experiment is described in section 4.
 
 Gilbert, J. C., and C. Lemar\'echal, 1989: Some numerical experiments with
 variable-storage quasi-Newton algorithms. \textit{Math. Programm.,}
 \textbf{45,} 407-435.
 
-2) Implemention of the control variable and the cost function.
+\subsection{Implemention of the control variable and the cost function}
 
 All subroutines that require modifications are found in verifications/Optim/code\_ad
 
-2.1) The correction Qnetm is activated by setting ALLOW\_HFLUXM\_CONTROL to "define" in ECCO\_OPTIONS.h.
+\subsubsection{The control variable}
+
+The correction Qnetm is activated by setting ALLOW\_HFLUXM\_CONTROL to "define" in ECCO\_OPTIONS.h.
 
 It is first implemented as a forcing variable. It is defined in FFIELDS.h,
 initialized to zero in ini\_forcing.F, and then used in external\_forcing\_surf.F.
 
 Qnetm is made a control variable in the ctrl package by modifying the following subroutines:
 
-- ctrl\_init.F where Qnetm is defined as the control variable number 24,
+\begin{itemize}
+\item ctrl\_init.F where Qnetm is defined as the control variable number 24,
 
-- ctrl\_pack.F which writes, at the end of iteration, the sensitivity of the cost function
+\item ctrl\_pack.F which writes, at the end of iteration, the sensitivity of the cost function
 $\partial J/\partial Q_\mathrm{netm}$ into a file to be used by the lins-search algorithm,
 
-- ctrl\_unpack.F which reads, at the start of each iteration, the updated perturbations as
+\item ctrl\_unpack.F which reads, at the start of each iteration, the updated perturbations as
 provided by the line-search algorithm,
 
-- ctrl\_map\_forcing.F where the updated perturbation is added to the first guess Qnetm.
+\item ctrl\_map\_forcing.F where the updated perturbation is added to the first guess Qnetm.
+\end{itemize}
 
 Note also some minor changes in ctrl.h, ctrl\_readparams.F, and ctrl\_dummy.h (xx\_hfluxm\_file,
 fname\_hfluxm, xx\_hfluxm\_dummy).
 
-2.2) Cost functions
+\subsubsection{Cost functions}
 
-The cost functions are implemented in the cost package.
+The cost functions are implemented using the cost package.
 
-2.2.1) The temperature cost function $J_1$ which measures the drift of the mean model
+\begin{itemize}
+
+\item The temperature cost function $J_1$ which measures the drift of the mean model
 temperature from the Levitus climatology is implemented cost\_temp.F. It is
 activated by ALLOW\_COST\_TEMP in ECCO\_OPTIONS.h. It requires the mean temperature of
 the model which is obtained by accumulating the temperature in cost\_tile.F (called at
@@ -103,24 +111,26 @@ each time step).
 The value of the cost function is stored in objf\_temp and its weight $\lambda_1$
 in mult\_temp.
 
-2.2.2) The cost function penalizing the departure of the surface heat flux from
+\item The heat flux cost function penalizing the departure of the surface heat flux from
 observations is implemented in cost\_hflux.F, and activated by activated
 ALLOW\_COST\_HFLUXM in ECCO\_OPTIONS.h. The value of the cost function is stored in
 objf\_hfluxm and its weight $\lambda_2$ in mult\_hfluxm,
 
-2.2.3) The subroutine cost\_final.F calls the cost\_functions subroutines
+\item The subroutine cost\_final.F calls the cost\_functions subroutines
 and make the (weighted) sum of the different contributions.
 
-2.2.4) The weights used in the cost functions are read is cost\_weights.F.
+\item The weights used in the cost functions are read is cost\_weights.F.
 The weigth of the cost functions are read in cost\_readparams.F from the input file
 data.cost.    
 
-3) Compiling 
+\end{itemize}
+
+\subsection{Compiling} 
 
 The optimization experiment requires two executables: 1) the 
 MITgcm and its adjoints (mitgcmuv\_ad) and the line-search algorithm (optim.x) 
 
-3.1) Compilation of MITgcm and its adjoint: mitcgmuv\_ad
+\subsubsection{Compilation of MITgcm and its adjoint: mitcgmuv\_ad}
 
 Before compiling, first note that, in the directory code\_ad/, two files
 must be updated:
@@ -137,9 +147,9 @@ make adall
 to generate the MITgcm excutable mitgcmuv\_ad
 
 
-3.2) Compilation of the line Search Algorithm (optim.x)
+\subsubsection{Compilation of the line Search Algorithm: \it{optim.x}}
 
-This is done from the directories lsopt/ and optim/ (under MITgcm)
+This is done from the directories lsopt/ and optim/ (under MITgcm/)
 
 In lsopt/, unzip the blas1 library you need, and change accordingly the
 library in the Makefile. Compile with make all
@@ -149,24 +159,25 @@ In optim/,  the path of the directory where mitgcm\_ad was compliled must be spe
 in the Makefile in the variable INCLUDEDIRS. The file name of the controle variable
 (xx\_hfluxm\_file here) must be added to the namelist read by optim\_num.F
 
-Then use make depend and make to generate the line-search executable optim.x.
+Then use \it{make depend} and \it{make} to generate the line-search executable \it{optim.x}.
 
-4) Running the optimization
+\subsection{Running the estimation}
 
 Copy the mitgcmuv\_ad executble to input\_ad and optim.x to the subdirectory
 input\_ad/OPTIM. Move into input\_ad/.
 
-
-The first iteration has be done "by hand". 
-Check that the iteration number is set to 0 in data.optim and run the Mitgcm
-./mitgcmuv\_ad
+The first iteration has be done "by hand". Check that the iteration number is set
+to 0 in data.optim and run the Mitgcm
+\begin{verbatim}
+% ./mitgcmuv_ad
+\end{verbatim}
 
 The output files adxx\_hfluxm.0000000000.* and xx\_hfluxm.0000000000.* contain,
 respectively, the sensitivity of the cost function to Qnetm and the perturbations
 to Qnetm (zero at the first iteration). Two other files called ecco\_cost.. and
-ecco\_ctrl are also generated, 
-these are the only files involved in the communication between the model mitgcmuv\_ad and
-the line search optim.x. the cost one contains the cost function and the cost function
+ecco\_ctrl are also generated. They essentially contains the same information as the
+adxx\_* and xx\_* files, but in a compressed format. These two file are the only ones
+involved in the communication between the model \it{mitgcmuv\_ad} and the line search optim.x. the cost one contains the cost function and the cost function
 sensitivity to the control variables. It is an ouptu of mitgcmuv\_ad. The ctrl one contain the correction to Qnetm.
 
 Move these two files to OPTIM, open data.optim, the iteration number should be
