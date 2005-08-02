@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_examples/held_suarez_cs/held_suarez_cs.tex,v 1.1 2005/08/01 22:58:25 jmc Exp $
+% $Header: /u/gcmpack/manual/s_examples/held_suarez_cs/held_suarez_cs.tex,v 1.2 2005/08/02 23:32:02 jmc Exp $
 % $Name:  $
 
 \section[Held-Suarez Atmosphere MITgcm Example]{Held-Suarez atmospheric simulation
@@ -22,8 +22,7 @@ on cube-sphere grid with 32 square cube faces.}
 %\end{center}
 
 This example illustrates the use of the MITgcm as an Atmospheric GCM,
-using simple %Held and Suarez 
-\cite{held-suar:94} forcing 
+using simple \cite{held-suar:94} forcing 
 to simulate Atmospheric Dynamics on global scale.
 The set-up use the rescaled pressure coordinate ($p^*$)\cite[]{adcroft:04a}
 in the vertical direction, with 20 equaly-spaced levels, and
@@ -64,16 +63,23 @@ but without any limitation on the number of processors.
 
 The use of the $p^*$ coordinate with 20 equally spaced levels
 ($20 \times 50\,{\rm mb}$, from $p^*=1000,{\rm mb}$ to $0$ at the 
-top of the atmosphere) follows the choice of \cite{held-suar:94} study, 
-where normalized pressure coordinate ($\sigma_p$) was used. 
-Note that without topography, the 2 coordinates systems are identical.
+top of the atmosphere) follows the choice of \cite{held-suar:94}. 
+Note that without topography, the $p^*$ coordinate and the normalized 
+pressure coordinate ($\sigma_p$) coincide exactly.
+No viscosity and zero diffusion are used here, but
+a $8^th$ order \cite{Shapiro_70} filter is applied to both momentum and
+potential temperature, to remove selectively grid scale noise.
+Apart from the horizontal grid, this experiment is made very similar to
+the grid-point model case used in \cite{held-suar:94} study.
 
 At this resolution, the configuration can be integrated forward 
 for many years on a single processor desktop computer.
 \\
 
+\subsection{Forcing}
+\label{www:tutorials}
+
 The model is forced by relaxation to a radiative equilibrium temperature from
-%Held and Suarez 
 \cite{held-suar:94}.
 A linear frictional drag (Rayleigh damping) is applied in the lower 
 part of the atmosphere and account from surface friction and momentum
@@ -83,41 +89,50 @@ Altogether, this yields the following forcing
 
 \begin{eqnarray}
 \label{EQ:eg-hs-global_forcing}
-\label{EQ:eg-hs-global_forcing_fu}
-\vec{{\cal F}_{u}} & = & -k_{v}(p)\vec{u}
+\label{EQ:eg-hs-global_forcing_fv}
+\vec{{\cal F}_v} & = & -k_v(p)\vec{v}_h
 \\
 \label{EQ:eg-hs-global_forcing_ft}
 {\cal F}_{\theta} & = & -k_{\theta}(\phi,p)[\theta-\theta_{eq}(\phi,p)]
-\\
 \end{eqnarray}
 
-\noindent where ${\vec{\cal F}_{u}}$, ${\cal F}_{\theta}$,
+\noindent where ${\vec{\cal F}_{v}}$, ${\cal F}_{\theta}$,
 are the forcing terms in the zonal and meridional
 momentum and in the potential temperature equations respectively.
-The term $k_{v}$ in equation (\ref{EQ:eg-hs-global_forcing_fu}) applies a
-linear frictional drag (Rayleigh damping) that is active within the
-planetary boundary layer. It is defined so as to decay with
-height according to
-\begin{eqnarray}
+The term $k_{v}$ in equation (\ref{EQ:eg-hs-global_forcing_fv}) applies a
+Rayleigh damping that is active within the planetary boundary layer. 
+It is defined so as to decay as pressure decreases according to
+\begin{eqnarray*}
 \label{EQ:eg-hs-define_kv}
-k_{v} & = & k_{f}~{\rm max}[0,(p^*/P^{0}_{s}-\sigma_{b})/(1-\sigma_{b})]
+k_{v} & = & k_{f}~\max[0,~(p^*/P^{0}_{s}-\sigma_{b})/(1-\sigma_{b})]
 \\
-\sigma_{b} & = & 0.7
-\\
-k_{f} & = & 1/86400 ~{\rm s}^{-1}
-\end{eqnarray}
+\sigma_{b} & = & 0.7 ~~{\rm and}~~
+k_{f}  =  1/86400 ~{\rm s}^{-1}
+\end{eqnarray*}
 
 where $p^*$ is the pressure level of the cell center 
-and $P^{0}_{s} = 10^5 {\rm Pa}$ is the pressure at the base of the atmospheric column.
+and $P^{0}_{s}$ is the pressure at the base of the atmospheric column,
+which is constant and uniform here ($= 10^5 {\rm Pa}$), in the abcence 
+of topography.
 
 The Equilibrium temperature $\theta_{eq}$ and relaxation time scale $k_{\theta}$ 
 are set to:
 \begin{eqnarray}
-\label{EQ:eg-hs-define_kT}
-\theta_{eq}(\phi,p^*) & = & 
+\label{EQ:eg-hs-define_Teq}
+\theta_{eq}(\phi,p^*) & = & \max \{ 200.K (P^{0}_{s}/p^*)^\kappa,\\
+\nonumber
+& & \hspace{8mm} 315.K - \Delta T_y~\sin^2(\Phi) 
+  - \Delta \theta_z \cos^2(\Phi) \log(p^*/P^{0}_s) \}
 \\
+\label{EQ:eg-hs-define_kT}
 k_{\theta}(\phi,p^*) & = &
+k_a + (k_s -k_a)~\cos^4(\Phi)~\max[0,(p^*/P^{0}_{s}-\sigma_{b})/(1-\sigma_{b})]
 \end{eqnarray}
+with:
+\begin{eqnarray*}
+ \Delta T_y = 60.K & k_a = 1/(40 \cdot 86400) ~{\rm s}^{-1}\\
+\Delta \theta_z = 10.K & k_s = 1/(4 \cdot 86400) ~{\rm s}^{-1}
+\end{eqnarray*}
 
 Initial conditions correspond to a resting state with horizontally uniform 
 stratified fluid. The initial temperature profile is simply the 
@@ -126,127 +141,105 @@ horizontally average of the radiative equilibrium temperature.
 \subsection{Discrete Numerical Configuration}
 \label{www:tutorials}
 
+The model is configured in hydrostatic form, using non-boussinesq
+$p^*$ coordinate.
+The vertical resolution is uniform, $\Delta p^* = 50.10^2 Pa$,
+with 20 levels, from $p^*=10^5 Pa$ to $0$ at the top.
+The domain is discretised using C32 cube-sphere grid \cite[]{adcroft:04b}
+that cover the whole sphere with a relatively uniform grid-spacing.
+The resolution at the equator or along the Greenwitch meridian
+is similar to the $128 \times 64$ equaly spaced longitude-latitude grid,
+but requires $25\%$ less grid points.
+Grid spacing and grid-point location are not computed by the model but
+read from files.
 
- The model is configured in hydrostatic form.  The domain is discretised with 
-a uniform grid spacing in latitude and longitude on the sphere
- $\Delta \phi=\Delta \lambda=4^{\circ}$, so 
-that there are ninety grid cells in the zonal and forty in the 
-meridional direction. The internal model coordinate variables
-$x$ and $y$ are initialized according to
-\begin{eqnarray}
-x=r\cos(\phi),~\Delta x & = &r\cos(\Delta \phi) \\
-y=r\lambda,~\Delta x &= &r\Delta \lambda 
-\end{eqnarray}
+The vector-invariant form of the momentum equation (see section
+\ref{sect:vect-inv_momentum_equations}) is used so that no explicit 
+metrics are necessary.
 
-Arctic polar regions are not
-included in this experiment. Meridionally the model extends from
-$80^{\circ}{\rm S}$ to $80^{\circ}{\rm N}$.
-Vertically the model is configured with twenty layers with the 
-following thicknesses
-$\Delta z_{1} = 50\,{\rm m},\,
- \Delta z_{2} = 50\,{\rm m},\,
- \Delta z_{3} = 55\,{\rm m},\,
- \Delta z_{4} = 60\,{\rm m},\,
- \Delta z_{5} = 65\,{\rm m},\,
-$
-$
- \Delta z_{6}~=~70\,{\rm m},\,
- \Delta z_{7}~=~80\,{\rm m},\,
- \Delta z_{8}~=95\,{\rm m},\,
- \Delta z_{9}=120\,{\rm m},\,
- \Delta z_{10}=155\,{\rm m},\,
-$
-$
- \Delta z_{11}=200\,{\rm m},\,
- \Delta z_{12}=260\,{\rm m},\,
- \Delta z_{13}=320\,{\rm m},\,
- \Delta z_{14}=400\,{\rm m},\,
- \Delta z_{15}=480\,{\rm m},\,
-$
-$
- \Delta z_{16}=570\,{\rm m},\,
- \Delta z_{17}=655\,{\rm m},\,
- \Delta z_{18}=725\,{\rm m},\,
- \Delta z_{19}=775\,{\rm m},\,
- \Delta z_{20}=815\,{\rm m}
-$ (here the numeric subscript indicates the model level index number, ${\tt k}$).
-The implicit free surface form of the pressure equation described in Marshall et. al 
-\cite{marshall:97a} is employed. A Laplacian operator, $\nabla^2$, provides viscous
-dissipation. Thermal and haline diffusion is also represented by a Laplacian operator.
+Applying the vector-invariant discretization to the
+atmospheric equations \ref{eq:atmos-prime}, and adding the 
+forcing term 
+(\ref{EQ:eg-hs-global_forcing_fv}, \ref{EQ:eg-hs-global_forcing_ft})
+on the right-hand-side,
+leads to the set of equations that are solved in this configuration:
 
-Wind-stress forcing is added to the momentum equations for both
-the zonal flow, $u$ and the meridional flow $v$, according to equations 
-(\ref{EQ:eg-hs-global_forcing_fu}) and (\ref{EQ:eg-hs-global_forcing_fv}).
-Thermodynamic forcing inputs are added to the equations for
-potential temperature, $\theta$, and salinity, $S$, according to equations 
-(\ref{EQ:eg-hs-global_forcing_ft}) and (\ref{EQ:eg-hs-global_forcing_fs}).
-This produces a set of equations solved in this configuration as follows:
+%the The set of equations solved here is der
+%Wind-stress forcing is added to the momentum equations for both
+%the zonal flow, $u$ and the meridional flow $v$, according to equations 
+%(\ref{EQ:eg-hs-global_forcing_fv}) and (\ref{EQ:eg-hs-global_forcing_fv}).
+%Thermodynamic forcing inputs are added to the equations for
+%potential temperature, $\theta$, and salinity, $S$, according to equations 
+%(\ref{EQ:eg-hs-global_forcing_ft}) and (\ref{EQ:eg-hs-global_forcing_fs}).
 
 \begin{eqnarray}
 \label{EQ:eg-hs-model_equations}
-\frac{Du}{Dt} - fv + 
-  \frac{1}{\rho}\frac{\partial p^{'}}{\partial x} - 
-  \nabla_{h}\cdot A_{h}\nabla_{h}u - 
-  \frac{\partial}{\partial z}A_{z}\frac{\partial u}{\partial z} 
- & = &
-\begin{cases}
-{\cal F}_u & \text{(surface)} \\
-0 & \text{(interior)}
-\end{cases}
+\frac{\partial \vec{\mathbf{v}}_h}{\partial t}
++(f + \zeta)\hat{\mathbf{k}} \times \vec{\mathbf{v}}_h
+%+\mathbf{\nabla }_{p} ({\rm KE})
++\mathbf{\nabla }_{p} (\mbox{\sc ke})
++ \omega \frac{\partial \vec{\mathbf{v}}_h }{\partial p}
++\mathbf{\nabla }_p \phi ^{\prime } 
+&=& 
+% \vec{{\cal F}_v} = 
+-k_v\vec{v}_h
 \\
-\frac{Dv}{Dt} + fu + 
-  \frac{1}{\rho}\frac{\partial p^{'}}{\partial y} - 
-  \nabla_{h}\cdot A_{h}\nabla_{h}v - 
-  \frac{\partial}{\partial z}A_{z}\frac{\partial v}{\partial z} 
-& = &
-\begin{cases}
-{\cal F}_v & \text{(surface)} \\
-0 & \text{(interior)}
-\end{cases}
+\frac{\partial \phi ^{\prime }}{\partial p} 
++\frac{\partial \Pi }{\partial p}\theta ^{\prime } &=&0
 \\
-\frac{\partial \eta}{\partial t} + \nabla_{h}\cdot \vec{u}
-&=&
-0
+\mathbf{\nabla }_{p}\cdot \vec{\mathbf{v}}_h+\frac{\partial \omega }{
+\partial p} &=&0
 \\
-\frac{D\theta}{Dt} -
- \nabla_{h}\cdot K_{h}\nabla_{h}\theta
- - \frac{\partial}{\partial z}\Gamma(K_{z})\frac{\partial\theta}{\partial z} 
-& = &
-\begin{cases}
-{\cal F}_\theta & \text{(surface)} \\
-0 & \text{(interior)}
-\end{cases}
-\\
-\frac{D s}{Dt} -
- \nabla_{h}\cdot K_{h}\nabla_{h}s
- - \frac{\partial}{\partial z}\Gamma(K_{z})\frac{\partial s}{\partial z} 
-& = &
-\begin{cases}
-{\cal F}_s & \text{(surface)} \\
-0 & \text{(interior)}
-\end{cases}
-\\
-g\rho_{0} \eta + \int^{0}_{-z}\rho^{'} dz & = & p^{'}
+\frac{\partial \theta }{\partial t} 
++ \mathbf{\nabla }_{p}\cdot (\theta \vec{\mathbf{v}}_h)
++ \frac{\partial (\theta \omega)}{\partial p}
+%= \frac{\mathcal{Q}}{\Pi } 
+&=& -k_{\theta}[\theta-\theta_{eq}]
 \end{eqnarray}
 
-\noindent where $u=\frac{Dx}{Dt}=r \cos(\phi)\frac{D \lambda}{Dt}$ and 
-$v=\frac{Dy}{Dt}=r \frac{D \phi}{Dt}$ 
-are the zonal and meridional components of the
-flow vector, $\vec{u}$, on the sphere. As described in
-MITgcm Numerical Solution Procedure \ref{chap:discretization}, the time 
-evolution of potential temperature, $\theta$, equation is solved prognostically.
-The total pressure, $p$, is diagnosed by summing pressure due to surface 
-elevation $\eta$ and the hydrostatic pressure.
+%\begin{equation}
+%\partial_t \vec{v} + ( 2\vec{\Omega} + \vec{\zeta}) \wedge \vec{v}
+%- b \hat{r}
+%+ \vec{\nabla} B = \vec{\nabla} \cdot \vec{\bf \tau}
+%\end{equation}
+%{\cal F}_{\theta} & = & -k_{\theta}(\phi,p)[\theta-\theta_{eq}(\phi,p)]
+
+\noindent where $\vec{v}_h$ and $\omega = \frac{Dp}{Dt}$ are the horizontal 
+velocity vector and the vertical velocity in pressure coordinate,
+$\zeta$ is the relative vorticity and $f$ the Coriolis parameter, 
+$\hat{\mathbf{k}}$ is the vertical unity vector, 
+{\sc ke} is the kinetic energy, $\Phi$ is the geopotential
+and $\Pi$ the Exner function 
+($\Pi = C_p (p/p_c)^\kappa ~{\rm with}~ p_c = 10^5 Pa$).
+Variables marqued with $^{prime}$ corresponds to annomaly from 
+the resting, uniformly stratified state.
+
+As described in MITgcm Numerical Solution Procedure \ref{chap:discretization}, 
+the continuity equation is integrated vertically, to give a prognostic
+equation for the surface pressure $p_s$:
+\begin{equation}
+\frac{\partial p_s}{\partial t} + \nabla_{h}\cdot \int_{0}^{p_s} \vec{v}_h dp
+= 0
+\end{equation}
+
+The implicit free surface form of the pressure equation described in 
+\cite{marshall:97a} is employed to solve for $p_s$; 
+Integrating vertically the hydrostatic balance 
+gives the geopotential $\phi'$ and allow to step forward the momentum equation
+\ref{EQ:eg-hs-model_equations}.
+The potential temperature, $\theta$, is stepped forward using the 
+new velocity field ({\it staggered time-step}, section 
+\ref{sect:adams-bashforth-staggered}).
 \\
 
 \subsubsection{Numerical Stability Criteria}
 \label{www:tutorials}
 
-The Laplacian dissipation coefficient, $A_{h}$, is set to $5 \times 10^5 m s^{-1}$.
+The Laplacian dissipation coefficient, $A_h$, is set to $5 \times 10^5 m s^{-1}$.
 This value is chosen to yield a Munk layer width \cite{adcroft:95},
 \begin{eqnarray}
 \label{EQ:eg-hs-munk_layer}
-M_{w} = \pi ( \frac { A_{h} }{ \beta } )^{\frac{1}{3}}
+M_{w} = \pi ( \frac { A_h }{ \beta } )^{\frac{1}{3}}
 \end{eqnarray}
 
 \noindent  of $\approx 600$km. This is greater than the model
@@ -260,7 +253,7 @@ $\delta t_{v}=40~{\rm minutes}$ for momentum terms. With this time step, the sta
 parameter to the horizontal Laplacian friction \cite{adcroft:95}
 \begin{eqnarray}
 \label{EQ:eg-hs-laplacian_stability}
-S_{l} = 4 \frac{A_{h} \delta t_{v}}{{\Delta x}^2}
+S_{l} = 4 \frac{A_h \delta t_{v}}{{\Delta x}^2}
 \end{eqnarray}
 
 \noindent evaluates to 0.16 at a latitude of $\phi=80^{\circ}$, which is below the 
@@ -280,14 +273,14 @@ level spacing ($\Delta z_{1}=50{\rm m}$) which is again well below
 the upper stability limit.
 \\
 
-The values of the horizontal ($K_{h}$) and vertical ($K_{z}$) diffusion coefficients 
+The values of the horizontal ($K_h$) and vertical ($K_{z}$) diffusion coefficients 
 for both temperature and salinity are set to $1 \times 10^{3}~{\rm m}^{2}{\rm s}^{-1}$ 
 and $3 \times 10^{-5}~{\rm m}^{2}{\rm s}^{-1}$ respectively. The stability limit 
-related to $K_{h}$ will be at $\phi=80^{\circ}$ where $\Delta x \approx 77 {\rm km}$. 
+related to $K_h$ will be at $\phi=80^{\circ}$ where $\Delta x \approx 77 {\rm km}$. 
 Here the stability parameter 
 \begin{eqnarray} 
 \label{EQ:eg-hs-laplacian_stability_xtheta}
-S_{l} = \frac{4 K_{h} \delta t_{\theta}}{{\Delta x}^2} 
+S_{l} = \frac{4 K_h \delta t_{\theta}}{{\Delta x}^2} 
 \end{eqnarray}
 evaluates to $0.07$, well below the stability limit of $S_{l} \approx 0.5$. The 
 stability parameter related to $K_{z}$
