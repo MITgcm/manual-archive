@@ -169,15 +169,15 @@ RH_{min} & = & 0.75 \nonumber \\
 
 These cloud fractions are suppressed, however, in regions where the convective
 sub-cloud layer is conditionally unstable.  The functional form of $RH_c$ is shown in
-Figure (\ref{fig:fizhi:rhcrit}).
+Figure (\ref{fig.rhcrit}).
 
 \begin{figure*}[htbp]
   \vspace{0.4in}
   \centerline{  \epsfysize=4.0in  \epsfbox{part6/rhcrit.ps}}
   \vspace{0.4in}
-  \caption  [Critical Relative Humidity for Clouds.] 
-            {Critical Relative Humidity for Clouds.} 
-  \label{fig:fizhi:rhcrit}
+  \caption  [Critical Relative Humidity for Clouds.]
+            {Critical Relative Humidity for Clouds.}
+  \label{fig.rhcrit}
 \end{figure*}
 
 The total cloud fraction in a grid box is determined by the larger of the two cloud fractions:
@@ -308,19 +308,8 @@ cloud cover of all the layers in the group.  The optical thickness
 of a given layer is then scaled for both the direct (as a function of the
 solar zenith angle) and diffuse beam radiation 
 so that the grouped layer reflectance is the same as the original reflectance.
-The solar flux is computed for each of the eight cloud realizations possible 
-(see Figure \ref{fig:fizhi:cloud}) within this
+The solar flux is computed for each of eight cloud realizations possible within this
 low/middle/high classification, and appropriately averaged to produce the net solar flux.
-
-\begin{figure*}[htbp]
-  \vspace{0.4in}
-  \centerline{  \epsfysize=4.0in  %\epsfbox{part6/rhcrit.ps}
-             }
-  \vspace{0.4in}
-  \caption  {Low-Middle-High Cloud Configurations} 
-  \label{fig:fizhi:cloud}
-\end{figure*}
-
 
 \paragraph{Longwave Radiation}
 
@@ -686,13 +675,13 @@ are shown in Table \ref{tab:fizhi:surftype}. The surface types and the percent o
 cell occupied by any surface type were derived from the surface classification of
 \cite{deftow:94}, and information about the location of permanent
 ice was obtained from the classifications of \cite{dorsell:89}.
-The surface type for the \txt GCM grid is shown in Figure \ref{fig:fizhi:surftype}.
+The surface type map for a $1^\circ$ grid is shown in Figure \ref{fig:fizhi:surftype}.
 The determination of the land or sea category of surface type was made from NCAR's
 10 minute by 10 minute Navy topography 
 dataset, which includes information about the percentage of water-cover at any point.
-The data were averaged to the model's \fxf and \txt grid resolutions,
+The data were averaged to the model's grid resolutions,
 and any grid-box whose averaged water percentage was $\geq 60 \%$ was
-defined as a water point. The \fxf grid Land-Water designation was further modified
+defined as a water point. The Land-Water designation was further modified
 subjectively to ensure sufficient representation from small but isolated land and water regions.
  
 \begin{table}
@@ -723,18 +712,23 @@ and surface albedo.}
  
  
 \begin{figure*}[htbp]
-  \centerline{  \epsfysize=7in  \epsfbox{part6/surftypes.ps}}
-  \vspace{0.3in}
-  \caption  {Surface Type Compinations at \txt resolution.}
+  \begin{center}
+  \rotatebox{270}{\resizebox{90mm}{!}{\includegraphics{part6/surftypes.eps}}}
+  \rotatebox{270}{\resizebox{100mm}{!}{\includegraphics{part6/surftypes.descrip.eps}}}
+  \end{center}
+  \vspace{0.2in}
+  \caption  {Surface Type Combinations at $1^\circ$ resolution.}
   \label{fig:fizhi:surftype}
 \end{figure*}
 
-\begin{figure*}[htbp]
-  \centerline{  \epsfysize=7in  \epsfbox{part6/surftypes.descrip.ps}}
-  \vspace{0.3in}
-  \caption  {Surface Type Descriptions.}
-  \label{fig:fizhi:surftype.desc}
-\end{figure*}
+% \rotatebox{270}{\centerline{  \epsfysize=4in  \epsfbox{part6/surftypes.eps}}}
+% \rotatebox{270}{\centerline{  \epsfysize=4in  \epsfbox{part6/surftypes.descrip.eps}}}
+%\begin{figure*}[htbp]
+%  \centerline{  \epsfysize=4in  \epsfbox{part6/surftypes.descrip.ps}}
+%  \vspace{0.3in}
+%  \caption  {Surface Type Descriptions.}
+%  \label{fig:fizhi:surftype.desc}
+%\end{figure*}
 
 
 \paragraph{Surface Roughness}
@@ -797,13 +791,12 @@ fields include:  sea surface temperature, sea ice estent, surface geopotential v
 vegetation index, and the radiation-related background levels of: ozone, carbon dioxide, 
 and stratospheric moisture.
 
-Boundary condition data sets are available at the model's \fxf and \txt 
+Boundary condition data sets are available at the model's 
 resolutions for either climatological or yearly varying conditions. 
 Any frequency of boundary condition data can be used in the fizhi package; 
 however, the current selection of data is summarized in Table \ref{tab:fizhi:bcdata}\@.
 The time mean values are interpolated during each model timestep to the 
-current time. Future model versions will incorporate boundary conditions at
-higher spatial \mbox{($1^\circ$ x $1^\circ$)} resolutions.
+current time. 
 
 \begin{table}[htb]
 \begin{center}
