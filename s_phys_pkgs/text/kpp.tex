@@ -59,6 +59,15 @@ The scheme has been extensively compared to observations
 (see e.g. \cite{lar-eta:97}) and is now coomon in many
 ocean models.
 
+The current code originates in the NCAR NCOM 1-D code
+and was kindly provided by Bill Large and Jan Morzel.
+It has been adapted first to the MITgcm vector code and
+subsequently to the current parallel code.
+Adjustment were mainly in conjunction with WRAPPER requirements
+(domain decomposition and threading capability), to enable
+automatic differentiation of tangent linear and adjoint code
+via TAMC.
+
 The following sections will describe the KPP package
 configuration and compiling (\ref{sec:pkg:kpp:comp}),
 the settings and choices of runtime parameters
@@ -84,6 +93,14 @@ using the \texttt{packages.conf} file by adding \texttt{kpp} to it,
 \item
 or using \texttt{genmake2} adding
 \texttt{-enable=kpp} or \texttt{-disable=kpp} switches
+%
+\item
+\textit{Required packages and CPP options:} \\
+No additional packages are required, but the MITgcm kernel flag
+enabling the penetration of shortwave radiation below
+the surface layer needs to be set in \texttt{CPP\_OPTIONS.h} 
+as follows: \\
+\texttt{\#define SHORTWAVE\_HEATING}
 %
 \end{itemize}
 (see Section \ref{sect:buildingCode}).
@@ -271,14 +288,20 @@ their default values.
 
 %----------------------------------------------------------------------
 
-\subsubsection{Equations
+\subsubsection{Equations and key routines
 \label{sec:pkg:kpp:equations}}
 
 We restrict ourselves to writing out only the essential equations
 that relate to main processes and parameters mentioned above.
 We closely follow the notation of \cite{lar-eta:94}.
 
-\paragraph{Mixing in the boundary layer} ~ \\
+\paragraph{KPP\_CALC:} Top-level routine. \\
+~
+
+\paragraph{KPP\_MIX:} Intermediate-level routine \\
+~
+
+\paragraph{BLMIX: Mixing in the boundary layer} ~ \\
 %
 ~
 
@@ -343,73 +366,7 @@ it has the following form:
 
 \end{itemize}
 
-
-\paragraph{Mixing in the interior} ~ \\
-%
-~
-
-\paragraph{Implicit time integration} ~ \\
-%
-~
-
-%----------------------------------------------------------------------
-
-\subsubsection{Key subroutines
-\label{sec:pkg:kpp:subroutines}}
-
-\paragraph{kpp\_calc:} Top-level routine. \\
-~
-
-\paragraph{kpp\_mix:} Intermediate-level routine \\
-~
-
-\paragraph{ri\_iwmix:} ~ \\
-%
-Compute interior viscosity and diffusivity coefficients due to
-%
-\begin{itemize}
-%
-\item
-shear instability (dependent on a local gradient Richardson number),
-%
-\item
-to background internal wave activity, and
-%
-\item
-to static instability (local Richardson number < 0).
-%
-\end{itemize}
-
-
-\paragraph{bldepth:} ~ \\
-%
-The oceanic planetary boundary layer depth, \texttt{hbl}, is determined as
-the shallowest depth where the bulk Richardson number is
-equal to the critical value, \texttt{Ricr}.
-
-Bulk Richardson numbers are evaluated by computing velocity and
-buoyancy differences between values at zgrid(kl) < 0 and surface
-reference values.
-In this configuration, the reference values are equal to the
-values in the surface layer.
-When using a very fine vertical grid, these values should be
-computed as the vertical average of velocity and buoyancy from
-the surface down to epsilon*zgrid(kl).
-
-When the bulk Richardson number at k exceeds Ricr, hbl is
-linearly interpolated between grid levels zgrid(k) and zgrid(k-1).
-
-The water column and the surface forcing are diagnosed for
-stable/ustable forcing conditions, and where hbl is relative
-to grid points (caseA), so that conditional branches can be
-avoided in later subroutines.
-
-\paragraph{blmix:} ~ \\
-%
-Compute boundary layer mixing coefficients.
-Mixing coefficients within boundary layer depend on surface
-forcing and the magnitude and gradient of interior mixing below
-the boundary layer ("matching").
+In practice, the routine peforms the following tasks:
 %
 \begin{enumerate}
 %
@@ -436,20 +393,82 @@ find diffusivities at kbl-1 grid level
 %
 \end{enumerate}
 
-\paragraph{kpp\_calc\_diff\_t/\_s, kpp\_calc\_visc:} ~  \\
+\paragraph{RI\_IWMIX: Mixing in the interior} ~ \\
+%
+Compute interior viscosity and diffusivity coefficients due to
+%
+\begin{itemize}
+%
+\item
+shear instability (dependent on a local gradient Richardson number),
+%
+\item
+to background internal wave activity, and
+%
+\item
+to static instability (local Richardson number $<$ 0).
+%
+\end{itemize}
+
+TO BE CONTINUED.
+
+\paragraph{BLDEPTH: Boundary layer depth calculation:} ~ \\
+%
+The oceanic planetary boundary layer depth, \texttt{hbl}, is determined as
+the shallowest depth where the bulk Richardson number is
+equal to the critical value, \texttt{Ricr}.
+
+Bulk Richardson numbers are evaluated by computing velocity and
+buoyancy differences between values at zgrid(kl) < 0 and surface
+reference values.
+In this configuration, the reference values are equal to the
+values in the surface layer.
+When using a very fine vertical grid, these values should be
+computed as the vertical average of velocity and buoyancy from
+the surface down to epsilon*zgrid(kl).
+
+When the bulk Richardson number at k exceeds Ricr, hbl is
+linearly interpolated between grid levels zgrid(k) and zgrid(k-1).
+
+The water column and the surface forcing are diagnosed for
+stable/ustable forcing conditions, and where hbl is relative
+to grid points (caseA), so that conditional branches can be
+avoided in later subroutines.
+
+TO BE CONTINUED.
+
+\paragraph{KPP\_CALC\_DIFF\_T/\_S, KPP\_CALC\_VISC:} ~  \\
 %
 Add contribution to net diffusivity/viscosity from 
 KPP diffusivity/viscosity.
 
-\paragraph{kpp\_transport\_t/\_s/\_ptr:} ~ \\
+TO BE CONTINUED.
+
+\paragraph{KPP\_TRANSPORT\_T/\_S/\_PTR:} ~ \\
 %
 Add non local KPP transport term (ghat) to diffusive
 temperature/salinity/passive tracer flux.
 The nonlocal transport term is nonzero only for scalars
 in unstable (convective) forcing conditions. 
 
-\paragraph{Flow chart:} ~ \\
+TO BE CONTINUED.
+
+\paragraph{Implicit time integration} ~ \\
 %
+TO BE CONTINUED.
+
+
+\paragraph{Penetration of shortwave radiation} ~ \\
+%
+TO BE CONTINUED.
+
+
+%----------------------------------------------------------------------
+
+\subsubsection{Flow chart
+\label{sec:pkg:kpp:flowchart}}
+
+
 {\footnotesize
 \begin{verbatim}
 
