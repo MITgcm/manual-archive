@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_examples/global_oce_optim/global_oce_estimation.tex,v 1.5 2005/08/02 21:49:07 dfer Exp $
+% $Header: /u/gcmpack/manual/s_examples/global_oce_optim/global_oce_estimation.tex,v 1.6 2005/08/03 15:48:06 edhill Exp $
 % $Name:  $
 
 \section[Global Ocean State Estimation Example]{Global Ocean State Estimation at $4^\circ$ Resolution}
@@ -144,9 +144,9 @@ these files associated with this experiment.
 
 The optimization experiment requires two executables: 1) the 
 MITgcm and its adjoints (it{mitgcmuv\_ad}) and 2) the line-search
-algorithm (\it{optim.x}) 
+algorithm ({\it optim.x}) 
 
-\subsubsection{Compilation of MITgcm and its adjoint: \it{mitcgmuv\_ad}}
+\subsubsection{Compilation of MITgcm and its adjoint: {\it mitcgmuv\_ad}}
 
 Before compiling, first note that, in the directory code\_ad/, two files
 must be updated:
@@ -167,7 +167,7 @@ Then, in the directory build\_ad/, type:
 \end{verbatim}
 to generate the MITgcm executable mitgcmuv\_ad
 
-\subsubsection{Compilation of the line-search algorithm: \it{optim.x}}
+\subsubsection{Compilation of the line-search algorithm: {\it optim.x}}
 
 This is done from the directories lsopt/ and optim/ (under MITgcm/)
 
@@ -178,7 +178,7 @@ library in the Makefile. Compile with:
 \end{verbatim}
 (more details in lsopt\_doc.txt)
 
-In optim/,  the path of the directory where \it{mitgcm\_ad} was compliled must be specified
+In optim/,  the path of the directory where {\it mitgcm\_ad} was compliled must be specified
 in the Makefile in the variable INCLUDEDIRS. The file name of the controle variable
 (xx\_hfluxm\_file here) must be added to the namelist read by optim\_num.F
 
@@ -190,11 +190,11 @@ and
 \begin{verbatim}
 % make
 \end{verbatim}
-to generate the line-search executable \it{optim.x}.
+to generate the line-search executable {\it optim.x}.
 
 \subsection{Running the estimation}
 
-Copy the \it{mitgcmuv\_ad} executable to input\_ad and \it{optim.x}
+Copy the {\it mitgcmuv\_ad} executable to input\_ad and {\it optim.x}
 to the subdirectory input\_ad/OPTIM. Move into input\_ad/.
 
 The first iteration has be done "by hand". Check that the iteration number is set
@@ -209,14 +209,14 @@ to $Q_\mathrm{netm}$ (zero at the first iteration), respectively. Two other file
 called ecco\_cost.. and ecco\_ctrl are also generated. They essentially contains
 the same information as the adxx\_* and xx\_* files, but in a compressed format.
 These two file are the only ones involved in the communication between the adjoint
-model \it{mitgcmuv\_ad} and the line-search algorithm \it{optim.x}. The ecco\_cost*n
+model {\it mitgcmuv\_ad} and the line-search algorithm {\it optim.x}. The ecco\_cost*n
 is an ouput of the adjoint model at iteration $n$ and an input of the line-search. The
 latter returns an updated perturbation in ecco\_ctrl*n+1 to be used as an input of
 the adjoint model at iteration n+1. 
 
 At the first iteration, move these two files ecco\_cost and ecco\_ctrl 
 to OPTIM/, open data.optim and check the iteration number is set to 0.
-The target cost function \it{fmin} needs to be specified: a rule of thumb 
+The target cost function {\it fmin} needs to be specified: a rule of thumb 
 suggest it should be set to about 0.95-0.90 times the value of the cost
 function at the first iteration. This value is only used at the first
 iteration and does not need to be updated afterwards. 
@@ -229,10 +229,11 @@ Once this is done, run the line-search algorithm:
 \end{verbatim}
 which computes the updated perturbations for iteration 1 ecco\_ctrl\_1.
 
-The following iterations can be executed automatically using the shell script \it{cycsh}
+The following iterations can be executed automatically using the shell
+script {\it cycsh}
 found in input\_ad/. This script will take care of changing the iteration numbers in the
 data.optim, launch the adjoint model, clean and store the ouputs, move the
 ecco\_cost* and ecco\_ctrl* files, and run the line-search algotrithm.
-Edit \it{cycsh} to specify the prefix of the directories used to store the ouputs and
+Edit {\it cycsh} to specify the prefix of the directories used to store the ouputs and
 the maximum number of iteration.
 
