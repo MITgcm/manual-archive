@@ -1,7 +1,7 @@
-% $Header: /u/gcmpack/manual/s_outp_pkgs/text/mnc.tex,v 1.2 2005/08/02 18:53:02 edhill Exp $
+% $Header: /u/gcmpack/manual/s_outp_pkgs/text/mnc.tex,v 1.3 2005/08/06 16:28:14 edhill Exp $
 % $Name:  $
 
-\subsection{NetCDF I/O Integration: MNC}
+\section{NetCDF I/O Integration: MNC}
 \label{sec:pkg:mnc}
 \begin{rawhtml}
 <!-- CMIREDIR:package_mnc: -->
@@ -31,9 +31,9 @@ list for help building and installing netCDF for your particular
 platform.
 
 
-\subsubsection{Using MNC}
+\subsection{Using MNC}
 
-MNC Configuration:
+\subsubsection{MNC Configuration:}
 
 As with all MITgcm packages, MNC can be turned on or off at compile time
 using the \texttt{packages.conf} file or the \texttt{genmake2}
@@ -75,7 +75,7 @@ a factor of \textbf{2--10} in order to avoid wasting time on an
 iterative compile--test sequence.
 
 
-MNC Inputs:
+\subsubsection{MNC Inputs:}
 
 Like most MITgcm packages, all of MNC can be turned on/off at runtime
 using a single flag in \texttt{data.pkg}
@@ -207,7 +207,7 @@ package.  Please see the individual packages for descriptions of their
 use of MNC.
 
 
-MNC Output:
+\subsubsection{MNC Output:}
 
 Depending upon the flags used, MNC will produce zero or more
 directories containing one or more netCDF files as output.  These
@@ -299,9 +299,9 @@ and the intent is two--fold:
 \end{enumerate}
 
 
-\subsubsection{MNC Troubleshooting}
+\subsection{MNC Troubleshooting}
 
-Build Troubleshooting:
+\subsubsection{Build Troubleshooting:}
 
 In order to build MITgcm with MNC enabled, the netCDF v3.x Fortran-77
 (not Fortran-90) library must be available.  This library is compposed
@@ -320,7 +320,7 @@ http://www.unidata.ucar.edu/packages/netcdf/
 which includes an extensive list of known--good netCDF configurations
 for various platforms
 
-Runtime Troubleshooting:
+\subsubsection{Runtime Troubleshooting:}
 
 Please be aware of the following:
 
@@ -358,7 +358,7 @@ Please be aware of the following:
 \end{itemize}
 
 
-\subsubsection{MNC Internals}
+\subsection{MNC Internals}
 
 The \texttt{mnc} package is a two-level convenience library (or
 ``wrapper'') for most of the NetCDF Fortran API.  Its purpose is to
@@ -406,7 +406,7 @@ The two levels of the \texttt{mnc} package are:
 \end{description}
 
 
-MNC Grid--Types and Variable--Types:
+\subsubsection{MNC Grid--Types and Variable--Types:}
 
 As a convenience for users, the MNC package includes numerous routines
 to aid in the writing of data to NetCDF format.  Probably the biggest
@@ -465,7 +465,7 @@ and is used by the \texttt{mnc\_cw\_*\_[R|W]} subroutines for reading
 and writing variables.
 
 
-Using MNC: Examples:
+\subsubsection{Using MNC: Examples:}
 
 Writing variables to NetCDF files can be accomplished in as few as two
 function calls.  The first function call defines a variable type,

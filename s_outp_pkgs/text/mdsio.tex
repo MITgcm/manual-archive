@@ -1,16 +1,63 @@
-% $Header: /u/gcmpack/manual/s_outp_pkgs/text/mdsio.tex,v 1.1 2005/07/18 20:45:28 molod Exp $
+% $Header: /u/gcmpack/manual/s_outp_pkgs/text/mdsio.tex,v 1.2 2005/08/06 16:28:14 edhill Exp $
 % $Name:  $
 
 
+\section{Fortran Binary I/O: MDSIO and RW}
+\label{sec:mdsio_and_rw}
+
+
 \subsection{MDSIO}
-\label{sec:mdsio}
 \label{sec:pkg:mdsio}
 \begin{rawhtml}
 <!-- CMIREDIR:package_mdsio: -->
 \end{rawhtml}
+\label{sec:pkg:rw}
 
+\subsubsection{Introduction}
 The \texttt{mdsio} package contains a group of Fortran routines
 intended as a general interface for reading and writing direct-access
 (``binary'') Fortran files.  The \texttt{mdsio} routines are used by
 the \texttt{rw} package.
+
+\subsubsection{Using MDSIO}
+
+
+
+
+\subsection{RW Basic binary I/O utilities}
+\label{sec:pkg:rw}
+\begin{rawhtml}
+<!-- CMIREDIR:package_rw: -->
+\end{rawhtml}
+
+The {\tt rw} package provides a very rudimentary binary I/O capability
+for quickly writing {\it single record} direct-access Fortran binary files.
+It is primarily used for writing diagnostic output.
+
+\subsubsection{Introduction}
+Package {\tt rw} is an interface to the more general {\tt mdsio} package.
+The {\tt rw} package can be used to write or read direct-access Fortran
+binary files for two-dimensional XY and three-dimensional XYZ arrays.
+The arrays are assumed to have been declared according to the standard
+MITgcm two-dimensional or three-dimensional floating point array type:
+\begin{verbatim}
+C     Example of declaring a standard two dimensional "long"
+C     floating point type array (the _RL macro is usually
+C     mapped to 64-bit floats in most configurations)
+      _RL anArray(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
+\end{verbatim}
+
+Each call to an {\tt rw} read or write routine will read (or write) to
+the first record of a file. To write direct access Fortran files with
+multiple records use the package {\tt mdsio} (see section
+\ref{sec:pkg:mdsio}).  To write self-describing files that contain
+embedded information describing the variables being written and the
+spatial and temporal locations of those variables use the package {\tt
+  mnc} (see section \ref{sec:pkg:mnc}) which produces
+\htlink{netCDF}{http://www.unidata.ucar.edu/packages/netcdf}
+\cite{rew:97} based output.
+
+%% \subsubsection{Key subroutines, parameters and files}
+%% \label{sec:pkg:rw:implementation_synopsis}
+%% The {\tt rw} package has
 
