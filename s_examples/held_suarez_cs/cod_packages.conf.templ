@@ -1,0 +1,49 @@
+
+%\subsubsection{File {\it code/packages.conf}}
+%\label{www:tutorials}
+
+This file, reproduced completely below, specifies the packages
+that are compiled and made available for this experiment.
+The additional packages that are used for this configuration are
+
+\begin{itemize}
+
+\item Line PUT_LINE_NB:gfd=,
+\begin{verbatim} 
+ gfd
+\end{verbatim} 
+This line selects the standard set of packages that are used by default.
+
+\item Line PUT_LINE_NB:shap_filt=,
+\begin{verbatim} 
+ shap_filt
+\end{verbatim} 
+This line makes the Shapiro filter package available for this 
+experiment.
+
+\item Line PUT_LINE_NB:exch2=,
+\begin{verbatim} 
+ exch2
+\end{verbatim} 
+This line selects the {\it exch2} pacakge to be compiled and
+used in this experiment. Note that, with the present structure of 
+the model, the parameter {\it useEXCH2} does not exists and 
+therefore, this package is always used when it is compiled.
+
+\item Line PUT_LINE_NB:diagnostics=,
+\begin{verbatim}
+ diagnostics
+\end{verbatim}
+This line selects the {\it pkg/diagnostics} to be compiled,
+and makes it available for this experiment.
+
+\item Line PUT_LINE_NB:mnc=,
+\begin{verbatim}
+ mnc
+\end{verbatim}
+This line selects the {\it pkg/mnc} to be compiled,
+and makes it available for this experiment.
+
+\end{itemize}
+The entire file {\it code/packages.conf} is reproduced here below:
+

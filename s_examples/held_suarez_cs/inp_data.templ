@@ -1,0 +1,318 @@
+
+%\subsubsection{File {\it input/data}}
+%\label{www:tutorials}
+
+This file, reproduced completely below, specifies the main parameters 
+for the experiment. 
+The parameters that are significant for this configuration are:
+
+\begin{itemize}
+
+\item Lines PUT_LINE_NB:tRef=,
+\begin{verbatim} 
+ tRef=295.2, 295.5, 295.9, 296.3, 296.7, 297.1, 297.6, 298.1, 298.7, 299.3,
+\end{verbatim} 
+$\cdots$ \\
+set reference values for potential temperature at each model level 
+in Kelvin units.
+The entries are ordered like model level, from surface up to the top.
+Density is calculated from anomalies at each level evaluated
+with respect to the reference values set here.
+\\ \fbox{
+\begin{minipage}{5.0in}
+{\it S/R INI\_THETA}({\it ini\_theta.F})
+\end{minipage}
+}
+
+
+\item Line PUT_LINE_NB:no_slip_sides=,
+\begin{verbatim}
+ no_slip_sides=.FALSE.,
+\end{verbatim}
+this line selects a free-slip lateral boundary condition for
+the horizontal Laplacian friction operator 
+e.g. $\frac{\partial u}{\partial y}$=0 along boundaries in $y$ and
+$\frac{\partial v}{\partial x}$=0 along boundaries in $x$.
+
+\item Lines PUT_LINE_NB:no_slip_bottom=,
+\begin{verbatim}
+ no_slip_bottom=.FALSE.,
+\end{verbatim}
+this line selects a free-slip boundary condition at the top,
+in the vertical Laplacian friction operator 
+e.g. $\frac{\partial u}{\partial p} = \frac{\partial v}{\partial p} = 0$
+
+\item Line PUT_LINE_NB:buoyancyRelation=,
+\begin{verbatim}
+ buoyancyRelation='ATMOSPHERIC',
+\end{verbatim}
+this line sets the type of fluid and the type of vertical coordinate to use,
+which, in this case, is air with a pressure like coordinate ($p$ or $p^*$).
+
+\item Line PUT_LINE_NB:eosType=,
+\begin{verbatim}
+ eosType='IDEALGAS',
+\end{verbatim}
+Selects the Ideal gas equation of state.
+%\\ \fbox{
+%\begin{minipage}{5.0in}
+%{\it S/R FIND\_RHO}~({\it find\_rho.F})\\
+%{\it S/R FIND\_ALPHA}~({\it find\_alpha.F})
+%\end{minipage}
+%}
+
+\item Line PUT_LINE_NB:implicitFreeSurface=,
+\begin{verbatim}
+ implicitFreeSurface=.TRUE.,
+\end{verbatim}
+Selects the way the barotropic equation is solved, using here the implicit 
+free-surface formulation.
+\\ \fbox{
+\begin{minipage}{5.0in}
+{\it S/R SOLVE\_FOR\_PRESSURE}~({\it solve\_for\_pressure.F})
+\end{minipage}
+}
+
+\item Line PUT_LINE_NB:exactConserv=,
+\begin{verbatim}
+ exactConserv=.TRUE.,
+\end{verbatim}
+Explicitly calculate again the surface pressure changes from 
+the divergence of the vertically integrated horizontal flow,
+after the implicit free surface solver and filters are applied.
+\\ \fbox{
+\begin{minipage}{5.0in}
+{\it S/R INTEGR\_CONTINUITY}~({\it integr\_continuity.F})
+\end{minipage}
+}
+
+\item Line PUT_LINE_NB:nonlinFreeSurf=
+ and Line PUT_LINE_NB:select_rStar=,
+\begin{verbatim}
+ nonlinFreeSurf=4,
+ select_rStar=2,
+\end{verbatim}
+Select the Non-Linear free surface formulation, using $r^*$ vertical coordinate
+(here $p^*$).
+Note that, except for the default ($= 0$), other values of those 2 parameters
+are only permitted for testing/debuging purpose.
+\\ \fbox{
+\begin{minipage}{5.0in}
+{\it S/R CALC\_R\_STAR}~({\it calc\_r\_star.F})\\
+{\it S/R UPDATE\_R\_STAR}~({\it update\_r\_star.F})
+\end{minipage}
+}
+
+\item Line PUT_LINE_NB:uniformLin_PhiSurf=
+\begin{verbatim}
+ uniformLin_PhiSurf=.FALSE.,
+\end{verbatim}
+Select the linear relation between surface geopotential anomaly 
+and surface pressure anomaly to be evaluated from 
+$\frac{\partial \Phi_s}{\partial p_s} = 1/\rho(\theta_{Ref})$.
+Note that using the default (=TRUE), the constant $1/\rho_0$ is
+used instead, and is not necessary consistent with other 
+parts of the geopotential that relies on $\theta_{Ref}$.
+\\ \fbox{
+\begin{minipage}{5.0in}
+{\it S/R INI\_LINEAR\_PHISURF}~({\it ini\_linear\_phisurf.F})
+\end{minipage}
+}
+
+\item Line PUT_LINE_NB:saltStepping= and Line PUT_LINE_NB:momViscosity=
+\begin{verbatim}
+ saltStepping=.FALSE.,
+ momViscosity=.FALSE.,
+\end{verbatim}
+Do not step forward Water vapour and do not compute viscous terms.
+This allow to save some computer time.
+
+\item Line PUT_LINE_NB:vectorInvariantMomentum=
+\begin{verbatim}
+ vectorInvariantMomentum=.TRUE.,
+\end{verbatim}
+Select the vector-invariant form to solve the momentum equation.
+\\ \fbox{
+\begin{minipage}{5.0in}
+{\it S/R MOM\_VECINV}~({\it mom\_vecinv.F})
+\end{minipage}
+}
+
+\item Line PUT_LINE_NB:staggerTimeStep=
+\begin{verbatim}
+ staggerTimeStep=.TRUE.,
+\end{verbatim}
+Select the staggered time-stepping (rather than syncronous time stepping).
+
+\item Line PUT_LINE_NB:readBinaryPrec= and PUT_LINE_NB:writeBinaryPrec=
+\begin{verbatim}
+ readBinaryPrec=64,
+ writeBinaryPrec=64,
+\end{verbatim}
+Sets format for reading binary input datasets and writing output fields to
+use 64-bit representation for floating-point numbers.
+\\ \fbox{
+\begin{minipage}{5.0in}
+{\it S/R READ\_WRITE\_FLD}~({\it read\_write\_fld.F})\\
+{\it S/R READ\_WRITE\_REC}~({\it read\_write\_rec.F})
+\end{minipage}
+}
+
+\item Line PUT_LINE_NB:cg2dMaxIters=,
+\begin{verbatim}
+ cg2dMaxIters=200,
+\end{verbatim}
+Sets maximum number of iterations the two-dimensional, conjugate
+gradient solver will use, {\bf irrespective of convergence 
+criteria being met}.
+\\ \fbox{
+\begin{minipage}{5.0in}
+{\it S/R CG2D}~({\it cg2d.F})
+\end{minipage}
+}
+
+\item Line PUT_LINE_NB:cg2dTargetResWunit=,
+\begin{verbatim}
+ cg2dTargetResWunit=1.E-17,
+\end{verbatim}
+Sets the tolerance (in units of $\omega$) which the 
+two-dimensional, conjugate gradient solver will use to test for convergence 
+in equation \ref{EQ:eg-hs-congrad_2d_resid} to $1 \times 10^{-17} Pa/s$.
+Solver will iterate until 
+tolerance falls below this value or until the maximum number of
+solver iterations is reached.
+\\ \fbox{
+\begin{minipage}{5.0in}
+{\it S/R CG2D}~({\it cg2d.F})
+\end{minipage}
+}
+
+\item Line PUT_LINE_NB:deltaT=,
+\begin{verbatim}
+ deltaT=450.,
+\end{verbatim}
+Sets the timestep $\Delta t$ used in the model to
+$450~{\rm s}$ ($= 1/8 {\rm h}$).
+\\ \fbox{
+\begin{minipage}{5.0in}
+{\it S/R TIMESTEP}({\it timestep.F})\\
+{\it S/R TIMESTEP\_TRACER}({\it timestep\_tracer.F})
+\end{minipage}
+}
+
+\item Line PUT_LINE_NB:startTime=,
+\begin{verbatim}
+ startTime=124416000.,
+\end{verbatim}
+Sets the starting time, in seconds, for the model time counter.
+A non-zero starting time requires to read the initial state
+from a pickup file. By default the pickup file is named according 
+to the integer number ({\it nIter0}) of time steps 
+in the {\bf startTime} value ($ nIter0 = startTime / deltaT $).
+
+\item Line PUT_LINE_NB:#nTimeSteps=,
+\begin{verbatim}
+#nTimeSteps=69120,
+\end{verbatim}
+A commented out setting for the length of the simulation 
+(in number of time-step) that corresponds to 1 year simulation.
+
+\item Line PUT_LINE_NB:nTimeSteps= and PUT_LINE_NB:monitorFreq=,
+\begin{verbatim}
+ nTimeSteps=16,
+ monitorFreq=1.,
+\end{verbatim}
+Sets the length of the simulation (in number of time-step)
+and the frequency (in seconds) for "monitor" output.
+to 16 iterations and 1 seconds respectively. This choice
+corresponds to a short simulation test.
+
+\item Line PUT_LINE_NB:pChkptFreq=,
+\begin{verbatim}
+ pChkptFreq=31104000.,
+\end{verbatim}
+Sets the time interval, in seconds, bewteen 2 consecutive 
+"permanent" pickups ("permanent checkpoint frequency")
+that are used to restart the simuilation, to 1 year.
+
+\item Line PUT_LINE_NB:chkptFreq=,
+\begin{verbatim}
+ chkptFreq=2592000.,
+\end{verbatim}
+Sets the time interval, in seconds, bewteen 2 consecutive 
+"temporary" pickups ("checkpoint frequency") to 1 month. 
+The "temporary" pickup file name is alternatively "ckptA" 
+and "ckptB", and are designed to be over-written by the 
+most recent one.
+
+\item Line PUT_LINE_NB:dumpFreq=,
+\begin{verbatim}
+ dumpFreq=2592000.,
+\end{verbatim}
+Set the frequencies (in seconds) for the snap-shot output
+to 1 month.
+
+\item Line PUT_LINE_NB:#monitorFreq=,
+\begin{verbatim}
+#monitorFreq=43200.,
+\end{verbatim}
+A commented out line setting the frequency (in seconds) for the 
+"monitor" output to 12.h respectively. This frequency is fits 
+better the longer simulation of 1 year.
+
+\item Line PUT_LINE_NB:usingCurvilinearGrid=,
+\begin{verbatim}
+ usingCurvilinearGrid=.TRUE.,
+\end{verbatim}
+Set the horizontal type of grid to Curvilinear-Grid.
+
+\item Line PUT_LINE_NB:horizGridFile=,
+\begin{verbatim}
+ horizGridFile='grid_cs32',
+\end{verbatim}
+Set the root for the grid file name to "{\it grid\_cs32}".
+The grid-file names are derived from the root, adding a 
+suffix with the face number (e.g.: {\it .face001.bin}, 
+{\it .face002.bin} $\cdots$ )
+\\ \fbox{
+\begin{minipage}{5.0in}
+{\it S/R INI\_CURVILINEAR\_GRID}~({\it ini\_curvilinear\_grid.F})
+\end{minipage}
+}
+
+\item Lines PUT_LINE_NB:delR= and PUT_LINE_NB:Ro_SeaLevel=,
+\begin{verbatim}
+ delR=20*50.E2,
+ Ro_SeaLevel=1.E5,
+\end{verbatim}
+Those 2 lines define the vertical discretization, in pressure units.
+The $1^{rst}$ one sets the increments in pressure units (Pa),
+to 20 equally thick levels of $50 \times 10^2 {\rm Pa}$ each.
+The $2^{nd}$ one sets the reference pressure at the sea-level, 
+to $10^5 {\rm Pa}$. This define the origin (interface $k=1$) 
+of the vertical pressure axis, with decreasing pressure 
+as the level index $k$ increases.
+\\ \fbox{
+\begin{minipage}{5.0in}
+{\it S/R INI\_VERTICAL\_GRID}~({\it ini\_vertical\_grid.F})
+\end{minipage}
+}
+
+\item Line PUT_LINE_NB:#topoFile=,
+\begin{verbatim}
+#topoFile='topo.cs.bin'
+\end{verbatim}
+This commented out line would allow to set the file name 
+of a 2-D orography file, in meters units, to '{\it topo.cs.bin}'.
+\\ \fbox{
+\begin{minipage}{5.0in}
+{\it S/R INI\_DEPTH}~({\it ini\_depth.F})
+\end{minipage}
+}
+
+\end{itemize}
+
+\noindent other lines in the file {\it input/data} are standard values
+that are described in the MITgcm Getting Started and MITgcm Parameters
+notes.
+

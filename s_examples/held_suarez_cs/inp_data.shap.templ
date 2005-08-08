@@ -1,0 +1,58 @@
+
+%\subsubsection{File {\it input/data.pkg}}
+%\label{www:tutorials}
+
+This file, reproduced completely below, specifies the parameters
+that the model uses for the Shapiro filter package (\cite{Shapiro_70},
+section \ref{sect:shapiro-filter}).
+The parameters that are significant for this configuration are:
+
+\begin{itemize}
+
+\item Line PUT_LINE_NB:Shap_funct=,
+\begin{verbatim} 
+ Shap_funct=2,
+\end{verbatim} 
+This line selects the shapiro filter function
+to use, here S2 in this experiment
+(see section \ref{sect:shapiro-filter}).
+
+\item Lines PUT_LINE_NB:nShapT= and PUT_LINE_NB:nShapUV=,
+\begin{verbatim}
+ nShapT=4,
+ nShapUV=4,
+\end{verbatim}
+Those lines select the order of the shapiro filter
+for active tracer ($\theta$ and $q$) and momentum respectively. 
+This sets the integer parameter $n$ to 4, in the equations of 
+section \ref{sect:shapiro-filter}, which implies a 8th order
+filter.
+
+\item Lines PUT_LINE_NB:nShapTrPhys= and PUT_LINE_NB:nShapUVPhys=,
+\begin{verbatim}
+ nShapTrPhys=0,
+ nShapUVPhys=0,
+\end{verbatim}
+Those lines select the order of the physical space filter 
+(filter function S2g, in section \ref{sect:shapiro-filter})
+that applies to for $\theta$ and $q$ and for $u$ and $v$ respectively.
+The difference $ nShapT - nShapTrPhys $ and $ nShapUV - nShapUVPhys $
+correspond to the order of the computational filter
+(filter function S2c, in section \ref{sect:shapiro-filter}).
+
+\item Lines PUT_LINE_NB:Shap_Trtau= and PUT_LINE_NB:Shap_uvtau=,
+\begin{verbatim}
+ Shap_Trtau=5400.,
+ Shap_uvtau=1800.,
+\end{verbatim}
+Thoses lines set the time scale of the filter (in seconds), 
+for $\theta$ and $q$ and for $u$ and $v$ respectively,
+to 5400 s (90 min) and 1800 s (30 min) respectively.
+Note that a shorter time scale means a stronger filter, and
+that the time scale cannot be smaller than the time-step $\Delta t$
+of the model.
+
+\end{itemize}
+
+The entire file {\it input/data.shap} is reproduced here below:
+
