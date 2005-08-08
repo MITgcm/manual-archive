@@ -1,0 +1,122 @@
+#!/bin/sh
+
+if test $# != 2
+then
+  echo 'Usage:'`basename $0`'  {tex_file.templ} {data_file} :'
+  echo ' replace >>>PUT_LINE_NB:{variable_name}=<<< in file {tex_file.templ}'
+  echo ' with line number in file {data_file} that corresponds to the'
+  echo ' description of variable {variable_name}'
+  echo 'LIMITATION: a) no space / blank between PUT_LINE_NB and "="'
+  echo '            b) no space in the variable name'
+  echo '               (e.g.:  "#YYY=" works, but "# YYY=" does not)'
+  exit
+else
+ texFil=$1
+ inpFil=$2
+fi
+
+outFil=`echo $texFil.tex | sed 's/.templ//'`
+tmpFil1=TTT_fil1.$$
+tmpFil2=TTT_fil2.$$
+dbug=
+
+#texFil='inp_tst'
+#outFil=tata
+#tmpFil1=titi
+#tmpFil2=toto
+#dbug=1
+
+rm -f $outFil $tmpFil1 $tmpFil2
+cp -f $texFil $outFil
+
+# take all the lines in texFil where a line-Nb needs to be added:
+listR=`egrep 'PUT_LINE_NB:' $texFil`
+if test $dbug ; then echo $listR ; fi
+
+for pp in $listR
+do
+ #echo 'pp='$pp
+ xx=`echo $pp | sed "s/PUT_LINE_NB://g"`
+ #echo 'xx='$pp
+ if test $pp != $xx
+ then
+#- select the variable name (=xx) to look for (in inpFil & texFil):
+  if test $dbug ; then echo '  xx='$xx ' <- from pp='$pp ; fi
+  while test $pp != $xx
+  do 
+    pp=$xx
+    xx=`echo $pp | sed 's/=./=/g'`
+  done
+  xx=`echo $pp | sed 's/=$//g'`
+  if test $dbug ; then echo ' Var name: xx='$xx ; fi
+#- select the line in texFil that has been copied from inpFil 
+#    (and needs to receive a line Nb)
+  egrep $xx $texFil | grep -v 'PUT_LINE_NB:' > $tmpFil1
+  if test -s $tmpFil1
+  then
+   #echo 'found' $xx 'in file:' $texFil
+    out=1;
+#-  remove space at the beginning of the line:
+    while test $out = 1
+    do 
+      mv $tmpFil1 $tmpFil2
+      sed 's/^ //g' $tmpFil2 > $tmpFil1
+      diff $tmpFil1 $tmpFil2 > /dev/null
+      out=$?
+    done
+    yy=$xx
+    nbT=`egrep -c "^${yy}" $tmpFil1`
+    if [ $nbT -gt 1 ] 
+    then
+#- try to search for "xx=": 
+#-  count number of blank between variable name "xx" and "=":
+      nblk=0
+      out=`egrep -c "^${yy}=" $tmpFil1`
+      while test $out = 0
+      do
+        yy="${yy} " ; #echo "yy=${yy}<"
+        nblk=`expr $nblk + 1` ;
+        out=`egrep -c "^${yy}=" $tmpFil1`
+        if [ $nblk -ge 100 ] ; then out=1 ; fi
+      done
+      if test $nblk = 100 ; then yy=$xx ; else yy=${yy}"=" ; fi
+      nbT=`egrep -c "^${yy}" $tmpFil1`
+      if test $dbug ; then echo 'nblk='$nblk ', nbT='$nbT ", yy=>${yy}<" ; fi
+    fi
+  else
+    nbT=0
+  fi
+  nn='XXX';
+  if test $nbT = '1' ; then
+#-  now take the only line that start with variable name "xx":
+    LINE=`egrep "^${yy}" $tmpFil1 | sed 's/\*/\\\*/g'`
+    if test $dbug ; then echo '  LINE='$LINE ; fi
+#-  find the same line in inpFil and take the line number (nn):
+    nbI=`egrep -c "$LINE" $inpFil`
+   #echo 'nbI='$nbI
+    if test $nbI = 1
+    then
+      nn=`sed -n "/$LINE/=" $inpFil`
+    else
+      if test $nbI = '0';
+      then echo 'no line found with "'$xx'" in file:' $inpFil
+      else echo 'too many('$nbI') lines with "'$xx'" in file:' $inpFil
+      fi
+    fi
+  else
+    if test $nbT = '0';
+    then echo 'did not find "'$xx'" in file:' $texFil
+    else echo 'too many('$nbT') "'$xx'" in file:' $texFil
+    fi
+  fi
+#- replace by the line number (if found), XXX otherwise:
+  sed "s/PUT_LINE_NB:${xx}=/$nn/" $outFil > $tmpFil1
+  if test $dbug ; then echo " Replace PUT_LINE_NB:${xx}= by line number: nn=$nn" ; fi
+ #if test $dbug ; then echo diff $outFil $tmpFil1 ; diff $outFil $tmpFil1 ; fi
+  mv $tmpFil1 $outFil
+ fi
+done
+rm -f $tmpFil1 $tmpFil2
+if test $dbug ; then echo diff $outFil $texFil ; diff $outFil $texFil ; fi
+
+exit
