@@ -4,7 +4,7 @@
 here=`pwd`
 tutor=`basename $here`
 echo 'tutorial:' $tutor
-src='../../../../wrk57/verification/tutorial_'$tutor
+src='../../../../MITgcm/verification/tutorial_'$tutor
 
 if test -d $src
 then
