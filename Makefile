@@ -50,7 +50,8 @@ l2h: l2h.tgz
 
 subfigs: manual.tgz
 
-manual.dvi: *.tex */*.tex */*/*/*.tex */*.ps */*.eps */*/*/*.eps manual_references.bib
+manual.dvi: *.tex */*.tex */*/*/*.tex */*.ps */*.eps */*/*/*.eps manual_references.bib */*/*/*.templ
+	( cd part3/case_studies/held_suarez_cs/  &&  make )
 	TEXINPUTS=.:::texinputs latex manual
 	bibtex manual
 	TEXINPUTS=.:::texinputs latex manual
@@ -63,6 +64,7 @@ manual.pdf: manual.ps
 	ps2pdf -dMaxSubsetPct=100 -dCompatibilityLevel=1.2 -dSubsetFonts=true -dEmbedAllFonts=true manual.ps manual.pdf
 
 clean: 
+	( cd part3/case_studies/held_suarez_cs/  &&  make clean )
 	rm -f manual.{aux,bbl,blg,dvi,log,out,toc} warnings l2h.log
 Clean:
 	make clean
