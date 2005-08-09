@@ -1,5 +1,5 @@
 
-%\subsubsection{File {\it input/data.pkg}}
+%\subsubsection{File {\it input/data.shap}}
 %\label{www:tutorials}
 
 This file, reproduced completely below, specifies the parameters
@@ -23,9 +23,9 @@ to use, here S2 in this experiment
  nShapUV=4,
 \end{verbatim}
 Those lines select the order of the shapiro filter
-for active tracer ($\theta$ and $q$) and momentum respectively. 
+for active tracer ($\theta$ and $q$) and momentum ($u,v$) respectively. 
 This sets the integer parameter $n$ to 4, in the equations of 
-section \ref{sect:shapiro-filter}, which implies a 8th order
+section \ref{sect:shapiro-filter}, which corresponds to a 8th order
 filter.
 
 \item Lines PUT_LINE_NB:nShapTrPhys= and PUT_LINE_NB:nShapUVPhys=,
@@ -35,8 +35,8 @@ filter.
 \end{verbatim}
 Those lines select the order of the physical space filter 
 (filter function S2g, in section \ref{sect:shapiro-filter})
-that applies to for $\theta$ and $q$ and for $u$ and $v$ respectively.
-The difference $ nShapT - nShapTrPhys $ and $ nShapUV - nShapUVPhys $
+that applies to $\theta,q$ and to $u,v$ respectively.
+The differences {\it nShapT - nShapTrPhys} and {\it nShapUV - nShapUVPhys}
 correspond to the order of the computational filter
 (filter function S2c, in section \ref{sect:shapiro-filter}).
 

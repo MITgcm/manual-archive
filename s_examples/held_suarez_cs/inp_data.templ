@@ -13,8 +13,8 @@ The parameters that are significant for this configuration are:
  tRef=295.2, 295.5, 295.9, 296.3, 296.7, 297.1, 297.6, 298.1, 298.7, 299.3,
 \end{verbatim} 
 $\cdots$ \\
-set reference values for potential temperature at each model level 
-in Kelvin units.
+set reference values for potential temperature (in Kelvin units) 
+at each model level.
 The entries are ordered like model level, from surface up to the top.
 Density is calculated from anomalies at each level evaluated
 with respect to the reference values set here.
@@ -109,7 +109,8 @@ are only permitted for testing/debuging purpose.
 \end{verbatim}
 Select the linear relation between surface geopotential anomaly 
 and surface pressure anomaly to be evaluated from 
-$\frac{\partial \Phi_s}{\partial p_s} = 1/\rho(\theta_{Ref})$.
+$\frac{\partial \Phi_s}{\partial p_s} = 1/\rho(\theta_{Ref})$
+(see section \ref{sect:phi-freesurface}).
 Note that using the default (=TRUE), the constant $1/\rho_0$ is
 used instead, and is not necessary consistent with other 
 parts of the geopotential that relies on $\theta_{Ref}$.
@@ -208,7 +209,7 @@ Sets the starting time, in seconds, for the model time counter.
 A non-zero starting time requires to read the initial state
 from a pickup file. By default the pickup file is named according 
 to the integer number ({\it nIter0}) of time steps 
-in the {\bf startTime} value ($ nIter0 = startTime / deltaT $).
+in the {\it startTime} value ($ nIter0 = startTime / deltaT $).
 
 \item Line PUT_LINE_NB:#nTimeSteps=,
 \begin{verbatim}
@@ -242,8 +243,9 @@ that are used to restart the simuilation, to 1 year.
 Sets the time interval, in seconds, bewteen 2 consecutive 
 "temporary" pickups ("checkpoint frequency") to 1 month. 
 The "temporary" pickup file name is alternatively "ckptA" 
-and "ckptB", and are designed to be over-written by the 
-most recent one.
+and "ckptB" ; thoses pickup (as opposed to the permanent ones)
+are designed to be over-written by the model as the simulation
+progresses.
 
 \item Line PUT_LINE_NB:dumpFreq=,
 \begin{verbatim}
@@ -257,7 +259,7 @@ to 1 month.
 #monitorFreq=43200.,
 \end{verbatim}
 A commented out line setting the frequency (in seconds) for the 
-"monitor" output to 12.h respectively. This frequency is fits 
+"monitor" output to 12.h. This frequency fits 
 better the longer simulation of 1 year.
 
 \item Line PUT_LINE_NB:usingCurvilinearGrid=,
