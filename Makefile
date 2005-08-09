@@ -1,3 +1,9 @@
+#
+#  $Header: /u/gcmpack/manual/Makefile,v 1.27 2005/08/09 17:45:06 edhill Exp $
+#  $Name:  $
+#
+
+#
 #L2H = -image_type gif -split 5 -show_section_numbers -link 2 \
 #      -address "<a href=mailto:support@mitgcm.org>support@mitgcm.org</a>" \
 #      -local_icons -noantialias -notransparent -white
@@ -64,10 +70,11 @@ manual.pdf: manual.ps
 	ps2pdf -dMaxSubsetPct=100 -dCompatibilityLevel=1.2 -dSubsetFonts=true -dEmbedAllFonts=true manual.ps manual.pdf
 
 clean: 
-	( cd part3/case_studies/held_suarez_cs/  &&  make clean )
 	rm -f manual.{aux,bbl,blg,dvi,log,out,toc} warnings l2h.log
+
 Clean:
 	make clean
+	( cd part3/case_studies/held_suarez_cs/  &&  make clean )
 	rm -f manual.{ps,pdf,ps.gz}
 	rm -rf manual
 	rm -f manual.{tz,tgz} mbkup.{tz,tgz} l2h.{tz,tgz}
