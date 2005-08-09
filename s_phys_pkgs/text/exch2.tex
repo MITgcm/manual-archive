@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/text/exch2.tex,v 1.24 2005/07/18 20:45:27 molod Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/text/exch2.tex,v 1.25 2005/08/09 21:52:09 edhill Exp $
 % $Name:  $
 
 %%  * Introduction
@@ -23,7 +23,7 @@ into any number of tiles that divide evenly into the grid point
 dimensions of the subdomain.  Furthermore, the tiles can run on
 separate processors individually or in groups, which provides for
 manual compile-time load balancing across a relatively arbitrary
-number of processors. \\
+number of processors.
 
 The exchange parameters are declared in
 \filelink{pkg/exch2/W2\_EXCH2\_TOPOLOGY.h}{pkg-exch2-W2_EXCH2_TOPOLOGY.h}
@@ -44,43 +44,46 @@ file for single-processor execution.
 \subsubsection{Invoking exch2}
 
 To use exch2 with the cubed sphere, the following conditions must be
-met: \\
+met:
 
-$\bullet$ The exch2 package is included when \file{genmake2} is run.
-  The easiest way to do this is to add the line \code{exch2} to the
-  \file{profile.conf} file -- see Section
-  \ref{sect:buildingCode} \sectiontitle{Building the code} for general
-  details. \\
+\begin{itemize}
+\item The exch2 package is included when \file{genmake2} is run.  The
+  easiest way to do this is to add the line \code{exch2} to the
+  \file{packages.conf} file -- see Section \ref{sect:buildingCode}
+  \sectiontitle{Building the code} for general
+  details.
 
-$\bullet$ An example of \file{W2\_EXCH2\_TOPOLOGY.h} and
+\item An example of \file{W2\_EXCH2\_TOPOLOGY.h} and
   \file{w2\_e2setup.F} must reside in a directory containing files
-  symbolically linked by the \file{genmake2} script.  The safest place to
-  put these is the directory indicated in the \code{-mods=DIR} command
-  line modifier (typically \file{../code}), or the build directory.
-  The default versions of these files reside in \file{pkg/exch2} and
-  are linked automatically if no other versions exist elsewhere in the
-  build path, but they should be left untouched to avoid breaking
-  configurations other than the one you intend to modify.\\
+  symbolically linked by the \file{genmake2} script.  The safest place
+  to put these is the directory indicated in the \code{-mods=DIR}
+  command line modifier (typically \file{../code}), or the build
+  directory.  The default versions of these files reside in
+  \file{pkg/exch2} and are linked automatically if no other versions
+  exist elsewhere in the build path, but they should be left untouched
+  to avoid breaking configurations other than the one you intend to
+  modify.
 
-$\bullet$ Files containing grid parameters, named
-  \file{tile00$n$.mitgrid} where $n$=\code{(1:6)} (one per subdomain),
-  must be in the working directory when the MITgcm executable is run.
-  These files are provided in the example experiments for cubed sphere
-  configurations with 32$\times$32 cube sides 
-  -- please contact MITgcm support if you want to generate
-  files for other configurations. \\
+\item Files containing grid parameters, named \file{tile00$n$.mitgrid}
+  where $n$=\code{(1:6)} (one per subdomain), must be in the working
+  directory when the MITgcm executable is run.  These files are
+  provided in the example experiments for cubed sphere configurations
+  with 32$\times$32 cube sides -- please contact MITgcm support if you
+  want to generate files for other configurations.
 
-$\bullet$ As always when compiling MITgcm, the file \file{SIZE.h} must
-  be placed where \file{genmake2} will find it.  In particular for
-  exch2, the domain decomposition specified in \file{SIZE.h} must
-  correspond with the particular configuration's topology specified in
+\item As always when compiling MITgcm, the file \file{SIZE.h} must be
+  placed where \file{genmake2} will find it.  In particular for exch2,
+  the domain decomposition specified in \file{SIZE.h} must correspond
+  with the particular configuration's topology specified in
   \file{W2\_EXCH2\_TOPOLOGY.h} and \file{w2\_e2setup.F}.  Domain
   decomposition issues particular to exch2 are addressed in Section
   \ref{sec:topogen} \sectiontitle{Generating Topology Files for exch2}
-  and \ref{sec:exch2mpi} \sectiontitle{exch2, SIZE.h, and Multiprocessing}; a more
-  general background on the subject relevant to MITgcm is presented in
-  Section \ref{sect:specifying_a_decomposition}
-  \sectiontitle{Specifying a decomposition}.\\
+  and \ref{sec:exch2mpi} \sectiontitle{exch2, SIZE.h, and
+    Multiprocessing}; a more general background on the subject
+  relevant to MITgcm is presented in Section
+  \ref{sect:specifying_a_decomposition}
+  \sectiontitle{Specifying a decomposition}.
+\end{itemize}
 
 At the time of this writing the following examples use exch2 and may
 be used for guidance:
@@ -188,21 +191,20 @@ by their tile number in the topology, separated by a newline. \\
 Once the topology configuration files are created, the Fortran
 \code{PARAMETER}s in \file{SIZE.h} must be configured to match.
 Section \ref{sect:specifying_a_decomposition} \sectiontitle{Specifying
-a decomposition} provides a general description of domain
+  a decomposition} provides a general description of domain
 decomposition within MITgcm and its relation to \file{SIZE.h}. The
-current section specifies constraints that the exch2 package
-imposes and describes how to enable parallel execution with
-MPI. \\
+current section specifies constraints that the exch2 package imposes
+and describes how to enable parallel execution with MPI.
 
 As in the general case, the parameters \varlink{sNx}{sNx} and
 \varlink{sNy}{sNy} define the size of the individual tiles, and so
 must be assigned the same respective values as \code{tnx} and
-\code{tny} in \file{driver.m}.\\
+\code{tny} in \file{driver.m}.
 
 The halo width parameters \varlink{OLx}{OLx} and \varlink{OLy}{OLy}
 have no special bearing on exch2 and may be assigned as in the general
-case. The same holds for \varlink{Nr}{Nr}, the number of vertical 
-levels in the model.\\
+case. The same holds for \varlink{Nr}{Nr}, the number of vertical
+levels in the model.
 
 The parameters \varlink{nSx}{nSx}, \varlink{nSy}{nSy},
 \varlink{nPx}{nPx}, and \varlink{nPy}{nPy} relate to the number of
@@ -210,7 +212,7 @@ tiles and how they are distributed on processors.  When using exch2,
 the tiles are stored in the $x$ dimension, and so
 \code{\varlink{nSy}{nSy}=1} in all cases.  Since the tiles as
 configured by exch2 cannot be split up accross processors without
-regenerating the topology, \code{\varlink{nPy}{nPy}=1} as well. \\
+regenerating the topology, \code{\varlink{nPy}{nPy}=1} as well.
 
 The number of tiles MITgcm allocates and how they are distributed
 between processors depends on \varlink{nPx}{nPx} and
@@ -227,12 +229,11 @@ thirty-six tiles that allows you to exclude seven tiles.  To evenly
 distribute the remaining twenty-nine tiles among five processors, you
 would have to run one ``dummy'' tile to make an even six tiles per
 processor.  Such dummy tiles are \emph{not} listed in
-\file{blanklist.txt}.\\
-
+\file{blanklist.txt}.
 
 The following is an example of \file{SIZE.h} for the twelve-tile
-configuration illustrated in figure \ref{fig:12tile} running on 
-one processor: \\
+configuration illustrated in figure \ref{fig:12tile} running on one
+processor:
 
 \begin{verbatim}
       PARAMETER (
@@ -266,9 +267,6 @@ figure \ref{fig:24tile} running on six processors:
      &           Ny  = sNy*nSy*nPy,
      &           Nr  =   5)
 \end{verbatim}
-
-
-
 
 
 \subsubsection{Key Variables}

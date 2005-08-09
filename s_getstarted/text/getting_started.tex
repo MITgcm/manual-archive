@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.30 2004/10/16 03:40:13 edhill Exp $
+% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.31 2005/08/09 21:52:09 edhill Exp $
 % $Name:  $
 
 %\section{Getting started}
@@ -99,7 +99,8 @@ be set within your shell.  For a csh or tcsh shell, put the following
 \begin{verbatim}
 % setenv CVSROOT :pserver:cvsanon@mitgcm.org:/u/gcmpack
 \end{verbatim}
-in your .cshrc or .tcshrc file.  For bash or sh shells, put:
+in your \texttt{.cshrc} or \texttt{.tcshrc} file.  For bash or sh
+shells, put:
 \begin{verbatim}
 % export CVSROOT=':pserver:cvsanon@mitgcm.org:/u/gcmpack'
 \end{verbatim}
@@ -154,12 +155,12 @@ of CVS aliases
   \label{tab:cvsModules}
 \end{table}
 
-The checkout process creates a directory called \textit{MITgcm}. If
-the directory \textit{MITgcm} exists this command updates your code
+The checkout process creates a directory called \texttt{MITgcm}. If
+the directory \texttt{MITgcm} exists this command updates your code
 based on the repository. Each directory in the source tree contains a
-directory \textit{CVS}. This information is required by CVS to keep
+directory \texttt{CVS}. This information is required by CVS to keep
 track of your file versions with respect to the repository. Don't edit
-the files in \textit{CVS}!  You can also use CVS to download code
+the files in \texttt{CVS}!  You can also use CVS to download code
 updates.  More extensive information on using CVS for maintaining
 MITgcm code can be found
 \begin{rawhtml} <A href=''http://mitgcm.org/usingcvstoget.html'' target="idontexist"> \end{rawhtml}
@@ -273,63 +274,63 @@ framework for grid-point models. MITgcmUV is a specific numerical
 model that uses the framework. Under this structure the model is split
 into execution environment support code and conventional numerical
 model code. The execution environment support code is held under the
-\textit{eesupp} directory. The grid point model code is held under the
-\textit{model} directory. Code execution actually starts in the
-\textit{eesupp} routines and not in the \textit{model} routines. For
-this reason the top-level \textit{MAIN.F} is in the
-\textit{eesupp/src} directory. In general, end-users should not need
+\texttt{eesupp} directory. The grid point model code is held under the
+\texttt{model} directory. Code execution actually starts in the
+\texttt{eesupp} routines and not in the \texttt{model} routines. For
+this reason the top-level \texttt{MAIN.F} is in the
+\texttt{eesupp/src} directory. In general, end-users should not need
 to worry about this level. The top-level routine for the numerical
-part of the code is in \textit{model/src/THE\_MODEL\_MAIN.F}. Here is
+part of the code is in \texttt{model/src/THE\_MODEL\_MAIN.F}. Here is
 a brief description of the directory structure of the model under the
 root tree (a detailed description is given in section 3: Code
 structure).
 
 \begin{itemize}
 
-\item \textit{bin}: this directory is initially empty. It is the
+\item \texttt{bin}: this directory is initially empty. It is the
   default directory in which to compile the code.
   
-\item \textit{diags}: contains the code relative to time-averaged
-  diagnostics. It is subdivided into two subdirectories \textit{inc}
-  and \textit{src} that contain include files (*.\textit{h} files) and
-  Fortran subroutines (*.\textit{F} files), respectively.
+\item \texttt{diags}: contains the code relative to time-averaged
+  diagnostics. It is subdivided into two subdirectories \texttt{inc}
+  and \texttt{src} that contain include files (\texttt{*.h} files) and
+  Fortran subroutines (\texttt{*.F} files), respectively.
 
-\item \textit{doc}: contains brief documentation notes.
+\item \texttt{doc}: contains brief documentation notes.
   
-\item \textit{eesupp}: contains the execution environment source code.
-  Also subdivided into two subdirectories \textit{inc} and
-  \textit{src}.
+\item \texttt{eesupp}: contains the execution environment source code.
+  Also subdivided into two subdirectories \texttt{inc} and
+  \texttt{src}.
   
-\item \textit{exe}: this directory is initially empty. It is the
+\item \texttt{exe}: this directory is initially empty. It is the
   default directory in which to execute the code.
   
-\item \textit{model}: this directory contains the main source code.
-  Also subdivided into two subdirectories \textit{inc} and
-  \textit{src}.
+\item \texttt{model}: this directory contains the main source code.
+  Also subdivided into two subdirectories \texttt{inc} and
+  \texttt{src}.
   
-\item \textit{pkg}: contains the source code for the packages. Each
-  package corresponds to a subdirectory. For example, \textit{gmredi}
+\item \texttt{pkg}: contains the source code for the packages. Each
+  package corresponds to a subdirectory. For example, \texttt{gmredi}
   contains the code related to the Gent-McWilliams/Redi scheme,
-  \textit{aim} the code relative to the atmospheric intermediate
+  \texttt{aim} the code relative to the atmospheric intermediate
   physics. The packages are described in detail in section 3.
   
-\item \textit{tools}: this directory contains various useful tools.
-  For example, \textit{genmake2} is a script written in csh (C-shell)
+\item \texttt{tools}: this directory contains various useful tools.
+  For example, \texttt{genmake2} is a script written in csh (C-shell)
   that should be used to generate your makefile. The directory
-  \textit{adjoint} contains the makefile specific to the Tangent
+  \texttt{adjoint} contains the makefile specific to the Tangent
   linear and Adjoint Compiler (TAMC) that generates the adjoint code.
   The latter is described in details in part V.
   
-\item \textit{utils}: this directory contains various utilities. The
-  subdirectory \textit{knudsen2} contains code and a makefile that
+\item \texttt{utils}: this directory contains various utilities. The
+  subdirectory \texttt{knudsen2} contains code and a makefile that
   compute coefficients of the polynomial approximation to the knudsen
   formula for an ocean nonlinear equation of state. The
-  \textit{matlab} subdirectory contains matlab scripts for reading
-  model output directly into matlab. \textit{scripts} contains C-shell
+  \texttt{matlab} subdirectory contains matlab scripts for reading
+  model output directly into matlab. \texttt{scripts} contains C-shell
   post-processing scripts for joining processor-based and tiled-based
   model output.
   
-\item \textit{verification}: this directory contains the model
+\item \texttt{verification}: this directory contains the model
   examples. See section \ref{sect:modelExamples}.
 
 \end{itemize}
@@ -350,92 +351,92 @@ documentation in sections \ref{sect:eg-baro} - \ref{sect:eg-global}.
 The other examples follow the same general structure as the tutorial
 examples. However, they only include brief instructions in a text file
 called {\it README}.  The examples are located in subdirectories under
-the directory \textit{verification}. Each example is briefly described
+the directory \texttt{verification}. Each example is briefly described
 below.
 
 \subsection{Full list of model examples}
 
 \begin{enumerate}
   
-\item \textit{exp0} - single layer, ocean double gyre (barotropic with
+\item \texttt{exp0} - single layer, ocean double gyre (barotropic with
   free-surface). This experiment is described in detail in section
   \ref{sect:eg-baro}.
 
-\item \textit{exp1} - Four layer, ocean double gyre. This experiment
+\item \texttt{exp1} - Four layer, ocean double gyre. This experiment
   is described in detail in section \ref{sect:eg-baroc}.
   
-\item \textit{exp2} - 4x4 degree global ocean simulation with steady
+\item \texttt{exp2} - 4x4 degree global ocean simulation with steady
   climatological forcing. This experiment is described in detail in
   section \ref{sect:eg-global}.
   
-\item \textit{exp4} - Flow over a Gaussian bump in open-water or
+\item \texttt{exp4} - Flow over a Gaussian bump in open-water or
   channel with open boundaries.
   
-\item \textit{exp5} - Inhomogenously forced ocean convection in a
+\item \texttt{exp5} - Inhomogenously forced ocean convection in a
   doubly periodic box.
 
-\item \textit{front\_relax} - Relaxation of an ocean thermal front (test for
+\item \texttt{front\_relax} - Relaxation of an ocean thermal front (test for
 Gent/McWilliams scheme). 2D (Y-Z).
 
-\item \textit{internal wave} - Ocean internal wave forced by open
+\item \texttt{internal wave} - Ocean internal wave forced by open
   boundary conditions.
   
-\item \textit{natl\_box} - Eastern subtropical North Atlantic with KPP
+\item \texttt{natl\_box} - Eastern subtropical North Atlantic with KPP
   scheme; 1 month integration
   
-\item \textit{hs94.1x64x5} - Zonal averaged atmosphere using Held and
+\item \texttt{hs94.1x64x5} - Zonal averaged atmosphere using Held and
   Suarez '94 forcing.
   
-\item \textit{hs94.128x64x5} - 3D atmosphere dynamics using Held and
+\item \texttt{hs94.128x64x5} - 3D atmosphere dynamics using Held and
   Suarez '94 forcing.
   
-\item \textit{hs94.cs-32x32x5} - 3D atmosphere dynamics using Held and
+\item \texttt{hs94.cs-32x32x5} - 3D atmosphere dynamics using Held and
   Suarez '94 forcing on the cubed sphere.
   
-\item \textit{aim.5l\_zon-ave} - Intermediate Atmospheric physics.
+\item \texttt{aim.5l\_zon-ave} - Intermediate Atmospheric physics.
   Global Zonal Mean configuration, 1x64x5 resolution.
   
-\item \textit{aim.5l\_XZ\_Equatorial\_Slice} - Intermediate
+\item \texttt{aim.5l\_XZ\_Equatorial\_Slice} - Intermediate
   Atmospheric physics, equatorial Slice configuration.  2D (X-Z).
   
-\item \textit{aim.5l\_Equatorial\_Channel} - Intermediate Atmospheric
+\item \texttt{aim.5l\_Equatorial\_Channel} - Intermediate Atmospheric
   physics. 3D Equatorial Channel configuration.
   
-\item \textit{aim.5l\_LatLon} - Intermediate Atmospheric physics.
+\item \texttt{aim.5l\_LatLon} - Intermediate Atmospheric physics.
   Global configuration, on latitude longitude grid with 128x64x5 grid
   points ($2.8^\circ{\rm degree}$ resolution).
   
-\item \textit{adjustment.128x64x1} Barotropic adjustment problem on
+\item \texttt{adjustment.128x64x1} Barotropic adjustment problem on
   latitude longitude grid with 128x64 grid points ($2.8^\circ{\rm
     degree}$ resolution).
   
-\item \textit{adjustment.cs-32x32x1} Barotropic adjustment problem on
+\item \texttt{adjustment.cs-32x32x1} Barotropic adjustment problem on
   cube sphere grid with 32x32 points per face ( roughly $2.8^\circ{\rm
     degree}$ resolution).
   
-\item \textit{advect\_cs} Two-dimensional passive advection test on
+\item \texttt{advect\_cs} Two-dimensional passive advection test on
   cube sphere grid.
   
-\item \textit{advect\_xy} Two-dimensional (horizontal plane) passive
+\item \texttt{advect\_xy} Two-dimensional (horizontal plane) passive
   advection test on Cartesian grid.
   
-\item \textit{advect\_yz} Two-dimensional (vertical plane) passive
+\item \texttt{advect\_yz} Two-dimensional (vertical plane) passive
   advection test on Cartesian grid.
   
-\item \textit{carbon} Simple passive tracer experiment. Includes
+\item \texttt{carbon} Simple passive tracer experiment. Includes
   derivative calculation. Described in detail in section
   \ref{sect:eg-carbon-ad}.
 
-\item \textit{flt\_example} Example of using float package.
+\item \texttt{flt\_example} Example of using float package.
   
-\item \textit{global\_ocean.90x40x15} Global circulation with GM, flux
+\item \texttt{global\_ocean.90x40x15} Global circulation with GM, flux
   boundary conditions and poles.
 
-\item \textit{global\_ocean\_pressure} Global circulation in pressure
+\item \texttt{global\_ocean\_pressure} Global circulation in pressure
   coordinate (non-Boussinesq ocean model). Described in detail in
   section \ref{sect:eg-globalpressure}.
   
-\item \textit{solid-body.cs-32x32x1} Solid body rotation test for cube
+\item \texttt{solid-body.cs-32x32x1} Solid body rotation test for cube
   sphere grid.
 
 \end{enumerate}
@@ -445,39 +446,48 @@ Gent/McWilliams scheme). 2D (Y-Z).
 Each example directory has the following subdirectories:
 
 \begin{itemize}
-\item \textit{code}: contains the code particular to the example. At a
+\item \texttt{code}: contains the code particular to the example. At a
   minimum, this directory includes the following files:
 
   \begin{itemize}
-  \item \textit{code/CPP\_EEOPTIONS.h}: declares CPP keys relative to
+  \item \texttt{code/packages.conf}: declares the list of packages or
+    package groups to be used.  If not included, the default version
+    is located in \texttt{pkg/pkg\_default}.  Package groups are
+    simply convenient collections of commonly used packages which are
+    defined in \texttt{pkg/pkg\_default}.  Some packages may require
+    other packages or may require their absence (that is, they are
+    incompatible) and these package dependencies are listed in
+    \texttt{pkg/pkg\_depend}.
+
+  \item \texttt{code/CPP\_EEOPTIONS.h}: declares CPP keys relative to
     the ``execution environment'' part of the code. The default
-    version is located in \textit{eesupp/inc}.
+    version is located in \texttt{eesupp/inc}.
   
-  \item \textit{code/CPP\_OPTIONS.h}: declares CPP keys relative to
+  \item \texttt{code/CPP\_OPTIONS.h}: declares CPP keys relative to
     the ``numerical model'' part of the code. The default version is
-    located in \textit{model/inc}.
+    located in \texttt{model/inc}.
   
-  \item \textit{code/SIZE.h}: declares size of underlying
+  \item \texttt{code/SIZE.h}: declares size of underlying
     computational grid.  The default version is located in
-    \textit{model/inc}.
+    \texttt{model/inc}.
   \end{itemize}
   
   In addition, other include files and subroutines might be present in
-  \textit{code} depending on the particular experiment. See Section 2
+  \texttt{code} depending on the particular experiment. See Section 2
   for more details.
   
-\item \textit{input}: contains the input data files required to run
-  the example. At a minimum, the \textit{input} directory contains the
+\item \texttt{input}: contains the input data files required to run
+  the example. At a minimum, the \texttt{input} directory contains the
   following files:
 
   \begin{itemize}
-  \item \textit{input/data}: this file, written as a namelist,
+  \item \texttt{input/data}: this file, written as a namelist,
     specifies the main parameters for the experiment.
   
-  \item \textit{input/data.pkg}: contains parameters relative to the
+  \item \texttt{input/data.pkg}: contains parameters relative to the
     packages used in the experiment.
   
-  \item \textit{input/eedata}: this file contains ``execution
+  \item \texttt{input/eedata}: this file contains ``execution
     environment'' data. At present, this consists of a specification
     of the number of threads to use in $X$ and $Y$ under multithreaded
     execution.
@@ -488,8 +498,8 @@ Each example directory has the following subdirectories:
   of the experiment.  This varies from experiment to experiment. See
   section 2 for more details.
 
-\item \textit{results}: this directory contains the output file
-  \textit{output.txt} produced by the simulation example. This file is
+\item \texttt{results}: this directory contains the output file
+  \texttt{output.txt} produced by the simulation example. This file is
   useful for comparison with your own output when you run the
   experiment.
 \end{itemize}
@@ -503,38 +513,38 @@ compile the code.
 <!-- CMIREDIR:buildingCode: -->
 \end{rawhtml}
 
-To compile the code, we use the {\em make} program. This uses a file
-({\em Makefile}) that allows us to pre-process source files, specify
-compiler and optimization options and also figures out any file
-dependencies. We supply a script ({\em genmake2}), described in
-section \ref{sect:genmake}, that automatically creates the {\em
-  Makefile} for you. You then need to build the dependencies and
+To compile the code, we use the \texttt{make} program. This uses a
+file (\texttt{Makefile}) that allows us to pre-process source files,
+specify compiler and optimization options and also figures out any
+file dependencies. We supply a script (\texttt{genmake2}), described
+in section \ref{sect:genmake}, that automatically creates the
+\texttt{Makefile} for you. You then need to build the dependencies and
 compile the code.
 
-As an example, let's assume that you want to build and run experiment
-\textit{verification/exp2}. The are multiple ways and places to
+As an example, assume that you want to build and run experiment
+\texttt{verification/exp2}. The are multiple ways and places to
 actually do this but here let's build the code in
-\textit{verification/exp2/input}:
+\texttt{verification/exp2/build}:
 \begin{verbatim}
-% cd verification/exp2/input
+% cd verification/exp2/build
 \end{verbatim}
-First, build the {\em Makefile}:
+First, build the \texttt{Makefile}:
 \begin{verbatim}
 % ../../../tools/genmake2 -mods=../code
 \end{verbatim}
-The command line option tells {\em genmake} to override model source
-code with any files in the directory {\em ../code/}.
+The command line option tells \texttt{genmake} to override model source
+code with any files in the directory \texttt{../code/}.
 
-On many systems, the {\em genmake2} program will be able to
+On many systems, the \texttt{genmake2} program will be able to
 automatically recognize the hardware, find compilers and other tools
-within the user's path (``echo \$PATH''), and then choose an
+within the user's path (``\texttt{echo \$PATH}''), and then choose an
 appropriate set of options from the files (``optfiles'') contained in
-the {\em tools/build\_options} directory.  Under some circumstances, a
-user may have to create a new ``optfile'' in order to specify the
-exact combination of compiler, compiler flags, libraries, and other
-options necessary to build a particular configuration of MITgcm.  In
-such cases, it is generally helpful to read the existing ``optfiles''
-and mimic their syntax.
+the \texttt{tools/build\_options} directory.  Under some
+circumstances, a user may have to create a new ``optfile'' in order to
+specify the exact combination of compiler, compiler flags, libraries,
+and other options necessary to build a particular configuration of
+MITgcm.  In such cases, it is generally helpful to read the existing
+``optfiles'' and mimic their syntax.
 
 Through the MITgcm-support list, the MITgcm developers are willing to
 provide help writing or modifing ``optfiles''.  And we encourage users
@@ -545,40 +555,54 @@ MITgcm-support@mitgcm.org
 \begin{rawhtml} </A> \end{rawhtml}
 list.
 
-To specify an optfile to {\em genmake2}, the syntax is:
+To specify an optfile to \texttt{genmake2}, the syntax is:
 \begin{verbatim}
 % ../../../tools/genmake2 -mods=../code -of /path/to/optfile
 \end{verbatim}
 
-Once a {\em Makefile} has been generated, we create the dependencies:
+Once a \texttt{Makefile} has been generated, we create the
+dependencies with the command:
 \begin{verbatim}
 % make depend
 \end{verbatim}
-This modifies the {\em Makefile} by attaching a [long] list of files
-upon which other files depend. The purpose of this is to reduce
-re-compilation if and when you start to modify the code. The {\tt make
-  depend} command also creates links from the model source to this
-directory.  It is important to note that the {\tt make depend} stage
-will occasionally produce warnings or errors since the dependency
-parsing tool is unable to find all of the necessary header files
-(\textit{eg.}  \texttt{netcdf.inc}).  In these circumstances, it is
-usually OK to ignore the warnings/errors and proceed to the next step.
+This modifies the \texttt{Makefile} by attaching a (usually, long)
+list of files upon which other files depend. The purpose of this is to
+reduce re-compilation if and when you start to modify the code. The
+{\tt make depend} command also creates links from the model source to
+this directory.  It is important to note that the {\tt make depend}
+stage will occasionally produce warnings or errors since the
+dependency parsing tool is unable to find all of the necessary header
+files (\textit{eg.}  \texttt{netcdf.inc}).  In these circumstances, it
+is usually OK to ignore the warnings/errors and proceed to the next
+step.
 
-Next compile the code:
+Next one can compile the code using:
 \begin{verbatim}
 % make
 \end{verbatim}
-The {\tt make} command creates an executable called \textit{mitgcmuv}.
+The {\tt make} command creates an executable called \texttt{mitgcmuv}.
 Additional make ``targets'' are defined within the makefile to aid in
-the production of adjoint and other versions of MITgcm.
+the production of adjoint and other versions of MITgcm.  On SMP
+(shared multi-processor) systems, the build process can often be sped
+up appreciably using the command:
+\begin{verbatim}
+% make -j 2
+\end{verbatim}
+where the ``2'' can be replaced with a number that corresponds to the
+number of CPUs available.
 
 Now you are ready to run the model. General instructions for doing so are
-given in section \ref{sect:runModel}. Here, we can run the model with:
+given in section \ref{sect:runModel}. Here, we can run the model by
+first creating links to all the input files:
+\begin{verbatim}
+ln -s ../input/* .
+\end{verbatim}
+and then calling the executable with:
 \begin{verbatim}
 ./mitgcmuv > output.txt
 \end{verbatim}
-where we are re-directing the stream of text output to the file {\em
-output.txt}.
+where we are re-directing the stream of text output to the file
+\texttt{output.txt}.
 
 
 \section[Running MITgcm]{Running the model in prognostic mode}
@@ -587,7 +611,7 @@ output.txt}.
 <!-- CMIREDIR:runModel: -->
 \end{rawhtml}
 
-If compilation finished succesfuully (section \ref{sect:buildingCode})
+If compilation finished succesfully (section \ref{sect:buildingCode})
 then an executable called \texttt{mitgcmuv} will now exist in the
 local directory.
 
@@ -602,7 +626,7 @@ do!). The above command will spew out many lines of text output to
 your screen.  This output contains details such as parameter values as
 well as diagnostics such as mean Kinetic energy, largest CFL number,
 etc. It is worth keeping this text output with the binary output so we
-normally re-direct the {\em stdout} stream as follows:
+normally re-direct the \texttt{stdout} stream as follows:
 \begin{verbatim}
 % ./mitgcmuv > output.txt
 \end{verbatim}
@@ -610,19 +634,21 @@ In the event that the model encounters an error and stops, it is very
 helpful to include the last few line of this \texttt{output.txt} file
 along with the (\texttt{stderr}) error message within any bug reports.
 
-For the example experiments in {\em verification}, an example of the
-output is kept in {\em results/output.txt} for comparison. You can
-compare your {\em output.txt} with the corresponding one for that
+For the example experiments in \texttt{verification}, an example of the
+output is kept in \texttt{results/output.txt} for comparison. You can
+compare your \texttt{output.txt} with the corresponding one for that
 experiment to check that the set-up works.
 
 
 
 \subsection{Output files}
 
-The model produces various output files.  Depending upon the I/O
-package selected (either \texttt{mdsio} or \texttt{mnc} or both as
-determined by both the compile-time settings and the run-time flags in
-\texttt{data.pkg}), the following output may appear.
+The model produces various output files and, when using \texttt{mnc},
+sometimes even directories.  Depending upon the I/O package(s)
+selected at compile time (either \texttt{mdsio} or \texttt{mnc} or
+both as determined by \texttt{code/packages.conf}) and the run-time
+flags set (in \texttt{input/data.pkg}), the following output may
+appear.
 
 
 \subsubsection{MDSIO output files}
@@ -632,34 +658,34 @@ package.  At a minimum, the instantaneous ``state'' of the model is
 written out, which is made of the following files:
 
 \begin{itemize}
-\item \textit{U.00000nIter} - zonal component of velocity field (m/s and $>
+\item \texttt{U.00000nIter} - zonal component of velocity field (m/s and $>
 0 $ eastward).
 
-\item \textit{V.00000nIter} - meridional component of velocity field (m/s
+\item \texttt{V.00000nIter} - meridional component of velocity field (m/s
 and $> 0$ northward).
 
-\item \textit{W.00000nIter} - vertical component of velocity field (ocean:
+\item \texttt{W.00000nIter} - vertical component of velocity field (ocean:
 m/s and $> 0$ upward, atmosphere: Pa/s and $> 0$ towards increasing pressure
 i.e. downward).
 
-\item \textit{T.00000nIter} - potential temperature (ocean: $^{0}$C,
+\item \texttt{T.00000nIter} - potential temperature (ocean: $^{0}$C,
 atmosphere: $^{0}$K).
 
-\item \textit{S.00000nIter} - ocean: salinity (psu), atmosphere: water vapor
+\item \texttt{S.00000nIter} - ocean: salinity (psu), atmosphere: water vapor
 (g/kg).
 
-\item \textit{Eta.00000nIter} - ocean: surface elevation (m), atmosphere:
+\item \texttt{Eta.00000nIter} - ocean: surface elevation (m), atmosphere:
 surface pressure anomaly (Pa).
 \end{itemize}
 
-The chain \textit{00000nIter} consists of ten figures that specify the
-iteration number at which the output is written out. For example, \textit{%
+The chain \texttt{00000nIter} consists of ten figures that specify the
+iteration number at which the output is written out. For example, \texttt{%
 U.0000000300} is the zonal velocity at iteration 300.
 
 In addition, a ``pickup'' or ``checkpoint'' file called:
 
 \begin{itemize}
-\item \textit{pickup.00000nIter}
+\item \texttt{pickup.00000nIter}
 \end{itemize}
 
 is written out. This file represents the state of the model in a condensed
@@ -667,13 +693,13 @@ form and is used for restarting the integration. If the C-D scheme is used,
 there is an additional ``pickup'' file:
 
 \begin{itemize}
-\item \textit{pickup\_cd.00000nIter}
+\item \texttt{pickup\_cd.00000nIter}
 \end{itemize}
 
 containing the D-grid velocity data and that has to be written out as well
 in order to restart the integration. Rolling checkpoint files are the same
 as the pickup files but are named differently. Their name contain the chain 
-\textit{ckptA} or \textit{ckptB} instead of \textit{00000nIter}. They can be
+\texttt{ckptA} or \texttt{ckptB} instead of \texttt{00000nIter}. They can be
 used to restart the model but are overwritten every other time they are
 output to save disk space during long integrations.
 
@@ -687,19 +713,20 @@ a name such as \texttt{mnc\_test\_\${DATE}\_\${SEQ}}.  The files
 within this subdirectory are all in the ``self-describing'' netCDF
 format and can thus be browsed and/or plotted using tools such as:
 \begin{itemize}
-\item At a minimum, the \texttt{ncdump} utility is typically included
+\item \texttt{ncdump} is a utility which is typically included
   with every netCDF install:
   \begin{rawhtml} <A href="http://www.unidata.ucar.edu/packages/netcdf/"> \end{rawhtml}
 \begin{verbatim}
-http://www.unidata.ucar.edu/packages/netcdf/
+     http://www.unidata.ucar.edu/packages/netcdf/
 \end{verbatim}
-  \begin{rawhtml} </A> \end{rawhtml}
+  \begin{rawhtml} </A> \end{rawhtml} and it converts the netCDF
+  binaries into formatted ASCII text files.
 
-\item The \texttt{ncview} utility is a very convenient and quick way
+\item \texttt{ncview} utility is a very convenient and quick way
   to plot netCDF data and it runs on most OSes:
   \begin{rawhtml} <A href="http://meteora.ucsd.edu/~pierce/ncview_home_page.html"> \end{rawhtml}
 \begin{verbatim}
-http://meteora.ucsd.edu/~pierce/ncview_home_page.html
+     http://meteora.ucsd.edu/~pierce/ncview_home_page.html
 \end{verbatim}
   \begin{rawhtml} </A> \end{rawhtml}
   
@@ -710,7 +737,6 @@ http://meteora.ucsd.edu/~pierce/ncview_home_page.html
 http://woodshole.er.usgs.gov/staffpages/cdenham/public_html/MexCDF/nc4ml5.html
 \end{verbatim}
   \begin{rawhtml} </A> \end{rawhtml}
-
 \end{itemize}
 
 
@@ -718,15 +744,15 @@ http://woodshole.er.usgs.gov/staffpages/cdenham/public_html/MexCDF/nc4ml5.html
 
 The ``traditional'' or mdsio model data are written according to a
 ``meta/data'' file format.  Each variable is associated with two files
-with suffix names \textit{.data} and \textit{.meta}. The
-\textit{.data} file contains the data written in binary form
-(big\_endian by default). The \textit{.meta} file is a ``header'' file
+with suffix names \texttt{.data} and \texttt{.meta}. The
+\texttt{.data} file contains the data written in binary form
+(big\_endian by default). The \texttt{.meta} file is a ``header'' file
 that contains information about the size and the structure of the
-\textit{.data} file. This way of organizing the output is particularly
+\texttt{.data} file. This way of organizing the output is particularly
 useful when running multi-processors calculations. The base version of
 the model includes a few matlab utilities to read output files written
 in this format. The matlab scripts are located in the directory
-\textit{utils/matlab} under the root tree. The script \textit{rdmds.m}
+\texttt{utils/matlab} under the root tree. The script \texttt{rdmds.m}
 reads the data. Look at the comments inside the script to see how to
 use it.
 
@@ -745,4 +771,6 @@ Some examples of reading and visualizing some output in {\em Matlab}:
 >> for n=1:11; imagesc(eta(:,:,n)');axis ij;colorbar;pause(.5);end
 \end{verbatim}
 
-Similar scripts for netCDF output (\texttt{rdmnc.m}) are available.
+Similar scripts for netCDF output (\texttt{rdmnc.m}) are available and
+they are described in Section \ref{sec:pkg:mnc}.
+
