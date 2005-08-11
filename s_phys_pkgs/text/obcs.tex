@@ -1,0 +1,272 @@
+\subsection{OBCS: Open boundary conditions for regional modeling}
+
+\label{sec:pkg:obcs}
+\begin{rawhtml}
+<!-- CMIREDIR:package_obcs: -->
+\end{rawhtml}
+
+Authors: Martin Losch and Patrick Heimbach
+
+\subsubsection{Introduction
+\label{sec:pkg:obcs:intro}}
+
+
+
+%----------------------------------------------------------------------
+
+\subsubsection{OBCS configuration and compiling
+\label{sec:pkg:kpp:comp}}
+
+As with all MITgcm packages, OBCS can be turned on or off 
+at compile time
+%
+\begin{itemize}
+%
+\item
+using the \texttt{packages.conf} file by adding \texttt{obcs} to it,
+%
+\item
+or using \texttt{genmake2} adding
+\texttt{-enable=obcs} or \texttt{-disable=obcs} switches
+%
+\item
+\textit{Required packages and CPP options:} \\
+%
+To alternatives are available for prescribing open boundary values,
+which differ in the way how OB's are treated in time:
+A simple time-management (e.g. constant in time, or cyclic with
+fixed fequency) is provided through 
+S/R \texttt{obcs\_external\_fields\_load}.
+More sophisticated ``real-time'' (i.e. calendar time) management is
+available through \texttt{obcs\_prescribe\_read}. 
+The latter case requires
+packages \texttt{cal} and \texttt{exf} to be enabled.
+%
+\end{itemize}
+(see also Section \ref{sect:buildingCode}).
+
+Parts of the OBCS code can be enabled or disabled at compile time
+via CPP preprocessor flags. These options are set in
+\texttt{OBCS\_OPTIONS.h}. Table \ref{tab:pkg:obcs:cpp} summarizes them.
+
+\begin{table}[h!]
+\centering
+  \label{tab:pkg:obcs:cpp}
+  {\footnotesize
+    \begin{tabular}{|l|l|}
+      \hline 
+      \textbf{CPP option}  &  \textbf{Description}  \\
+      \hline \hline
+        \texttt{ALLOW\_OBCS\_NORTH} & 
+          enable Northern OB \\
+        \texttt{ALLOW\_OBCS\_SOUTH} & 
+          enable Southern OB \\
+        \texttt{ALLOW\_OBCS\_EAST} & 
+          enable Eastern OB \\
+        \texttt{ALLOW\_OBCS\_WEST} & 
+          enable Western OB \\
+      \hline
+        \texttt{ALLOW\_OBCS\_PRESCRIBE} & 
+          enable code for prescribing OB's \\
+        \texttt{ALLOW\_OBCS\_SPONGE} & 
+          enable sponge layer code \\
+        \texttt{ALLOW\_OBCS\_BALANCE} & 
+          enable code for balancing transports through OB's \\
+        \texttt{ALLOW\_ORLANSKI} & 
+          enable Orlanski radiation conditions at OB's \\
+      \hline
+    \end{tabular}
+  }
+  \caption{~}
+\end{table}
+
+
+%----------------------------------------------------------------------
+
+\subsubsection{Run-time parameters
+\label{sec:pkg:obcs:runtime}}
+
+Run-time parameters are set in files 
+\texttt{data.pkg}, \texttt{data.obcs}, and \texttt{data.exf} 
+if ``real-time'' prescription is requested 
+(i.e. package \texttt{exf} enabled).
+These parameter files are read in S/R
+\texttt{packages\_readparms.F}, \texttt{obcs\_readparms.F}, and
+\texttt{exf\_readparms.F}, respectively.
+Run-time parameters may be broken into 3 categories:
+(i) switching on/off the package at runtime,
+(ii) OBCS package flags and parameters,
+(iii) additional timing flags in \texttt{data.exf}, if selected.
+
+\paragraph{Enabling the package}
+~ \\
+%
+The OBCS package is switched on at runtime by setting
+\texttt{useOBCS = .TRUE.} in \texttt{data.pkg}.
+
+\paragraph{Package flags and parameters}
+~ \\
+%
+Table \ref{tab:pkg:obcs:runtime_flags} summarizes the
+runtime flags that are set in \texttt{data.obcs}, and
+their default values.
+
+\begin{table}[h!]
+\centering
+  \label{tab:pkg:obcs:runtime_flags}
+  {\footnotesize
+    \begin{tabular}{|l|c|l|}
+      \hline 
+      \textbf{Flag/parameter} & \textbf{default} &  \textbf{Description}  \\
+      \hline \hline
+         \multicolumn{3}{|c|}{\textit{basic flags \& parameters} } \\
+         \hline
+        OB\_Jnorth & 0 & 
+           Nx-vector of J-indices (w.r.t. Ny) of Northern OB
+           at each I-position (w.r.t. Nx) \\
+        OB\_Jsouth & 0 & 
+           Nx-vector of J-indices (w.r.t. Ny) of Southern OB
+           at each I-position (w.r.t. Nx) \\
+        OB\_Ieast & 0 & 
+           Ny-vector of I-indices (w.r.t. Nx) of Eastern OB
+           at each J-position (w.r.t. Ny) \\
+        OB\_Iwest & 0 & 
+           Ny-vector of I-indices (w.r.t. Nx) of Western OB
+           at each J-position (w.r.t. Ny) \\
+        useOBCSprescribe & \texttt{.FALSE.} & 
+           ~ \\
+        useOBCSsponge & \texttt{.FALSE.} & 
+           ~ \\
+        useOBCSbalance & \texttt{.FALSE.} & 
+           ~ \\
+        OB\textbf{X}\textbf{y}File & ~ & 
+           file name of OB field \\
+        ~ & ~ & 
+           \textbf{X}: \textbf{N}(orth), \textbf{S}(outh), 
+                       \textbf{E}(ast), \textbf{W}(est) \\
+        ~ & ~ & 
+           \textbf{y}: \textbf{t}(emperature), \textbf{s}(salinity), 
+           \textbf{u}(-velocity), \textbf{v}(-velocity) \\
+      \hline
+      \multicolumn{3}{|c|}{\textit{Orlanski parameters} } \\
+      \hline
+        cvelTimeScale & 2000 sec & 
+           averaging period for phase speed \\
+        CMAX & 0.45 m/s & 
+           maximum allowable phase speed-CFL for AB-II \\
+        CFIX & 0.8 m/s & 
+           fixed boundary phase speed \\
+        useFixedCEast & .FALSE. & 
+           ~ \\
+        useFixedCWest & .FALSE. & 
+           ~ \\
+      \hline
+      \multicolumn{3}{|c|}{\textit{Sponge-layer parameters} } \\
+      \hline
+        spongeThickness & 0 & 
+           sponge layer thickness (in \# grid points) \\
+        Urelaxobcsinner & 0 sec & 
+           relaxation time scale at the 
+           innermost sponge layer point of a meridional OB \\
+        Vrelaxobcsinner & 0 sec & 
+           relaxation time scale at the 
+           innermost sponge layer point of a zonal OB \\
+        Urelaxobcsbound & 0 sec & 
+           relaxation time scale at the 
+           outermost sponge layer point of a meridional OB \\
+        Vrelaxobcsbound & 0 sec & 
+           relaxation time scale at the 
+           outermost sponge layer point of a zonal OB \\
+         \hline
+      \hline
+    \end{tabular}
+  }
+  \caption{~}
+\end{table}
+
+
+
+%----------------------------------------------------------------------
+
+\subsubsection{Equations and key routines
+\label{sec:pkg:obcs:equations}}
+
+\paragraph{OBCS\_READPARMS:} Setting OB positions \\
+~
+
+\paragraph{OBCS\_CALC:} ~ \\
+~
+
+\paragraph{OBCS\_APPLY\_*:} ~ \\
+~
+
+\paragraph{OBCS\_PRESCRIBE\_READ} Setting OB fields and updates \\
+%
+~
+
+\paragraph{OBCS\_SPONGE} Setting sponge layer characteristics \\
+%
+~
+
+\paragraph{OBCS\_BALANCE} ~ \\
+%
+~
+
+\paragraph{ORLANSKI} Orlanski radiation conditions \\
+%
+~
+
+\paragraph{OB's with nonlinear free surface} ~ \\
+%
+~
+
+
+%----------------------------------------------------------------------
+
+\subsubsection{Flow chart
+\label{sec:pkg:obcs:flowchart}}
+
+
+{\footnotesize
+\begin{verbatim}
+
+C     !CALLING SEQUENCE:
+c ...
+
+\end{verbatim}
+}
+
+%----------------------------------------------------------------------
+
+\subsubsection{OBCS diagnostics
+\label{sec:pkg:obcs:diagnostics}}
+
+Diagnostics output is available via the diagnostics package
+(see Section \ref{sec:pkg:diagnostics}).
+Available output fields are summarized in 
+Table \ref{tab:pkg:obcs:diagnostics}.
+
+\begin{table}[h!]
+\centering
+\label{tab:pkg:obcs:diagnostics}
+{\footnotesize
+\begin{verbatim}
+------------------------------------------------------
+ <-Name->|Levs|grid|<--  Units   -->|<- Tile (max=80c)
+------------------------------------------------------
+
+\end{verbatim}
+}
+\caption{~}
+\end{table}
+
+%----------------------------------------------------------------------
+
+\subsubsection{Reference experiments}
+
+
+
+%----------------------------------------------------------------------
+
+\subsubsection{References}
+
