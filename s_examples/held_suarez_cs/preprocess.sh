@@ -26,6 +26,10 @@ then
   done
 
 #---------------------------------------------------------------------
+else
+  echo 'dir:' $src 'is missing'
+fi
+
   listT=`ls *.templ`
 
   echo ' Generate from template:'
@@ -48,8 +52,5 @@ then
   done
 
 #---------------------------------------------------------------------
-else
-  echo 'dir:' $src 'is missing'
-fi
 
 exit

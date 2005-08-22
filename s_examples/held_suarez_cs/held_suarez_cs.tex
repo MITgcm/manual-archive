@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_examples/held_suarez_cs/held_suarez_cs.tex,v 1.4 2005/08/09 18:46:39 jmc Exp $
+% $Header: /u/gcmpack/manual/s_examples/held_suarez_cs/held_suarez_cs.tex,v 1.5 2005/08/22 20:46:12 jmc Exp $
 % $Name:  $
 
 \section[Held-Suarez Atmosphere MITgcm Example]{Held-Suarez atmospheric simulation
@@ -170,12 +170,12 @@ leads to the set of equations that are solved in this configuration:
 %+\mathbf{\nabla }_{p} ({\rm KE})
 +\mathbf{\nabla }_{p} (\mbox{\sc ke})
 + \omega \frac{\partial \vec{\mathbf{v}}_h }{\partial p}
-+\mathbf{\nabla }_p \varphi ^{\prime } 
++\mathbf{\nabla }_p \Phi ^{\prime } 
 &=& 
 % \vec{{\cal F}_v} = 
 -k_\mathbf{v}\vec{\mathbf{v}}_h
 \\
-\frac{\partial \varphi ^{\prime }}{\partial p} 
+\frac{\partial \Phi ^{\prime }}{\partial p} 
 +\frac{\partial \Pi }{\partial p}\theta ^{\prime } &=&0
 \\
 \mathbf{\nabla }_{p}\cdot \vec{\mathbf{v}}_h+\frac{\partial \omega }{
@@ -290,18 +290,10 @@ to these files associated with this experiment.
 
 \input{part3/case_studies/held_suarez_cs/inp_data}
 
-\begin{small}
-\input{part3/case_studies/held_suarez_cs/input/data}
-\end{small}
-
 \subsubsection{File {\it input/data.pkg}}
 \label{www:tutorials}
 
 \input{part3/case_studies/held_suarez_cs/inp_data.pkg}
-
-\begin{small}
-\input{part3/case_studies/held_suarez_cs/input/data.pkg}
-\end{small}
 
 \subsubsection{File {\it input/eedata}}
 \label{www:tutorials}
@@ -317,10 +309,6 @@ to connect tiles and faces edges.
 \label{www:tutorials}
 
 \input{part3/case_studies/held_suarez_cs/inp_data.shap}
-
-\begin{small}
-\input{part3/case_studies/held_suarez_cs/input/data.shap}
-\end{small}
 
 \subsubsection{File {\it code/SIZE.h}}
 \label{www:tutorials}
@@ -359,10 +347,6 @@ sets the vertical domain extent in grid points.
 \label{www:tutorials}
 
 \input{part3/case_studies/held_suarez_cs/cod_packages.conf}
-
-\begin{small}
-\input{part3/case_studies/held_suarez_cs/code/packages.conf}
-\end{small}
 
 \subsubsection{File {\it code/CPP\_OPTIONS.h}}
 \label{www:tutorials}
