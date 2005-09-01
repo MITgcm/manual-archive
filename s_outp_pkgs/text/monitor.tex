@@ -4,5 +4,65 @@
 <!-- CMIREDIR:package_monitor: -->
 \end{rawhtml}
 
-\subsection{Key subroutines, parameters and files}
-\label{sec:pkg:monitor:implementation_synopsis}
+
+\subsection{Overview}
+\label{sec:pkg:monitor:overview}
+
+
+The \texttt{monitor} package is primarily intended as a convenient
+method for calculating and writing the following statistics:
+\begin{center}
+  minimum, maximum, mean, and standard deviation
+\end{center}
+for spatially distributed fields.  By default, \texttt{monitor} output
+is sent to the ``standard output'' channel where it appears as ASCII
+text containing a \texttt{\%MON} string such as this example:
+\begin{verbatim}
+     (PID.TID 0000.0001) %MON time_tsnumber      =                     3
+     (PID.TID 0000.0001) %MON time_secondsf      =   3.6000000000000E+03
+     (PID.TID 0000.0001) %MON dynstat_eta_max    =   1.0025466645951E-03
+     (PID.TID 0000.0001) %MON dynstat_eta_min    =  -1.0008899950901E-03
+     (PID.TID 0000.0001) %MON dynstat_eta_mean   =   2.1037438449350E-14
+     (PID.TID 0000.0001) %MON dynstat_eta_sd     =   5.0985228723396E-04
+     (PID.TID 0000.0001) %MON dynstat_eta_del2   =   3.5216706549525E-07
+     (PID.TID 0000.0001) %MON dynstat_uvel_max   =   3.7594045977254E-05
+     (PID.TID 0000.0001) %MON dynstat_uvel_min   =  -2.8264287531564E-05
+     (PID.TID 0000.0001) %MON dynstat_uvel_mean  =   9.1369201945671E-06
+     (PID.TID 0000.0001) %MON dynstat_uvel_sd    =   1.6868439193567E-05
+     (PID.TID 0000.0001) %MON dynstat_uvel_del2  =   8.4315445301916E-08
+\end{verbatim}
+The \texttt{monitor} text can be readily parsed by the
+\texttt{testreport} script to determine, somewhat crudely but quickly,
+how similar the output from two experiments are when run on different
+platforms or before/after code changes.
+
+The \texttt{monitor} output can also be useful for quickly diagnosing
+practical problems such as CFL limitations, model progress (through
+iteration counts), and behavior within some packages that use it.
+
+
+\subsection{Using Monitor}
+\label{sec:pkg:monitor:using}
+
+As with most packages, \texttt{monitor} can be turned on or off at
+compile and/or run times using the \texttt{packages.conf} and
+\texttt{data.pkg} files.  
+
+The monitor output can be sent to the standard output channel, to an
+\texttt{mnc}--generated file, or to both simultaneously.  For
+\texttt{mnc} output, the flag:
+\begin{verbatim}
+   monitor_mnc=.TRUE.,
+\end{verbatim}
+should be set within the \texttt{data.mnc} file.  For output to both
+ASCII and \texttt{mnc}, the flag
+\begin{verbatim}
+   outputTypesInclusive=.TRUE.,
+\end{verbatim}
+should be set within the \texttt{PARM03} section of the main
+\texttt{data} file.  It should be noted that the
+\texttt{outputTypesInclusive} flag will make \textbf{ALL} kinds of
+output (that is, everything written by \texttt{mdsio}, \texttt{mnc},
+and \texttt{monitor}) simultaneously active so it should be used only
+with caution--and perhaps only for debugging purposes.
+

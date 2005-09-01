@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_outp_pkgs/text/mdsio.tex,v 1.2 2005/08/06 16:28:14 edhill Exp $
+% $Header: /u/gcmpack/manual/s_outp_pkgs/text/mdsio.tex,v 1.3 2005/09/01 19:00:43 edhill Exp $
 % $Name:  $
 
 
@@ -20,8 +20,172 @@ intended as a general interface for reading and writing direct-access
 the \texttt{rw} package.
 
 \subsubsection{Using MDSIO}
+The \texttt{mdsio} package is geared toward the reading and writing of
+floating point (Fortran \texttt{REAL*4} or \texttt{REAL*8}) arrays.
+It assumes that the in-memory layout of all arrays follows the per-tile
+MITgcm convention
+\begin{verbatim}
+C     Example of a "2D" array
+      _RL anArray(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
+
+C     Example of a "3D" array
+      _RL anArray(1-OLx:sNx+OLx,1-OLy:sNy+OLy,1:Nr,nSx,nSy)
+\end{verbatim}
+where the first two dimensions are spatial or ``horizontal'' indicies
+that include a ``halo'' or exchange region (please see
+Chapters \ref{chap:sarch} and \ref{sec:exch2} which describe domain
+decomposition), and the remaining indicies (\texttt{Nr},\texttt{nSx},
+and \texttt{nSx}) are often present but not required.
+
+In order to write output, the \texttt{mdsio} package is called with a
+function such as:
+\begin{verbatim}
+      CALL MDSWRITEFIELD(fn,prec,lgf,typ,Nr,arr,irec,myIter,myThid)
+\end{verbatim}
+where:
+\begin{quote}
+  \begin{description}
+  \item[\texttt{fn}] is a \texttt{CHARACTER} string containing a file
+    ``base'' name which will then be used to create file names that
+    contain tile and/or model iteration indicies
+  \item[\texttt{prec}] is an integer that contains one of two globally
+    defined values (\texttt{precFloat64} or \texttt{precFloat32})
+  \item[\texttt{lgf}] is a \texttt{LOGICAL} that typically contains
+    the globally defined \texttt{globalFile} option which specifies
+    the creation of globally (spatially) concatenated files
+  \item[\texttt{typ}] is a \texttt{CHARACTER} string that specifies
+    the type of the variable being written (\texttt{'RL'} or
+    \texttt{'RS'})
+  \item[\texttt{Nr}] is an integer that specifies the number of
+    vertical levels within the variable being written
+  \item[\texttt{arr}] is the variable (array) to be written
+  \item[\texttt{irec}] is the starting record within the output file
+    that will contain the array
+  \item[\texttt{myIter,myThid}] are integers containing, respectively,
+    the current model iteration count and the unique thread ID for the
+    current context of execution
+  \end{description}  
+\end{quote}
+As one can see from the above (generic) example, enough information is
+made available (through both the argument list and through common blocks)
+for the \texttt{mdsio} package to perform the following tasks:
+\begin{enumerate}
+\item open either a per-tile file such as:
+  \begin{center}
+    \texttt{uVel.0000302400.003.001.data}
+  \end{center}
+  or a ``global'' file such as
+  \begin{center}
+    \texttt{uVel.0000302400.data}
+  \end{center}
+\item byte-swap (as necessary) the input array and write its contents
+  (minus any halo information) to the binary file -- or to the correct
+  location within the binary file if the globalfile option is used, and 
+\item create an ASCII--text metadata file (same name as the binary but
+  with a \texttt{.meta} extension) describing the binary file contents
+  (often, for later use with the MatLAB \texttt{rdmds()} utility).
+\end{enumerate}
+
+Reading output with \texttt{mdsio} is very similar to writing it.  A
+typical function call is
+\begin{verbatim}
+      CALL MDSREADFIELD(fn,prec,typ,Nr,arr,irec,myThid)
+\end{verbatim}
+where variables are exactly the same as the \texttt{MDSWRITEFIELD}
+example provided above.  It is important to note that the \texttt{lgf}
+argument is missing from the \texttt{MDSREADFIELD} function.  By
+default, \texttt{mdsio} will first try to read from an appropriately
+named global file and, failing that, will try to read from a per-tile
+file.
 
 
+\subsubsection{Important Considerations}
+When using \texttt{mdsio}, one should be aware of the following
+package features and limitations:
+\begin{description}
+\item[Byte-swapping] is, for the most part, gracefully handled.  All
+  files intended for reading/writing by \texttt{mdsio} should contain
+  big-endian (sometimes called ``network byte order'') data.  By
+  handling byte-swapping within the model, MITgcm output is more
+  easily ported between different machines, architectures, compilers,
+  etc.  Byteswapping can be turned on/off at compile time within
+  \texttt{mdsio} using the \texttt{\_BYTESWAPIO} CPP macro which is
+  usually set within a \texttt{genmake2} options file or
+  ``\texttt{optfile}'' which are located in
+\begin{verbatim}
+      MITgcm/tools/build_options
+\end{verbatim}
+  Additionally, some compilers may have byte-swap options that are
+  speedier or more convenient to use.
+
+\item[Types] are currently limited to single-- or double--precision
+  floating point values.  These values can be converted, on-the-fly,
+  from one to the other so that any combination of either single-- or
+  double--precision variables can be read from or written to files
+  containing either single-- or double--precision data.
+
+\item[Array sizes] are limited.  The \texttt{mdsio} package is very
+  much geared towards the reading/writing of per-tile (that is,
+  domain-decomposed and halo-ed) arrays.  Data that cannot be made to
+  ``fit'' within these assumed sizes can be challenging to read or
+  write with \texttt{mdsio}.
+
+\item[Tiling] or domain decomposition is, for logically rectangular
+  grid topologies and ``standard'' cubesphere topologies, gracefully
+  handled by \texttt{mdsio}.  The \texttt{mdsio} package can, without
+  any coding changes, read and write to/from files that were run on
+  the same global grid but with different tiling (grid decomposition)
+  schemes.  For example, \texttt{mdsio} can use and/or create
+  identical input/output files for a ``C32'' cube when the model is
+  run with either 6, 12, or 24 tiles (corresponding to 1, 2 or 4 tiles
+  per cubesphere face).  Currently, this is one of the primary
+  advantages that the \texttt{mdsio} package has over \texttt{mnc}.
+
+\item[Meta-data] is written on a per-file basis using a second file
+  with a \texttt{.meta} extension as described above.  One should be
+  careful not to delete the metadata files when using convenient
+  MatLAB post-processing scripts such as \texttt{rdmds()}.
+
+\item[Numerous files] can be written by \texttt{mdsio} due to its
+  typically per-time-step and per-variable orientation.  The creation of
+  both a binary (\texttt{*.data}) and ASCII text meta--data
+  (\texttt{*.meta}) file for each output type step tends to exacerbate
+  the problem.  Some (mostly, older) operating systems do not
+  gracefully handle large numbers (\textit{eg.} many thousands) of
+  files within one directory.  So care should be taken to split output
+  into smaller groups using subdirectories.
+
+\item[Overwriting] is the \textbf{default behavior} for
+  \texttt{mdsio}.  If a model tries to write to a file name that
+  already exists, the older file \textbf{will be deleted}.  For this
+  reason, MITgcm users should be careful to move output that that wish
+  to keep into, for instance, subdirectories before performing
+  subsequent runs that may over--lap in time or otherwise produce
+  files with identical names (\textit{eg.} Monte-Carlo simulations).
+
+\item[No ``halo'' information] is written or read by \texttt{mdsio}.
+  Along the horizontal dimensions, all variables are written in an
+  \texttt{sNx}--by--\texttt{sNy} fashion.  So, although variables
+  (arrays) may be defined at different locations on Arakawa grids [U
+  (right/left horizontal edges), V (top/bottom horizontal edges), M
+  (mass or cell center), or Z (vorticity or cell corner) points], they
+  are all written using only interior (\texttt{1:sNx} and
+  \texttt{1:sNy}) values.  For quantities defined at U, V, and M
+  points, writing \texttt{1:sNx} and \texttt{1:sNy} for every tile is
+  sufficient to ensure that all values are written globally for some
+  grids (eg. cubesphere, re-entrant channels, and doubly-periodic
+  rectangular regions).  For Z points, failing to write values at the
+  \texttt{sNx+1} and \texttt{sNy+1} locations means that, for some
+  tile topologies, not all values are written.  For instance, with a
+  cubesphere topology at least two corner values are ``lost'' (fail to
+  be written for any tile) if the \texttt{sNx+1} and \texttt{sNy+1}
+  values are ignored.  To fix this problem, the \texttt{mnc} package
+  writes the \texttt{sNx+1} and \texttt{sNy+1} grid values for the U,
+  V, and Z locations.  Also, the \texttt{mnc} package is capable of
+  reading and/or writing entire halo regions and more complicated
+  array shapes which can be helpful when debugging--features that
+  do not exist within \texttt{mdsio}.
+\end{description}
 
 
 \subsection{RW Basic binary I/O utilities}
