@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_outp_pkgs/text/mdsio.tex,v 1.3 2005/09/01 19:00:43 edhill Exp $
+% $Header: /u/gcmpack/manual/s_outp_pkgs/text/mdsio.tex,v 1.4 2005/09/02 02:24:58 edhill Exp $
 % $Name:  $
 
 
@@ -18,6 +18,17 @@ The \texttt{mdsio} package contains a group of Fortran routines
 intended as a general interface for reading and writing direct-access
 (``binary'') Fortran files.  The \texttt{mdsio} routines are used by
 the \texttt{rw} package.
+
+The \texttt{mdsio} package is currently the primary method for MITgcm
+I/O, but it is not being actively extended or enhanced.  Instead, the
+\texttt{mnc} netCDF package (see Section \ref{sec:pkg:mnc}) is
+expected to gain all of the current \texttt{mdsio} functionality and,
+eventually, replace it.  For the short term, every effort has been
+made to allow \texttt{mnc} and \texttt{mdsio} to peacefully co-exist.
+In may cases, the model can read one format and write to the other.
+This side-by-side functionality can be used to, for instance, help
+convert pickup files or other data sets between the two formats.
+
 
 \subsubsection{Using MDSIO}
 The \texttt{mdsio} package is geared toward the reading and writing of
@@ -130,16 +141,29 @@ package features and limitations:
   ``fit'' within these assumed sizes can be challenging to read or
   write with \texttt{mdsio}.
 
-\item[Tiling] or domain decomposition is, for logically rectangular
-  grid topologies and ``standard'' cubesphere topologies, gracefully
-  handled by \texttt{mdsio}.  The \texttt{mdsio} package can, without
-  any coding changes, read and write to/from files that were run on
-  the same global grid but with different tiling (grid decomposition)
-  schemes.  For example, \texttt{mdsio} can use and/or create
-  identical input/output files for a ``C32'' cube when the model is
-  run with either 6, 12, or 24 tiles (corresponding to 1, 2 or 4 tiles
-  per cubesphere face).  Currently, this is one of the primary
-  advantages that the \texttt{mdsio} package has over \texttt{mnc}.
+\item[Tiling] or domain decomposition is automatically handled by
+  \texttt{mdsio} for logically rectangular grid topologies
+  (\textit{eg.} lat-lon grids) and ``standard'' cubesphere topologies.
+  More complicated topologies will probably not be supported.  The
+  \texttt{mdsio} package can, without any coding changes, read and
+  write to/from files that were run on the same global grid but with
+  different tiling (grid decomposition) schemes.  For example,
+  \texttt{mdsio} can use and/or create identical input/output files
+  for a ``C32'' cube when the model is run with either 6, 12, or 24
+  tiles (corresponding to 1, 2 or 4 tiles per cubesphere face).
+  Currently, this is one of the primary advantages that the
+  \texttt{mdsio} package has over \texttt{mnc}.
+
+\item[Single-CPU I/O] can be specified with the flag
+\begin{verbatim}
+       useSingleCpuIO = .TRUE.,
+\end{verbatim}
+  in the \texttt{PARM01} namelist within the main \texttt{data} file.
+  Single--CPU I/O mode is appropriate for computers (\textit{eg.} some
+  SGI systems) where it can either speed overall I/O or solve problems
+  where the operating system or file systems cannot correctly handle
+  multiple threads or MPI processes simultaneously writing to the same
+  file.
 
 \item[Meta-data] is written on a per-file basis using a second file
   with a \texttt{.meta} extension as described above.  One should be
