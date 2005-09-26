@@ -19,38 +19,40 @@ to use, here S2 in this experiment
 
 \item Lines PUT_LINE_NB:nShapT= and PUT_LINE_NB:nShapUV=,
 \begin{verbatim}
- nShapT=4,
+ nShapT=0,
  nShapUV=4,
 \end{verbatim}
 Those lines select the order of the shapiro filter
 for active tracer ($\theta$ and $q$) and momentum ($u,v$) respectively. 
-This sets the integer parameter $n$ to 4, in the equations of 
+In this case, no filter is applied to active tracers. Regarding
+the momentum, this sets the integer parameter $n$ to 4, in the equations of 
 section \ref{sect:shapiro-filter}, which corresponds to a 8th order
 filter.
 
-\item Lines PUT_LINE_NB:nShapTrPhys= and PUT_LINE_NB:nShapUVPhys=,
+\item Line PUT_LINE_NB:nShapUVPhys=,
 \begin{verbatim}
- nShapTrPhys=0,
- nShapUVPhys=0,
+ nShapUVPhys=4,
 \end{verbatim}
-Those lines select the order of the physical space filter 
+This line selects the order of the physical space filter 
 (filter function S2g, in section \ref{sect:shapiro-filter})
-that applies to $\theta,q$ and to $u,v$ respectively.
-The differences {\it nShapT - nShapTrPhys} and {\it nShapUV - nShapUVPhys}
-correspond to the order of the computational filter
+that applies to $u,v$.
+The difference {\it nShapUV - nShapUVPhys}
+corresponds to the order of the computational filter
 (filter function S2c, in section \ref{sect:shapiro-filter}).
 
-\item Lines PUT_LINE_NB:Shap_Trtau= and PUT_LINE_NB:Shap_uvtau=,
+\item Lines PUT_LINE_NB:#Shap_Trtau= and PUT_LINE_NB:#Shap_uvtau=,
 \begin{verbatim}
- Shap_Trtau=5400.,
- Shap_uvtau=1800.,
+#Shap_Trtau=5400.,
+#Shap_uvtau=1800.,
 \end{verbatim}
-Thoses lines set the time scale of the filter (in seconds), 
+Those commented lines would have set the time scale of the filter (in seconds), 
 for $\theta$ and $q$ and for $u$ and $v$ respectively,
 to 5400 s (90 min) and 1800 s (30 min) respectively.
-Note that a shorter time scale means a stronger filter, and
-that the time scale cannot be smaller than the time-step $\Delta t$
-of the model.
+Without explicitly setting those timescales, the default is used 
+which corresponds to the model time-step.
+%Note that a shorter time scale means a stronger filter, and
+%that the time scale cannot be smaller than the time-step $\Delta t$
+%of the model.
 
 \end{itemize}
 
