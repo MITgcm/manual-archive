@@ -1,0 +1,1012 @@
+% \documentstyle[12pt]{report}
+% \renewcommand{\baselinestretch}{1}
+% \textwidth 190mm
+% \textheight 250mm
+% \topmargin -20mm
+% \oddsidemargin -15mm
+% \begin{document}
+
+\section[Offline Example]{Offline Experiments}
+\label{www:tutorials}
+\label{sect:eg-offline}
+
+%\begin{center} 
+%{\Large \bf Using MITgcm to Perform Offline Tracer Exeriments}
+%
+%\vspace*{4mm}
+%
+%\vspace*{3mm}
+%{\large September 2005}
+%\end{center}
+
+This document describes a simple experiment using the offline form of
+the MITgcm.
+
+\subsection{Overview}
+\label{www:tutorials}
+
+This experiment demonstrates use of the offline form of the MITgcm to
+study advection of a passive tracer. Time-averaged flow-fields and
+mixing coefficients, deriving from a prior online run, are re-used
+leaving only the tracer equation to be integrated.
+
+Figure \ref{FIG:eg-ofline_config} shows a movie of tracer being
+advected using the offline package of the MITgcm. In the top panel the
+frames of the movie show the monthly surface evolution of an initially
+local source of passive tracer. In the lower panel, the frames of the
+movie show the changing monthly surface evolution where the initial
+tracer field had a global distribution.
+
+\subsection{Time-stepping of tracers}
+\label{www:tutorials}
+
+\noindent see section 2.15 through 2.18 for details of available
+tracer time-stepping schemes and their characteristics.
+
+\subsection{Code Configuration}
+\label{www:tutorials}
+\label{SEC:eg_fourl_code_config}
+
+\noindent The model configuration for this experiment resides under the 
+directory {\it verification/offline}.  The experiment files 
+\begin {itemize}
+\item {\it input/data}
+\item {\it input/data.off}
+\item {\it input/data.pkg}
+\item {\it input/data.ptracers}
+\item {\it input/eedata}
+\item {\it input/packages.conf}
+\item {\it code/PTRACERS\_SIZE.h}
+\item {\it code/SIZE.h}. 
+\end {itemize}
+
+\noindent contain the code customisations and parameter settings
+required to run the example. In addition the following binary data
+files are required:
+
+\begin {itemize}
+\item {\it input/depth\_g77.bin}
+\item {\it input/tracer1\_.bin}
+\item {\it input/tracer2\_.bin}
+\item {\it input/input\_off/uVeltave.0000000001-12.data}
+\item {\it input/input\_off/vVeltave.0000000001-12.data}
+\item {\it input/input\_off/wVeltave.0000000001-12.data}
+\item {\it input/input\_off/Convtave.0000000001-12.data}
+\end {itemize}
+
+
+\subsubsection{File {\it input/data}}
+\label{www:tutorials}
+
+\noindent This file, reproduced completely below, specifies the main
+parameters for the experiment.
+
+\begin{itemize}
+\item Line 18, 19
+\begin {verbatim}
+ nIter0  = 0,
+ nTimeSteps = 720,
+\end{verbatim}
+\end{itemize}
+
+\noindent nIter0 and nTimesteps control the start time and the length
+of the run (in timesteps). If nIter0 is non-zero the model will
+require appropriate pickup files to be present in the run directory.
+Where nIter0 is zero, as here, the model makes a fresh start. In this
+case the model has been prescribed to run for 720 timesteps or 1 year.
+
+\begin{itemize}
+\item Line 20
+\begin {verbatim}
+ deltaTtracer= 43200.0,
+\end{verbatim}
+\end{itemize}
+
+\noindent deltaTtracer is the tracer timestep in seconds, in this
+case, 12 hours (43200s = 12 hours). Note that deltatTracer must be
+specified in {\it input/data} as well as specifying deltaToffline in
+{\it input/data.off}.
+
+\begin{itemize}
+\item Line 21
+\begin {verbatim}
+ deltaTClock= 43200.0,
+\end{verbatim}
+\end{itemize}
+
+\noindent When using the MITgcm in offline mode deltaTClock (an
+internal model counter) should be made equal to the value assigned to
+deltatTtracer.
+
+\begin{itemize}
+\item Line 27
+\begin {verbatim}
+ periodicExternalForcing=.TRUE.,
+\end{verbatim}
+\end{itemize}
+
+\noindent periodicExternalForcing is a flag telling the model whether
+to cyclically re-use forcing data where there is external forcing (see
+`A More Complcated Example', below). Where there is no external
+forcing, as here, but where there is to be cyclic re-use of the
+offline flow and mixing fields, periodicExternalForcing must be
+assigned the value .TRUE.
+
+\begin{itemize}
+\item Line 28
+\begin {verbatim}
+ externForcingPeriod=2592000.,
+\end{verbatim}
+\end{itemize}
+
+\noindent externForcingPeriod specifies the period of the external
+forcing data in seconds. In the absence of external forcing, as in
+this example, it must be made equal to the value of
+externForcingPeriod in {\it input/data.off}, in this case, monthly
+(2592000s = 1 month).
+
+\begin{itemize}
+\item Line 29
+\begin {verbatim}
+ externForcingCycle=31104000.,
+\end{verbatim}
+\end{itemize}
+
+\noindent externForcingCycle specifies the duration of the external
+forcing data cycle in seconds. In the absence of external forcing, as
+in this example, it must be made equal to the value of
+externForcingCycle in {\it input/data.off}, in this case, the cycle is
+one year(31104000s = 1 year).
+
+\begin{itemize}
+\item Line 35
+\begin {verbatim}
+ usingSphericalPolarGrid=.TRUE.,
+\end{verbatim}
+\end{itemize}
+
+\noindent This line requests that the simulation be performed in a
+spherical polar coordinate system. It affects the interpretation of
+grid input parameters and causes the grid generation routines to
+initialize an internal grid based on spherical polar geometry.
+
+\begin{itemize}
+\item Line 36
+\begin {verbatim}
+ delR=  50.,  70., 100., 140., 190., 
+       240., 290., 340., 390., 440., 
+       490., 540., 590., 640., 690.,
+\end{verbatim}
+\end{itemize}
+
+\noindent This line sets the vertical grid spacing between each
+z-coordinate line in the discrete grid. Here the total model depth is
+$5200\,{\rm m}$.
+
+\begin{itemize}
+\item Line 39
+\begin {verbatim}
+ phiMin=-90.,
+\end{verbatim}
+\end{itemize}
+
+\noindent This line sets the southern boundary of the modeled domain
+to $0^{\circ}$ latitude. This value affects both the generation of the
+locally orthogonal grid that the model uses internally and affects the
+initialization of the coriolis force.  Note - it is not required to
+set a longitude boundary, since the absolute longitude does not alter
+the kernel equation discretisation.
+
+\begin{itemize}
+\item Line 40
+\begin {verbatim}
+ dxSpacing=2.8125,
+\end{verbatim}
+\end{itemize}
+
+\noindent This line sets the horizontal grid spacing between each
+y-coordinate line in the discrete grid to $2.8125^{\circ}$ in
+longitude.
+
+\begin{itemize}
+\item Line 41
+\begin {verbatim}
+ dySpacing=2.8125,
+\end{verbatim}
+\end{itemize}
+
+\noindent This line sets the vertical grid spacing between each
+x-coordinate line in the discrete grid to $2.8125^{\circ}$ in
+latitude.
+
+\begin{itemize}
+\item Line 46
+\begin {verbatim}
+bathyFile='depth_g77.bin',
+\end{verbatim}
+\end{itemize}
+
+\noindent This line specifies the name of the file, in this case {\it
+  depth\_g77.bin}, from which the domain bathymetry is read. This file
+contains a two-dimensional ($x,y$) map of (assumed 64-bit) binary
+numbers giving the depth of the model at each grid cell, ordered with
+the x coordinate varying fastest. The points are ordered from low
+coordinate to high coordinate for both axes. The units and orientation
+of the depths in this file are the same as used in the MITgcm code. In
+this experiment, a depth of $0m$ indicates land.
+  
+
+\begin {verbatim}
+1    # ====================
+2    # | Model parameters |
+3    # ====================
+4    #
+5    # Continuous equation parameters
+6    &PARM01
+7    &
+8    #
+9    # Elliptic solver parameters
+10   &PARM02
+11   cg2dMaxIters=1000,
+12   cg2dTargetResidual=1.E-13,
+13   &
+14   #
+15
+16   # Time stepping parameters
+17   &PARM03
+18   nIter0  = 0,
+19   nTimeSteps = 720,
+20   deltaTtracer= 43200.0,
+21   deltaTClock = 43200.0,
+22   pChkptFreq=31104000.,
+23   chkptFreq= 31104000.,
+24   dumpFreq=  2592000.,
+25   taveFreq=  311040000.,
+26   monitorFreq= 1.,
+27   periodicExternalForcing=.TRUE.,
+28   externForcingPeriod=2592000.,
+29   externForcingCycle=31104000.,
+30   &
+31   #
+32   # Gridding parameters
+33   &PARM04
+34   usingCartesianGrid=.FALSE.,
+35   usingSphericalPolarGrid=.TRUE.,
+36   delR=  50.,  70., 100., 140., 190., 
+37         240., 290., 340., 390., 440., 
+38         490., 540., 590., 640., 690.,
+39   phiMin=-90.,
+40   dxSpacing=2.8125,
+41   dySpacing=2.8125,
+42   &
+43   #
+44   # Input datasets
+45   &PARM05
+46   bathyFile=      'depth_g77.bin',
+47   &
+\end{verbatim}
+
+\subsubsection{File {\it input/data.off}}
+\label{www:tutorials}
+
+\noindent {\it input/data.off} provides the MITgcm offline package
+with package specific parameters. {\it input/data.off} specifies the
+location (relative to the run directory) and prefix of files
+describing the flow field (UvelFile, VvelFile, WvelFile) and the
+corresponding convective mixing coefficients (ConvFile) which together
+prescribe the three dimensional, time varying dynamic system within
+which the offline model will advect the tracer.
+
+\begin{itemize}
+\item Lines 2 to 5
+\begin {verbatim}
+  UvelFile= '../input/input_off/uVeltave',
+  VvelFile= '../input/input_off/vVeltave',
+  WvelFile= '../input/input_off/wVeltave',
+  ConvFile= '../input/input_off/Convtave',
+\end{verbatim}
+\end{itemize}
+
+\noindent In the example the offline data is located in the
+sub-directory {\it input/input\_off}. In this directory are fields
+describing the velocity and convective mixing histories of a prior
+forward integration of the MITgcm required for the offline package and
+identified in {\it input/data\_off}. Based on the values of {\it
+  deltatToffline}, {\it offlineForcingPeriod} and {\it
+  offlineForcingCycle} specified in {\it input/data.off}, since {\it
+  offlineForcingCycle} corresponds to 12 forcing periods {\it
+  offlineForcingPeriod} and since offlineIter0 is zero, there needs to
+be 12 uVeltave, 12 vVeltave, 12 wVeltave and 12 Convtave files each
+having a 10 digit sequence identifier between 0000000001 to
+0000000012, that is, a total of 48 files.
+
+
+\begin{itemize}
+\item Line 9
+\begin {verbatim}
+  offlineIter0=0,
+\end{verbatim}
+\end{itemize}
+
+\noindent offlineIter0, here specified to be 0 timesteps, corresponds
+to the timestep at which the tracer model is initialised. Note that
+offlineIter0 and nIter0 (set in {\it input/data}) need not be the
+same.
+
+\begin{itemize}
+\item Line 10
+\begin {verbatim}
+  deltaToffline=43200.,
+\end{verbatim}
+\end{itemize}
+
+
+\noindent deltatToffline sets the timestep associated with the offline
+model data in seconds, here 12 hours (43200s = 12 hours).
+
+\begin{itemize}
+\item Line 11
+\begin {verbatim}
+  offlineForcingPeriod=43200.,
+\end{verbatim}
+\end{itemize}
+
+\noindent offlineForcingPeriod sets the forcing period associated with
+the offline model data in seconds.
+
+\begin{itemize}
+\item Line 12
+\begin {verbatim}
+  offlineForcingCycle=518400.,
+\end{verbatim}
+\end{itemize}
+
+\noindent offlineForcingCycle sets the forcing cycle length associated
+with the offline model data in seconds. In this example the offline
+forcing cycle is 6 days, or 12 offline forcing periods.  Together
+deltatToffline, offlineForcingPeriod and offlineForcingCycle determine
+the value of the 10 digit sequencing tag the model expects files in
+{\it input/input\_off} to have.
+
+
+\begin {verbatim}
+1   &OFFLINE_PARM01
+2    UvelFile= 'input_off/uVeltave',
+3    VvelFile= 'input_off/vVeltave',
+4    WvelFile= 'input_off/wVeltave',
+5    ConvFile= 'input_off/Convtave',
+6   &end
+
+7   &OFFLINE_PARM02
+8    offlineIter0=0,
+9    deltaToffline=43200.,
+10   offlineForcingPeriod=43200.,
+11   offlineForcingCycle=518400.,
+12  &end
+\end{verbatim}
+
+
+\subsubsection{File {\it input/data.pkg}}
+\label{www:tutorials}
+
+\noindent File {\it input/data.pkg}, reproduced completely below,
+specifies which MITgcm packages ({\it ~/MITgcm/pkg}) are to be used.
+
+
+\begin {itemize}
+\item Line 3
+\begin {verbatim}
+ usePTRACERS=.TRUE.,
+\end{verbatim}
+\end{itemize}
+
+\noindent usePTRACERS is a flag invoking the ptracers package which is
+responsible for the advection of the tracer within the model.
+
+\begin {verbatim}
+1  # Packages
+2   &PACKAGES
+3   usePTRACERS=.TRUE.,
+4   &
+\end{verbatim}
+
+\subsubsection{File {\it input/data.ptracers}}
+\label{www:tutorials}
+
+\noindent File {\it input/data.ptracers}, reproduced completely below,
+provides the MITgcm ptracers package with package specific parameters,
+prescribing the nature of the the tracer/tracers as well as the
+variables associated with their advection.
+
+\begin{itemize}
+\item Line 2
+\begin {verbatim}
+ PTRACERS_numInUse=2,
+\end{verbatim}
+\end{itemize}
+
+\noindent PTRACERS\_numInUse tells the model how many separate tracers
+are to be advected, in this case 2. Note: The value of
+PTRACERS\_numInUse must agree with the value specified in {\it
+  code/PTRACERS\_SIZE.h} - see {\it code/PTRACERS\_SIZE.h} below.
+
+\begin{itemize}
+\item Line 3
+\begin {verbatim}
+ PTRACERS_Iter0= 0,
+\end{verbatim}
+\end{itemize}
+
+\noindent PTRACERS\_Iter0 specifies the iteration at which the tracer
+is to be introduced. In this case the tracer is initialised at the
+start of the simulation. i.e. PTRACERS\_Iter0 = PTRACERS\_nIter0.
+
+\begin{itemize}
+\item Lines 5 and 10
+\begin {verbatim}
+ PTRACERS_advScheme(1)=77,
+\end{verbatim}
+\end{itemize}
+
+\noindent PTRACERS\_advScheme(n) identifies which advection scheme
+will be used for tracer n, where n is the number of the tracer up to
+PTRACERS\_numInUse. See section 2.18, 'Comparison of advection
+schemes', to identify the numerical codes used to specify different
+advection schemes (e.g. centered 2nd order, 3rd order upwind) as well
+as details of each.
+ 
+\begin{itemize}
+\item Lines 6 and 11
+\begin{verbatim}
+ PTRACERS_diffKh(1)=1.E3,
+\end{verbatim}
+\end{itemize}
+
+\noindent PTRACERS\_diffKh(n) is the horizontal diffusion coefficient
+for tracer n, where n is the number of the tracer up to
+PTRACERS\_numInUse.
+
+\begin {itemize}
+\item Lines 7 and 12
+\begin{verbatim}
+ PTRACERS_diffKr(1)=5.E-5,
+\end{verbatim}
+\end{itemize}
+
+\noindent PTRACERS\_diffKr(n) is the vertical diffusion coefficient
+for tracer n, where n is the number of the tracer up to
+PTRACERS\_numInUse.
+
+\begin {itemize}
+\item Lines 8 and 13
+\begin{verbatim}
+ PTRACERS_initialFile(1)='tracer1.bin',
+\end{verbatim}
+\end{itemize}
+
+\noindent PTRACERS\_initialFile(n) identifies the initial tracer field
+to be associated with tracer n, where n is the number of the tracer up
+to PTRACERS\_numInUse. In this example file {\it input/tracer1.bin}
+contains localised tracer, {\it input/tracer2.bin} contains an
+arbitrary global distribution. Included Matlab script {\it
+  input/makeinitialtracer.m} provides a template for generating or
+manipulating initial tracer fields.
+
+\begin {verbatim}
+1   &PTRACERS_PARM01
+2   PTRACERS_numInUse=2,
+3   PTRACERS_Iter0= 0,
+4  # tracer 1 
+5   PTRACERS_advScheme(1)=77,
+6   PTRACERS_diffKh(1)=1.E3,
+7   PTRACERS_diffKr(1)=5.E-5,
+8   PTRACERS_initialFile(1)='tracer1.bin',
+9  # tracer 2 
+10  PTRACERS_advScheme(2)=77,
+11  PTRACERS_diffKh(2)=1.E3,
+12  PTRACERS_diffKr(2)=5.E-5,
+13  PTRACERS_initialFile(2)='tracer2.bin',
+14  &
+\end{verbatim}
+
+\noindent Note {\it input/data.ptracers} requires a set of entries for
+each tracer.
+
+\subsubsection{File {\it input/eedata}}
+\label{www:tutorials}
+\noindent This file uses standard default values and does not contain
+customisations for this experiment.
+
+\noindent The following code changes are required to run this exaperiment. 
+
+\subsubsection{File {\it code/packages.conf}}
+\label{www:tutorials}
+
+\noindent This file is used to invoke the model components required
+for a particuylar implementation of the MITgcm. In this case the {\it
+  code/packages.conf} contains the component names:
+
+\begin {verbatim}
+ptracers
+generic_advdiff
+mdsio
+mom_fluxform
+mom_vecinv
+timeave
+rw
+monitor
+offline
+\end{verbatim}
+
+\subsubsection{File {\it code/PTRACERS\_SIZE.h}}
+\label{www:tutorials}
+\begin{itemize}
+\item Line
+\begin{verbatim}
+     PARAMETER(PTRACERS_num = 2 )
+\end{verbatim}
+\end{itemize}
+
+\noindent This line sets the parameters PTRACERS\_num (the number of
+tracers to be integrated) to 2 (in agreement with {\it
+  input/data.ptracers}).
+
+\subsubsection{File {\it code/SIZE.h}}
+\label{www:tutorials}
+
+\noindent Two lines are customized in this file for the current
+experiment
+
+\begin{itemize}
+
+\item Line 39, 
+\begin{verbatim} sNx=128, \end{verbatim} \noindent this line sets
+the lateral domain extent in grid points for the
+axis aligned with the x-coordinate.
+
+\item Line 40, 
+\begin{verbatim} sNy=64, \end{verbatim} 
+\noindent this line sets
+the lateral domain extent in grid points for the
+axis aligned with the y-coordinate.
+
+\item Line 49, 
+\begin{verbatim} Nr=15,   \end{verbatim} 
+\noindent this line sets
+the vertical domain extent in grid points.
+
+\end{itemize}
+
+
+\subsection{Running The Example}
+\label{www:tutorials}
+\label{SEC:running_the_example}
+
+\subsubsection{Code Download}
+\label{www:tutorials}
+
+In order to run the examples you must first download the code
+distribution.  Instructions for downloading the code can be found in
+section \ref{sect:obtainingCode}.
+
+\subsubsection{Experiment Location}
+\label{www:tutorials}
+
+This example experiment is located under the release sub-directory
+
+\vspace{5mm}
+{\it verification/offline/ }
+
+\subsubsection{Running the Experiment}
+\label{www:tutorials}
+
+To run the experiment
+
+\begin{enumerate}
+\item Set the current directory to {\it input/ }
+
+\begin{verbatim}
+% cd input
+\end{verbatim}
+
+\item Verify that current directory is now correct
+
+\begin{verbatim}
+% pwd
+\end{verbatim}
+
+  You should see a response on the screen ending in {\it
+    verification/offline/input }
+
+\item Copy the contents of {\it input/} including subdirectory {\it
+    input/input\_off/} to a new directory called {\it run/}
+
+\item Listing directory {\it run/} you should see:
+
+\begin {verbatim}
+data      data.pkg       depth_g77.bin  input_off    tracer2.bin
+data.off  data.ptracers  eedata         tracer1.bin
+\end{verbatim}
+
+
+\item Set the current directory to {\it run/ }
+
+
+\item Run the genmake script to create the experiment {\it Makefile}
+
+\begin {verbatim}
+% ../../../tools/genmake2 -mods=../code
+\end{verbatim}
+
+\item Create a list of header file dependencies in {\it Makefile}
+
+\begin {verbatim}
+% make depend
+\end{verbatim}
+
+\item Build the executable file.
+
+\begin {verbatim}
+% make
+\end{verbatim}
+
+\item Run the {\it mitgcmuv} executable
+
+\begin {verbatim}
+% ./mitgcmuv
+\end{verbatim}
+
+\end{enumerate}
+
+Besides the input files and the files the model generates describing
+the grid (prefixed Depth, DXC, DXG, hFacC, hFacS and hFacW, you should
+now have 26 single precision binary files
+PTRACER01.0000000000-0000000720.001.001.data and
+PTRACER02.0000000000-0000000720.001.001.data and their 26
+corresponding meta files as well as a single pickup file,
+pickup\_ptracers.0000000720.001.001.data and its corresponding meta
+file pickup\_ptracers.0000000720.001.001.meta. To run on simply change
+nIter0 in file {\it run/data} to 720...
+
+\subsection{A more complicated example}
+
+\noindent The last example demonstrated simple advection of a passive
+tracer using the offline form of the MITgcm. Now we present a more
+complicated example in which the model is used to explore
+contamination of the global ocean through surface exposure to CFC's
+during the last century. In invoking packages gchem, gmredi and cfc it
+provides a starting point and template for more complicated offline
+modeling, involving as it does surface forcing through wind and ice
+fields, more sophisticated mixing and a time-varying forcing funtion.
+
+\vspace{0.5cm}
+
+\noindent The model configuration for this experiment resides under
+the directory {\it verification/cfc\_offline}.  The experiment files
+
+\begin{itemize}
+\item {\it input/data}
+\item {\it input/data.gchem}
+\item {\it input/data.gmredi}
+\item {\it input/data.off}
+\item {\it input/data.pkg}
+\item {\it input/data.ptracers}
+\item {\it input/eedata}
+\item {\it code/GCHEM\_OPTIONS.h}
+\item {\it code/GMREDI\_OPTIONS.h}
+\item {\it input/packages.conf}
+\item {\it code/PTRACERS\_SIZE.h}
+\item {\it code/SIZE.h}. 
+\end{itemize}
+
+\noindent contain all the code customisations and parameter settings
+required.
+
+\noindent The full list of other files required becomes:
+
+\begin{verbatim}
+cfc1112.atm  data.ptracers   
+data         depth_g77.bin   pickup.0004269600.data
+data.gchem   eedata          
+data.gmredi  ice.bin         pickup_ptracers.0004269600.data
+data.off     data.pkg        tren_speed.bin
+\end{verbatim}
+
+\noindent and
+
+\begin{verbatim}
+input_off/:
+Convtave.0004248060.data  GM_Kwz-T.0004248060.data  uVeltave.0004248060.data
+Convtave.0004248060.meta  GM_Kwz-T.0004248060.meta  uVeltave.0004248060.meta
+Convtave.0004248720.data  GM_Kwz-T.0004248720.data  uVeltave.0004248720.data
+Convtave.0004248720.meta  GM_Kwz-T.0004248720.meta  uVeltave.0004248720.meta
+GM_Kwx-T.0004248060.data  Stave.0004248060.data     vVeltave.0004248060.data
+GM_Kwx-T.0004248060.meta  Stave.0004248060.meta     vVeltave.0004248060.meta
+GM_Kwx-T.0004248720.data  Stave.0004248720.data     vVeltave.0004248720.data
+GM_Kwx-T.0004248720.meta  Stave.0004248720.meta     vVeltave.0004248720.meta
+GM_Kwy-T.0004248060.data  Ttave.0004248060.data     wVeltave.0004248060.data
+GM_Kwy-T.0004248060.meta  Ttave.0004248060.meta     wVeltave.0004248060.meta
+GM_Kwy-T.0004248720.data  Ttave.0004248720.data     wVeltave.0004248720.data
+GM_Kwy-T.0004248720.meta  Ttave.0004248720.meta     wVeltave.0004248720.meta
+\end{verbatim}
+
+
+\subsubsection{File {\it input/data}}
+\label{www:tutorials}
+
+\noindent A single line must be added (under PARM01, between lines 6
+and 7) in file {\it input/data} from the previous example
+
+\begin{verbatim}
+ &PARM01
+ implicitDiffusion=.TRUE.,
+ &
+\end{verbatim}
+
+\noindent When package GMREDI is used, the flag implicitDiffusion must
+be assigned the value .TRUE. For information about MITgcm package
+GMREDI see...
+
+\vspace{0.5cm}
+\noindent In this example the starting timestep nIter0 is set to
+4269600 requiring model access to pickup files with the timetag
+0004269600. The model will run for 4 timesteps (nTimeSteps = 4). In
+this case the frequencies with which permanent and rolling checkpoints
+(pChkptFreq and chkptFreq) have been set is sufficiently long to
+ensure that only one from the last timestep will be written. This is
+also true of the values that have been assigned to the frequency with
+which dumps are written (dumpFreq) and time averaging (taveFreq) is
+performed however since the model always dumps the state of the model
+when it stops without error a dump will be written with timetag
+0004269604 upon completion.
+
+
+\subsubsection{File {\it input/data.off}}
+\label{www:tutorials}
+
+\noindent File {\it input/data.off}, reproduced in full below,
+specifies the prefixes and locations of additional input files
+required to run the offline model. Note that {\it input/input\_off}
+contains only as many offline files as are required to successfully
+run for 4 timesteps. Where the GMREDI scheme was used in the forward
+run, as here, package GMREDI must again be invoked when running
+offline. In this example tracer is specified as having beeen
+introduced with a non-zero starttime, at timestep 4248000.
+
+\begin {verbatim}
+1   &OFFLINE_PARM01
+2    UvelFile= '../input/input_off/uVeltave',
+3    VvelFile= '../input/input_off/vVeltave',
+4    WvelFile= '../input/input_off/wVeltave',
+5    GMwxFile= '../input/input_off/GM_Kwx-T',
+6    GMwyFile= '../input/input_off/GM_Kwy-T',
+7    GMwzFile= '../input/input_off/GM_Kwz-T',
+8    ConvFile= '../input/input_off/Convtave',
+9   &end
+
+10  &OFFLINE_PARM02
+11   offlineIter0=4248000,
+12   deltaToffline=43200.,
+13   offlineForcingPeriod=2592000.,
+14   offlineForcingCycle=31104000.,
+15  &end
+\end{verbatim}
+
+\subsubsection{File {\it input/data.pkg}}
+\label{www:tutorials}
+
+\noindent File {\it input/data.pkg}, reproduced completely below,
+specifies which MITgcm packages ({\it ~/MITgcm/pkg}) are to be used.
+It now invokes additional packages {\it pkg/gmredi} and {pkg/gchem}.
+
+\begin {verbatim}
+1  # Packages
+2   &PACKAGES
+3   useGMRedi=.TRUE.,
+4   usePTRACERS=.TRUE.,
+5   useGCHEM=.TRUE.,
+6   &
+
+\end{verbatim}
+
+
+\subsubsection{File {\it input/data.ptracers}}
+\label{www:tutorials}
+
+\noindent File {\it input/data.ptracers}, reproduced completely below,
+specifies parameters associated with the CFC11 and CFC12 tracer fields
+advected in this example.
+
+
+\begin{itemize}
+\item Line 3
+\begin {verbatim}
+  PTRACERS_Iter0= 4248000,
+\end{verbatim}
+\end{itemize}
+
+\noindent In this example the tracers were introduced at iteration
+4248000.
+
+\begin{itemize}
+\item Lines 7 and 14
+\begin {verbatim}
+  PTRACERS_diffKh(n)=0.E3,
+\end{verbatim}
+\end{itemize}
+
+\noindent Since package GMREDI is being used, regular horizontal
+diffusion is set to zero.
+
+\begin{itemize}
+\item Lines 9,10 and 16,17
+\begin {verbatim}
+  PTRACERS_useGMRedi(n)=.TRUE. ,
+  PTRACERS_useKPP(n)=.FALSE. ,
+ \end{verbatim}
+\end{itemize}
+
+\noindent Setting flag PTRACERS\_useGMRedi(n) to .TRUE. identifies
+that package GMREDI is to be used. Setting flag PTRACERS\_useKPP(n) to
+.FALSE. explicitly turns off KPP mixing.
+
+\begin{itemize}
+\item Lines 11 and 18
+\begin {verbatim}
+ PTRACERS_initialFile(n)=' ',
+ \end{verbatim}
+\end{itemize}
+
+\noindent Since this is a `pickup' run the initial tracer files
+PTRACERS\_initialFile(1) and PTRACERS\_initialFile(2) aree not needed.
+The model will obtain the tracer state from
+pickup\_ptracers.0004269600.data
+
+\begin {verbatim}
+1   &PTRACERS_PARM01
+2   PTRACERS_numInUse=2,
+3   PTRACERS_Iter0= 4248000,
+4  #
+5  # tracer 1 - CFC11
+6   PTRACERS_advScheme(1)=77,
+7   PTRACERS_diffKh(1)=0.E3,
+8   PTRACERS_diffKr(1)=5.E-5,
+9   PTRACERS_useGMRedi(1)=.TRUE. ,
+10  PTRACERS_useKPP(1)=.FALSE. ,
+11  PTRACERS_initialFile(1)=' ',
+12 # tracer 2 - CFC12
+13  PTRACERS_advScheme(2)=77,
+14  PTRACERS_diffKh(2)=0.E3,
+15  PTRACERS_diffKr(2)=5.E-5,
+16  PTRACERS_useGMRedi(2)=.TRUE. ,
+17  PTRACERS_useKPP(2)=.FALSE. ,
+18  PTRACERS_initialFile(2)=' ',
+19  &
+\end{verbatim}
+
+
+\subsubsection{File {\it input/data.gchem}}
+\label{www:tutorials}
+
+\noindent File {\it input/data.gchem}, reproduced completely below,
+names the forcing files needed in package GCHEM.
+
+\begin{itemize}
+\item Line 3
+\begin {verbatim}
+   iceFile='ice.bin',
+\end{verbatim}
+\end{itemize}
+
+\noindent File {\it input/ice.bin} contains 12, monthly surface ice
+fields.
+
+\begin{itemize}
+\item Line 3
+\begin {verbatim}
+   iceFile='tren_speed.bin',
+\end{verbatim}
+\end{itemize}
+
+\noindent File {\it input/tren\_speed.bin} contains 12, monthly
+surface wind fields.
+
+\begin {verbatim}
+1   &GCHEM_PARM01
+2    iceFile='fice.bin',
+3    windFile='tren_speed.bin',
+4   &
+\end{verbatim}
+
+\noindent Package GCHEM is described in detail in section ??
+
+\subsubsection{File {\it input/data.gmredi}}
+\label{www:tutorials}
+
+\noindent File {\it input/data.gmredi}, reproduced completely below,
+provides the parameters required for package GMREDI.
+
+\begin {verbatim}
+1   &GM_PARM01
+2    GM_background_K    = 1.e+3,
+3    GM_taper_scheme    = 'gkw91',
+4    GM_maxSlope        = 1.e-2,
+5    GM_Kmin_horiz      = 100.,
+6    GM_Scrit           = 4.e-3,
+7    GM_Sd              = 1.e-3,
+8   &
+\end{verbatim}
+
+\noindent Package GMREDI is described in detail in section ??
+
+\subsubsection{File {\it input/cfc1112.atm}}
+\label{www:tutorials}
+
+\noindent File {\it input/cfc1112.atm} is a text file containing the
+CFC source functions over the northern and southern hemispheres
+annually from 1931 through 1998.
+
+\subsubsection{File {\it code/packages.conf}}
+\label{www:tutorials}
+
+\noindent In this example {\it code/packages.conf} additionally
+invokes components gchem, cfc and rmredi:
+
+\begin {verbatim}
+ptracers
+generic_advdiff
+mdsio
+mom_fluxform
+mom_vecinv
+timeave
+rw
+monitor
+offline
+gchem
+cfc
+gmredi
+\end{verbatim}
+
+\subsubsection{File {\it code/GCHEM\_OPTIONS.h}}
+\label{www:tutorials}
+
+\noindent File {\it code/GCHEM\_OPTIONS.h}, specifies options for
+package GCHEM. In this case defining the flag ALLOW\_CFC to activate
+the cfc code.
+
+\subsubsection{File {\it code/GMREDI\_OPTIONS.h}}
+\label{www:tutorials}
+
+\noindent File {\it code/GCHEM\_OPTIONS.h}, specifies options for
+package GMREDI.
+
+\subsubsection{File {\it code/PTRACERS\_SIZE.h}}
+\label{www:tutorials}
+
+\noindent File {\it code/PTRACERS\_SIZE.h} is unchanged from the
+simpler example.
+
+\subsubsection{File {\it code/SIZE.h}}
+\label{www:tutorials}
+
+\noindent File {\it code/SIZE.h} is unchanged from the simpler
+example.
+
+
+\subsubsection{Running the Experiment}
+\label{www:tutorials}
+
+The model is run as before and produces the files the model generates
+describing the grid (prefixed Depth, DXC, DXG, hFacC, hFacS and hFacW)
+as well as 2, single precision, binary files
+PTRACER01.0004269600-0004269604.001.001.data and
+PTRACER02.0004269600-0004269604.001.001.data and their 2 corresponding
+meta files as well as a single pickup file,
+pickup\_ptracers.ckptA.001.001.data and its corresponding meta file
+pickup\_ptracers.ckptA.001.001.meta from which you could run the model
+on.
+
+%% \end{document}
+
+
+
