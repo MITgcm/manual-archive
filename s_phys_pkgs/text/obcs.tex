@@ -5,7 +5,8 @@
 <!-- CMIREDIR:package_obcs: -->
 \end{rawhtml}
 
-Authors: Martin Losch and Patrick Heimbach
+Authors: 
+Alistair Adcroft, Patrick Heimbach, Samar Katiwala, Martin Losch
 
 \subsubsection{Introduction
 \label{sec:pkg:obcs:intro}}
@@ -188,23 +189,92 @@ their default values.
 
 %----------------------------------------------------------------------
 
+\subsubsection{Defining open boundary positions
+\label{sec:pkg:obcs:defining}}
+
+There are four open boundaries (OBs), a 
+Northern, Southern, Eastern, and Western.
+All OB locations are specified by their absolute
+meridional (Northern/Southern) or zonal (Eastern/Western) indices.
+Thus, for each zonal position $i=1,\ldots,Nx$ a meridional index
+$j$ specifies the Northern/Southern OB position,
+and for each meridional position $j=1,\ldots,Ny$, a zonal index
+$i$ specifies the Eastern/Western OB position.
+For Northern/Southern OB this defines an $Nx$-dimensional
+``row'' array $\tt OB\_Jnorth(Ny)$ / $\tt OB\_Jsouth(Ny)$,
+and an $Ny$-dimenisonal 
+``column'' array $\tt OB\_Ieast(Nx)$ / $\tt OB\_Iwest(Nx)$
+Positions determined in this way allows Northern/Southern
+OBs to be at variable $j$ (or $y$) positions, and Eastern/Western
+OBs at variable $i$ (or $x$) positions.
+Here, indices refer to tracer points on the C-grid.
+A zero (0) element in $\tt OB\_I\ldots$, $\tt OB\_J\ldots$
+means there is no corresponding OB in that column/row.
+For a Northern/Southern OB, the OB V point is to the South/North.
+For an Eastern/Western OB, the OB U point is to the West/East.
+
+\begin{verbatim}
+ For example
+     OB_Jnorth(3)=34  means that:
+          T( 3 ,34) is a an OB point
+          U(3:4,34) is a an OB point
+          V( 4 ,34) is a an OB point
+ while
+     OB_Jsouth(3)=1  means that:
+          T( 3 ,1) is a an OB point
+          U(3:4,1) is a an OB point
+          V( 4 ,2) is a an OB point
+\end{verbatim}
+
+For convenience, negative values for Jnorth/Ieast refer to
+points relative to the Northern/Eastern edges of the model
+eg. $\tt OB\_Jnorth(3)=-1$  means that the point $\tt (3,Ny)$ 
+is a northern OB.
+
+\noindent
+\textsf{Add special comments for case \#define NONLIN\_FRSURF,
+see obcs\_ini\_fixed.F}
+
+%----------------------------------------------------------------------
+
 \subsubsection{Equations and key routines
 \label{sec:pkg:obcs:equations}}
 
-\paragraph{OBCS\_READPARMS:} Setting OB positions \\
-~
+\paragraph{OBCS\_READPARMS:} ~ \\
+Set OB positions through arrays
+{\tt OB\_Jnorth(Ny), OB\_Jsouth(Ny), OB\_Ieast(Nx), OB\_Iwest(Nx)},
+and runtime flags see Table \ref{tab:???}.
 
 \paragraph{OBCS\_CALC:} ~ \\
-~
+%
+Top-level routine for filling values to be applied at OB for 
+$T,S,U,V,\eta$ into corresponding 
+``slice'' arrays $(x,z)$, $(y,z)$ for each OB:
+$\tt OB[N/S/E/W][t/s/u/v]$; e.g. for salinity array at
+Southern OB, array name is $\tt OBSt$.
+Values filled are either
+%
+\begin{itemize}
+%
+\item
+constant vertical $T,S$ profiles as specified in file
+{\tt data} ({\tt tRef(Nr), sRef(Nr)}) with zero velocities $U,V$,
+%
+\item
+$T,S,U,V$ values determined via Orlanski radiation conditions
+(see below),
+%
+\item
+prescribed time-constant or time-varying fields (see below).
+%
+\end{itemize}
 
-\paragraph{OBCS\_APPLY\_*:} ~ \\
-~
+
+\paragraph{ORLANSKI} ~ \\
+%
+Orlanski radiation conditions
 
 \paragraph{OBCS\_PRESCRIBE\_READ} Setting OB fields and updates \\
-%
-~
-
-\paragraph{OBCS\_SPONGE} Setting sponge layer characteristics \\
 %
 ~
 
@@ -212,7 +282,10 @@ their default values.
 %
 ~
 
-\paragraph{ORLANSKI} Orlanski radiation conditions \\
+\paragraph{OBCS\_APPLY\_*:} ~ \\
+~
+
+\paragraph{OBCS\_SPONGE} Setting sponge layer characteristics \\
 %
 ~
 
