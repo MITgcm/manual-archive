@@ -1,4 +1,4 @@
-%  $Header: /u/gcmpack/manual/s_algorithm/text/nonlin_visc.tex,v 1.1 2005/10/05 19:52:47 edhill Exp $
+%  $Header: /u/gcmpack/manual/s_algorithm/text/nonlin_visc.tex,v 1.2 2005/10/10 19:00:02 baylor Exp $
 %  $Name:  $
 
 \def\del{{\mathbf \nabla}}
@@ -203,12 +203,8 @@ A_{hLeith}^{1/2}\eta^{-1/6}$.  Thus, the Leith-estimated length scale
 of enstrophy-dissipation and the resulting eddy viscosity are
 \begin{eqnarray}
 L_\eta(A_{hLeith})\propto\pi A_{hLeith}^{1/2}\eta^{-1/6}=\pi A_{hLeith}^{1/3}|\nabla \av \omega_3|^{-1/3}\\
-A_{hLeith}={\sf viscC2Leith}|\nabla \av \omega_3|L^3\\
+A_{hLeith}=\left(\frac{{\sf viscC2Leith}}{\pi}\right)^3L^3|\nabla \av \omega_3|\\
 |\nabla\omega_3|\equiv\sqrt{\left[\pd{x}{\ }\left(\pd{x}{\av \tv}-\pd{y}{\av \tu}\right)\right]^2+\left[\pd{y}{\ }\left(\pd{x}{\av \tv}-\pd{y}{\av \tu}\right)\right]^2}
-\end{eqnarray}
-NOTE:: may be useful to redefine viscC2Leith for consistency with Smag...
-\begin{eqnarray}
-A_{hLeith}=\left(\frac{{\sf viscC2Leith}}{\pi}\right)^3L^3|\nabla \av \omega_3|
 \end{eqnarray}
 
 \subsubsection{Modified Leith Viscosity}
