@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/manual.tex,v 1.35 2005/10/05 19:52:47 edhill Exp $
+% $Header: /u/gcmpack/manual/manual.tex,v 1.36 2005/12/16 06:26:09 edhill Exp $
 % $Name:  $
 
 \documentclass[10pt]{book}
@@ -151,6 +151,23 @@
 
 \def\blankpage{ \vspace*{\fill} \vspace{5in} \vfill \newpage}
 
+% Some definitions modified from the ones provided by Baylor
+\def\BFKav#1{\overline{#1}}
+\def\BFKpd#1#2{{\frac{\partial{#2}}{\partial{#1}}}}
+\def\BFKpds#1#2{{\frac{\partial^2{#2}}{{\partial{#1}}^2}}}
+\def\BFKDt#1{\frac{D{#1}}{Dt}}
+\def\BFKaDt#1{\frac{\BFKav D{#1}}{\BFKav{Dt}}}
+\def\BFKd#1{{\,\rm d#1}}
+\def\BFKRo{{\rm Ro}}
+\def\BFKRe{{\rm Re}}
+\def\BFKFr{{\rm Fr}}
+\def\BFKPr{{\rm Pr}}
+\def\BFKMr{{M_{Ro}}}
+\def\BFKtu{{\tilde u}}
+\def\BFKtv{{\tilde v}}
+\def\BFKatu{{\tilde {\BFKav u}}}
+\def\BFKatv{{\tilde {\BFKav v}}}
+\def\BFKlesssim{{<\atop\sim}}
 
 \begin{document}
 

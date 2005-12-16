@@ -1,26 +1,5 @@
-%  $Header: /u/gcmpack/manual/s_algorithm/text/nonlin_visc.tex,v 1.2 2005/10/10 19:00:02 baylor Exp $
+%  $Header: /u/gcmpack/manual/s_algorithm/text/nonlin_visc.tex,v 1.3 2005/12/16 06:26:09 edhill Exp $
 %  $Name:  $
-
-\def\del{{\mathbf \nabla}}
-\def\av#1{\overline{#1}}
-\def\pd#1#2{{\frac{\partial{#2}}{\partial#1}}}
-\def\pds#1#2{{\frac{\partial^2{#2}}{{\partial#1}^2}}}
-\def\Dt#1{\frac{D{#1}}{Dt}}
-\def\aDt#1{\frac{\av D{#1}}{\av{Dt}}}
-\def\d#1{{\,\rm d#1}}
-\def\Ro{{\rm Ro}}
-\def\Re{{\rm Re}}
-\def\Fr{{\rm Fr}}
-\def\mr{{m_{Ro}}}
-\def\Mr{{M_{Ro}}}
-\def\eg{{\emph{e.g.,}\ }}
-\def\ie{{\emph{i.e.,}\ }}
-\def\tu{{\tilde u}}
-\def\tv{{\tilde v}}
-\def\atu{{\tilde {\av u}}}
-\def\atv{{\tilde {\av v}}}
-\def\lesssim{{<\atop\sim}}
-
 
 \section{Nonlinear Viscosities for Large Eddy Simulation}
 \label{sect:nonlin-visc}
@@ -37,19 +16,30 @@ largest scales of motion are resolved, and the subgridscale's effects
 on the large-scale are parameterized.
 
 To formalize this process, we can introduce a filter over the
-subgridscale L: $u_\alpha\rightarrow \av u_\alpha$ and $L:
-b\rightarrow \av b$.  This filter has some intrinsic length and time
+subgridscale L: $u_\alpha\rightarrow \BFKav u_\alpha$ and $L:
+b\rightarrow \BFKav b$.  This filter has some intrinsic length and time
 scales, and we assume that the flow at that scale can be characterized
 with a single velocity scale ($V$) and vertical buoyancy gradient
 ($N^2$). The filtered equations of motion in a local Mercator
 projection about the gridpoint in question (see Appendix for notation
-and details of approximation) are: \newpage
+and details of approximation) are: 
 \begin{eqnarray}
-\aDt \atu- \frac{\atv \sin\theta}{\Ro\sin\theta_0}+\frac{\Mr}{\Ro}\pd{x}{\av\pi}=-\left({\av{\Dt \tu}}-{\aDt \atu}\right)+\frac{\nabla^2{\atu}}{\Re}\label{eq:mercat}\\
-\aDt\atv+ \frac{\atu\sin\theta}{\Ro\sin\theta_0}+\frac{\Mr}{\Ro}\pd{y}{\av\pi}=-\left({\av{\Dt \tv}}-{\aDt \atv}\right)+\frac{\nabla^2{\atv}}{\Re}\nonumber\\
-\aDt {\av w} +\frac{\pd{z}{\av\pi}-\av b}{\Fr^2\lambda^2}=-\left(\av{\Dt w}-\aDt {\av{w}}\right)+\frac{\nabla^2\av w}{\Re}\nonumber\\
-\aDt{\ \av b}+\av w=-\left(\av{\Dt{b}}-\aDt{\ \av b} \right)+\frac{\nabla^2 \av b}{\Pr\Re}\nonumber \\
-\mu^2\left(\pd x\atu  + \pd y\atv \right)+\pd z {\av w} =0\label{eq:cont}
+\BFKaDt \BFKatu- \frac{\BFKatv
+  \sin\theta}{\BFKRo\sin\theta_0}+\frac{\BFKMr}{\BFKRo}\BFKpd{x}{\BFKav\pi}
+& = & -\left({\BFKav{\BFKDt \BFKtu}}-{\BFKaDt \BFKatu}\right)
++\frac{\nabla^2{\BFKatu}}{\BFKRe}\label{eq:mercat}\\
+\BFKaDt\BFKatv+\frac{\BFKatu\sin\theta}{\BFKRo\sin\theta_0}
++\frac{\BFKMr}{\BFKRo}\BFKpd{y}{\BFKav\pi}
+& = & -\left({\BFKav{\BFKDt \BFKtv}}-{\BFKaDt \BFKatv}\right)
++\frac{\nabla^2{\BFKatv}}{\BFKRe}\nonumber\\
+\BFKaDt {\BFKav w} +\frac{\BFKpd{z}{\BFKav\pi}-\BFKav b}{\BFKFr^2\lambda^2}
+& = & -\left(\BFKav{\BFKDt w}-\BFKaDt {\BFKav{w}}\right)
++\frac{\nabla^2\BFKav w}{\BFKRe}\nonumber\\
+\BFKaDt{\ \BFKav b}+\BFKav w & = &
+ -\left(\BFKav{\BFKDt{b}}-\BFKaDt{\ \BFKav b} \right)
++\frac{\nabla^2 \BFKav b}{\Pr\BFKRe}\nonumber \\
+\mu^2\left(\BFKpd x\BFKatu  + \BFKpd y\BFKatv \right)+\BFKpd z {\BFKav w} 
+& = & 0\label{eq:cont}
 \end{eqnarray}
 Tildes denote multiplication by $\cos\theta/\cos\theta_0$ to account
 for converging meridians.
@@ -57,7 +47,7 @@ for converging meridians.
 The ocean is usually turbulent, and an operational definition of
 turbulence is that the terms in parentheses (the 'eddy' terms) on the
 right of (\ref{eq:mercat}) are of comparable magnitude to the terms on
-the left-hand side.  The terms proportional to the inverse of \Re,
+the left-hand side.  The terms proportional to the inverse of \BFKRe,
 instead, are many orders of magnitude smaller than all of the other
 terms in virtually every oceanic application.
 
@@ -67,36 +57,44 @@ the right of the preceding equations.  The simplest form of LES is
 just to increase the viscosity and diffusivity until the viscous and
 diffusive scales are resolved.  That is, we approximate:
 \begin{eqnarray}
-\left({\av{\Dt \tu}}-{\aDt \atu}\right)\approx\frac{\nabla^2_h{\atu}}{\Re_h}+\frac{\pds{z}{\atu}}{\Re_v}\label{eq:eddyvisc},\qquad
-\left({\av{\Dt \tv}}-{\aDt \atv}\right)\approx\frac{\nabla^2_h{\atv}}{\Re_h}+\frac{\pds{z}{\atv}}{\Re_v}\nonumber\\
-\left(\av{\Dt w}-\aDt {\av{w}}\right)\approx\frac{\nabla^2_h\av w}{\Re_h}+\frac{\pds{z}{\av w}}{\Re_v}\nonumber,\qquad
-\left(\av{\Dt{b}}-\aDt{\ \av b} \right)\approx\frac{\nabla^2_h \av b}{\Pr\Re_h}+\frac{\pds{z} {\av b}}{\Pr\Re_v}\nonumber
+\left({\BFKav{\BFKDt \BFKtu}}-{\BFKaDt \BFKatu}\right)
+\approx\frac{\nabla^2_h{\BFKatu}}{\BFKRe_h}
++\frac{\BFKpds{z}{\BFKatu}}{\BFKRe_v}\label{eq:eddyvisc}, & &
+\left({\BFKav{\BFKDt \BFKtv}}-{\BFKaDt \BFKatv}\right)
+\approx\frac{\nabla^2_h{\BFKatv}}{\BFKRe_h}
++\frac{\BFKpds{z}{\BFKatv}}{\BFKRe_v}\nonumber\\
+\left(\BFKav{\BFKDt w}-\BFKaDt {\BFKav{w}}\right)
+\approx\frac{\nabla^2_h\BFKav w}{\BFKRe_h}
++\frac{\BFKpds{z}{\BFKav w}}{\BFKRe_v}\nonumber, & &
+\left(\BFKav{\BFKDt{b}}-\BFKaDt{\ \BFKav b} \right)
+\approx\frac{\nabla^2_h \BFKav b}{\Pr\BFKRe_h}
++\frac{\BFKpds{z} {\BFKav b}}{\Pr\BFKRe_v}\nonumber
 \end{eqnarray}
    
 \subsubsection{Reynolds-Number Limited Eddy Viscosity}   
-One way of ensuring that the gridscale is sufficiently viscous (\ie
-resolved) is to choose the eddy viscosity $A_h$ so that the gridscale
-horizontal Reynolds number based on this eddy viscosity, $\Re_h$, to
-is O(1).  That is, if the gridscale is to be viscous, then the
-viscosity should be chosen to make the viscous terms as large as the
-advective ones.  \citet{Bryanetal75} note that a computational mode is
-squelched by using $\Re_h<$2.
+One way of ensuring that the gridscale is sufficiently viscous
+(\textit{ie.}  resolved) is to choose the eddy viscosity $A_h$ so that
+the gridscale horizontal Reynolds number based on this eddy viscosity,
+$\BFKRe_h$, to is O(1).  That is, if the gridscale is to be viscous,
+then the viscosity should be chosen to make the viscous terms as large
+as the advective ones.  Bryan \textit{et al} \cite{Bryanetal75} notes
+that a computational mode is squelched by using $\BFKRe_h<$2.
 
 The MITgcm user can select an horizontal eddy viscosity based on
-$\Re_h$ by two methods.  1) The user may estimate the velocity scale
-expected from the calculation and grid spacing and set the {\sf
-  viscAh} to satisfy $\Re_h<2$.  2) The user may use {\sf
+$\BFKRe_h$ by two methods.  1) The user may estimate the velocity
+scale expected from the calculation and grid spacing and set the {\sf
+  viscAh} to satisfy $\BFKRe_h<2$.  2) The user may use {\sf
   viscAhReMax}, which ensures that the viscosity is always chosen so
-that $\Re_h<{\sf viscAhReMax}$.  This last option should be used with
-caution, however, since it effectively implies that viscous terms are
-fixed in magnitude relative to advective terms.  While it may be a
+that $\BFKRe_h<{\sf viscAhReMax}$.  This last option should be used
+with caution, however, since it effectively implies that viscous terms
+are fixed in magnitude relative to advective terms.  While it may be a
 useful method for specifying a minimum viscosity with little effort,
-tests have shown that setting {\sf viscAhReMax}=2
-\citep[per][]{Bryanetal75} often tends to increase the viscosity
-substantially over other more 'physical' parameterizations below,
-especially in regions where gradients of velocity are small (and thus
-turbulence may be weak), so perhaps a more liberal value should be
-used, \eg {\sf viscAhReMax}=10.
+tests \cite{Bryanetal75} have shown that setting {\sf viscAhReMax}=2
+often tends to increase the viscosity substantially over other more
+'physical' parameterizations below, especially in regions where
+gradients of velocity are small (and thus turbulence may be weak), so
+perhaps a more liberal value should be used, \textit{eg.} {\sf
+  viscAhReMax}=10.
   
 While it is certainly necessary that viscosity be active at the
 gridscale, the wavelength where dissipation of energy or enstrophy
@@ -110,13 +108,13 @@ meaning.
 Vertical eddy viscosities are often chosen in a more subjective way,
 as model stability is not usually as sensitive to vertical viscosity.
 Usually the 'observed' value from finescale measurements, etc., is
-used (\eg {\sf viscAr}$\approx1\times10^{-4} m^2/s$).  However,
-\citet{Smagorinsky93} notes that the Smagorinsky parameterization of
-isotropic turbulence implies a value of the vertical viscosity as well
-as the horizontal viscosity (see below).
+used (\textit{eg.} {\sf viscAr}$\approx1\times10^{-4} m^2/s$).  However,
+Smagorinsky \cite{Smagorinsky93} notes that the Smagorinsky
+parameterization of isotropic turbulence implies a value of the
+vertical viscosity as well as the horizontal viscosity (see below).
  
 \subsubsection{Smagorinsky Viscosity}
-\citet{sm63} and \citet{Smagorinsky93} suggest choosing a viscosity
+Some \cite{sm63,Smagorinsky93} suggest choosing a viscosity
 that \emph{depends on the resolved motions}.  Thus, the overall
 viscous operator has a nonlinear dependence on velocity.  Smagorinsky
 chose his form of viscosity by considering Kolmogorov's ideas about
@@ -147,64 +145,76 @@ the energy flux at every grid point, and adjusts the viscosity
 accordingly.
 
 Smagorinsky formed the energy equation from the momentum equations by
-dotting them with velocity.  \citep[There are some complications when
-using the hydrostatic approximation, see][]{Smagorinsky93}.  The
-positive definite energy dissipation by horizontal viscosity in a
-hydrostatic flow is $\nu D^2$, where D is the deformation rate at the
-viscous scale.  According to Kolmogorov's theory, this should be a
-good approximation to the energy flux at any wavenumber
-$\epsilon\approx\nu D^2$.  Kolmogorov and Smagorinsky noted that using
-an eddy viscosity that exceeds the molecular value $\nu$ should ensure
-that the energy flux through viscous scale set by the eddy viscosity
-is the same as it would have been had we resolved all the way to the
-true viscous scale.  That is, $\epsilon\approx A_{hSmag} \av D^2$.  If
-we use this approximation to estimate the Kolmogorov viscous length,
-then
-\begin{eqnarray}
-L_\epsilon(A_{hSmag})\propto\pi\epsilon^{-1/4}A_{hSmag}^{3/4}\approx\pi(A_{hSmag} \av D^2)^{-1/4}A_{hSmag}^{3/4}=\pi A_{hSmag}^{1/2}\av D^{-1/2}
-\end{eqnarray}
+dotting them with velocity.  There are some complications when using
+the hydrostatic approximation as described by Smagorinsky
+\cite{Smagorinsky93}.  The positive definite energy dissipation by
+horizontal viscosity in a hydrostatic flow is $\nu D^2$, where D is
+the deformation rate at the viscous scale.  According to Kolmogorov's
+theory, this should be a good approximation to the energy flux at any
+wavenumber $\epsilon\approx\nu D^2$.  Kolmogorov and Smagorinsky noted
+that using an eddy viscosity that exceeds the molecular value $\nu$
+should ensure that the energy flux through viscous scale set by the
+eddy viscosity is the same as it would have been had we resolved all
+the way to the true viscous scale.  That is, $\epsilon\approx
+A_{hSmag} \BFKav D^2$.  If we use this approximation to estimate the
+Kolmogorov viscous length, then
+\begin{equation}
+L_\epsilon(A_{hSmag})\propto\pi\epsilon^{-1/4}A_{hSmag}^{3/4}\approx\pi(A_{hSmag}
+\BFKav D^2)^{-1/4}A_{hSmag}^{3/4} = \pi A_{hSmag}^{1/2}\BFKav D^{-1/2}
+\end{equation}
 To make $L_\epsilon(A_{hSmag})$ scale with the gridscale, then
-\begin{eqnarray}
-A_{hSmag}=\left(\frac{{\sf viscC2Smag}}{\pi}\right)^2L^2|\av D|
-\end{eqnarray}
+\begin{equation}
+A_{hSmag} = \left(\frac{{\sf viscC2Smag}}{\pi}\right)^2L^2|\BFKav D|
+\end{equation}
 Where the deformation rate appropriate for hydrostatic flows with
 shallow-water scaling is
-\begin{eqnarray}
-|\av D|=\sqrt{\left(\pd{x}{\av \tu}-\pd{y}{\av \tv}\right)^2+\left(\pd{y}{\av \tu}+\pd{x}{\av \tv}\right)^2}
-\end{eqnarray}
+\begin{equation}
+|\BFKav D|=\sqrt{\left(\BFKpd{x}{\BFKav \BFKtu}-\BFKpd{y}{\BFKav \BFKtv}\right)^2
++\left(\BFKpd{y}{\BFKav \BFKtu}+\BFKpd{x}{\BFKav \BFKtv}\right)^2}
+\end{equation}
 The coefficient {\sf viscC2Smag} is what the MITgcm user sets, and it
 replaces the proportionality in the Kolmogorov length with an
-equality.  \citet{grha00} suggest values of {\sf viscC2Smag} from 2.2
-to 4 for oceanic problems.  \citet{Smagorinsky93} shows that values
-from 0.2 to 0.9 have been used in atmospheric modeling.
+equality.  Others \cite{grha00} suggest values of {\sf viscC2Smag}
+from 2.2 to 4 for oceanic problems.  Smagorinsky \cite{Smagorinsky93}
+shows that values from 0.2 to 0.9 have been used in atmospheric
+modeling.
 
-\citet{Smagorinsky93} shows that a corresponding vertical viscosity
-should be used:
-\begin{eqnarray}
-A_{vSmag}=\left(\frac{{\sf viscC2Smag}}{\pi}\right)^2H^2\sqrt{\left(\pd{z}{\av \tu}\right)^2+\left(\pd{z}{\av \tv}\right)^2}\nonumber
-\end{eqnarray}
+Smagorinsky \cite{Smagorinsky93} shows that a corresponding vertical
+viscosity should be used:
+\begin{equation}
+A_{vSmag}=\left(\frac{{\sf viscC2Smag}}{\pi}\right)^2H^2
+\sqrt{\left(\BFKpd{z}{\BFKav \BFKtu}\right)^2
++\left(\BFKpd{z}{\BFKav \BFKtv}\right)^2}
+\end{equation}
 This vertical viscosity is currently not implemented in the MITgcm
 (although it may be soon).
 
 \subsubsection{Leith Viscosity}
-\citet{Leith68,Leith96} notes that 2-d turbulence is quite different
-from 3-d.  In two-dimensional turbulence, energy cascades to larger
-scales, so there is no concern about resolving the scales of energy
-dissipation.  Instead, another quantity, enstrophy, (which is the
-vertical component of vorticity squared) is conserved in 2-d
+Leith \cite{Leith68,Leith96} notes that 2-d turbulence is quite
+different from 3-d.  In two-dimensional turbulence, energy cascades to
+larger scales, so there is no concern about resolving the scales of
+energy dissipation.  Instead, another quantity, enstrophy, (which is
+the vertical component of vorticity squared) is conserved in 2-d
 turbulence, and it cascades to smaller scales where it is dissipated.
 
 Following a similar argument to that above about energy flux, the
 enstrophy flux is estimated to be equal to the positive-definite
 gridscale dissipation rate of enstrophy $\eta\approx A_{hLeith}
-|\nabla\av \omega_3|^2$.  By dimensional analysis, the
+|\nabla\BFKav \omega_3|^2$.  By dimensional analysis, the
 enstrophy-dissipation scale is $L_\eta(A_{hLeith})\propto\pi
 A_{hLeith}^{1/2}\eta^{-1/6}$.  Thus, the Leith-estimated length scale
 of enstrophy-dissipation and the resulting eddy viscosity are
 \begin{eqnarray}
-L_\eta(A_{hLeith})\propto\pi A_{hLeith}^{1/2}\eta^{-1/6}=\pi A_{hLeith}^{1/3}|\nabla \av \omega_3|^{-1/3}\\
-A_{hLeith}=\left(\frac{{\sf viscC2Leith}}{\pi}\right)^3L^3|\nabla \av \omega_3|\\
-|\nabla\omega_3|\equiv\sqrt{\left[\pd{x}{\ }\left(\pd{x}{\av \tv}-\pd{y}{\av \tu}\right)\right]^2+\left[\pd{y}{\ }\left(\pd{x}{\av \tv}-\pd{y}{\av \tu}\right)\right]^2}
+L_\eta(A_{hLeith})\propto\pi A_{hLeith}^{1/2}\eta^{-1/6}
+& = & \pi A_{hLeith}^{1/3}|\nabla \BFKav \omega_3|^{-1/3} \\
+A_{hLeith} & = & 
+\left(\frac{{\sf viscC2Leith}}{\pi}\right)^3L^3|\nabla \BFKav\omega_3| \\
+|\nabla\omega_3| & \equiv & 
+\sqrt{\left[\BFKpd{x}{\ }
+    \left(\BFKpd{x}{\BFKav \BFKtv}-\BFKpd{y}{\BFKav
+        \BFKtu}\right)\right]^2
+  +\left[\BFKpd{y}{\ }\left(\BFKpd{x}{\BFKav \BFKtv}
+      -\BFKpd{y}{\BFKav \BFKtu}\right)\right]^2}
 \end{eqnarray}
 
 \subsubsection{Modified Leith Viscosity}
@@ -228,8 +238,16 @@ set.  This is a damping specifically targeting purely divergent
 instabilities near the gridscale.  The combined viscosity has the
 form:
 \begin{eqnarray}
-A_{hLeith}=L^3\sqrt{\left(\frac{{\sf viscC2Leith}}{\pi}\right)^6|\nabla \av \omega_3|^2+\left(\frac{{\sf viscC2LeithD}}{\pi}\right)^6|\nabla \nabla\cdot \av {\tilde u}_h|^2}\nonumber\\
-|\nabla \nabla\cdot \av {\tilde u}_h|\equiv\sqrt{\left[\pd{x}{\ }\left(\pd{x}{\av \tu}+\pd{y}{\av \tv}\right)\right]^2+\left[\pd{y}{\ }\left(\pd{x}{\av \tu}+\pd{y}{\av \tv}\right)\right]^2}
+A_{hLeith} & = & 
+L^3\sqrt{\left(\frac{{\sf viscC2Leith}}{\pi}\right)^6
+  |\nabla \BFKav \omega_3|^2
+  +\left(\frac{{\sf viscC2LeithD}}{\pi}\right)^6
+  |\nabla \nabla\cdot \BFKav {\tilde u}_h|^2} \\
+|\nabla \nabla\cdot \BFKav {\tilde u}_h| & \equiv & 
+\sqrt{\left[\BFKpd{x}{\ }\left(\BFKpd{x}{\BFKav \BFKtu}
+      +\BFKpd{y}{\BFKav \BFKtv}\right)\right]^2
+  +\left[\BFKpd{y}{\ }\left(\BFKpd{x}{\BFKav \BFKtu}
+      +\BFKpd{y}{\BFKav \BFKtv}\right)\right]^2}
 \end{eqnarray}
 Whether there is any physical rationale for this correction is unclear
 at the moment, but the numerical consequences are good.  The
@@ -250,9 +268,8 @@ Whatever viscosities are used in the model, the choice is constrained
 by gridscale and timestep by the Courant--Freidrichs--Lewy (CFL)
 constraint on stability:
 \begin{eqnarray}
-A_h<\frac{L^2}{4\Delta t}\nonumber\\
-A_4 \le \frac{L^4}{32\Delta t}\nonumber
-%%  A_4\lesssim\frac{L^4}{32\Delta t}\nonumber
+A_h & < & \frac{L^2}{4\Delta t} \\
+A_4 & \le & \frac{L^4}{32\Delta t}
 \end{eqnarray}
 The viscosities may be automatically limited to be no greater than
 these values in the MITgcm by specifying {\sf viscAhGridMax}$<1$ and
@@ -261,26 +278,34 @@ viscosities are provided by {\sf viscAhGridMin} and {\sf
   viscA4GridMin}, which if used, should be set to values $\ll 1$. $L$
 is roughly the gridscale (see below).
 
-Following \citet{grha00}, we note that there is a factor of $\Delta
+Following \cite{grha00}, we note that there is a factor of $\Delta
 x^2/8$ difference between the harmonic and biharmonic viscosities.
 Thus, whenever a non-dimensional harmonic coefficient is used in the
-MITgcm (\eg {\sf viscAhGridMax}$<1$), the biharmonic equivalent is
-scaled so that the same non-dimensional value can be used (\eg {\sf
+MITgcm (\textit{eg.} {\sf viscAhGridMax}$<1$), the biharmonic equivalent is
+scaled so that the same non-dimensional value can be used (\textit{eg.} {\sf
   viscA4GridMax}$<1$).
 
 \subsubsection{Biharmonic Viscosity}
-\citet{ho78} suggested that eddy viscosities ought to be focuses on
+\cite{ho78} suggested that eddy viscosities ought to be focuses on
 the dynamics at the grid scale, as larger motions would be 'resolved'.
 To enhance the scale selectivity of the viscous operator, he suggested
 a biharmonic eddy viscosity instead of a harmonic (or Laplacian)
 viscosity:
 \begin{eqnarray}
-\left({\av{\Dt \tu}}-{\aDt \atu}\right)\approx\frac{-\nabla^4_h{\atu}}{\Re_4}+\frac{\pds{z}{\atu}}{\Re_v}\label{eq:bieddyvisc},\qquad
-\left({\av{\Dt \tv}}-{\aDt \atv}\right)\approx\frac{-\nabla^4_h{\atv}}{\Re_4}+\frac{\pds{z}{\atv}}{\Re_v}\nonumber\\
-\left(\av{\Dt w}-\aDt {\av{w}}\right)\approx\frac{-\nabla^4_h\av w}{\Re_4}+\frac{\pds{z}{\av w}}{\Re_v}\nonumber,\qquad
-\left(\av{\Dt{b}}-\aDt{\ \av b} \right)\approx\frac{-\nabla^4_h \av b}{\Pr\Re_4}+\frac{\pds{z} {\av b}}{\Pr\Re_v}\nonumber
+\left({\BFKav{\BFKDt \BFKtu}}-{\BFKaDt \BFKatu}\right)\approx
+\frac{-\nabla^4_h{\BFKatu}}{\BFKRe_4}
++\frac{\BFKpds{z}{\BFKatu}}{\BFKRe_v}\label{eq:bieddyvisc}, & &
+\left({\BFKav{\BFKDt \BFKtv}}-{\BFKaDt \BFKatv}\right)\approx
+\frac{-\nabla^4_h{\BFKatv}}{\BFKRe_4}
++\frac{\BFKpds{z}{\BFKatv}}{\BFKRe_v}\nonumber\\
+\left(\BFKav{\BFKDt w}-\BFKaDt
+  {\BFKav{w}}\right)\approx\frac{-\nabla^4_h\BFKav
+  w}{\BFKRe_4}+\frac{\BFKpds{z}{\BFKav w}}{\BFKRe_v}\nonumber, & &
+\left(\BFKav{\BFKDt{b}}-\BFKaDt{\ \BFKav b} \right)\approx
+\frac{-\nabla^4_h \BFKav b}{\Pr\BFKRe_4}
++\frac{\BFKpds{z} {\BFKav b}}{\Pr\BFKRe_v}\nonumber
 \end{eqnarray}
-\citet{grha00} propose that if one scales the biharmonic viscosity by
+\cite{grha00} propose that if one scales the biharmonic viscosity by
 stability considerations, then the biharmonic viscous terms will be
 similarly active to harmonic viscous terms at the gridscale of the
 model, but much less active on larger scale motions.  Similarly, a
@@ -305,8 +330,13 @@ similarly to the harmonic viscosities and diffusivities with the
 substitution $h\rightarrow 4$.  The MITgcm also supports a biharmonic
 Leith and Smagorinsky viscosities:
 \begin{eqnarray}
-A_{4Smag}=\left(\frac{{\sf viscC4Smag}}{\pi}\right)^2\frac{L^4}{8}|D|\nonumber\\
-A_{4Leith}=\frac{L^5}{8}\sqrt{\left(\frac{{\sf viscC4Leith}}{\pi}\right)^6|\nabla \av \omega_3|^2+\left(\frac{{\sf viscC4LeithD}}{\pi}\right)^6|\nabla \nabla\cdot \av {\bf \tu}_h|^2}\nonumber
+A_{4Smag} & = & 
+\left(\frac{{\sf viscC4Smag}}{\pi}\right)^2\frac{L^4}{8}|D| \\
+A_{4Leith} & = & 
+\frac{L^5}{8}\sqrt{\left(\frac{{\sf viscC4Leith}}{\pi}\right)^6
+  |\nabla \BFKav \omega_3|^2
+  +\left(\frac{{\sf viscC4LeithD}}{\pi}\right)^6
+  |\nabla \nabla\cdot \BFKav {\bf \BFKtu}_h|^2}
 \end{eqnarray}
 However, it should be noted that unlike the harmonic forms, the
 biharmonic scaling does not easily relate to whether
@@ -314,15 +344,22 @@ energy-dissipation or enstrophy-dissipation scales are resolved.  If
 similar arguments are used to estimate these scales and scale them to
 the gridscale, the resulting biharmonic viscosities should be:
 \begin{eqnarray}
-A_{4Smag}=\left(\frac{{\sf viscC4Smag}}{\pi}\right)^5L^5|\nabla^2\av {\bf \tu}_h|\nonumber\\
-A_{4Leith}=L^6\sqrt{\left(\frac{{\sf viscC4Leith}}{\pi}\right)^{12}|\nabla^2 \av \omega_3|^2+\left(\frac{{\sf viscC4LeithD}}{\pi}\right)^{12}|\nabla^2 \nabla\cdot \av {\bf \tu}_h|^2}\nonumber
+A_{4Smag} & = & 
+\left(\frac{{\sf viscC4Smag}}{\pi}\right)^5L^5
+|\nabla^2\BFKav {\bf \BFKtu}_h| \\
+A_{4Leith} & = & 
+L^6\sqrt{\left(\frac{{\sf viscC4Leith}}{\pi}\right)^{12}
+  |\nabla^2 \BFKav \omega_3|^2
+  +\left(\frac{{\sf viscC4LeithD}}{\pi}\right)^{12}
+  |\nabla^2 \nabla\cdot \BFKav {\bf \BFKtu}_h|^2}
 \end{eqnarray}
-Thus, the biharmonic scaling suggested by \citet{grha00} implies:
+Thus, the biharmonic scaling suggested by \cite{grha00} implies:
 \begin{eqnarray}
-|D|\propto L|\nabla^2\av {\bf \tu}_h|\\
-|\nabla \av \omega_3|\propto L|\nabla^2 \av \omega_3|
+|D| & \propto &  L|\nabla^2\BFKav {\bf \BFKtu}_h|\\
+|\nabla \BFKav \omega_3| & \propto & L|\nabla^2 \BFKav \omega_3|
 \end{eqnarray}
-It is not at all clear that these assumptions ought to hold.  Only the \citet{grha00} forms are currently implemented in the MITgcm.
+It is not at all clear that these assumptions ought to hold.  Only the
+\cite{grha00} forms are currently implemented in the MITgcm.
 
 \subsubsection{Selection of Length Scale}
 Above, the length scale of the grid has been denoted $L$.  However, in
@@ -338,41 +375,92 @@ and occurs naturally in the CFL constraint.  If {\sf
   useAreaViscLength} is true, then the square root of the area of the
 grid cell is used.
 
-% The Appendices part is started with the command \appendix;
-% appendix sections are then done as normal sections
-% \appendix
-
 \subsection{Mercator, Nondimensional Equations}
 The rotating, incompressible, Boussinesq equations of motion
-\citep{Gill1982} on a sphere can be written in Mercator projection
+\cite{Gill1982} on a sphere can be written in Mercator projection
 about a latitude $\theta_0$ and geopotential height $z=r-r_0$.  The
 nondimensional form of these equations is:
+\begin{equation}
+\BFKRo\BFKDt\BFKtu- \frac{\BFKtv
+  \sin\theta}{\sin\theta_0}+\BFKMr\BFKpd{x}{\pi}
++\frac{\lambda\BFKFr^2\BFKMr\cos \theta}{\mu\sin\theta_0} w
+= -\frac{\BFKFr^2\BFKMr \BFKtu w}{r/H}
++\frac{\BFKRo{\bf \hat x}\cdot\nabla^2{\bf u}}{\BFKRe}
+\end{equation}
+\begin{equation}
+\BFKRo\BFKDt\BFKtv+
+\frac{\BFKtu\sin\theta}{\sin\theta_0}+\BFKMr\BFKpd{y}{\pi}
+= -\frac{\mu\BFKRo\tan\theta(\BFKtu^2+\BFKtv^2)}{r/L} 
+-\frac{\BFKFr^2\BFKMr \BFKtv w}{r/H}
++\frac{\BFKRo{\bf \hat y}\cdot\nabla^2{\bf u}}{\BFKRe}
+\end{equation}
 \begin{eqnarray}
-\Ro\Dt\tu- \frac{\tv \sin\theta}{\sin\theta_0}+\Mr\pd{x}{\pi}+\frac{\lambda\Fr^2\Mr\cos \theta}{\mu\sin\theta_0} w=-\frac{\Fr^2\Mr \tu w}{r/H}+\frac{\Ro{\bf \hat x}\cdot\nabla^2{\bf u}}{\Re}\nonumber\\
-\Ro\Dt\tv+ \frac{\tu\sin\theta}{\sin\theta_0}+\Mr\pd{y}{\pi}=-\frac{\mu\Ro\tan\theta(\tu^2+\tv^2)}{r/L} -\frac{\Fr^2\Mr \tv w}{r/H}+\frac{\Ro{\bf \hat y}\cdot\nabla^2{\bf u}}{\Re}\nonumber\\
-\Fr^2\lambda^2\Dt w -b+\pd{z}{\pi}-\frac{\lambda\cot \theta_0 \tu}{\Mr}=\frac{\lambda\mu^2(\tu^2+\tv^2)}{\Mr(r/L)}+\frac{\Fr^2\lambda^2{\bf \hat z}\cdot\nabla^2{\bf u}}{\Re}\nonumber\\
-\Dt b+w=\frac{\nabla^2 b}{\Pr\Re}\nonumber, \qquad
-\mu^2\left(\pd x\tu  + \pd y\tv \right)+\pd z w =0\nonumber
+\BFKFr^2\lambda^2\BFKDt w -b+\BFKpd{z}{\pi}
+-\frac{\lambda\cot \theta_0 \BFKtu}{\BFKMr}
+& = & \frac{\lambda\mu^2(\BFKtu^2+\BFKtv^2)}{\BFKMr(r/L)}
++\frac{\BFKFr^2\lambda^2{\bf \hat z}\cdot\nabla^2{\bf u}}{\BFKRe} \\
+\BFKDt b+w & = & \frac{\nabla^2 b}{\Pr\BFKRe}\nonumber \\
+\mu^2\left(\BFKpd x\BFKtu  + \BFKpd y\BFKtv \right)+\BFKpd z w 
+& = & 0
 \end{eqnarray}
 Where 
-\begin{eqnarray}
-\mu\equiv\frac{\cos\theta_0}{\cos\theta},\qquad\tu=\frac{u^*}{V\mu},\qquad\tv=\frac{v^*}{V\mu} , \qquad \Dt\ \equiv \mu^2\left(\tu\pd x\  +\tv \pd y\ \right)+\frac{\Fr^2\Mr}{\Ro} w\pd z \nonumber \\
-f_0\equiv2\Omega\sin\theta_0,\qquad x\equiv \frac{r}{L} \phi \cos \theta_0, \qquad y\equiv \frac{r}{L} \int_{\theta_0}^\theta\frac{\cos \theta_0 \d \theta'}{\cos\theta'}, \qquad z\equiv \lambda\frac{r-r_0}{L}\nonumber\\
-t^*=t \frac{L}{V},\qquad b^*= b\frac{V f_0\Mr}{\lambda},\qquad \pi^*=\pi V f_0 L\Mr,\qquad w^*=w V \frac{\Fr^2\lambda\Mr}{\Ro}\nonumber\\
-\Ro\equiv\frac{V}{f_0 L},\qquad \Mr\equiv \max[1,\Ro], \qquad \Fr\equiv\frac{V}{N \lambda L}, \qquad \Re\equiv\frac{VL}{\nu}, \qquad \Pr\equiv\frac{\nu}{\kappa}\nonumber
-\end{eqnarray}
+\begin{equation}
+\mu\equiv\frac{\cos\theta_0}{\cos\theta},\ \ \
+\BFKtu=\frac{u^*}{V\mu},\ \ \  \BFKtv=\frac{v^*}{V\mu}
+\end{equation}
+%% EH3 :: This is the key bit thats messed up in the next equation
+%% \Dt\ \equiv \mu^2\left(\tu\pd x\  +\tv \pd y\ \right)+\frac{\Fr^2\Mr}{\Ro} w\pd z
+\begin{equation}
+f_0\equiv2\Omega\sin\theta_0,\ \ \  
+%,\ \ \  \BFKDt\  \equiv \mu^2\left(\BFKtu\BFKpd x\  
+%+\BFKtv \BFKpd y\  \right)+\frac{\BFKFr^2\BFKMr}{\BFKRo} w\BFKpd z\  
+\frac{D}{Dt}  \equiv \mu^2\left(\BFKtu\frac{\partial}{\partial x}  
++\BFKtv \frac{\partial}{\partial y}  \right)
++\frac{\BFKFr^2\BFKMr}{\BFKRo} w\frac{\partial}{\partial z}
+\end{equation}
+\begin{equation}
+x\equiv \frac{r}{L} \phi \cos \theta_0, \ \ \   
+y\equiv \frac{r}{L} \int_{\theta_0}^\theta
+\frac{\cos \theta_0 \BFKd \theta'}{\cos\theta'}, \ \ \   
+z\equiv \lambda\frac{r-r_0}{L}
+\end{equation}
+\begin{equation}
+t^*=t \frac{L}{V},\ \ \  b^*= b\frac{V f_0\BFKMr}{\lambda}
+\end{equation}
+\begin{equation}
+\pi^*=\pi V f_0 L\BFKMr,\ \ \  
+w^*=w V \frac{\BFKFr^2\lambda\BFKMr}{\BFKRo}
+\end{equation}
+\begin{equation}
+\BFKRo\equiv\frac{V}{f_0 L},\ \ \  \BFKMr\equiv \max[1,\BFKRo]
+\end{equation}
+\begin{equation}
+\BFKFr\equiv\frac{V}{N \lambda L}, \ \ \   
+\BFKRe\equiv\frac{VL}{\nu}, \ \ \   
+\BFKPr\equiv\frac{\nu}{\kappa}
+\end{equation}
 Dimensional variables are denoted by an asterisk where necessary.  If
 we filter over a grid scale typical for ocean models ($1m<L<100km$,
 $0.0001<\lambda<1$, $0.001m/s <V<1 m/s$, $f_0<0.0001 s^{-1}$, $0.01
 s^{-1}<N<0.0001 s^{-1}$), these equations are very well approximated
 by
 \begin{eqnarray}
-\Ro{\Dt\tu}- \frac{\tv \sin\theta}{\sin\theta_0}+\Mr\pd{x}{\pi}=-\frac{\lambda\Fr^2\Mr\cos \theta}{\mu\sin\theta_0} w+\frac{\Ro\nabla^2{\tu}}{\Re}\nonumber\\
-\Ro\Dt\tv+ \frac{\tu\sin\theta}{\sin\theta_0}+\Mr\pd{y}{\pi}=\frac{\Ro\nabla^2{\tv}}{\Re}\nonumber\\
-\Fr^2\lambda^2\Dt w -b+\pd{z}{\pi}=\frac{\lambda\cot \theta_0 \tu}{\Mr}\nonumber+\frac{\Fr^2\lambda^2\nabla^2w}{\Re}\\
-\Dt b+w=\frac{\nabla^2 b}{\Pr\Re}\nonumber, \qquad
-\mu^2\left(\pd x\tu  + \pd y\tv \right)+\pd z w =0\nonumber\\
-\nabla^2\approx\left(\frac{\partial^2}{\partial x^2}+\frac{\partial^2}{\partial y^2}+\frac{\partial^2}{\lambda^2\partial z^2}\right)\nonumber
+\BFKRo{\BFKDt\BFKtu}- \frac{\BFKtv
+  \sin\theta}{\sin\theta_0}+\BFKMr\BFKpd{x}{\pi}
+& =& -\frac{\lambda\BFKFr^2\BFKMr\cos \theta}{\mu\sin\theta_0} w
++\frac{\BFKRo\nabla^2{\BFKtu}}{\BFKRe} \\
+\BFKRo\BFKDt\BFKtv+
+\frac{\BFKtu\sin\theta}{\sin\theta_0}+\BFKMr\BFKpd{y}{\pi}
+& = & \frac{\BFKRo\nabla^2{\BFKtv}}{\BFKRe} \\
+\BFKFr^2\lambda^2\BFKDt w -b+\BFKpd{z}{\pi}
+& = & \frac{\lambda\cot \theta_0 \BFKtu}{\BFKMr}
++\frac{\BFKFr^2\lambda^2\nabla^2w}{\BFKRe} \\
+\BFKDt b+w & = & \frac{\nabla^2 b}{\Pr\BFKRe} \\
+\mu^2\left(\BFKpd x\BFKtu + \BFKpd y\BFKtv \right)+\BFKpd z w
+& = & 0 \\
+\nabla^2 & \approx & \left(\frac{\partial^2}{\partial x^2}
+  +\frac{\partial^2}{\partial y^2}
+  +\frac{\partial^2}{\lambda^2\partial z^2}\right)
 \end{eqnarray}
 Neglecting the non-frictional terms on the right-hand side is usually
 called the 'traditional' approximation.  It is appropriate, with
@@ -380,23 +468,3 @@ either large aspect ratio or far from the tropics.  This approximation
 is used here, as it does not affect the form of the eddy stresses
 which is the main topic.  The frictional terms are preserved in this
 approximate form for later comparison with eddy stresses.
-% \label{}
-
-% Bibliographic references with the natbib package:
-% Parenthetical: \citep{Bai92} produces (Bailyn 1992).
-% Textual: \citet{Bai95} produces Bailyn et al. (1995).
-% An affix and part of a reference:
-%   \citep[e.g.][Ch. 2]{Bar76}
-%   produces (e.g. Barnes et al. 1976, Ch. 2).
-%\bibliography{biblio}
-%\begin{thebibliography}{}
-
-% \bibitem[Names(Year)]{label} or \bibitem[Names(Year)Long names]{label}.
-% (\harvarditem{Name}{Year}{label} is also supported.)
-% Text of bibliographic item
-
-%\bibitem[]{}
-
-%\end{thebibliography}
-
-
