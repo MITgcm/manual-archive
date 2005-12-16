@@ -1,5 +1,5 @@
 #
-#  $Header: /u/gcmpack/manual/Makefile,v 1.27 2005/08/09 17:45:06 edhill Exp $
+#  $Header: /u/gcmpack/manual/Makefile,v 1.28 2005/12/16 01:27:58 edhill Exp $
 #  $Name:  $
 #
 
@@ -10,7 +10,7 @@
 
 
 L2H = -image_type png -split 5 -show_section_numbers -link 2 \
-      -address "<a href=mailto:support@mitgcm.org>mitgcm-support@dev.mitgcm.org</a>" \
+      -address "<a href=mailto:support@mitgcm.org>mitgcm-support@mitgcm.org</a>" \
       -local_icons -noantialias -notransparent -white
 
 default:
