@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_outp_pkgs/text/mnc.tex,v 1.3 2005/08/06 16:28:14 edhill Exp $
+% $Header: /u/gcmpack/manual/s_outp_pkgs/text/mnc.tex,v 1.4 2005/12/20 21:25:16 edhill Exp $
 % $Name:  $
 
 \section{NetCDF I/O Integration: MNC}
@@ -147,6 +147,8 @@ are contained within a Fortran namelist file called
       write \texttt{autodiff} output w/MNC  \\
       \texttt{mnc\_max\_fsize}  &  R  & 2.1e+09  &  
       max allowable file size  \\
+      \texttt{mnc\_filefreq}  &  R  &  -1  &  
+      frequency of new file creation (seconds)  \\
       \texttt{readgrid\_mnc}  &  L  &  \texttt{.FALSE.}  &  
       read grid quantities using MNC  \\
       \texttt{mnc\_echo\_gvtypes}  &  L  & \texttt{.FALSE.}  &  
@@ -202,6 +204,13 @@ http://nco.sourceforge.net/
 \end{verbatim}
 \begin{rawhtml} </A> \end{rawhtml}
 
+Another way users can force the splitting of MNC files along the time
+dimension is the \texttt{mnc\_filefreq} option.  With it, files that
+contain variables with a temporal dimension can be split at regular
+intervals based solely upon the model time (specified in seconds).
+For some problems, this can be much more convenient than splitting
+based upon file size.
+
 Additional MNC--related parameters may be contained within each
 package.  Please see the individual packages for descriptions of their
 use of MNC.
@@ -215,21 +224,32 @@ files are either mostly or entirely compliant with the netCDF ``CF''
 convention (v1.0) and any conformance issues will be fixed over time.
 The patterns used for file names are:
 \begin{center}
-\texttt{BASENAME.nIter0.tileNum.seqNum.nc}
+  {\footnotesize
+    \begin{tabular}[htb]{l}
+      \texttt{BASENAME.tileNum.nc}  \\
+      \texttt{BASENAME.nIter.faceNum.nc}  \\
+      \texttt{BASENAME.nIter.tileNum.nc}
+    \end{tabular}
+  }
 \end{center}
-and an example is:
+and examples are:
 \begin{center}
-\texttt{grid.0000000000.000001.0000.nc}
+  {\footnotesize
+    \begin{tabular}[htb]{l}
+      \texttt{grid.t001.nc}, \texttt{grid.t002.nc}  \\
+      \texttt{state.0000000000.t001.nc},
+      \texttt{surfDiag.0000036000.t001.nc}  \\
+      \texttt{input.0000072000.f001.nc}
+    \end{tabular}
+  }
 \end{center}
 where \texttt{BASENAME} is the name selected to represent a set of
-variables written together, \texttt{nIter0} is the starting iteration
+variables written together, \texttt{nIter} is the current iteration
 number as specified in the main \texttt{data} namelist input file and
-written in a zero-filled 10-digit format, \texttt{tileNum} is the
-six-digit zero-filled tile number, \texttt{seqnum} is a four-digit
-zero-filled sequence number used when maximum allowable files sizes
-are too small to contain all of the output for a particular type
-within one run (new files are created with sequential numbers as files
-reach the maximum file size limit), and \texttt{.nc} is the file
+written in a zero-filled 10-digit format, \texttt{tileNum} is a
+three-or-more-digit zero-filled and ``\texttt{t}''--prefixed tile
+number, \texttt{faceNum} is a three-or-more-digit zero-filled and
+``\texttt{f}''--prefixed face number, and \texttt{.nc} is the file
 suffix specified by the current netCDF ``CF'' conventions.
 
 Some example \texttt{BASENAME} values are:
