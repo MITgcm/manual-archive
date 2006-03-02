@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_outp_pkgs/text/mdsio.tex,v 1.4 2005/09/02 02:24:58 edhill Exp $
+% $Header: /u/gcmpack/manual/s_outp_pkgs/text/mdsio.tex,v 1.5 2006/03/02 18:21:54 edhill Exp $
 % $Name:  $
 
 
@@ -165,14 +165,17 @@ package features and limitations:
   multiple threads or MPI processes simultaneously writing to the same
   file.
 
-\item[Meta-data] is written on a per-file basis using a second file
-  with a \texttt{.meta} extension as described above.  One should be
-  careful not to delete the metadata files when using convenient
-  MatLAB post-processing scripts such as \texttt{rdmds()}.
+\item[Meta-data] is written by MITgcm on a per-file basis using a
+  second file with a \texttt{.meta} extension as described above.
+  MITgcm itself does not read the \texttt{*.meta} files, they are
+  there primarly for convenience during post-processing.  One should
+  be careful not to delete the meta-data files when using MatLAB
+  post-processing scripts such as \texttt{rdmds()} since it relies
+  upon them.
 
 \item[Numerous files] can be written by \texttt{mdsio} due to its
   typically per-time-step and per-variable orientation.  The creation of
-  both a binary (\texttt{*.data}) and ASCII text meta--data
+  both a binary (\texttt{*.data}) and ASCII text meta-data
   (\texttt{*.meta}) file for each output type step tends to exacerbate
   the problem.  Some (mostly, older) operating systems do not
   gracefully handle large numbers (\textit{eg.} many thousands) of
