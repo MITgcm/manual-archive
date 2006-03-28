@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_outp_pkgs/text/mnc.tex,v 1.4 2005/12/20 21:25:16 edhill Exp $
+% $Header: /u/gcmpack/manual/s_outp_pkgs/text/mnc.tex,v 1.5 2006/03/28 16:24:57 edhill Exp $
 % $Name:  $
 
 \section{NetCDF I/O Integration: MNC}
@@ -127,26 +127,26 @@ are contained within a Fortran namelist file called
       output directory name \\
       \ \ \texttt{mnc\_outdir\_date}  &  L  & \texttt{.FALSE.}  &  
       embed date in the outdir name  \\
-      \ \ \texttt{mnc\_outdir\_num}  &  L  & \texttt{.FALSE.}  &  
+      \ \ \texttt{mnc\_outdir\_num}  &  L  & \texttt{.TRUE.}  &  
       optional  \\
-      \texttt{pickup\_write\_mnc}  &  L  & \texttt{.FALSE.}  &  
+      \texttt{pickup\_write\_mnc}  &  L  & \texttt{.TRUE.}  &  
       use MNC to write pickup files  \\
-      \texttt{pickup\_read\_mnc}  &  L  & \texttt{.FALSE.}  &  
+      \texttt{pickup\_read\_mnc}  &  L  & \texttt{.TRUE.}  &  
       use MNC to read pickup files  \\
       \texttt{mnc\_use\_indir}  &  L  & \texttt{.FALSE.}  &  
       use a directory (path) for input  \\
       \ \ \texttt{mnc\_indir\_str}  &  S  & \texttt{''}  &  
       input directory (or path) name  \\
-      \texttt{snapshot\_mnc}  &  L  & \texttt{.FALSE.}  &  
+      \texttt{snapshot\_mnc}  &  L  & \texttt{.TRUE.}  &  
       write \texttt{snapshot} output w/MNC  \\
-      \texttt{monitor\_mnc}  &  L  & \texttt{.FALSE.}  &  
+      \texttt{monitor\_mnc}  &  L  & \texttt{.TRUE.}  &  
       write \texttt{monitor} output w/MNC  \\
-      \texttt{timeave\_mnc}  &  L  & \texttt{.FALSE.}  &  
+      \texttt{timeave\_mnc}  &  L  & \texttt{.TRUE.}  &  
       write \texttt{timeave} output w/MNC  \\
-      \texttt{autodiff\_mnc}  &  L  & \texttt{.FALSE.}  &  
+      \texttt{autodiff\_mnc}  &  L  & \texttt{.TRUE.}  &  
       write \texttt{autodiff} output w/MNC  \\
       \texttt{mnc\_max\_fsize}  &  R  & 2.1e+09  &  
-      max allowable file size  \\
+      max allowable file size (<2GB)  \\
       \texttt{mnc\_filefreq}  &  R  &  -1  &  
       frequency of new file creation (seconds)  \\
       \texttt{readgrid\_mnc}  &  L  &  \texttt{.FALSE.}  &  
