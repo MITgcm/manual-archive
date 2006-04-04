@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.20 2004/10/17 04:14:21 jmc Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.21 2006/04/04 20:16:39 jmc Exp $
 % $Name:  $
 
 This chapter lays out the numerical schemes that are
@@ -814,8 +814,8 @@ $\eta^{n+1}$: {\bf etaN} (\em DYNVARS.h)
 
 
 Once ${\eta}^{n+1}$ has been found, substituting into
-\ref{eq:discrete-time-u,eq:discrete-time-v} yields $\vec{\bf v}^{n+1}$ if the model is
-hydrostatic ($\epsilon_{nh}=0$):
+\ref{eq:discrete-time-u}, \ref{eq:discrete-time-v} yields $\vec{\bf v}^{n+1}$ 
+if the model is hydrostatic ($\epsilon_{nh}=0$):
 $$
 \vec{\bf v}^{n+1} = \vec{\bf v}^{*}
 - \Delta t {\bf \nabla}_h b_s {\eta}^{n+1}
