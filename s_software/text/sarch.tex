@@ -1,20 +1,20 @@
-% $Header: /u/gcmpack/manual/s_software/text/sarch.tex,v 1.21 2006/04/04 15:54:55 edhill Exp $
+% $Header: /u/gcmpack/manual/s_software/text/sarch.tex,v 1.22 2006/04/04 18:33:52 edhill Exp $
 
-This chapter focuses on describing the {\bf WRAPPER} environment within which
-both the core numerics and the pluggable packages operate. The description
-presented here is intended to be a detailed exposition and contains significant
-background material, as well as advanced details on working with the WRAPPER. 
-The tutorial sections of this manual (see sections
-\ref{sect:tutorials}  and \ref{sect:tutorialIII}) 
-contain more succinct, step-by-step instructions on running basic numerical
-experiments, of varous types, both sequentially and in parallel. For many 
-projects simply starting from an example code and adapting it to suit a 
-particular situation 
-will be all that is required.
-The first part of this chapter discusses the MITgcm architecture at an 
-abstract level. In the second part of the chapter we described practical 
-details of the MITgcm implementation and of current tools and operating system 
-features that are employed.
+This chapter focuses on describing the {\bf WRAPPER} environment
+within which both the core numerics and the pluggable packages
+operate. The description presented here is intended to be a detailed
+exposition and contains significant background material, as well as
+advanced details on working with the WRAPPER.  The tutorial sections
+of this manual (see sections \ref{sect:tutorials} and
+\ref{sect:tutorialIII}) contain more succinct, step-by-step
+instructions on running basic numerical experiments, of varous types,
+both sequentially and in parallel. For many projects simply starting
+from an example code and adapting it to suit a particular situation
+will be all that is required.  The first part of this chapter
+discusses the MITgcm architecture at an abstract level. In the second
+part of the chapter we described practical details of the MITgcm
+implementation and of current tools and operating system features that
+are employed.
 
 \section{Overall architectural goals}
 \begin{rawhtml}
@@ -25,19 +25,19 @@ Broadly, the goals of the software architecture employed in MITgcm are
 three-fold
  
 \begin{itemize}
-\item We wish to be able to study a very broad range
-of interesting and challenging rotating fluids problems.
-\item We wish the model code to be readily targeted to
-a wide range of platforms
-\item On any given platform we would like to be
-able to achieve performance comparable to an implementation 
-developed and specialized specifically for that platform.
+\item We wish to be able to study a very broad range of interesting
+  and challenging rotating fluids problems.
+\item We wish the model code to be readily targeted to a wide range of
+  platforms
+\item On any given platform we would like to be able to achieve
+  performance comparable to an implementation developed and
+  specialized specifically for that platform.
 \end{itemize}
 
-These points are summarized in figure \ref{fig:mitgcm_architecture_goals} 
-which conveys the goals of the MITgcm design. The goals lead to
-a software architecture which at the high-level can be viewed as consisting 
-of
+These points are summarized in figure
+\ref{fig:mitgcm_architecture_goals} which conveys the goals of the
+MITgcm design. The goals lead to a software architecture which at the
+high-level can be viewed as consisting of
 
 \begin{enumerate}
 \item A core set of numerical and support code. This is discussed in
@@ -71,14 +71,13 @@ is required.
 \begin{center}
 \resizebox{!}{2.5in}{\includegraphics{part4/mitgcm_goals.eps}}
 \end{center}
-\caption{
-The MITgcm architecture is designed to allow simulation of a wide 
-range of physical problems on a wide range of hardware. The computational 
-resource requirements of the applications targeted range from around 
-$10^7$ bytes ( $\approx 10$ megabytes ) of memory to $10^{11}$ bytes
-( $\approx 100$ gigabytes). Arithmetic operation counts for the applications of 
-interest range from $10^{9}$ floating point operations to more than $10^{17}$ 
-floating point operations.}
+\caption{ The MITgcm architecture is designed to allow simulation of a
+  wide range of physical problems on a wide range of hardware. The
+  computational resource requirements of the applications targeted
+  range from around $10^7$ bytes ($\approx 10$ megabytes) of memory to
+  $10^{11}$ bytes ($\approx 100$ gigabytes). Arithmetic operation
+  counts for the applications of interest range from $10^{9}$ floating
+  point operations to more than $10^{17}$ floating point operations.}
 \label{fig:mitgcm_architecture_goals}
 \end{figure}
 
@@ -87,19 +86,20 @@ floating point operations.}
 <!-- CMIREDIR:wrapper: -->
 \end{rawhtml}
 
-A significant element of the software architecture utilized in
-MITgcm is a software superstructure and substructure collectively
-called the WRAPPER (Wrappable Application Parallel Programming 
-Environment Resource). All numerical and support code in MITgcm is written 
-to ``fit'' within the WRAPPER infrastructure. Writing code to ``fit'' within 
-the WRAPPER means that coding has to follow certain, relatively
-straightforward, rules and conventions (these are discussed further in 
+A significant element of the software architecture utilized in MITgcm
+is a software superstructure and substructure collectively called the
+WRAPPER (Wrappable Application Parallel Programming Environment
+Resource). All numerical and support code in MITgcm is written to
+``fit'' within the WRAPPER infrastructure. Writing code to ``fit''
+within the WRAPPER means that coding has to follow certain, relatively
+straightforward, rules and conventions (these are discussed further in
 section \ref{sect:specifying_a_decomposition}).
 
-The approach taken by the WRAPPER is illustrated in figure 
-\ref{fig:fit_in_wrapper} which shows how the WRAPPER serves to insulate code 
-that fits within it from architectural differences between hardware platforms 
-and operating systems. This allows numerical code to be easily retargetted. 
+The approach taken by the WRAPPER is illustrated in figure
+\ref{fig:fit_in_wrapper} which shows how the WRAPPER serves to
+insulate code that fits within it from architectural differences
+between hardware platforms and operating systems. This allows
+numerical code to be easily retargetted.
 
 
 \begin{figure}
@@ -416,16 +416,17 @@ default WRAPPER sources, because of their proprietary nature.
 \subsection{Distributed memory communication}
 \label{sect:distributed_memory_communication}
 Many parallel systems are not constructed in a way where it is
-possible or practical for an application to use shared memory
-for communication. For example cluster systems consist of individual computers
-connected by a fast network. On such systems there is no notion of shared memory
-at the system level. For this sort of system the WRAPPER provides support
-for communication based on a bespoke communication library 
-(see figure \ref{fig:comm_msg}).  The default communication library used is MPI 
-\ref{mpi}. However, it is relatively straightforward to implement bindings to 
-optimized platform specific communication libraries. For example the work 
-described in \ref{hoe-hill:99} substituted standard MPI communication for a 
-highly optimized library.
+possible or practical for an application to use shared memory for
+communication. For example cluster systems consist of individual
+computers connected by a fast network. On such systems there is no
+notion of shared memory at the system level. For this sort of system
+the WRAPPER provides support for communication based on a bespoke
+communication library (see figure \ref{fig:comm_msg}).  The default
+communication library used is MPI \cite{MPI-std-20}. However, it is
+relatively straightforward to implement bindings to optimized platform
+specific communication libraries. For example the work described in
+\ref{hoe-hill:99} substituted standard MPI communication for a highly
+optimized library.
 
 \subsection{Communication primitives}
 \label{sect:communication_primitives}
