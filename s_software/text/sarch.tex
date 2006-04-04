@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_software/text/sarch.tex,v 1.20 2004/10/16 03:40:16 edhill Exp $
+% $Header: /u/gcmpack/manual/s_software/text/sarch.tex,v 1.21 2006/04/04 15:54:55 edhill Exp $
 
 This chapter focuses on describing the {\bf WRAPPER} environment within which
 both the core numerics and the pluggable packages operate. The description
@@ -40,27 +40,31 @@ a software architecture which at the high-level can be viewed as consisting
 of
 
 \begin{enumerate}
-\item A core set of numerical and support code. This is discussed in detail in
-section \ref{sect:partII}.
-\item A scheme for supporting optional "pluggable" {\bf packages} (containing 
-for example mixed-layer schemes, biogeochemical schemes, atmospheric physics). 
-These packages are used both to overlay alternate dynamics and to introduce 
-specialized physical content onto the core numerical code. An overview of
-the {\bf package} scheme is given at the start of part \ref{part:packages}.
-\item A support framework called {\bf WRAPPER} (Wrappable Application Parallel 
-Programming Environment Resource), within which the core numerics and pluggable 
-packages operate.
+\item A core set of numerical and support code. This is discussed in
+  detail in section \ref{chap:discretization}.
+
+\item A scheme for supporting optional ``pluggable'' {\bf packages}
+  (containing for example mixed-layer schemes, biogeochemical schemes,
+  atmospheric physics).  These packages are used both to overlay
+  alternate dynamics and to introduce specialized physical content
+  onto the core numerical code. An overview of the {\bf package}
+  scheme is given at the start of part \ref{chap:packagesI}.
+
+\item A support framework called {\bf WRAPPER} (Wrappable Application
+  Parallel Programming Environment Resource), within which the core
+  numerics and pluggable packages operate.
 \end{enumerate}
 
-This chapter focuses on describing the {\bf WRAPPER} environment under which
-both the core numerics and the pluggable packages function. The description
-presented here is intended to be a detailed exposition and contains significant
-background material, as well as advanced details on working with the WRAPPER. 
-The examples section of this manual (part \ref{part:example}) contains more
-succinct, step-by-step instructions on running basic numerical
-experiments both sequentially and in parallel. For many projects simply 
-starting from an example code and adapting it to suit a particular situation 
-will be all that is required.
+This chapter focuses on describing the {\bf WRAPPER} environment under
+which both the core numerics and the pluggable packages function. The
+description presented here is intended to be a detailed exposition and
+contains significant background material, as well as advanced details
+on working with the WRAPPER.  The examples section of this manual
+(part \ref{chap:getting_started}) contains more succinct, step-by-step
+instructions on running basic numerical experiments both sequentially
+and in parallel. For many projects simply starting from an example
+code and adapting it to suit a particular situation will be all that
+is required.
 
 
 \begin{figure}
@@ -89,8 +93,8 @@ called the WRAPPER (Wrappable Application Parallel Programming
 Environment Resource). All numerical and support code in MITgcm is written 
 to ``fit'' within the WRAPPER infrastructure. Writing code to ``fit'' within 
 the WRAPPER means that coding has to follow certain, relatively
-straightforward, rules and conventions ( these are discussed further in 
-section \ref{sect:specifying_a_decomposition} ).
+straightforward, rules and conventions (these are discussed further in 
+section \ref{sect:specifying_a_decomposition}).
 
 The approach taken by the WRAPPER is illustrated in figure 
 \ref{fig:fit_in_wrapper} which shows how the WRAPPER serves to insulate code 
@@ -116,86 +120,92 @@ optimized for that platform.}
 \subsection{Target hardware}
 \label{sect:target_hardware}
 
-The WRAPPER is designed to target as broad as possible a range of computer
-systems. The original development of the WRAPPER took place on a 
-multi-processor, CRAY Y-MP system. On that system, numerical code performance 
-and scaling under the WRAPPER was in excess of that of an implementation that 
-was tightly bound to the CRAY systems proprietary multi-tasking and 
-micro-tasking approach. Later developments have been carried out on 
-uniprocessor and multi-processor Sun systems with both uniform memory access 
-(UMA) and non-uniform memory access (NUMA) designs. Significant work has also 
-been undertaken on x86 cluster systems, Alpha processor based clustered SMP 
-systems, and on cache-coherent NUMA (CC-NUMA) systems from Silicon Graphics. 
-The MITgcm code, operating within the WRAPPER, is also routinely used on 
-large scale MPP systems (for example T3E systems and IBM SP systems). In all 
-cases numerical code, operating within the WRAPPER, performs and scales very 
-competitively with equivalent numerical code that has been modified to contain 
-native optimizations for a particular system \ref{ref hoe and hill, ecmwf}.
+The WRAPPER is designed to target as broad as possible a range of
+computer systems.  The original development of the WRAPPER took place
+on a multi-processor, CRAY Y-MP system. On that system, numerical code
+performance and scaling under the WRAPPER was in excess of that of an
+implementation that was tightly bound to the CRAY systems proprietary
+multi-tasking and micro-tasking approach. Later developments have been
+carried out on uniprocessor and multi-processor Sun systems with both
+uniform memory access (UMA) and non-uniform memory access (NUMA)
+designs.  Significant work has also been undertaken on x86 cluster
+systems, Alpha processor based clustered SMP systems, and on
+cache-coherent NUMA (CC-NUMA) systems such as Silicon Graphics Altix
+systems.  The MITgcm code, operating within the WRAPPER, is also
+routinely used on large scale MPP systems (for example, Cray T3E and
+IBM SP systems). In all cases numerical code, operating within the
+WRAPPER, performs and scales very competitively with equivalent
+numerical code that has been modified to contain native optimizations
+for a particular system \ref{ref hoe and hill, ecmwf}.
 
 \subsection{Supporting hardware neutrality}
 
-The different systems listed in section \ref{sect:target_hardware} can be 
-categorized in many different ways. For example, one common distinction is 
-between shared-memory parallel systems (SMP's, PVP's) and distributed memory 
-parallel systems (for example x86 clusters and large MPP systems). This is one 
-example of a difference between compute platforms that can impact an 
-application. Another common distinction is between vector processing systems 
-with highly specialized CPU's and memory subsystems and commodity 
-microprocessor based systems. There are numerous other differences, especially 
-in relation to how parallel execution is supported. To capture the essential 
-differences between different platforms the WRAPPER uses a {\it machine model}. 
+The different systems listed in section \ref{sect:target_hardware} can
+be categorized in many different ways. For example, one common
+distinction is between shared-memory parallel systems (SMP and PVP)
+and distributed memory parallel systems (for example x86 clusters and
+large MPP systems). This is one example of a difference between
+compute platforms that can impact an application. Another common
+distinction is between vector processing systems with highly
+specialized CPUs and memory subsystems and commodity microprocessor
+based systems. There are numerous other differences, especially in
+relation to how parallel execution is supported. To capture the
+essential differences between different platforms the WRAPPER uses a
+{\it machine model}.
 
 \subsection{WRAPPER machine model}
 
-Applications using the WRAPPER are not written to target just one 
-particular machine (for example an IBM SP2) or just one particular family or 
-class of machines (for example Parallel Vector Processor Systems). Instead the
-WRAPPER provides applications with an 
-abstract {\it machine model}. The machine model is very general, however, it can
-easily be specialized to fit, in a computationally efficient manner, any 
-computer architecture currently available to the scientific computing community.
+Applications using the WRAPPER are not written to target just one
+particular machine (for example an IBM SP2) or just one particular
+family or class of machines (for example Parallel Vector Processor
+Systems). Instead the WRAPPER provides applications with an abstract
+{\it machine model}. The machine model is very general, however, it
+can easily be specialized to fit, in a computationally efficient
+manner, any computer architecture currently available to the
+scientific computing community.
 
 \subsection{Machine model parallelism}
 \begin{rawhtml}
 <!-- CMIREDIR:domain_decomp: -->
 \end{rawhtml}
 
- Codes operating under the WRAPPER target an abstract machine that is assumed to
-consist of one or more logical processors that can compute concurrently.  
-Computational work is divided among the logical
-processors by allocating ``ownership'' to 
-each processor of a certain set (or sets) of calculations. Each set of 
-calculations owned by a particular processor is associated with a specific 
-region of the physical space that is being simulated, only one processor will 
-be associated with each such region (domain decomposition).  
+Codes operating under the WRAPPER target an abstract machine that is
+assumed to consist of one or more logical processors that can compute
+concurrently.  Computational work is divided among the logical
+processors by allocating ``ownership'' to each processor of a certain
+set (or sets) of calculations. Each set of calculations owned by a
+particular processor is associated with a specific region of the
+physical space that is being simulated, only one processor will be
+associated with each such region (domain decomposition).
 
-In a strict sense the logical processors over which work is divided do not need 
-to correspond to physical processors. It is perfectly possible to execute a 
-configuration decomposed for multiple logical processors on a single physical 
-processor. This helps ensure that numerical code that is written to fit
-within the WRAPPER will parallelize with no additional effort and is
-also useful when debugging codes. Generally, however,
-the computational domain will be subdivided over multiple logical
-processors in order to then bind those logical processors to physical 
-processor resources that can compute in parallel.
+In a strict sense the logical processors over which work is divided do
+not need to correspond to physical processors.  It is perfectly
+possible to execute a configuration decomposed for multiple logical
+processors on a single physical processor.  This helps ensure that
+numerical code that is written to fit within the WRAPPER will
+parallelize with no additional effort.  It is also useful for
+debugging purposes.  Generally, however, the computational domain will
+be subdivided over multiple logical processors in order to then bind
+those logical processors to physical processor resources that can
+compute in parallel.
 
 \subsubsection{Tiles}
 
-Computationally, associated with each region of physical 
-space allocated to a particular logical processor, there will be data 
-structures (arrays, scalar variables etc...) that hold the simulated state of 
-that region. We refer to these data structures as being {\bf owned} by the 
-processor to which their
-associated region of physical space has been allocated. Individual
-regions that are allocated to processors are called {\bf tiles}. A 
-processor can own more 
-than one tile. Figure \ref{fig:domaindecomp} shows a physical domain being
-mapped to a set of logical processors, with each processors owning a single 
-region of the domain (a single tile). Except for periods of
-communication and coordination, each processor computes autonomously, working 
-only with data from the tile (or tiles) that the processor owns. When multiple 
-tiles are alloted to a single processor, each tile is computed on 
-independently of the other tiles, in a sequential fashion. 
+Computationally, the data structures (\textit{eg.} arrays, scalar
+variables, etc.) that hold the simulated state are associated with
+each region of physical space and are allocated to a particular
+logical processor.  We refer to these data structures as being {\bf
+  owned} by the processor to which their associated region of physical
+space has been allocated.  Individual regions that are allocated to
+processors are called {\bf tiles}.  A processor can own more than one
+tile.  Figure \ref{fig:domaindecomp} shows a physical domain being
+mapped to a set of logical processors, with each processors owning a
+single region of the domain (a single tile).  Except for periods of
+communication and coordination, each processor computes autonomously,
+working only with data from the tile (or tiles) that the processor
+owns.  When multiple tiles are alloted to a single processor, each
+tile is computed on independently of the other tiles, in a sequential
+fashion.
 
 \begin{figure}
 \begin{center}
@@ -203,34 +213,33 @@ independently of the other tiles, in a sequential fashion.
   \includegraphics{part4/domain_decomp.eps}
  }
 \end{center}
-\caption{ The WRAPPER provides support for one and two dimensional 
-decompositions of grid-point domains. The figure shows a hypothetical domain of 
-total size $N_{x}N_{y}N_{z}$. This hypothetical domain is decomposed in 
-two-dimensions along the $N_{x}$ and $N_{y}$ directions. The resulting {\bf 
-tiles} are {\bf owned} by different processors. The {\bf owning} 
-processors perform the 
-arithmetic operations associated with a {\bf tile}. Although not illustrated 
-here, a single processor can {\bf own} several {\bf tiles}.
-Whenever a processor wishes to transfer data between tiles or
-communicate with other processors it calls a WRAPPER supplied
-function.
-} \label{fig:domaindecomp} 
+\caption{ The WRAPPER provides support for one and two dimensional
+  decompositions of grid-point domains. The figure shows a
+  hypothetical domain of total size $N_{x}N_{y}N_{z}$. This
+  hypothetical domain is decomposed in two-dimensions along the
+  $N_{x}$ and $N_{y}$ directions. The resulting {\bf tiles} are {\bf
+    owned} by different processors. The {\bf owning} processors
+  perform the arithmetic operations associated with a {\bf tile}.
+  Although not illustrated here, a single processor can {\bf own}
+  several {\bf tiles}.  Whenever a processor wishes to transfer data
+  between tiles or communicate with other processors it calls a
+  WRAPPER supplied function.  } \label{fig:domaindecomp}
 \end{figure}
 
 
 \subsubsection{Tile layout}
 
-Tiles consist of an interior region and an overlap region. The overlap region 
-of a tile corresponds to the interior region of an adjacent tile. 
-In figure \ref{fig:tiledworld} each tile would own the region
-within the black square and hold duplicate information for overlap
-regions extending into the tiles to the north, south, east and west.
-During 
-computational phases a processor will reference data in an overlap region 
-whenever it requires values that outside the domain it owns. Periodically 
-processors will make calls to WRAPPER functions to communicate data between 
-tiles, in order to keep the overlap regions up to date (see section 
-\ref{sect:communication_primitives}). The WRAPPER functions can use a
+Tiles consist of an interior region and an overlap region.  The
+overlap region of a tile corresponds to the interior region of an
+adjacent tile.  In figure \ref{fig:tiledworld} each tile would own the
+region within the black square and hold duplicate information for
+overlap regions extending into the tiles to the north, south, east and
+west.  During computational phases a processor will reference data in
+an overlap region whenever it requires values that lie outside the
+domain it owns.  Periodically processors will make calls to WRAPPER
+functions to communicate data between tiles, in order to keep the
+overlap regions up to date (see section
+\ref{sect:communication_primitives}).  The WRAPPER functions can use a
 variety of different mechanisms to communicate data between tiles.
 
 \begin{figure}
@@ -247,32 +256,34 @@ Overlap regions are periodically updated from neighboring tiles.
 
 \subsection{Communication mechanisms}
 
- Logical processors are assumed to be able to exchange information
-between tiles and between each other using at least one of two possible 
-mechanisms. 
+Logical processors are assumed to be able to exchange information
+between tiles and between each other using at least one of two
+possible mechanisms.
 
 \begin{itemize}
-\item {\bf Shared memory communication}.
-Under this mode of communication data transfers are assumed to be possible 
-using direct addressing of regions of memory. In this case a CPU is able to read
-(and write) directly to regions of memory "owned" by another CPU
-using simple programming language level assignment operations of the
-the sort shown in figure \ref{fig:simple_assign}. In this way one CPU
-(CPU1 in the figure) can communicate information to another CPU (CPU2 in the 
-figure) by assigning a particular value to a particular memory location.
+\item {\bf Shared memory communication}.  Under this mode of
+  communication data transfers are assumed to be possible using direct
+  addressing of regions of memory.  In this case a CPU is able to read
+  (and write) directly to regions of memory ``owned'' by another CPU
+  using simple programming language level assignment operations of the
+  the sort shown in figure \ref{fig:simple_assign}.  In this way one
+  CPU (CPU1 in the figure) can communicate information to another CPU
+  (CPU2 in the figure) by assigning a particular value to a particular
+  memory location.
 
-\item {\bf Distributed memory communication}. 
-Under this mode of communication there is no mechanism, at the application code level,
-for directly addressing regions of memory owned and visible to another CPU. Instead 
-a communication library must be used as illustrated in figure 
-\ref{fig:comm_msg}. In this case CPU's must call a function in the API of the 
-communication library to communicate data from a tile that it owns to a tile
-that another CPU owns. By default the WRAPPER binds to the MPI communication
-library \ref{MPI} for this style of communication.
+\item {\bf Distributed memory communication}.  Under this mode of
+  communication there is no mechanism, at the application code level,
+  for directly addressing regions of memory owned and visible to
+  another CPU. Instead a communication library must be used as
+  illustrated in figure \ref{fig:comm_msg}. In this case CPUs must
+  call a function in the API of the communication library to
+  communicate data from a tile that it owns to a tile that another CPU
+  owns. By default the WRAPPER binds to the MPI communication library
+  \ref{MPI} for this style of communication.
 \end{itemize}
 
 The WRAPPER assumes that communication will use one of these two styles
-of communication. The underlying hardware and operating system support
+of communication.  The underlying hardware and operating system support
 for the style used is not specified and can vary from system to system.
 
 \begin{figure}
@@ -286,10 +297,10 @@ for the style used is not specified and can vary from system to system.
                                  |        END WHILE
                                  |
 \end{verbatim}
-\caption{ In the WRAPPER shared memory communication model, simple writes to an
-array can be made to be visible to other CPU's at the application code level.
+\caption{In the WRAPPER shared memory communication model, simple writes to an
+array can be made to be visible to other CPUs at the application code level.
 So that for example, if one CPU (CPU1 in the figure above) writes the value $8$ to 
-element $3$ of array $a$, then other CPU's (for example CPU2 in the figure above)
+element $3$ of array $a$, then other CPUs (for example CPU2 in the figure above)
 will be able to see the value $8$ when they read from $a(3)$.
 This provides a very low latency and high bandwidth communication 
 mechanism.
@@ -308,102 +319,106 @@ mechanism.
                                  |
 \end{verbatim}
 \caption{ In the WRAPPER distributed memory communication model
-data can not be made directly visible to other CPU's.
+data can not be made directly visible to other CPUs.
 If one CPU writes the value $8$ to element $3$ of array $a$, then
 at least one of CPU1 and/or CPU2 in the figure above will need
 to call a bespoke communication library in order for the updated 
-value to be communicated between CPU's.
+value to be communicated between CPUs.
 } \label{fig:comm_msg}
 \end{figure}
 
 \subsection{Shared memory communication}
 \label{sect:shared_memory_communication}
 
-Under shared communication independent CPU's are operating
-on the exact same global address space at the application level.
-This means that CPU 1 can directly write into global 
-data structures that CPU 2 ``owns'' using a simple
-assignment at the application level. 
-This is the model of memory access is supported at the basic system 
-design level in ``shared-memory'' systems such as PVP systems, SMP systems,
-and on distributed shared memory systems (the SGI Origin).
-On such systems the WRAPPER will generally use simple read and write statements 
-to access directly application data structures when communicating between CPU's.
+Under shared communication independent CPUs are operating on the
+exact same global address space at the application level.  This means
+that CPU 1 can directly write into global data structures that CPU 2
+``owns'' using a simple assignment at the application level.  This is
+the model of memory access is supported at the basic system design
+level in ``shared-memory'' systems such as PVP systems, SMP systems,
+and on distributed shared memory systems (\textit{eg.} SGI Origin, SGI
+Altix, and some AMD Opteron systems).  On such systems the WRAPPER
+will generally use simple read and write statements to access directly
+application data structures when communicating between CPUs.
 
-In a system where assignments statements, like the one in figure 
-\ref{fig:simple_assign} map directly to 
-hardware instructions that transport data between CPU and memory banks, this 
-can be a very efficient mechanism for communication. In this case two CPU's,
-CPU1 and CPU2, can communicate simply be reading and writing to an 
-agreed location and following a few basic rules. The latency of this sort
-of communication is generally not that much higher than the hardware
-latency of other memory accesses on the system. The bandwidth available
-between CPU's communicating in this way can be close to the bandwidth of
-the systems main-memory interconnect. This can make this method of 
-communication very efficient provided it is used appropriately.
+In a system where assignments statements, like the one in figure
+\ref{fig:simple_assign} map directly to hardware instructions that
+transport data between CPU and memory banks, this can be a very
+efficient mechanism for communication.  In this case two CPUs, CPU1
+and CPU2, can communicate simply be reading and writing to an agreed
+location and following a few basic rules.  The latency of this sort of
+communication is generally not that much higher than the hardware
+latency of other memory accesses on the system. The bandwidth
+available between CPUs communicating in this way can be close to the
+bandwidth of the systems main-memory interconnect.  This can make this
+method of communication very efficient provided it is used
+appropriately.
 
 \subsubsection{Memory consistency}
 \label{sect:memory_consistency}
 
-When using shared memory communication between
-multiple processors the WRAPPER level shields user applications from 
-certain counter-intuitive system behaviors. In particular, one issue the 
-WRAPPER layer must deal with is a systems memory model. In general the order 
-of reads and writes expressed by the textual order of an application code may 
-not be the ordering of instructions executed by the processor performing the 
-application. The processor performing the application instructions will always
-operate so that, for the application instructions the processor is executing, 
-any reordering is not apparent. However, in general machines are often 
-designed so that reordering of instructions is not hidden from other second 
-processors.  This means that, in general, even on a shared memory system two 
-processors can observe inconsistent memory values. 
+When using shared memory communication between multiple processors the
+WRAPPER level shields user applications from certain counter-intuitive
+system behaviors.  In particular, one issue the WRAPPER layer must
+deal with is a systems memory model.  In general the order of reads
+and writes expressed by the textual order of an application code may
+not be the ordering of instructions executed by the processor
+performing the application.  The processor performing the application
+instructions will always operate so that, for the application
+instructions the processor is executing, any reordering is not
+apparent.  However, in general machines are often designed so that
+reordering of instructions is not hidden from other second processors.
+This means that, in general, even on a shared memory system two
+processors can observe inconsistent memory values.
 
-The issue of memory consistency between multiple processors is discussed at 
-length in many computer science papers, however, from a practical point of 
-view, in order to deal with this issue, shared memory machines all provide 
-some mechanism to enforce memory consistency when it is needed. The exact 
-mechanism employed will vary between systems. For communication using shared 
-memory, the WRAPPER provides a place to invoke the appropriate mechanism to 
-ensure memory consistency for a particular platform.
+The issue of memory consistency between multiple processors is
+discussed at length in many computer science papers.  From a practical
+point of view, in order to deal with this issue, shared memory
+machines all provide some mechanism to enforce memory consistency when
+it is needed.  The exact mechanism employed will vary between systems.
+For communication using shared memory, the WRAPPER provides a place to
+invoke the appropriate mechanism to ensure memory consistency for a
+particular platform.
 
 \subsubsection{Cache effects and false sharing}
 \label{sect:cache_effects_and_false_sharing}
 
 Shared-memory machines often have local to processor memory caches
-which contain mirrored copies of main memory. Automatic cache-coherence
+which contain mirrored copies of main memory.  Automatic cache-coherence
 protocols are used to maintain consistency between caches on different
-processors. These cache-coherence protocols typically enforce consistency
+processors.  These cache-coherence protocols typically enforce consistency
 between regions of memory with large granularity (typically 128 or 256 byte
-chunks). The coherency protocols employed can be expensive relative to other
+chunks).  The coherency protocols employed can be expensive relative to other
 memory accesses and so care is taken in the WRAPPER (by padding synchronization
 structures appropriately) to avoid unnecessary coherence traffic.
 
 \subsubsection{Operating system support for shared memory.}
 
-Applications running under multiple threads within a single process can
-use shared memory communication. In this case {\it all} the memory locations 
-in an application are potentially visible to all the compute threads. Multiple 
-threads operating within a single process is the standard mechanism for 
-supporting shared memory that the WRAPPER utilizes. Configuring and launching 
-code to run in multi-threaded mode on specific platforms is discussed in 
-section \ref{sect:running_with_threads}.  However, on many systems, potentially 
-very efficient mechanisms for using shared memory communication between 
-multiple processes (in contrast to multiple threads within a single 
-process) also exist. In most cases this works by making a limited region of 
-memory shared between processes. The MMAP \ref{magicgarden} and 
-IPC \ref{magicgarden} facilities in UNIX systems provide this capability as do 
-vendor specific tools like LAPI \ref{IBMLAPI} and IMC \ref{Memorychannel}. 
-Extensions exist for the WRAPPER that allow these mechanisms 
-to be used for shared memory communication. However, these mechanisms are not 
-distributed with the default WRAPPER sources, because of their proprietary 
-nature.
+Applications running under multiple threads within a single process
+can use shared memory communication.  In this case {\it all} the
+memory locations in an application are potentially visible to all the
+compute threads. Multiple threads operating within a single process is
+the standard mechanism for supporting shared memory that the WRAPPER
+utilizes. Configuring and launching code to run in multi-threaded mode
+on specific platforms is discussed in section
+\ref{sect:multi-threaded-execution}.  However, on many systems,
+potentially very efficient mechanisms for using shared memory
+communication between multiple processes (in contrast to multiple
+threads within a single process) also exist. In most cases this works
+by making a limited region of memory shared between processes. The
+MMAP \ref{magicgarden} and IPC \ref{magicgarden} facilities in UNIX
+systems provide this capability as do vendor specific tools like LAPI
+\ref{IBMLAPI} and IMC \ref{Memorychannel}.  Extensions exist for the
+WRAPPER that allow these mechanisms to be used for shared memory
+communication. However, these mechanisms are not distributed with the
+default WRAPPER sources, because of their proprietary nature.
 
 \subsection{Distributed memory communication}
 \label{sect:distributed_memory_communication}
 Many parallel systems are not constructed in a way where it is
 possible or practical for an application to use shared memory
 for communication. For example cluster systems consist of individual computers
-connected by a fast network. On such systems their is no notion of shared memory
+connected by a fast network. On such systems there is no notion of shared memory
 at the system level. For this sort of system the WRAPPER provides support
 for communication based on a bespoke communication library 
 (see figure \ref{fig:comm_msg}).  The default communication library used is MPI 
@@ -422,62 +437,64 @@ highly optimized library.
  }
 \end{center}
 \caption{Three performance critical parallel primitives are provided
-by the WRAPPER. These primitives are always used to communicate data
-between tiles. The figure shows four tiles. The curved arrows indicate
-exchange primitives which transfer data between the overlap regions at tile
-edges and interior regions for nearest-neighbor tiles.
-The straight arrows symbolize global sum operations which connect all tiles.
-The global sum operation provides both a key arithmetic primitive and can
-serve as a synchronization primitive. A third barrier primitive is also
-provided, it behaves much like the global sum primitive.
-} \label{fig:communication_primitives}
+  by the WRAPPER. These primitives are always used to communicate data
+  between tiles. The figure shows four tiles. The curved arrows
+  indicate exchange primitives which transfer data between the overlap
+  regions at tile edges and interior regions for nearest-neighbor
+  tiles.  The straight arrows symbolize global sum operations which
+  connect all tiles.  The global sum operation provides both a key
+  arithmetic primitive and can serve as a synchronization primitive. A
+  third barrier primitive is also provided, it behaves much like the
+  global sum primitive.  } \label{fig:communication_primitives}
 \end{figure}
 
 
-Optimized communication support is assumed to be possibly available 
-for a small number of communication operations.
-It is assumed that communication performance optimizations can
-be achieved by optimizing a small number of communication primitives.
-Three optimizable primitives are provided by the WRAPPER 
+Optimized communication support is assumed to be potentially available
+for a small number of communication operations.  It is also assumed
+that communication performance optimizations can be achieved by
+optimizing a small number of communication primitives.  Three
+optimizable primitives are provided by the WRAPPER
 \begin{itemize}
-\item{\bf EXCHANGE} This operation is used to transfer data between interior
-and overlap regions of neighboring tiles. A number of different forms of this
-operation are supported. These different forms handle
-\begin{itemize}
-\item Data type differences. Sixty-four bit and thirty-two bit fields may be handled 
-separately.
-\item Bindings to different communication methods.
-Exchange primitives select between using shared memory or distributed
-memory communication.
-\item Transformation operations required when transporting
-data between different grid regions. Transferring data
-between faces of a cube-sphere grid, for example, involves a rotation
-of vector components.
-\item Forward and reverse mode computations. Derivative calculations require 
-tangent linear and adjoint forms of the exchange primitives.
-
-\end{itemize}
+\item{\bf EXCHANGE} This operation is used to transfer data between
+  interior and overlap regions of neighboring tiles. A number of
+  different forms of this operation are supported. These different
+  forms handle
+  \begin{itemize}
+  \item Data type differences. Sixty-four bit and thirty-two bit
+    fields may be handled separately.
+  \item Bindings to different communication methods.  Exchange
+    primitives select between using shared memory or distributed
+    memory communication.
+  \item Transformation operations required when transporting data
+    between different grid regions. Transferring data between faces of
+    a cube-sphere grid, for example, involves a rotation of vector
+    components.
+  \item Forward and reverse mode computations. Derivative calculations
+    require tangent linear and adjoint forms of the exchange
+    primitives.
+  \end{itemize}
 
 \item{\bf GLOBAL SUM} The global sum operation is a central arithmetic
-operation for the pressure inversion phase of the MITgcm algorithm.
-For certain configurations scaling can be highly sensitive to
-the performance of the global sum primitive. This operation is a collective
-operation involving all tiles of the simulated domain. Different forms
-of the global sum primitive exist for handling
-\begin{itemize}
-\item Data type differences. Sixty-four bit and thirty-two bit fields may be handled
-separately.
-\item Bindings to different communication methods.
-Exchange primitives select between using shared memory or distributed
-memory communication.
-\item Forward and reverse mode computations. Derivative calculations require
-tangent linear and adjoint forms of the exchange primitives.
-\end{itemize}
-
-\item{\bf BARRIER} The WRAPPER provides a global synchronization function
-called barrier. This is used to synchronize computations over all tiles.
-The {\bf BARRIER} and {\bf GLOBAL SUM} primitives have much in common and in
-some cases use the same underlying code.
+  operation for the pressure inversion phase of the MITgcm algorithm.
+  For certain configurations scaling can be highly sensitive to the
+  performance of the global sum primitive. This operation is a
+  collective operation involving all tiles of the simulated domain.
+  Different forms of the global sum primitive exist for handling
+  \begin{itemize}
+  \item Data type differences. Sixty-four bit and thirty-two bit
+    fields may be handled separately.
+  \item Bindings to different communication methods.  Exchange
+    primitives select between using shared memory or distributed
+    memory communication.
+  \item Forward and reverse mode computations. Derivative calculations
+    require tangent linear and adjoint forms of the exchange
+    primitives.
+  \end{itemize}
+  
+\item{\bf BARRIER} The WRAPPER provides a global synchronization
+  function called barrier. This is used to synchronize computations
+  over all tiles.  The {\bf BARRIER} and {\bf GLOBAL SUM} primitives
+  have much in common and in some cases use the same underlying code.
 \end{itemize}
 
 
@@ -517,28 +534,27 @@ Following the discussion above, the machine model that the WRAPPER
 presents to an application has the following characteristics
 
 \begin{itemize}
-\item The machine consists of one or more logical processors. \vspace{-3mm}
-\item Each processor operates on tiles that it owns.\vspace{-3mm}
-\item A processor may own more than one tile.\vspace{-3mm}
-\item Processors may compute concurrently.\vspace{-3mm}
+\item The machine consists of one or more logical processors.
+\item Each processor operates on tiles that it owns.
+\item A processor may own more than one tile.
+\item Processors may compute concurrently.
 \item Exchange of information between tiles is handled by the
-machine (WRAPPER) not by the application.
+  machine (WRAPPER) not by the application.
 \end{itemize}
 Behind the scenes this allows the WRAPPER to adapt the machine model
 functions to exploit hardware on which
 \begin{itemize}
-\item Processors may be able to communicate very efficiently with each other 
-using shared memory. \vspace{-3mm}
+\item Processors may be able to communicate very efficiently with each
+  other using shared memory.
 \item An alternative communication mechanism based on a relatively
-simple inter-process communication API may be required.\vspace{-3mm}
+  simple inter-process communication API may be required.
 \item Shared memory may not necessarily obey sequential consistency,
-however some mechanism will exist for enforcing memory consistency. 
-\vspace{-3mm}
+  however some mechanism will exist for enforcing memory consistency.
 \item Memory consistency that is enforced at the hardware level
-may be expensive. Unnecessary triggering of consistency protocols
-should be avoided. \vspace{-3mm}
+  may be expensive. Unnecessary triggering of consistency protocols
+  should be avoided.
 \item Memory access patterns may need to either repetitive or highly
-pipelined for optimum hardware performance. \vspace{-3mm}
+  pipelined for optimum hardware performance.
 \end{itemize}
 
 This generic model captures the essential hardware ingredients
@@ -550,23 +566,23 @@ last 50 years.
 <!-- CMIREDIR:using_the_wrapper: -->
 \end{rawhtml}
 
-In order to support maximum portability the WRAPPER is implemented primarily 
-in sequential Fortran 77. At a practical level the key steps provided by the 
-WRAPPER are
+In order to support maximum portability the WRAPPER is implemented
+primarily in sequential Fortran 77. At a practical level the key steps
+provided by the WRAPPER are
 \begin{enumerate}
 \item specifying how a domain will be decomposed
 \item starting a code in either sequential or parallel modes of operations
 \item controlling communication between tiles and between concurrently
-computing CPU's.
+  computing CPUs.
 \end{enumerate} 
 This section describes the details of each of these operations.
-Section \ref{sect:specifying_a_decomposition} explains how the way in which
-a domain is decomposed (or composed) is expressed. Section 
-\ref{sect:starting_a_code} describes practical details of running codes
-in various different parallel modes on contemporary computer systems. 
-Section \ref{sect:controlling_communication} explains the internal information
-that the WRAPPER uses to control how information is communicated between
-tiles.
+Section \ref{sect:specifying_a_decomposition} explains how the way in
+which a domain is decomposed (or composed) is expressed. Section
+\ref{sect:starting_a_code} describes practical details of running
+codes in various different parallel modes on contemporary computer
+systems.  Section \ref{sect:controlling_communication} explains the
+internal information that the WRAPPER uses to control how information
+is communicated between tiles.
 
 \subsection{Specifying a domain decomposition}
 \label{sect:specifying_a_decomposition}
@@ -962,39 +978,37 @@ Parameter:  {\em nTy}
 \subsubsection{Multi-process execution}
 \label{sect:multi-process-execution}
 
-Despite its appealing programming model, multi-threaded execution remains
-less common then multi-process execution. One major reason for this
-is that many system libraries are still not ``thread-safe''. This means that for
-example on some systems it is not safe to call system routines to
-do I/O when running in multi-threaded mode, except for in a limited set of 
-circumstances. Another reason is that support for multi-threaded programming
-models varies between systems. 
+Despite its appealing programming model, multi-threaded execution
+remains less common than multi-process execution. One major reason for
+this is that many system libraries are still not ``thread-safe''. This
+means that, for example, on some systems it is not safe to call system
+routines to perform I/O when running in multi-threaded mode (except,
+perhaps, in a limited set of circumstances).  Another reason is that
+support for multi-threaded programming models varies between systems.
 
-Multi-process execution is more ubiquitous.
-In order to run code in a multi-process configuration a decomposition
-specification ( see section \ref{sect:specifying_a_decomposition})
-is given ( in which the at least one of the
-parameters {\em nPx} or {\em nPy} will be greater than one)
-and then, as for multi-threaded operation,
-appropriate compile time and run time steps must be taken.
+Multi-process execution is more ubiquitous.  In order to run code in a
+multi-process configuration a decomposition specification (see section
+\ref{sect:specifying_a_decomposition}) is given (in which the at least
+one of the parameters {\em nPx} or {\em nPy} will be greater than one)
+and then, as for multi-threaded operation, appropriate compile time
+and run time steps must be taken.
 
-\paragraph{Compilation} Multi-process execution under the WRAPPER 
-assumes that the portable, MPI libraries are available
-for controlling the start-up of multiple processes. The MPI libraries
-are not required, although they are usually used, for performance
-critical communication. However, in order to simplify the task
-of controlling and coordinating the start up of a large number
-(hundreds and possibly even thousands) of copies of the same 
-program, MPI is used. The calls to the MPI multi-process startup
-routines must be activated at compile time.  Currently MPI libraries are 
-invoked by
-specifying the appropriate options file with the 
-{\tt-of} flag when running the {\em genmake2} 
-script, which generates the Makefile for compiling and linking MITgcm.
-(Previously this was done by setting the {\em ALLOW\_USE\_MPI} and 
-{\em ALWAYS\_USE\_MPI} flags in the {\em CPP\_EEOPTIONS.h} file.)  More
-detailed information about the use of {\em genmake2} for specifying 
-local compiler flags is located in section \ref{sect:genmake}.\\  
+\paragraph{Compilation} Multi-process execution under the WRAPPER
+assumes that the portable, MPI libraries are available for controlling
+the start-up of multiple processes. The MPI libraries are not
+required, although they are usually used, for performance critical
+communication. However, in order to simplify the task of controlling
+and coordinating the start up of a large number (hundreds and possibly
+even thousands) of copies of the same program, MPI is used. The calls
+to the MPI multi-process startup routines must be activated at compile
+time.  Currently MPI libraries are invoked by specifying the
+appropriate options file with the {\tt-of} flag when running the {\em
+  genmake2} script, which generates the Makefile for compiling and
+linking MITgcm.  (Previously this was done by setting the {\em
+  ALLOW\_USE\_MPI} and {\em ALWAYS\_USE\_MPI} flags in the {\em
+  CPP\_EEOPTIONS.h} file.)  More detailed information about the use of
+{\em genmake2} for specifying
+local compiler flags is located in section \ref{sect:genmake}.\\
 
 
 \fbox{ 
@@ -1003,23 +1017,23 @@ Directory: {\em tools/build\_options}\\
 File: {\em tools/genmake2}
 \end{minipage}
 } \\
-\paragraph{\bf Execution} The mechanics of starting a program in 
-multi-process mode under MPI is not standardized. Documentation 
+\paragraph{\bf Execution} The mechanics of starting a program in
+multi-process mode under MPI is not standardized. Documentation
 associated with the distribution of MPI installed on a system will
-describe how to start a program using that distribution.
-For the free, open-source MPICH system the MITgcm program is started
-using a command such as
+describe how to start a program using that distribution.  For the
+open-source MPICH system, the MITgcm program can be started using a
+command such as
 \begin{verbatim}
 mpirun -np 64 -machinefile mf ./mitgcmuv
 \end{verbatim}
-In this example the text {\em -np 64} specifies the number of processes 
-that will be created. The numeric value {\em 64} must be equal to the
-product of the processor grid settings of {\em nPx} and {\em nPy}
-in the file {\em SIZE.h}. The parameter {\em mf} specifies that a text file
-called ``mf'' will be read to get a list of processor names on
-which the sixty-four processes will execute. The syntax of this file
-is specified by the MPI distribution.
-\\ 
+In this example the text {\em -np 64} specifies the number of
+processes that will be created. The numeric value {\em 64} must be
+equal to the product of the processor grid settings of {\em nPx} and
+{\em nPy} in the file {\em SIZE.h}. The parameter {\em mf} specifies
+that a text file called ``mf'' will be read to get a list of processor
+names on which the sixty-four processes will execute. The syntax of
+this file is specified by the MPI distribution.
+\\
 
 \fbox{ 
 \begin{minipage}{4.75in}
@@ -1031,58 +1045,53 @@ Parameter: {\em nPy}
 
 
 \paragraph{Environment variables}
-On most systems multi-threaded execution also requires the setting
-of a special environment variable. On many machines this variable
-is called PARALLEL and its values should be set to the number
-of parallel threads required. Generally the help pages associated
-with the multi-threaded compiler on a machine will explain
-how to set the required environment variables for that machines.
+On most systems multi-threaded execution also requires the setting of
+a special environment variable. On many machines this variable is
+called PARALLEL and its values should be set to the number of parallel
+threads required. Generally the help or manual pages associated with
+the multi-threaded compiler on a machine will explain how to set the
+required environment variables.
 
 \paragraph{Runtime input parameters}
-Finally the file {\em eedata} needs to be configured to indicate
-the number of threads to be used in the x and y directions.
-The variables {\em nTx} and {\em nTy} in this file are used to
-specify the information required. The product of {\em nTx} and
-{\em nTy} must be equal to the number of threads spawned i.e.
-the setting of the environment variable PARALLEL.
-The value of {\em nTx} must subdivide the number of sub-domains
-in x ({\em nSx}) exactly. The value of {\em nTy} must subdivide the 
-number of sub-domains in y ({\em nSy}) exactly. 
-The multiprocess startup of the MITgcm executable {\em mitgcmuv}
-is controlled by the routines {\em EEBOOT\_MINIMAL()} and
-{\em INI\_PROCS()}. The first routine performs basic steps required
-to make sure each process is started and has a textual output
-stream associated with it. By default two output files are opened
-for each process with names {\bf STDOUT.NNNN} and {\bf STDERR.NNNN}.
-The {\bf NNNNN} part of the name is filled in with the process
-number so that process number 0 will create output files
-{\bf STDOUT.0000} and {\bf STDERR.0000}, process number 1 will create
-output files {\bf STDOUT.0001} and {\bf STDERR.0001} etc... These files
-are used for reporting status and configuration information and
-for reporting error conditions on a process by process basis.
-The {\em EEBOOT\_MINIMAL()} procedure also sets the variables 
-{\em myProcId} and {\em MPI\_COMM\_MODEL}.
-These variables are related
-to processor identification are are used later in the routine
-{\em INI\_PROCS()} to allocate tiles to processes.
+Finally the file {\em eedata} needs to be configured to indicate the
+number of threads to be used in the x and y directions.  The variables
+{\em nTx} and {\em nTy} in this file are used to specify the
+information required. The product of {\em nTx} and {\em nTy} must be
+equal to the number of threads spawned i.e.  the setting of the
+environment variable PARALLEL.  The value of {\em nTx} must subdivide
+the number of sub-domains in x ({\em nSx}) exactly. The value of {\em
+  nTy} must subdivide the number of sub-domains in y ({\em nSy})
+exactly.  The multiprocess startup of the MITgcm executable {\em
+  mitgcmuv} is controlled by the routines {\em EEBOOT\_MINIMAL()} and
+{\em INI\_PROCS()}. The first routine performs basic steps required to
+make sure each process is started and has a textual output stream
+associated with it. By default two output files are opened for each
+process with names {\bf STDOUT.NNNN} and {\bf STDERR.NNNN}.  The {\bf
+  NNNNN} part of the name is filled in with the process number so that
+process number 0 will create output files {\bf STDOUT.0000} and {\bf
+  STDERR.0000}, process number 1 will create output files {\bf
+  STDOUT.0001} and {\bf STDERR.0001}, etc. These files are used for
+reporting status and configuration information and for reporting error
+conditions on a process by process basis.  The {\em EEBOOT\_MINIMAL()}
+procedure also sets the variables {\em myProcId} and {\em
+  MPI\_COMM\_MODEL}.  These variables are related to processor
+identification are are used later in the routine {\em INI\_PROCS()} to
+allocate tiles to processes.
 
-Allocation of processes to tiles in controlled by the routine
-{\em INI\_PROCS()}. For each process this routine sets
-the variables {\em myXGlobalLo} and {\em myYGlobalLo}.
-These variables specify in index space the coordinates
-of the southernmost and westernmost corner of the 
-southernmost and westernmost tile owned by this process.
-The variables {\em pidW}, {\em pidE}, {\em pidS} and {\em pidN}
-are also set in this routine. These are used to identify
-processes holding tiles to the west, east, south and north 
-of this process. These values are stored in global storage
-in the header file {\em EESUPPORT.h} for use by
-communication routines.  The above does not hold when the 
-exch2 package is used -- exch2 sets its own parameters to 
-specify the global indices of tiles and their relationships
-to each other.  See the documentation on the exch2 package
-(\ref{sec:exch2})  for
-details.
+Allocation of processes to tiles is controlled by the routine {\em
+  INI\_PROCS()}. For each process this routine sets the variables {\em
+  myXGlobalLo} and {\em myYGlobalLo}.  These variables specify, in
+index space, the coordinates of the southernmost and westernmost
+corner of the southernmost and westernmost tile owned by this process.
+The variables {\em pidW}, {\em pidE}, {\em pidS} and {\em pidN} are
+also set in this routine. These are used to identify processes holding
+tiles to the west, east, south and north of a given process. These
+values are stored in global storage in the header file {\em
+  EESUPPORT.h} for use by communication routines.  The above does not
+hold when the exch2 package is used.  The exch2 sets its own
+parameters to specify the global indices of tiles and their
+relationships to each other.  See the documentation on the exch2
+package (\ref{sec:exch2}) for details.
 \\
 
 \fbox{ 
@@ -1108,42 +1117,39 @@ operations and that can be customized for different platforms. This section
 describes the information that is held and used.
 
 \begin{enumerate}
-\item {\bf Tile-tile connectivity information} 
-For each tile the WRAPPER
-sets a flag that sets the tile number to the north, 
-south, east and
-west of that tile. This number is unique over all tiles in a 
-configuration. Except when using the cubed sphere and the exch2 package,
-the number is held in the variables {\em tileNo}
-( this holds the tiles own number), {\em tileNoN}, {\em tileNoS},
-{\em tileNoE} and {\em tileNoW}. A parameter is also stored with each tile
-that specifies the type of communication that is used between tiles.
-This information is held in the variables {\em tileCommModeN},
-{\em tileCommModeS}, {\em tileCommModeE} and {\em tileCommModeW}.
-This latter set of variables can take one of the following values
-{\em COMM\_NONE}, {\em COMM\_MSG}, {\em COMM\_PUT} and {\em COMM\_GET}.
-A value of {\em COMM\_NONE} is used to indicate that a tile has no
-neighbor to communicate with on a particular face. A value
-of {\em COMM\_MSG} is used to indicated that some form of distributed
-memory communication is required to communicate between
-these tile faces ( see section \ref{sect:distributed_memory_communication}).
-A value of {\em COMM\_PUT} or {\em COMM\_GET} is used to indicate 
-forms of shared memory communication ( see section 
-\ref{sect:shared_memory_communication}). The {\em COMM\_PUT} value indicates 
-that a CPU should communicate by writing to data structures owned by another 
-CPU. A {\em COMM\_GET} value indicates that a CPU should communicate by reading
-from data structures owned by another CPU. These flags affect the behavior
-of the WRAPPER exchange primitive 
-(see figure \ref{fig:communication_primitives}). The routine 
-{\em ini\_communication\_patterns()} is responsible for setting the
-communication mode values for each tile.
+\item {\bf Tile-tile connectivity information}
+  For each tile the WRAPPER sets a flag that sets the tile number to
+  the north, south, east and west of that tile. This number is unique
+  over all tiles in a configuration. Except when using the cubed
+  sphere and the exch2 package, the number is held in the variables
+  {\em tileNo} ( this holds the tiles own number), {\em tileNoN}, {\em
+    tileNoS}, {\em tileNoE} and {\em tileNoW}. A parameter is also
+  stored with each tile that specifies the type of communication that
+  is used between tiles.  This information is held in the variables
+  {\em tileCommModeN}, {\em tileCommModeS}, {\em tileCommModeE} and
+  {\em tileCommModeW}.  This latter set of variables can take one of
+  the following values {\em COMM\_NONE}, {\em COMM\_MSG}, {\em
+    COMM\_PUT} and {\em COMM\_GET}.  A value of {\em COMM\_NONE} is
+  used to indicate that a tile has no neighbor to communicate with on
+  a particular face. A value of {\em COMM\_MSG} is used to indicate
+  that some form of distributed memory communication is required to
+  communicate between these tile faces (see section
+  \ref{sect:distributed_memory_communication}).  A value of {\em
+    COMM\_PUT} or {\em COMM\_GET} is used to indicate forms of shared
+  memory communication (see section
+  \ref{sect:shared_memory_communication}). The {\em COMM\_PUT} value
+  indicates that a CPU should communicate by writing to data
+  structures owned by another CPU. A {\em COMM\_GET} value indicates
+  that a CPU should communicate by reading from data structures owned
+  by another CPU. These flags affect the behavior of the WRAPPER
+  exchange primitive (see figure \ref{fig:communication_primitives}).
+  The routine {\em ini\_communication\_patterns()} is responsible for
+  setting the communication mode values for each tile.
 
-When using the cubed sphere configuration with the exch2 package, the 
-relationships between tiles and their communication methods are set 
-by the package in other variables.  See the exch2 package documentation 
-(\ref{sec:exch2} for details.
-
-
+  When using the cubed sphere configuration with the exch2 package,
+  the relationships between tiles and their communication methods are
+  set by the exch2 package and stored in different variables.  See the
+  exch2 package documentation (\ref{sec:exch2} for details.
 
 \fbox{ 
 \begin{minipage}{4.75in}
@@ -1162,33 +1168,34 @@ Parameter: {\em tileCommModeS} \\
 } \\
 
 \item {\bf MP directives}
-The WRAPPER transfers control to numerical application code through
-the routine {\em THE\_MODEL\_MAIN}. This routine is called in a way
-that allows for it to be invoked by several threads. Support for this
-is based on using multi-processing (MP) compiler directives.
-Most commercially available Fortran compilers support the generation
-of code to spawn multiple threads through some form of compiler directives.
-As this is generally much more convenient than writing code to interface
-to operating system libraries to explicitly spawn threads, and on some systems
-this may be the only method available the WRAPPER is distributed with
-template MP directives for a number of systems.
+  The WRAPPER transfers control to numerical application code through
+  the routine {\em THE\_MODEL\_MAIN}. This routine is called in a way
+  that allows for it to be invoked by several threads. Support for
+  this is based on either multi-processing (MP) compiler directives or
+  specific calls to multi-threading libraries (\textit{eg.} POSIX
+  threads).  Most commercially available Fortran compilers support the
+  generation of code to spawn multiple threads through some form of
+  compiler directives.  Compiler directives are generally more
+  convenient than writing code to explicitly spawning threads.  And,
+  on some systems, compiler directives may be the only method
+  available.  The WRAPPER is distributed with template MP directives
+  for a number of systems.
 
- These directives are inserted into the code just before and after the 
-transfer of control to numerical algorithm code through the routine
-{\em THE\_MODEL\_MAIN}. Figure \ref{fig:mp_directives} shows an example of 
-the code that performs this process for a Silicon Graphics system.
-This code is extracted from the files {\em main.F} and
-{\em MAIN\_PDIRECTIVES1.h}. The variable {\em nThreads} specifies
-how many instances of the routine {\em THE\_MODEL\_MAIN} will
-be created. The value of {\em nThreads} is set in the routine
-{\em INI\_THREADING\_ENVIRONMENT}. The value is set equal to the
-the product of the parameters {\em nTx} and {\em nTy} that
-are read from the file {\em eedata}. If the value of {\em nThreads}
-is inconsistent with the number of threads requested from the
-operating system (for example by using an environment
-variable as described in section \ref{sect:multi_threaded_execution})
-then usually an error will be reported by the routine 
-{\em CHECK\_THREADS}.\\
+  These directives are inserted into the code just before and after
+  the transfer of control to numerical algorithm code through the
+  routine {\em THE\_MODEL\_MAIN}. Figure \ref{fig:mp_directives} shows
+  an example of the code that performs this process for a Silicon
+  Graphics system.  This code is extracted from the files {\em main.F}
+  and {\em MAIN\_PDIRECTIVES1.h}. The variable {\em nThreads}
+  specifies how many instances of the routine {\em THE\_MODEL\_MAIN}
+  will be created. The value of {\em nThreads} is set in the routine
+  {\em INI\_THREADING\_ENVIRONMENT}. The value is set equal to the the
+  product of the parameters {\em nTx} and {\em nTy} that are read from
+  the file {\em eedata}. If the value of {\em nThreads} is
+  inconsistent with the number of threads requested from the operating
+  system (for example by using an environment variable as described in
+  section \ref{sect:multi_threaded_execution}) then usually an error
+  will be reported by the routine {\em CHECK\_THREADS}.
 
 \fbox{ 
 \begin{minipage}{4.75in}
@@ -1204,19 +1211,19 @@ Parameter: {\em nTy} \\
 }
 
 \item {\bf memsync flags}
-As discussed in section \ref{sect:memory_consistency}, when using shared memory,
-a low-level system function may be need to force memory consistency.
-The routine {\em MEMSYNC()} is used for this purpose. This routine should
-not need modifying and the information below is only provided for
-completeness. A logical parameter {\em exchNeedsMemSync} set
-in the routine {\em INI\_COMMUNICATION\_PATTERNS()} controls whether
-the {\em MEMSYNC()} primitive is called. In general this
-routine is only used for multi-threaded execution.
-The code that goes into the {\em MEMSYNC()}
- routine is specific to the compiler and
-processor being used for multi-threaded execution and in general
-must be written using a short code snippet of assembly language.
-For an Ultra Sparc system the following code snippet is used
+  As discussed in section \ref{sect:memory_consistency}, a low-level
+  system function may be need to force memory consistency on some
+  shared memory systems.  The routine {\em MEMSYNC()} is used for this
+  purpose. This routine should not need modifying and the information
+  below is only provided for completeness. A logical parameter {\em
+    exchNeedsMemSync} set in the routine {\em
+    INI\_COMMUNICATION\_PATTERNS()} controls whether the {\em
+    MEMSYNC()} primitive is called. In general this routine is only
+  used for multi-threaded execution.  The code that goes into the {\em
+    MEMSYNC()} routine is specific to the compiler and processor used.
+  In some cases, it must be written using a short code snippet of
+  assembly language.  For an Ultra Sparc system the following code
+  snippet is used
 \begin{verbatim}
 asm("membar #LoadStore|#StoreStore");
 \end{verbatim}
@@ -1230,115 +1237,114 @@ asm("lock; addl $0,0(%%esp)": : :"memory")
 \end{verbatim}
 
 \item {\bf Cache line size}
-As discussed in section \ref{sect:cache_effects_and_false_sharing},
-milti-threaded codes explicitly avoid penalties associated with excessive 
-coherence traffic on an SMP system. To do this the shared memory data structures
-used by the {\em GLOBAL\_SUM}, {\em GLOBAL\_MAX} and {\em BARRIER} routines
-are padded. The variables that control the padding are set in the
-header file {\em EEPARAMS.h}. These variables are called
-{\em cacheLineSize}, {\em lShare1}, {\em lShare4} and
-{\em lShare8}. The default values should not normally need changing.
+  As discussed in section \ref{sect:cache_effects_and_false_sharing},
+  milti-threaded codes explicitly avoid penalties associated with
+  excessive coherence traffic on an SMP system. To do this the shared
+  memory data structures used by the {\em GLOBAL\_SUM}, {\em
+    GLOBAL\_MAX} and {\em BARRIER} routines are padded. The variables
+  that control the padding are set in the header file {\em
+    EEPARAMS.h}. These variables are called {\em cacheLineSize}, {\em
+    lShare1}, {\em lShare4} and {\em lShare8}. The default values
+  should not normally need changing.
+
 \item {\bf \_BARRIER}
-This is a CPP macro that is expanded to a call to a routine
-which synchronizes all the logical processors running under the
-WRAPPER. Using a macro here preserves flexibility to insert
-a specialized call in-line into application code. By default this
-resolves to calling the procedure {\em BARRIER()}. The default
-setting for the \_BARRIER macro is given in the file {\em CPP\_EEMACROS.h}.
+  This is a CPP macro that is expanded to a call to a routine which
+  synchronizes all the logical processors running under the WRAPPER.
+  Using a macro here preserves flexibility to insert a specialized
+  call in-line into application code. By default this resolves to
+  calling the procedure {\em BARRIER()}. The default setting for the
+  \_BARRIER macro is given in the file {\em CPP\_EEMACROS.h}.
 
 \item {\bf \_GSUM}
-This is a CPP macro that is expanded to a call to a routine
-which sums up a floating point number
-over all the logical processors running under the
-WRAPPER. Using a macro here provides extra flexibility to insert
-a specialized call in-line into application code. By default this
-resolves to calling the procedure {\em GLOBAL\_SUM\_R8()} ( for
-64-bit floating point operands)
-or {\em GLOBAL\_SUM\_R4()} (for 32-bit floating point operands). The default
-setting for the \_GSUM macro is given in the file {\em CPP\_EEMACROS.h}.
-The \_GSUM macro is a performance critical operation, especially for
-large processor count, small tile size configurations.
-The custom communication example discussed in section \ref{sect:jam_example}
-shows how the macro is used to invoke a custom global sum routine
-for a specific set of hardware.
+  This is a CPP macro that is expanded to a call to a routine which
+  sums up a floating point number over all the logical processors
+  running under the WRAPPER. Using a macro here provides extra
+  flexibility to insert a specialized call in-line into application
+  code. By default this resolves to calling the procedure {\em
+    GLOBAL\_SUM\_R8()} ( for 64-bit floating point operands) or {\em
+    GLOBAL\_SUM\_R4()} (for 32-bit floating point operands). The
+  default setting for the \_GSUM macro is given in the file {\em
+    CPP\_EEMACROS.h}.  The \_GSUM macro is a performance critical
+  operation, especially for large processor count, small tile size
+  configurations.  The custom communication example discussed in
+  section \ref{sect:jam_example} shows how the macro is used to invoke
+  a custom global sum routine for a specific set of hardware.
 
 \item {\bf \_EXCH}
-The \_EXCH CPP macro is used to update tile overlap regions.
-It is qualified by a suffix indicating whether overlap updates are for
-two-dimensional ( \_EXCH\_XY ) or three dimensional ( \_EXCH\_XYZ )
-physical fields and whether fields are 32-bit floating point
-( \_EXCH\_XY\_R4, \_EXCH\_XYZ\_R4 ) or 64-bit floating point
-( \_EXCH\_XY\_R8, \_EXCH\_XYZ\_R8 ). The macro mappings are defined
-in the header file {\em CPP\_EEMACROS.h}. As with \_GSUM, the 
-\_EXCH operation plays a crucial role in scaling to small tile,
-large logical and physical processor count configurations.
-The example in section \ref{sect:jam_example} discusses defining an
-optimized and specialized form on the \_EXCH operation.
+  The \_EXCH CPP macro is used to update tile overlap regions.  It is
+  qualified by a suffix indicating whether overlap updates are for
+  two-dimensional ( \_EXCH\_XY ) or three dimensional ( \_EXCH\_XYZ )
+  physical fields and whether fields are 32-bit floating point (
+  \_EXCH\_XY\_R4, \_EXCH\_XYZ\_R4 ) or 64-bit floating point (
+  \_EXCH\_XY\_R8, \_EXCH\_XYZ\_R8 ). The macro mappings are defined in
+  the header file {\em CPP\_EEMACROS.h}. As with \_GSUM, the \_EXCH
+  operation plays a crucial role in scaling to small tile, large
+  logical and physical processor count configurations.  The example in
+  section \ref{sect:jam_example} discusses defining an optimized and
+  specialized form on the \_EXCH operation.
 
-The \_EXCH operation is also central to supporting grids such as
-the cube-sphere grid. In this class of grid a rotation may be required
-between tiles. Aligning the coordinate requiring rotation with the
-tile decomposition, allows the coordinate transformation to 
-be embedded within a custom form of the \_EXCH primitive.  In these
-cases \_EXCH is mapped to exch2 routines, as detailed in the exch2
-package documentation  \ref{sec:exch2}.
+  The \_EXCH operation is also central to supporting grids such as the
+  cube-sphere grid. In this class of grid a rotation may be required
+  between tiles. Aligning the coordinate requiring rotation with the
+  tile decomposition, allows the coordinate transformation to be
+  embedded within a custom form of the \_EXCH primitive.  In these
+  cases \_EXCH is mapped to exch2 routines, as detailed in the exch2
+  package documentation \ref{sec:exch2}.
 
 \item {\bf Reverse Mode}
-The communication primitives \_EXCH and \_GSUM both employ 
-hand-written adjoint forms (or reverse mode) forms. 
-These reverse mode forms can be found in the
-source code directory {\em pkg/autodiff}.
-For the global sum primitive the reverse mode form
-calls are to {\em GLOBAL\_ADSUM\_R4} and
-{\em GLOBAL\_ADSUM\_R8}. The reverse mode form of the
-exchange primitives are found in routines
-prefixed {\em ADEXCH}. The exchange routines make calls to
-the same low-level communication primitives as the forward mode
-operations. However, the routine argument {\em simulationMode}
-is set to the value {\em REVERSE\_SIMULATION}. This signifies 
-ti the low-level routines that the adjoint forms of the
-appropriate communication operation should be performed.
+  The communication primitives \_EXCH and \_GSUM both employ
+  hand-written adjoint forms (or reverse mode) forms.  These reverse
+  mode forms can be found in the source code directory {\em
+    pkg/autodiff}.  For the global sum primitive the reverse mode form
+  calls are to {\em GLOBAL\_ADSUM\_R4} and {\em GLOBAL\_ADSUM\_R8}.
+  The reverse mode form of the exchange primitives are found in
+  routines prefixed {\em ADEXCH}. The exchange routines make calls to
+  the same low-level communication primitives as the forward mode
+  operations. However, the routine argument {\em simulationMode} is
+  set to the value {\em REVERSE\_SIMULATION}. This signifies to the
+  low-level routines that the adjoint forms of the appropriate
+  communication operation should be performed.
 
 \item {\bf MAX\_NO\_THREADS}
-The variable {\em MAX\_NO\_THREADS} is used to indicate the
-maximum number of OS threads that a code will use. This
-value defaults to thirty-two and is set in the file {\em EEPARAMS.h}.
-For single threaded execution it can be reduced to one if required.
-The value; is largely private to the WRAPPER and application code
-will nor normally reference the value, except in the following scenario.
+  The variable {\em MAX\_NO\_THREADS} is used to indicate the maximum
+  number of OS threads that a code will use. This value defaults to
+  thirty-two and is set in the file {\em EEPARAMS.h}.  For single
+  threaded execution it can be reduced to one if required.  The value
+  is largely private to the WRAPPER and application code will not
+  normally reference the value, except in the following scenario.
 
-For certain physical parametrization schemes it is necessary to have 
-a substantial number of work arrays. Where these arrays are allocated
-in heap storage ( for example COMMON blocks ) multi-threaded
-execution will require multiple instances of the COMMON block data.
-This can be achieved using a Fortran 90 module construct, however,
-if this might be unavailable then the work arrays can be extended
-with dimensions use the tile dimensioning scheme of {\em nSx}
-and {\em nSy} ( as described in section 
-\ref{sect:specifying_a_decomposition}). However, if the configuration
-being specified involves many more tiles than OS threads then
-it can save memory resources to reduce the variable
-{\em MAX\_NO\_THREADS} to be equal to the actual number of threads that
-will be used and to declare the physical parameterization
-work arrays with a single {\em MAX\_NO\_THREADS} extra dimension.
-An example of this is given in the verification experiment
-{\em aim.5l\_cs}. Here the default setting of 
-{\em MAX\_NO\_THREADS} is altered to
+  For certain physical parametrization schemes it is necessary to have
+  a substantial number of work arrays. Where these arrays are
+  allocated in heap storage (for example COMMON blocks) multi-threaded
+  execution will require multiple instances of the COMMON block data.
+  This can be achieved using a Fortran 90 module construct.  However,
+  if this mechanism is unavailable then the work arrays can be extended
+  with dimensions using the tile dimensioning scheme of {\em nSx} and
+  {\em nSy} (as described in section
+  \ref{sect:specifying_a_decomposition}). However, if the
+  configuration being specified involves many more tiles than OS
+  threads then it can save memory resources to reduce the variable
+  {\em MAX\_NO\_THREADS} to be equal to the actual number of threads
+  that will be used and to declare the physical parameterization work
+  arrays with a single {\em MAX\_NO\_THREADS} extra dimension.  An
+  example of this is given in the verification experiment {\em
+    aim.5l\_cs}. Here the default setting of {\em MAX\_NO\_THREADS} is
+  altered to
 \begin{verbatim}
       INTEGER MAX_NO_THREADS
       PARAMETER ( MAX_NO_THREADS =    6 )
 \end{verbatim}
-and several work arrays for storing intermediate calculations are
-created with declarations of the form.
+  and several work arrays for storing intermediate calculations are
+  created with declarations of the form.
 \begin{verbatim}
       common /FORCIN/ sst1(ngp,MAX_NO_THREADS)
 \end{verbatim}
-This declaration scheme is not used widely, because most global data
-is used for permanent not temporary storage of state information.
-In the case of permanent state information this approach cannot be used
-because there has to be enough storage allocated for all tiles.
-However, the technique can sometimes be a useful scheme for reducing memory 
-requirements in complex physical parameterizations.
+  This declaration scheme is not used widely, because most global data
+  is used for permanent not temporary storage of state information.
+  In the case of permanent state information this approach cannot be
+  used because there has to be enough storage allocated for all tiles.
+  However, the technique can sometimes be a useful scheme for reducing
+  memory requirements in complex physical parameterizations.
 \end{enumerate}
 
 \begin{figure}
@@ -1359,10 +1365,9 @@ C--     Invoke nThreads instances of the numerical model
 
       ENDDO
 \end{verbatim}
-\caption{Prior to transferring control to
-the procedure {\em THE\_MODEL\_MAIN()} the WRAPPER may use
-MP directives to spawn multiple threads.
-} \label{fig:mp_directives}
+  \caption{Prior to transferring control to the procedure {\em
+      THE\_MODEL\_MAIN()} the WRAPPER may use MP directives to spawn
+    multiple threads.  } \label{fig:mp_directives}
 \end{figure}
 
 
@@ -1375,53 +1380,53 @@ how it can be used to adapt to new griding approaches.
 
 \subsubsection{JAM example}
 \label{sect:jam_example}
-On some platforms a big performance boost can be obtained by
-binding the communication routines {\em \_EXCH} and
-{\em \_GSUM} to specialized native libraries ) fro example the
-shmem library on CRAY T3E systems). The {\em LETS\_MAKE\_JAM} CPP flag 
-is used as an illustration of a specialized communication configuration 
-that substitutes for standard, portable forms of {\em \_EXCH} and 
-{\em \_GSUM}. It affects three source files {\em eeboot.F}, 
-{\em CPP\_EEMACROS.h} and {\em cg2d.F}. When the flag is defined
-is has the following effects.
+On some platforms a big performance boost can be obtained by binding
+the communication routines {\em \_EXCH} and {\em \_GSUM} to
+specialized native libraries (for example, the shmem library on CRAY
+T3E systems). The {\em LETS\_MAKE\_JAM} CPP flag is used as an
+illustration of a specialized communication configuration that
+substitutes for standard, portable forms of {\em \_EXCH} and {\em
+  \_GSUM}. It affects three source files {\em eeboot.F}, {\em
+  CPP\_EEMACROS.h} and {\em cg2d.F}. When the flag is defined is has
+the following effects.
 \begin{itemize}
-\item An extra phase is included at boot time to initialize the custom 
-communications library ( see {\em ini\_jam.F}).
+\item An extra phase is included at boot time to initialize the custom
+  communications library ( see {\em ini\_jam.F}).
 \item The {\em \_GSUM} and {\em \_EXCH} macro definitions are replaced
-with calls to custom routines ( see {\em gsum\_jam.F} and {\em exch\_jam.F})
+  with calls to custom routines (see {\em gsum\_jam.F} and {\em
+    exch\_jam.F})
 \item a highly specialized form of the exchange operator (optimized
-for overlap regions of width one) is substituted into the elliptic
-solver routine {\em cg2d.F}.
+  for overlap regions of width one) is substituted into the elliptic
+  solver routine {\em cg2d.F}.
 \end{itemize}
 Developing specialized code for other libraries follows a similar
 pattern.
 
 \subsubsection{Cube sphere communication}
 \label{sect:cube_sphere_communication}
-Actual {\em \_EXCH} routine code is generated automatically from 
-a series of template files, for example {\em exch\_rx.template}.
-This is done to allow a large number of variations on the exchange 
-process to be maintained. One set of variations supports the
-cube sphere grid. Support for a cube sphere grid in MITgcm is based
-on having each face of the cube as a separate tile or tiles.
-The exchange routines are then able to absorb much of the
-detailed rotation and reorientation required when moving around the
-cube grid. The set of {\em \_EXCH} routines that contain the
-word cube in their name perform these transformations.
-They are invoked when the run-time logical parameter
+Actual {\em \_EXCH} routine code is generated automatically from a
+series of template files, for example {\em exch\_rx.template}.  This
+is done to allow a large number of variations on the exchange process
+to be maintained. One set of variations supports the cube sphere grid.
+Support for a cube sphere grid in MITgcm is based on having each face
+of the cube as a separate tile or tiles.  The exchange routines are
+then able to absorb much of the detailed rotation and reorientation
+required when moving around the cube grid. The set of {\em \_EXCH}
+routines that contain the word cube in their name perform these
+transformations.  They are invoked when the run-time logical parameter
 {\em useCubedSphereExchange} is set true. To facilitate the
-transformations on a staggered C-grid, exchange operations are defined 
-separately for both vector and scalar quantities and for
-grid-centered and for grid-face and corner quantities.
-Three sets of exchange routines are defined. Routines
-with names of the form {\em exch\_rx} are used to exchange
-cell centered scalar quantities. Routines with names of the form
-{\em exch\_uv\_rx} are used to exchange vector quantities located at
-the C-grid velocity points. The vector quantities exchanged by the 
-{\em exch\_uv\_rx} routines can either be signed (for example velocity 
-components) or un-signed (for example grid-cell separations).
-Routines with names of the form {\em exch\_z\_rx} are used to exchange 
-quantities at the C-grid vorticity point locations.
+transformations on a staggered C-grid, exchange operations are defined
+separately for both vector and scalar quantities and for grid-centered
+and for grid-face and grid-corner quantities.  Three sets of exchange
+routines are defined. Routines with names of the form {\em exch\_rx}
+are used to exchange cell centered scalar quantities. Routines with
+names of the form {\em exch\_uv\_rx} are used to exchange vector
+quantities located at the C-grid velocity points. The vector
+quantities exchanged by the {\em exch\_uv\_rx} routines can either be
+signed (for example velocity components) or un-signed (for example
+grid-cell separations).  Routines with names of the form {\em
+  exch\_z\_rx} are used to exchange quantities at the C-grid vorticity
+point locations.
 
 
 
