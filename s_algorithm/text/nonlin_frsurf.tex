@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/nonlin_frsurf.tex,v 1.11 2005/08/09 18:21:53 jmc Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/nonlin_frsurf.tex,v 1.12 2006/04/04 20:19:00 jmc Exp $
 % $Name:  $
 
 
@@ -308,9 +308,10 @@ $h^n$ and $dh^n$ are the column and grid box thickness in r-coordinate.
 \vec{\bf v}^{*} & = & \vec{\bf v}^{n-1/2} + \Delta t \frac{dh^{n-1}}{dh^{n}} \left(
 \vec{\bf G}_{\vec{\bf v}}^{(n)} + F_{\vec{\bf v}}^{n}/dh^{n-1} \right)
 - \Delta t \nabla \phi_{hyd}^{n}
-\label{eq:vstar-nlfs} \\
-  \mathrm{update}\hspace{-4mm} & & \hspace{-4mm}\mathrm{
-  model~geometry~:~{\bf hFac}}(dh^n)\nonumber \\
+\label{eq:vstar-nlfs}
+\end{eqnarray}
+\hspace{3cm}$\longrightarrow$~~{\it update model~geometry~:~}${\bf hFac}(dh^n)$\\
+\begin{eqnarray}
 \eta^{n+1/2} \hspace{-2mm} & = & 
 \eta^{n-1/2} + \Delta t P^{n+1/2} - \Delta t
   \nabla \cdot \int \vec{\bf v}^{n+1/2} dh^{n} \nonumber \\
