@@ -377,6 +377,27 @@ clipping and for comparison b) using horizontal constant diffusion.}
 \end{figure}
 
 \subsubsection{Package Reference}
+\label{sec:pkg:gmredi:diagnostics}
+
+\begin{verbatim}
+------------------------------------------------------------------------
+<-Name->|Levs|<-parsing code->|<--  Units   -->|<- Tile (max=80c) 
+------------------------------------------------------------------------
+GM_VisbK|  1 |SM P    M1      |m^2/s           |Mixing coefficient from Visbeck etal parameterization
+GM_Kux  | 15 |UU P 177MR      |m^2/s           |K_11 element (U.point, X.dir) of GM-Redi tensor
+GM_Kvy  | 15 |VV P 176MR      |m^2/s           |K_22 element (V.point, Y.dir) of GM-Redi tensor
+GM_Kuz  | 15 |UU   179MR      |m^2/s           |K_13 element (U.point, Z.dir) of GM-Redi tensor
+GM_Kvz  | 15 |VV   178MR      |m^2/s           |K_23 element (V.point, Z.dir) of GM-Redi tensor
+GM_Kwx  | 15 |UM   181LR      |m^2/s           |K_31 element (W.point, X.dir) of GM-Redi tensor
+GM_Kwy  | 15 |VM   180LR      |m^2/s           |K_32 element (W.point, Y.dir) of GM-Redi tensor
+GM_Kwz  | 15 |WM P    LR      |m^2/s           |K_33 element (W.point, Z.dir) of GM-Redi tensor
+GM_PsiX | 15 |UU   184LR      |m^2/s           |GM Bolus transport stream-function : X component
+GM_PsiY | 15 |VV   183LR      |m^2/s           |GM Bolus transport stream-function : Y component
+GM_KuzTz| 15 |UU   186MR      |degC.m^3/s      |Redi Off-diagonal Tempetature flux: X component
+GM_KvzTz| 15 |VV   185MR      |degC.m^3/s      |Redi Off-diagonal Tempetature flux: Y component
+\end{verbatim}
+
+\subsubsection{Package Reference}
 % DO NOT EDIT HERE
 
 

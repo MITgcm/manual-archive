@@ -122,6 +122,23 @@ This is done in {\it gchem\_diags.F}. For instance the time average CO2
 air-sea fluxes, and sea surface pH (among others) are written
 out by {\it dic\_biotic\_diags.F} which is called from {\it gchem\_diags.F}.
 
+\subsubsection{GCHEM Diagnostics
+\label{sec:pkg:gchem:diagnostics}
+
+\begin{verbatim}
+
+------------------------------------------------------------------------
+<-Name->|Levs|<-parsing code->|<--  Units   -->|<- Tile (max=80c) 
+------------------------------------------------------------------------
+DICBIOA | 15 |SM P    MR      |mol/m3/sec      |Biological Productivity (mol/m3/s)
+DICCARB | 15 |SM P    MR      |mol eq/m3/sec   |Carbonate chg-biol prod and remin (mol eq/m3/s)
+DICTFLX |  1 |SM P    L1      |mol/m3/sec      |Tendency of DIC due to air-sea exch (mol/m3/s)
+DICOFLX |  1 |SM P    L1      |mol/m3/sec      |Tendency of O2 due to air-sea exch (mol/m3/s)
+DICCFLX |  1 |SM P    L1      |mol/m2/sec      |Flux of CO2 - air-sea exch (mol/m2/s)
+DICPCO2 |  1 |SM P    M1      |atm             |Partial Pressure of CO2 (atm)
+DICPHAV |  1 |SM P    M1      |dimensionless   |pH (dimensionless)
+\end{verbatim}
+
 \subsubsection{Do's and Don'ts}
 
 The pkg ptracer is required with use with this pkg. Also, as usual, the
