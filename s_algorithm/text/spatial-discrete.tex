@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/spatial-discrete.tex,v 1.18 2004/10/17 04:14:21 jmc Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/spatial-discrete.tex,v 1.19 2006/04/05 01:16:27 jmc Exp $
 % $Name:  $
 
 \section{Spatial discretization of the dynamical equations}
@@ -150,8 +150,8 @@ is bordered by the lengths $\Delta x_f$ and $\Delta y_u$.}
 The model domain is decomposed into tiles and within each tile a
 quasi-regular grid is used. A tile is the basic unit of domain
 decomposition for parallelization but may be used whether parallelized
-or not; see section \ref{sect:tiles} for more details. Although the
-tiles may be patched together in an unstructured manner
+or not; see section \ref{sect:domain_decomposition} for more details. 
+Although the tiles may be patched together in an unstructured manner
 (i.e. irregular or non-tessilating pattern), the interior of tiles is
 a structured grid of quadrilateral cells. The horizontal coordinate
 system is orthogonal curvilinear meaning we can not necessarily treat
