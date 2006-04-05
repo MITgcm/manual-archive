@@ -4,6 +4,7 @@
 <!-- CMIREDIR:package_land: -->
 \end{rawhtml}
 
+\subsubsection{Introduction}
 This package provides a simple land model
 based on Rong Zhang [e-mail:roz@gfdl.noaa.gov] 2 layers model
 (see documentation below).
@@ -30,6 +31,7 @@ author: Rong Zhang\\
 
 % \baselineskip19pt
 
+\subsubsection{Equations and Key Parameters}
 This is a simple 2-layer land model. The top layer depth $z1=0.1m$, the
 second layer depth $z2=4m$.
 
@@ -92,11 +94,28 @@ that is put into second layer.
 
 The time step is 1 hour, it takes several years to reach equalibrium offline.
 
-\begin{center}
-\bigskip
-\end{center}
+\subsubsection{Land diagnostics}
+\label{sec:pkg:land:diagnostics}
 
-\textbf{References}
+\begin{verbatim}
+
+------------------------------------------------------------------------
+<-Name->|Levs|<-parsing code->|<--  Units   -->|<- Tile (max=80c) 
+------------------------------------------------------------------------
+GrdSurfT|  1 |SM      Lg      |degC            |Surface Temperature over land
+GrdTemp |  2 |SM      MG      |degC            |Ground Temperature at each level
+GrdEnth |  2 |SM      MG      |J/m3            |Ground Enthalpy at each level
+GrdWater|  2 |SM P    MG      |0-1             |Ground Water (vs Field Capacity) Fraction at each level
+LdSnowH |  1 |SM P    Lg      |m               |Snow Thickness over land
+LdSnwAge|  1 |SM P    Lg      |s               |Snow Age over land
+RUNOFF  |  1 |SM      L1      |m/s             |Run-Off per surface unit
+EnRunOff|  1 |SM      L1      |W/m^2           |Energy flux associated with run-Off
+landHFlx|  1 |SM      Lg      |W/m^2           |net surface downward Heat flux over land
+landPmE |  1 |SM      Lg      |kg/m^2/s        |Precipitation minus Evaporation over land
+ldEnFxPr|  1 |SM      Lg      |W/m^2           |Energy flux (over land) associated with Precip (snow,rain)
+\end{verbatim}
+
+\subsubsection{References}
 
 Hansen J. et al. Efficient three-dimensional global models for climate
 studies: models I and II. \emph{Monthly Weather Review}, vol.111, no.4, pp.

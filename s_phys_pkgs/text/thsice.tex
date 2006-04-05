@@ -41,8 +41,7 @@ Modifications are discussed in small font following the
 subroutine descriptions.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\vspace{1cm}
+\subsubsection{Key parameters and Routines}
 
 \noindent
 The ice model is called from {\it thermodynamics.F}, subroutine
@@ -467,8 +466,7 @@ be greater than 0})
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \vspace{1cm}
 
-\noindent
-{\bf {\underline{Important Notes}}}
+\subsubsection{Important Notes}
 
 \noindent
 {\bf 1)} heat fluxes have different signs in the ocean and ice
@@ -480,6 +478,35 @@ models.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\subsubsection{THSICE Diagnostics}
+\label{sec:pkg:thsice:diagnostics}
+
+\begin{verbatim}
+
+------------------------------------------------------------------------
+<-Name->|Levs|<-parsing code->|<--  Units   -->|<- Tile (max=80c) 
+------------------------------------------------------------------------
+SI_Fract|  1 |SM P    M1      |0-1             |Sea-Ice fraction  [0-1]
+SI_Thick|  1 |SM PC197M1      |m               |Sea-Ice thickness (area weighted average)
+SI_SnowH|  1 |SM PC197M1      |m               |Snow thickness over Sea-Ice (area weighted)
+SI_Tsrf |  1 |SM  C197M1      |degC            |Surface Temperature over Sea-Ice (area weighted)
+SI_Tice1|  1 |SM  C197M1      |degC            |Sea-Ice Temperature, 1srt layer (area weighted)
+SI_Tice2|  1 |SM  C197M1      |degC            |Sea-Ice Temperature, 2nd  layer (area weighted)
+SI_Qice1|  1 |SM  C198M1      |J/kg            |Sea-Ice enthalpy, 1srt layer (mass weighted)
+SI_Qice2|  1 |SM  C198M1      |J/kg            |Sea-Ice enthalpy, 2nd  layer (mass weighted)
+SIalbedo|  1 |SM PC197M1      |0-1             |Sea-Ice Albedo [0-1] (area weighted average)
+SIsnwAge|  1 |SM P    M1      |s               |snow age over Sea-Ice
+SIsnwPrc|  1 |SM  C197M1      |kg/m^2/s        |snow precip. (+=dw) over Sea-Ice (area weighted)
+SIflxAtm|  1 |SM      M1      |W/m^2           |net heat flux from the Atmosphere (+=dw)
+SIfrwAtm|  1 |SM      M1      |kg/m^2/s        |fresh-water flux to the Atmosphere (+=up)
+SIflx2oc|  1 |SM      M1      |W/m^2           |heat flux out of the ocean (+=up)
+SIfrw2oc|  1 |SM      M1      |m/s             |fresh-water flux out of the ocean (+=up)
+SIsaltFx|  1 |SM      M1      |psu.kg/m^2      |salt flux out of the ocean (+=up)
+SItOcMxL|  1 |SM      M1      |degC            |ocean mixed layer temperature
+SIsOcMxL|  1 |SM P    M1      |psu             |ocean mixed layer salinity
+\end{verbatim}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \vspace{1cm}
 
 \noindent 
