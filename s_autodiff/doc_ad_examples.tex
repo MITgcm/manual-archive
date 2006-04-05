@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_autodiff/Attic/doc_ad_examples.tex,v 1.6 2004/10/16 03:40:17 edhill Exp $
+% $Header: /u/gcmpack/manual/s_autodiff/Attic/doc_ad_examples.tex,v 1.7 2006/04/05 02:27:33 edhill Exp $
 % $Name:  $
 
 %**********************************************************************
@@ -12,11 +12,11 @@
 \end{rawhtml}
 %**********************************************************************
 
-The MITGCM has been adapted to enable AD using TAMC or TAF.
+MITgcm has been adapted to enable AD using TAMC or TAF.
 The present description, therefore, is specific to the
 use of TAMC or TAF as AD tool.
 The following sections describe the steps which are necessary to 
-generate a tangent linear or adjoint model of the MITGCM.
+generate a tangent linear or adjoint model of MITgcm.
 We take as an example the sensitivity of carbon sequestration
 in the ocean.
 The AD-relevant hooks in the code are sketched in 
@@ -32,7 +32,7 @@ into the ocean interior (see \cite{hil-eta:01}).
 \subsubsection{Passive tracer equation}
 \label{www:tutorials}
 
-For this work the MITGCM was augmented with a thermodynamically 
+For this work MITgcm was augmented with a thermodynamically 
 inactive tracer, $C$. Tracer residing in the ocean 
 model surface layer is out-gassed according to a relaxation time scale, 
 $\mu$. Within the ocean interior, the tracer is passively advected 
@@ -621,7 +621,7 @@ TAMC or TAF info is written to file
 %
 \item
 {\tt make adchange} \\
-The multi-threading capability of the MITGCM requires a slight
+The multi-threading capability of MITgcm requires a slight
 change in the parameter list of some routines that are related to
 to active file handling.
 This post-processing invokes the sed script {\it adjoint\_ecco\_sed.com}

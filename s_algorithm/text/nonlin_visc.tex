@@ -1,4 +1,4 @@
-%  $Header: /u/gcmpack/manual/s_algorithm/text/nonlin_visc.tex,v 1.3 2005/12/16 06:26:09 edhill Exp $
+%  $Header: /u/gcmpack/manual/s_algorithm/text/nonlin_visc.tex,v 1.4 2006/04/05 02:27:33 edhill Exp $
 %  $Name:  $
 
 \section{Nonlinear Viscosities for Large Eddy Simulation}
@@ -80,8 +80,8 @@ then the viscosity should be chosen to make the viscous terms as large
 as the advective ones.  Bryan \textit{et al} \cite{Bryanetal75} notes
 that a computational mode is squelched by using $\BFKRe_h<$2.
 
-The MITgcm user can select an horizontal eddy viscosity based on
-$\BFKRe_h$ by two methods.  1) The user may estimate the velocity
+MITgcm users can select horizontal eddy viscosities based on
+$\BFKRe_h$ using two methods.  1) The user may estimate the velocity
 scale expected from the calculation and grid spacing and set the {\sf
   viscAh} to satisfy $\BFKRe_h<2$.  2) The user may use {\sf
   viscAhReMax}, which ensures that the viscosity is always chosen so
@@ -137,7 +137,7 @@ gridscale, $L_\epsilon(A_h)\propto\pi\epsilon^{-1/4}A_h^{3/4}$ (for
 Large Eddy Simulation or LES).
 
 There are two methods of ensuring that the Kolmogorov length is
-resolved in the MITgcm.  1) The user can estimate the flux of energy
+resolved in MITgcm.  1) The user can estimate the flux of energy
 through spectral space for a given simulation and adjust grid spacing
 or {\sf viscAh} to ensure that $L_\epsilon(A_h)>L$.  2) The user may
 use the approach of Smagorinsky with {\sf viscC2Smag}, which estimates
@@ -172,7 +172,7 @@ shallow-water scaling is
 |\BFKav D|=\sqrt{\left(\BFKpd{x}{\BFKav \BFKtu}-\BFKpd{y}{\BFKav \BFKtv}\right)^2
 +\left(\BFKpd{y}{\BFKav \BFKtu}+\BFKpd{x}{\BFKav \BFKtv}\right)^2}
 \end{equation}
-The coefficient {\sf viscC2Smag} is what the MITgcm user sets, and it
+The coefficient {\sf viscC2Smag} is what an MITgcm user sets, and it
 replaces the proportionality in the Kolmogorov length with an
 equality.  Others \cite{grha00} suggest values of {\sf viscC2Smag}
 from 2.2 to 4 for oceanic problems.  Smagorinsky \cite{Smagorinsky93}
@@ -186,7 +186,7 @@ A_{vSmag}=\left(\frac{{\sf viscC2Smag}}{\pi}\right)^2H^2
 \sqrt{\left(\BFKpd{z}{\BFKav \BFKtu}\right)^2
 +\left(\BFKpd{z}{\BFKav \BFKtv}\right)^2}
 \end{equation}
-This vertical viscosity is currently not implemented in the MITgcm
+This vertical viscosity is currently not implemented in MITgcm
 (although it may be soon).
 
 \subsubsection{Leith Viscosity}
@@ -230,7 +230,7 @@ exist which are only horizontally divergent and have little vertical
 vorticity.  This causes a difficulty with the Leith viscosity, which
 can only responds to buildup of vorticity at the grid scale.
 
-The MITgcm offers two options for dealing with this problem.  1) The
+MITgcm offers two options for dealing with this problem.  1) The
 Smagorinsky viscosity can be used instead of Leith, or in conjunction
 with Leith--a purely divergent flow does cause an increase in
 Smagorinsky viscosity.  2) The {\sf viscC2LeithD} parameter can be
@@ -272,7 +272,7 @@ A_h & < & \frac{L^2}{4\Delta t} \\
 A_4 & \le & \frac{L^4}{32\Delta t}
 \end{eqnarray}
 The viscosities may be automatically limited to be no greater than
-these values in the MITgcm by specifying {\sf viscAhGridMax}$<1$ and
+these values in MITgcm by specifying {\sf viscAhGridMax}$<1$ and
 {\sf viscA4GridMax}$<1$.  Similarly-scaled minimum values of
 viscosities are provided by {\sf viscAhGridMin} and {\sf
   viscA4GridMin}, which if used, should be set to values $\ll 1$. $L$
@@ -324,10 +324,10 @@ the choice of coefficients.  Using biharmonic viscosity alone implies
 that one zeros the first non-vanishing term in the Taylor series,
 which is unsupported by any fluid theory or observation.
 
-Nonetheless, the MITgcm supports a plethora of biharmonic viscosities
+Nonetheless, MITgcm supports a plethora of biharmonic viscosities
 and diffusivities, which are controlled with parameters named
 similarly to the harmonic viscosities and diffusivities with the
-substitution $h\rightarrow 4$.  The MITgcm also supports a biharmonic
+substitution $h\rightarrow 4$.  MITgcm also supports a biharmonic
 Leith and Smagorinsky viscosities:
 \begin{eqnarray}
 A_{4Smag} & = & 
@@ -359,7 +359,7 @@ Thus, the biharmonic scaling suggested by \cite{grha00} implies:
 |\nabla \BFKav \omega_3| & \propto & L|\nabla^2 \BFKav \omega_3|
 \end{eqnarray}
 It is not at all clear that these assumptions ought to hold.  Only the
-\cite{grha00} forms are currently implemented in the MITgcm.
+\cite{grha00} forms are currently implemented in MITgcm.
 
 \subsubsection{Selection of Length Scale}
 Above, the length scale of the grid has been denoted $L$.  However, in
@@ -368,7 +368,7 @@ some locations.  In that case, the CFL condition suggests that the
 minimum of $L_x$ and $L_y$ be used.  On the other hand, other
 viscosities which involve whether a particular wavelength is
 'resolved' might be better suited to use the maximum of $L_x$ and
-$L_y$.  Currently the MITgcm uses {\sf useAreaViscLength} to select
+$L_y$.  Currently, MITgcm uses {\sf useAreaViscLength} to select
 between two options.  If false, the geometric mean of $L^2_x$ and
 $L^2_y$ is used for all viscosities, which is closer to the minimum
 and occurs naturally in the CFL constraint.  If {\sf

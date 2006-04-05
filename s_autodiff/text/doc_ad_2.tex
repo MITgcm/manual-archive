@@ -1,45 +1,38 @@
-% $Header: /u/gcmpack/manual/s_autodiff/text/doc_ad_2.tex,v 1.19 2005/08/02 22:26:58 heimbach Exp $
+% $Header: /u/gcmpack/manual/s_autodiff/text/doc_ad_2.tex,v 1.20 2006/04/05 02:27:33 edhill Exp $
 % $Name:  $
 
 Author: Patrick Heimbach
 
 {\sf Automatic differentiation} (AD), also referred to as algorithmic
-(or, more loosely, computational) differentiation, involves 
-automatically deriving code to calculate
-partial derivatives from an existing fully non-linear prognostic code.
-(see \cite{gri:00}).
-A software tool is used that parses and transforms source files 
-according to a set of linguistic and mathematical rules. 
-AD tools are like source-to-source translators in that
-they parse a program code as input and produce a new program code 
-as output.
-However, unlike a pure source-to-source translation, the output program
-represents a new algorithm, such as the evaluation of the
-Jacobian, the Hessian, or higher derivative operators.
-In principle, a variety of derived algorithms
-can be generated automatically in this way.
+(or, more loosely, computational) differentiation, involves
+automatically deriving code to calculate partial derivatives from an
+existing fully non-linear prognostic code.  (see \cite{gri:00}).  A
+software tool is used that parses and transforms source files
+according to a set of linguistic and mathematical rules.  AD tools are
+like source-to-source translators in that they parse a program code as
+input and produce a new program code as output.  However, unlike a
+pure source-to-source translation, the output program represents a new
+algorithm, such as the evaluation of the Jacobian, the Hessian, or
+higher derivative operators.  In principle, a variety of derived
+algorithms can be generated automatically in this way.
 
-The MITGCM has been adapted for use with the
-Tangent linear and Adjoint Model Compiler (TAMC) and its successor TAF
-(Transformation of Algorithms in Fortran), developed
-by Ralf Giering (\cite{gie-kam:98}, \cite{gie:99,gie:00}).
-The first application of the adjoint of the MITGCM for sensitivity
-studies has been published by \cite{maro-eta:99}.
-\cite{sta-eta:97,sta-eta:01} use the MITGCM and its adjoint
-for ocean state estimation studies.
-In the following we shall refer to TAMC and TAF synonymously,
-except were explicitly stated otherwise.
+MITgcm has been adapted for use with the Tangent linear and Adjoint
+Model Compiler (TAMC) and its successor TAF (Transformation of
+Algorithms in Fortran), developed by Ralf Giering (\cite{gie-kam:98},
+\cite{gie:99,gie:00}).  The first application of the adjoint of MITgcm
+for sensitivity studies has been published by \cite{maro-eta:99}.
+\cite{sta-eta:97,sta-eta:01} use MITgcm and its adjoint for ocean
+state estimation studies.  In the following we shall refer to TAMC and
+TAF synonymously, except were explicitly stated otherwise.
 
-TAMC exploits the chain rule for computing the first
-derivative of a function with
-respect to a set of input variables. 
-Treating a given forward code as a composition of operations --
-each line representing a compositional element, the chain rule is
-rigorously applied to the code, line by line. The resulting 
-tangent linear or adjoint code,
-then, may be thought of as the composition in 
-forward or reverse order, respectively, of the
-Jacobian matrices of the forward code's compositional elements.
+TAMC exploits the chain rule for computing the first derivative of a
+function with respect to a set of input variables.  Treating a given
+forward code as a composition of operations -- each line representing
+a compositional element, the chain rule is rigorously applied to the
+code, line by line. The resulting tangent linear or adjoint code,
+then, may be thought of as the composition in forward or reverse
+order, respectively, of the Jacobian matrices of the forward code's
+compositional elements.
 
 %**********************************************************************
 \section{Some basic algebra}
@@ -955,7 +948,7 @@ The flow directives for the core MITgcm routines of
 {\tt eesupp/src/} and {\tt model/src/}
 reside in {\tt pkg/autodiff/}.
 This directory also contains hand-written adjoint code
-for the MITgcm WRAPPER (see Section ???).
+for the MITgcm WRAPPER (section \ref{chap:sarch}).
 
 Flow directives for package-specific routines are contained in
 the corresponding package directories in the file
@@ -1209,7 +1202,7 @@ and their gradients: {\it ctrl\_unpack}
 \\
 %
 Two important issues related to the handling of the control
-variables in the MITGCM need to be addressed.
+variables in MITgcm need to be addressed.
 First, in order to save memory, the control variable arrays
 are not kept in memory, but rather read from file and added
 to the initial fields during the model initialization phase.
@@ -1284,7 +1277,7 @@ when calling TAMC:
 tamc -input 'xx_tr1 ...' ...
 \end{verbatim}
 %
-Now, as mentioned above, the MITGCM avoids maintaining
+Now, as mentioned above, MITgcm avoids maintaining
 an array for each control variable by reading the
 perturbation to a temporary array from file.
 To ensure the symbolic link to be recognized by TAMC, a scalar

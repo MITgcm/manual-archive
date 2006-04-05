@@ -7,15 +7,14 @@
 Authors: Christian Eckert and Patrick Heimbach
 
 This calendar tool was originally intended to enable the use of
-absolute dates (Gregorian Calendar dates) in the ocean general
-circulation model MITgcmuv. There is, however, a fair amount of
-routines that can be used independently of the MITgcmuv. After
-some minor modifications the whole package can be used either
-as a stand-alone calendar or in connection with any dynamical
-model that needs calendar dates. Some straightforward extensions
-are still pending e.g. the availability of the Julian Calendar,
-to be able to resolve fractions of a second, and to have a time-
-step that is longer than one day.
+absolute dates (Gregorian Calendar dates) in MITgcm. There is,
+however, a fair number of routines that can be used independently of
+the main MITgcm executable. After some minor modifications the whole
+package can be used either as a stand-alone calendar or in connection
+with any dynamical model that needs calendar dates. Some
+straightforward extensions are still pending e.g. the availability of
+the Julian Calendar, to be able to resolve fractions of a second, and
+to have a time- step that is longer than one day.
 
 \subsubsection{Basic assumptions for the calendar tool}
 
@@ -158,7 +157,7 @@ c                  TheCalendar='gregorian'
 {\footnotesize
 \begin{verbatim}
 c      o  cal_Init          - Initialise the calendar. This is the interface
-c                             to the MITgcm.
+c                             to MITgcm.
 c
 c      o  cal_Set           - Sets the calendar according to the user
 c                             specifications.
@@ -252,7 +251,7 @@ c      o  cal_PrintError    - Print error messages according to the flags
 c                             raised by the calendar routines.
 c
 c      o  cal_PrintDate     - Print a date array in some format suitable for
-c                             the MITgcmuv's protocol output.
+c                             MITgcm's protocol output.
 c
 c      o  cal_TimeStamp     - Given the time and the iteration number return
 c                             the date and print all the above numbers.
