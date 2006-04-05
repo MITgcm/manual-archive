@@ -1,0 +1,640 @@
+Rebuild and set to do cron build
+
+To do
+
+  - where to put under development links?
+
+  - mitgcm.org very front page.
+    o too many clicks to get to model manual.
+      make doc link go to mitgcm.org/r2_web_testing/latest
+      and add "HowTo" reference etc... to /latest page 
+
+  - mitgcm.org/r2_web_testing/latest
+    o add another short-cut for quick download
+
+    o add another short-cut
+      About
+      Installation
+      Contents
+      Overview
+      Tutorials (broken)
+      Browse Code
+      Get Code (where does this go to?)
+
+    o authors
+      John, Alistair, Jean-Michel, Patrick, Andrea, Steph, Helen,
+      Martin, Baylor, Dimitris, David, Ed, Mick, Chris, Constantinos,
+      Gael - others?
+
+    o Tutorials side bar link is broken
+
+    o words
+      change to "access on-line Auser manual/A and Atable of contents/A
+      and browse the Aoverview section/A"
+
+    o finite-volume doesn't leap to FV figure
+
+    o date is 2002
+
+    o fix search so it doesn't include advertisements
+
+    o the src and equation links don't come through to
+      the html when they are in figures - see chapter 2 for some
+      examples.
+
+    o degree symbols keep getting "dropped down" - problem with
+      pnmcrop et al.
+
+
+Contents
+
+    Intro                  - CNH
+      o single kernel diagram -
+          add reference to MWR paper
+
+      o non-hydro
+         add reference to 1995 and 1999 papers
+         pdf of 1995 paper
+
+      o FV
+         add references to 1997 papers.
+
+      o Tangent linear/adjoint add reference to
+        Heimbach papers, Marotzke, 1998 ECMWF, Bugi etc...
+
+      o platforms
+         Add reference to SC article and Scientific Programming article
+
+      o List of key papers needs to be updated and reformatted
+
+
+      o Global atmosphere: `Held Suarez',
+        update Adcroft reference
+        fix up ingrid link and frame (ingrid movies seem to be broken?)
+        Held and Suarez reference is not a link.
+
+      o Ocean Gyres
+        fix up frame link
+        make "lopped cell" a link to referenced paper.
+        add references (ask Steph/Mick)
+        online/offline paper
+
+      o Convection and mixing over topography
+        add in Legg references for convection and mixing over topography
+        and external link to CPT-GCE etc...
+
+      o Boundary forced internal waves
+        add in Legg references, obc's reference
+
+      o Parameter sensitivity
+        add in Bugnion references, Boyin references, Steph references
+
+      o State estimation
+        add in references from Patrick/Carl/Ichiro/Detlef etc...
+        update links to point to latest ECCO results
+        ECCO ingrid results have been moved
+        add forward links to "ECCO state estimation" chapter in manual
+
+      o Ocean biogeochemical cycles
+        add in references from Mick/Galen etc...
+        fix ingrid link ( date to date thing does not appear to work)
+        figure url does not have a "target=idontexist" entry
+
+      o Simulations of laboratory experiments
+        reference Wardle and Karsten papers
+        update links to include DDDAS "PIAB" page
+        cylindrical polar coordinates
+
+      o Continuos equations in ''r'' coordinates
+         add references to iso paper
+         no mention of z* and p* - forward reference to z*/p* in 2.
+         add that coupling also manifests through F, Q
+         add tracer transport
+
+      o Kinematic boundary conditions
+
+      o Hydrostatic, Quasi-hydrostatic, Quasi-nonhydrostatic and Non-hydrostatic forms
+        need to tidy up discussion of shallow-atmosphere to be
+        consistent with the code or change code to be consistent
+        with the discussion!
+        make references hyperlinks
+        add stuff too
+
+      o Finding the pressure field
+        make references hyperlinks
+        add forward references to manual algorithm section
+        change Elliptic to "elliptic"
+
+      o Forcing and dissipation
+        make "physics packages" refer to chapter 6.
+        should we move "external forcing" et. al to a
+        generic_forcing_driver package?
+
+        viscosities
+        update to mention Smag/Leith (Ah and A4 not constant)
+        and to have forward references to numerical section
+        tracers
+        forward references to numerical section, reddy, GM etc...
+        add references to literature
+
+      o 1.3.8 Vector invariant form
+        forward references to numerical section
+
+      o 1.3.9 Adjoint
+        add a little more here + some hyperlink to chapter 5.
+
+      o 1.4 Appendix ATMOSPHERE
+
+        add some introductory words
+
+      o 1.6 Coordinate systems
+        o only has some words on spherical polar. add some brief words
+          to cover all of
+          - cartesian
+          - spherical
+          - cylindrical
+          - general orthogonal curvilinear (vector invariant)
+
+      o Equation of state options
+        add some discussion
+        can't remember what we said we were going to do here
+        PH to do something
+
+
+    Discretization and alg - JMC+CNH
+
+    Tutorials              - AM
+     3.1 "Where to find"
+       o link to Pelican not needed
+       o mailman twice (why?)
+       o no htdig (gone? - I liked it)
+
+     intro part
+     individual experiments
+
+     offline - duplicate inputs, what is it, tidy up cfc v.
+               other offline.
+
+    Software               - EH to review
+
+    some to be done on resource estimates at the end - needs sorting.
+
+    Automatic Diff         - CE
+
+    Physical Packages      - ???
+
+    Diags and tools        - ???
+
+    Interface with ECCO    - ???
+
+    Model uses             - ???
+
+    Building document      - ???
+    via cron
+    tweaking latex2html etc..
+
+    Src Code tree (rename
+    examples etc..)        - ???
+
+Documentation
+
+1. Introduction
+
+2. Discretization and Algorithm
+
+   2.13.5 Lateral dissipation
+    o need to relate c11, c12 etc.. to COSFAC, USE_COS etc... flags
+      in code need to explain why cos()3/2 turns out to be
+      scaling (not cos()2)
+
+   2.13.6 Vertical dissipation
+    o update to have reference to Baylors section
+      reference to implicit discussion in time-stepping part of manual
+
+
+
+3. Tutorials
+   reorg'd into
+   intro part
+   individual experiments
+
+4. Software Architecture
+
+5. Automatic Differentiation
+
+6. Physical Parameterization and Packages
+
+7. Diagnostics and tools
+
+8. Interface with ECCO
+
+9. Model uses
+   Spall, Gianmaria, Legg, Dewar, Cessi, Cournelle, Follows, Adcroft, etc...
+   (check in support for more names)
+
+ Need an empty package as part of distribution
+
+ latex2html equation formatting is still a bit weird in places. Need to have another go if we have a chance - especially the degree symbol seems to jump around somewhat!
+
+Chapter 1
+
+    Change hydrodynamical to "dynamical"
+
+    Examples
+
+        - extra "in action" cases
+
+          o high res ocean with diurnal atmospheric state forcing
+            - links to ingrid output
+              CNH/Dimitris
+
+          o realistic FIZHI from Andrea
+            - links to ingrid output
+              from AM
+
+          o with seaice on high res cube
+            - links to ingrid output
+              CNH/Dimitris
+
+          o coupled aqua, ridge world etc...
+            - links to ingrid output
+              get stuff from Daniel
+
+          o constrained lab simulation
+            - links to ingrid output for model and lab
+              fields
+              get stuff from Sai/Andrew
+
+          o sensitivity wrt to iron
+
+          o optimization
+            - update to link to latest ECCO sites and GF
+              related material
+
+          o eddy diffusivity transport application
+
+          o Gas giant?
+
+Chapter 6
+
+   the master package diagram does not appear in the document
+
+   pkg/ptracers doesn't seem to have any documentation (see packages list below)
+
+
+
+2.10.5 Horizontal grid
+
+   need to do a better job of relating model variables to this diagram
+
+
+Master list of packages
+
+admtlm/               - autodiff (chapter 5)
+aim/                  - 6.4.1 (content needs fixing - JM to do)
+aim_compon_interf/    - 6.6 (no content yet)
+aim_ocn_coupler/      - 6.6 (no content yet)
+aim_v23/              - retired
+atm_common/           - 6.6 (no content yet)
+autodiff/             - autodiff (chapter 5)
+bulk_force/           - 6.3.3
+cal/                  - 6.3.5
+cd_code/              - chapter 2 (JM check)
+cfc/                  - not sure
+chronos/              - AM to check
+compon_communic/      - 6.6 (no content yet)
+cost/                 - not sure, check with PH
+ctrl/                 - not sure, check with PH
+debug/                - JM may do something in chapter 7 (utilities)
+diagnostics/          - 7.1
+dic/                  - 6.7.2
+ebm/                  - not sure
+ecco/                 - chapter 8
+embed_files/          - add something to chapter 7
+ex3/                  - rename to exch3
+exch2/                - 6.2.2
+exf/                  - 6.3.4
+fizhi/                - 6.4.3
+flt/                  - in chapter 2 (JM check)
+gchem/                - 6.7.1
+generic_advdiff/      - in chapter 2 (JM check)
+ggl90/                - nothing, (Martin?)
+gmredi/               - in chapter 2 (JM check). also need
+                        Ferrari & Mc tapering
+grdchk/               - grdchk (chapter 5 - check with PH)
+gridalt/              - 6.2.4
+kpp/                  - 6.3.2
+land/                 - 6.4.2 (not connected to code - JM to fix)
+matrix/               - Samar
+mdsio/                - 7.3.1
+mnc/                  - 7.2.1
+mom_common/           - in chapter 2 (JM check)
+mom_fluxform/         - in chapter 2 (JM check)
+mom_vecinv/           - in chapter 2 (JM check)
+monitor/              - 7.4
+my82/                 - nothing, (martin?)
+obcs/                 - 6.3 (needs a check)
+ocn_compon_interf/    - 6.6 (no content yet)
+offline/              - nothing, tutorials that need work but no package   section entry
+opps/                 - nothing, (martin?)
+pp81/                 - nothing, (martin?)
+profiles/             - GAEL
+ptracers/             - JM + SD to write something
+rbcs/                 - talk to steph
+runclock/             - runclock
+rw/                   - not sure
+sbo/                  - text in sbo_descruption.tex but not linked into
+                        part6
+seaice/               - 6.5.2 - no equations, dimitris has promised some
+shap_filt/            - chapter 2, JM to check
+shelfice/             - nothing yet (martin?)
+solver/               - empty
+sphere/               - chapter 5 or 8 (PH to check)
+therm_seaice/         - empty
+thsice/               - 6.5.1 (JM to update?)
+timeave/              - retiring......
+zonal_filt/           - chapter 2 (JM to check)
+
+Possible for chap 7 - Daniels grafix/ stuff
+
+Need to get packages to contain their available diagnostics (i.e. calls to DIAGNOSTICS_ADD). these are listed in stdout when pacakages are started.
+
+Figure 6.8 is missing
+
+
+>>>> From Ed
+
+Here are the remaining bits for Chap 4 :
+
+ - The grammar/flow could still use some work.  Boo was an English
+   major and has experience editing/proofing technical papers.  I
+   could print out a copy and ask her to read it and suggest
+   improvements.
+
+ - missing references (if you point me towards URLs, I'll add them
+   to the bibliography):
+     \ref{ref hoe and hill, ecmwf}
+     \ref{magicgarden}
+     \ref{IBMLAPI}
+     \ref{Memorychannel}
+     \ref{hoe-hill:99}
+
+ - There are a few empty sub-sections at the end of Chap 4 that
+   should either be commented out or fleshed out.
+
+and thats about it for Chap 4.
+
+
+Add more to quick links on front page
+
+
+>>>> From Andrea
+
+to do list for chap 7:
+
+
+7.1.1 - links to section 7.1.4: the text of the first one should read "see MITgcm Kernal Diagnostics Menu"
+        the links are pointing to the proper place
+
+7.1.4.0.1 - the link at the bottom to the fizhi diagnostic menu is broken
+          - there should be links here to the diagnostic menus from other packages
+
+7.5.1 - add Graphix to the list of stuff in utils/matlab
+7.5.2 - empty
+
+
+andrea
+
+>>>> From Andrea
+
+Chapter 3
+--------
+
+Almost all of the 'math mode' text is dropped down as subscripts
+
+divide chapter 3 more clearly into 2 sections?
+   (ie, 3.1-3.6 are more informational, 3.8- 3.18 are examples, and
+    then 3.19 and 3.20 are informational again - rearrange subsections?)
+
+3.1 - don't need a link to the outside of the document (remove it)
+    - link to htdig is broken
+
+3.2.1 - link at bottom to source code points to section 3.2.1
+   (ie, to itself) - link should point to cvs code archive
+
+3.2.2.1  - ('upgrading from an earlier version') belongs under
+      the cvs part, ie, should be 3.2.1.1
+
+3.3 - remove reference to 'diags' section under MITgcm
+    - remove reference to 'exe' and 'bin' sections also
+      (remove the .cvsignore file under these directories in cvs)
+    - add a 'jobs' section, and a description as examples of run scripts
+    - add 'lsopt', 'optim' and 'tutorial examples' with brief descriptions
+    - under 'tools' add a reference to 'build_options'. refer to the 'optfiles'
+    - under 'tools' the adjoint points to section 5 - this is now section 8
+      (but should be a floating reference)
+    - under 'utils' add a reference to exch2 - stuff for different resolutions
+    - the description of the pkg section refers directly to
+      section 3. should be section 6 (actually should be a floating reference)
+
+3.4 - refer to sections 3.8 - 3.18 (now says 3.8 - 3.10)
+3.4.1 - links to the following experiments don't exist or are broken:
+          exp2 - should link to section 3.9
+          hs94.cs-32x32x5 - link to section 3.12
+          add 'convection' to the list, link to section 3.13
+          add 'plume on slope` to the list, link to section 3.14
+          add '??' link to section 3.15
+          add 'dic_example on slope` to the list, link to section 3.16
+          add '??' link to section 3.17
+          add 'offline' and link to section 3.18
+          clean up others and make links where they are needed
+3.4.2 - text suggests to see section 2 for details about what is in the 'code'
+        and 'input' directories - should refer to the examples in this section
+      - add 'build' bullet - this is where the model is compiled and exectuable lives
+
+3.5 - add some little text when talking about 'optfiles' to refer to the tools/build_options
+      as the place where they live (add a link?)
+
+3.6.1 - Add some general 'approach' text - ie, output is controlled either by the
+        'data' file in the input directory or by the data.[pkg name] file for any
+        package running. And there is some default behavior when the 'state' dumps
+        are written.
+3.6.1.2 - needs to be moved to inside section 3.6.2
+
+3.7 - this section is superfluous - remove it -OR- put the tutorial sections (3.8-3.18)
+      underneath this one and leave the text for 3.7 in place
+
+All the 'overview' sections need some reference to the name of the experiment in
+the verification directory
+
+3.10 - in title, 4 degrees - degree symbol is a subscript, not a superscript
+     - is this experiment in the list from section 3.4???
+3.10.3.1 - refers to figures and equations, links are broken
+
+3.11.3.2 - line 43: link to equation is broken
+         - line 51-53: link to equation is broken
+         - there is some mess of text hanging around the end of this section. remove? reformat?
+
+3.12.4.1 - line 34 - link to equation is broken
+         - lines 60,61 - 1st (take out the 'r' in the superscript)
+
+3.13.2 - link to theta-equation is broken
+3.13.5.4 -- ALL of the bold links to variable names are broken
+            line 34: link to equation is broken
+
+3.15.1 - reference to 'fourth experiment' should be removed
+
+3.16.4 - strange formatting, presence of '>' symbols - remove them
+
+3.17.3 - unknown verification directory pointed to - also: no link from list in sec 3.4
+3.17.3.1 - nothing filled in under file input/data - needs description
+
+3.18.2 - point to section 2 for details - need hyperlink
+
+3.19.1 - text (2 places) says that section 3.5 called for compile in 'input' directory - not true!
+         section 3.5 has the 'build' directory in the example
+
+3.20.1 - link to doc at end of section points to this section
+3.20.2 - link to doc at end of section points to this section
+
+>>>> from JM
+
+
+
+manual, section.2 :
+
+In general: 
+- add more refences/links to S/R & variable name
+- would be nice to have an active link to the fortran-file 
+  for all the S/R & eq.Number in the "calling-tree" boxes
+- search for CALC_MOM_RHS and replace it by the appropriate S/R
+  (mom_flux_form, mom_vecinv, dynamics)
+- Problem with notation: in section.1 \vec{\bf v_h} (or \vec{\mathbf{v}}_{h})
+was used for the horizontal velocity vector, and the 3.D vector was \vec{\mathbf{v}}
+in section.2, \vec{\bf v} is used instead and 3.D velocity vector is 
+simply written \vec{v}.
+I would suggest to keep the notation as they are (since they are consistent 
+inside each section) but may be to move the "notation.tex" piece
+at the beginning of section.2 and to mention clearly the changes between 
+the 2 sections.
+
+in content: Horizontal Dissipation: 2 times in vector-invariant section
+
+2.1 time-stepping (part2/time_stepping.tex)
+
+- this is not clear to me:
+
+>> In all the above configurations it is also possible to substitute the
+>> Adams-Bashforth with an alternative time-stepping scheme for terms
+>> evaluated explicitly in time
+
+
+2.2 rigid-lid:
+
+- At some point, would be better to replace "g \eta" with "\Phi_s (cg2d_x)"
+  to stay closer to the code.
+- mention section 2.5 implicit-Time-stepping (for vertical viscosity)
+
+2.3 linear free-surface: 
+- add ref(+link) to S/R names:
+- add ref(+link) to Crank-Nickelson section 2.9.1
+
+2.4 Adams-Bashforth
+- add stability diagrams (I have some figures that I can put)
+- add link for var. forcing_In_AB
+- add S/R link for S/R ADAMS_BASHFORTH2
+
+2.5 Implicit time-stepping 
+- add name of S/R: IMPLDIFF, GAD_IMPLICIT_R, MOM_U_IMPLICIT_R
+	SOLVE_TRIDIAGONAL, SOLVE_PENTADIAGONAL
+- update: also used for vertical advection
+
+2.6 Synchronous time-stepping:
+- add link for S/R THERMODYNAMICS, DYNAMCIS, SOLVE_FOR_PRESSURE,  
+                   MOMENTUM_CORRECTION_STEP.
+
+2.7 Stagger baroclinic time-stepping
+- mention AB(T,S) instead of AB(Gt,Gs) (in development) at the end
+
+2.8 NH
+- add link & S/R names: CALC_GW, SOLVE_FOR_PRESSURE, CG3D
+
+2.9 Variants on Free-Surface
+- Delta.t mis-written (eq.2.73)
+- Eq.Num missing (has been fixed since)
+- u* is stored in gU (and not in gUnm1)
+- Phi_nh in NH_VARS.h
+- add link to S/R file: SOLVE_FOR_PRESSURE, CALC_DIV_GHAT, CG2D, CG3D, 
+  INI_CG2D, INI_CG3D
+
+2.9.1 Crank-Nickelson
+- link for variable: implicSurfPress, implicDiv2DFlow, useRealFreshWater
+ 
+2.9.2 NLFS
+- eq.Nb are wrong in html
+- 2.9.2.4 : set of eq. appears wrong in html (but right in .dvi) 
+
+2.10.1 Notation
+- Area definition is not really used like this
+
+>> Ao : Area of the face orthogonal to "o" direction (o=u,v,w)
+
+  Instead, in the following section, Ac,Aw,As,A_zeta (= corresponding to 
+  the model variables) are used (e.g., see section 2.10.5)
+
+2.10.5 Horizontal grid:
+- fig.2.8 : should use Aw,As consistently in this figure description,
+  in the figure itself, as it is in the text.
+- curvilinear: 
+  to add: mention the angle of the grid direction relative to 
+  Eastward, Northward direction.
+  + mention horizGridFile= in file "data" (PARM04)
+- add cylindrical grid description
+
+2.11 Continuity & Horizontal Pressure gradient terms
+ - mention that d.Phi/dr|s =g if using z coordinate 
+ - eq. 2.90 not clear regarding \delta_k(P-E)
+ better to add the free surface eq: d.eta/dt = w_s + P-E
+
+2.12 Hydrostatic balance
+ - add ref to Atmosphere Appendix section (1.4) since Adcroft 2002
+   is hard to find
+ - add ref to section 1.3.4 (Hydrostatic, Quasi-Hydrostatic & Non-H)
+    and in section 1.3.4: remove the 1.3.4.3.2 subsection: 
+                       Quasi-nonhydrostatic Atmosphere
+
+2.13.2 Coriolis terms
+ - note: the discretization used when useEnergyConservingCoriolis=T  
+   has no hFac and no Area and is still different from the form 
+   described here (with Area & hFac);
+
+2.13.5 Lateral dissipation
+ - add description of how to use cosFactor & cosPower
+ - add the parameter correspondence: Ah <-> viscAh ; A4 <-> viscA4 
+
+2.13.6 Vertical dissipation 
+ - mention the implicit vertical viscosity option and ref to section 2.5
+ - add the parameter correspondence: Av <-> viscAr (and might change also
+   the notation to Ar)
+
+2.14 Vector invariant momentum equations
+ - indicate that the NH pieces (vertical momentum eq) are not yet coded
+   and that the NH code uses the flux form.
+
+2.14.6 Horizontal dissipation -> Horizontal Divergence
+
+2.14.7 Horizontal dissipation
+ - add the parameter correspondence: A_D,A_z <-> viscAhD,viscAhZ  
+   and A_D4,A_z4 <-> viscA4D,viscA4Z 
+
+2.16 & 2.17 & 2.18 : 
+ - add 1rst Order upwind option & DST-2 (Lax-Wendroff) options
+
+2.20.2 mercator, non-dimensional Equations:
+- does not use std notation
+- would be better as an appendix of section 2.20:
+(e.g changing the tile to:
+ Appendix: non-dimensional Equations on Spherical-Polar grid.)
+
+JM
+
