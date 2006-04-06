@@ -569,16 +569,17 @@ embed_files/          - add something to chapter 7
 exch2/                - 6.2.2
 exf/                  - 6.3.4
 fizhi/                - 6.4.3
-flt/                  - in chapter 2 (JM check)
+flt/                  - (PH check)
 gchem/                - 6.7.1
 generic_advdiff/      - in chapter 2 (JM check)
 ggl90/                - nothing, (Martin?)
 gmredi/               - in chapter 2 (JM check). also need
-                        Ferrari & Mc tapering
+                        Ferrari & Mc transition zone stuff (Samar doing this)
+                        get dfer to read this
 grdchk/               - grdchk (chapter 5 - check with PH)
 gridalt/              - 6.2.4
 kpp/                  - 6.3.2
-land/                 - 6.4.2 (not connected to code - JM to fix)
+land/                 - 6.4.2 (not connected to code Rong's notes - JM to fix)
 matrix/               - Samar
 mdsio/                - 7.3.1
 mnc/                  - 7.2.1
