@@ -596,7 +596,7 @@ ptracers/             - JM + SD + Martin to write something (nothing for this
                         AM has diagnostics table for this.
 rbcs/                 - CNH to talk to steph
 runclock/             - runclock - CNH
-rw/                   - not sure - going to stay says JMC
+rw/                   - not sure - going to stay says JMC. quick IO calls
 sbo/                  - text in sbo_descruption.tex but not linked into
                         part6
 seaice/               - 6.5.2 - no equations, dimitris has promised some
