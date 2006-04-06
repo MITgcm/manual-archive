@@ -8,6 +8,9 @@ To do
     Add an "Under development, chapter" - shortish description of what
     is available (last chapter)
 
+
+o HTML, scripts and front content
+
   - pick a URL
     TBD
 
@@ -26,32 +29,31 @@ To do
       Overview
       Tutorials (broken)
       Browse Code
+
+    o mitgcm.org (front content) [DONE]
       Get Code (where does this go to?)
+      get rid of * CVS current bullet
+      make HTML-enabled CVS code browser leap to MITgcm/MITgcm
 
     o authors
       John, Alistair, Jean-Michel, Patrick, Andrea, Steph, Helen,
       Martin, Baylor, Dimitris, David, Ed, Mick, Chris, Constantinos,
       Gael - others?
 
-    o Tutorials side bar link is broken
-
-    o words
-      change to "access on-line Auser manual/A and Atable of contents/A
-      and browse the Aoverview section/A"
+    o words on http://mitgcm.org/r2_web_testing/latest
+      change to 
+       "access on-line Auser manual/A and Atable of contents/A
+        and browse the Aoverview section/A"
 
     o finite-volume doesn't leap to FV figure
 
-    o the src and equation links don't come through to
-      the html when they are in figures - see chapter 2 for some
-      examples.
+    o have another go at pnmcrop et al.
 
-    o degree symbols keep getting "dropped down" - problem with
-      pnmcrop et al.
+    o Need an empty package as part of distribution. Check out atm_common
 
+o Latex   
 
-Contents
-
-    Intro                  - CNH
+    Chapter 1                 - CNH
       o single kernel diagram -
           add reference to MWR paper
 
@@ -116,29 +118,32 @@ Contents
 
       o Kinematic boundary conditions
 
-      o Hydrostatic, Quasi-hydrostatic, Quasi-nonhydrostatic and Non-hydrostatic forms
-        need to tidy up discussion of shallow-atmosphere to be
-        consistent with the code or change code to be consistent
-        with the discussion!
-        make references hyperlinks
-        add stuff too
+      o Hydrostatic, Quasi-hydrostatic, Quasi-nonhydrostatic and 
+        Non-hydrostatic forms
+         need to tidy up discussion of shallow-atmosphere to be
+         consistent with the code or change code to be consistent
+         with the discussion!
+         make references hyperlinks
+         add stuff too
+         JMC remove QNH atmosphere
+         need to sort out calc_gw for deep atmosphere
 
       o Finding the pressure field
-        make references hyperlinks
-        add forward references to manual algorithm section
-        change Elliptic to "elliptic"
+         make references hyperlinks
+         add forward references to manual algorithm section
+         change Elliptic to "elliptic"
 
       o Forcing and dissipation
-        make "physics packages" refer to chapter 6.
-        should we move "external forcing" et. al to a
-        generic_forcing_driver package?
+         make "physics packages" refer to chapter 6.
+         should we move "external forcing" et. al to a
+         generic_forcing_driver package?
 
         viscosities
-        update to mention Smag/Leith (Ah and A4 not constant)
-        and to have forward references to numerical section
-        tracers
-        forward references to numerical section, reddy, GM etc...
-        add references to literature
+         update to mention Smag/Leith (Ah and A4 not constant)
+         and to have forward references to numerical section
+         tracers
+         forward references to numerical section, reddy, GM etc...
+         add references to literature
 
       o 1.3.8 Vector invariant form
         forward references to numerical section
@@ -163,83 +168,6 @@ Contents
         can't remember what we said we were going to do here
         PH to do something
 
-
-    Discretization and alg - JMC+CNH
-
-    Tutorials              - AM
-     3.1 "Where to find"
-       o link to Pelican not needed
-       o mailman twice (why?)
-       o no htdig (gone? - I liked it)
-
-     intro part
-     individual experiments
-
-     offline - duplicate inputs, what is it, tidy up cfc v.
-               other offline.
-
-    Software               - EH to review
-
-    some to be done on resource estimates at the end - needs sorting.
-
-    Automatic Diff         - CE
-
-    Physical Packages      - ???
-
-    Diags and tools        - ???
-
-    Interface with ECCO    - ???
-
-    Model uses             - ???
-
-    Building document      - ???
-    via cron
-    tweaking latex2html etc..
-
-    Src Code tree (rename
-    examples etc..)        - ???
-
-Documentation
-
-1. Introduction
-
-2. Discretization and Algorithm
-
-   2.13.5 Lateral dissipation
-    o need to relate c11, c12 etc.. to COSFAC, USE_COS etc... flags
-      in code need to explain why cos()3/2 turns out to be
-      scaling (not cos()2)
-
-   2.13.6 Vertical dissipation
-    o update to have reference to Baylors section
-      reference to implicit discussion in time-stepping part of manual
-
-
-
-3. Tutorials
-   reorg'd into
-   intro part
-   individual experiments
-
-4. Software Architecture
-
-5. Automatic Differentiation
-
-6. Physical Parameterization and Packages
-
-7. Diagnostics and tools
-
-8. Interface with ECCO
-
-9. Model uses
-   Spall, Gianmaria, Legg, Dewar, Cessi, Cournelle, Follows, Adcroft, etc...
-   (check in support for more names)
-
- Need an empty package as part of distribution
-
- latex2html equation formatting is still a bit weird in places. Need to have another go if we have a chance - especially the degree symbol seems to jump around somewhat!
-
-Chapter 1
 
     Change hydrodynamical to "dynamical"
 
@@ -277,18 +205,6 @@ Chapter 1
           o eddy diffusivity transport application
 
           o Gas giant?
-
-Chapter 6
-
-   the master package diagram does not appear in the document
-
-   pkg/ptracers doesn't seem to have any documentation (see packages list below)
-
-
-
-2.10.5 Horizontal grid
-
-   need to do a better job of relating model variables to this diagram
 
 
 Master list of packages
@@ -389,6 +305,12 @@ and thats about it for Chap 4.
 
 
 Add more to quick links on front page
+
+Chapter 6
+
+   the master package diagram does not appear in the document
+
+   pkg/ptracers doesn't seem to have any documentation (see packages list below)
 
 
 >>>> From Andrea
@@ -497,6 +419,9 @@ the verification directory
 3.20.1 - link to doc at end of section points to this section
 3.20.2 - link to doc at end of section points to this section
 
+     offline - duplicate inputs, what is it, tidy up cfc v.
+               other offline. JM thinks these need tidying up.
+
 >>>> from JM
 
 
@@ -590,6 +515,8 @@ in content: Horizontal Dissipation: 2 times in vector-invariant section
   Eastward, Northward direction.
   + mention horizGridFile= in file "data" (PARM04)
 - add cylindrical grid description
+   need to do a better job of relating model variables to this diagram
+
 
 2.11 Continuity & Horizontal Pressure gradient terms
  - mention that d.Phi/dr|s =g if using z coordinate 
@@ -611,6 +538,9 @@ in content: Horizontal Dissipation: 2 times in vector-invariant section
 2.13.5 Lateral dissipation
  - add description of how to use cosFactor & cosPower
  - add the parameter correspondence: Ah <-> viscAh ; A4 <-> viscA4 
+    o need to relate c11, c12 etc.. to COSFAC, USE_COS etc... flags
+      in code need to explain why cos()3/2 turns out to be
+      scaling (not cos()2)
 
 2.13.6 Vertical dissipation 
  - mention the implicit vertical viscosity option and ref to section 2.5
@@ -638,3 +568,7 @@ in content: Horizontal Dissipation: 2 times in vector-invariant section
 
 JM
 
+
+9. Model uses
+   Spall, Gianmaria, Legg, Dewar, Cessi, Cournelle, Follows, Adcroft, etc...
+   (check in support for more names)
