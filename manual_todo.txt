@@ -5,10 +5,11 @@ To do
   - where to put under development links?
     JMC would like to have some mention of unfinished things (checked in 
      but not that tested e.g. AB3)
-    Add an "Under development, chapter"
+    Add an "Under development, chapter" - shortish description of what
+    is available (last chapter)
 
-  - pick a URL (whine whine whine whine whine whine
-    whine whine whine whine whine whine ...........)
+  - pick a URL
+    TBD
 
   - mitgcm.org very front page.
     o too many clicks to get to model manual.
