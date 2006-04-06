@@ -298,7 +298,7 @@ in content: Horizontal Dissipation: 2 times in vector-invariant section
   to add: mention the angle of the grid direction relative to 
   Eastward, Northward direction.
   + mention horizGridFile= in file "data" (PARM04)
-- add cylindrical grid description
+- add cylindrical polar grid description
    need to do a better job of relating model variables to this diagram
 
 
