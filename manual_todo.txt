@@ -34,8 +34,6 @@ To do
 
     o finite-volume doesn't leap to FV figure
 
-    o date is 2002
-
     o the src and equation links don't come through to
       the html when they are in figures - see chapter 2 for some
       examples.
