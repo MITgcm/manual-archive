@@ -612,11 +612,7 @@ zonal_filt/           - chapter 2 (JM to check)
 
 list an expeiment which uses package? CNH
 
-Possible for chap 7 - Daniels grafix/ stuff
-
-Need to get packages to contain their available diagnostics (i.e. calls to DIAGNOSTICS_ADD). these are listed in stdout when pacakages are started.
-
-Figure 6.8 is missing
+[DONE]Need to get packages to contain their available diagnostics (i.e. calls to DIAGNOSTICS_ADD). these are listed in stdout when pacakages are started.
 
 6.3.1.7 Tapering: Large, Danabasoglu and Doney, JPO 1997 
  Figure 6.8 is missing
