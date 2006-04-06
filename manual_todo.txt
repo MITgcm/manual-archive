@@ -348,7 +348,9 @@ in content: Horizontal Dissipation: 2 times in vector-invariant section
 - does not use std notation
 - would be better as an appendix of section 2.20:
 (e.g changing the tile to:
+- talk to Baylor
  Appendix: non-dimensional Equations on Spherical-Polar grid.)
+ 
 
 JM
 
