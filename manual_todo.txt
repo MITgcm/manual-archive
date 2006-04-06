@@ -352,6 +352,101 @@ in content: Horizontal Dissipation: 2 times in vector-invariant section
 
 JM
 
+
+>>>> From Andrea
+
+Chapter 3
+--------
+
+Almost all of the 'math mode' text is dropped down as subscripts
+
+divide chapter 3 more clearly into 2 sections?
+   (ie, 3.1-3.6 are more informational, 3.8- 3.18 are examples, and
+    then 3.19 and 3.20 are informational again - rearrange subsections?)
+
+3.1 - don't need a link to the outside of the document (remove it)
+    - link to htdig is broken
+
+3.2.1 - link at bottom to source code points to section 3.2.1
+   (ie, to itself) - link should point to cvs code archive
+
+3.2.2.1  - ('upgrading from an earlier version') belongs under
+      the cvs part, ie, should be 3.2.1.1
+
+3.3 - remove reference to 'diags' section under MITgcm
+    - remove reference to 'exe' and 'bin' sections also
+      (remove the .cvsignore file under these directories in cvs)
+    - add a 'jobs' section, and a description as examples of run scripts
+    - add 'lsopt', 'optim' and 'tutorial examples' with brief descriptions
+    - under 'tools' add a reference to 'build_options'. refer to the 'optfiles'
+    - under 'tools' the adjoint points to section 5 - this is now section 8
+      (but should be a floating reference)
+    - under 'utils' add a reference to exch2 - stuff for different resolutions
+    - the description of the pkg section refers directly to
+      section 3. should be section 6 (actually should be a floating reference)
+
+3.4 - refer to sections 3.8 - 3.18 (now says 3.8 - 3.10)
+3.4.1 - links to the following experiments don't exist or are broken:
+          exp2 - should link to section 3.9
+          hs94.cs-32x32x5 - link to section 3.12
+          add 'convection' to the list, link to section 3.13
+          add 'plume on slope` to the list, link to section 3.14
+          add '??' link to section 3.15
+          add 'dic_example on slope` to the list, link to section 3.16
+          add '??' link to section 3.17
+          add 'offline' and link to section 3.18
+          clean up others and make links where they are needed
+3.4.2 - text suggests to see section 2 for details about what is in the 'code'
+        and 'input' directories - should refer to the examples in this section
+      - add 'build' bullet - this is where the model is compiled and exectuable lives
+
+3.5 - add some little text when talking about 'optfiles' to refer to the tools/build_options
+      as the place where they live (add a link?)
+
+3.6.1 - Add some general 'approach' text - ie, output is controlled either by the
+        'data' file in the input directory or by the data.[pkg name] file for any
+        package running. And there is some default behavior when the 'state' dumps
+        are written.
+3.6.1.2 - needs to be moved to inside section 3.6.2
+
+3.7 - this section is superfluous - remove it -OR- put the tutorial sections (3.8-3.18)
+      underneath this one and leave the text for 3.7 in place
+
+All the 'overview' sections need some reference to the name of the experiment in
+the verification directory
+
+3.10 - in title, 4 degrees - degree symbol is a subscript, not a superscript
+     - is this experiment in the list from section 3.4???
+3.10.3.1 - refers to figures and equations, links are broken
+
+3.11.3.2 - line 43: link to equation is broken
+         - line 51-53: link to equation is broken
+         - there is some mess of text hanging around the end of this section. remove? reformat?
+
+3.12.4.1 - line 34 - link to equation is broken
+         - lines 60,61 - 1st (take out the 'r' in the superscript)
+
+3.13.2 - link to theta-equation is broken
+3.13.5.4 -- ALL of the bold links to variable names are broken
+            line 34: link to equation is broken
+
+3.15.1 - reference to 'fourth experiment' should be removed
+
+3.16.4 - strange formatting, presence of '>' symbols - remove them
+
+3.17.3 - unknown verification directory pointed to - also: no link from list in sec 3.4
+3.17.3.1 - nothing filled in under file input/data - needs description
+
+3.18.2 - point to section 2 for details - need hyperlink
+
+3.19.1 - text (2 places) says that section 3.5 called for compile in 'input' directory - not true!
+         section 3.5 has the 'build' directory in the example
+
+3.20.1 - link to doc at end of section points to this section
+3.20.2 - link to doc at end of section points to this section
+
+     offline - duplicate inputs, what is it, tidy up cfc v.
+               other offline. JM thinks these need tidying up.
 >>>> From Ed
 
 Here are the remaining bits for Chap 4 :
@@ -474,101 +569,6 @@ to do list for chap 7:
 
 
 andrea
-
->>>> From Andrea
-
-Chapter 3
---------
-
-Almost all of the 'math mode' text is dropped down as subscripts
-
-divide chapter 3 more clearly into 2 sections?
-   (ie, 3.1-3.6 are more informational, 3.8- 3.18 are examples, and
-    then 3.19 and 3.20 are informational again - rearrange subsections?)
-
-3.1 - don't need a link to the outside of the document (remove it)
-    - link to htdig is broken
-
-3.2.1 - link at bottom to source code points to section 3.2.1
-   (ie, to itself) - link should point to cvs code archive
-
-3.2.2.1  - ('upgrading from an earlier version') belongs under
-      the cvs part, ie, should be 3.2.1.1
-
-3.3 - remove reference to 'diags' section under MITgcm
-    - remove reference to 'exe' and 'bin' sections also
-      (remove the .cvsignore file under these directories in cvs)
-    - add a 'jobs' section, and a description as examples of run scripts
-    - add 'lsopt', 'optim' and 'tutorial examples' with brief descriptions
-    - under 'tools' add a reference to 'build_options'. refer to the 'optfiles'
-    - under 'tools' the adjoint points to section 5 - this is now section 8
-      (but should be a floating reference)
-    - under 'utils' add a reference to exch2 - stuff for different resolutions
-    - the description of the pkg section refers directly to
-      section 3. should be section 6 (actually should be a floating reference)
-
-3.4 - refer to sections 3.8 - 3.18 (now says 3.8 - 3.10)
-3.4.1 - links to the following experiments don't exist or are broken:
-          exp2 - should link to section 3.9
-          hs94.cs-32x32x5 - link to section 3.12
-          add 'convection' to the list, link to section 3.13
-          add 'plume on slope` to the list, link to section 3.14
-          add '??' link to section 3.15
-          add 'dic_example on slope` to the list, link to section 3.16
-          add '??' link to section 3.17
-          add 'offline' and link to section 3.18
-          clean up others and make links where they are needed
-3.4.2 - text suggests to see section 2 for details about what is in the 'code'
-        and 'input' directories - should refer to the examples in this section
-      - add 'build' bullet - this is where the model is compiled and exectuable lives
-
-3.5 - add some little text when talking about 'optfiles' to refer to the tools/build_options
-      as the place where they live (add a link?)
-
-3.6.1 - Add some general 'approach' text - ie, output is controlled either by the
-        'data' file in the input directory or by the data.[pkg name] file for any
-        package running. And there is some default behavior when the 'state' dumps
-        are written.
-3.6.1.2 - needs to be moved to inside section 3.6.2
-
-3.7 - this section is superfluous - remove it -OR- put the tutorial sections (3.8-3.18)
-      underneath this one and leave the text for 3.7 in place
-
-All the 'overview' sections need some reference to the name of the experiment in
-the verification directory
-
-3.10 - in title, 4 degrees - degree symbol is a subscript, not a superscript
-     - is this experiment in the list from section 3.4???
-3.10.3.1 - refers to figures and equations, links are broken
-
-3.11.3.2 - line 43: link to equation is broken
-         - line 51-53: link to equation is broken
-         - there is some mess of text hanging around the end of this section. remove? reformat?
-
-3.12.4.1 - line 34 - link to equation is broken
-         - lines 60,61 - 1st (take out the 'r' in the superscript)
-
-3.13.2 - link to theta-equation is broken
-3.13.5.4 -- ALL of the bold links to variable names are broken
-            line 34: link to equation is broken
-
-3.15.1 - reference to 'fourth experiment' should be removed
-
-3.16.4 - strange formatting, presence of '>' symbols - remove them
-
-3.17.3 - unknown verification directory pointed to - also: no link from list in sec 3.4
-3.17.3.1 - nothing filled in under file input/data - needs description
-
-3.18.2 - point to section 2 for details - need hyperlink
-
-3.19.1 - text (2 places) says that section 3.5 called for compile in 'input' directory - not true!
-         section 3.5 has the 'build' directory in the example
-
-3.20.1 - link to doc at end of section points to this section
-3.20.2 - link to doc at end of section points to this section
-
-     offline - duplicate inputs, what is it, tidy up cfc v.
-               other offline. JM thinks these need tidying up.
 
 
 9. Model uses
