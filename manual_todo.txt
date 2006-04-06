@@ -594,9 +594,9 @@ profiles/             - GAEL
 ptracers/             - JM + SD + Martin to write something (nothing for this
                           at the moment)
                         AM has diagnostics table for this.
-rbcs/                 - talk to steph
-runclock/             - runclock
-rw/                   - not sure
+rbcs/                 - CNH to talk to steph
+runclock/             - runclock - CNH
+rw/                   - not sure - going to stay says JMC
 sbo/                  - text in sbo_descruption.tex but not linked into
                         part6
 seaice/               - 6.5.2 - no equations, dimitris has promised some
@@ -608,6 +608,8 @@ therm_seaice/         - empty
 thsice/               - 6.5.1 (JM to update?)
 timeave/              - retiring......
 zonal_filt/           - chapter 2 (JM to check)
+
+list an expeiment which uses package? CNH
 
 Possible for chap 7 - Daniels grafix/ stuff
 
