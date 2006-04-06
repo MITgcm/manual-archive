@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/shap.tex,v 1.5 2005/08/08 17:57:06 jmc Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/shap.tex,v 1.6 2006/04/06 00:38:17 molod Exp $
 % $Name:  $
 
 \section{Shapiro Filter} 
@@ -61,3 +61,17 @@ The stability of this S2g filter requires
 $L_{shap} < \mathrm{Min}^{(Global)}(\Delta x,\Delta y)$.
 
 \marginpar{Add Response functions and figures}
+
+\subsection{SHAP Diagnostics}
+\label{sec:pkg:shap_filt:diagnostics}
+
+\begin{verbatim}
+
+------------------------------------------------------------------------
+<-Name->|Levs|<-parsing code->|<--  Units   -->|<- Tile (max=80c) 
+------------------------------------------------------------------------
+SHAP_dT |  5 |SM      MR      |K/s             |Temperature Tendency due to Shapiro Filter
+SHAP_dS |  5 |SM      MR      |g/kg/s          |Specific Humidity Tendency due to Shapiro Filter
+SHAP_dU |  5 |UU   148MR      |m/s^2           |Zonal Wind Tendency due to Shapiro Filter
+SHAP_dV |  5 |VV   147MR      |m/s^2           |Meridional Wind Tendency due to Shapiro Filter
+\end{verbatim}

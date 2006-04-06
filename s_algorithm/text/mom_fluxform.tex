@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/mom_fluxform.tex,v 1.9 2005/08/02 20:54:44 jmc Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/mom_fluxform.tex,v 1.10 2006/04/06 00:38:17 molod Exp $
 % $Name:  $
 
 \section{Flux-form momentum equations}
@@ -405,3 +405,71 @@ KE = \frac{1}{2} \left( \overline{ u^2 }^i + \overline{ v^2 }^j +
 \epsilon_{nh} \overline{ w^2 }^k \right)
 \end{equation}
 
+\subsection{Mom Diagnostics}
+\label{sec:pkg:mom_common:diagnostics}
+
+\begin{verbatim}
+
+------------------------------------------------------------------------
+<-Name->|Levs|<-parsing code->|<--  Units   -->|<- Tile (max=80c) 
+------------------------------------------------------------------------
+VISCAHZ | 15 |SZ      MR      |m^2/s           |Harmonic Visc Coefficient (m2/s) (Zeta Pt)
+VISCA4Z | 15 |SZ      MR      |m^4/s           |Biharmonic Visc Coefficient (m4/s) (Zeta Pt)
+VISCAHD | 15 |SM      MR      |m^2/s           |Harmonic Viscosity Coefficient (m2/s) (Div Pt)
+VISCA4D | 15 |SM      MR      |m^4/s           |Biharmonic Viscosity Coefficient (m4/s) (Div Pt)
+VAHZMAX | 15 |SZ      MR      |m^2/s           |CFL-MAX Harm Visc Coefficient (m2/s) (Zeta Pt)
+VA4ZMAX | 15 |SZ      MR      |m^4/s           |CFL-MAX Biharm Visc Coefficient (m4/s) (Zeta Pt)
+VAHDMAX | 15 |SM      MR      |m^2/s           |CFL-MAX Harm Visc Coefficient (m2/s) (Div Pt)
+VA4DMAX | 15 |SM      MR      |m^4/s           |CFL-MAX Biharm Visc Coefficient (m4/s) (Div Pt)
+VAHZMIN | 15 |SZ      MR      |m^2/s           |RE-MIN Harm Visc Coefficient (m2/s) (Zeta Pt)
+VA4ZMIN | 15 |SZ      MR      |m^4/s           |RE-MIN Biharm Visc Coefficient (m4/s) (Zeta Pt)
+VAHDMIN | 15 |SM      MR      |m^2/s           |RE-MIN Harm Visc Coefficient (m2/s) (Div Pt)
+VA4DMIN | 15 |SM      MR      |m^4/s           |RE-MIN Biharm Visc Coefficient (m4/s) (Div Pt)
+VAHZLTH | 15 |SZ      MR      |m^2/s           |Leith Harm Visc Coefficient (m2/s) (Zeta Pt)
+VA4ZLTH | 15 |SZ      MR      |m^4/s           |Leith Biharm Visc Coefficient (m4/s) (Zeta Pt)
+VAHDLTH | 15 |SM      MR      |m^2/s           |Leith Harm Visc Coefficient (m2/s) (Div Pt)
+VA4DLTH | 15 |SM      MR      |m^4/s           |Leith Biharm Visc Coefficient (m4/s) (Div Pt)
+VAHZLTHD| 15 |SZ      MR      |m^2/s           |LeithD Harm Visc Coefficient (m2/s) (Zeta Pt)
+VA4ZLTHD| 15 |SZ      MR      |m^4/s           |LeithD Biharm Visc Coefficient (m4/s) (Zeta Pt)
+VAHDLTHD| 15 |SM      MR      |m^2/s           |LeithD Harm Visc Coefficient (m2/s) (Div Pt)
+VA4DLTHD| 15 |SM      MR      |m^4/s           |LeithD Biharm Visc Coefficient (m4/s) (Div Pt)
+VAHZSMAG| 15 |SZ      MR      |m^2/s           |Smagorinsky Harm Visc Coefficient (m2/s) (Zeta Pt)
+VA4ZSMAG| 15 |SZ      MR      |m^4/s           |Smagorinsky Biharm Visc Coeff. (m4/s) (Zeta Pt)
+VAHDSMAG| 15 |SM      MR      |m^2/s           |Smagorinsky Harm Visc Coefficient (m2/s) (Div Pt)
+VA4DSMAG| 15 |SM      MR      |m^4/s           |Smagorinsky Biharm Visc Coeff. (m4/s) (Div Pt)
+momKE   | 15 |SM      MR      |m^2/s^2         |Kinetic Energy (in momentum Eq.)
+momHDiv | 15 |SM      MR      |s^-1            |Horizontal Divergence (in momentum Eq.)
+momVort3| 15 |SZ      MR      |s^-1            |3rd component (vertical) of Vorticity
+Strain  | 15 |SZ      MR      |s^-1            |Horizontal Strain of Horizontal Velocities
+Tension | 15 |SM      MR      |s^-1            |Horizontal Tension of Horizontal Velocities
+UBotDrag| 15 |UU   129MR      |m/s^2           |U momentum tendency from Bottom Drag
+VBotDrag| 15 |VV   128MR      |m/s^2           |V momentum tendency from Bottom Drag
+USidDrag| 15 |UU   131MR      |m/s^2           |U momentum tendency from Side Drag
+VSidDrag| 15 |VV   130MR      |m/s^2           |V momentum tendency from Side Drag
+Um_Diss | 15 |UU   133MR      |m/s^2           |U momentum tendency from Dissipation
+Vm_Diss | 15 |VV   132MR      |m/s^2           |V momentum tendency from Dissipation
+Um_Advec| 15 |UU   135MR      |m/s^2           |U momentum tendency from Advection terms
+Vm_Advec| 15 |VV   134MR      |m/s^2           |V momentum tendency from Advection terms
+Um_Cori | 15 |UU   137MR      |m/s^2           |U momentum tendency from Coriolis term
+Vm_Cori | 15 |VV   136MR      |m/s^2           |V momentum tendency from Coriolis term
+Um_Ext  | 15 |UU   137MR      |m/s^2           |U momentum tendency from external forcing
+Vm_Ext  | 15 |VV   138MR      |m/s^2           |V momentum tendency from external forcing
+Um_AdvZ3| 15 |UU   141MR      |m/s^2           |U momentum tendency from Vorticity Advection
+Vm_AdvZ3| 15 |VV   140MR      |m/s^2           |V momentum tendency from Vorticity Advection
+Um_AdvRe| 15 |UU   143MR      |m/s^2           |U momentum tendency from vertical Advection (Explicit part)
+Vm_AdvRe| 15 |VV   142MR      |m/s^2           |V momentum tendency from vertical Advection (Explicit part)
+ADVx_Um | 15 |UM   145MR      |m^4/s^2         |Zonal      Advective Flux of U momentum
+ADVy_Um | 15 |VZ   144MR      |m^4/s^2         |Meridional Advective Flux of U momentum
+ADVrE_Um| 15 |WU      LR      |m^4/s^2         |Vertical   Advective Flux of U momentum (Explicit part)
+ADVx_Vm | 15 |UZ   148MR      |m^4/s^2         |Zonal      Advective Flux of V momentum
+ADVy_Vm | 15 |VM   147MR      |m^4/s^2         |Meridional Advective Flux of V momentum
+ADVrE_Vm| 15 |WV      LR      |m^4/s^2         |Vertical   Advective Flux of V momentum (Explicit part)
+VISCx_Um| 15 |UM   151MR      |m^4/s^2         |Zonal      Viscous Flux of U momentum
+VISCy_Um| 15 |VZ   150MR      |m^4/s^2         |Meridional Viscous Flux of U momentum
+VISrE_Um| 15 |WU      LR      |m^4/s^2         |Vertical   Viscous Flux of U momentum (Explicit part)
+VISrI_Um| 15 |WU      LR      |m^4/s^2         |Vertical   Viscous Flux of U momentum (Implicit part)
+VISCx_Vm| 15 |UZ   155MR      |m^4/s^2         |Zonal      Viscous Flux of V momentum
+VISCy_Vm| 15 |VM   154MR      |m^4/s^2         |Meridional Viscous Flux of V momentum
+VISrE_Vm| 15 |WV      LR      |m^4/s^2         |Vertical   Viscous Flux of V momentum (Explicit part)
+VISrI_Vm| 15 |WV      LR      |m^4/s^2         |Vertical   Viscous Flux of V momentum (Implicit part)
+\end{verbatim}
