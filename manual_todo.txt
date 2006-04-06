@@ -633,7 +633,7 @@ to do list for chap 7:
 andrea
 
 
-9. Model uses
+9. Publications using MITgcm
    Spall, Gianmaria, Legg, Dewar, Cessi, Cournelle, Follows, Adcroft, etc...
    (check in support for more names)
 
