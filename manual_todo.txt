@@ -597,14 +597,15 @@ ptracers/             - JM + SD + Martin to write something (nothing for this
 rbcs/                 - CNH to talk to steph
 runclock/             - runclock - CNH
 rw/                   - not sure - going to stay says JMC. quick IO calls
+                        JMC to write a quick note for that.
 sbo/                  - text in sbo_descruption.tex but not linked into
-                        part6
+                        part6 - CNH
 seaice/               - 6.5.2 - no equations, dimitris has promised some
 shap_filt/            - chapter 2, JM to check
 shelfice/             - nothing yet (martin?)
-solver/               - empty
+solver/               - empty (go away?)
 sphere/               - chapter 5 or 8 (PH to check)
-therm_seaice/         - empty
+therm_seaice/         - empty (go away?)
 thsice/               - 6.5.1 (JM to update?)
 timeave/              - retiring......
 zonal_filt/           - chapter 2 (JM to check)
