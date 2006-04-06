@@ -14,11 +14,6 @@ o HTML, scripts and front content
   - pick a URL
     TBD
 
-  - mitgcm.org very front page.
-    o too many clicks to get to model manual.
-      make doc link go to mitgcm.org/r2_web_testing/latest
-      and add "HowTo" reference etc... to /latest page 
-
   - mitgcm.org/r2_web_testing/latest
     o add another short-cut for quick download
 
