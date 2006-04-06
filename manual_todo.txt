@@ -566,7 +566,6 @@ dic/                  - 6.7.2
 ebm/                  - (check with PH)
 ecco/                 - chapter 8
 embed_files/          - add something to chapter 7
-ex3/                  - move to contrib (EH)
 exch2/                - 6.2.2
 exf/                  - 6.3.4
 fizhi/                - 6.4.3
