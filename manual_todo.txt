@@ -393,11 +393,8 @@ Add more to quick links on front page
 to do list for chap 7:
 
 
-7.1.1 - links to section 7.1.4: the text of the first one should read "see MITgcm Kernal Diagnostics Menu"
+7.1.1 - links to section 7.1.4: the text of the first one should read "see MITgcm Kernel Diagnostics Menu"
         the links are pointing to the proper place
-
-7.1.4.0.1 - the link at the bottom to the fizhi diagnostic menu is broken
-          - there should be links here to the diagnostic menus from other packages
 
 7.5.1 - add Graphix to the list of stuff in utils/matlab
 7.5.2 - empty
