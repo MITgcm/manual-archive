@@ -538,10 +538,6 @@ Chapter 6
 
    the master package diagram does not appear in the document
 
-   pkg/ptracers doesn't seem to have any documentation (see packages list below)
-                martin volunteered - get martin to ask steph
-
-
 Master list of packages (add this to beginning of chap 6)
 
 admtlm/               - autodiff (chapter 5)
@@ -588,13 +584,16 @@ mom_fluxform/         - in chapter 2 (JM check)
 mom_vecinv/           - in chapter 2 (JM check)
 monitor/              - 7.4
 my82/                 - nothing, (martin?)
-obcs/                 - 6.3 (needs a check)
+obcs/                 - 6.3 (needs a check - ask PH to read)
 ocn_compon_interf/    - 6.6 (no content yet)
 offline/              - nothing, tutorials that need work but no package   section entry
+                        trivial to document (CNH to do)
 opps/                 - nothing, (martin?)
 pp81/                 - nothing, (martin?)
 profiles/             - GAEL
-ptracers/             - JM + SD to write something
+ptracers/             - JM + SD + Martin to write something (nothing for this
+                          at the moment)
+                        AM has diagnostics table for this.
 rbcs/                 - talk to steph
 runclock/             - runclock
 rw/                   - not sure
