@@ -1,4 +1,4 @@
-Rebuild and set to do cron build
+Rebuild and set to do cron build - DONE on hugo
 
 To do
 
