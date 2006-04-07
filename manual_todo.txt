@@ -25,16 +25,6 @@ o HTML, scripts and front content
       Tutorials (broken)
       Browse Code
 
-    o mitgcm.org (front content) [DONE]
-      Get Code (where does this go to?)
-      get rid of * CVS current bullet
-      make HTML-enabled CVS code browser leap to MITgcm/MITgcm
-
-    o authors
-      John, Alistair, Jean-Michel, Patrick, Andrea, Steph, Helen,
-      Martin, Baylor, Dimitris, David, Ed, Mick, Chris, Constantinos,
-      Gael - others?
-
     o words on http://mitgcm.org/r2_web_testing/latest
       change to 
        "access on-line Auser manual/A and Atable of contents/A
@@ -633,7 +623,7 @@ to do list for chap 7:
 andrea
 
 
-9. Publications using MITgcm
+9. Publications using MITgcm --> "Previous Applications of MITgcm"
    Spall, Gianmaria, Legg, Dewar, Cessi, Cournelle, Follows, Adcroft, etc...
    (check in support for more names)
 
