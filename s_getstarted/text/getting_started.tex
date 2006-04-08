@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.33 2006/04/08 01:50:49 edhill Exp $
+% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.34 2006/04/08 15:29:05 edhill Exp $
 % $Name:  $
 
 %\section{Getting started}
@@ -126,7 +126,7 @@ The MITgcm web site contains further directions concerning the source
 code and CVS.  It also contains a web interface to our CVS archive so
 that one may easily view the state of files, revisions, and other
 development milestones:
-\begin{rawhtml} <A href=''http://mitgcm.org/download'' target="idontexist"> \end{rawhtml}
+\begin{rawhtml} <A href="http://mitgcm.org/download" target="idontexist"> \end{rawhtml}
 \begin{verbatim}
 http://mitgcm.org/source_code.html
 \end{verbatim}
@@ -163,7 +163,7 @@ track of your file versions with respect to the repository. Don't edit
 the files in \texttt{CVS}!  You can also use CVS to download code
 updates.  More extensive information on using CVS for maintaining
 MITgcm code can be found
-\begin{rawhtml} <A href=''http://mitgcm.org/usingcvstoget.html'' target="idontexist"> \end{rawhtml}
+\begin{rawhtml} <A href="http://mitgcm.org/usingcvstoget.html" target="idontexist"> \end{rawhtml}
 here
 \begin{rawhtml} </A> \end{rawhtml} 
 .
@@ -192,7 +192,7 @@ delete; even if you do not use CVS yourself the information can help
 us if you should need to send us your copy of the code.  If a recent
 tar file does not exist, then please contact the developers through
 the 
-\begin{rawhtml} <A href=''mailto:MITgcm-support@mitgcm.org"> \end{rawhtml}
+\begin{rawhtml} <A href="mailto:MITgcm-support@mitgcm.org"> \end{rawhtml}
 MITgcm-support@mitgcm.org
 \begin{rawhtml} </A> \end{rawhtml}
 mailing list.
@@ -549,7 +549,7 @@ Through the MITgcm-support list, the MITgcm developers are willing to
 provide help writing or modifing ``optfiles''.  And we encourage users
 to post new ``optfiles'' (particularly ones for new machines or
 architectures) to the 
-\begin{rawhtml} <A href=''mailto:MITgcm-support@mitgcm.org"> \end{rawhtml}
+\begin{rawhtml} <A href="mailto:MITgcm-support@mitgcm.org"> \end{rawhtml}
 MITgcm-support@mitgcm.org
 \begin{rawhtml} </A> \end{rawhtml}
 list.
@@ -657,29 +657,29 @@ package.  At a minimum, the instantaneous ``state'' of the model is
 written out, which is made of the following files:
 
 \begin{itemize}
-\item \texttt{U.00000nIter} - zonal component of velocity field (m/s and $>
-0 $ eastward).
+\item \texttt{U.00000nIter} - zonal component of velocity field (m/s
+  and positive eastward).
 
-\item \texttt{V.00000nIter} - meridional component of velocity field (m/s
-and $> 0$ northward).
+\item \texttt{V.00000nIter} - meridional component of velocity field
+  (m/s and positive northward).
 
-\item \texttt{W.00000nIter} - vertical component of velocity field (ocean:
-m/s and $> 0$ upward, atmosphere: Pa/s and $> 0$ towards increasing pressure
-i.e. downward).
+\item \texttt{W.00000nIter} - vertical component of velocity field
+  (ocean: m/s and positive upward, atmosphere: Pa/s and positive
+  towards increasing pressure i.e. downward).
 
-\item \texttt{T.00000nIter} - potential temperature (ocean: $^{0}$C,
-atmosphere: $^{0}$K).
+\item \texttt{T.00000nIter} - potential temperature (ocean:
+  $^{\circ}\mathrm{C}$, atmosphere: $^{\circ}\mathrm{K}$).
 
-\item \texttt{S.00000nIter} - ocean: salinity (psu), atmosphere: water vapor
-(g/kg).
+\item \texttt{S.00000nIter} - ocean: salinity (psu), atmosphere: water
+  vapor (g/kg).
 
-\item \texttt{Eta.00000nIter} - ocean: surface elevation (m), atmosphere:
-surface pressure anomaly (Pa).
+\item \texttt{Eta.00000nIter} - ocean: surface elevation (m),
+  atmosphere: surface pressure anomaly (Pa).
 \end{itemize}
 
 The chain \texttt{00000nIter} consists of ten figures that specify the
-iteration number at which the output is written out. For example, \texttt{%
-U.0000000300} is the zonal velocity at iteration 300.
+iteration number at which the output is written out. For example,
+\texttt{U.0000000300} is the zonal velocity at iteration 300.
 
 In addition, a ``pickup'' or ``checkpoint'' file called:
 
@@ -716,7 +716,7 @@ format and can thus be browsed and/or plotted using tools such as:
   with every netCDF install:
   \begin{rawhtml} <A href="http://www.unidata.ucar.edu/packages/netcdf/"> \end{rawhtml}
 \begin{verbatim}
-     http://www.unidata.ucar.edu/packages/netcdf/
+http://www.unidata.ucar.edu/packages/netcdf/
 \end{verbatim}
   \begin{rawhtml} </A> \end{rawhtml} and it converts the netCDF
   binaries into formatted ASCII text files.
@@ -725,12 +725,17 @@ format and can thus be browsed and/or plotted using tools such as:
   to plot netCDF data and it runs on most OSes:
   \begin{rawhtml} <A href="http://meteora.ucsd.edu/~pierce/ncview_home_page.html"> \end{rawhtml}
 \begin{verbatim}
-     http://meteora.ucsd.edu/~pierce/ncview_home_page.html
+http://meteora.ucsd.edu/~pierce/ncview_home_page.html
 \end{verbatim}
   \begin{rawhtml} </A> \end{rawhtml}
   
 \item MatLAB(c) and other common post-processing environments provide
   various netCDF interfaces including:
+  \begin{rawhtml} <A href="http://mexcdf.sourceforge.net/"> \end{rawhtml}
+\begin{verbatim}
+http://mexcdf.sourceforge.net/
+\end{verbatim}
+  \begin{rawhtml} </A> \end{rawhtml}
   \begin{rawhtml} <A href="http://woodshole.er.usgs.gov/staffpages/cdenham/public_html/MexCDF/nc4ml5.html"> \end{rawhtml}
 \begin{verbatim}
 http://woodshole.er.usgs.gov/staffpages/cdenham/public_html/MexCDF/nc4ml5.html
