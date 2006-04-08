@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_overview/text/manual_fromjm.tex,v 1.4 2006/04/05 02:27:32 edhill Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual_fromjm.tex,v 1.5 2006/04/08 01:50:49 edhill Exp $
 % $Name:  $
 
 \documentclass[12pt]{book}
@@ -34,7 +34,7 @@
 
 % Section: Overview
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual_fromjm.tex,v 1.4 2006/04/05 02:27:32 edhill Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual_fromjm.tex,v 1.5 2006/04/08 01:50:49 edhill Exp $
 % $Name:  $
 
 \section{Introduction}
@@ -95,7 +95,7 @@ listed in an Appendix.
 We begin by briefly showing some of the results of the model in action to
 give a feel for the wide range of problems that can be addressed using it.
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual_fromjm.tex,v 1.4 2006/04/05 02:27:32 edhill Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual_fromjm.tex,v 1.5 2006/04/08 01:50:49 edhill Exp $
 % $Name:  $
 
 \section{Illustrations of the model in action}
@@ -118,7 +118,7 @@ oceanographic flows at both small and large scales.
 
 Fig.E1a.\ref{fig:eddy_cs} shows an instantaneous plot of the 500$mb$
 temperature field obtained using the atmospheric isomorph of MITgcm run at
-2.8$^{\circ }$ resolution on the cubed sphere. We see cold air over the pole
+$2.8^{\circ }$ resolution on the cubed sphere. We see cold air over the pole
 (blue) and warm air along an equatorial band (red). Fully developed
 baroclinic eddies spawned in the northern hemisphere storm track are
 evident. There are no mountains or land-sea contrast in this calculation,
@@ -158,8 +158,8 @@ increased until the baroclinic instability process is resolved, numerical
 solutions of a different and much more realistic kind, can be obtained.
 
 Fig. ?.? shows the surface temperature and velocity field obtained from
-MITgcm run at $\frac{1}{6}^{\circ }$ horizontal resolution on a $lat-lon$
-grid in which the pole has been rotated by 90$^{\circ }$ on to the equator
+MITgcm run at $\frac{1}{6}^{\circ }$ horizontal resolution on a \textit{lat-lon}
+grid in which the pole has been rotated by $90^{\circ }$ on to the equator
 (to avoid the converging of meridian in northern latitudes). 21 vertical
 levels are used in the vertical with a `lopped cell' representation of
 topography. The development and propagation of anomalously warm and cold
@@ -174,10 +174,10 @@ visible.
 
 \subsection{Global ocean circulation}
 
-Fig.E2a shows the pattern of ocean currents at the surface of a 4$^{\circ }$
+Fig.E2a shows the pattern of ocean currents at the surface of a $4^{\circ }$
 global ocean model run with 15 vertical levels. Lopped cells are used to
-represent topography on a regular $lat-lon$ grid extending from 70$^{\circ
-}N $ to 70$^{\circ }S$. The model is driven using monthly-mean winds with
+represent topography on a regular \textit{lat-lon} grid extending from $70^{\circ
+}N $ to $70^{\circ }S$. The model is driven using monthly-mean winds with
 mixed boundary conditions on temperature and salinity at the surface. The
 transfer properties of ocean eddies, convection and mixing is parameterized
 in this model.
@@ -233,7 +233,7 @@ data assimilation studies.
 
 As one example of application of the MITgcm adjoint, Fig.E4 maps the
 gradient $\frac{\partial J}{\partial \mathcal{H}}$where $J$ is the magnitude
-of the overturning streamfunction shown in fig?.? at 40$^{\circ }$N and $
+of the overturning streamfunction shown in fig?.? at $40^{\circ }N$ and $
 \mathcal{H}$ is the air-sea heat flux 100 years before. We see that $J$ is
 sensitive to heat fluxes over the Labrador Sea, one of the important sources
 of deep water for the thermohaline circulations. This calculation also
@@ -286,7 +286,7 @@ stratification of the ACC.
 %notci%\input{part1/lab_figure}
 %%CNHend
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual_fromjm.tex,v 1.4 2006/04/05 02:27:32 edhill Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual_fromjm.tex,v 1.5 2006/04/08 01:50:49 edhill Exp $
 % $Name:  $
 
 \section{Continuous equations in `r' coordinates}
@@ -656,8 +656,8 @@ $\underline{\underline{\mathcal{F}_{\dot{r}}}}$
 \end{equation}
 \qquad \qquad \qquad \qquad \qquad
 
-In the above `${r}$' is the distance from the center of the earth and `$lat$
-' is latitude.
+In the above `${r}$' is the distance from the center of the earth and
+`\textit{lat}' is latitude.
 
 Grad and div operators in spherical coordinates are defined in appendix
 OPERATORS.
@@ -1021,7 +1021,7 @@ to discretize the model.
 Tangent linear and adjoint counterparts of the forward model and described
 in Chapter 5.
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual_fromjm.tex,v 1.4 2006/04/05 02:27:32 edhill Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual_fromjm.tex,v 1.5 2006/04/08 01:50:49 edhill Exp $
 % $Name:  $
 
 \section{Appendix ATMOSPHERE}
@@ -1148,7 +1148,7 @@ _{h}+\mathbf{\nabla }_{p}\phi ^{\prime } &=&\vec{\mathbf{\mathcal{F}}} \\
 \frac{D\theta }{Dt} &=&\frac{\mathcal{Q}}{\Pi }  \label{eq:atmos-prime}
 \end{eqnarray}
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual_fromjm.tex,v 1.4 2006/04/05 02:27:32 edhill Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual_fromjm.tex,v 1.5 2006/04/08 01:50:49 edhill Exp $
 % $Name:  $
 
 \section{Appendix OCEAN}
@@ -1364,7 +1364,7 @@ the perturbation density. Nevertheless, it is the hydrostatic ($\epsilon
 _{nh}=0$ form of these equations that are used throughout the ocean modeling
 community and referred to as the primitive equations (HPE).
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual_fromjm.tex,v 1.4 2006/04/05 02:27:32 edhill Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual_fromjm.tex,v 1.5 2006/04/08 01:50:49 edhill Exp $
 % $Name:  $
 
 \section{Appendix:OPERATORS}
