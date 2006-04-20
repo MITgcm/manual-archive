@@ -329,6 +329,7 @@ in content: Horizontal Dissipation: 2 times in vector-invariant section
 
 2.16 & 2.17 & 2.18 : 
  - add 1rst Order upwind option & DST-2 (Lax-Wendroff) options
+ - fix equations 2.202 & 2.203 (thanks to Martin)
 
 2.20.2 mercator, non-dimensional Equations:
 - does not use std notation
