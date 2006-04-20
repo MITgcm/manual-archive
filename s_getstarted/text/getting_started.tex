@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.34 2006/04/08 15:29:05 edhill Exp $
+% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.35 2006/04/20 22:09:08 molod Exp $
 % $Name:  $
 
 %\section{Getting started}
@@ -14,7 +14,6 @@ structure are described more fully in chapters
 \ref{chap:discretization} and \ref{chap:sarch}, respectively. Here, in
 this section, we provide information on how to customize the code when
 you are ready to try implementing the configuration you have in mind.
-
 
 \section{Where to find information}
 \label{sect:whereToFindInfo}
@@ -603,6 +602,392 @@ and then calling the executable with:
 where we are re-directing the stream of text output to the file
 \texttt{output.txt}.
 
+\subsection{Building/compiling the code elsewhere}
+
+In the example above (section \ref{sect:buildingCode}) we built the
+executable in the {\em input} directory of the experiment for
+convenience. You can also configure and compile the code in other
+locations, for example on a scratch disk with out having to copy the
+entire source tree. The only requirement to do so is you have {\tt
+  genmake2} in your path or you know the absolute path to {\tt
+  genmake2}.
+
+The following sections outline some possible methods of organizing
+your source and data.
+
+\subsubsection{Building from the {\em ../code directory}}
+
+This is just as simple as building in the {\em input/} directory:
+\begin{verbatim}
+% cd verification/exp2/code
+% ../../../tools/genmake2
+% make depend
+% make
+\end{verbatim}
+However, to run the model the executable ({\em mitgcmuv}) and input
+files must be in the same place. If you only have one calculation to make:
+\begin{verbatim}
+% cd ../input
+% cp ../code/mitgcmuv ./
+% ./mitgcmuv > output.txt
+\end{verbatim}
+or if you will be making multiple runs with the same executable:
+\begin{verbatim}
+% cd ../
+% cp -r input run1
+% cp code/mitgcmuv run1
+% cd run1
+% ./mitgcmuv > output.txt
+\end{verbatim}
+
+\subsubsection{Building from a new directory}
+
+Since the {\em input} directory contains input files it is often more
+useful to keep {\em input} pristine and build in a new directory
+within {\em verification/exp2/}:
+\begin{verbatim}
+% cd verification/exp2
+% mkdir build
+% cd build
+% ../../../tools/genmake2 -mods=../code
+% make depend
+% make
+\end{verbatim}
+This builds the code exactly as before but this time you need to copy
+either the executable or the input files or both in order to run the
+model. For example,
+\begin{verbatim}
+% cp ../input/* ./
+% ./mitgcmuv > output.txt
+\end{verbatim}
+or if you tend to make multiple runs with the same executable then
+running in a new directory each time might be more appropriate:
+\begin{verbatim}
+% cd ../
+% mkdir run1
+% cp build/mitgcmuv run1/
+% cp input/* run1/
+% cd run1
+% ./mitgcmuv > output.txt
+\end{verbatim}
+
+\subsubsection{Building on a scratch disk}
+
+Model object files and output data can use up large amounts of disk
+space so it is often the case that you will be operating on a large
+scratch disk. Assuming the model source is in {\em ~/MITgcm} then the
+following commands will build the model in {\em /scratch/exp2-run1}:
+\begin{verbatim}
+% cd /scratch/exp2-run1
+% ~/MITgcm/tools/genmake2 -rootdir=~/MITgcm \
+  -mods=~/MITgcm/verification/exp2/code
+% make depend
+% make
+\end{verbatim}
+To run the model here, you'll need the input files:
+\begin{verbatim}
+% cp ~/MITgcm/verification/exp2/input/* ./
+% ./mitgcmuv > output.txt
+\end{verbatim}
+
+As before, you could build in one directory and make multiple runs of
+the one experiment:
+\begin{verbatim}
+% cd /scratch/exp2
+% mkdir build
+% cd build
+% ~/MITgcm/tools/genmake2 -rootdir=~/MITgcm \
+  -mods=~/MITgcm/verification/exp2/code
+% make depend
+% make
+% cd ../
+% cp -r ~/MITgcm/verification/exp2/input run2
+% cd run2
+% ./mitgcmuv > output.txt
+\end{verbatim}
+
+
+\subsection{Using \texttt{genmake2}}
+\label{sect:genmake}
+
+To compile the code, first use the program \texttt{genmake2} (located
+in the \texttt{tools} directory) to generate a Makefile.
+\texttt{genmake2} is a shell script written to work with all
+``sh''--compatible shells including bash v1, bash v2, and Bourne.
+Internally, \texttt{genmake2} determines the locations of needed
+files, the compiler, compiler options, libraries, and Unix tools.  It
+relies upon a number of ``optfiles'' located in the
+\texttt{tools/build\_options} directory.
+
+The purpose of the optfiles is to provide all the compilation options
+for particular ``platforms'' (where ``platform'' roughly means the
+combination of the hardware and the compiler) and code configurations.
+Given the combinations of possible compilers and library dependencies
+({\it eg.}  MPI and NetCDF) there may be numerous optfiles available
+for a single machine.  The naming scheme for the majority of the
+optfiles shipped with the code is
+\begin{center}
+  {\bf OS\_HARDWARE\_COMPILER }
+\end{center}
+where
+\begin{description}
+\item[OS] is the name of the operating system (generally the
+  lower-case output of the {\tt 'uname'} command)
+\item[HARDWARE] is a string that describes the CPU type and
+  corresponds to output from the  {\tt 'uname -m'} command:
+  \begin{description}
+  \item[ia32] is for ``x86'' machines such as i386, i486, i586, i686,
+    and athlon
+  \item[ia64] is for Intel IA64 systems (eg. Itanium, Itanium2)
+  \item[amd64] is AMD x86\_64 systems
+  \item[ppc] is for Mac PowerPC systems
+  \end{description}
+\item[COMPILER] is the compiler name (generally, the name of the
+  FORTRAN executable)
+\end{description}
+
+In many cases, the default optfiles are sufficient and will result in
+usable Makefiles.  However, for some machines or code configurations,
+new ``optfiles'' must be written. To create a new optfile, it is
+generally best to start with one of the defaults and modify it to suit
+your needs.  Like \texttt{genmake2}, the optfiles are all written
+using a simple ``sh''--compatible syntax.  While nearly all variables
+used within \texttt{genmake2} may be specified in the optfiles, the
+critical ones that should be defined are:
+
+\begin{description}
+\item[FC] the FORTRAN compiler (executable) to use
+\item[DEFINES] the command-line DEFINE options passed to the compiler
+\item[CPP] the C pre-processor to use
+\item[NOOPTFLAGS] options flags for special files that should not be
+  optimized
+\end{description}
+
+For example, the optfile for a typical Red Hat Linux machine (``ia32''
+architecture) using the GCC (g77) compiler is
+\begin{verbatim}
+FC=g77
+DEFINES='-D_BYTESWAPIO -DWORDLENGTH=4'
+CPP='cpp  -traditional -P'
+NOOPTFLAGS='-O0'
+#  For IEEE, use the "-ffloat-store" option
+if test "x$IEEE" = x ; then
+    FFLAGS='-Wimplicit -Wunused -Wuninitialized'
+    FOPTIM='-O3 -malign-double -funroll-loops'
+else
+    FFLAGS='-Wimplicit -Wunused -ffloat-store'
+    FOPTIM='-O0 -malign-double'
+fi
+\end{verbatim}
+
+If you write an optfile for an unrepresented machine or compiler, you
+are strongly encouraged to submit the optfile to the MITgcm project
+for inclusion.  Please send the file to the
+\begin{rawhtml} <A href="mail-to:MITgcm-support@mitgcm.org"> \end{rawhtml}
+\begin{center}
+  MITgcm-support@mitgcm.org
+\end{center}
+\begin{rawhtml} </A> \end{rawhtml}
+mailing list.
+
+In addition to the optfiles, \texttt{genmake2} supports a number of
+helpful command-line options.  A complete list of these options can be
+obtained from:
+\begin{verbatim}
+% genmake2 -h
+\end{verbatim}
+
+The most important command-line options are:
+\begin{description}
+  
+\item[\texttt{--optfile=/PATH/FILENAME}] specifies the optfile that
+  should be used for a particular build.
+  
+  If no "optfile" is specified (either through the command line or the
+  MITGCM\_OPTFILE environment variable), genmake2 will try to make a
+  reasonable guess from the list provided in {\em
+    tools/build\_options}.  The method used for making this guess is
+  to first determine the combination of operating system and hardware
+  (eg. "linux\_ia32") and then find a working FORTRAN compiler within
+  the user's path.  When these three items have been identified,
+  genmake2 will try to find an optfile that has a matching name.
+  
+\item[\texttt{--pdefault='PKG1 PKG2 PKG3 ...'}] specifies the default
+  set of packages to be used.  The normal order of precedence for
+  packages is as follows:
+  \begin{enumerate}
+  \item If available, the command line (\texttt{--pdefault}) settings
+    over-rule any others.
+
+  \item Next, \texttt{genmake2} will look for a file named
+    ``\texttt{packages.conf}'' in the local directory or in any of the
+    directories specified with the \texttt{--mods} option.
+    
+  \item Finally, if neither of the above are available,
+    \texttt{genmake2} will use the \texttt{/pkg/pkg\_default} file.
+  \end{enumerate}
+  
+\item[\texttt{--pdepend=/PATH/FILENAME}] specifies the dependency file
+  used for packages.
+  
+  If not specified, the default dependency file {\em pkg/pkg\_depend}
+  is used.  The syntax for this file is parsed on a line-by-line basis
+  where each line containes either a comment ("\#") or a simple
+  "PKGNAME1 (+|-)PKGNAME2" pairwise rule where the "+" or "-" symbol
+  specifies a "must be used with" or a "must not be used with"
+  relationship, respectively.  If no rule is specified, then it is
+  assumed that the two packages are compatible and will function
+  either with or without each other.
+  
+\item[\texttt{--adof=/path/to/file}] specifies the "adjoint" or
+  automatic differentiation options file to be used.  The file is
+  analogous to the ``optfile'' defined above but it specifies
+  information for the AD build process.
+  
+  The default file is located in {\em
+    tools/adjoint\_options/adjoint\_default} and it defines the "TAF"
+  and "TAMC" compilers.  An alternate version is also available at
+  {\em tools/adjoint\_options/adjoint\_staf} that selects the newer
+  "STAF" compiler.  As with any compilers, it is helpful to have their
+  directories listed in your {\tt \$PATH} environment variable.
+  
+\item[\texttt{--mods='DIR1 DIR2 DIR3 ...'}] specifies a list of
+  directories containing ``modifications''.  These directories contain
+  files with names that may (or may not) exist in the main MITgcm
+  source tree but will be overridden by any identically-named sources
+  within the ``MODS'' directories.
+  
+  The order of precedence for this "name-hiding" is as follows:
+  \begin{itemize}
+  \item ``MODS'' directories (in the order given)
+  \item Packages either explicitly specified or provided by default
+    (in the order given)
+  \item Packages included due to package dependencies (in the order
+    that that package dependencies are parsed)
+  \item The "standard dirs" (which may have been specified by the
+    ``-standarddirs'' option)
+  \end{itemize}
+  
+\item[\texttt{--mpi}] This option enables certain MPI features (using
+  CPP \texttt{\#define}s) within the code and is necessary for MPI
+  builds (see Section \ref{sect:mpi-build}).
+  
+\item[\texttt{--make=/path/to/gmake}] Due to the poor handling of
+  soft-links and other bugs common with the \texttt{make} versions
+  provided by commercial Unix vendors, GNU \texttt{make} (sometimes
+  called \texttt{gmake}) should be preferred.  This option provides a
+  means for specifying the make executable to be used.
+  
+\item[\texttt{--bash=/path/to/sh}] On some (usually older UNIX)
+  machines, the ``bash'' shell is unavailable.  To run on these
+  systems, \texttt{genmake2} can be invoked using an ``sh'' (that is,
+  a Bourne, POSIX, or compatible) shell.  The syntax in these
+  circumstances is:
+  \begin{center}
+    \texttt{\%  /bin/sh genmake2 -bash=/bin/sh [...options...]}
+  \end{center}
+  where \texttt{/bin/sh} can be replaced with the full path and name
+  of the desired shell.
+
+\end{description}
+
+
+\subsection{Building with MPI}
+\label{sect:mpi-build}
+
+Building MITgcm to use MPI libraries can be complicated due to the
+variety of different MPI implementations available, their dependencies
+or interactions with different compilers, and their often ad-hoc
+locations within file systems.  For these reasons, its generally a
+good idea to start by finding and reading the documentation for your
+machine(s) and, if necessary, seeking help from your local systems
+administrator.
+
+The steps for building MITgcm with MPI support are:
+\begin{enumerate}
+  
+\item Determine the locations of your MPI-enabled compiler and/or MPI
+  libraries and put them into an options file as described in Section
+  \ref{sect:genmake}.  One can start with one of the examples in:
+  \begin{rawhtml} <A
+    href="http://mitgcm.org/cgi-bin/viewcvs.cgi/MITgcm/tools/build_options/">
+  \end{rawhtml}
+  \begin{center}
+    \texttt{MITgcm/tools/build\_options/}
+  \end{center}
+  \begin{rawhtml} </A> \end{rawhtml}
+  such as \texttt{linux\_ia32\_g77+mpi\_cg01} or
+  \texttt{linux\_ia64\_efc+mpi} and then edit it to suit the machine at
+  hand.  You may need help from your user guide or local systems
+  administrator to determine the exact location of the MPI libraries.
+  If libraries are not installed, MPI implementations and related
+  tools are available including:
+  \begin{itemize}
+  \item \begin{rawhtml} <A
+      href="http://www-unix.mcs.anl.gov/mpi/mpich/">
+    \end{rawhtml}
+    MPICH
+    \begin{rawhtml} </A> \end{rawhtml}
+
+  \item \begin{rawhtml} <A
+      href="http://www.lam-mpi.org/">
+    \end{rawhtml}
+    LAM/MPI
+    \begin{rawhtml} </A> \end{rawhtml}
+
+  \item \begin{rawhtml} <A
+      href="http://www.osc.edu/~pw/mpiexec/">
+    \end{rawhtml}
+    MPIexec
+    \begin{rawhtml} </A> \end{rawhtml}
+  \end{itemize}
+  
+\item Build the code with the \texttt{genmake2} \texttt{-mpi} option
+  (see Section \ref{sect:genmake}) using commands such as:
+{\footnotesize \begin{verbatim}
+  %  ../../../tools/genmake2 -mods=../code -mpi -of=YOUR_OPTFILE
+  %  make depend
+  %  make
+\end{verbatim} }
+  
+\item Run the code with the appropriate MPI ``run'' or ``exec''
+  program provided with your particular implementation of MPI.
+  Typical MPI packages such as MPICH will use something like:
+\begin{verbatim}
+  %  mpirun -np 4 -machinefile mf ./mitgcmuv
+\end{verbatim}
+  Sightly more complicated scripts may be needed for many machines
+  since execution of the code may be controlled by both the MPI
+  library and a job scheduling and queueing system such as PBS,
+  LoadLeveller, Condor, or any of a number of similar tools.  A few
+  example scripts (those used for our \begin{rawhtml} <A
+    href="http://mitgcm.org/testing.html"> \end{rawhtml}regular
+  verification runs\begin{rawhtml} </A> \end{rawhtml}) are available
+  at:
+  \begin{rawhtml} <A
+    href="http://mitgcm.org/cgi-bin/viewcvs.cgi/MITgcm_contrib/test_scripts/">
+  \end{rawhtml}
+  {\footnotesize \tt
+    http://mitgcm.org/cgi-bin/viewcvs.cgi/MITgcm\_contrib/test\_scripts/ }
+  \begin{rawhtml} </A> \end{rawhtml}
+
+\end{enumerate}
+
+An example of the above process on the MITgcm cluster (``cg01'') using
+the GNU g77 compiler and the mpich MPI library is:
+
+{\footnotesize \begin{verbatim}
+  %  cd MITgcm/verification/exp5
+  %  mkdir build
+  %  cd build
+  %  ../../../tools/genmake2 -mpi -mods=../code \
+       -of=../../../tools/build_options/linux_ia32_g77+mpi_cg01
+  %  make depend
+  %  make
+  %  cd ../input
+  %  /usr/local/pkg/mpi/mpi-1.2.4..8a-gm-1.5/g77/bin/mpirun.ch_gm \
+       -machinefile mf --gm-kill 5 -v -np 2  ../build/mitgcmuv
+\end{verbatim} }
 
 \section[Running MITgcm]{Running the model in prognostic mode}
 \label{sect:runModel}
