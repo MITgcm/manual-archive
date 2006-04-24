@@ -1,0 +1,302 @@
+\newpage
+\begin{table}
+\hspace*{-1.5in}
+\begin{tabular}{lllc}
+
+  \textbf{Name}  &  \textbf{Default value}  
+    &  \textbf{Description}   &  \textbf{Reference}  \\
+  & & & \\
+
+   useLand   &                     T
+    &   use Land package for surf.BC over land  
+    &  %---ref---
+    \\
+   aim\_useFMsurfBC   &                     T
+    &   F.Molteni surf. BC scheme on/off flag 
+    &  %---ref---
+    \\
+   aim\_useMMsurfFc   &                     F
+    &   Monthly Mean surf. Forcing on/off flag 
+    &  %---ref---
+    \\
+   aim\_surfPotTemp   &                     F
+    &   Surf Temp file in Pot.Temp on/off flag 
+    &  %---ref---
+    \\
+   aim\_energPrecip   &                     T
+    &   account for energy of precip. on/off flag 
+    &  %---ref---
+    \\
+   aim\_splitSIOsFx   &                     T
+    &   separate Sea-Ice and Ocean Flux on/off flag 
+    &  %---ref---
+    \\
+   aim\_dragStrato  &                   2.592000000000000E+06
+    &   stratospheric-drag damping time scale (s) 
+    &  %---ref---
+    \\
+   aim\_clrSkyDiag   &                     F
+    &   do clear-sky radiation diagnostics 
+    &  %---ref---
+    \\
+   aim\_taveFreq   &                   2.592000000000000E+06
+    &   Frequency$^-1$ for time-Aver. output (s) 
+    &  %---ref---
+    \\
+   aim\_diagFreq   &                   7.776000000000000E+06
+    &   Frequency$^-1$ for diagnostic output (s) 
+    &  %---ref---
+    \\
+   aim\_tendFreq   &                   0.000000000000000E+00
+    &   Frequency$^-1$ for tendencies output (s) 
+    &  %---ref---
+    \\
+   AIM\_FOR:   SOLC   &                   3.420000000000000E+02
+    &   Solar constant (area averaged) in W/m2 
+    &  %---ref---
+    \\
+   AIM\_FOR: ALBSEA   &                   7.000000000000001E-02
+    &   Albedo over sea [0-1]      
+    &  %---ref---
+    \\
+   AIM\_FOR: ALBICE   &                   6.000000000000000E-01
+    &   Albedo over sea ice (for ice fraction =1) 
+    &  %---ref---
+    \\
+   AIM\_FOR:  ALBSN   &                   6.000000000000000E-01
+    &   Albedo over snow (for snow depth > SDALB) 
+    &  %---ref---
+    \\
+   AIM\_FOR:  SDALB   &                   6.000000000000000E+01
+    &   Snow depth (mm H2O) corresp. maximum albedo 
+    &  %---ref---
+    \\
+   AIM\_FOR:  SWCAP   &                   3.000000000000000E-01
+    &   Soil wetness at field capacity (Vol.fract.) 
+    &  %---ref---
+    \\
+   AIM\_FOR:  SWWIL   &                   1.700000000000000E-01
+    &   Soil wetness at wilting point  (Vol.fract.) 
+    &  %---ref---
+    \\
+   AIM\_FOR: hSnowWetness  &                   1.000000000000000E-02
+    &   snow depth corresp. maximum wetness (m) 
+    &  %---ref---
+    \\
+   AIM\_SFL: FWIND0   &                   6.000000000000000E-01
+    &   ratio of near-sfc wind to lowest-level wind 
+    &  %---ref---
+    \\
+   AIM\_SFL: FTEMP0   &                   1.000000000000000E+00
+    &   weight for near-sfc temp. extrapolation (0-1)
+    &  %---ref---
+    \\
+   AIM\_SFL:  FHUM0   &                   1.000000000000000E+00
+    &   weight for near-sfc spec.humid. extrap. (0-1)
+    &  %---ref---
+    \\
+   AIM\_SFL:    CDL   &                   1.800000000000000E-03
+    &   drag coefficient for momentum over land 
+    &  %---ref---
+    \\
+   AIM\_SFL:    CDS   &                   8.000000000000000E-04
+    &   drag coefficient for momentum over sea  
+    &  %---ref---
+    \\
+   AIM\_SFL:    CHL   &                   1.200000000000000E-03
+    &   heat exchange coefficient over land 
+    &  %---ref---
+    \\
+   AIM\_SFL:    CHS   &                   8.000000000000000E-04
+    &   heat exchange coefficient over sea  
+    &  %---ref---
+    \\
+   AIM\_SFL:  VGUST   &                   5.000000000000000E+00
+    &   wind speed [m/s] for sub-grid-scale gusts 
+    &  %---ref---
+    \\
+   AIM\_SFL:  CTDAY   &                   1.000000000000000E-02
+    &   daily-cycle correction (dTskin/dSSRad) 
+    &  %---ref---
+    \\
+   AIM\_SFL: DTHETA   &                   3.000000000000000E+00
+    &   Pot.Temp. gradient for stability correction 
+    &  %---ref---
+    \\
+   AIM\_SFL: dTstab   &                   1.000000000000000E+00
+    &   Pot.Temp. increment for stab.funct. derivative 
+    &  %---ref---
+    \\
+   AIM\_SFL:  FSTAB   &                   6.700000000000000E-01
+    &   Amplitude of stability correction (fract.) 
+    &  %---ref---
+    \\
+   AIM\_SFL:  HDRAG   &                   2.000000000000000E+03
+    &   Height scale for orographic correction 
+    &  %---ref---
+    \\
+   AIM\_SFL: FHDRAG   &                   8.000000000000000E-01
+    &   Amplitude of orographic correction (fract.)
+    &  %---ref---
+    \\
+   AIM\_CNV:  PSMIN   &                   7.000000000000000E-01
+    &   min norm.sfc.P. for occurrence of convect. 
+    &  %---ref---
+    \\
+   AIM\_CNV:  TRCNV   &                   6.000000000000000E+00
+    &   time of relaxation [h] towards ref state 
+    &  %---ref---
+    \\
+   AIM\_CNV:    QBL   &                   1.500000000000000E+01
+    &   specific hum. threshold in the Bound.layer 
+    &  %---ref---
+    \\
+   AIM\_CNV:   RHBL   &                   8.000000000000000E-01
+    &   relative hum. threshold in the Bound.layer 
+    &  %---ref---
+    \\
+   AIM\_CNV:   RHIL   &                   7.000000000000000E-01
+    &   rel.hum. threshold (intern) for 2nd mass.Flx
+    &  %---ref---
+    \\
+   AIM\_CNV: ENTMAX   &                   5.000000000000000E-01
+    &   time of relaxation [h] towards neutral eq. 
+    &  %---ref---
+    \\
+   AIM\_CNV:    SMF   &                   5.000000000000000E-01
+    &   ratio 2ndary/primary mass.Flx at cloud-base
+    &  %---ref---
+    \\
+\end{tabular}
+\end{table}
+
+\newpage
+\begin{table}
+\hspace*{-1.5in}
+\begin{tabular}{lllc}
+  \textbf{Name}  &  \textbf{Default value}  
+    &  \textbf{Description}   &  \textbf{Reference}  \\
+  & & & \\
+   AIM\_LSC:  TRLSC   &                   4.000000000000000E+00
+    &   relaxation time [h] for supersat. spec.hum. 
+    &  %---ref---
+    \\
+   AIM\_LSC:  RHLSC   &                   9.000000000000000E-01
+    &   Max rel.humidity threshold (at sigma=1) 
+    &  %---ref---
+    \\
+   AIM\_LSC: DRHLSC   &                   1.000000000000000E-01
+    &   Vertical range of rel.humidity threshold 
+    &  %---ref---
+    \\
+   AIM\_LSC:  QSMAX   &                   5.000000000000000E+01
+    &   Define the maximum latent heat release 
+    &  %---ref---
+    \\
+   AIM\_RAD:  RHCL1   &                   4.500000000000000E-01
+    &    rel.hum. corresponding to cloud cover = 0 
+    &  %---ref---
+    \\
+   AIM\_RAD:  RHCL2   &                   8.500000000000000E-01
+    &    rel.hum. corresponding to cloud cover = 1 
+    &  %---ref---
+    \\
+   AIM\_RAD:  QACL1   &                   1.000000000000000E-01
+    &   spec.hum. threshold for cloud, upper trop. 
+    &  %---ref---
+    \\
+   AIM\_RAD:  QACL2   &                   1.000000000000000E+00
+    &   spec.hum. threshold for cloud, upper trop. 
+    &  %---ref---
+    \\
+   AIM\_RAD:  ALBCL   &                   4.000000000000000E-01
+    &    cloud albedo (for cloud cover = 1) 
+    &  %---ref---
+    \\
+   AIM\_RAD:  EPSSW   &                   1.500000000000000E-02
+    &    fract. of inc.solar rad. absorbed by ozone 
+    &  %---ref---
+    \\
+   AIM\_RAD:  EPSLW   &                   0.000000000000000E+00
+    &    fract. of sfc LW emitted directly to space 
+    &  %---ref---
+    \\
+   AIM\_RAD: EMISFC   &                   9.800000000000000E-01
+    &    longwave surface emissivity 
+    &  %---ref---
+    \\
+    AIM\_RAD : ABSDRY &
+    &    ShortWave absorptivities (for dp = $10^5$ Pa)
+    &  %---ref---
+    \\
+   AIM\_RAD: ABSDRY   &                   3.300000000000000E-02
+    &   abs. of dry air (visible band) 
+    &  %---ref---
+    \\
+   AIM\_RAD: ABSAER   &                   3.300000000000000E-02
+    &   abs. of aerosols (visible band) 
+    &  %---ref---
+    \\
+   AIM\_RAD: ABSWV1   &                   2.200000000000000E-02
+    &   abs. of water vap. (vis. band)(/dq, 1g/kg) 
+    &  %---ref---
+    \\
+   AIM\_RAD: ABSWV2   &                   1.500000000000000E+01
+    &   abs. of water vap.(near IR bd)(/dq, 1g/kg) 
+    &  %---ref---
+    \\
+   AIM\_RAD: ABSCL1   &                   0.000000000000000E+00
+    &   abs. of clouds (vis.band)(constant term) 
+    &  %---ref---
+    \\
+   AIM\_RAD: ABSCL2   &                   1.000000000000000E-02
+    &   abs. of clouds (vis.band) (/dw, 1g/kg) 
+    &  %---ref---
+    \\
+   AIM\_RAD: ABLWIN   &                   7.000000000000000E-01
+    &   abs. of air in "window" band 
+    &  %---ref---
+    \\
+   AIM\_RAD: ABLCO2   &                   4.000000000000000E+00
+    &   abs. of air in CO2 band 
+    &  %---ref---
+    \\
+   AIM\_RAD: ABLWV1   &                   7.000000000000000E-01
+    &   abs. of Water vap. H2O bd-1(weak)(/dq,1g/kg)
+    &  %---ref---
+    \\
+   AIM\_RAD: ABLWV2   &                   5.000000000000000E+01
+    &   abs. of W. vap., H2O bd-2(strong)(/dq,1g/kg)
+    &  %---ref---
+    \\
+   AIM\_RAD: ABLCL1   &                   1.200000000000000E+01
+    &   abs. of clouds in window band (const term) 
+    &  %---ref---
+    \\
+   AIM\_RAD: ABLCL2   &                   0.000000000000000E+00
+    &   abs. of clouds in window band (/dw, 1g/kg) 
+    &  %---ref---
+    \\
+   AIM\_VDI:  TRSHC   &                   2.400000000000000E+01
+    &   relaxation time [h] for shallow convection 
+    &  %---ref---
+    \\
+   AIM\_VDI:  TRVDI   &                   4.000000000000000E+01
+    &   relaxation time [h] for moisture diffusion 
+    &  %---ref---
+    \\
+   AIM\_VDI:  TRVDS   &                   5.000000000000000E+00
+    &   relaxation time [h] for super-adiab. cond. 
+    &  %---ref---
+    \\
+   AIM\_VDI: RHGRAD   &                   5.000000000000000E-01
+    &   max gradient of rel.humidity (d\_RH/d\_sigma)
+    &  %---ref---
+    \\
+   AIM\_VDI: RHGRAD   &                   5.000000000000000E-01
+    &   max grad. of dry static Energy(d\_DSE/d\_phi)
+    &  %---ref---
+    \\
+
+\end{tabular}
+\end{table}

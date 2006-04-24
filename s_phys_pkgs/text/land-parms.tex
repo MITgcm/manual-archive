@@ -1,0 +1,134 @@
+\newpage
+
+\begin{table}
+\hspace*{-1.5in}
+\begin{tabular}{lllc}
+
+  \textbf{Name}  &  \textbf{Default value}  
+    &  \textbf{Description}   &  \textbf{Reference}  \\
+  & & & \\
+
+   land\_calc\_grT   &                     T
+    &   step forward ground Temp. on/off flag 
+    &  %---ref---
+    \\
+   land\_calc\_grW   &                     T
+    &   step forward soil moiture on/off flag 
+    &  %---ref---
+    \\
+   land\_impl\_grT   &                     T
+    &   solve ground temperature implicitly 
+    &  %---ref---
+    \\
+   land\_calc\_snow   &                     T
+    &   step forward snow thickness 
+    &  %---ref---
+    \\
+   land\_calc\_alb   &                     T
+    &   compute land
+    &  %---ref---
+    \\
+   land\_grT\_iniFile   &                   land\_grT\_ini.bin
+    &   Initial ground-Temp Input-File 
+    &  %---ref---
+    \\
+   land\_grW\_iniFile   &                   land\_grW\_ini.bin
+    &   Initial soil-Water Input-File 
+    &  %---ref---
+    \\
+   land\_deltaT   &                   4.500000000000000E+02
+    &   land model Time-Step (s) 
+    &  %---ref---
+    \\
+   land\_taveFreq   &                   2.592000000000000E+06
+    &   $Frequency^-1$ for time-Aver. output (s) 
+    &  %---ref---
+    \\
+   land\_diagFreq   &                   7.776000000000000E+06
+    &   $Frequency^-1$ for diagnostic output (s) 
+    &  %---ref---
+    \\
+   land\_monFreq   &                   7.776000000000000E+06
+    &   $Frequency^-1$ for monitor output (s) 
+    &  %---ref---
+    \\
+   land\_dzF   &                   1.000000000000000E-01 at K=1
+    &   layer thickness ( m ) 
+    &  %---ref---
+    \\
+   land\_rec\_dzC  &                   2.000000000000000E+01 at K=1
+    &   recip. vertical spacing (m-1) 
+    &  %---ref---
+    \\
+   land\_grdLambda   &                   4.200000000000000E-01
+    &   Thermal conductivity of the ground (W/m/K)
+    &  %---ref---
+    \\
+   land\_heatCs   &                   1.130000000000000E+06
+    &   Heat capacity of dry soil (J/m3/K) 
+    &  %---ref---
+    \\
+   land\_CpWater   &                   4.200000000000000E+03
+    &   Heat capacity of water    (J/kg/K) 
+    &  %---ref---
+    \\
+   land\_wTauDiff   &                   1.728000000000000E+05
+    &   soil moisture diffusion time scale (s) 
+    &  %---ref---
+    \\
+   land\_waterCap   &                   2.400000000000000E-01
+    &   field capacity per meter of soil (1) 
+    &  %---ref---
+    \\
+   land\_fractRunOff  &                   5.000000000000000E-01
+    &   fraction of water in excess which run-off 
+    &  %---ref---
+    \\
+   land\_rhoLiqW   &                   1.000000000000000E+03
+    &   density of liquid water (kg/m3) 
+    &  %---ref---
+    \\
+   land\_rhoSnow   &                   3.300000000000000E+02
+    &   density of snow (kg/m3) 
+    &  %---ref---
+    \\
+   land\_Lfreez   &                   3.340000000000000E+05
+    &   Latent heat of freezing (J/kg) 
+    &  %---ref---
+    \\
+   land\_hMaxSnow   &                   1.000000000000000E+03
+    &   maximum snow-thickness (m) 
+    &  %---ref---
+    \\
+   diffKsnow   &                   3.000000000000000E-01
+    &   thermal conductivity of snow (W/m/K) 
+    &  %---ref---
+    \\
+   timeSnowAge   &                   4.320000000000000E+06
+    &   snow aging time scale   (s) 
+    &  %---ref---
+    \\
+   hNewSnowAge   &                   2.000000000000000E-03
+    &   new snow thickness to refresh snow-age by 1/e 
+    &  %---ref---
+    \\
+   albColdSnow   &                   8.500000000000000E-01
+    &   albedo of cold (=dry) new snow 
+    &  %---ref---
+    \\
+   albWarmSnow   &                   7.000000000000000E-01
+    &   albedo of warm (=wet) new snow 
+    &  %---ref---
+    \\
+   albOldSnow   &                   5.500000000000000E-01
+    &   albedo of old snow (snowAge >35.d)
+    &  %---ref---
+    \\
+   hAlbSnow   &                   3.000000000000000E-01
+    &   snow depth for albedo transition 
+    &  %---ref---
+    \\
+
+\end{tabular}
+\end{table}
+
