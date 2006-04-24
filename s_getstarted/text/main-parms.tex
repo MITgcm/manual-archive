@@ -1,0 +1,790 @@
+\newpage
+
+\begin{table}
+%\hspace*{-1.5in}
+\begin{tabular}{lllc}
+
+  \textbf{Name}  &  \textbf{value}  
+    &  \textbf{Description}   &  \textbf{Reference}  \\
+  & & & \\
+
+   buoyancyRelation   &   
+    &   buoyancyRelation = OCEANIC
+    &  %---ref---
+    \\
+   fluidIsAir    &                     F
+    &   fluid major constituent is Air 
+    &  %---ref---
+    \\
+   fluidIsWater  &                     T
+    &   fuild major constituent is Water 
+    &  %---ref---
+    \\
+   usingPCoords   &                     F
+    &   use p (or p
+    &  %---ref---
+    \\
+   usingZCoords   &                     T
+    &   use z (or z
+    &  %---ref---
+    \\
+   tRef   &      2.0E+01 at K= top
+    &   Reference temperature profile ( oC or K ) 
+    &  %---ref---
+    \\
+   sRef   &      3.0E+01  at K= top
+    &   Reference salinity profile ( psu ) 
+    &  %---ref---
+    \\
+   viscAh   &                   0.0E+00
+    &   Lateral eddy viscosity ( $m^2/s$ ) 
+    &  %---ref---
+    \\
+   viscAhMax   &                   1.0E+21
+    &   Maximum lateral eddy viscosity ( $m^2/s$ ) 
+    &  %---ref---
+    \\
+   viscAhGrid   &                   0.0E+00
+    &   Grid dependent lateral eddy viscosity ( non-dim. ) 
+    &  %---ref---
+    \\
+   useFullLeith   &                     F
+    &   Use Full Form of Leith Viscosity on/off flag
+    &  %---ref---
+    \\
+   useStrainTensionVisc   &                     F
+    &   Use StrainTension Form of Viscous Operator on/off flag
+    &  %---ref---
+    \\
+   useAreaViscLength   &                     F
+    &   Use area for visc length instead of geom. mean
+    &  %---ref---
+    \\
+   viscC2leith   &                   0.0E+00
+    &   Leith harmonic visc. factor (on grad(vort),non-dim.) 
+    &  %---ref---
+    \\
+   viscC2leithD   &                   0.0E+00
+    &   Leith harmonic viscosity factor (on grad(div),non-dim.) 
+    &  %---ref---
+    \\
+   viscC2smag   &                   0.0E+00
+    &   Smagorinsky harmonic viscosity factor (non-dim.) 
+    &  %---ref---
+    \\
+   viscA4   &                   0.0E+00
+    &   Lateral biharmonic viscosity ( $m^4/s$ ) 
+    &  %---ref---
+    \\
+   viscA4Max   &                   1.0E+21
+    &   Maximum biharmonic viscosity ( $m^2/s$ ) 
+    &  %---ref---
+    \\
+   viscA4Grid   &                   0.0E+00
+    &   Grid dependent biharmonic viscosity ( non-dim. ) 
+    &  %---ref---
+    \\
+   viscC4leith   &                   0.0E+00
+    &   Leith biharm viscosity factor (on grad(vort), non-dim.) 
+    &  %---ref---
+    \\
+   viscC4leithD   &                   0.0E+00
+    &   Leith biharm viscosity factor (on grad(div), non-dim.) 
+    &  %---ref---
+    \\
+   viscC4Smag   &                   0.0E+00
+    &   Smagorinsky biharm viscosity factor (non-dim) 
+    &  %---ref---
+    \\
+   no\_slip\_sides   &                     T
+    &   Viscous BCs: No-slip sides 
+    &  %---ref---
+    \\
+   sideDragFactor   &                   2.0E+00
+    &   side-drag scaling factor (non-dim) 
+    &  %---ref---
+    \\
+   viscAr   &                   0.0E+00
+    &   Vertical eddy viscosity ( units of $r^2/s$ ) 
+    &  %---ref---
+    \\
+   no\_slip\_bottom   &                     T
+    &   Viscous BCs: No-slip bottom 
+    &  %---ref---
+    \\
+   bottomDragLinear   &                   0.0E+00
+    &   linear bottom-drag coefficient ( 1/s ) 
+    &  %---ref---
+    \\
+   bottomDragQuadratic   &                   0.0E+00
+    &   quadratic bottom-drag coeff. ( 1/m ) 
+    &  %---ref---
+    \\
+   diffKhT   &                   0.0E+00
+    &   Laplacian diffusion of heat laterally ( $m^2/s$ ) 
+    &  %---ref---
+    \\
+   diffK4T   &                   0.0E+00
+    &   Bihaarmonic diffusion of heat laterally ( $m^4/s$ ) 
+    &  %---ref---
+    \\
+   diffKhS   &                   0.0E+00
+    &   Laplacian diffusion of salt laterally ( $m^2/s$ ) 
+    &  %---ref---
+    \\
+   diffK4S   &                   0.0E+00
+    &   Bihaarmonic diffusion of salt laterally ( $m^4/s$ ) 
+    &  %---ref---
+    \\
+   diffKrNrT   &      0.0E+00 at K= top
+    &   vertical profile of vertical diffusion of Temp ( $m^2/s$ )
+    &  %---ref---
+    \\
+   diffKrNrS   &      0.0E+00 at K= top
+    &   vertical profile of vertical diffusion of Salt ( $m^2/s$ )
+    &  %---ref---
+    \\
+   diffKrBL79surf   &                   0.0E+00
+    &   Surface diffusion for Bryan and Lewis 1979 ( $m^2/s$ ) 
+    &  %---ref---
+    \\
+   diffKrBL79deep   &                   0.0E+00
+    &   Deep diffusion for Bryan and Lewis 1979 ( $m^2/s$ ) 
+    &  %---ref---
+    \\
+   diffKrBL79scl   &                   2.0E+02
+    &   Depth scale for Bryan and Lewis 1979 ( m ) 
+    &  %---ref---
+    \\
+   diffKrBL79Ho   &                  -2.0E+03
+    &   Turning depth for Bryan and Lewis 1979 ( m ) 
+    &  %---ref---
+    \\
+   eosType   &  LINEAR 
+    &   Equation of State
+    &  %---ref---
+    \\
+   tAlpha   &                   2.0E-04
+    &   Linear EOS thermal expansion coefficient ( 1/oC ) 
+    &  %---ref---
+    \\
+\end{tabular}
+\end{table}
+
+\newpage
+\begin{table}
+%\hspace*{-1.5in}
+\begin{tabular}{lllc}
+
+  \textbf{Name}  &  \textbf{value}  
+    &  \textbf{Description}   &  \textbf{Reference}  \\
+  & & & \\
+   sBeta   &                   7.4E-04
+    &   Linear EOS haline contraction coef ( 1/psu ) 
+    &  %---ref---
+    \\
+   rhonil   &                   9.998E+02
+    &   Reference density ( $kg/m^3$ ) 
+    &  %---ref---
+    \\
+   rhoConst   &                   9.998E+02
+    &   Reference density ( $kg/m^3$ ) 
+    &  %---ref---
+    \\
+   rhoConstFresh   &                   9.998E+02
+    &   Reference density ( $kg/m^3$ ) 
+    &  %---ref---
+    \\
+   gravity   &                   9.81E+00
+    &   Gravitational acceleration ( $m/s^2$ ) 
+    &  %---ref---
+    \\
+   gBaro   &                   9.81E+00
+    &   Barotropic gravity ( $m/s^2$ ) 
+    &  %---ref---
+    \\
+   rotationPeriod   &                   8.6164E+04
+    &   Rotation Period ( s ) 
+    &  %---ref---
+    \\
+   omega   &                   7.292123516990375E-05
+    &   Angular velocity ( rad/s ) 
+    &  %---ref---
+    \\
+   f0   &                   1.0E-04
+    &   Reference coriolis parameter ( 1/s ) 
+    &  %---ref---
+    \\
+   beta   &                   9.999999999999999E-12
+    &   Beta ( 1/(m.s) ) 
+    &  %---ref---
+    \\
+   freeSurfFac   &                   1.0E+00
+    &   Implicit free surface factor 
+    &  %---ref---
+    \\
+   implicitFreeSurface   &                     T
+    &   Implicit free surface on/off flag 
+    &  %---ref---
+    \\
+   rigidLid   &                     F
+    &   Rigid lid on/off flag 
+    &  %---ref---
+    \\
+   implicSurfPress   &                   1.0E+00
+    &   Surface Pressure implicit factor (0-1)
+    &  %---ref---
+    \\
+   implicDiv2Dflow   &                   1.0E+00
+    &   Barot. Flow Div. implicit factor (0-1)
+    &  %---ref---
+    \\
+   exactConserv   &                     F
+    &   Exact Volume Conservation on/off flag
+    &  %---ref---
+    \\
+   uniformLin\_PhiSurf   &                     T
+    &   use uniform Bo\_surf on/off flag
+    &  %---ref---
+    \\
+   nonlinFreeSurf   &                         0
+    &   Non-linear Free Surf. options (-1,0,1,2,3)
+    &  %---ref---
+    \\
+   hFacInf   &                   2.0E-01
+    &   lower threshold for hFac (nonlinFreeSurf only)
+    &  %---ref---
+    \\
+   hFacSup   &                   2.0E+00
+    &   upper threshold for hFac (nonlinFreeSurf only)
+    &  %---ref---
+    \\
+   select\_rStar   &                         0
+    &   r
+    &  %---ref---
+    \\
+   useRealFreshWaterFlux   &                     F
+    &   Real Fresh Water Flux on/off flag
+    &  %---ref---
+    \\
+   convertFW2Salt   &                   3.5E+01
+    &   convert F.W. Flux to Salt Flux (-1=use local S)
+    &  %---ref---
+    \\
+   use3Dsolver   &                     F
+    &   use 3-D pressure solver on/off flag 
+    &  %---ref---
+    \\
+   nonHydrostatic   &                     F
+    &   Non-Hydrostatic on/off flag 
+    &  %---ref---
+    \\
+   nh\_Am2   &                   1.0E+00
+    &   Non-Hydrostatic terms scaling factor 
+    &  %---ref---
+    \\
+   quasiHydrostatic   &                     F
+    &   Quasi-Hydrostatic on/off flag 
+    &  %---ref---
+    \\
+   momStepping   &                     T
+    &   Momentum equation on/off flag 
+    &  %---ref---
+    \\
+   vectorInvariantMomentum  &                     F
+    &   Vector-Invariant Momentum on/off 
+    &  %---ref---
+    \\
+   momAdvection   &                     T
+    &   Momentum advection on/off flag 
+    &  %---ref---
+    \\
+   momViscosity   &                     T
+    &   Momentum viscosity on/off flag 
+    &  %---ref---
+    \\
+   momImplVertAdv   &                     F
+    &   Momentum implicit vert. advection on/off
+    &  %---ref---
+    \\
+   implicitViscosity   &                     F
+    &   Implicit viscosity on/off flag 
+    &  %---ref---
+    \\
+   metricTerms   &                     F
+    &   metric-Terms on/off flag 
+    &  %---ref---
+    \\
+   useNHMTerms   &                     F
+    &   Non-Hydrostatic Metric-Terms on/off 
+    &  %---ref---
+    \\
+   useCoriolis   &                     T
+    &   Coriolis on/off flag 
+    &  %---ref---
+    \\
+   useCDscheme   &                     F
+    &   CD scheme on/off flag 
+    &  %---ref---
+    \\
+   useJamartWetPoints  &                     F
+    &   Coriolis WetPoints method flag 
+    &  %---ref---
+    \\
+   useJamartMomAdv  &                     F
+    &   V.I. Non-linear terms Jamart flag 
+    &  %---ref---
+    \\
+\end{tabular}
+\end{table}
+
+\newpage
+\begin{table}
+%\hspace*{-1.5in}
+\begin{tabular}{lllc}
+
+  \textbf{Name}  &  \textbf{value}  
+    &  \textbf{Description}   &  \textbf{Reference}  \\
+  & & & \\
+   SadournyCoriolis  &                     F
+    &   Sadourny Coriolis discr. flag 
+    &  %---ref---
+    \\
+   upwindVorticity  &                     F
+    &   Upwind bias vorticity flag 
+    &  %---ref---
+    \\
+   useAbsVorticity  &                     F
+    &   Work with f
+    &  %---ref---
+    \\
+   highOrderVorticity  &                     F
+    &   High order interp. of vort. flag 
+    &  %---ref---
+    \\
+   upwindShear  &                     F
+    &   Upwind vertical Shear advection flag 
+    &  %---ref---
+    \\
+   selectKEscheme  &                         0
+    &   Kinetic Energy scheme selector 
+    &  %---ref---
+    \\
+   momForcing   &                     T
+    &   Momentum forcing on/off flag 
+    &  %---ref---
+    \\
+   momPressureForcing   &                     T
+    &   Momentum pressure term on/off flag 
+    &  %---ref---
+    \\
+   implicitIntGravWave  &                     F
+    &   Implicit Internal Gravity Wave flag 
+    &  %---ref---
+    \\
+   staggerTimeStep   &                     F
+    &   Stagger time stepping on/off flag 
+    &  %---ref---
+    \\
+   multiDimAdvection   &                     T
+    &   enable/disable Multi-Dim Advection 
+    &  %---ref---
+    \\
+   useMultiDimAdvec   &                     F
+    &   Multi-Dim Advection is/is-not used 
+    &  %---ref---
+    \\
+   implicitDiffusion   &                     F
+    &   Implicit Diffusion on/off flag 
+    &  %---ref---
+    \\
+   tempStepping   &                     T
+    &   Temperature equation on/off flag 
+    &  %---ref---
+    \\
+   tempAdvection  &                     T
+    &   Temperature advection on/off flag 
+    &  %---ref---
+    \\
+   tempImplVertAdv   &                     F
+    &   Temp. implicit vert. advection on/off 
+    &  %---ref---
+    \\
+   tempForcing    &                     T
+    &   Temperature forcing on/off flag 
+    &  %---ref---
+    \\
+   saltStepping   &                     T
+    &   Salinity equation on/off flag 
+    &  %---ref---
+    \\
+   saltAdvection  &                     T
+    &   Salinity advection on/off flag 
+    &  %---ref---
+    \\
+   saltImplVertAdv   &                     F
+    &   Sali. implicit vert. advection on/off 
+    &  %---ref---
+    \\
+   saltForcing    &                     T
+    &   Salinity forcing on/off flag 
+    &  %---ref---
+    \\
+    readBinaryPrec   &                        32
+    &   Precision used for reading binary files 
+    &  %---ref---
+    \\
+   writeBinaryPrec   &                        32
+    &   Precision used for writing binary files 
+    &  %---ref---
+    \\
+    globalFiles   &                     F
+    &   write "global" (=not per tile) files 
+    &  %---ref---
+    \\
+    useSingleCpuIO   &                     F
+    &   only master MPI process does I/O 
+    &  %---ref---
+    \\
+    debugMode    &                     F
+    &   Debug Mode on/off flag 
+    &  %---ref---
+    \\
+      debLevA    &                         1
+    &   1rst level of debugging 
+    &  %---ref---
+    \\
+      debLevB    &                         2
+    &   2nd  level of debugging 
+    &  %---ref---
+    \\
+    debugLevel   &                         1
+    &   select debugging level 
+    &  %---ref---
+    \\
+   cg2dMaxIters   &                       150
+    &   Upper limit on 2d con. grad iterations  
+    &  %---ref---
+    \\
+   cg2dChkResFreq   &                         1
+    &   2d con. grad convergence test frequency 
+    &  %---ref---
+    \\
+   cg2dTargetResidual   &                   1.0E-07
+    &   2d con. grad target residual  
+    &  %---ref---
+    \\
+   cg2dTargetResWunit   &                  -1.0E+00
+    &   CG2d target residual [W units] 
+    &  %---ref---
+    \\
+   cg2dPreCondFreq   &                         1
+    &   Freq. for updating cg2d preconditioner 
+    &  %---ref---
+    \\
+   nIter0   &                         0
+    &   Run starting timestep number  
+    &  %---ref---
+    \\
+   nTimeSteps   &                         0
+    &   Number of timesteps 
+    &  %---ref---
+    \\
+   deltatTmom   &                   6.0E+01
+    &   Momentum equation timestep ( s ) 
+    &  %---ref---
+    \\
+   deltaTfreesurf   &                   6.0E+01
+    &   FreeSurface equation timestep ( s ) 
+    &  %---ref---
+    \\
+   dTtracerLev   &      6.0E+01 at K= top
+    &   Tracer equation timestep ( s ) 
+    &  %---ref---
+    \\
+   deltatTClock    &                   6.0E+01
+    &   Model clock timestep ( s ) 
+    &  %---ref---
+    \\
+\end{tabular}
+\end{table}
+
+\newpage
+\begin{table}
+%\hspace*{-1.5in}
+\begin{tabular}{lllc}
+
+  \textbf{Name}  &  \textbf{value}  
+    &  \textbf{Description}   &  \textbf{Reference}  \\
+  & & & \\
+   cAdjFreq   &                   0.0E+00
+    &   Convective adjustment interval ( s ) 
+    &  %---ref---
+    \\
+   momForcingOutAB   &                         0
+    &   =1: take Momentum Forcing out of Adams-Bash.
+    &  %---ref---
+    \\
+   tracForcingOutAB   &                         0
+    &   =1: take T,S,pTr Forcing out of Adams-Bash.
+    &  %---ref---
+    \\
+   momDissip\_In\_AB   &                     T
+    &   put Dissipation Tendency in Adams-Bash. 
+    &  %---ref---
+    \\
+   doAB\_onGtGs   &                     T
+    &   apply AB on Tendencies (rather than on T,S)
+    &  %---ref---
+    \\
+   abEps   &                   1.0E-02
+    &   Adams-Bashforth-2 stabilizing weight 
+    &  %---ref---
+    \\
+   baseTime   &                   0.0E+00
+    &   Model base time ( s ). 
+    &  %---ref---
+    \\
+   startTime   &                   0.0E+00
+    &   Run start time ( s ). 
+    &  %---ref---
+    \\
+   endTime   &                   0.0E+00
+    &   Integration ending time ( s ). 
+    &  %---ref---
+    \\
+   pChkPtFreq   &                   0.0E+00
+    &   Permanent restart/checkpoint file interval ( s ). 
+    &  %---ref---
+    \\
+   chkPtFreq   &                   0.0E+00
+    &   Rolling restart/checkpoint file interval ( s ). 
+    &  %---ref---
+    \\
+   pickup\_write\_mdsio   &                     T
+    &   Model IO flag. 
+    &  %---ref---
+    \\
+   pickup\_read\_mdsio   &                     T
+    &   Model IO flag. 
+    &  %---ref---
+    \\
+   pickup\_write\_immed   &                     F
+    &   Model IO flag. 
+    &  %---ref---
+    \\
+   dumpFreq   &                   0.0E+00
+    &   Model state write out interval ( s ). 
+    &  %---ref---
+    \\
+   dumpInitAndLast  &                     T
+    &   write out Initial and Last iter. model state 
+    &  %---ref---
+    \\
+   snapshot\_mdsio   &                     T
+    &   Model IO flag. 
+    &  %---ref---
+    \\
+   monitorFreq   &                   6.0E+01
+    &   Monitor output interval ( s ). 
+    &  %---ref---
+    \\
+   monitor\_stdio   &                     T
+    &   Model IO flag. 
+    &  %---ref---
+    \\
+   externForcingPeriod   &                   0.0E+00
+    &   forcing period (s) 
+    &  %---ref---
+    \\
+   externForcingCycle   &                   0.0E+00
+    &   period of the cyle (s). 
+    &  %---ref---
+    \\
+   tauThetaClimRelax   &                   0.0E+00
+    &   relaxation time scale (s) 
+    &  %---ref---
+    \\
+   tauSaltClimRelax   &                   0.0E+00
+    &   relaxation time scale (s) 
+    &  %---ref---
+    \\
+   latBandClimRelax   &                   3.703701E+05
+    &   max. Lat. where relaxation 
+    &  %---ref---
+    \\
+   usingCartesianGrid   &                     T
+    &   Cartesian coordinates flag ( True / False ) 
+    &  %---ref---
+    \\
+   usingSphericalPolarGrid   &                     F
+    &   Spherical coordinates flag ( True / False ) 
+    &  %---ref---
+    \\
+   usingCylindricalGrid   &                     F
+    &   Spherical coordinates flag ( True / False ) 
+    &  %---ref---
+    \\
+   Ro\_SeaLevel   &                   0.0E+00
+    &   r(1) ( units of r ) 
+    &  %---ref---
+    \\
+   rkSign   &                  -1.0E+00
+    &   index orientation relative to vertical coordinate 
+    &  %---ref---
+    \\
+   horiVertRatio   &                   1.0E+00
+    &   Ratio on units : Horiz - Vertical 
+    &  %---ref---
+    \\
+   drC   &                   5.0E+03 at K=1
+    &   C spacing ( units of r ) 
+    &  %---ref---
+    \\
+   drF   &      1.0E+04 at K= top
+    &   W spacing ( units of r ) 
+    &  %---ref---
+    \\
+   delX   &      1.234567E+05  at I= east
+    &   U spacing ( m - cartesian, degrees - spherical ) 
+    &  %---ref---
+    \\
+   delY   &                   1.234567E+05  at J=1 
+    &   V spacing ( m - cartesian, degrees - spherical ) 
+    &  %---ref---
+    \\
+   phiMin   &                   0.0E+00
+    &   South edge (ignored - cartesian, degrees - spherical ) 
+    &  %---ref---
+    \\
+   thetaMin   &                   0.0E+00
+    &   West edge ( ignored - cartesian, degrees - spherical ) 
+    &  %---ref---
+    \\
+   rSphere   &                   6.37E+06
+    &   Radius ( ignored - cartesian, m - spherical ) 
+    &  %---ref---
+    \\
+   xcoord   &                   6.172835E+04 at I=1
+    &   P-point X coord ( m - cartesian, degrees - spherical ) 
+    &  %---ref---
+    \\
+   ycoord   &                   6.172835E+04 at J=1
+    &   P-point Y coord ( m - cartesian, degrees - spherical ) 
+    &  %---ref---
+    \\
+   rcoord   &                  -5.0E+03 at K=1
+    &   P-point R coordinate (  units of r ) 
+    &  %---ref---
+    \\
+   rF   &                   0.0E+00 at K=1
+    &   W-Interf. R coordinate (  units of r ) 
+    &  %---ref---
+    \\
+   dBdrRef   &      0.0E+00  at K= top
+    &   Vertical gradient of reference boyancy [$(m/s/r)^2)$] 
+    &  %---ref---
+    \\
+\end{tabular}
+\end{table}
+
+\newpage
+\begin{table}
+%\hspace*{-1.5in}
+\begin{tabular}{lllc}
+
+  \textbf{Name}  &  \textbf{value}  
+    &  \textbf{Description}   &  \textbf{Reference}  \\
+  & & & \\
+   dxF   &       1.234567E+05  at K= top
+    &   dxF(:,1,:,1) ( m - cartesian, degrees - spherical ) 
+    &  %---ref---
+    \\
+   dyF   &      1.234567E+05  at I= east
+    &   dyF(:,1,:,1) ( m - cartesian, degrees - spherical ) 
+    &  %---ref---
+    \\
+   dxG   &      1.234567E+05   at I= east
+    &   dxG(:,1,:,1) ( m - cartesian, degrees - spherical ) 
+    &  %---ref---
+    \\
+   dyG   &      1.234567E+05   at I= east
+    &   dyG(:,1,:,1) ( m - cartesian, degrees - spherical ) 
+    &  %---ref---
+    \\
+   dxC   &      1.234567E+05  at I= east
+    &   dxC(:,1,:,1) ( m - cartesian, degrees - spherical ) 
+    &  %---ref---
+    \\
+   dyC   &      1.234567E+05  at I= east
+    &   dyC(:,1,:,1) ( m - cartesian, degrees - spherical ) 
+    &  %---ref---
+    \\
+   dxV   &      1.234567E+05   at I= east
+    &   dxV(:,1,:,1) ( m - cartesian, degrees - spherical ) 
+    &  %---ref---
+    \\
+   dyU   &      1.234567E+05   at I= east
+    &   dyU(:,1,:,1) ( m - cartesian, degrees - spherical ) 
+    &  %---ref---
+    \\
+   rA   &      1.524155677489E+10  at I= east
+    &   rA(:,1,:,1) ( m - cartesian, degrees - spherical ) 
+    &  %---ref---
+    \\
+   rAw   &      1.524155677489E+10   at K= top
+    &   rAw(:,1,:,1) ( m - cartesian, degrees - spherical ) 
+    &  %---ref---
+    \\
+   rAs   &      1.524155677489E+10   at K= top
+    &   rAs(:,1,:,1) ( m - cartesian, degrees - spherical ) 
+    &  %---ref---
+    \\
+
+\end{tabular}
+\end{table}
+
+\begin{table}
+%\hspace*{-1.5in}
+\begin{tabular}{lllc}
+
+  \textbf{Name}  &  \textbf{Default value}  
+    &  \textbf{Description}   &  \textbf{Reference}  \\
+  & & & \\
+
+   tempAdvScheme   &                         2
+    &   Temp. Horiz.Advection scheme selector 
+    &  %---ref---
+    \\
+   tempVertAdvScheme   &                         2
+    &   Temp. Vert. Advection scheme selector 
+    &  %---ref---
+    \\
+   tempMultiDimAdvec   &                     F
+    &   use Muti-Dim Advec method for Temp 
+    &  %---ref---
+    \\
+   tempAdamsBashforth   &                     T
+    &   use Adams-Bashforth time-stepping for Temp 
+    &  %---ref---
+    \\
+   saltAdvScheme   &                         2
+    &   Salt. Horiz.advection scheme selector 
+    &  %---ref---
+    \\
+   saltVertAdvScheme   &                         2
+    &   Salt. Vert. Advection scheme selector 
+    &  %---ref---
+    \\
+   saltMultiDimAdvec   &                     F
+    &   use Muti-Dim Advec method for Salt 
+    &  %---ref---
+    \\
+   saltAdamsBashforth   &                     T
+    &   use Adams-Bashforth time-stepping for Salt 
+    &  %---ref---
+    \\
+
+\end{tabular}
+\end{table}
+
