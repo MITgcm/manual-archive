@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/mom_vecinv.tex,v 1.5 2005/08/02 20:54:44 jmc Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/mom_vecinv.tex,v 1.6 2006/06/26 01:03:47 jmc Exp $
 % $Name:  $
 
 \section{Vector invariant momentum equations}
@@ -48,7 +48,7 @@ G_w & = & G_w^{fu} + G_w^{\zeta_1 v} + G_w^{\zeta_2 u} + G_w^{\partial_z B}
 \end{eqnarray}
 
 \fbox{ \begin{minipage}{4.75in}
-{\em S/R CALC\_MOM\_RHS} ({\em pkg/mom\_vecinv/calc\_mom\_rhs.F})
+{\em S/R MOM\_VECINV} ({\em pkg/mom\_vecinv/mom\_vecinv.F})
 
 $G_u$: {\bf Gu} ({\em DYNVARS.h})
 
@@ -75,7 +75,7 @@ the vertical and $\Gamma$ is the circulation about that cell.
 \fbox{ \begin{minipage}{4.75in}
 {\em S/R MOM\_VI\_CALC\_RELVORT3} ({\em mom\_vi\_calc\_relvort3.F})
 
-$\zeta_3$: {\bf vort3} (local to {\em calc\_mom\_rhs.F})
+$\zeta_3$: {\bf vort3} (local to {\em mom\_vecinv.F})
 \end{minipage} }
 
 
@@ -90,7 +90,7 @@ KE = \frac{1}{2} ( \overline{ u^2 }^i + \overline{ v^2 }^j
 \fbox{ \begin{minipage}{4.75in}
 {\em S/R MOM\_VI\_CALC\_KE} ({\em mom\_vi\_calc\_ke.F})
 
-$KE$: {\bf KE} (local to {\em calc\_mom\_rhs.F})
+$KE$: {\bf KE} (local to {\em mom\_vecinv.F})
 \end{minipage} }
 
 
@@ -150,9 +150,9 @@ available only through commented subroutine calls.
 
 {\em S/R MOM\_VI\_V\_CORIOLIS} ({\em mom\_vi\_v\_coriolis.F})
 
-$G_u^{fv}$, $G_u^{\zeta_3 v}$: {\bf uCf} (local to {\em calc\_mom\_rhs.F})
+$G_u^{fv}$, $G_u^{\zeta_3 v}$: {\bf uCf} (local to {\em mom\_vecinv.F})
 
-$G_v^{fu}$, $G_v^{\zeta_3 u}$: {\bf vCf} (local to {\em calc\_mom\_rhs.F})
+$G_v^{fu}$, $G_v^{\zeta_3 u}$: {\bf vCf} (local to {\em mom\_vecinv.F})
 \end{minipage} }
 
 
@@ -179,9 +179,9 @@ G_v^{\zeta_1 w} & = &
 
 {\em S/R MOM\_VI\_V\_VERTSHEAR} ({\em mom\_vi\_v\_vertshear.F})
 
-$G_u^{\zeta_2 w}$: {\bf uCf} (local to {\em calc\_mom\_rhs.F})
+$G_u^{\zeta_2 w}$: {\bf uCf} (local to {\em mom\_vecinv.F})
 
-$G_v^{\zeta_1 w}$: {\bf vCf} (local to {\em calc\_mom\_rhs.F})
+$G_v^{\zeta_1 w}$: {\bf vCf} (local to {\em mom\_vecinv.F})
 \end{minipage} }
 
 
@@ -202,14 +202,14 @@ G_v^{\partial_y B} & = &
 
 {\em S/R MOM\_VI\_V\_GRAD\_KE} ({\em mom\_vi\_v\_grad\_ke.F})
 
-$G_u^{\partial_x KE}$: {\bf uCf} (local to {\em calc\_mom\_rhs.F})
+$G_u^{\partial_x KE}$: {\bf uCf} (local to {\em mom\_vecinv.F})
 
-$G_v^{\partial_y KE}$: {\bf vCf} (local to {\em calc\_mom\_rhs.F})
+$G_v^{\partial_y KE}$: {\bf vCf} (local to {\em mom\_vecinv.F})
 \end{minipage} }
 
 
 
-\subsection{Horizontal dissipation}
+\subsection{Horizontal divergence}
 
 The horizontal divergence, a complimentary quantity to relative
 vorticity, is used in parameterizing the Reynolds stresses and is
@@ -223,7 +223,7 @@ D = \frac{1}{{\cal A}_c h_c} (
 \fbox{ \begin{minipage}{4.75in}
 {\em S/R MOM\_VI\_CALC\_HDIV} ({\em mom\_vi\_calc\_hdiv.F})
 
-$D$: {\bf hDiv} (local to {\em calc\_mom\_rhs.F})
+$D$: {\bf hDiv} (local to {\em mom\_vecinv.F})
 \end{minipage} }
 
 
@@ -254,9 +254,9 @@ D^* & = & \frac{1}{{\cal A}_c h_c} (
 \fbox{ \begin{minipage}{4.75in}
 {\em S/R MOM\_VI\_HDISSIP} ({\em mom\_vi\_hdissip.F})
 
-$G_u^{h-dissip}$: {\bf uDiss} (local to {\em calc\_mom\_rhs.F})
+$G_u^{h-dissip}$: {\bf uDiss} (local to {\em mom\_vecinv.F})
 
-$G_v^{h-dissip}$: {\bf vDiss} (local to {\em calc\_mom\_rhs.F})
+$G_v^{h-dissip}$: {\bf vDiss} (local to {\em mom\_vecinv.F})
 \end{minipage} }
 
 
@@ -282,7 +282,7 @@ In the interior the vertical stresses are discretized:
 
 {\em S/R MOM\_V\_RVISCLFUX} ({\em mom\_v\_rviscflux.F})
 
-$\tau_{13}$: {\bf urf} (local to {\em calc\_mom\_rhs.F})
+$\tau_{13}$: {\bf urf} (local to {\em mom\_vecinv.F})
 
-$\tau_{23}$: {\bf vrf} (local to {\em calc\_mom\_rhs.F})
+$\tau_{23}$: {\bf vrf} (local to {\em mom\_vecinv.F})
 \end{minipage} }

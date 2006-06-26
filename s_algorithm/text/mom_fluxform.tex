@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/mom_fluxform.tex,v 1.10 2006/04/06 00:38:17 molod Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/mom_fluxform.tex,v 1.11 2006/06/26 01:03:47 jmc Exp $
 % $Name:  $
 
 \section{Flux-form momentum equations}
@@ -29,11 +29,11 @@ In the hydrostatic limit, $G_w=0$ and $\epsilon_{nh}=0$, reducing the
 vertical momentum to hydrostatic balance.
 
 These terms are calculated in routines called from subroutine {\em
-CALC\_MOM\_RHS} a collected into the global arrays {\bf Gu}, {\bf Gv},
+MOM\_FLUXFORM} a collected into the global arrays {\bf Gu}, {\bf Gv},
 and {\bf Gw}.
 
 \fbox{ \begin{minipage}{4.75in}
-{\em S/R CALC\_MOM\_RHS} ({\em pkg/mom\_fluxform/calc\_mom\_rhs.F})
+{\em S/R MOM\_FLUXFORM} ({\em pkg/mom\_fluxform/mom\_fluxform.F})
 
 $G_u$: {\bf Gu} ({\em DYNVARS.h})
 
@@ -90,7 +90,7 @@ conserves kinetic energy.
 
 {\em S/R MOM\_U\_ADV\_WV} ({\em mom\_u\_adv\_wv.F})
 
-$uu$, $uv$, $vu$, $vv$: {\bf aF} (local to {\em calc\_mom\_rhs.F})
+$uu$, $uv$, $vu$, $vv$: {\bf aF} (local to {\em mom\_fluxform.F})
 \end{minipage} }
 
 
@@ -149,7 +149,7 @@ useEnergyConservingCoriolis} to {\em true} which otherwise defaults to
 
 {\em S/R MOM\_V\_CORIOLIS} ({\em mom\_v\_coriolis.F})
 
-$G_u^{Cor}$, $G_v^{Cor}$: {\bf cF} (local to {\em calc\_mom\_rhs.F})
+$G_u^{Cor}$, $G_v^{Cor}$: {\bf cF} (local to {\em mom\_fluxform.F})
 \end{minipage} }
 
 
@@ -188,7 +188,7 @@ respectively.
 
 {\em S/R MOM\_V\_METRIC\_SPHERE} ({\em mom\_v\_metric\_sphere.F})
 
-$G_u^{metric}$, $G_v^{metric}$: {\bf mT} (local to {\em calc\_mom\_rhs.F})
+$G_u^{metric}$, $G_v^{metric}$: {\bf mT} (local to {\em mom\_fluxform.F})
 \end{minipage} }
 
 
@@ -223,7 +223,7 @@ G_w^{metric} & = &
 
 {\em S/R MOM\_V\_METRIC\_NH} ({\em mom\_v\_metric\_nh.F})
 
-$G_u^{metric}$, $G_v^{metric}$: {\bf mT} (local to {\em calc\_mom\_rhs.F})
+$G_u^{metric}$, $G_v^{metric}$: {\bf mT} (local to {\em mom\_fluxform.F})
 \end{minipage} }
 
 
@@ -280,7 +280,7 @@ viscA4}), has units of $m^4 s^{-1}$.
 {\em S/R MOM\_V\_YVISCFLUX} ({\em mom\_v\_yviscflux.F})
 
 $\tau_{11}$, $\tau_{12}$, $\tau_{22}$, $\tau_{22}$: {\bf vF}, {\bf
-v4F} (local to {\em calc\_mom\_rhs.F})
+v4F} (local to {\em mom\_fluxform.F})
 \end{minipage} }
 
 Two types of lateral boundary condition exist for the lateral viscous
@@ -318,7 +318,7 @@ neighboring vorticity points, e.g. $1-h_w < 1-h_\zeta$
 
 {\em S/R MOM\_V\_SIDEDRAG} ({\em mom\_v\_sidedrag.F})
 
-$G_u^{side-drag}$, $G_v^{side-drag}$: {\bf vF} (local to {\em calc\_mom\_rhs.F})
+$G_u^{side-drag}$, $G_v^{side-drag}$: {\bf vF} (local to {\em mom\_fluxform.F})
 \end{minipage} }
 
 
@@ -355,9 +355,9 @@ is even less consistent than for the hydrostatic (see
 
 {\em S/R MOM\_V\_RVISCLFUX} ({\em mom\_v\_rviscflux.F})
 
-$\tau_{13}$: {\bf urf} (local to {\em calc\_mom\_rhs.F})
+$\tau_{13}$: {\bf urf} (local to {\em mom\_fluxform.F})
 
-$\tau_{23}$: {\bf vrf} (local to {\em calc\_mom\_rhs.F})
+$\tau_{23}$: {\bf vrf} (local to {\em mom\_fluxform.F})
 \end{minipage} }
 
 
@@ -393,7 +393,7 @@ dimensionless with typical values in the range 0.001--0.003.
 
 {\em S/R MOM\_V\_BOTTOMDRAG} ({\em mom\_v\_bottomdrag.F})
 
-$\tau_{13}^{bottom-drag}$, $\tau_{23}^{bottom-drag}$: {\bf vf} (local to {\em calc\_mom\_rhs.F})
+$\tau_{13}^{bottom-drag}$, $\tau_{23}^{bottom-drag}$: {\bf vf} (local to {\em mom\_fluxform.F})
 \end{minipage} }
 
 \subsection{Derivation of discrete energy conservation}
