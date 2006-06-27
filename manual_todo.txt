@@ -371,6 +371,12 @@ in content: Horizontal Dissipation: 2 times in vector-invariant section
 (e.g changing the tile to:
 - talk to Baylor
  Appendix: non-dimensional Equations on Spherical-Polar grid.)
+
+
+Diagrams of grid locations etc.... and what variables and output files 
+and/or netcdf variable names are not very easy to figure out and follow.
+It would be good to redo and extend these diagrams and align with GRID.h
+content.
  
 
 JM
