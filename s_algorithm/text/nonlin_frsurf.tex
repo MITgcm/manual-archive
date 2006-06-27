@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/nonlin_frsurf.tex,v 1.12 2006/04/04 20:19:00 jmc Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/nonlin_frsurf.tex,v 1.13 2006/06/27 22:31:23 edhill Exp $
 % $Name:  $
 
 
@@ -31,14 +31,16 @@ For both fluid, using the isomorphic notations, we can write:
 $$ 
 \phi' = \int^{r_{surf}}_r b~ dr - \int^{R_o}_r b_o dr
 $$
-\begin{eqnarray}
-\mathrm{and~re~write:}\hspace{10mm}
-\phi' = \int^{r_{surf}}_{R_o} b~ dr & + & \int^{R_o}_r (b - b_o) dr
-\label{eq:split-phi-Ro} \\ 
-\mathrm{or:}\hspace{10mm}
-\phi' = \int^{r_{surf}}_{R_o} b_o dr & + & \int^{r_{surf}}_r (b - b_o) dr
+and re-write as:
+\begin{equation}
+\phi' = \int^{r_{surf}}_{R_o} b~ dr + \int^{R_o}_r (b - b_o) dr
+\label{eq:split-phi-Ro}
+\end{equation}
+or:
+\begin{equation}
+\phi' = \int^{r_{surf}}_{R_o} b_o dr + \int^{r_{surf}}_r (b - b_o) dr
 \label{eq:split-phi-bo}
-\end{eqnarray}
+\end{equation}
 
 In section \ref{sec:finding_the_pressure_field}, following eq.\ref{eq:split-phi-Ro},
 the pressure/geo-potential $\phi'$ has been separated into surface ($\phi_s$),

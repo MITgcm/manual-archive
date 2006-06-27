@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.23 2006/06/27 22:29:56 edhill Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.24 2006/06/27 22:31:23 edhill Exp $
 % $Name:  $
 
 This chapter lays out the numerical schemes that are
@@ -692,7 +692,7 @@ The momentum equations are discretized in time as follows:
 \frac{1}{\Delta t} v^{n+1} + g \partial_y \eta^{n+1} + \partial_y \phi_{nh}^{n+1}
 & = & \frac{1}{\Delta t} v^{n} + G_v^{(n+1/2)} \label{eq:discrete-time-v-nh} \\
 \frac{1}{\Delta t} w^{n+1} + \partial_r \phi_{nh}^{n+1}
-& = & \frac{1}{\Delta t} w^{n} + G_w^{(n+1/2)} \label{eq:discrete-time-w-nh} \\
+& = & \frac{1}{\Delta t} w^{n} + G_w^{(n+1/2)} \label{eq:discrete-time-w-nh}
 \end{eqnarray}
 which must satisfy the discrete-in-time depth integrated continuity,
 equation~\ref{eq:discrete-time-backward-free-surface} and the local continuity equation
