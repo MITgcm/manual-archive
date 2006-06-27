@@ -1,3 +1,33 @@
+Editors
+
+ Overall       - JM, AM, PH, CNH, EH3
+
+ Front content - EH3
+
+ Chapter 1     - CNH
+
+ Chapter 2     - JMC
+
+ Chapter 3     -  AM
+
+ Chapter 4     - CNH
+
+ Chapter 5     -  PH
+
+ Chapter 6     -  AM
+
+ Chapter 7     - EH3
+
+ Chapter 8     -  PH
+
+ Chapter 9     - CNH (Applications)
+
+ Chapter 10    - JMC (Under development chapter)
+
+ Biblio        - EH3
+
+
+
 Rebuild and set to do cron build - DONE on hugo
 
 To do
@@ -7,6 +37,10 @@ To do
      but not that tested e.g. AB3)
     Add an "Under development, chapter" - shortish description of what
     is available (last chapter)
+
+  - add in example latex for formatting author names in different pieces.
+    this aknowledges peoples contributions and gives ref for who
+    to talk to.
 
 
 o HTML, scripts and front content
