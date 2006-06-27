@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_examples/global_oce_optim/global_oce_estimation.tex,v 1.6 2005/08/03 15:48:06 edhill Exp $
+% $Header: /u/gcmpack/manual/s_examples/global_oce_optim/global_oce_estimation.tex,v 1.7 2006/06/27 19:08:22 molod Exp $
 % $Name:  $
 
 \section[Global Ocean State Estimation Example]{Global Ocean State Estimation at $4^\circ$ Resolution}
@@ -16,7 +16,8 @@ This experiment illustrates the optimization (or data-assimilation) capacity
 of the MITgcm. Using an ocean configuration with realistic geography and bathymetry on a
 $4\times4^circ$ spherical polar grid, we estimate a time-independent surface heat flux correction
 $Q_\mathrm{netm}$ that brings the model climatology into consistency with observations (Levitus
-climatology).
+climatology). The files for this experiment can be found in the verification directory under
+tutorial\_global\_oce\_optim.
 
 This correction $Q_\mathrm{netm}$ (a 2D field only function of longitude and latitude) is
 the control variable of an optimization problem. It is inferred by an iterative
