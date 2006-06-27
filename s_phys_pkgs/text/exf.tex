@@ -86,10 +86,6 @@ Table \ref{tab:pkg:exf:cpp} summarizes these options.
       \hline
          \multicolumn{2}{|c|}{\textit{used in conjunction with relaxation to prescribed (climatological) fields}} \\
          \hline
-        \texttt{ALLOW\_CLIMTEMP\_RELAXATION} & 
-          relaxation to 3-D temperature climatology \\
-        \texttt{ALLOW\_CLIMSALT\_RELAXATION} & 
-          relaxation to 3-D salinity climatology \\
         \texttt{ALLOW\_CLIMSST\_RELAXATION} &
           relaxation to 2-D SST climatology \\
         \texttt{ALLOW\_CLIMSSS\_RELAXATION} &
@@ -292,6 +288,12 @@ c               |  Typical range: -0.5 < vstress < 0.5
 c               |  Southwest C-grid V point
 c               |  Input field
 c----------------------------------------------------------------------
+c     hs        :: sensible heat flux into ocean in W/m^2
+c               |  > 0 for increase in theta (ocean warming)
+c----------------------------------------------------------------------
+c     hl        :: latent   heat flux into ocean in W/m^2
+c               |  > 0 for increase in theta (ocean warming)
+c----------------------------------------------------------------------
 c     hflux     :: Net upward surface heat flux in W/m^2 
 c               |  excluding shortwave (on input)
 c               |  hflux = latent + sensible + lwflux
@@ -328,6 +330,11 @@ c               |  Typical range: -10 < vwind < 10
 c               |  Southwest C-grid V point
 c               |  Input or input/output field
 c----------------------------------------------------------------------
+c     wspeed    :: Surface (10-m) wind speed in m/s
+c               |  >= 0 sqrt(u^2+v^2)
+c               |  Typical range: 0 < wspeed < 10
+c               |  Input or input/output field
+c----------------------------------------------------------------------
 c     atemp     :: Surface (2-m) air temperature in deg K
 c               |  Typical range: 200 < atemp < 300
 c               |  Southwest C-grid tracer point
@@ -355,6 +362,11 @@ c     precip    :: Precipitation in m/s
 c               |  > 0 for decrease in salt (ocean salinity)
 c               |  Typical range: 0 < precip < 5e-7
 c               |  Southwest C-grid tracer point
+c               |  Input or input/output field
+c----------------------------------------------------------------------
+c    snowprecip :: snow in m/s
+c               |  > 0 for decrease in salt (ocean salinity)
+c               |  Typical range: 0 < precip < 5e-7
 c               |  Input or input/output field
 c----------------------------------------------------------------------
 c     runoff    :: River and glacier runoff in m/s
@@ -402,8 +414,6 @@ c ...
 c  exf_getforcing (TOP LEVEL ROUTINE)
 c  |
 c  |-- exf_getclim (get climatological fields used e.g. for relax.)
-c  |   |--- exf_set_climtemp (relax. to 3-D temperature field)
-c  |   |--- exf_set_climsalt (relax. to 3-D salinity field)
 c  |   |--- exf_set_climsst  (relax. to 2-D SST field)
 c  |   |--- exf_set_climsss  (relax. to 2-D SSS field)
 c  |   o
@@ -414,71 +424,64 @@ c  |   |      depending on CPP options (for each variable two fields
 c  |   |      consecutive in time are read in and interpolated onto
 c  |   |      current time step).
 c  |   |   2. If forcing is atmos. state and control is atmos. state,
-c  |   |      then the control variable anomalies are read here
-c  |   |          * ctrl_getatemp
-c  |   |          * ctrl_getaqh
-c  |   |          * ctrl_getuwind
-c  |   |          * ctrl_getvwind
+c  |   |      then the control variable anomalies are read here via ctrl_get_gen
+c  |   |      (atemp, aqh, precip, swflux, swdown, uwind, vwind).
 c  |   |      If forcing and control are fluxes, then
 c  |   |      controls are added later.
 c  |   o
 c  |
-c  |-- exf_check_range
-c  |   |   1. Check whether read fields are within assumed range
-c  |   |      (may capture mismatches in units)
+c  |-- exf_radiation
+c  |   |    Compute net or downwelling radiative fluxes via
+c  |   |    Stefan-Boltzmann law in case only one is known.
+c  |   o
+c  |-- exf_wind
+c  |   |   Computes wind speed and stresses, if required.
 c  |   o
 c  |
 c  |-- exf_bulkformulae
-c  |   |   1. Compute net or downwelling radiative fluxes via
-c  |   |      Stefan-Boltzmann law in case only one is known.
-c  |   |   2. Compute air-sea momentum and buoyancy fluxes from
-c  |   |      atmospheric state following Large and Pond, JPO, 1981/82
+c  |   |   Compute air-sea buoyancy fluxes from
+c  |   |   atmospheric state following Large and Pond, JPO, 1981/82
 c  |   o
 c  |
-c  |-- < add time-mean river runoff here, if available >
-c  |
-c  |-- < update tile edges here >
-c  |
-c  |-- exf_getsurfacefluxes
-c  |   |   1. If forcing and control are fluxes, then
-c  |   |      controls are added here.
-c  |   o
-c  |
-c  |-- < treatment of hflux w.r.t. swflux >
-c  |
-c  |-- exf_diagnostics_fill
-c  |   |   1. Do EXF-related diagnostics output here.
-c  |   o
-c  |
-c  |-- exf_mapfields
-c  |   |   1. Map the EXF variables onto the core MITgcm
-c  |   |      forcing fields.
-c  |   o
-c  |
-c  |-- exf_bulkformulae
-c  |   If ALLOW_BULKFORMULAE, compute fluxes via bulkformulae
+c  |-- < hflux is sum of sensible, latent, longwave rad. >
+c  |-- < sflux is sum of evap. minus precip. minus runoff  >
 c  |
 c  |-- exf_getsurfacefluxes
 c  |   If forcing and control is flux, then the
-c  |   control vector anomalies are read here
-c  |      * ctrl_getheatflux
-c  |      * ctrl_getsaltflux
-c  |      * ctrl_getzonstress
-c  |      * call ctrl_getmerstress
+c  |   control vector anomalies are read here via ctrl_get_gen
+c  |   (hflux, sflux, ustress, vstress)
+c  |
+c  |-- < update tile edges here >
+c  |
+c  |-- exf_check_range
+c  |   |   Check whether read fields are within assumed range
+c  |   |   (may capture mismatches in units)
+c  |   o
+c  |
+c  |-- < add shortwave to hflux for diagnostics >
+c  |
+c  |-- exf_diagnostics_fill
+c  |   |   Do EXF-related diagnostics output here.
+c  |   o
 c  |
 c  |-- exf_mapfields
-c  |   Forcing fields from exf package are mapped onto
-c  |   mitgcm forcing arrays.
-c  |   Mapping enables a runtime rescaling of fields
-
+c  |   |   Forcing fields from exf package are mapped onto
+c  |   |   mitgcm forcing arrays.
+c  |   |   Mapping enables a runtime rescaling of fields
+c  |   o
+C  o
 \end{verbatim}
 }
 
-Bulk formula routine: \texttt{exf\_bulkformulae.F}
+Radiation calculation: \texttt{exf\_radiation.F}
 
-Generic I/O routine: \texttt{exf\_set\_gen.F}
+Wind speed and stress calculation: \texttt{exf\_wind.F}
 
-Interpolation routine: \texttt{exf\_interp.F}
+Bulk formula: \texttt{exf\_bulkformulae.F}
+
+Generic I/O: \texttt{exf\_set\_gen.F}
+
+Interpolation: \texttt{exf\_interp.F}
 
 Header routines
 
@@ -500,6 +503,10 @@ Table \ref{tab:pkg:exf:diagnostics}.
 ------------------------------------------------------
  <-Name->|Levs|grid|<--  Units   -->|<- Tile (max=80c)
 ------------------------------------------------------
+ EXFhs   |  1 | SM | W/m^2          | Sensible heat flux into ocean, >0 increases theta
+ EXFhl   |  1 | SM | W/m^2          | Latent heat flux into ocean, >0 increases theta
+ EXFlwnet|  1 | SM | W/m^2          | Net upward longwave radiation, >0 decreases theta
+ EXFswnet|  1 | SM | W/m^2          | Net upward shortwave radiation, >0 decreases theta
  EXFlwdn |  1 | SM | W/m^2          | Downward longwave radiation, >0 increases theta
  EXFswdn |  1 | SM | W/m^2          | Downward shortwave radiation, >0 increases theta
  EXFqnet |  1 | SM | W/m^2          | Net upward heat flux (turb+rad), >0 decreases theta
@@ -507,10 +514,12 @@ Table \ref{tab:pkg:exf:diagnostics}.
  EXFtauy |  1 | SV | N/m^2          | meridional surface wind stress, >0 increases vVel
  EXFuwind|  1 | SM | m/s            | zonal 10-m wind speed, >0 increases uVel
  EXFvwind|  1 | SM | m/s            | meridional 10-m wind speed, >0 increases uVel
+ EXFwspee|  1 | SM | m/s            | 10-m wind speed modulus ( >= 0 )
  EXFatemp|  1 | SM | degK           | surface (2-m) air temperature
  EXFaqh  |  1 | SM | kg/kg          | surface (2-m) specific humidity
  EXFevap |  1 | SM | m/s            | evaporation, > 0 increases salinity
  EXFpreci|  1 | SM | m/s            | evaporation, > 0 decreases salinity
+ EXFsnow |  1 | SM | m/s            | snow precipitation, > 0 decreases salinity
  EXFempmr|  1 | SM | m/s            | net upward freshwater flux, > 0 increases salinity
  EXFpress|  1 | SM | N/m^2          | atmospheric pressure field
 \end{verbatim}
