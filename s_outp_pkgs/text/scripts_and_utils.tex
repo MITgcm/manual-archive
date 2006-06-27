@@ -41,15 +41,25 @@ systems which as yet are unpublished and undocumented.
 
 \subsubsection{MNC Utils}
 
-The MITgcm netCDF integration is relatively new and its format is
-still evolving.  The following scripts and utilities have been written
-to help manipulate MNC files:
+The MITgcm netCDF integration is relatively new and the tools used to
+work on netCDF data sets are developing.  The following scripts and
+utilities have been written to help manipulate MNC (netCDF) files:
 \begin{description}
 \item[Tile Assembly:] a matlab script {\tt
     utils/matlab/mnc\_assembly.m} is available for spatially
-  ``assembling'' MNC output.
+  ``assembling'' MNC output.  A convenience wrapper script called {\tt
+    utils/matlab/gluemnc.m} is also provided.  Please use the matlab
+  help facility for more information.
 
-%\item[]
+\item[gmt:] As MITgcm evolves to handle more complicated domains and
+  topologies, a suite of matlab tools is being written to more
+  gracefully handle the model files.  This suite is called ``gmt''
+  which refers to ``generalized model topology'' pre-/post-processing.
+  Currently, this directory contains a matlab script {\tt
+    utils/matlab/gmt/rdnctiles.m} that is able to read the MNC-created
+  netCDF files for any domain.  Additional scripts are being created
+  that will work with these fields on a per-tile basis.
+
 \end{description}
 
 
