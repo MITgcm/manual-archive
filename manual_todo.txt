@@ -26,8 +26,6 @@ Editors
 
  Biblio        - EH3
 
-
-
 Rebuild and set to do cron build - DONE on hugo
 
 To do
@@ -41,7 +39,6 @@ To do
   - add in example latex for formatting author names in different pieces.
     this aknowledges peoples contributions and gives ref for who
     to talk to.
-
 
 o HTML, scripts and front content
 
@@ -90,7 +87,6 @@ o Latex
          Add reference to SC article and Scientific Programming article
 
       o List of key papers needs to be updated and reformatted
-
 
       o Global atmosphere: `Held Suarez',
         update Adcroft reference
@@ -650,6 +646,8 @@ andrea
    (check in support for more names)
 
 10. Under development
+
+Constantinos LCML
 
 
 Bibliography
