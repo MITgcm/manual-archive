@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.22 2006/06/27 19:10:32 jmc Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.23 2006/06/27 22:29:56 edhill Exp $
 % $Name:  $
 
 This chapter lays out the numerical schemes that are
@@ -609,7 +609,7 @@ G_{\theta,S}^{(n+1/2)} & = & (3/2+\epsilon_{AB}) G_{\theta,S}^{n}-(1/2+\epsilon_
 (\theta^*,S^*) & = & (\theta^{n},S^{n}) + \Delta t G_{\theta,S}^{(n+1/2)}
 \label{eq:tstar-staggered} \\
 (\theta^{n+1},S^{n+1}) & = & {\cal L}^{-1}_{\theta,S} (\theta^*,S^*)
-\label{eq:t-n+1-staggered} \\
+\label{eq:t-n+1-staggered}
 \end{eqnarray}
 The corresponding calling tree is given in
 \ref{fig:call-tree-adams-bashforth-staggered}.
