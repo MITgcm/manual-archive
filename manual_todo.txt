@@ -590,16 +590,16 @@ list an expeiment which uses package? CNH
  Figure 6.8 is missing
 
 
->>>> From Andrea
+=====  Chapter 7  =====  [EH3 editing] :
 
-to do list for chap 7:
-
-
-7.1.1 - links to section 7.1.4: the text of the first one should read "see MITgcm Kernel Diagnostics Menu"
+7.1.1 - links to section 7.1.4: the text of the first 
+        one should read "see MITgcm Kernel Diagnostics Menu"
         the links are pointing to the proper place
 
-7.5.1 - add Graphix to the list of stuff in utils/matlab
-7.5.2 - empty
+7.5.1 - add Graphix to the list of stuff in utils/matlab (Daniel)
+
+7.5.2 - get bathymetry pre-processing stuff from Patrick
+        and then describe it
 
 
 andrea
