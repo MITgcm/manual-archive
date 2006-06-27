@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/text/top_section.tex,v 1.38 2006/04/06 21:11:57 edhill Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/text/top_section.tex,v 1.39 2006/06/27 20:47:05 molod Exp $
 % $Name:  $
 
 \chapter{Physical Parameterizations - Packages I}
@@ -87,15 +87,21 @@ table \ref{tab:package_summary_tab}.
 \newpage
 \section{Packages Related to Hydrodynamical Kernel}
 \input{part6/generic_advdiff.tex}
+tutorial\_offline               \ref{sect:eg-offline}
+tutorial\_baroclinic\_gyre      \ref{sect:eg-fourlayer}
+tutorial\_tracer\_adjsens       \ref{sect:eg-simple-tracer}
 
 \newpage
 \input{part6/zonal_filt.tex}
+tutorial\_held\_suarez\_cs    \ref{sect:eg-hs}
 
 \newpage
 \input{part6/exch2.tex}
+tutorial\_held\_suarez\_cs   \ref{sect:eg-hs}
 
 \newpage
 \input{part6/gridalt.tex}
+fizhi-cs-32x32x40
 
 % Some Mention of Packages that are part of the main model document
 
@@ -103,55 +109,74 @@ table \ref{tab:package_summary_tab}.
 \newpage
 \section{Ocean Packages}
 \input{part6/gmredi.tex}
+tutorial\_global\_oce\_latlon    \ref{sect:eg-global}
+front\_relax
+ideal\_2D\_oce
 
 \newpage
 \input{part6/kpp.tex}
+lab\_sea
 
 \newpage
 \input{part6/bulk_force.tex}
+global\_ocean.cs32x15/input/thsice
 
 \newpage
 \input{part6/exf.tex}
+global\_with\_exf
+lab\_sea
 
 \newpage
 \input{part6/cal.tex}
+global\_with\_exf
+lab\_sea
 
 \newpage
 \input{part6/obcs.tex}
+exp4
 
 \section{Atmosphere Packages}
 \newpage
 \input{part6/aim.tex}
+aim.5l\_cs
 
 \newpage
 \input{part6/land.tex}
+aim.5l\_cs
 
-%% FIZHI is *** PRIVATE ***
-%\begin{versionprivate}
-  \newpage
-  \input{part6/fizhi.tex}
-%\end{versionprivate}
+\newpage
+\input{part6/fizhi.tex}
+fizhi-cs-aqualev20
+fizhi-cs-32x32x40
 
 \section{Sea Ice Packages}
 \newpage
 \input{part6/thsice.tex}
+aim.5l\_cs/input.thsice
+global\_ocean.cs32x15/input.thsice
 
 \newpage
 \input{part6/seaice.tex}
+lab\_sea
 
 \section{Packages Related to Coupled Model}
 \newpage
 \input{part6/aim_compon_interf.tex}
+cpl\_aim+ocean
 
 \newpage
 \input{part6/aim_ocn_coupler.tex}
+cpl\_aim+ocean
 
 \newpage
 \input{part6/component_communications.tex}
+cpl\_aim+ocean
 
 \section{Biogeochemistry Packages}
 \newpage
 \input{part6/gchem.tex}
+tutorial\_global\_oce\_biogeo    \ref{sect:eg-biogeochem\_tutorial}
 
 \newpage
 \input{part6/dic.tex}
+tutorial\_global\_oce\_biogeo    \ref{sect:eg-biogeochem\_tutorial}

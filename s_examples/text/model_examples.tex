@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_examples/text/model_examples.tex,v 1.11 2006/06/27 19:08:22 molod Exp $
+% $Header: /u/gcmpack/manual/s_examples/text/model_examples.tex,v 1.12 2006/06/27 20:47:05 molod Exp $
 % $Name:  $
 
 \section[MITgcm Example Experiments]{Example experiments}
@@ -21,6 +21,8 @@ under the directory \texttt{verification}.  Each example is briefly described be
 
 \begin{enumerate}
   
+\item \texttt{tutorial\_barotropic\_gyre}
+
 \item \texttt{tutorial\_barotropic\_gyre} - single layer, ocean double gyre 
   (barotropic with free-surface). This experiment is described in detail in section
   \ref{sect:eg-baro}.
@@ -51,7 +53,7 @@ Gent/McWilliams scheme). 2D (Y-Z).
 \item \texttt{hs94.128x64x5} - 3D atmosphere dynamics using Held and
   Suarez '94 forcing.
   
-\item \texttt{hs94.cs-32x32x5} - 3D atmosphere dynamics using Held and Suarez 
+\item \texttt{tutorial\_held\_suarez\_cs} - 3D atmosphere dynamics using Held and Suarez 
   (1994) forcing on the cubed sphere.  This experiment is described in detail in
   section \ref{sect:eg-hs}.
   
@@ -68,6 +70,8 @@ Gent/McWilliams scheme). 2D (Y-Z).
   Global configuration, on latitude longitude grid with 128x64x5 grid
   points ($2.8^\circ$ resolution).
   
+\item \texttt{aim.5l_cs}
+
 \item \texttt{adjustment.128x64x1} Barotropic adjustment problem on
   latitude longitude grid with 128x64 grid points ($2.8^\circ$ resolution).
   
@@ -81,7 +85,7 @@ Gent/McWilliams scheme). 2D (Y-Z).
 \item \texttt{advect\_xy} Two-dimensional (horizontal plane) passive
   advection test on Cartesian grid.
   
-\item \texttt{advect\_yz} Two-dimensional (vertical plane) passive
+\item \texttt{advect\_xz} Two-dimensional (vertical plane) passive
   advection test on Cartesian grid.
   
 \item \texttt{tutorial\_tracer\_adjsens} Simple passive tracer experiment. Includes
@@ -115,6 +119,58 @@ Gent/McWilliams scheme). 2D (Y-Z).
 
 \item \texttt{rotating\_tank} Rotating tank simulation in cylindrical coordinates.
   This experiment is described in detail in section \ref{sect:eg-tank}.
+
+\item \texttt{MLAdjust} Simple test for different viscosity formulations.
+
+\item \texttt{bottom_ctrl_5x5} Adjoint test using the bottom topography as the
+  control parameter.
+
+\item \texttt{cfc_example} Global ocean with online computation and advection of
+CFC11 and CFC12.
+
+\item \texttt{dome} Idealized 3D test of a density-driven bottom current.
+
+\item \texttt{exp2} Old version of the global ocean experiment.
+
+\item \texttt{exp5} Deep convection.
+
+\item \texttt{fizhi-cs-32x32x10} Global atmospheric simulation with realistic topography,
+  10 vertical levels, a cubed sphere grid and the full atmospheric physics package.
+
+\item \texttt{fizhi-cs-aqualev20} Global atmospheric simulation on an aqua planet with
+  full atmospheric physics. Run is perpetual march with an analytical SST distribution.
+  This is the configuration for the APE (Aqua Planet Experiment) participation experiment.
+
+\item \texttt{fizhi-gridalt-hs} Global atmospheric simulation Held-Suarez (1994) forcing,
+  with the physical forcing and the dynamical forcing running on different vertical grids.
+
+\item \texttt{global_ocean.cs32x15} Global ocean experiment on the cubed sphere grid, using
+thermodynamic sea ice and bulk force packages.
+
+\item \texttt{global_ocean_ebm} Global ocean experiment on a lat-lon grid coupled to an
+atmospheric energy balance model. Similar to global_ocean.90x40x15 experiment.
+
+\item \texttt{global_with_exf} Global ocean experiment on a lat-lon grid using the exf
+package. Similar to global_ocean.90x40x15 experiment.
+
+\item \texttt{hs94.cs-32x32x5} 3D atmosphere dynamics using Held and Suarez
+  (1994) forcing on the cubed sphere. 5 vertical levels.
+
+\item \texttt{ideal_2D_oce} Idealized 2D global ocean simulation on an aqua planet.
+
+\item \texttt{inverted_barometer} Simple test of ocean response to atmospheric pressure
+loading.
+
+\item \texttt{lab_sea} Regional Labrador Sea simulation on a lat-lon grid. Coupled to
+the sea ice model.
+
+\item \texttt{matrix_example} Test of experimental method to accelerated convergence towards
+equillibrium.
+
+\item \texttt{tutorial_cfc_offline} Offline form of the MITgcm to study advection of a passive
+  tracer and CFCs.
+
+\item \texttt{vermix} Simple test in a small domain (3 columns) for ocean vertical mixing schemes.
 
 \end{enumerate}
 
