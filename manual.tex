@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/manual.tex,v 1.37 2006/04/07 15:40:07 edhill Exp $
+% $Header: /u/gcmpack/manual/manual.tex,v 1.38 2006/06/28 21:13:23 cnh Exp $
 % $Name:  $
 
 \documentclass[10pt]{book}
@@ -25,6 +25,7 @@
 %afe seems like these need to be long, sorry
 \newcommand{\varlink}[2]{\htmladdnormallink{\tt #1}{../code_reference/vdb/byname/#2.html}}
 \newcommand{\filelink}[2]{\htmladdnormallink{\bf \tt #1}{../code_reference/vdb/byname/#2.html}}
+\newcommand{\myhref}[2]{\htmladdnormallink{#2}{#1}}
 
 % afe  Commands to standardize typesetting 
 \newcommand{\file}[1]{\texttt{#1}}
@@ -96,8 +97,10 @@
 %aja%\bibpunct{[}{]}{,}{a}{}{,}
 %\bibliographystyle{plain}
 %-jmc: try agu bib-style (give author names & year instead of just a number)
+%% \usepackage[square]
 \usepackage[square]{natbib}
 \bibliographystyle{agu}
+%% \bibliographystyle{aguurl}
 
 % referencing
 %ph%\newcommand{\refequ}[1]{equation (\ref{equ:#1})}
@@ -204,41 +207,41 @@
 %\pagebreak
 
 % Section: Discretization and Algorithm
-\input{part2/part2}
+%% \input{part2/part2}
 %\pagebreak
 
 % Section: Getting started
-\input{part3/part3}
+%% \input{part3/part3}
 %\pagebreak
 
 % Section: Software Architecture
-\input{part4/part4}
+%% \input{part4/part4}
 %\pagebreak
 
 
 %\part{Adjoint of the MIT GCM}
 
 % Section: Automatic Differentiation
-\input{part5/part5}
+%% \input{part5/part5}
 %\pagebreak
 
 
 %\part{Additional features}
 
 % Section: Physical Packages
-\input{part6/part6}
+%% \input{part6/part6}
 %\pagebreak
 
 % Section: Pre-processing and Post-processing Tools
-\input{part7/part7}
+%% \input{part7/part7}
 %\pagebreak
 
 % Section: ECCO
-\input{part8/part8}
+%% \input{part8/part8}
 %\pagebreak
 
 % Section: Model Uses
-\input{model_uses}
+%% \input{model_uses}
 %\pagebreak
 
 % Section: References:

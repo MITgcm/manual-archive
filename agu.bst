@@ -675,7 +675,7 @@ FUNCTION {make.href.hypertex}
 % make hyperref specials
 FUNCTION {make.href.hyperref}
 { 
-  " \href{" swap$ * "}{" * swap$ * "}" *
+  " \myhref{" swap$ * "}{" * swap$ * "}" *
 }
 FUNCTION {make.href}
 { hrefform #2 =
