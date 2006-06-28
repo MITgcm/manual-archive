@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.25 2006/04/08 01:50:49 edhill Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.26 2006/06/28 15:22:13 edhill Exp $
 % $Name:  $
 
 %tci%\documentclass[12pt]{book}
@@ -34,7 +34,7 @@
 
 % Section: Overview
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.25 2006/04/08 01:50:49 edhill Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.26 2006/06/28 15:22:13 edhill Exp $
 % $Name:  $
 
 This document provides the reader with the information necessary to
@@ -137,7 +137,7 @@ J. Geophysical Res., 104(C12), 29,529-29,547.
 We begin by briefly showing some of the results of the model in action to
 give a feel for the wide range of problems that can be addressed using it.
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.25 2006/04/08 01:50:49 edhill Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.26 2006/06/28 15:22:13 edhill Exp $
 % $Name:  $
 
 \section{Illustrations of the model in action}
@@ -374,7 +374,7 @@ stratification of the ACC.
 \input{part1/lab_figure}
 %%CNHend
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.25 2006/04/08 01:50:49 edhill Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.26 2006/06/28 15:22:13 edhill Exp $
 % $Name:  $
 
 \section{Continuous equations in `r' coordinates}
@@ -1077,7 +1077,7 @@ friction. These coefficients are the same for all velocity components.
 
 The mixing terms for the temperature and salinity equations have a similar
 form to that of momentum except that the diffusion tensor can be
-non-diagonal and have varying coefficients. $\qquad $
+non-diagonal and have varying coefficients.
 \begin{equation}
 D_{T,S}=\nabla .[\underline{\underline{K}}\nabla (T,S)]+K_{4}\nabla
 _{h}^{4}(T,S)  \label{eq:diffusion}
@@ -1126,7 +1126,7 @@ to discretize the model.
 Tangent linear and adjoint counterparts of the forward model are described
 in Chapter 5.
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.25 2006/04/08 01:50:49 edhill Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.26 2006/06/28 15:22:13 edhill Exp $
 % $Name:  $
 
 \section{Appendix ATMOSPHERE}
@@ -1255,7 +1255,7 @@ _{h}+\mathbf{\nabla }_{p}\phi ^{\prime } &=&\vec{\mathbf{\mathcal{F}}}
 \frac{D\theta }{Dt} &=&\frac{\mathcal{Q}}{\Pi } 
 \end{eqnarray}
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.25 2006/04/08 01:50:49 edhill Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.26 2006/06/28 15:22:13 edhill Exp $
 % $Name:  $
 
 \section{Appendix OCEAN}
@@ -1472,7 +1472,7 @@ the perturbation density. Nevertheless, it is the hydrostatic ($\epsilon
 _{nh}=0$ form of these equations that are used throughout the ocean modeling
 community and referred to as the primitive equations (HPE).
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.25 2006/04/08 01:50:49 edhill Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.26 2006/06/28 15:22:13 edhill Exp $
 % $Name:  $
 
 \section{Appendix:OPERATORS}
@@ -1489,9 +1489,8 @@ u=r\cos \varphi \frac{D\lambda }{Dt}
 \end{equation*}
 
 \begin{equation*}
-v=r\frac{D\varphi }{Dt}\qquad
+v=r\frac{D\varphi }{Dt}
 \end{equation*}
-$\qquad \qquad \qquad \qquad $
 
 \begin{equation*}
 \dot{r}=\frac{Dr}{Dt}
@@ -1501,7 +1500,7 @@ Here $\varphi $ is the latitude, $\lambda $ the longitude, $r$ the radial
 distance of the particle from the center of the earth, $\Omega $ is the
 angular speed of rotation of the Earth and $D/Dt$ is the total derivative.
 
-The `grad' ($\nabla $) and `div' ($\nabla $.) operators are defined by, in
+The `grad' ($\nabla $) and `div' ($\nabla\cdot$) operators are defined by, in
 spherical coordinates:
 
 \begin{equation*}
@@ -1511,7 +1510,7 @@ spherical coordinates:
 \end{equation*}
 
 \begin{equation*}
-\nabla .v\equiv \frac{1}{r\cos \varphi }\left\{ \frac{\partial u}{\partial
+\nabla\cdot v\equiv \frac{1}{r\cos \varphi }\left\{ \frac{\partial u}{\partial
 \lambda }+\frac{\partial }{\partial \varphi }\left( v\cos \varphi \right) \right\}
 +\frac{1}{r^{2}}\frac{\partial \left( r^{2}\dot{r}\right) }{\partial r}
 \end{equation*}
