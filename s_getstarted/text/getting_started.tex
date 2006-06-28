@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.37 2006/06/28 16:48:19 molod Exp $
+% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.38 2006/06/28 17:20:51 molod Exp $
 % $Name:  $
 
 %\section{Getting started}
@@ -894,47 +894,11 @@ as the pickup files but are named differently. Their name contain the chain
 used to restart the model but are overwritten every other time they are
 output to save disk space during long integrations.
 
-
-
 \subsubsection{MNC output files}
 
 Unlike the \texttt{mdsio} output, the \texttt{mnc}--generated output
 is usually (though not necessarily) placed within a subdirectory with
-a name such as \texttt{mnc\_test\_\${DATE}\_\${SEQ}}.  The files
-within this subdirectory are all in the ``self-describing'' netCDF
-format and can thus be browsed and/or plotted using tools such as:
-\begin{itemize}
-\item \texttt{ncdump} is a utility which is typically included
-  with every netCDF install:
-  \begin{rawhtml} <A href="http://www.unidata.ucar.edu/packages/netcdf/"> \end{rawhtml}
-\begin{verbatim}
-http://www.unidata.ucar.edu/packages/netcdf/
-\end{verbatim}
-  \begin{rawhtml} </A> \end{rawhtml} and it converts the netCDF
-  binaries into formatted ASCII text files.
-
-\item \texttt{ncview} utility is a very convenient and quick way
-  to plot netCDF data and it runs on most OSes:
-  \begin{rawhtml} <A href="http://meteora.ucsd.edu/~pierce/ncview_home_page.html"> \end{rawhtml}
-\begin{verbatim}
-http://meteora.ucsd.edu/~pierce/ncview_home_page.html
-\end{verbatim}
-  \begin{rawhtml} </A> \end{rawhtml}
-  
-\item MatLAB(c) and other common post-processing environments provide
-  various netCDF interfaces including:
-  \begin{rawhtml} <A href="http://mexcdf.sourceforge.net/"> \end{rawhtml}
-\begin{verbatim}
-http://mexcdf.sourceforge.net/
-\end{verbatim}
-  \begin{rawhtml} </A> \end{rawhtml}
-  \begin{rawhtml} <A href="http://woodshole.er.usgs.gov/staffpages/cdenham/public_html/MexCDF/nc4ml5.html"> \end{rawhtml}
-\begin{verbatim}
-http://woodshole.er.usgs.gov/staffpages/cdenham/public_html/MexCDF/nc4ml5.html
-\end{verbatim}
-  \begin{rawhtml} </A> \end{rawhtml}
-\end{itemize}
-
+a name such as \texttt{mnc\_test\_\${DATE}\_\${SEQ}}.  
 
 \subsection{Looking at the output}
 
@@ -969,4 +933,38 @@ Some examples of reading and visualizing some output in {\em Matlab}:
 
 Similar scripts for netCDF output (\texttt{rdmnc.m}) are available and
 they are described in Section \ref{sec:pkg:mnc}.
+
+The MNC output files are all in the ``self-describing'' netCDF
+format and can thus be browsed and/or plotted using tools such as:
+\begin{itemize}
+\item \texttt{ncdump} is a utility which is typically included
+  with every netCDF install:
+  \begin{rawhtml} <A href="http://www.unidata.ucar.edu/packages/netcdf/"> \end{rawhtml}
+\begin{verbatim}
+http://www.unidata.ucar.edu/packages/netcdf/
+\end{verbatim}
+  \begin{rawhtml} </A> \end{rawhtml} and it converts the netCDF
+  binaries into formatted ASCII text files.
+
+\item \texttt{ncview} utility is a very convenient and quick way
+  to plot netCDF data and it runs on most OSes:
+  \begin{rawhtml} <A href="http://meteora.ucsd.edu/~pierce/ncview_home_page.html"> \end{rawhtml}
+\begin{verbatim}
+http://meteora.ucsd.edu/~pierce/ncview_home_page.html
+\end{verbatim}
+  \begin{rawhtml} </A> \end{rawhtml}
+  
+\item MatLAB(c) and other common post-processing environments provide
+  various netCDF interfaces including:
+  \begin{rawhtml} <A href="http://mexcdf.sourceforge.net/"> \end{rawhtml}
+\begin{verbatim}
+http://mexcdf.sourceforge.net/
+\end{verbatim}
+  \begin{rawhtml} </A> \end{rawhtml}
+  \begin{rawhtml} <A href="http://woodshole.er.usgs.gov/staffpages/cdenham/public_html/MexCDF/nc4ml5.html"> \end{rawhtml}
+\begin{verbatim}
+http://woodshole.er.usgs.gov/staffpages/cdenham/public_html/MexCDF/nc4ml5.html
+\end{verbatim}
+  \begin{rawhtml} </A> \end{rawhtml}
+\end{itemize}
 

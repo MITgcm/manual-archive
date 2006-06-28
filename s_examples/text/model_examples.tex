@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_examples/text/model_examples.tex,v 1.13 2006/06/27 22:34:09 edhill Exp $
+% $Header: /u/gcmpack/manual/s_examples/text/model_examples.tex,v 1.14 2006/06/28 17:20:51 molod Exp $
 % $Name:  $
 
 \section[MITgcm Example Experiments]{Example experiments}
@@ -249,12 +249,16 @@ Each example directory has the following subdirectories:
   In addition, you will also find in this directory the forcing and
   topography files as well as the files describing the initial state
   of the experiment.  This varies from experiment to experiment. See
-  section 2 for more details.
+  the verification directories refered to in this chapter for more details.
 
 \item \texttt{results}: this directory contains the output file
   \texttt{output.txt} produced by the simulation example. This file is
   useful for comparison with your own output when you run the
   experiment.
+
+\item \texttt{build}: this directory is where the model is compiled
+  and loaded, and where the executable resides.
+
 \end{itemize}
 
 Once you have chosen the example you want to run, you are ready to
