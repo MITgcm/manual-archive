@@ -233,7 +233,7 @@ In general:
 - would be nice to have an active link to the fortran-file 
   for all the S/R & eq.Number in the "calling-tree" boxes
 - search for CALC_MOM_RHS and replace it by the appropriate S/R
-  (mom_flux_form, mom_vecinv, dynamics)
+  (mom_flux_form, mom_vecinv, dynamics) <- DONE
 - Problem with notation: in section.1 \vec{\bf v_h} (or \vec{\mathbf{v}}_{h})
 was used for the horizontal velocity vector, and the 3.D vector was \vec{\mathbf{v}}
 in section.2, \vec{\bf v} is used instead and 3.D velocity vector is 
@@ -244,6 +244,7 @@ at the beginning of section.2 and to mention clearly the changes between
 the 2 sections.
 
 in content: Horizontal Dissipation: 2 times in vector-invariant section
+<- DONE
 
 2.1 time-stepping (part2/time_stepping.tex)
 
@@ -252,6 +253,7 @@ in content: Horizontal Dissipation: 2 times in vector-invariant section
 >> In all the above configurations it is also possible to substitute the
 >> Adams-Bashforth with an alternative time-stepping scheme for terms
 >> evaluated explicitly in time
+<- Leave it general.
 
 
 2.2 rigid-lid:
@@ -285,10 +287,10 @@ in content: Horizontal Dissipation: 2 times in vector-invariant section
 - add link & S/R names: CALC_GW, SOLVE_FOR_PRESSURE, CG3D
 
 2.9 Variants on Free-Surface
-- Delta.t mis-written (eq.2.73)
-- Eq.Num missing (has been fixed since)
-- u* is stored in gU (and not in gUnm1)
-- Phi_nh in NH_VARS.h
+- Delta.t mis-written (eq.2.73) <- DONE
+- Eq.Num missing <- DONE
+- u* is stored in gU (and not in gUnm1) <- DONE
+- Phi_nh in NH_VARS.h <- DONE
 - add link to S/R file: SOLVE_FOR_PRESSURE, CALC_DIV_GHAT, CG2D, CG3D, 
   INI_CG2D, INI_CG3D
 
@@ -298,6 +300,7 @@ in content: Horizontal Dissipation: 2 times in vector-invariant section
 2.9.2 NLFS
 - eq.Nb are wrong in html
 - 2.9.2.4 : set of eq. appears wrong in html (but right in .dvi) 
+ <- DONE
 
 2.10.1 Notation
 - Area definition is not really used like this
@@ -306,10 +309,11 @@ in content: Horizontal Dissipation: 2 times in vector-invariant section
 
   Instead, in the following section, Ac,Aw,As,A_zeta (= corresponding to 
   the model variables) are used (e.g., see section 2.10.5)
+<- DONE
 
 2.10.5 Horizontal grid:
 - fig.2.8 : should use Aw,As consistently in this figure description,
-  in the figure itself, as it is in the text.
+  in the figure itself, as it is in the text. <- DONE
 - curvilinear: 
   to add: mention the angle of the grid direction relative to 
   Eastward, Northward direction.
@@ -360,7 +364,7 @@ in content: Horizontal Dissipation: 2 times in vector-invariant section
 
 2.16 & 2.17 & 2.18 : 
  - add 1rst Order upwind option & DST-2 (Lax-Wendroff) options
- - fix equations 2.202 & 2.203 (thanks to Martin)
+ - fix equations 2.202 & 2.203 (thanks to Martin) <- DONE
 
 2.20.2 mercator, non-dimensional Equations:
 - does not use std notation
@@ -368,6 +372,7 @@ in content: Horizontal Dissipation: 2 times in vector-invariant section
 (e.g changing the tile to:
 - talk to Baylor
  Appendix: non-dimensional Equations on Spherical-Polar grid.)
+ <- No (Chris said)
 
 
 Diagrams of grid locations etc.... and what variables and output files 
