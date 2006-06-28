@@ -637,6 +637,8 @@ list an expeiment which uses package? CNH
 7.5.2 - get bathymetry pre-processing stuff from Patrick
         and then describe it
 
+add something on spgrid mesh generator (maybe)?
+
 
 andrea
 
