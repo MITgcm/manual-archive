@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_examples/baroclinic_gyre/fourlayer.tex,v 1.21 2006/06/27 19:08:22 molod Exp $
+% $Header: /u/gcmpack/manual/s_examples/baroclinic_gyre/fourlayer.tex,v 1.22 2006/06/28 18:57:15 jmc Exp $
 % $Name:  $
 
 \section[Baroclinic Gyre MITgcm Example]{Four Layer Baroclinic Ocean Gyre In Spherical Coordinates}
@@ -417,18 +417,12 @@ viscAh=4.E2,
   coefficient to $1 \times 10^{-2} {\rm m^{2}s^{-1}}$. Boundary
   conditions for this operator are specified later.  The variable
   \varlink{viscAh}{viscAh} is read in the routine
-  \varlink{INI\_PARMS}{INI_PARMS} and applied in routines
-  \varlink{CALC\_MOM\_RHS}{CALC_MOM_RHS} and
-  \varlink{CALC\_GW}{CALC_GW}.
+  \varlink{INI\_PARMS}{INI_PARMS} and applied in routine
+  \varlink{MOM\_FLUXFORM}{MOM_FLUXFORM}.
 
 \fbox{
   \begin{minipage}{5.0in}
-    {\it S/R CALC\_MOM\_RHS}({\it calc\_mom\_rhs.F})
-  \end{minipage}
-}
-\fbox{
-  \begin{minipage}{5.0in}
-    {\it S/R CALC\_GW}({\it calc\_gw.F})
+    {\it S/R MOM\_FLUXFORM}({\it mom\_fluxform.F})
   \end{minipage}
 }
 
@@ -446,10 +440,10 @@ no_slip_sides=.FALSE.
 
   \fbox{
     \begin{minipage}{5.0in}
-      {\it S/R CALC\_MOM\_RHS}({\it calc\_mom\_rhs.F})
+      {\it S/R MOM\_FLUXFORM}({\it mom\_fluxform.F})
     \end{minipage}
   }
-  \filelink{calc\_mom\_rhs.F}{calc_mom_rhs.F}
+  \filelink{mom\_fluxform.F}{pkg-mom_fluxform-mom_fluxform.F}
   
 \item Lines 9,
 \begin{verbatim}
@@ -460,14 +454,14 @@ no_slip_bottom=.TRUE.
   at $z=-H$, where $H$ is the local depth of the domain.  The variable
   \varlink{no\_slip\_bottom}{no\_slip\_bottom} is read in the routine
   \filelink{INI\_PARMS}{model-src-ini_parms.F} and is applied in the
-  routine \varlink{CALC\_MOM\_RHS}{CALC_MOM_RHS}.
+  routine \varlink{MOM\_FLUXFORM}{MOM_FLUXFORM}.
 
   \fbox{
     \begin{minipage}{5.0in}
-      {\it S/R CALC\_MOM\_RHS}({\it calc\_mom\_rhs.F})
+      {\it S/R MOM\_FLUXFORM}({\it mom\_fluxform.F})
     \end{minipage}
   }
-  \filelink{calc\_mom\_rhs.F}{calc_mom_rhs.F}
+  \filelink{mom\_fluxform.F}{pkg-mom_fluxform-mom_fluxform.F}
 
 \item Line 10,
 \begin{verbatim}
