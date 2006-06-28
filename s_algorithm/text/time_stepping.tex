@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.24 2006/06/27 22:31:23 edhill Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.25 2006/06/28 16:55:53 jmc Exp $
 % $Name:  $
 
 This chapter lays out the numerical schemes that are
@@ -796,16 +796,16 @@ where
 \begin{eqnarray}
 {\eta}^* = \epsilon_{fs} \: {\eta}^{n} -
 \Delta t {\bf \nabla}_h \cdot \int_{R_{fixed}}^{R_o} \vec{\bf v}^* dr
-\: + \: \epsilon_{fw} \Delta_t (P-E)^{n} 
+\: + \: \epsilon_{fw} \Delta t (P-E)^{n} 
 \label{eq-solve2D_rhs}
 \end{eqnarray}
 
 \fbox{ \begin{minipage}{4.75in}
 {\em S/R SOLVE\_FOR\_PRESSURE} ({\em solve\_for\_pressure.F})
 
-$u^*$: {\bf GuNm1} ({\em DYNVARS.h})
+$u^*$: {\bf gU} ({\em DYNVARS.h})
 
-$v^*$: {\bf GvNm1} ({\em DYNVARS.h})
+$v^*$: {\bf gV} ({\em DYNVARS.h})
 
 $\eta^*$: {\bf cg2d\_b} (\em SOLVE\_FOR\_PRESSURE.h)
 
@@ -857,11 +857,11 @@ without any consequence on the solution.
 
 $\eta^{n+1}$: {\bf etaN} (\em DYNVARS.h)
 
-$\phi_{nh}^{n+1}$: {\bf phi\_nh} (\em DYNVARS.h)
+$\phi_{nh}^{n+1}$: {\bf phi\_nh} (\em NH\_VARS.h)
 
-$u^*$: {\bf GuNm1} ({\em DYNVARS.h})
+$u^*$: {\bf gU} ({\em DYNVARS.h})
 
-$v^*$: {\bf GvNm1} ({\em DYNVARS.h})
+$v^*$: {\bf gV} ({\em DYNVARS.h})
 
 $u^{n+1}$: {\bf uVel} ({\em DYNVARS.h})
 
