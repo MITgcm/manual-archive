@@ -705,19 +705,14 @@ Type & Vegetation Designation \\ \hline
 100 & Ocean \\ \hline
 \end{tabular}
 \end{center}
-\caption{Surface type designations used to compute surface roughness (over land) 
-and surface albedo.}
+\caption{Surface type designations.}
 \label{tab:fizhi:surftype}
 \end{table}
  
- 
 \begin{figure*}[htbp]
-  \begin{center}
-  \rotatebox{270}{\resizebox{90mm}{!}{\includegraphics{part6/surftypes.eps}}}
-  \rotatebox{270}{\resizebox{100mm}{!}{\includegraphics{part6/surftypes.descrip.eps}}}
-  \end{center}
+  \centerline{  \epsfysize=4.0in  \epsfbox{part6/surftype.eps}}
   \vspace{0.2in}
-  \caption  {Surface Type Combinations at $1^\circ$ resolution.}
+  \caption  {Surface Type Combinations.}
   \label{fig:fizhi:surftype}
 \end{figure*}
 
@@ -2976,3 +2971,12 @@ q^{n+1} = (\pi q)^{n+1} / \pi^{n+1}
 \subsubsection{Dos and donts}
 
 \subsubsection{Fizhi Reference}
+
+\subsubsection{Experiments and tutorials that use fizhi}
+\label{sec:pkg:fizhi:experiments}
+
+\begin{itemize}
+\item{Global atmosphere experiment with realistic SST and topography in fizhi-cs-32x32x10 verification directory. }
+\item{Global atmosphere aqua planet experiment in fizhi-cs-aqualev20 verification directory. }
+\end{itemize}
+
