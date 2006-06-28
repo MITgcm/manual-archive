@@ -391,17 +391,17 @@ Chapter 3
 
 Almost all of the 'math mode' text is dropped down as subscripts
 
-3.10.3.1 - refers to figures and equations, links are broken
+3.11.3.1 - refers to figures and equations, links are broken
 
-3.11.3.2 - line 43: link to equation is broken
+3.12.3.2 - line 43: link to equation is broken
          - line 51-53: link to equation is broken
          - there is some mess of text hanging around the end of this section. remove? reformat?
 
-3.12.4.1 - line 34 - link to equation is broken
+3.13.4.1 - line 34 - link to equation is broken
          - lines 60,61 - 1st (take out the 'r' in the superscript)
 
-3.13.2 - link to theta-equation is broken
-3.13.5.4 -- ALL of the bold links to variable names are broken
+3.14.2 - link to theta-equation is broken
+3.14.5.4 -- ALL of the bold links to variable names are broken
             line 34: link to equation is broken
 
 >>>> From Ed
