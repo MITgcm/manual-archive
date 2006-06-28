@@ -391,27 +391,6 @@ Chapter 3
 
 Almost all of the 'math mode' text is dropped down as subscripts
 
-3.1 - don't need a link to the outside of the document (remove it)
-    - link to htdig is broken
-
-3.2.1 - link at bottom to source code points to section 3.2.1
-   (ie, to itself) - link should point to cvs code archive
-
-3.2.2.1  - ('upgrading from an earlier version') belongs under
-      the cvs part, ie, should be 3.2.1.1
-
-3.3 - remove reference to 'diags' section under MITgcm
-    - remove reference to 'exe' and 'bin' sections also
-      (remove the .cvsignore file under these directories in cvs)
-    - add a 'jobs' section, and a description as examples of run scripts
-    - add 'lsopt', 'optim' and 'tutorial examples' with brief descriptions
-    - under 'tools' add a reference to 'build_options'. refer to the 'optfiles'
-    - under 'tools' the adjoint points to section 5 - this is now section 8
-      (but should be a floating reference)
-    - under 'utils' add a reference to exch2 - stuff for different resolutions
-    - the description of the pkg section refers directly to
-      section 3. should be section 6 (actually should be a floating reference)
-
 3.4 - refer to sections 3.8 - 3.18 (now says 3.8 - 3.10)
 3.4.1 - links to the following experiments don't exist or are broken:
           exp2 - should link to section 3.9
