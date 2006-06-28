@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.36 2006/06/27 19:08:22 molod Exp $
+% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.37 2006/06/28 16:48:19 molod Exp $
 % $Name:  $
 
 %\section{Getting started}
@@ -21,18 +21,7 @@ you are ready to try implementing the configuration you have in mind.
 <!-- CMIREDIR:whereToFindInfo: -->
 \end{rawhtml}
 
-A web site is maintained for release 2 (``Pelican'') of MITgcm:
-\begin{rawhtml} <A href=http://mitgcm.org/pelican/ target="idontexist"> \end{rawhtml}
-\begin{verbatim}
-http://mitgcm.org/pelican
-\end{verbatim}
-\begin{rawhtml} </A> \end{rawhtml}
-Here you will find an on-line version of this document, a
-``browsable'' copy of the code and a searchable database of the model
-and site, as well as links for downloading the model and
-documentation, to data-sources, and other related sites.
-
-There is also a web-archived support mailing list for the model that
+There is a web-archived support mailing list for the model that
 you can email at \texttt{MITgcm-support@mitgcm.org} or browse at:
 \begin{rawhtml} <A href=http://mitgcm.org/mailman/listinfo/mitgcm-support/ target="idontexist"> \end{rawhtml}
 \begin{verbatim}
@@ -40,16 +29,6 @@ http://mitgcm.org/mailman/listinfo/mitgcm-support/
 http://mitgcm.org/pipermail/mitgcm-support/
 \end{verbatim}
 \begin{rawhtml} </A> \end{rawhtml}
-Essentially all of the MITgcm web pages can be searched using a
-popular web crawler such as Google or through our own search facility:
-\begin{rawhtml} <A href=http://mitgcm.org/mailman/htdig/ target="idontexist"> \end{rawhtml}
-\begin{verbatim}
-http://mitgcm.org/htdig/
-\end{verbatim}
-\begin{rawhtml} </A> \end{rawhtml}
-%%% http://www.google.com/search?q=hydrostatic+site%3Amitgcm.org
-
-
 
 \section{Obtaining the code}
 \label{sect:obtainingCode}
@@ -175,27 +154,6 @@ they create can be changed to a different name following the check-out:
    %  mv MITgcm MITgcm_verif_basic
 \end{verbatim}
 
-
-\subsection{Method 2 - Tar file download}
-\label{sect:conventionalDownload}
-
-If you do not have CVS on your system, you can download the model as a
-tar file from the web site at:
-\begin{rawhtml} <A href=http://mitgcm.org/download target="idontexist"> \end{rawhtml}
-\begin{verbatim}
-http://mitgcm.org/download/
-\end{verbatim}
-\begin{rawhtml} </A> \end{rawhtml}
-The tar file still contains CVS information which we urge you not to
-delete; even if you do not use CVS yourself the information can help
-us if you should need to send us your copy of the code.  If a recent
-tar file does not exist, then please contact the developers through
-the 
-\begin{rawhtml} <A href="mailto:MITgcm-support@mitgcm.org"> \end{rawhtml}
-MITgcm-support@mitgcm.org
-\begin{rawhtml} </A> \end{rawhtml}
-mailing list.
-
 \subsubsection{Upgrading from an earlier version}
 
 If you already have an earlier version of the code you can ``upgrade''
@@ -262,6 +220,26 @@ that you may only have part of a patch. Using this method of updating
 also means we can't tell what version of the code you are working
 with. So please be sure you understand what you're doing.
 
+\subsection{Method 2 - Tar file download}
+\label{sect:conventionalDownload}
+
+If you do not have CVS on your system, you can download the model as a
+tar file from the web site at:
+\begin{rawhtml} <A href=http://mitgcm.org/download target="idontexist"> \end{rawhtml}
+\begin{verbatim}
+http://mitgcm.org/download/
+\end{verbatim}
+\begin{rawhtml} </A> \end{rawhtml}
+The tar file still contains CVS information which we urge you not to
+delete; even if you do not use CVS yourself the information can help
+us if you should need to send us your copy of the code.  If a recent
+tar file does not exist, then please contact the developers through
+the 
+\begin{rawhtml} <A href="mailto:MITgcm-support@mitgcm.org"> \end{rawhtml}
+MITgcm-support@mitgcm.org
+\begin{rawhtml} </A> \end{rawhtml}
+mailing list.
+
 \section{Model and directory structure}
 \begin{rawhtml}
 <!-- CMIREDIR:directory_structure: -->
@@ -286,22 +264,11 @@ structure).
 
 \begin{itemize}
 
-\item \texttt{bin}: this directory is initially empty. It is the
-  default directory in which to compile the code.
-  
-\item \texttt{diags}: contains the code relative to time-averaged
-  diagnostics. It is subdivided into two subdirectories \texttt{inc}
-  and \texttt{src} that contain include files (\texttt{*.h} files) and
-  Fortran subroutines (\texttt{*.F} files), respectively.
-
 \item \texttt{doc}: contains brief documentation notes.
   
 \item \texttt{eesupp}: contains the execution environment source code.
   Also subdivided into two subdirectories \texttt{inc} and
   \texttt{src}.
-  
-\item \texttt{exe}: this directory is initially empty. It is the
-  default directory in which to execute the code.
   
 \item \texttt{model}: this directory contains the main source code.
   Also subdivided into two subdirectories \texttt{inc} and
@@ -311,14 +278,17 @@ structure).
   package corresponds to a subdirectory. For example, \texttt{gmredi}
   contains the code related to the Gent-McWilliams/Redi scheme,
   \texttt{aim} the code relative to the atmospheric intermediate
-  physics. The packages are described in detail in section 3.
+  physics. The packages are described in detail in chapter \ref{chap.packagesI}.
   
 \item \texttt{tools}: this directory contains various useful tools.
   For example, \texttt{genmake2} is a script written in csh (C-shell)
   that should be used to generate your makefile. The directory
   \texttt{adjoint} contains the makefile specific to the Tangent
   linear and Adjoint Compiler (TAMC) that generates the adjoint code.
-  The latter is described in details in part V.
+  The latter is described in detail in part \ref{chap.ecco}.
+  This directory also contains the subdirectory build\_options, which
+  contains the `optfiles' with the compiler options for the different
+  compilers and machines that can run MITgcm.
   
 \item \texttt{utils}: this directory contains various utilities. The
   subdirectory \texttt{knudsen2} contains code and a makefile that
@@ -327,11 +297,19 @@ structure).
   \texttt{matlab} subdirectory contains matlab scripts for reading
   model output directly into matlab. \texttt{scripts} contains C-shell
   post-processing scripts for joining processor-based and tiled-based
-  model output.
+  model output. The subdirectory exch2 contains the code needed for
+  the exch2 package to work with different combinations of domain
+  decompositions.
   
 \item \texttt{verification}: this directory contains the model
   examples. See section \ref{sect:modelExamples}.
 
+\item \texttt{jobs}: contains sample job scripts for running MITgcm.
+  
+\item \texttt{lsopt}: Line search code used for optimization.
+  
+\item \texttt{optim}: Interface between MITgcm and line search code.
+  
 \end{itemize}
 
 \section[Building MITgcm]{Building the code}
