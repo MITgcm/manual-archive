@@ -205,6 +205,7 @@ o Latex
           o coupled aqua, ridge world etc...
             - links to ingrid output
               get stuff from Daniel
+              Davids donut movie
 
           o constrained lab simulation
             - links to ingrid output for model and lab
