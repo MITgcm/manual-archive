@@ -391,33 +391,6 @@ Chapter 3
 
 Almost all of the 'math mode' text is dropped down as subscripts
 
-3.4 - refer to sections 3.8 - 3.18 (now says 3.8 - 3.10)
-3.4.1 - links to the following experiments don't exist or are broken:
-          exp2 - should link to section 3.9
-          hs94.cs-32x32x5 - link to section 3.12
-          add 'convection' to the list, link to section 3.13
-          add 'plume on slope` to the list, link to section 3.14
-          add '??' link to section 3.15
-          add 'dic_example on slope` to the list, link to section 3.16
-          add '??' link to section 3.17
-          add 'offline' and link to section 3.18
-          clean up others and make links where they are needed
-3.4.2 - text suggests to see section 2 for details about what is in the 'code'
-        and 'input' directories - should refer to the examples in this section
-      - add 'build' bullet - this is where the model is compiled and exectuable lives
-
-3.5 - add some little text when talking about 'optfiles' to refer to the tools/build_options
-      as the place where they live (add a link?)
-
-3.6.1 - Add some general 'approach' text - ie, output is controlled either by the
-        'data' file in the input directory or by the data.[pkg name] file for any
-        package running. And there is some default behavior when the 'state' dumps
-        are written.
-3.6.1.2 - needs to be moved to inside section 3.6.2
-
-All the 'overview' sections need some reference to the name of the experiment in
-the verification directory
-
 3.10 - in title, 4 degrees - degree symbol is a subscript, not a superscript
      - is this experiment in the list from section 3.4???
 3.10.3.1 - refers to figures and equations, links are broken
