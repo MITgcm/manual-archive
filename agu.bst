@@ -1,3 +1,12 @@
+%%% Modification of BibTeX style file agu.bst
+%%% ... by urlbst, version 0.5 (marked with "% urlbst")
+%%% See <http://www.astro.gla.ac.uk/users/norman/distrib/urlbst/>
+%%% Added webpage entry type, and url and lastchecked fields.
+%%% Added eprint support.
+%%% Added DOI support.
+%%% Added hyperref support.
+%%% Original headers follow...
+
 %% 
 %% This is file `agu.bst', generated 
 %% on <1994/5/27> with the docstrip utility (2.2e).
@@ -92,14 +101,45 @@ ENTRY
     type
     volume
     year
+    eprint % urlbst
+    doi % urlbst
+    url % urlbst
+    lastchecked % urlbst
   }
   {}
   { label extra.label sort.label }
 
 INTEGERS { output.state before.all mid.sentence after.sentence after.block }
 
+STRINGS { urlintro eprinturl eprintprefix doiprefix doiurl } % urlbst...
+INTEGERS { hrefform addeprints adddoiresolver }
+% Following constants may be adjusted by hand, if desired
+FUNCTION {init.config.constants}
+{
+  "Available from: " 'urlintro := % prefix before URL
+  "http://arxiv.org/abs/" 'eprinturl := % prefix to make URL from eprint ref
+  "arXiv:" 'eprintprefix := % text prefix printed before eprint ref
+  "http://dx.doi.org/" 'doiurl := % prefix to make URL from DOI
+  "doi:" 'doiprefix := % text prefix printed before DOI ref
+  #1 'addeprints := % 0=no eprints; 1=include eprints
+  #1 'adddoiresolver := % 0=no DOI resolver; 1=include it
+  #2 'hrefform := % 0=no crossrefs; 1=hypertex xrefs; 2=hyperref refs
+}
+INTEGERS { 
+  bracket.state
+  outside.brackets
+  open.brackets
+  within.brackets
+  close.brackets
+}
+% ...urlbst to here
 FUNCTION {init.state.consts}
-{ #0 'before.all :=
+{ #0 'outside.brackets := % urlbst
+  #1 'open.brackets :=
+  #2 'within.brackets :=
+  #3 'close.brackets :=
+
+  #0 'before.all :=
   #1 'mid.sentence :=
   #2 'after.sentence :=
   #3 'after.block :=
@@ -107,7 +147,8 @@ FUNCTION {init.state.consts}
 
 STRINGS { s t }
 
-FUNCTION {output.nonnull}
+% urlbst
+FUNCTION {output.nonnull.original}
 { 's :=
   output.state mid.sentence =
     { ", " * write$ }
@@ -128,6 +169,57 @@ FUNCTION {output.nonnull}
   s
 }
 
+% urlbst...
+FUNCTION {output.nonnull}
+{ % Save the thing we've been asked to output
+  's :=
+  % If the bracket-state is close.brackets, then add a close-bracket to
+  % what is currently at the top of the stack, and set bracket.state
+  % to outside.brackets
+  bracket.state close.brackets =
+    { "]" *
+      outside.brackets 'bracket.state :=
+    }
+    'skip$
+  if$
+  bracket.state outside.brackets =
+    { % We're outside all brackets -- this is the normal situation.
+      % Write out what's currently at the top of the stack, using the
+      % original output.nonnull function.
+      s
+      output.nonnull.original
+    }
+    { % Still in brackets.  Add open-bracket or (continuation) comma, add the
+      % new text (in s) to the top of the stack, and move to the close-brackets
+      % state, ready for next time (unless inbrackets resets it).  If we come
+      % into this branch, then output.state is carefully undisturbed.
+      bracket.state open.brackets =
+        { " [" * }
+        { ", " * } % bracket.state will be within.brackets
+      if$ 
+      s * 
+      close.brackets 'bracket.state :=
+    }
+  if$
+}
+
+% Call this function just before adding something which should be presented in 
+% brackets.  bracket.state is handled specially within output.nonnull.
+FUNCTION {inbrackets}
+{ bracket.state close.brackets =
+    { within.brackets 'bracket.state := } % reset the state: not open nor closed
+    { open.brackets 'bracket.state := }
+  if$
+}
+
+FUNCTION {format.lastchecked}
+{ lastchecked empty$
+    { "" }
+    { inbrackets "cited " lastchecked * }
+  if$
+}
+% ...urlbst to here
+
 FUNCTION {output}
 { duplicate$ empty$
     'pop$
@@ -144,7 +236,8 @@ FUNCTION {output.check}
 }
 
 FUNCTION {output.bibitem}
-{ newline$
+{ outside.brackets 'bracket.state := % urlbst
+   newline$
   "\bibitem[" write$
   label write$
   ")]{" write$
@@ -156,7 +249,12 @@ FUNCTION {output.bibitem}
 }
 
 FUNCTION {fin.entry}
-{ add.period$
+{ 
+  bracket.state close.brackets = % urlbst
+    { "]" * }
+    'skip$
+  if$
+   add.period$
   write$
   newline$
 }
@@ -558,6 +656,149 @@ FUNCTION {format.incoll.inproc.crossref}
   "\cite{" * crossref * "}" *
 }
 
+% urlbst...
+% Functions for making hypertext links.
+% In all cases, the stack has (link-text href-url)
+%
+% make 'null' specials
+FUNCTION {make.href.null}
+{
+  pop$
+}
+% make hypertex specials
+FUNCTION {make.href.hypertex}
+{ 
+  "\special {html:<a href=" quote$ *
+  swap$ * quote$ * "> }" * swap$ *
+  "\special {html:</a>}" *
+}
+% make hyperref specials
+FUNCTION {make.href.hyperref}
+{ 
+  " \href{" swap$ * "}{" * swap$ * "}" *
+}
+FUNCTION {make.href}
+{ hrefform #2 =
+    'make.href.hyperref      % hrefform = 2
+    { hrefform #1 =
+        'make.href.hypertex  % hrefform = 1
+        'make.href.null      % hrefform = 0 (or anything else)
+      if$
+    }
+  if$
+}
+
+FUNCTION {format.url}
+{ url empty$
+    { "" }
+      { hrefform #1 =
+          { % special case -- add HyperTeX specials
+            urlintro "\url{" url * "}" * url make.href.hypertex * }
+          { urlintro "\url{" * url * "}" * }
+       if$
+     }
+  if$
+}
+
+FUNCTION {format.eprint}
+{ eprint empty$
+    { "" }
+    { eprintprefix eprint * eprinturl eprint * make.href }
+  if$
+}
+
+FUNCTION {format.doi}
+{ doi empty$
+    { "" }
+    { doiprefix doi * doiurl doi * make.href }
+  if$
+}
+
+% Output a URL.  We can't use the more normal idiom (something like
+% `format.url output'), because the `inbrackets' within
+% format.lastchecked applies to everything between calls to `output',
+% so that `format.url format.lastchecked * output' ends up with both
+% the URL and the lastchecked in brackets.
+FUNCTION {output.url}
+{ url empty$
+    'skip$ 
+    { new.block 
+      format.url output
+      format.lastchecked output 
+    }
+  if$
+}
+
+FUNCTION {output.web.refs}
+{
+  new.block
+  output.url
+  addeprints eprint empty$ not and
+    { format.eprint output.nonnull }
+    'skip$
+  if$
+  adddoiresolver doi empty$ not and
+    { format.doi output.nonnull }
+    'skip$
+  if$
+%  addeprints
+%    { eprint empty$
+%        'skip$
+%        { format.eprint output.nonnull }
+%      if$
+%    }
+%    'skip$
+%  if$
+}
+
+% Webpage entry type.
+% Title and url fields required;
+% author, note, year, month, and lastchecked fields optional
+% See references 
+%   ISO 690-2 http://www.nlc-bnc.ca/iso/tc46sc9/standard/690-2e.htm
+%   http://www.classroom.net/classroom/CitingNetResources.html
+%   http://neal.ctstateu.edu/history/cite.html
+%   http://www.cas.usf.edu/english/walker/mla.html
+% for citation formats for web pages.
+FUNCTION {webpage}
+{ output.bibitem
+  author empty$
+    { editor empty$
+        'skip$  % author and editor both optional
+        { format.editors output.nonnull }
+      if$
+    }
+    { editor empty$
+        { format.authors output.nonnull }
+        { "can't use both author and editor fields in " cite$ * warning$ }
+      if$
+    }
+  if$
+%  author empty$
+%    'skip$
+%    { format.authors output.nonnull }
+%  if$
+  new.block
+  format.title "title" output.check
+  inbrackets "online" output
+  new.block
+  year empty$
+    'skip$
+    { format.date "year" output.check }
+  if$
+  lastchecked empty$
+    'skip$
+    { format.lastchecked output }
+  if$
+  new.block
+  format.url "url" output.check
+  new.block
+  note output
+  fin.entry
+}
+% ...urlbst to here
+
+
 FUNCTION {article}
 { output.bibitem
   format.authors "author" output.check
@@ -573,6 +814,7 @@ FUNCTION {article}
   if$
   note output
   format.date "year" output.check
+  output.web.refs  % urlbst
   fin.entry
 }
 
@@ -604,6 +846,7 @@ FUNCTION {book}
   format.edition output
   note output
   format.date "year" output.check
+  output.web.refs  % urlbst
   fin.entry
 }
 
@@ -616,6 +859,7 @@ FUNCTION {booklet}
   address output
   note output
   format.date "year" output.check
+  output.web.refs  % urlbst
   fin.entry
 }
 
@@ -648,6 +892,7 @@ FUNCTION {inbook}
   format.edition output
   note output
   format.date "year" output.check
+  output.web.refs  % urlbst
   fin.entry
 }
 
@@ -672,6 +917,7 @@ FUNCTION {incollection}
   if$
   note output
   format.date "year" output.check
+  output.web.refs  % urlbst
   fin.entry
 }
 
@@ -696,6 +942,7 @@ FUNCTION {inproceedings}
   if$
   note output
   format.date "year" output.check
+  output.web.refs  % urlbst
   fin.entry
 }
 
@@ -711,6 +958,7 @@ FUNCTION {manual}
   format.edition output
   note output
   format.date "year" output.check
+  output.web.refs  % urlbst
   fin.entry
 }
 
@@ -724,6 +972,7 @@ FUNCTION {mastersthesis}
   address output
   note output
   format.date "year" output.check
+  output.web.refs  % urlbst
   fin.entry
 }
 
@@ -735,6 +984,7 @@ FUNCTION {misc}
   howpublished output
   note output
   format.date "year" output.check
+  output.web.refs  % urlbst
   fin.entry
 }
 
@@ -748,6 +998,7 @@ FUNCTION {phdthesis}
   address output
   note output
   format.date "year" output.check
+  output.web.refs  % urlbst
   fin.entry
 }
 
@@ -764,6 +1015,7 @@ FUNCTION {proceedings}
   publisher output
   note output
   format.date "year" output.check
+  output.web.refs  % urlbst
   fin.entry
 }
 
@@ -777,6 +1029,7 @@ FUNCTION {techreport}
   address output
   note output
   format.date "year" output.check
+  output.web.refs  % urlbst
   fin.entry
 }
 
@@ -787,6 +1040,7 @@ FUNCTION {unpublished}
   format.title "title" output.check
   note "note" output.check
   format.date "year" output.check
+  output.web.refs  % urlbst
   fin.entry
 }
 
@@ -1132,6 +1386,7 @@ FUNCTION {begin.bib}
 
 EXECUTE {begin.bib}
 
+EXECUTE {init.config.constants}
 EXECUTE {init.state.consts}
 
 ITERATE {call.type$}
