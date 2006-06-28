@@ -391,8 +391,6 @@ Chapter 3
 
 Almost all of the 'math mode' text is dropped down as subscripts
 
-3.10 - in title, 4 degrees - degree symbol is a subscript, not a superscript
-     - is this experiment in the list from section 3.4???
 3.10.3.1 - refers to figures and equations, links are broken
 
 3.11.3.2 - line 43: link to equation is broken
@@ -405,82 +403,6 @@ Almost all of the 'math mode' text is dropped down as subscripts
 3.13.2 - link to theta-equation is broken
 3.13.5.4 -- ALL of the bold links to variable names are broken
             line 34: link to equation is broken
-
-3.15.1 - reference to 'fourth experiment' should be removed
-
-3.16.4 - strange formatting, presence of '>' symbols - remove them
-
-3.17.3 - unknown verification directory pointed to - also: no link from list in sec 3.4
-3.17.3.1 - nothing filled in under file input/data - needs description
-
-3.18.2 - point to section 2 for details - need hyperlink
-
-3.19.1 - text (2 places) says that section 3.5 called for compile in 'input' directory - not true!
-         section 3.5 has the 'build' directory in the example
-
-3.20.1 - link to doc at end of section points to this section
-3.20.2 - link to doc at end of section points to this section
-
-     offline - duplicate inputs, what is it, tidy up cfc v.
-               other offline. JM thinks these need tidying up.
-
-Which of the following are which tutorial?
-adjustment.128x64x1
-adjustment.cs-32x32x1
-advect_cs
-advect_xy
-advect_xz
-aim.5l_cs
-aim.5l_Equatorial_Channel
-aim.5l_LatLon
-biogeo
-bottom_ctrl_5x5
-cfc_example
-cpl_aim+ocn
-dome
-exp2
-exp4
-exp5
-fizhi-cs-32x32x10
-fizhi-cs-aqualev20
-fizhi-gridalt-hs
-flt_example
-front_relax
-global1x1_tot
-global2x2_tot
-global_ocean.90x40x15
-global_ocean.cs32x15
-global_ocean.cubed32x32x30
-global_ocean_ebm
-global_with_exf
-hs94.128x64x5
-hs94.1x64x5
-hs94.cs-32x32x5
-ideal_2D_oce
-internal_wave
-inverted_barometer
-lab_sea
-matrix_example
-MLAdjust
-natl_box
-natl_box_adjoint
-OpenAD
-rotating_tank
-solid-body.cs-32x32x1
-tidal_basin_2d
-tutorial_baroclinic_gyre
-tutorial_barotropic_gyre
-tutorial_cfc_offline
-tutorial_deep_convection
-tutorial_global_oce_biogeo
-tutorial_global_oce_in_p
-tutorial_global_oce_latlon
-tutorial_global_oce_optim
-tutorial_held_suarez_cs
-tutorial_offline
-tutorial_plume_on_slope
-tutorial_tracer_adjsens
-vermix
 
 >>>> From Ed
 
