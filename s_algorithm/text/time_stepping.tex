@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.25 2006/06/28 16:55:53 jmc Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.26 2006/06/29 01:45:32 jmc Exp $
 % $Name:  $
 
 This chapter lays out the numerical schemes that are
@@ -198,15 +198,21 @@ The calling tree for these routines is given in
 Fig.~\ref{fig:call-tree-pressure-method}.
 
 
-
-\paragraph{Need to discuss implicit viscosity somewhere:}
+%\paragraph{Need to discuss implicit viscosity somewhere:}
+In general, the horizontal momentum time-stepping can contain some terms 
+that are treated implicitly in time,
+such as the vertical viscosity when using the backward time-stepping scheme
+(\varlink{implicitViscosity}{implicitViscosity} {\it =.TRUE.}).
+The method used to solve those implicit terms is provided in 
+section \ref{sect:implicit-backward-stepping}, and modifies
+equations \ref{eq:discrete-time-u} and \ref{eq:discrete-time-v} to
+give:
 \begin{eqnarray}
-\frac{1}{\Delta t} u^{n+1} - \partial_z A_v \partial_z u^{n+1}
-+ g \partial_x \eta^{n+1} & = & \frac{1}{\Delta t} u^{n} +
-G_u^{(n+1/2)}
+u^{n+1} - \Delta t \partial_z A_v \partial_z u^{n+1}
++ \Delta t g \partial_x \eta^{n+1} & = & u^{n} + \Delta t G_u^{(n+1/2)}
 \\
-\frac{1}{\Delta t} v^{n+1} - \partial_z A_v \partial_z v^{n+1}
-+ g \partial_y \eta^{n+1} & = & \frac{1}{\Delta t} v^{n} + G_v^{(n+1/2)}
+v^{n+1} - \Delta t \partial_z A_v \partial_z v^{n+1}
++ \Delta t g \partial_y \eta^{n+1} & = & v^{n} + \Delta t G_v^{(n+1/2)}
 \end{eqnarray}
 
 
@@ -245,10 +251,10 @@ pressure method is then replaced by the time discretization of
 \label{eq:discrete-time-backward-free-surface}
 \end{equation}
 where the use of flow at time level $n+1$ makes the method implicit
-and backward in time. The is the preferred scheme since it still
+and backward in time. This is the preferred scheme since it still
 filters the fast unresolved wave motions by damping them. A centered
-scheme, such as Crank-Nicholson, would alias the energy of the fast
-modes onto slower modes of motion.
+scheme, such as Crank-Nicholson (see section \ref{sect:freesurf-CrankNick}),
+would alias the energy of the fast modes onto slower modes of motion.
 
 As for the rigid-lid pressure method, equations
 \ref{eq:discrete-time-u}, \ref{eq:discrete-time-v} and
@@ -279,7 +285,8 @@ recovered. However, the implicit treatment of the free-surface allows
 the flow to be divergent and for the surface pressure/elevation to
 respond on a finite time-scale (as opposed to instantly). To recover
 the rigid-lid formulation, we introduced a switch-like parameter,
-$\epsilon_{fs}$, which selects between the free-surface and rigid-lid;
+$\epsilon_{fs}$ (\varlink{freesurfFac}{freesurfFac}), 
+which selects between the free-surface and rigid-lid;
 $\epsilon_{fs}=1$ allows the free-surface to evolve; $\epsilon_{fs}=0$
 imposes the rigid-lid. The evolution in time and location of variables
 is exactly as it was for the rigid-lid model so that
@@ -317,7 +324,9 @@ FORWARD\_STEP \\
 \end{tabbing} \end{minipage} } \end{center}
 \caption{
 Calling tree for the Adams-Bashforth time-stepping of temperature with
-implicit diffusion.}
+implicit diffusion.
+  (\filelink{THERMODYNAMICS}{model-src-thermodynamics.F},
+   \filelink{ADAMS\_BASHFORTH2}{model-src-adams_bashforth2.F})}
 \label{fig:call-tree-adams-bashforth}
 \end{figure}
 
@@ -348,10 +357,16 @@ simpler to include these terms and this can be justified if the flow
 and forcing evolves smoothly. Problems can, and do, arise when forcing
 or motions are high frequency and this corresponds to a reduced
 stability compared to a simple forward time-stepping of such terms.
-The model offers the possibility to leave the forcing term outside the 
-Adams-Bashforth extrapolation, by turning off the logical flag 
-{\bf forcing\_In\_AB } (parameter file {\em data}, namelist {\em PARM01}, 
-default value = True).
+The model offers the possibility to leave the tracer and momentum 
+forcing terms and the dissipation terms outside the 
+Adams-Bashforth extrapolation, by turning off the logical flags 
+\varlink{forcing\_In\_AB}{forcing_In_AB}
+(parameter file {\em data}, namelist {\em PARM01}, default value = True).
+(\varlink{tracForcingOutAB}{tracForcingOutAB}, default=0,
+\varlink{momForcingOutAB}{momForcingOutAB}, default=0)
+and \varlink{momDissip\_In\_AB}{momDissip_In_AB}
+(parameter file {\em data}, namelist {\em PARM01}, default value = True).
+respectively.
 
 A stability analysis for an oscillation equation should be given at this point.
 \marginpar{AJA needs to find his notes on this...}
@@ -359,8 +374,29 @@ A stability analysis for an oscillation equation should be given at this point.
 A stability analysis for a relaxation equation should be given at this point.
 \marginpar{...and for this too.}
 
+\begin{figure}
+\begin{center}
+\resizebox{5.5in}{!}{\includegraphics{part2/oscil+damp_AB2.eps}}
+\end{center}
+\caption{
+Oscillatory and damping response of
+quasi-second order Adams-Bashforth scheme for different values
+of the $\epsilon_{AB}$ parameter (0., 0.1, 0.25, from top to bottom)
+The analytical solution (in black), the physical mode (in blue)
+and the numerical mode (in red) are represented with a CFL
+step of 0.1.
+The left column represents the oscillatory response
+on the complex plane for CFL ranging from 0.1 up to 0.9.
+The right column represents the damping response amplitude
+(y-axis) function of the CFL (x-axis).
+}
+\label{fig:adams-bashforth-respons}
+\end{figure}
+
+
 
 \section{Implicit time-stepping: backward method}
+\label{sect:implicit-backward-stepping}
 \begin{rawhtml}
 <!-- CMIREDIR:implicit_time-stepping_backward: -->
 \end{rawhtml}
