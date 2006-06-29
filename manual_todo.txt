@@ -260,16 +260,16 @@ in content: Horizontal Dissipation: 2 times in vector-invariant section
 
 - At some point, would be better to replace "g \eta" with "\Phi_s (cg2d_x)"
   to stay closer to the code.
-- mention section 2.5 implicit-Time-stepping (for vertical viscosity)
+- mention section 2.5 implicit-Time-stepping (for vertical viscosity) <- DONE
 
 2.3 linear free-surface: 
 - add ref(+link) to S/R names:
-- add ref(+link) to Crank-Nickelson section 2.9.1
+- add ref(+link) to Crank-Nickelson section 2.9.1 <- DONE
 
 2.4 Adams-Bashforth
-- add stability diagrams (I have some figures that I can put)
-- add link for var. forcing_In_AB
-- add S/R link for S/R ADAMS_BASHFORTH2
+- add stability diagrams (I have some figures that I can put) <- DONE
+- add link for var. forcing_In_AB and epsil_AB <- half DONE
+- add S/R link for S/R ADAMS_BASHFORTH2 <-DONE
 
 2.5 Implicit time-stepping 
 - add name of S/R: IMPLDIFF, GAD_IMPLICIT_R, MOM_U_IMPLICIT_R
