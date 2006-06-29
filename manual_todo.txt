@@ -519,6 +519,9 @@ list an expeiment which uses package? CNH
 
 add something on spgrid mesh generator (maybe)?
 
+add in gmaze PV calculation scripts plus write up on how it is calculated
+http://mitgcm.org/cgi-bin/viewcvs.cgi/MITgcm_contrib/gmaze_pv/
+
 
 andrea
 
