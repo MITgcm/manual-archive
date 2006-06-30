@@ -1,0 +1,161 @@
+% $Header: /u/gcmpack/manual/s_outp_pkgs/text/grid_gen.tex,v 1.1 2006/06/30 05:58:03 edhill Exp $
+% $Name:  $
+
+\section{Grid Generation}
+\label{sec:pkg:grid_gen}
+\begin{rawhtml}
+<!-- CMIREDIR:package_grid_gen: -->
+\end{rawhtml}
+
+
+The horizontal discretizations within MITgcm have been written to work
+with many different grid types including:
+\begin{itemize}
+\item cartesian coordinates
+\item spherical polar (``latitude-longitude'') coordinates
+\item general curvilinear orthogonal coordinates
+\end{itemize}
+The last of these, especially when combined with the domain
+decomposition capabilities of MITgcm, allows a great degree of grid
+flexibility.  To date, general curvilinear orthogonal coordinates have
+been used primarily (in fact, almost exclusively) in conjunction with
+so-called ``cube-sphere'' grids.  However, it is important to observe
+that cube-sphere arrangements are only one example of what is possible
+with domain-decomposed logically rectangular tiles each containing
+curvilinear orthogonal coordinate systems.  Much more sophisticated 
+domains can be imagined and constructed.
+
+In order to explore the possibilities of domain-decomposed curvilinear
+orthogonal coordinate systems, a suite of grid generation software
+called ``SPGrid'' (for SPherical Gridding) has developed.  SPGrid is a
+relatively new facility and papers detailing its algorithms are in
+preparation.  Althogh SPGrid is new and still rapidly developing, it
+has already demonstrated the ability to generate some useful and
+interesting grids.
+
+This section provides a very brief introduction to SPGrid and shows
+some early results.  For further information, please contact the
+MITgcm support list:
+\begin{center}
+  \begin{rawhtml} <A href="mailto:MITgcm-support@mitgcm.org"> \end{rawhtml}
+  MITgcm-support@mitgcm.org
+  \begin{rawhtml} </A> \end{rawhtml}
+\end{center}
+
+
+\subsection{Using SPGrid}
+
+The SPGrid software is not a single program.  Rather, it is a
+collection of \CC code and MatLAB scripts that can be used as a
+framework or library for grid generation.  Currently, grid creation is
+accomplished by writing a \CC ``driver'' program that specifies the
+shape and connectivity of tiles and the preferred grid sizes (in the
+sense of the number of grid cells) and edge locations of the cells at
+the edges of grid faces.  The driver program then passes this
+information to the SPGrid library which generates the actual grid and
+produces the output files that describe it.
+
+Currently, driver programs are available for a few examples including
+cubes, ``lat-lon caps'' (cube topologies that have conformal caps at
+the poles and are exactly lat-lon channels for the remainder of the
+domain), and some simple ``embedded'' regions that are meant to be
+used within typical cubes or traditional lat-lon grids.
+
+To create new grids, one may start with an existing driver program and
+modify it to describe a domain that has a different arrangement.  The
+number, location, size, and connectivity of grid ``faces'' (the name
+used for the logically rectangular regions) can be readily changed.
+Further, the number of grid cells within faces and the location of
+the grid cells at the face edges can also be specified.
+
+
+\subsubsection{SPGrid Requirements}
+
+The following programs and libraries are required to build and/or run
+the SPGrid suite:
+\begin{itemize}
+\item MatLAB is a run-time requirement since many of the generation
+  algorithms have been written as MatLAB scripts: \\
+  \begin{rawhtml} <A href="http://www.mathworks.com"> \end{rawhtml}
+  \texttt{http://www.mathworks.com}
+  \begin{rawhtml} </A> \end{rawhtml}
+
+\item the Wild Magic graphics engine (a \CC library) is needed for the
+  main ``driver'' code: \\
+  \begin{rawhtml} <A href="http://geometrictools.com/"> \end{rawhtml}
+  \texttt{http://geometrictools.com/}
+  \begin{rawhtml} </A> \end{rawhtml}
+
+\item the NetCDF library is needed for file I/O: \\
+  \begin{rawhtml} <A href="http://www.mathworks.com"> \end{rawhtml}
+  \texttt{http://www.mathworks.com}
+  \begin{rawhtml} </A> \end{rawhtml}
+
+\item the BOOST Serialization library is used for I/O: \\
+  \begin{rawhtml} <A href="http://www.boost.org"> \end{rawhtml}
+  \texttt{http://www.boost.org}
+  \begin{rawhtml} </A> \end{rawhtml}
+
+\item a typical Unix/Linux build environment including the make
+  utility (preferably Gnu Make) and a \CC compiler (SPGrid was
+  developed with g++ v3.x and v4.x).
+\end{itemize}
+
+
+\subsubsection{Obtaining SPGrid}
+
+The latest version can be obtained from:
+\begin{center}
+  \begin{rawhtml} <A href="http://mitgcm.org/eh3/grids/spgrid_releases/>
+  \end{rawhtml}
+  \texttt{http://mitgcm.org/eh3/grids/spgrid\_releases/}
+  \begin{rawhtml} </A> \end{rawhtml}
+\end{center}
+
+
+\subsubsection{Building SPGrid}
+
+The procedure for building is similar to many open source projects:
+\begin{verbatim}
+     tar -xf spgrid-0.9.4.tar.gz
+     cd spgrid-0.9.4
+     export CPPFLAGS="-I/usr/include/netcdf-3"
+     export LDFLAGS="-L/usr/lib/netcdf-3"
+     ./configure
+     make
+\end{verbatim}
+where the \texttt{CPPFLAGS} and\texttt{LDFLAGS} environment variables
+can be edited to reflect the locations of all the necessary
+dependencies.  SPGrid is known to work on Fedora Core Linux and is
+likely to work on most any Linux distribution that provides the needed
+dependencies.
+
+
+\subsubsection{Using SPGrid}
+
+Within the \texttt{src} sub-directory, various example programs
+exist.  These example programs describe small but complete domains and
+can generate the input (formatted as either binary ``mitgrid'' or
+netCDF) files required by MITgcm.
+
+One such example is called ``SpF\_test\_cube\_cap'' and it can be run
+with the following sequence of commands:
+\begin{verbatim}
+     cd spgrid-0.9.4/src
+     mkdir SpF_test_cube_cap.d
+     ( cd SpF_test_cube_cap.d && ln -s ../../scripts/*.m . )
+     ./SpF_test_cube_cap
+\end{verbatim}
+which should create a series of output files of the form
+\begin{verbatim}
+     SpF_test_cube_cap.d/grid_*.mitgrid
+     SpF_test_cube_cap.d/grid_*.nc
+     SpF_test_cube_cap.d/std_topology.nc
+\end{verbatim}
+which describe each face of the domain and how the faces are
+connected.
+
+
+\subsection{Example Grids}
+
+The following grids are various examples created with SPGrid. 
