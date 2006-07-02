@@ -26,6 +26,7 @@ Editors
 
  Biblio        - EH3
 
+
 Rebuild and set to do cron build - DONE on hugo
 
 To do
@@ -42,30 +43,39 @@ To do
 
 o HTML, scripts and front content
 
-  - pick a URL
-    TBD
+  - pick a URL:  mitgcm.org/r2  <-- EH3's preferred base URL
 
   - mitgcm.org/r2_web_testing/latest
-    o add another short-cut for quick download
+    
+    o --DONE--  add another short-cut for quick download
 
-    o add another short-cut
-      About
-      Installation
-      Contents
-      Overview
-      Tutorials (broken)
-      Browse Code
+    o --DONE--  add another short-cut
+                  About
+                  Installation
+                  Contents
+                  Overview
+                  Tutorials (broken)
+                  Browse Code
 
-    o words on http://mitgcm.org/r2_web_testing/latest
-      change to 
-       "access on-line Auser manual/A and Atable of contents/A
-        and browse the Aoverview section/A"
+    o --DONE--  words on http://mitgcm.org/r2_web_testing/latest change to 
 
-    o finite-volume doesn't leap to FV figure
+    o --DONE--  finite-volume doesn't leap to FV figure
 
-    o have another go at pnmcrop et al.
+    o -- DONE ??? --  have another go at pnmcrop et al.
+
+         I've tried making a small change in latex2html which fixes
+         the oddball-lower-alignment issue that we were seeing with
+         most in-line expressions (that is, math embedded in text).
+         The fix results in some things being slightly raised but I
+         thin this is more asthetically pleasing than being somewhat
+         lowered as before. --EH3
+
+	 To view the altered alignment, see:
+
+            http://eddy.csail.mit.edu/r2/latest/
 
     o Need an empty package as part of distribution. Check out atm_common
+
 
 o Latex   
 
@@ -508,19 +518,18 @@ list an expeiment which uses package? CNH
 
 =====  Chapter 7  =====  [EH3 editing] :
 
-7.1.x - JMC: please add description of:
+ + JMC: please add description of:
 	- diagstat
 	- new temporal averaging feature
 
-7.5.1 - add Graphix to the list of stuff in utils/matlab (Daniel)
+ + add Graphix to the list of stuff in utils/matlab (Daniel)
 
-7.5.2 - get bathymetry pre-processing stuff from Patrick
-        and then describe it
+ + get bathymetry pre-processing stuff from Patrick and then describe it
 
-add something on spgrid mesh generator (maybe)?
+ + add something on spgrid mesh generator
 
-add in gmaze PV calculation scripts plus write up on how it is calculated
-http://mitgcm.org/cgi-bin/viewcvs.cgi/MITgcm_contrib/gmaze_pv/
+ + add in gmaze PV calculation scripts plus write up on how it is calculated
+     http://mitgcm.org/cgi-bin/viewcvs.cgi/MITgcm_contrib/gmaze_pv/
 
 
 andrea
