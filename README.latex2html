@@ -1,0 +1,15 @@
+
+The vertical alignment of many images created by some latex2html
+versions is poorly done and the patch in the file:
+
+  latex2html_alignment.patch
+
+mostly fixes it.  To apply the patch, simply run:
+
+  cd /usr/bin
+  sudo patch -p0 < /path/to/the/latex2html_alignment.patch
+
+and that should take care of it.
+
+ - Ed <ed@eh3.com>
+

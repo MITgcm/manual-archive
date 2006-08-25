@@ -1,0 +1,12 @@
+--- /usr/bin/latex2html.orig	2005-12-11 06:13:59.000000000 -0500
++++ /usr/bin/latex2html	2006-07-02 11:43:24.000000000 -0400
+@@ -9872,7 +9872,8 @@
+ 	    $aalign =  ($EQN_TAGS eq "L") ? "RIGHT" : "LEFT";
+ 	}
+     } elsif ($name =~ /inline|display|entity|xy|diagram/ && $depth{$name} != 0) {
+-	$aalign = "MIDDLE".$border;
++	#EH3 $aalign = "MIDDLE".$border;
++        $aalign = "BOTTOM".$border;
+     } elsif ($name =~ /inpar/m) {
+ 	$aalign = "TOP".$border;
+     } else {  $aalign = "BOTTOM".$border }
