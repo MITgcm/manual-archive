@@ -149,6 +149,73 @@ For EXF this flag is omitted, i.e. EXF is always ON if it is compiled.
            max. allowed wind stress $N/m^2$ \\
         exf\_albedo & \texttt{0.1} & 
           surface albedo used to compute downward vs. net radiative fluxes \\
+        climtempfreeze & \texttt{-1.9} & 
+          ??? \\
+        ocean\_emissivity & \texttt{} & 
+          longwave ocean-surface emissivity \\
+        ice\_emissivity & \texttt{} & 
+          longwave seaice emissivity \\
+        snow\_emissivity & \texttt{} & 
+          longwave  snow  emissivity \\
+        exf\_iceCd & \texttt{1.63E-3} & 
+          drag coefficient over sea-ice \\
+        exf\_iceCe & \texttt{1.63E-3} & 
+          evaporation transfer coeff. over sea-ice \\
+        exf\_iceCh & \texttt{1.63E-3} & 
+          sensible heat transfer coeff. over sea-ice \\
+        exf\_scal\_BulkCdn & \texttt{1.} & 
+          overall scaling of neutral drag coeff. \\
+        useStabilityFct\_overIce  & \texttt{.FALSE.} & 
+          compute turbulent transfer coeff. over sea-ice \\
+        readStressOnAgrid & \texttt{.FALSE.} & 
+          read wind-streess located on model-grid, A-grid point \\
+        readStressOnCgrid & \texttt{.FALSE.} & 
+          read wind-streess located on model-grid, C-grid point \\
+        useRelativeWind & \texttt{.FALSE.} & 
+          subtract [U/V]VEL or [U/VICE from U/V]WIND before \\
+        ~ & ~ &  computing [U/V]STRESS \\
+        zref & \texttt{10.} & 
+          reference height \\
+        hu & \texttt{10.} & 
+          height of mean wind \\
+        ht & \texttt{2.} & 
+          height of mean temperature and rel. humidity \\
+        umin & \texttt{0.5} & 
+          minimum absolute wind speed for computing Cd \\
+        atmrho & \texttt{1.2} & 
+          mean atmospheric density [kg/m\^3] \\
+        atmcp & \texttt{1005.} & 
+          mean atmospheric specific heat [J/kg/K] \\
+        cdrag\_[n] & \texttt{???} & 
+          n = 1,2,3; parameters for drag coeff. function \\
+        cstanton\_[n] & \texttt{???} & 
+          n = 1,2; parameters for Stanton number function \\
+        cdalton & \texttt{???} & 
+          parameter for Dalton number function \\
+        flamb & \texttt{2500000.} & 
+          latent heat of evaporation [J/kg] \\
+        flami & \texttt{334000.} & 
+          latent heat of melting of pure ice [J/kg] \\
+        zolmin & \texttt{-100.} & 
+          minimum stability parameter \\
+        cvapor\_fac & \texttt{640380.} & 
+          ~ \\
+        cvapor\_exp & \texttt{5107.4} & 
+          ~ \\
+        cvapor\_fac\_ice & \texttt{11637800.} & 
+          ~ \\
+        cvapor\_fac\_ice & \texttt{5897.8} & 
+          ~ \\
+        humid\_fac & \texttt{0.606} & 
+          parameter for virtual temperature calculation \\
+        gamma\_blk & \texttt{0.010} & 
+          adiabatic lapse rate \\
+        saltsat & \texttt{0.980} & 
+          reduction of saturation vapor pressure over salt-water \\          
+        psim\_fac & \texttt{5.} & 
+          ~ \\          
+        exf\_monFreq & \texttt{monitorFreq} & 
+          output frequency [s] \\
         exf\_iprec  & \texttt{32} & 
           precision of input fields (32-bit or 64-bit) \\
         exf\_yftype & \texttt{'RL'} & 
@@ -253,6 +320,13 @@ Interpolation on-the-fly is used (in the present case trivially
 on the same grid, but included nevertheless for illustration), 
 and input field grid starting coordinates and increments are 
 supplied as well.
+
+%----------------------------------------------------------------------
+
+\subsubsection{EXF bulk formulae
+\label{sec:pkg:exf:bulk_formulae}}
+
+T.B.D. (cross-ref. to parameter list table)
 
 %----------------------------------------------------------------------
 
