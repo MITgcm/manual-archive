@@ -8,11 +8,13 @@
 This is one of the biogeochemical packages handled from the
 pkg gchem. The main purpose of this package is to consider
 the cycling of carbon in the ocean. It also looks at the
-cycling of phosphorous and oxygen. There are five tracers
-$DIC$, $ALK$, $PO4$, $DOP$ and $O2$. The air-sea exchange
+cycling of phosphorous and potentially oxygen and iron. 
+There are four standard tracers
+$DIC$, $ALK$, $PO4$, $DOP$ and also possibly $O2$ and $Fe$. 
+The air-sea exchange
 of CO$_2$ and O$_2$ are handled as in the OCMIP experiments
 (reference). The export of biological matter is computed
-as a function of available light and PO$_4$. This export is
+as a function of available light and PO$_4$ (and Fe). This export is
 remineralized at depth according to a Martin curve (again,
 this is the same as in the OCMIP experiments). There is
 also a representation of the carbonate flux handled as in
@@ -20,6 +22,8 @@ the OCMIP experiments. The air-sea exchange on CO$_2$
 is affected by temperature, salinity and the pH of the
 surface waters. The pH is determined following the
 method of Follows et al. 
+For more details of the equations see section 
+\ref{sect:eg-biogeochem_tutorial}.
 
 \subsubsection {Key subroutines and parameters}
 
@@ -69,19 +73,35 @@ The latter is hard-wired into this package, the former is kept
 here for completeness.
 
 Biological productivity is determined following
-McKinely et al. and is calculated in {\it bio\_export.F}
-The light in each latitude band is calculate in {\it insol.F}.
+Dutkiewicz et al. (2005) and is calculated in {\it bio\_export.F}
+The light in each latitude band is calculate in {\it insol.F},
+unless using one of the flags listed below.
 The formation of hard tissue (carbonate) is linked to
 the biological productivity and has an effect on the
 alkalinity - the flux of carbonate is calculated in
-{\it car\_flux.F}. The flux of phosphate to depth where
+{\it car\_flux.F}, unless using the flag listed below
+for the Friis et al (2006) scheme. The flux of phosphate to depth where
 it instantly remineralized is calculated in {\it phos\_flux.F}.
 
-Alkalinity tendency comes from changes to the salinity from
-addition/subtraction of freshwater in the surface. This
-is handled in {\it alk\_surfforcing.F}.
+The dilution or concentration of  carbon and alkalinity by
+the addition  or subtraction of freshwater is important to 
+their surface patterns. These "virtual" fluxes can be calculated 
+by the model in several ways.
+The older scheme is done following OCMIP protocols (see
+more in Dutkiewicz et al 2005), in the subroutines
+{\it dic\_surfforcing.F} and {\it alk\_surfforcing.F}.
+To use this you need to set in GCHEM\_OPTIONS.h:\\
+\#define ALLOW\_OLD\_VIRTUALFLUX\\
+But this can also be done by the ptracers pkg if this
+is undefined. You will then need to set the concentration
+of the tracer in rainwater and potentially a reference
+tracer value in data.ptracer
+(PTRACERS\_EvPrRn, and PTRACERS\_ref respectively).
 
 Oxygen air-sea exchange is calculated in {\it o2\_surfforcing.F}.
+
+Iron chemistry (the amount of free iron) is taken care of in
+{\it fe\_chem.F}.
  
 \vspace{.5cm}
 
@@ -92,13 +112,69 @@ carbonate activity and pH are calculated. These are
 initialized to zero in {\it dic\_biotic\_init} and
 are stored in common block in {\it DIC\_BIOTIC.h}.
 
+\vspace{.5cm}
+
+\noindent
+{{\bf COMPILE TIME FLAGS}}\\
+These are set in GCHEM\_OPTIONS.h: \\
+
+DIC\_BIOTIC: needs to be set for dic to work properly
+(should be fixed sometime).\\
+ALLOW\_O2: include the tracer oxygen.\\
+ALLOW\_FE: include the tracer iron. Note you will need an
+iron dust file set in data.gchem in this case.\\
+MINFE: limit the iron, assuming precpitation of any
+excess free iron.\\
+CAR\_DISS: use the calcium carbonate scheme of Friis et al 2006.\\
+ALLOW\_OLD\_VIRTUALFLUX: use the old OCMIP style virtual flux
+for alklinity adn carbon (rather than doing it through pkg/ptracers).
+\\
+READ\_PAR: read the light (photosynthetically available
+radiation) from a file set in data.gchem.\\
+USE\_QSW: use the numbers from QSW to be the PAR. Note that
+a file for Qsw must be supplied in data, or Qsw must be
+supplied by an atmospheric model.\\
+If the above two flags are not set, the model calculates
+PAR in insol.F as a function of latitude and year day.\\
+USE\_QSW\_UNDERICE: if using a sea ice model, or if the
+Qsw variable has the seaice fraction already taken into
+account, this flag must be set.\\
+\\
+AD\_SAFE: will use a tanh function instead of a
+max function - this is better if using the adjoint\\
+DIC\_NO\_NEG: will include some failsafes in case any
+of the variables become negative. (This is advicable).
+ALLOW\_DIC\_COST: was used for calculating cost function 
+(but hasn't been updated or maintained, so not sure if it works still)
+
+
+
 \subsubsection{Do's and Don'ts}
 
 This package must be run with both ptracers and gchem enabled.
-It is set up for 5 tracers, but there is the provision of
-a 6th tracer (iron) that is not discussed here.
+It is set up for at least 4 tracers, but there is the provision for
+oxygen and iron. Note the flags above.
 
 \subsubsection{Reference Material}
+
+Dutkiewicz. S., A. Sokolov, J. Scott and P. Stone, 2005:
+A Three-Dimensional Ocean-Seaice-Carbon Cycle Model and its Coupling
+to a Two-Dimensional Atmospheric Model: Uses in Climate Change Studies,
+Report 122, Joint Program of the Science and Policy of Global Change,
+M.I.T., Cambridge, MA.
+\\
+
+Follows, M., T. Ito and S. Dutkiewicz, 2006:
+A Compact and Accurate Carbonate Chemistry Solver for Ocean
+Biogeochemistry Models. {\it Ocean Modeling}, 12, 290-301.
+\\
+
+Friis, K.,  R. Najjar, M.J. Follows, and S. Dutkiewicz, 2006:
+Possible overestimation of shallow-depth calcium carbonate
+dissolution in the ocean,
+{\it Global Biogeochemical Cycles}, 20, GB4019, doi:10.1029/2006GB002727.
+\\
+
 
 \subsubsection{Experiments and tutorials that use dic}
 \label{sec:pkg:dic:experiments}
