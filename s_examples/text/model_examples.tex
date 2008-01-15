@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_examples/text/model_examples.tex,v 1.14 2006/06/28 17:20:51 molod Exp $
+% $Header: /u/gcmpack/manual/s_examples/text/model_examples.tex,v 1.15 2008/01/15 16:31:06 jahn Exp $
 % $Name:  $
 
 \section[MITgcm Example Experiments]{Example experiments}
@@ -24,7 +24,10 @@ Each example is briefly described below.
 
 \begin{enumerate}
   
-\item \texttt{tutorial\_barotropic\_gyre}
+\item \texttt{advection\_in\_gyre\_circulation} - test of various
+  advection schemes in a single-layer double-gyre experiment.
+  This experiment is described in detail in section
+  \ref{sect:eg-adv-gyre}.
 
 \item \texttt{tutorial\_barotropic\_gyre} - single layer, ocean double
   gyre (barotropic with free-surface). This experiment is described in
@@ -264,6 +267,9 @@ Each example directory has the following subdirectories:
 Once you have chosen the example you want to run, you are ready to
 compile the code.
 
+
+\newpage
+\input{part3/case_studies/advection_in_gyre_circulation/adv_gyre.tex}
 
 \newpage
 \input{part3/case_studies/barotropic_gyre/baro.tex}
