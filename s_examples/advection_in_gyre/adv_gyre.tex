@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_examples/advection_in_gyre/adv_gyre.tex,v 1.9 2008/01/15 22:29:10 cnh Exp $
+% $Header: /u/gcmpack/manual/s_examples/advection_in_gyre/adv_gyre.tex,v 1.10 2008/01/15 23:29:37 cnh Exp $
 % $Name:  $
 
 \bodytext{bgcolor="#FFFFFFFF"}
@@ -10,6 +10,10 @@
 \begin{rawhtml}
 <!-- CMIREDIR:eg-adv-gyre: -->
 \end{rawhtml}
+
+Author: Oliver Jahn and Chris Hill
+
+
 
 This set of examples is based on the barotropic and baroclinic gyre MITgcm configurations,
 that are described in the tutorial sections \ref{sect:eg-baro} and \ref{sect:eg-fourlayer}. 
@@ -61,7 +65,7 @@ the $-U \cdot \nabla C$ term that are available
 \end{enumerate}
 
 
-\subsection{Introducting a tracer into the flow}
+\subsection{Introducing a tracer into the flow}
 
  The MITgcm ptracers package (see section \ref{sec:pkg:ptracers} for a more complete discussion
 of the ptracers package and section \ref{sec:pkg:using} for a general introduction to MITgcm 
@@ -69,7 +73,8 @@ packages) provides pre-coded support for a simple passive tracer with an initial
 distribution at simulation time $t=0$ of $C_0(x,y,z)$. The steps required to use this capability
 are 
 \begin{enumerate}
-\item[Activating package ptracers] 
+\item{\bf Activating the ptracers package.} This simply requires adding the line {\tt ptracers} to
+the {\tt packages.conf} file in the {\it code/} directory for the experiment.
 \end{enumerate}
 
 - activating ptracers
@@ -94,7 +99,10 @@ To intro
 \end{enumerate}
 
 \subsection{Code and Parameters files for this tutorial}
- 
+
+The code and parameters for the experiments can be found in the MITgcm example experiments 
+directory {\it verification/tutorial\_advection\_in\_gyre/}.
+
 
 
 
