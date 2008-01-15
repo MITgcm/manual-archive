@@ -1,0 +1,380 @@
+\section{Potential vorticity Matlab Toolbox}
+\label{sec:diag:pv}
+\begin{rawhtml}
+%<!-- CMIREDIR:pvdiag_matlab: -->
+\end{rawhtml}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Introduction}
+
+\noindent
+This section of the documentation describes a Matlab package that aims to provide useful
+routines to compute vorticity fields (relative, potential and planetary) and its related
+components. This is an offline computation. It was developed to be used in mode water
+studies, so that it comes with other related routines, in particular ones computing
+surface vertical potential vorticity fluxes.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Equations}
+
+\subsubsection{Potential Vorticity}
+\noindent
+The package computes the three components of the relative vorticity defined by:
+\begin{eqnarray}
+  \omega &= \nabla \times {\bf U} = \left( \begin{array}{c} 
+      \omega_x\\
+      \omega_y\\
+      \zeta
+  \end{array}\right)
+     \simeq &\left( \begin{array}{c} 
+      -\frac{\partial v}{\partial z}\\
+      -\frac{\partial u}{\partial z}\\
+      \frac{\partial v}{\partial x} - \frac{\partial u}{\partial y}
+  \end{array}\right) \label{sec:diag:pv:eq1}
+\end{eqnarray}
+where we omitted (like all across the package) the vertical velocity component.
+
+The package then computes the potential vorticity as:
+\begin{eqnarray}
+Q &=& -\frac{1}{\rho} \omega\cdot\nabla\sigma_\theta\\
+Q &=& -\frac{1}{\rho}\left(\omega_x \frac{\partial \sigma_\theta}{\partial x} + 
+\omega_y \frac{\partial \sigma_\theta}{\partial y} + 
+\left(f+\zeta\right) \frac{\partial \sigma_\theta}{\partial z}\right) \label{sec:diag:pv:eq2}
+\end{eqnarray}
+where $\rho$ is the density, $\sigma_\theta$ is the potential density (both eventually
+computed by the package) and $f$ is the Coriolis parameter.
+
+The package is also able to compute the simpler planetary vorticity as:
+\begin{eqnarray}
+splQ &=& -\frac{f}{\rho}\frac{\sigma_\theta}{\partial z} \label{sec:diag:pv:eq3}
+\end{eqnarray}
+
+\subsubsection{Surface vertical potential vorticity fluxes}
+These quantities are useful in mode water studies because of the impermeability theorem
+which states that for a given potential density layer (embedding a mode water), the
+integrated PV only changes through surface input/output.
+
+Vertical PV fluxes due to frictional and diabatic processes are given by:
+\begin{eqnarray}
+  J^B_z &=& -\frac{f}{h}\left( \frac{\alpha Q_{net}}{C_w}-\rho_0 \beta S_{net}\right) \label{sec:diag:pv:eq14a}\\
+  J^F_z &=& \frac{1}{\rho\delta_e} \vec{k}\times\tau\cdot\nabla\sigma_m \label{sec:diag:pv:eq15a}
+\end{eqnarray}
+These components can be computed with the package. Details on the variables definition and
+the way these fluxes are derived can be found in section
+\ref{sec:diag:pv:notes-flux-form}.
+
+\vspace{.5cm}
+\noindent
+We now give some simple explanations about these fluxes and how they can reduce the PV
+level of an oceanic potential density layer.
+
+\paragraph{Diabatic process}
+Let's take the PV flux due to surface buoyancy forcing from Eq.\ref{sec:diag:pv:eq14a} and
+simplify it as:
+\begin{eqnarray}
+  J^B_z &\simeq& -\frac{\alpha f}{hC_w} Q_{net}
+\end{eqnarray}
+When the net surface heat flux $Q_{net}$ is upward i.e. negative and cooling the ocean
+(buoyancy loss), surface density will increase, triggering mixing which reduces the
+stratification and then the PV.
+\begin{eqnarray}
+  Q_{net} &<& 0 \,\,\,\hbox{(upward, cooling)} \nonumber \\
+  J^B_z   &>& 0 \,\,\,\hbox{(upward)} \nonumber \\
+  -\rho^{-1}\nabla\cdot J^B_z &<& 0 \,\,\, \hbox{(PV flux divergence)} \nonumber \\
+  PV &\searrow& \hbox{where $Q_{net}<0$}\nonumber 
+\end{eqnarray}
+
+
+\paragraph{Frictional process: "Down-front" wind-stress}
+Now let's take the PV flux due to the "wind-driven buoyancy flux" from
+Eq.\ref{sec:diag:pv:eq15a} and simplify it as:
+\begin{eqnarray}
+  J^F_z &=& \frac{1}{\rho\delta_e} \left( \tau_x\frac{\partial \sigma}{\partial y} - \tau_y\frac{\partial \sigma}{\partial x} \right) \\
+  J^F_z &\simeq& \frac{1}{\rho\delta_e} \tau_x\frac{\partial \sigma}{\partial y} \nonumber
+\end{eqnarray}
+When the wind is blowing from the east above the Gulf Stream (a region of high meridional
+density gradient), it induces an advection of dense water from the northern side of the GS
+to the southern side through Ekman currents. Then, it induces a "wind-driven" buoyancy
+lost and mixing which reduces the stratification and the PV.
+\begin{eqnarray}
+ \vec{k}\times\tau\cdot\nabla\sigma &>& 0 \,\,\, \hbox{("Down-front" wind)} \nonumber \\
+ J^F_z &>& 0 \,\,\, \hbox{(upward)} \nonumber \\
+  -\rho^{-1}\nabla\cdot J^F_z &<& 0 \,\,\, \hbox{(PV flux divergence)} \nonumber \\
+  PV &\searrow& \hbox{where $\vec{k}\times\tau\cdot\nabla\sigma>0$}\nonumber 
+\end{eqnarray}
+
+
+\paragraph{Diabatic versus frictional processes}
+A recent debate in the community arose about the relative role of these processes.  Taking
+the ratio of Eq.\ref{sec:diag:pv:eq14a} and Eq.\ref{sec:diag:pv:eq15a} leads to:
+\begin{eqnarray}
+  \frac{J^F_z}{J^B_Z} &=& \frac{ \frac{1}{\rho\delta_e} \vec{k}\times\tau\cdot\nabla\sigma }
+  {-\frac{f}{h}\left( \frac{\alpha Q_{net}}{C_w}-\rho_0 \beta S_{net}\right)} \\
+  &\simeq& \frac{Q_{Ek}/\delta_e}{Q_{net}/h} \nonumber
+\end{eqnarray}
+where appears the lateral heat flux induced by Ekman currents:
+\begin{eqnarray}
+  Q_{Ek} &=& -\frac{C_w}{\alpha\rho f}\vec{k}\times\tau\cdot\nabla\sigma 
+  \nonumber \\
+  &=& \frac{C_w}{\alpha}\delta_e\vec{u_{Ek}}\cdot\nabla\sigma
+\end{eqnarray}
+which can be computed with the package.  In the aim of comparing both processes, it will be
+useful to plot surface net and lateral Ekman-induced heat fluxes together with PV fluxes.
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\subsection{Key routines}
+
+\begin{itemize}
+\item {\bf {\ttfamily A\_compute\_potential\_density.m}}: Compute the potential density
+  field. Requires the potential temperature and salinity (either total or anomalous) and
+  produces one output file with the potential density field (file prefix is {\ttfamily
+    SIGMATHETA}). The routine uses {\ttfamily densjmd95.m} a Matlab counterpart of the
+  MITgcm built-in function to compute the density.
+\item {\bf {\ttfamily B\_compute\_relative\_vorticity.m}}: Compute the three components of
+  the relative vorticity defined in Eq.~(\ref{sec:diag:pv:eq1}). Requires the two
+  horizontal velocity components and produces three output files with the three components
+  (files prefix are {\ttfamily OMEGAX}, {\ttfamily OMEGAY} and {\ttfamily ZETA}).
+\item {\bf {\ttfamily C\_compute\_potential\_vorticity.m}}: Compute the potential
+  vorticity without the negative ratio by the density. Two options are possible in order
+  to compute either the full component (term into parenthesis in
+  Eq.~\ref{sec:diag:pv:eq2}) or the planetary component ($f\partial_z\sigma_\theta$ in
+  Eq.~\ref{sec:diag:pv:eq3}). Requires the relative vorticity components and the potential
+  density, and produces one output file with the potential vorticity (file prefix is
+  {\ttfamily PV} for the full term and {\ttfamily splPV} for the planetary component).
+\item {\bf {\ttfamily D\_compute\_potential\_vorticity.m}}: Load the field computed with
+  \mbox{{\ttfamily C\_comp...}} and divide it by $-\rho$ to obtain the
+  correct potential vorticity. Require the density field and after loading, overwrite the
+  file with prefix {\ttfamily PV} or {\ttfamily splPV}.
+\item {\bf {\ttfamily compute\_density.m}}: Compute the density $\rho$ from the potential
+  temperature and the salinity fields.
+\item {\bf {\ttfamily compute\_JFz.m}}: Compute the surface vertical PV flux due to
+  frictional processes. Requires the wind stress components, density, potential density
+  and Ekman layer depth (all of them, except the wind stress, may be computed with the
+  package), and produces one output file with the PV flux $J^F_z$ (see
+  Eq.~\ref{sec:diag:pv:eq15a}) and with {\ttfamily JFz} as a prefix.
+\item {\bf {\ttfamily compute\_JBz.m}}: Compute the surface vertical PV flux due to
+  diabatic processes as:
+\begin{eqnarray}
+  J^B_z &=& -\frac{f}{h}\frac{\alpha Q_{net}}{C_w} \nonumber
+\end{eqnarray}
+which is a simplified version of the full expression given in
+Eq.~(\ref{sec:diag:pv:eq14a}).  Requires the net surface heat flux and the mixed layer depth
+(of which an estimation can be computed with the package), and produces one output file
+with the PV flux $J^B_z$ and with {\ttfamily JBz} as a prefix.
+\item {\bf {\ttfamily compute\_QEk.m}}: Compute the horizontal heat flux due to Ekman
+  currents from the PV flux induced by frictional forces as:
+\begin{eqnarray}
+ Q_{Ek} &=& - \frac{C_w \delta_e}{\alpha f}J^F_z\nonumber
+\end{eqnarray}
+Requires the PV flux due to frictional forces and the Ekman layer depth, and produces one
+output with the heat flux and with {\ttfamily QEk} as a prefix.
+\item {\bf {\ttfamily eg\_main\_getPV}}: A complete example of how to set up a master
+  routine able to compute everything from the package.
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Technical details}
+
+\subsubsection{File name}
+\noindent
+A file name is formed by three parameters which need to be set up as global variables in Matlab
+before running any routines. They are:
+\begin{itemize}
+\item the prefix, ie the variable name ({\ttfamily netcdf\_UVEL} for example). This
+  parameter is specified in the help section of all diagnostic routines.
+\item {\ttfamily netcdf\_domain}: the geographical domain.
+\item {\ttfamily netcdf\_suff}: the netcdf extension (nc or cdf for example).
+\end{itemize}
+Then, for example, if the calling Matlab routine had set up:
+\begin{verbatim}
+global netcdf_THETA netcdf_SALTanom netcdf_domain netcdf_suff
+netcdf_THETA    = 'THETA';
+netcdf_SALTanom = 'SALT';
+netcdf_domain   = 'north_atlantic';
+netcdf_suff     = 'nc';
+\end{verbatim}
+the routine {\ttfamily A\_compute\_potential\_density.m} to compute the potential density
+field, will look for the files:
+\begin{verbatim}
+THETA.north_atlantic.nc
+SALT.north_atlantic.nc
+\end{verbatim}
+and the output file will automatically be: {\ttfamily SIGMATHETA.north\_atlantic.nc}.
+
+Otherwise indicated, output file prefix cannot be changed.
+
+\subsubsection{Path to file}
+\noindent
+All diagnostic routines look for input files in a subdirectory (relative to the Matlab
+routine directory) called {\ttfamily ./netcdf-files} which in turn, is supposed to contain
+subdirectories for each set of fields. For example, computing the potential density for
+the timestep 12H00 02/03/2005 will require a
+subdirectory with the potential temperature and salinity files like:
+\begin{verbatim}
+./netcdf-files/200501031200/THETA.north_atlantic.nc
+./netcdf-files/200501031200/SALT.north_atlantic.nc
+\end{verbatim}
+\noindent
+The output file {\ttfamily SIGMATHETA.north\_atlantic.nc} will be created in {\ttfamily
+  ./netcdf-files/200501031200/}.
+\noindent
+All diagnostic routines take as argument the name of the timestep subdirectory into
+{\ttfamily ./netcdf-files}.
+
+\subsubsection{Grids}
+\noindent
+With MITgcm numerical outputs, velocity and tracer fields may not be defined on the same
+grid. Usually, UVEL and VVEL are defined on a C-grid but when interpolated from a
+cube-sphere simulation they are defined on a A-grid. When it is needed, routines allow
+to set up a global variable which define the grid to use.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\subsection{Notes on the flux form of the PV equation and vertical PV fluxes}
+\label{sec:diag:pv:notes-flux-form}
+
+\subsubsection{Flux form of the PV equation}
+The conservative flux form of the potential vorticity equation is:
+\begin{eqnarray}
+ \frac{\partial \rho Q}{\partial t} + \nabla \cdot \vec{J} &=& 0 \label{sec:diag:pv:eq4}
+\end{eqnarray}
+where the potential vorticity $Q$ is given by the Eq.\ref{sec:diag:pv:eq2}.
+
+The generalized flux vector of potential vorticity is:
+\begin{eqnarray}
+ \vec{J} &=& \rho Q \vec{u} + \vec{N_Q}
+\end{eqnarray}
+which allows to rewrite Eq.\ref{sec:diag:pv:eq4} as:
+\begin{eqnarray}
+ \frac{DQ}{dt} &=& -\frac{1}{\rho}\nabla\cdot\vec{N_Q} \label{sec:diag:pv:eq5}
+\end{eqnarray}
+where the nonadvective PV flux $\vec{N_Q}$ is given by:
+\begin{eqnarray}
+  \vec{N_Q} &=& -\frac{\rho_0}{g}B\vec{\omega_a} + \vec{F}\times\nabla\sigma_\theta 
+                \label{sec:diag:pv:eq6}
+\end{eqnarray} 
+
+Its first component is linked to the buoyancy forcing\footnote{
+Note that introducing B into Eq.\ref{sec:diag:pv:eq6} yields to:
+\begin{eqnarray}
+  \vec{N_Q} &=& \omega_a \frac{D \sigma_\theta}{dt} + \vec{F}\times\nabla\sigma_\theta
+\end{eqnarray}}:
+\begin{eqnarray}
+ B &=& -\frac{g}{\rho_o}\frac{D \sigma_\theta}{dt} 
+\end{eqnarray}
+and the second one to the nonconservative body forces per unit mass:
+\begin{eqnarray}
+ \vec{F} &=& \frac{D \vec{u}}{dt} + 2\Omega\times\vec{u} + \nabla p 
+\end{eqnarray}
+
+\subsubsection{Determining the PV flux at the ocean's surface}
+In the context of mode water study, we're particularly interested in how the PV may be
+reduced by surface PV fluxes because a mode water is characterised by a low PV level.
+Considering the volume limited by two $iso-\sigma_\theta$, PV
+flux is limited to surface processes and then vertical component of $\vec{N_Q}$.  It is
+supposed that $B$ and $\vec{F}$ will only be nonzero in the mixed layer (of depth $h$ and
+variable density $\sigma_m$) exposed to mechanical forcing by the wind and buoyancy fluxes
+through the ocean's surface.
+
+Given the assumption of a mechanical forcing confined to a thin surface Ekman layer (of
+depth $\delta_e$, eventually computed by the package) and of hydrostatic and geostrophic
+balances, we can write:
+\begin{eqnarray}
+  \vec{u_g} &=& \frac{1}{\rho f} \vec{k}\times\nabla p \\
+  \frac{\partial p_m}{\partial z} &=& -\sigma_m g \\ 
+  \frac{\partial \sigma_m}{\partial t} + \vec{u}_m\cdot\nabla\sigma_m &=& -\frac{\rho_0}{g}B \label{sec:diag:pv:eq7}
+\end{eqnarray} 
+where:
+\begin{eqnarray}
+  \vec{u}_m &=& \vec{u}_g + \vec{u}_{Ek} + o(R_o) \label{sec:diag:pv:eq8}
+\end{eqnarray} 
+is the full velocity field composed by the geostrophic current $\vec{u}_g$ and the Ekman
+drift:
+\begin{eqnarray}
+  \vec{u}_{Ek} &=& -\frac{1}{\rho f}\vec{k}\times\frac{\partial \tau}{\partial z} \label{sec:diag:pv:eq9}
+\end{eqnarray} 
+(where $\tau$ is the wind stress) and last by other ageostrophic components of $o(R_o)$
+which are neglected.
+
+Partitioning the buoyancy forcing as:
+\begin{eqnarray}
+  B &=& B_g + B_{Ek} \label{sec:diag:pv:eq10}
+\end{eqnarray} 
+and using Eq.\ref{sec:diag:pv:eq8} and Eq.\ref{sec:diag:pv:eq9}, the Eq.\ref{sec:diag:pv:eq7} becomes:
+\begin{eqnarray}
+  \frac{\partial \sigma_m}{\partial t} + \vec{u}_g\cdot\nabla\sigma_m &=& -\frac{\rho_0}{g} B_g
+\end{eqnarray}   
+revealing the "wind-driven buoyancy forcing":
+\begin{eqnarray}
+  B_{Ek} &=& \frac{g}{\rho_0}\frac{1}{\rho f}\left(\vec{k}\times\frac{\partial \tau}{\partial z}\right)\cdot\nabla\sigma_m
+\end{eqnarray} 
+Note that since:
+\begin{eqnarray}
+  \frac{\partial B_g}{\partial z} &=& \frac{\partial}{\partial z}\left(-\frac{g}{\rho_0}\vec{u_g}\cdot\nabla\sigma_m\right)
+  = -\frac{g}{\rho_0}\frac{\partial \vec{u_g}}{\partial z}\cdot\nabla\sigma_m 
+  = 0
+\end{eqnarray}
+$B_g$ must be uniform throughout the depth of the mixed layer and then being related to
+the surface buoyancy flux by integrating Eq.\ref{sec:diag:pv:eq10} through the mixed layer:
+\begin{eqnarray}
+  \int_{-h}^0B\,dz &=\, hB_g + \int_{-h}^0B_{Ek}\,dz  \,=& \mathcal{B}_{in} \label{sec:diag:pv:eq11}
+\end{eqnarray}                   
+where $\mathcal{B}_{in}$ is the vertically integrated surface buoyancy (in)flux:
+\begin{eqnarray}
+  \mathcal{B}_{in} &=& \frac{g}{\rho_o}\left( \frac{\alpha Q_{net}}{C_w} - \rho_0\beta S_{net}\right)  
+\label{sec:diag:pv:eq12}
+\end{eqnarray}  
+with $\alpha\simeq 2.5\times10^{-4}\, K^{-1}$ the thermal expansion coefficient (computed
+by the package otherwise), $C_w=4187J.kg^{-1}.K^{-1}$ the specific heat of seawater,
+$Q_{net}[W.m^{-2}]$ the net heat surface flux (positive downward, warming the ocean),
+$\beta[PSU^{-1}]$ the saline contraction coefficient, and
+$S_{net}=S*(E-P)[PSU.m.s^{-1}]$ the net freshwater surface flux with $S[PSU]$
+the surface salinity and $(E-P)[m.s^{-1}]$ the fresh water flux.
+
+Introducing the body force in the Ekman layer:
+\begin{eqnarray}
+  F_z &=& \frac{1}{\rho}\frac{\partial \tau}{\partial z}
+\end{eqnarray}
+the vertical component of Eq.\ref{sec:diag:pv:eq6} is:
+\begin{eqnarray}
+  \vec{N_Q}_z &=& -\frac{\rho_0}{g}(B_g+B_{Ek})\omega_z 
+  + \frac{1}{\rho}
+  \left( \frac{\partial \tau}{\partial z}\times\nabla\sigma_\theta \right)\cdot\vec{k}
+  \nonumber \\
+  &=& -\frac{\rho_0}{g}B_g\omega_z
+  -\frac{\rho_0}{g}
+  \left(\frac{g}{\rho_0}\frac{1}{\rho f}\vec{k}\times\frac{\partial \tau}{\partial z}
+    \cdot\nabla\sigma_m\right)\omega_z
+  + \frac{1}{\rho}
+  \left( \frac{\partial \tau}{\partial z}\times\nabla\sigma_\theta \right)\cdot\vec{k}
+  \nonumber \\
+  &=& -\frac{\rho_0}{g}B_g\omega_z
+  + \left(1-\frac{\omega_z}{f}\right)\left(\frac{1}{\rho}\frac{\partial \tau}{\partial z}
+                \times\nabla\sigma_\theta \right)\cdot\vec{k}
+\end{eqnarray}
+and given the assumption that $\omega_z\simeq f$, the second term vanishes and we obtain:
+\begin{eqnarray}
+  \vec{N_Q}_z &=& -\frac{\rho_0}{g}f B_g \label{sec:diag:pv:eq12}
+\end{eqnarray}
+Note that the wind-stress forcing does not appear explicitly here but is implicit in $B_g$
+through Eq.\ref{sec:diag:pv:eq11}: the buoyancy forcing $B_g$ is determined by the
+difference between the integrated surface buoyancy flux $\mathcal{B}_{in}$ and the
+integrated "wind-driven buoyancy forcing":
+\begin{eqnarray}
+  B_g &=& \frac{1}{h}\left( \mathcal{B}_{in} - \int_{-h}^0B_{Ek}dz \right) \nonumber \\
+  &=& \frac{1}{h}\frac{g}{\rho_0}\left( \frac{\alpha Q_{net}}{C_w} - \rho_0 \beta S_{net}\right)
+  - \frac{1}{h}\int_{-h}^0 
+  \frac{g}{\rho_0}\frac{1}{\rho f}\vec{k}\times \frac{\partial \tau}{\partial z} \cdot\nabla\sigma_m dz
+  \nonumber \\
+  &=& \frac{1}{h}\frac{g}{\rho_0}\left( \frac{\alpha Q_{net}}{C_w} - \rho_0 \beta S_{net}\right)  
+  - \frac{g}{\rho_0}\frac{1}{\rho f \delta_e}\vec{k}\times\tau\cdot\nabla\sigma_m
+\end{eqnarray}
+Finally, from Eq.\ref{sec:diag:pv:eq6}, the vertical surface flux of PV may be written as:
+\begin{eqnarray}
+  \vec{N_Q}_z &=& J^B_z + J^F_z \label{sec:diag:pv:eq13} \\
+  J^B_z &=& -\frac{f}{h}\left( \frac{\alpha Q_{net}}{C_w}-\rho_0 \beta S_{net}\right) \label{sec:diag:pv:eq14}\\
+  J^F_z &=& \frac{1}{\rho\delta_e} \vec{k}\times\tau\cdot\nabla\sigma_m \label{sec:diag:pv:eq15}
+\end{eqnarray}
