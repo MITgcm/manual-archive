@@ -17,8 +17,9 @@ Note that the gchem package itself is only a means to call
 the subroutines used by specific biogeochemical experiments,
 and does not "do" anything on its own.
 
-There are two examples: cfc which looks at 2 tracers with a
-simple external forcing and dic with 5 tracers whose tendency terms
+There are two examples: {\bf cfc} which looks at 2 tracers with a
+simple external forcing and {\bf dic} with 4,5 or 6 tracers 
+whose tendency terms
 are related to one another. We will discuss these here only as
 how they provide examples to use this package.
 
@@ -27,22 +28,24 @@ how they provide examples to use this package.
 
 \noindent
 {{\bf FRAMEWORK}} \\
+The different biogeochemistry frameworks (e.g. cfc of dic)
+are specified in the packages\_conf file.
 {\it GCHEM\_OPTIONS.h} includes the compiler options to be used
-in any experiment. For instance \#define ALLOW\_CFC allows
-the CFC code to be run. An important compiler option is
+in any experiment. 
+An important compiler option is
  \#define GCHEM\_SEPARATE\_FORCING which determined 
 how and when the tracer forcing is applied (see discussion
-on Forcing below).
+on Forcing below). See section on dic for some additional
+flags that can be set for that experiment.
  There are further runtime parameters
 set in {\it data.gchem} and kept in common block {\it GCHEM.h}.
 These runtime options include:\\
-$\bullet$ {\bf tIter0} which is the integer timestep when the tracer experiment
- is initialized. If {\bf nIter0} $=$ {\bf tIter0} then the tracers
- are initialized to zero or from initial files. If {\bf nIter0} $>$
- {\bf tIter0} then tracers (and previous timestep tendency terms)
-  are read in from a the ptracers pickup file. Note that tracers
-  of zeros will be carried around if {\bf nIter0} $<$ {\bf tIter0}.
-\\
+$\bullet$ Parameters to set the timing for periodic forcing files to
+be loaded are: {\it gchem\_ForcingPeriod}, {\it gchem\_ForcingCycle}.
+The former is how often to load, the latter is how often to cycle
+through those fields (eg. period couple be monthly and cycle one year).
+This is used in {\it dic} and {\it cfc}, with gchem\_ForcingPeriod=0
+meaning no periodic forcing.
 $\bullet$ {\bf nsubtime} is the integer number of extra timesteps
  required by the tracer experiment. This will give a timestep
  of {\bf deltaTtracer}$/${\bf nsubtime} for the dependencies
@@ -53,6 +56,12 @@ $\bullet$ File names - these are several filenames than can be read in
  wind speed is needed in both DIC and CFC packages to calculate
  the air-sea exchange of gases. Not all file names will be used 
  for every tracer experiment. 
+\\
+$\bullet$ {\bf gchem\_int\_*} are variable names for run-time set integer numbers. (Currently 1 through 5).
+\\
+$\bullet$ {\bf gchem\_rl\_*} are variable names for run-time set real numbers. (Currently 1 through 5).
+$\bullet$ Note that the old {\bf tIter0} has been replaced by {\bf PTRACERS\_Iter0} which is
+set in data.ptracers instead.
 
 \vspace{.5cm}
 
@@ -125,6 +134,8 @@ out by {\it dic\_biotic\_diags.F} which is called from {\it gchem\_diags.F}.
 \subsubsection{GCHEM Diagnostics}
 \label{sec:pkg:gchem:diagnostics}
 
+These diagnostics are particularly for the {\bf dic} package.
+
 {\footnotesize
 \begin{verbatim}
 
@@ -156,7 +167,16 @@ to dic and cfc pkgs).
 \label{sec:pkg:gchem:experiments}
 
 \begin{itemize}
-\item{Global Ocean tutorial, in tutorial\_global\_oce\_biogeo verification directory,   
-described in section \ref{sect:eg-biogeochem_tutorial} }
+\item{Global Ocean biogeochemical tutorial, in tutorial\_global\_oce\_biogeo verification directory,   
+described in section \ref{sect:eg-biogeochem_tutorial} uses gchem and dic }
+
+\item{Global Ocean cfc tutorial, in tutorial\_cfc\_offline verification directory,   
+uses gchem and cfc (and offline) described in \ref{sect:eg-cfc_offline} }
+
+\item{Global Ocean online cfc example in cfc\_example verification directory,   
+uses gchem and cfc}
+
+
+
 \end{itemize}
 

@@ -10,6 +10,16 @@
 
 \subsubsection {Key subroutines and parameters}
 
+Run time parameters  set in {\bf data.ptracders}:
+$\bullet$ {\bf PTRACERS\_Iter0} which is the integer timestep when the tracer experiment
+ is initialized. If {\bf nIter0} $=$ {\bf PTRACERS\_Iter0} then the tracers
+ are initialized to zero or from initial files. If {\bf nIter0} $>$
+ {\bf PTRACERS\_Iter0} then tracers (and previous timestep tendency terms)
+  are read in from a the ptracers pickup file. Note that tracers
+  of zeros will be carried around if {\bf nIter0} $<$ {\bf PTRACERS\_Iter0}.
+\\
+
+
 \subsubsection{PTRACERS Diagnostics}
 \label{sec:pkg:ptracers:diagnostics}
 
