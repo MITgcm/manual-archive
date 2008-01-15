@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_examples/text/model_examples.tex,v 1.18 2008/01/15 21:17:19 jmc Exp $
+% $Header: /u/gcmpack/manual/s_examples/text/model_examples.tex,v 1.19 2008/01/15 23:24:59 jmc Exp $
 % $Name:  $
 
 \section[MITgcm Example Experiments]{Example experiments}
@@ -34,11 +34,12 @@ Each example is briefly described below.
   \ref{sect:eg-fourlayer}.
 
 \item \texttt{tutorial\_barotropic\_gyre} - single layer, ocean double
-  gyre (barotropic with free-surface). This experiment is described in
-  detail in section \ref{sect:eg-baro}.
+  gyre (barotropic with free-surface). 
+  This experiment is described in detail in section \ref{sect:eg-baro}.
 
 \item \texttt{tutorial\_cfc\_offline} Offline form of the MITgcm to
   study advection of a passive tracer and CFCs.
+  This experiment is described in detail in section \ref{sect:eg-offline-cfc}.
 
 \item \texttt{tutorial\_deep\_convection} - Inhomogenously forced
   ocean convection in a doubly periodic box. This experiment is
@@ -49,7 +50,7 @@ Each example is briefly described below.
   experiment is described in detail in section
   \ref{sect:eg-biogeochem_tutorial}.
 
-\item \texttt{tutorial\_global\_oce\_in\_p} Global circulation in
+\item \texttt{tutorial\_global\_oce\_in\_p} Global ocean simulation in
   pressure coordinate (non-Boussinesq ocean model). Described in
   detail in section \ref{sect:eg-globalpressure}.
 
@@ -62,7 +63,7 @@ Each example is briefly described below.
   detail in section \ref{sect:eg-global_state_estimate}.
 
 \item \texttt{tutorial\_held\_suarez\_cs} - 3D atmosphere dynamics
-  using Held and Suarez (1994) forcing on the cubed sphere.  This
+  using Held and Suarez (1994) forcing on cubed sphere grid.  This
   experiment is described in detail in section \ref{sect:eg-hs}.
   
 \item \texttt{tutorial\_offline} Offline form of the MITgcm to study
@@ -75,7 +76,7 @@ Each example is briefly described below.
 
 \item \texttt{tutorial\_tracer\_adjsens} Simple passive tracer
   experiment. Includes derivative calculation. This experiment is
-  described in detail in section \ref{sect:eg-simple-tracer}.
+  described in detail in section \ref{sect:eg-simple-tracer-adjoint}.
 
 \item \texttt{adjustment.128x64x1} Barotropic adjustment problem on
   latitude longitude grid with 128x64 grid points ($2.8^\circ$ resolution).
@@ -88,7 +89,8 @@ Each example is briefly described below.
   cube sphere grid (32x32 grid points per face, roughly $2.8^\circ$)
   
 \item \texttt{advect\_xy} Two-dimensional (horizontal plane) passive
-  advection test on Cartesian grid.
+  advection test on Cartesian grid.\\
+  Also contains an additional set-up iusing Adams-Bashforth 3 (input.ab3\_c4).
   
 \item \texttt{advect\_xz} Two-dimensional (vertical plane) passive
   advection test on Cartesian grid.
@@ -103,7 +105,11 @@ Each example is briefly described below.
   
 \item \texttt{aim.5l\_cs} - 5-levels Intermediate Atmospheric physics,
   Global configuration on cube sphere grid 
-  (32x32 grid points per face, roughly $2.8^\circ$). 
+  (32x32 grid points per face, roughly $2.8^\circ$).\\
+  Also contains an additional set-up with an ocean mixed layer and thermodynamics
+  sea-ice (input.thSI).
+
+\item \texttt{biogeo} (to be removed)
 
 \item \texttt{bottom\_ctrl\_5x5} Adjoint test using the bottom
   topography as the control parameter.
@@ -111,9 +117,17 @@ Each example is briefly described below.
 \item \texttt{cfc\_example} Global ocean with online computation and
   advection of CFC11 and CFC12.
 
+\item \texttt{cpl\_aim+ocn}
+
+\item \texttt{cpl\_atm2d+ocn}
+
+\item \texttt{deep\_anelastic}
+
 \item \texttt{dome} Idealized 3D test of a density-driven bottom current.
 
-\item \texttt{exp2} Old version of the global ocean experiment.
+\item \texttt{exp2} Old version of the global ocean experiment (no GM, 
+      no partial-cells).\\
+  Also contains an additional set-up with ridid-lid (input.rigidLid).
 
 \item \texttt{exp4} - Flow over a Gaussian bump in open-water or
   channel with open boundaries.
@@ -138,12 +152,25 @@ Each example is briefly described below.
 \item \texttt{front\_relax} - Relaxation of an ocean thermal front
   (test for Gent/McWilliams scheme). 2D (Y-Z).
 
-\item \texttt{global\_ocean.90x40x15} Global circulation with GM, flux
-  boundary conditions and poles.
+\item \texttt{global1x1\_tot} ECCO-GODAE production configuration
+ version 1, 2 \& 3
+
+\item \texttt{global2x2\_tot} ECCO production configuration version 0
+
+\item \texttt{global\_ocean.90x40x15} Global ocean simulation at 4x4 
+  degree resolution. Similar to tutorial\_global\_oce\_latlon, with
+  quasi-non-hydrostatics and non-hydrostatic metric terms.\\
+  Also contains an adjoint set-up (code\_ad, input\_ad).
 
 \item \texttt{global\_ocean.cs32x15} Global ocean experiment on the
-  cubed sphere grid, using thermodynamic sea ice and bulk force
-  packages.
+  cubed sphere grid.\\ 
+  Also contains additional set-ups:
+  \begin{enumerate}
+   \item non-hydrostratic with biharmonic viscosity (input.viscA4)
+   \item using thermodynamic sea ice and bulk force (input.thsice)
+   \item using thermodynamic (pkg/thsice) dynamics (pkg/seaice) sea-ice
+         and exf pkg (input.icedyn)
+  \end{enumerate}
 
 \item \texttt{global\_ocean\_ebm} Global ocean experiment on a lat-lon
   grid coupled to an atmospheric energy balance model. Similar to
@@ -153,11 +180,11 @@ Each example is briefly described below.
   grid using the exf package. Similar to global\_ocean.90x40x15
   experiment.
 
-\item \texttt{hs94.128x64x5} - 3D atmosphere dynamics using Held and
-  Suarez '94 forcing.
+\item \texttt{hs94.128x64x5} - 3D atmosphere dynamics on lat-lon grid,
+  using Held and Suarez '94 forcing.
   
-\item \texttt{hs94.1x64x5} - Zonal averaged atmosphere using Held and
-  Suarez '94 forcing.
+\item \texttt{hs94.1x64x5} - Zonal averaged atmosphere dynamics 
+  using Held and Suarez '94 forcing.
   
 \item \texttt{hs94.cs-32x32x5} 3D atmosphere dynamics using Held and
   Suarez (1994) forcing on the cubed sphere. 5 vertical levels.
@@ -171,6 +198,8 @@ Each example is briefly described below.
 \item \texttt{inverted\_barometer} Simple test of ocean response to
   atmospheric pressure loading.
 
+\item \texttt{isomip}
+
 \item \texttt{lab\_sea} Regional Labrador Sea simulation on a lat-lon
   grid. Coupled to the sea ice model.
 
@@ -181,13 +210,23 @@ Each example is briefly described below.
 
 \item \texttt{natl\_box} - Eastern subtropical North Atlantic with KPP
   scheme; 1 month integration
+
+\item \texttt{natl\_box\_adjoint}
+
+\item \texttt{offline\_exf\_seaice}
   
+\item \texttt{OpenAD}
+
 \item \texttt{rotating\_tank} Rotating tank simulation in cylindrical
   coordinates.  This experiment is described in detail in section
   \ref{sect:eg-tank}.
 
+\item \texttt{seaice\_obcs}
+
 \item \texttt{solid-body.cs-32x32x1} Solid body rotation test for cube
   sphere grid.
+
+\item \texttt{tidal\_basin\_2d}
 
 \item \texttt{vermix} Simple test in a small domain (3 columns) for
   ocean vertical mixing schemes.
