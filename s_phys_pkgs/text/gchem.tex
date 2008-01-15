@@ -46,6 +46,7 @@ The former is how often to load, the latter is how often to cycle
 through those fields (eg. period couple be monthly and cycle one year).
 This is used in {\it dic} and {\it cfc}, with gchem\_ForcingPeriod=0
 meaning no periodic forcing.
+\\
 $\bullet$ {\bf nsubtime} is the integer number of extra timesteps
  required by the tracer experiment. This will give a timestep
  of {\bf deltaTtracer}$/${\bf nsubtime} for the dependencies
@@ -60,6 +61,7 @@ $\bullet$ File names - these are several filenames than can be read in
 $\bullet$ {\bf gchem\_int\_*} are variable names for run-time set integer numbers. (Currently 1 through 5).
 \\
 $\bullet$ {\bf gchem\_rl\_*} are variable names for run-time set real numbers. (Currently 1 through 5).
+\\
 $\bullet$ Note that the old {\bf tIter0} has been replaced by {\bf PTRACERS\_Iter0} which is
 set in data.ptracers instead.
 
