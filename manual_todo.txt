@@ -576,3 +576,13 @@ Bibliography
 
  tidy up from misc - .tex
 
+Also
+
+a link to the new manual
+should appear on the front page (even if it's under construction).
+
+updating:
+http://mitgcm.org/r2_web_testing/latest/code_reference/callTree.html
+which points to a 1.5 years old code. Would be good to generate a
+new one, and even better, to try to keep it up-to-date.
+
