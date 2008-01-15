@@ -22,7 +22,7 @@ forcing fields an arbitrary grid onto the model grid.
 CPP options enable or disable different aspects of the package
 (Section \ref{sec:pkg:exf:config}).
 Runtime options, flags, filenames and field-related dates/times are
-set in \texttt{data.exf} and \texttt{data.exf\_clim}
+set in \texttt{data.exf}
 (Section \ref{sec:pkg:exf:runtime}).
 A description of key subroutines is given in Section
 \ref{sec:pkg:exf:subroutines}.
@@ -119,9 +119,8 @@ Run-time parameters may be broken into 3 categories:
 \paragraph{Enabling the package}
 ~ \\
 %
-A package is usually switched on/off at runtime by setting
+A package is switched on/off at runtime by setting
 (e.g. for EXF) \texttt{useEXF = .TRUE.} in \texttt{data.pkg}.
-For EXF this flag is omitted, i.e. EXF is always ON if it is compiled.
 
 \paragraph{General flags and parameters}
 ~ \\
@@ -574,9 +573,9 @@ Table \ref{tab:pkg:exf:diagnostics}.
 \label{tab:pkg:exf:diagnostics}
 {\footnotesize
 \begin{verbatim}
-------------------------------------------------------
+---------+----+----+----------------+-----------------
  <-Name->|Levs|grid|<--  Units   -->|<- Tile (max=80c)
-------------------------------------------------------
+---------+----+----+----------------+-----------------
  EXFhs   |  1 | SM | W/m^2          | Sensible heat flux into ocean, >0 increases theta
  EXFhl   |  1 | SM | W/m^2          | Latent heat flux into ocean, >0 increases theta
  EXFlwnet|  1 | SM | W/m^2          | Net upward longwave radiation, >0 decreases theta

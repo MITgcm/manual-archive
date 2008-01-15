@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/text/seaice.tex,v 1.5 2006/06/28 15:35:07 molod Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/text/seaice.tex,v 1.6 2008/01/15 23:58:53 heimbach Exp $
 % $Name:  $
 
 %%EH3  Copied from "MITgcm/pkg/seaice/seaice_description.tex"
@@ -11,8 +11,123 @@
 <!-- CMIREDIR:package_seaice: -->
 \end{rawhtml}
 
+Authors: Martin Losch, Dimitris Menemenlis, An Nguyen, Jean-Michel Campin,
+Patrick Heimbach, Chris Hill and Jinlun Zhang
+
+%----------------------------------------------------------------------
+\subsubsection{Introduction
+\label{sec:pkg:exf:intro}}
+
+
 Package ``seaice'' provides a dynamic and thermodynamic interactive
-sea-ice model.  Sea-ice model thermodynamics are based on Hibler
+sea-ice model. 
+
+CPP options enable or disable different aspects of the package
+(Section \ref{sec:pkg:seaice:config}).
+Runtime options, flags, filenames and field-related dates/times are
+set in \texttt{data.seaice}
+(Section \ref{sec:pkg:seaice:runtime}).
+A description of key subroutines is given in Section
+\ref{sec:pkg:seaice:subroutines}.
+Input fields, units and sign conventions are summarized in
+Section \ref{sec:pkg:seaice:fields_units}, and available diagnostics
+output is listed in Section \ref{sec:pkg:seaice:fields_diagnostics}.
+
+%----------------------------------------------------------------------
+
+\subsubsection{SEAICE configuration, compiling \& running}
+
+\paragraph{Compile-time options
+\label{sec:pkg:seaice:config}}
+~
+
+As with all MITgcm packages, SEAICE can be turned on or off at compile time
+%
+\begin{itemize}
+%
+\item
+using the \texttt{packages.conf} file by adding \texttt{seaice} to it,
+%
+\item
+or using \texttt{genmake2} adding
+\texttt{-enable=seaice} or \texttt{-disable=seaice} switches
+%
+\item
+\textit{required packages and CPP options}: \\
+SEAICE requires the external forcing package \texttt{exf} to be enabled;
+no additional CPP options are required.
+%
+\end{itemize}
+(see Section \ref{sect:buildingCode}).
+
+Parts of the SEAICE code can be enabled or disabled at compile time
+via CPP preprocessor flags. These options are set in either
+\texttt{SEAICE\_OPTIONS.h} or in \texttt{ECCO\_CPPOPTIONS.h}.
+Table \ref{tab:pkg:seaice:cpp} summarizes these options.
+
+\begin{table}[h!]
+\centering
+  \label{tab:pkg:seaice:cpp}
+  {\footnotesize
+    \begin{tabular}{|l|l|}
+      \hline 
+      \textbf{CPP option}  &  \textbf{Description}  \\
+      \hline \hline
+        \texttt{SEAICE\_DEBUG} & 
+          Enhance STDOUT for debugging \\
+        \texttt{SEAICE\_ALLOW\_DYNAMICS} & 
+          sea-ice dynamics code \\
+        \texttt{SEAICE\_CGRID} & 
+          LSR solver on C-grid (rather than original B-grid \\
+        \texttt{SEAICE\_ALLOW\_EVP} & 
+          use EVP rather than LSR rheology solver \\
+        \texttt{SEAICE\_EXTERNAL\_FLUXES} & 
+          use EXF-computed fluxes as starting point \\
+        \texttt{SEAICE\_MULTICATEGORY} & 
+          enable 8-category thermodynamics \\
+        \texttt{SEAICE\_VARIABLE\_FREEZING\_POINT} & 
+          enable linear dependence of the freezing point on salinity \\
+        \texttt{ALLOW\_SEAICE\_FLOODING} & 
+          enable snow to ice conversion for submerged sea-ice \\
+        \texttt{SEAICE\_SALINITY} & 
+          enable "salty" sea-ice \\
+        \texttt{SEAICE\_CAP\_HEFF} & 
+          enable capping of sea-ice thickness to MAX\_HEFF \\
+      \hline
+    \end{tabular}
+  }
+  \caption{~}
+\end{table}
+
+%----------------------------------------------------------------------
+
+\subsubsection{Run-time parameters
+\label{sec:pkg:seaice:runtime}}
+
+Run-time parameters are set in files 
+\texttt{data.pkg} (read in \texttt{packages\_readparms.F}),
+and \texttt{data.seaice} (read in \texttt{seaice\_readparms.F}).
+
+\paragraph{Enabling the package}
+~ \\
+%
+A package is switched on/off at runtime by setting
+(e.g. for SEAICE) \texttt{useSEAICE = .TRUE.} in \texttt{data.pkg}.
+
+\paragraph{General flags and parameters}
+~ \\
+%
+\input{part6/seaice-parms.tex}
+
+
+
+%----------------------------------------------------------------------
+\subsubsection{Description
+\label{sec:pkg:seaice:descr}}
+
+[TO BE CONTINUED/MODIFIED]
+
+Sea-ice model thermodynamics are based on Hibler
 \cite{hib80}, that is, a 2-category model that simulates ice thickness
 and concentration.  Snow is simulated as per Zhang et al.
 \cite{zha98a}.  Although recent years have seen an increased use of
@@ -64,6 +179,95 @@ evaporation minus precipitation minus runoff, net surface heat flux,
 and net shortwave flux.  The sea-ice model is global: in ice-free
 regions bulk formulae are used to estimate oceanic forcing from the
 atmospheric fields.
+
+
+%----------------------------------------------------------------------
+
+\subsubsection{Key subroutines
+\label{sec:pkg:seaice:subroutines}}
+
+Top-level routine: \texttt{exf\_getforcing.F}
+
+{\footnotesize
+\begin{verbatim}
+
+C     !CALLING SEQUENCE:
+c ...
+c  seaice_model (TOP LEVEL ROUTINE)
+c  |
+c  |-- #ifdef SEAICE_CGRID
+c  |     SEAICE_DYNSOLVER
+c  |   #ELSE
+c  |     DYNSOLVER
+c  |   #ENDIF
+c  |
+c  ...
+
+\end{verbatim}
+}
+
+
+%----------------------------------------------------------------------
+
+\subsubsection{EXF diagnostics
+\label{sec:pkg:seaice:diagnostics}}
+
+Diagnostics output is available via the diagnostics package
+(see Section \ref{sec:pkg:diagnostics}).
+Available output fields are summarized in 
+Table \ref{tab:pkg:seaice:diagnostics}.
+
+\begin{table}[h!]
+\centering
+\label{tab:pkg:seaice:diagnostics}
+{\footnotesize
+\begin{verbatim}
+---------+----+----+----------------+-----------------
+ <-Name->|Levs|grid|<--  Units   -->|<- Tile (max=80c)
+---------+----+----+----------------+-----------------
+ SIarea  |  1 |SM  |m^2/m^2         |SEAICE fractional ice-covered area [0 to 1]
+ SIheff  |  1 |SM  |m               |SEAICE effective ice thickness
+ SIuice  |  1 |UU  |m/s             |SEAICE zonal ice velocity, >0 from West to East
+ SIvice  |  1 |VV  |m/s             |SEAICE merid. ice velocity, >0 from South to North
+ SIhsnow |  1 |SM  |m               |SEAICE snow thickness
+ SIhsalt |  1 |SM  |g/m^2           |SEAICE effective salinity
+ SIatmFW |  1 |SM  |m/s             |Net freshwater flux from the atmosphere (+=down)
+ SIuwind |  1 |SM  |m/s             |SEAICE zonal 10-m wind speed, >0 increases uVel
+ SIvwind |  1 |SM  |m/s             |SEAICE meridional 10-m wind speed, >0 increases uVel
+ SIfu    |  1 |UU  |N/m^2           |SEAICE zonal surface wind stress, >0 increases uVel
+ SIfv    |  1 |VV  |N/m^2           |SEAICE merid. surface wind stress, >0 increases vVel
+ SIempmr |  1 |SM  |m/s             |SEAICE upward freshwater flux, > 0 increases salt
+ SIqnet  |  1 |SM  |W/m^2           |SEAICE upward heatflux, turb+rad, >0 decreases theta
+ SIqsw   |  1 |SM  |W/m^2           |SEAICE upward shortwave radiat., >0 decreases theta
+ SIpress |  1 |SM  |m^2/s^2         |SEAICE strength (with upper and lower limit)
+ SIzeta  |  1 |SM  |m^2/s           |SEAICE nonlinear bulk viscosity
+ SIeta   |  1 |SM  |m^2/s           |SEAICE nonlinear shear viscosity
+ SIsigI  |  1 |SM  |no units        |SEAICE normalized principle stress, component one
+ SIsigII |  1 |SM  |no units        |SEAICE normalized principle stress, component two
+ SIthdgrh|  1 |SM  |m/s             |SEAICE thermodynamic growth rate of effective ice thickness
+ SIsnwice|  1 |SM  |m/s             |SEAICE ice formation rate due to flooding
+ SIuheff |  1 |UU  |m^2/s           |Zonal Transport of effective ice thickness
+ SIvheff |  1 |VV  |m^2/s           |Meridional Transport of effective ice thickness
+ ADVxHEFF|  1 |UU  |m.m^2/s         |Zonal      Advective Flux of eff ice thickn
+ ADVyHEFF|  1 |VV  |m.m^2/s         |Meridional Advective Flux of eff ice thickn
+ DFxEHEFF|  1 |UU  |m.m^2/s         |Zonal      Diffusive Flux of eff ice thickn
+ DFyEHEFF|  1 |VV  |m.m^2/s         |Meridional Diffusive Flux of eff ice thickn
+ ADVxAREA|  1 |UU  |m^2/m^2.m^2/s   |Zonal      Advective Flux of fract area
+ ADVyAREA|  1 |VV  |m^2/m^2.m^2/s   |Meridional Advective Flux of fract area
+ DFxEAREA|  1 |UU  |m^2/m^2.m^2/s   |Zonal      Diffusive Flux of fract area
+ DFyEAREA|  1 |VV  |m^2/m^2.m^2/s   |Meridional Diffusive Flux of fract area
+ ADVxSNOW|  1 |UU  |m.m^2/s         |Zonal      Advective Flux of eff snow thickn
+ ADVySNOW|  1 |VV  |m.m^2/s         |Meridional Advective Flux of eff snow thickn
+ DFxESNOW|  1 |UU  |m.m^2/s         |Zonal      Diffusive Flux of eff snow thickn
+ DFyESNOW|  1 |VV  |m.m^2/s         |Meridional Diffusive Flux of eff snow thickn
+ ADVxSSLT|  1 |UU  |psu.m^2/s       |Zonal      Advective Flux of seaice salinity
+ ADVySSLT|  1 |VV  |psu.m^2/s       |Meridional Advective Flux of seaice salinity
+ DFxESSLT|  1 |UU  |psu.m^2/s       |Zonal      Diffusive Flux of seaice salinity
+ DFyESSLT|  1 |VV  |psu.m^2/s       |Meridional Diffusive Flux of seaice salinity
+\end{verbatim}
+}
+\caption{~}
+\end{table}
 
 
 %\subsubsection{Package Reference}
