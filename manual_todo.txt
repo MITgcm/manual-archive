@@ -265,6 +265,9 @@ in content: Horizontal Dissipation: 2 times in vector-invariant section
 >> evaluated explicitly in time
 <- Leave it general.
 
+ o Time-stepping outline
+   - what gets called when
+
 
 2.2 rigid-lid:
 
@@ -414,6 +417,18 @@ Almost all of the 'math mode' text is dropped down as subscripts
 3.14.5.4 -- ALL of the bold links to variable names are broken
             line 34: link to equation is broken
 
+ o Update basic intro with one and four layer gyres
+   - include advection options
+   - conservation analysis
+   - diagnostics
+
+ o Four degree adjoint
+   - both TAF and OpenAD based.
+
+ o Coupled with biogeo setup
+   - based on CCGS setup
+
+
 >>>> From Ed
 
 Here are the remaining bits for Chap 4 :
@@ -465,6 +480,8 @@ embed_files/          - add something to chapter 7
 exch2/                - 6.2.2
 exf/                  - 6.3.4
 fizhi/                - 6.4.3
+ o Including FIZHI doc
+   - get things up to date
 flt/                  - (PH check)
 gchem/                - 6.7.1
 generic_advdiff/      - in chapter 2 (JM check)
@@ -510,6 +527,10 @@ thsice/               - 6.5.1 (JM to update?)
 timeave/              - retiring......
 zonal_filt/           - chapter 2 (JM to check)
 
+ o Cost function packages
+   - floats, weights, profiles etc...
+
+
 list an expeiment which uses package? CNH
 
 6.3.1.7 Tapering: Large, Danabasoglu and Doney, JPO 1997 
@@ -527,6 +548,10 @@ list an expeiment which uses package? CNH
  + get bathymetry pre-processing stuff from Patrick and then describe it
 
  + add something on spgrid mesh generator
+ o Grid generation
+   - more explanation and some step-by-step examples
+   - plotting grid examples
+
 
  + add in gmaze PV calculation scripts plus write up on how it is calculated
      http://mitgcm.org/cgi-bin/viewcvs.cgi/MITgcm_contrib/gmaze_pv/
@@ -542,8 +567,12 @@ andrea
 10. Under development
 
 Constantinos LCML
+ o Legend/LCML examples and explanation
+   - examples and explanation!
+
 
 
 Bibliography
 
  tidy up from misc - .tex
+
