@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_examples/text/model_examples.tex,v 1.16 2008/01/15 19:59:51 jmc Exp $
+% $Header: /u/gcmpack/manual/s_examples/text/model_examples.tex,v 1.17 2008/01/15 21:14:34 jmc Exp $
 % $Name:  $
 
 \section[MITgcm Example Experiments]{Example experiments}
@@ -24,63 +24,58 @@ Each example is briefly described below.
 
 \begin{enumerate}
   
-\item \texttt{advection\_in\_gyre\_circulation} - test of various
+\item \texttt{tutorial_advection\_in\_gyre} - test of various
   advection schemes in a single-layer double-gyre experiment.
   This experiment is described in detail in section
   \ref{sect:eg-adv-gyre}.
-
-\item \texttt{tutorial\_barotropic\_gyre} - single layer, ocean double
-  gyre (barotropic with free-surface). This experiment is described in
-  detail in section \ref{sect:eg-baro}.
 
 \item \texttt{tutorial\_baroclinic\_gyre} - Four layer, ocean double
   gyre. This experiment is described in detail in section
   \ref{sect:eg-fourlayer}.
 
-\item \texttt{tutorial\_global\_oce\_latlon} - 4x4 degree global ocean
-  simulation with steady climatological forcing. This experiment is
-  described in detail in section \ref{sect:eg-global}.
+\item \texttt{tutorial\_barotropic\_gyre} - single layer, ocean double
+  gyre (barotropic with free-surface). This experiment is described in
+  detail in section \ref{sect:eg-baro}.
 
-\item \texttt{exp4} - Flow over a Gaussian bump in open-water or
-  channel with open boundaries.
-  
+\item \texttt{tutorial\_cfc\_offline} Offline form of the MITgcm to
+  study advection of a passive tracer and CFCs.
+
 \item \texttt{tutorial\_deep\_convection} - Inhomogenously forced
   ocean convection in a doubly periodic box. This experiment is
   described in detail in section \ref{sect:eg-bconv}.
 
-\item \texttt{front\_relax} - Relaxation of an ocean thermal front
-  (test for Gent/McWilliams scheme). 2D (Y-Z).
+\item \texttt{tutorial\_global\_oce\_biogeo} Ocean model coupled to
+  the dissolved inorganic carbon biogeochemistry model. This
+  experiment is described in detail in section
+  \ref{sect:eg-biogeochem_tutorial}.
 
-\item \texttt{internal\_wave} - Ocean internal wave forced by open
-  boundary conditions.
-  
-\item \texttt{natl\_box} - Eastern subtropical North Atlantic with KPP
-  scheme; 1 month integration
-  
-\item \texttt{hs94.1x64x5} - Zonal averaged atmosphere using Held and
-  Suarez '94 forcing.
-  
-\item \texttt{hs94.128x64x5} - 3D atmosphere dynamics using Held and
-  Suarez '94 forcing.
-  
+\item \texttt{tutorial\_global\_oce\_in\_p} Global circulation in
+  pressure coordinate (non-Boussinesq ocean model). Described in
+  detail in section \ref{sect:eg-globalpressure}.
+
+\item \texttt{tutorial\_global\_oce\_latlon} - 4x4 degree global ocean
+  simulation with steady climatological forcing. This experiment is
+  described in detail in section \ref{sect:eg-global}.
+
+\item \texttt{tutorial\_global\_oce\_optim} Global ocean state
+  estimation at $4^\circ$ resolution.  This experiment is described in
+  detail in section \ref{sect:eg-global_state_estimate}.
+
 \item \texttt{tutorial\_held\_suarez\_cs} - 3D atmosphere dynamics
   using Held and Suarez (1994) forcing on the cubed sphere.  This
   experiment is described in detail in section \ref{sect:eg-hs}.
   
-\item \texttt{aim.5l\_zon-ave} - Intermediate Atmospheric physics.
-  Global Zonal Mean configuration, 1x64x5 resolution.
-  
-\item \texttt{aim.5l\_XZ\_Equatorial\_Slice} - Intermediate
-  Atmospheric physics, equatorial Slice configuration.  2D (X-Z).
-  
-\item \texttt{aim.5l\_Equatorial\_Channel} - Intermediate Atmospheric
-  physics. 3D Equatorial Channel configuration.
-  
-\item \texttt{aim.5l\_LatLon} - Intermediate Atmospheric physics.
-  Global configuration, on latitude longitude grid with 128x64x5 grid
-  points ($2.8^\circ$ resolution).
-  
-\item \texttt{aim.5l\_cs}
+\item \texttt{tutorial\_offline} Offline form of the MITgcm to study
+  advection of a passive tracer.  This experiment is described in
+  detail in section \ref{sect:eg-offline}.
+
+\item \texttt{tutorial\_plume\_on\_slope} Gravity Plume on a
+  continental slope.  This experiment is described in detail in
+  section \ref{sect:eg-gravityplume}.
+
+\item \texttt{tutorial\_tracer\_adjsens} Simple passive tracer
+  experiment. Includes derivative calculation. This experiment is
+  described in detail in section \ref{sect:eg-simple-tracer}.
 
 \item \texttt{adjustment.128x64x1} Barotropic adjustment problem on
   latitude longitude grid with 128x64 grid points ($2.8^\circ$ resolution).
@@ -90,7 +85,7 @@ Each example is briefly described below.
   resolution).
   
 \item \texttt{advect\_cs} Two-dimensional passive advection test on
-  cube sphere grid.
+  cube sphere grid (32x32 grid points per face, roughly $2.8^\circ$)
   
 \item \texttt{advect\_xy} Two-dimensional (horizontal plane) passive
   advection test on Cartesian grid.
@@ -98,44 +93,17 @@ Each example is briefly described below.
 \item \texttt{advect\_xz} Two-dimensional (vertical plane) passive
   advection test on Cartesian grid.
   
-\item \texttt{tutorial\_tracer\_adjsens} Simple passive tracer
-  experiment. Includes derivative calculation. This experiment is
-  described in detail in section \ref{sect:eg-simple-tracer}.
-
-\item \texttt{flt\_example} Example of using float package.
+\item \texttt{aim.5l\_Equatorial\_Channel}
+  - 5-levels Intermediate Atmospheric physics, 
+  3D Equatorial Channel configuration.
   
-\item \texttt{global\_ocean.90x40x15} Global circulation with GM, flux
-  boundary conditions and poles.
-
-\item \texttt{tutorial\_global\_oce\_in\_p} Global circulation in
-  pressure coordinate (non-Boussinesq ocean model). Described in
-  detail in section \ref{sect:eg-globalpressure}.
-
-\item \texttt{solid-body.cs-32x32x1} Solid body rotation test for cube
-  sphere grid.
-
-\item \texttt{tutorial\_plume\_on\_slope} Gravity Plume on a
-  continental slope.  This experiment is described in detail in
-  section \ref{sect:eg-gravityplume}.
-
-\item \texttt{tutorial\_global\_oce\_biogeo} Ocean model coupled to
-  the dissolved inorganic carbon biogeochemistry model. This
-  experiment is described in detail in section
-  \ref{sect:eg-biogeochem_tutorial}.
-
-\item \texttt{tutorial\_global\_oce\_optim} Global ocean state
-  estimation at $4^\circ$ resolution.  This experiment is described in
-  detail in section \ref{sect:eg-global_state_estimate}.
-
-\item \texttt{tutorial\_offline} Offline form of the MITgcm to study
-  advection of a passive tracer.  This experiment is described in
-  detail in section \ref{sect:eg-offline}.
-
-\item \texttt{rotating\_tank} Rotating tank simulation in cylindrical
-  coordinates.  This experiment is described in detail in section
-  \ref{sect:eg-tank}.
-
-\item \texttt{MLAdjust} Simple test for different viscosity formulations.
+\item \texttt{aim.5l\_LatLon} - 5-levels Intermediate Atmospheric physics,
+  Global configuration, on latitude longitude grid with 128x64x5 grid
+  points ($2.8^\circ$ resolution).
+  
+\item \texttt{aim.5l\_cs} - 5-levels Intermediate Atmospheric physics,
+  Global configuration on cube sphere grid 
+  (32x32 grid points per face, roughly $2.8^\circ$). 
 
 \item \texttt{bottom\_ctrl\_5x5} Adjoint test using the bottom
   topography as the control parameter.
@@ -147,9 +115,12 @@ Each example is briefly described below.
 
 \item \texttt{exp2} Old version of the global ocean experiment.
 
+\item \texttt{exp4} - Flow over a Gaussian bump in open-water or
+  channel with open boundaries.
+  
 \item \texttt{exp5} Deep convection.
 
-\item \texttt{fizhi-cs-32x32x10} Global atmospheric simulation with
+\item \texttt{fizhi-cs-32x32x40} Global atmospheric simulation with
   realistic topography, 10 vertical levels, a cubed sphere grid and
   the full atmospheric physics package.
 
@@ -161,6 +132,14 @@ Each example is briefly described below.
 \item \texttt{fizhi-gridalt-hs} Global atmospheric simulation
   Held-Suarez (1994) forcing, with the physical forcing and the
   dynamical forcing running on different vertical grids.
+
+\item \texttt{flt\_example} Example of using float package.
+  
+\item \texttt{front\_relax} - Relaxation of an ocean thermal front
+  (test for Gent/McWilliams scheme). 2D (Y-Z).
+
+\item \texttt{global\_ocean.90x40x15} Global circulation with GM, flux
+  boundary conditions and poles.
 
 \item \texttt{global\_ocean.cs32x15} Global ocean experiment on the
   cubed sphere grid, using thermodynamic sea ice and bulk force
@@ -174,11 +153,20 @@ Each example is briefly described below.
   grid using the exf package. Similar to global\_ocean.90x40x15
   experiment.
 
+\item \texttt{hs94.128x64x5} - 3D atmosphere dynamics using Held and
+  Suarez '94 forcing.
+  
+\item \texttt{hs94.1x64x5} - Zonal averaged atmosphere using Held and
+  Suarez '94 forcing.
+  
 \item \texttt{hs94.cs-32x32x5} 3D atmosphere dynamics using Held and
   Suarez (1994) forcing on the cubed sphere. 5 vertical levels.
 
 \item \texttt{ideal\_2D\_oce} Idealized 2D global ocean simulation on
   an aqua planet.
+
+\item \texttt{internal\_wave} - Ocean internal wave forced by open
+  boundary conditions.
 
 \item \texttt{inverted\_barometer} Simple test of ocean response to
   atmospheric pressure loading.
@@ -189,8 +177,17 @@ Each example is briefly described below.
 \item \texttt{matrix\_example} Test of experimental method to
   accelerated convergence towards equillibrium.
 
-\item \texttt{tutorial\_cfc\_offline} Offline form of the MITgcm to
-  study advection of a passive tracer and CFCs.
+\item \texttt{MLAdjust} Simple test for different viscosity formulations.
+
+\item \texttt{natl\_box} - Eastern subtropical North Atlantic with KPP
+  scheme; 1 month integration
+  
+\item \texttt{rotating\_tank} Rotating tank simulation in cylindrical
+  coordinates.  This experiment is described in detail in section
+  \ref{sect:eg-tank}.
+
+\item \texttt{solid-body.cs-32x32x1} Solid body rotation test for cube
+  sphere grid.
 
 \item \texttt{vermix} Simple test in a small domain (3 columns) for
   ocean vertical mixing schemes.
@@ -269,13 +266,13 @@ compile the code.
 
 
 \newpage
-\input{part3/case_studies/advection_in_gyre_circulation/adv_gyre.tex}
-
-\newpage
 \input{part3/case_studies/barotropic_gyre/baro.tex}
 
 \newpage
 \input{part3/case_studies/fourlayer_gyre/fourlayer.tex}
+
+\newpage
+\input{part3/case_studies/advection_in_gyre_circulation/adv_gyre.tex}
 
 \newpage
 \input{part3/case_studies/climatalogical_ogcm/climatalogical_ogcm.tex}
