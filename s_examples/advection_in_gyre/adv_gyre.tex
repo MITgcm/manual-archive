@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_examples/advection_in_gyre/adv_gyre.tex,v 1.8 2008/01/15 21:48:27 cnh Exp $
+% $Header: /u/gcmpack/manual/s_examples/advection_in_gyre/adv_gyre.tex,v 1.9 2008/01/15 22:29:10 cnh Exp $
 % $Name:  $
 
 \bodytext{bgcolor="#FFFFFFFF"}
@@ -63,8 +63,15 @@ the $-U \cdot \nabla C$ term that are available
 
 \subsection{Introducting a tracer into the flow}
 
- The ptracers package (see section \ref{sec:pkg:ptracers} for a more complete discussion
-of the ptracers package) 
+ The MITgcm ptracers package (see section \ref{sec:pkg:ptracers} for a more complete discussion
+of the ptracers package and section \ref{sec:pkg:using} for a general introduction to MITgcm 
+packages) provides pre-coded support for a simple passive tracer with an initial
+distribution at simulation time $t=0$ of $C_0(x,y,z)$. The steps required to use this capability
+are 
+\begin{enumerate}
+\item[Activating package ptracers] 
+\end{enumerate}
+
 - activating ptracers
 - setting initial distribution
 
@@ -86,7 +93,7 @@ To intro
 \item{Positive definite}
 \end{enumerate}
 
-
+\subsection{Code and Parameters files for this tutorial}
  
 
 
