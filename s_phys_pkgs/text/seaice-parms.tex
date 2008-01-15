@@ -1,13 +1,15 @@
 \newpage
 
 \begin{table}
-\hspace*{-1.5in}
-\begin{tabular}{lllc}
-
+{\small
+%\hspace*{-1.5in}
+\begin{tabular}{|lllc|}
+\hline
+  & & & \\
   \textbf{Name}  &  \textbf{Default value}  
     &  \textbf{Description}   &  \textbf{Reference}  \\
   & & & \\
-
+\hline \hline
    SEAICEwriteState    &                     T
     &   write sea ice state to file 
     &  %---ref---
@@ -24,19 +26,19 @@
     &   iterations for ice heat budget 
     &  %---ref---
     \\
-   SEAICE\_deltaTtherm  &                   3.600000000000000E+03
+   SEAICE\_deltaTtherm  &                   3.60000E+03
     &   thermodynamic timestep 
     &  %---ref---
     \\
-   SEAICE\_deltaTdyn    &                   3.600000000000000E+03
+   SEAICE\_deltaTdyn    &                   3.60000E+03
     &   dynamic timestep 
     &  %---ref---
     \\
-   SEAICE\_dumpFreq     &                   0.000000000000000E+00
+   SEAICE\_dumpFreq     &                   0.00000E+00
     &   dump frequency 
     &  %---ref---
     \\
-   SEAICE\_taveFreq     &                   3.600000000000000E+04
+   SEAICE\_taveFreq     &                   3.60000E+04
     &   time-averaging frequency 
     &  %---ref---
     \\
@@ -56,123 +58,124 @@
     &   write TimeAverage using MNC 
     &  %---ref---
     \\
-   SEAICE\_initialHEFF  &                   1.000000000000000E+00
+   SEAICE\_initialHEFF  &                   1.00000E+00
     &   initial sea-ice thickness 
     &  %---ref---
     \\
-   SEAICE\_drag         &                   2.000000000000000E-03
+   SEAICE\_drag         &                   2.00000E-03
     &   air-ice drag coefficient 
     &  %---ref---
     \\
-   OCEAN\_drag          &                   1.000000000000000E-03
+   OCEAN\_drag          &                   1.00000E-03
     &   air-ocean drag coefficient 
     &  %---ref---
     \\
-   SEAICE\_waterDrag    &                   5.500000000000000E+00
+   SEAICE\_waterDrag    &                   5.50000E+00
     &   water-ice drag 
     &  %---ref---
     \\
-   SEAICE\_dryIceAlb    &                   7.500000000000000E-01
+   SEAICE\_dryIceAlb    &                   7.50000E-01
     &   winter albedo 
     &  %---ref---
     \\
-   SEAICE\_wetIceAlb    &                   6.600000000000000E-01
+   SEAICE\_wetIceAlb    &                   6.60000E-01
     &   summer albedo 
     &  %---ref---
     \\
-   SEAICE\_drySnowAlb   &                   8.400000000000000E-01
+   SEAICE\_drySnowAlb   &                   8.40000E-01
     &   dry snow albedo 
     &  %---ref---
     \\
-   SEAICE\_wetSnowAlb   &                   7.000000000000000E-01
+   SEAICE\_wetSnowAlb   &                   7.00000E-01
     &   wet snow albedo 
     &  %---ref---
     \\
-   SEAICE\_waterAlbedo  &                   1.000000000000000E-01
+   SEAICE\_waterAlbedo  &                   1.00000E-01
     &   water albedo 
     &  %---ref---
     \\
-   SEAICE\_strength     &                   2.750000000000000E+04
+   SEAICE\_strength     &                   2.75000E+04
     &   sea-ice strength Pstar 
     &  %---ref---
     \\
-   SEAICE\_sensHeat     &                   2.284000000000000E+00
+   SEAICE\_sensHeat     &                   2.28400E+00
     &   sensible heat transfer 
     &  %---ref---
     \\
-   SEAICE\_latentWater  &                   5.687500000000000E+03
+   SEAICE\_latentWater  &                   5.68750E+03
     &   latent heat transfer for water 
     &  %---ref---
     \\
-   SEAICE\_latentIce    &                   6.447400000000000E+03
+   SEAICE\_latentIce    &                   6.44740E+03
     &   latent heat transfer for ice 
     &  %---ref---
     \\
-   SEAICE\_iceConduct   &                   2.165600000000000E+00
+   SEAICE\_iceConduct   &                   2.16560E+00
     &   sea-ice conductivity 
     &  %---ref---
     \\
-   SEAICE\_snowConduct  &                   3.100000000000000E-01
+   SEAICE\_snowConduct  &                   3.10000E-01
     &   snow conductivity 
     &  %---ref---
     \\
-   SEAICE\_emissivity   &                   5.500000000000000E-08
+   SEAICE\_emissivity   &                   5.50000E-08
     &   Stefan-Boltzman 
     &  %---ref---
     \\
-   SEAICE\_snowThick    &                   1.500000000000000E-01
+   SEAICE\_snowThick    &                   1.50000E-01
     &   cutoff snow thickness 
     &  %---ref---
     \\
-   SEAICE\_shortwave    &                   3.000000000000000E-01
+   SEAICE\_shortwave    &                   3.00000E-01
     &   penetration shortwave radiation 
     &  %---ref---
     \\
-   SEAICE\_freeze       &                  -1.960000000000000E+00
+   SEAICE\_freeze       &                  -1.96000E+00
     &   freezing temp. of sea water 
     &  %---ref---
     \\
-   LSR\_ERROR           &                   1.000000000000000E-12
+   LSR\_ERROR           &                   1.00000E-12
     &   sets accuracy of LSR solver 
     &  %---ref---
     \\
-   DIFF1               &                   4.000000000000000E-03
+   DIFF1               &                   4.00000E-03
     &   parameter used in advect.F 
     &  %---ref---
     \\
-   A22                 &                   1.500000000000000E-01
+   A22                 &                   1.50000E-01
     &   parameter used in growth.F 
     &  %---ref---
     \\
-   HO                  &                   5.000000000000000E-01
+   HO                  &                   5.00000E-01
     &   demarcation ice thickness 
     &  %---ref---
     \\
-   MAX\_HEFF            &                   1.000000000000000E+01
+   MAX\_HEFF            &                   1.00000E+01
     &   maximum ice thickness 
     &  %---ref---
     \\
-   MIN\_ATEMP           &                  -5.000000000000000E+01
+   MIN\_ATEMP           &                  -5.00000E+01
     &   minimum air temperature 
     &  %---ref---
     \\
-   MIN\_LWDOWN          &                   6.000000000000000E+01
+   MIN\_LWDOWN          &                   6.00000E+01
     &   minimum downward longwave 
     &  %---ref---
     \\
-   MAX\_TICE            &                   3.000000000000000E+01
+   MAX\_TICE            &                   3.00000E+01
     &   maximum ice temperature 
     &  %---ref---
     \\
-   MIN\_TICE            &                  -5.000000000000000E+01
+   MIN\_TICE            &                  -5.00000E+01
     &   minimum ice temperature 
     &  %---ref---
     \\
-   SEAICE\_EPS          &                   1.000000000000000E-10
+   SEAICE\_EPS          &                   1.00000E-10
     &   reduce derivative singularities 
     &  %---ref---
     \\
-
+\hline
 \end{tabular}
+}
 \end{table}
 
