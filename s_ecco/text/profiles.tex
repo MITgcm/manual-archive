@@ -1,0 +1,96 @@
+\section{Profiles: transect and float ocean sampling of MITgcm
+\label{sectionprofiles}}
+\begin{rawhtml}
+<!-- CMIREDIR:profiles: -->
+\end{rawhtml}
+
+Author: Gael Forget
+
+\bigskip
+
+The purpose of pkg/profiles is to allow sampling of MITgcm runs according to a chosen pathway (after a ship or a drifter, along altimeter tracks, etc.), typically leading to easy model-data comparisons. Given input files that contain positions and dates, pkg/profiles will interpolate the model trajectory at the observed location. In particular, pkg/profiles can be used to do model-data comparison online and formulate a least-squares problem (ECCO application). 
+
+\bigskip
+
+pkg/profiles is associated with three CPP keys: \\ 
+ (k1) ALLOW\_PROFILES \\
+ (k2) ALLOW\_PROFILES\_GENERICGRID \\
+ (k3) ALLOW\_PROFILES\_CONTRIBUTION \\
+k1 switches the package on. By default, pkg/profiles assumes a regular lat-long grid. For other grids such as the cubed sphere, k2 and pre-processing (see below) are necessary. k3 switches the least-squares application on (pkg/ecco needed). pkg/profiles requires needs pkg/cal and netcdf libraries. 
+
+\bigskip
+
+The namelist (data.profiles) is illustrated in table \ref{PkgProfNamelist}. This example includes two input netcdf files name (ARGOifremer\_r8.nc and XBT\_v5.nc are to be provided) and {\it cost function} multipliers (for least-squares only). The first index is a file number and the second index (in mult* only) is a variable number. By convention, the variable number is an integer ranging 1 to 6: temperature, salinity, zonal velocity, meridional velocity, sea surface height anomaly, and passive tracer. 
+
+\bigskip
+
+The input file structure is illustrated in table \ref{PkgProfInput}. To create such files, one can use the netcdf\_ecco\_create.m matlab script, which can be checked out of \\ 
+MITgcm\_contrib/gael/profilesMatlabProcessing/ \\
+along with a full suite of matlab scripts associated with pkg/profiles. At run time, each file is scanned to determine which variables are included; these will be interpolated. The (final) output file structure is similar but with interpolated model values in prof\_T etc., and it contains model mask variables (e.g. prof\_Tmask). The very model output consists of one binary (or netcdf) file per processor. The final netcdf output is to be built from those using netcdf\_ecco\_recompose.m (offline).
+
+\bigskip
+
+When the k2 option is used (e.g. for cubed sphere runs), the input file is to be completed with interpolation grid points and coefficients computed offline using netcdf\_ecco\_GenericgridMain.m. Typically, you would first provide the standard namelist and files. After detecting that interpolation information is missing, the model will generate special grid files (profilesXCincl1PointOverlap* etc.) and then stop. You then want to run netcdf\_ecco\_GenericgridMain.m using the special grid files. {\it This operation could eventually be inlined.}
+
+\bigskip
+
+\begin{table}[htbp]
+\begin{tabbing}
+\#\\
+\# ******************\\
+\# PROFILES cost function\\
+\# ****************** \\
+\&PROFILES\_NML\\
+\#\\
+ profilesfiles(1)= 'ARGOifremer\_r8',\\
+ mult\_profiles(1,1)   = 1.,\\
+ mult\_profiles(1,2)   = 1.,\\
+ profilesfiles(2)= 'XBT\_v5',\\
+ mult\_profiles(2,1)   = 1.,\\
+\#\\
+ /\\
+\end{tabbing}
+\caption{pkg/profiles: data.profiles example.}
+\label{PkgProfNamelist}
+\end{table}
+
+
+
+\begin{table}[phtb]
+\begin{tabbing}
+netcdf XBT\_v5 \{\\
+dimensions:\\
+\hspace{0.1cm} \= i\=PROF = 278026 ;\\
+\>  iDEPTH = 55 ;\\
+\>  lTXT = 30 ;\\
+variables:\\
+\>  double depth(iDEPTH) ;\\
+\>  \> depth:units = "meters" ;\\
+\>  double prof\_YYYYMMDD(iPROF) ;\\
+\>  \> prof\_YYYYMMDD:missing\_value = -9999. ;\\
+\>  \> prof\_YYYYMMDD:long\_name = "year (4 digits), month (2 digits), day (2 digits)" ;\\
+\>  double prof\_HHMMSS(iPROF) ;\\
+\>  \> prof\_HHMMSS:missing\_value = -9999. ;\\
+\>  \> prof\_HHMMSS:long\_name = "hour (2 digits), minute (2 digits), seconde (2 digits)" ;\\
+\>  double prof\_lon(iPROF) ;\\
+\>  \> prof\_lon:units = "(degree E)" ;\\
+\>  \> prof\_lon:missing\_value = -9999. ;\\
+\>  double prof\_lat(iPROF) ;\\
+\>  \> prof\_lat:units = "(degree N)" ;\\
+\>  \> prof\_lat:missing\_value = -9999. ;\\
+\>  char prof\_descr(iPROF, lTXT) ;\\
+\>  \> prof\_descr:long\_name = "profile description" ;\\
+\>  double prof\_T(iPROF, iDEPTH) ;\\
+\>  \> prof\_T:long\_name = "potential temperature" ;\\
+\>  \> prof\_T:units = "degree Celsius" ;\\
+\>  \> prof\_T:missing\_value = -9999. ;\\
+\>  double prof\_Tweight(iPROF, iDEPTH) ;\\
+\>  \> prof\_Tweight:long\_name = "weights" ;\\
+\>  \> prof\_Tweight:units = "(degree Celsius)\^-2" ;\\
+\>  \> prof\_Tweight:missing\_value = -9999. ;\\
+\}\\
+\end{tabbing}
+\caption{pkg/profiles: input file structure as would be shown by "ncdump -h ARGOifremer\_r8.nc".}
+\label{PkgProfInput}
+\end{table}
+
