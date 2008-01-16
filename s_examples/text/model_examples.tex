@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_examples/text/model_examples.tex,v 1.19 2008/01/15 23:24:59 jmc Exp $
+% $Header: /u/gcmpack/manual/s_examples/text/model_examples.tex,v 1.20 2008/01/16 21:03:40 jmc Exp $
 % $Name:  $
 
 \section[MITgcm Example Experiments]{Example experiments}
@@ -24,7 +24,7 @@ Each example is briefly described below.
 
 \begin{enumerate}
   
-\item \texttt{tutorial\_advection\_in\_gyre} - test of various
+\item \texttt{tutorial\_advection\_in\_gyre} - Test of various
   advection schemes in a single-layer double-gyre experiment.
   This experiment is described in detail in section
   \ref{sect:eg-adv-gyre}.
@@ -33,11 +33,11 @@ Each example is briefly described below.
   gyre. This experiment is described in detail in section
   \ref{sect:eg-fourlayer}.
 
-\item \texttt{tutorial\_barotropic\_gyre} - single layer, ocean double
+\item \texttt{tutorial\_barotropic\_gyre} - Single layer, ocean double
   gyre (barotropic with free-surface). 
   This experiment is described in detail in section \ref{sect:eg-baro}.
 
-\item \texttt{tutorial\_cfc\_offline} Offline form of the MITgcm to
+\item \texttt{tutorial\_cfc\_offline} - Offline form of the MITgcm to
   study advection of a passive tracer and CFCs.
   This experiment is described in detail in section \ref{sect:eg-offline-cfc}.
 
@@ -45,12 +45,12 @@ Each example is briefly described below.
   ocean convection in a doubly periodic box. This experiment is
   described in detail in section \ref{sect:eg-bconv}.
 
-\item \texttt{tutorial\_global\_oce\_biogeo} Ocean model coupled to
+\item \texttt{tutorial\_global\_oce\_biogeo} - Ocean model coupled to
   the dissolved inorganic carbon biogeochemistry model. This
   experiment is described in detail in section
   \ref{sect:eg-biogeochem_tutorial}.
 
-\item \texttt{tutorial\_global\_oce\_in\_p} Global ocean simulation in
+\item \texttt{tutorial\_global\_oce\_in\_p} - Global ocean simulation in
   pressure coordinate (non-Boussinesq ocean model). Described in
   detail in section \ref{sect:eg-globalpressure}.
 
@@ -58,7 +58,7 @@ Each example is briefly described below.
   simulation with steady climatological forcing. This experiment is
   described in detail in section \ref{sect:eg-global}.
 
-\item \texttt{tutorial\_global\_oce\_optim} Global ocean state
+\item \texttt{tutorial\_global\_oce\_optim} - Global ocean state
   estimation at $4^\circ$ resolution.  This experiment is described in
   detail in section \ref{sect:eg-global_state_estimate}.
 
@@ -66,33 +66,34 @@ Each example is briefly described below.
   using Held and Suarez (1994) forcing on cubed sphere grid.  This
   experiment is described in detail in section \ref{sect:eg-hs}.
   
-\item \texttt{tutorial\_offline} Offline form of the MITgcm to study
+\item \texttt{tutorial\_offline} - Offline form of the MITgcm to study
   advection of a passive tracer.  This experiment is described in
   detail in section \ref{sect:eg-offline}.
 
-\item \texttt{tutorial\_plume\_on\_slope} Gravity Plume on a
+\item \texttt{tutorial\_plume\_on\_slope} - Gravity Plume on a
   continental slope.  This experiment is described in detail in
   section \ref{sect:eg-gravityplume}.
 
-\item \texttt{tutorial\_tracer\_adjsens} Simple passive tracer
+\item \texttt{tutorial\_tracer\_adjsens} - Simple passive tracer
   experiment. Includes derivative calculation. This experiment is
   described in detail in section \ref{sect:eg-simple-tracer-adjoint}.
 
-\item \texttt{adjustment.128x64x1} Barotropic adjustment problem on
+\item \texttt{adjustment.128x64x1} - Barotropic adjustment problem on
   latitude longitude grid with 128x64 grid points ($2.8^\circ$ resolution).
   
-\item \texttt{adjustment.cs-32x32x1} Barotropic adjustment problem on
+\item \texttt{adjustment.cs-32x32x1} - Barotropic adjustment problem on
   cube sphere grid with 32x32 points per face (roughly $2.8^\circ$
-  resolution).
+  resolution).\\
+  Also contains a non-linear free-surface adjustment version ({\it input.nlfs/}).
   
 \item \texttt{advect\_cs} Two-dimensional passive advection test on
   cube sphere grid (32x32 grid points per face, roughly $2.8^\circ$)
   
-\item \texttt{advect\_xy} Two-dimensional (horizontal plane) passive
+\item \texttt{advect\_xy} - Two-dimensional (horizontal plane) passive
   advection test on Cartesian grid.\\
-  Also contains an additional set-up iusing Adams-Bashforth 3 (input.ab3\_c4).
+  Also contains an additional set-up using Adams-Bashforth 3 ({\it input.ab3\_c4/}).
   
-\item \texttt{advect\_xz} Two-dimensional (vertical plane) passive
+\item \texttt{advect\_xz} - Two-dimensional (vertical plane) passive
   advection test on Cartesian grid.
   
 \item \texttt{aim.5l\_Equatorial\_Channel}
@@ -107,76 +108,84 @@ Each example is briefly described below.
   Global configuration on cube sphere grid 
   (32x32 grid points per face, roughly $2.8^\circ$).\\
   Also contains an additional set-up with an ocean mixed layer and thermodynamics
-  sea-ice (input.thSI).
+  sea-ice ({\it input.thSI/}).
 
-\item \texttt{biogeo} (to be removed)
-
-\item \texttt{bottom\_ctrl\_5x5} Adjoint test using the bottom
+\item \texttt{bottom\_ctrl\_5x5} - Adjoint test using the bottom
   topography as the control parameter.
 
-\item \texttt{cfc\_example} Global ocean with online computation and
+\item \texttt{cfc\_example} - Global ocean with online computation and
   advection of CFC11 and CFC12.
 
-\item \texttt{cpl\_aim+ocn}
+\item \texttt{cpl\_aim+ocn} - Coupled Ocean - Atmosphere realistic 
+  configuration on cubed-sphere cs32 horizontal grid, 
+  using Intermediate Atmospheric physics ({\it pkg/aim\_v23})
+  thermodynamics seaice ({\it pkg/thsice}) and land packages.
+  on cubed-sphere cs32 in a realistics configuration.
 
-\item \texttt{cpl\_atm2d+ocn}
+\item \texttt{cpl\_atm2d+ocn} - Coupled Ocean - Atmosphere realistic 
+  configuration using 2-D Atmospheric Model ({\it pkg/atm2d}).
 
-\item \texttt{deep\_anelastic}
+\item \texttt{deep\_anelastic} - Convection simulation on a giant planet:
+  relax both the Boussinesq approximation (anelastic) and the thin atmosphere
+  approximation (deep atmosphere).
 
-\item \texttt{dome} Idealized 3D test of a density-driven bottom current.
+\item \texttt{dome} - Idealized 3D test of a density-driven bottom current.
 
-\item \texttt{exp2} Old version of the global ocean experiment (no GM, 
+\item \texttt{exp2} - Old version of the global ocean experiment (no GM, 
       no partial-cells).\\
-  Also contains an additional set-up with ridid-lid (input.rigidLid).
+  Also contains an additional set-up with ridid-lid ({\it input.rigidLid/}).
 
 \item \texttt{exp4} - Flow over a Gaussian bump in open-water or
   channel with open boundaries.
   
-\item \texttt{exp5} Deep convection.
+\item \texttt{exp5} - Deep convection.
 
-\item \texttt{fizhi-cs-32x32x40} Global atmospheric simulation with
-  realistic topography, 10 vertical levels, a cubed sphere grid and
+\item \texttt{fizhi-cs-32x32x40} - Global atmospheric simulation with
+  realistic topography, 40 vertical levels, a cubed sphere grid and
   the full atmospheric physics package.
 
-\item \texttt{fizhi-cs-aqualev20} Global atmospheric simulation on an
+\item \texttt{fizhi-cs-aqualev20} - Global atmospheric simulation on an
   aqua planet with full atmospheric physics. Run is perpetual march
   with an analytical SST distribution.  This is the configuration for
   the APE (Aqua Planet Experiment) participation experiment.
 
-\item \texttt{fizhi-gridalt-hs} Global atmospheric simulation
+\item \texttt{fizhi-gridalt-hs} - Global atmospheric simulation
   Held-Suarez (1994) forcing, with the physical forcing and the
   dynamical forcing running on different vertical grids.
 
-\item \texttt{flt\_example} Example of using float package.
+\item \texttt{flt\_example} - Example of using float package.
   
 \item \texttt{front\_relax} - Relaxation of an ocean thermal front
-  (test for Gent/McWilliams scheme). 2D (Y-Z).
+  (test for Gent/McWilliams scheme). 2D (Y-Z).\\
+  Also contains an additional set-up with Mixed-Layer Eddy parameterization
+  (Ferrari \& McWilliams, 2007) ({\it input.mxl/}).
 
-\item \texttt{global1x1\_tot} ECCO-GODAE production configuration
+\item \texttt{global1x1\_tot} - ECCO-GODAE production configuration
  version 1, 2 \& 3
 
-\item \texttt{global2x2\_tot} ECCO production configuration version 0
+\item \texttt{global2x2\_tot} - ECCO production configuration version 0
 
 \item \texttt{global\_ocean.90x40x15} Global ocean simulation at 4x4 
   degree resolution. Similar to tutorial\_global\_oce\_latlon, with
   quasi-non-hydrostatics and non-hydrostatic metric terms.\\
-  Also contains an adjoint set-up (code\_ad, input\_ad).
+  Also contains an adjoint set-up ({\it code\_ad/, input\_ad/}).
 
-\item \texttt{global\_ocean.cs32x15} Global ocean experiment on the
+\item \texttt{global\_ocean.cs32x15} - Global ocean experiment on the
   cubed sphere grid.\\ 
   Also contains additional set-ups:
   \begin{enumerate}
-   \item non-hydrostratic with biharmonic viscosity (input.viscA4)
-   \item using thermodynamic sea ice and bulk force (input.thsice)
-   \item using thermodynamic (pkg/thsice) dynamics (pkg/seaice) sea-ice
-         and exf pkg (input.icedyn)
+   \item non-hydrostratic with biharmonic viscosity ({\it input.viscA4/})
+   \item using thermodynamic sea ice and bulk force ({\it input.thsice/})
+   \item using thermodynamic ({\it pkg/thsice}) dynamics ({\it pkg/seaice}) sea-ice
+         and EXF package ({\it input.icedyn/})
   \end{enumerate}
 
-\item \texttt{global\_ocean\_ebm} Global ocean experiment on a lat-lon
+\item \texttt{global\_ocean\_ebm} - Global ocean experiment on a lat-lon
   grid coupled to an atmospheric energy balance model. Similar to
-  global\_ocean.90x40x15 experiment.
+  global\_ocean.90x40x15 experiment.\\
+  Also contains an adjoint set-up ({\it code\_ad/, input\_ad/}).
 
-\item \texttt{global\_with\_exf} Global ocean experiment on a lat-lon
+\item \texttt{global\_with\_exf} - Global ocean experiment on a lat-lon
   grid using the exf package. Similar to global\_ocean.90x40x15
   experiment.
 
@@ -184,52 +193,91 @@ Each example is briefly described below.
   using Held and Suarez '94 forcing.
   
 \item \texttt{hs94.1x64x5} - Zonal averaged atmosphere dynamics 
-  using Held and Suarez '94 forcing.
+  using Held and Suarez '94 forcing.\\
+  Also contains an adjoint set-up ({\it code\_ad/, input\_ad/}).
   
-\item \texttt{hs94.cs-32x32x5} 3D atmosphere dynamics using Held and
-  Suarez (1994) forcing on the cubed sphere. 5 vertical levels.
+\item \texttt{hs94.cs-32x32x5} - 3D atmosphere dynamics using Held and
+  Suarez (1994) forcing on the cubed sphere. 5 vertical levels.\\
+  Also contains an additional set-up with Implicit Internal gravity waves
+  treatment ({\it input.impIGW/}).
 
-\item \texttt{ideal\_2D\_oce} Idealized 2D global ocean simulation on
+\item \texttt{ideal\_2D\_oce} - Idealized 2D global ocean simulation on
   an aqua planet.
 
 \item \texttt{internal\_wave} - Ocean internal wave forced by open
   boundary conditions.
 
-\item \texttt{inverted\_barometer} Simple test of ocean response to
+\item \texttt{inverted\_barometer} - Simple test of ocean response to
   atmospheric pressure loading.
 
-\item \texttt{isomip}
+\item \texttt{isomip} - ISOMIP like set-up including ice-shelf cavities
+  ({\it pkg/shelfice}).\\
+  Also contains an additional set-up with ({\it input.htd/})
+  but only Martin knows what "htd" stands for.
 
-\item \texttt{lab\_sea} Regional Labrador Sea simulation on a lat-lon
-  grid. Coupled to the sea ice model.
+\item \texttt{lab\_sea} - Regional Labrador Sea simulation on a lat-lon
+  grid using the sea ice package.\\
+  Also contains additional set-ups:
+  \begin{enumerate}
+   \item using the LSR solver (instead of EVP dynamics) ({\it input.lsr/})
+   \item using Hibler and Bryan (1987) sea-ice ocean stress ({\it input.hb87/})
+   \item using package {\it salt\_plume} ({\it input.salt\_plume/})
+  \end{enumerate}
+  and also 3 adjoint set-ups ({\it code\_ad/, input\_ad/, input\_ad.noseaicedyn/,
+  input\_ad.noseaice/}).
 
-\item \texttt{matrix\_example} Test of experimental method to
+\item \texttt{matrix\_example} - Test of experimental method to
   accelerated convergence towards equillibrium.
 
-\item \texttt{MLAdjust} Simple test for different viscosity formulations.
+\item \texttt{MLAdjust} - Simple tests for different viscosity formulations.\\
+  Also contains additional set-ups:
+  \begin{enumerate}
+   \item ({\it input.0.leith/})
+   \item ({\it input.0.leithD/})
+   \item ({\it input.0.smag/})
+   \item ({\it input.1.leith/})
+  \end{enumerate}
 
 \item \texttt{natl\_box} - Eastern subtropical North Atlantic with KPP
   scheme; 1 month integration
 
-\item \texttt{natl\_box\_adjoint}
+\item \texttt{natl\_box\_adjoint} - Eastern subtropical North Atlantic with KPP
+  scheme; adjoint set-up.
 
-\item \texttt{offline\_exf\_seaice}
+\item \texttt{offline\_exf\_seaice} - oceanic surface forcing computed
+  by bulk-formulae ({\it pkg/exf}) and inposed SST (offline ocean).\\
+  Also contains additional set-ups:
+  \begin{enumerate}
+   \item with sea-ice ({\it pkg/seaice}) thermodynamics ({\it input.seaicetd/})
+   \item an adjoint test ({\it code\_ad/, input\_ad/}).
+  \end{enumerate}
   
-\item \texttt{OpenAD}
+\item \texttt{OpenAD} simple Adjoint experiement (used also to test 
+  open-AD compiler)
 
 \item \texttt{rotating\_tank} Rotating tank simulation in cylindrical
   coordinates.  This experiment is described in detail in section
   \ref{sect:eg-tank}.
 
-\item \texttt{seaice\_obcs}
+\item \texttt{seaice\_obcs} similar to "lab\_sea" ({\it input.salt\_plume/})
+  experiment with only a fraction of the domain and open-boundary conditions
+  derived from "lab\_sea" experiment.
 
 \item \texttt{solid-body.cs-32x32x1} Solid body rotation test for cube
   sphere grid.
 
-\item \texttt{tidal\_basin\_2d}
+\item \texttt{tidal\_basin\_2d} 2-D vertical section (X-Z) with tidal forcing
 
 \item \texttt{vermix} Simple test in a small domain (3 columns) for
-  ocean vertical mixing schemes.
+  ocean vertical mixing schemes. The standard set-up ({\it input/}) uses
+  KPP scheme.\\
+  Also contains additional set-ups:
+  \begin{enumerate}
+   \item with Gaspar et al. (1990) ({\it pkg/ggl90}) scheme ({\it input.ggl90/})
+   \item with Mellor \& Yamada (1982) level 2. ({\it pkg/my82}) scheme ({\it input.my82/})
+   \item with Paluszkiewicz \& Romea (1997) ({\it pkg/opps}) scheme ({\it input.opps/})
+   \item with Pacanowski \& Philander (1981) ({\it pkg/pp81}) scheme ({\it input.pp81/})
+  \end{enumerate}
 
 \end{enumerate}
 
