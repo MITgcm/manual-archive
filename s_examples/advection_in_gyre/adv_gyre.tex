@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_examples/advection_in_gyre/adv_gyre.tex,v 1.10 2008/01/15 23:29:37 cnh Exp $
+% $Header: /u/gcmpack/manual/s_examples/advection_in_gyre/adv_gyre.tex,v 1.11 2008/01/16 02:45:30 cnh Exp $
 % $Name:  $
 
 \bodytext{bgcolor="#FFFFFFFF"}
@@ -74,13 +74,14 @@ distribution at simulation time $t=0$ of $C_0(x,y,z)$. The steps required to use
 are 
 \begin{enumerate}
 \item{\bf Activating the ptracers package.} This simply requires adding the line {\tt ptracers} to
-the {\tt packages.conf} file in the {\it code/} directory for the experiment.
+the {\tt packages.conf} file in the {\it code/} directory for the experiment. 
+\item{\bf Setting an initial tracer distribution.} 
 \end{enumerate}
 
-- activating ptracers
-- setting initial distribution
+Once the two steps above are complete we can proceed to examine how the tracer we have created is
+carried by the flow field and what properties of the tracer distribution are preserved under
+different advection schemes.
 
-To intro
 \subsection{Selecting an advection scheme}
 
 - flags in data and data.ptracers
