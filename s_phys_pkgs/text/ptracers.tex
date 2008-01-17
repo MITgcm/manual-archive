@@ -6,22 +6,98 @@
 
 \subsubsection {Introduction}
 
+This is a "passive" tracer package. Passive here means that the
+tracers don't affect the density of the water (as opposed to
+temperature and salinity) so no not actively affect the 
+physics of the ocean. Tracers are initialized, advected, diffused
+and various outputs are taken care of in this package.
+For methods to add additional sources and sinks of tracers use the pkg/gchem
+(section \ref{sec:pkg:gchem}).
+
+Can use up tp 3843 tracers. But can not use pkg/diagnostics with more 
+than about 90 tracers.
+Use utils/matlab/ioLb2num.m and num2ioLb.m to find correspondence
+between tracer number and tracer designation in the code for more
+than 99 tracers (since
+tracers only have two digit designations).
+
 \subsubsection {Equations}
 
 \subsubsection {Key subroutines and parameters}
 
-Run time parameters  set in {\bf data.ptracders}:
-$\bullet$ {\bf PTRACERS\_Iter0} which is the integer timestep when the tracer experiment
- is initialized. If {\bf nIter0} $=$ {\bf PTRACERS\_Iter0} then the tracers
- are initialized to zero or from initial files. If {\bf nIter0} $>$
- {\bf PTRACERS\_Iter0} then tracers (and previous timestep tendency terms)
+The only code you shoul dhave to modify is:
+{\bf PTRACERS\_SIZE.h} where you need to set in the number of tracers to
+be used in the experiment:  PTRACERS\_num.
+
+\vspace{.5cm}
+
+
+\noindent
+{bf RUN TIME PARAMETERS  SET IN {\bf data.ptracers}}: \\
+$\bullet$ {\bf PTRACERS\_Iter0} 
+which is the integer timestep when the tracer experiment
+ is initialized. If  nIter0 $=$  PTRACERS\_Iter0 then the tracers
+ are initialized to zero or from initial files. If nIter0 $>$
+  PTRACERS\_Iter0 then tracers (and previous timestep tendency terms)
   are read in from a the ptracers pickup file. Note that tracers
-  of zeros will be carried around if {\bf nIter0} $<$ {\bf PTRACERS\_Iter0}.
+  of zeros will be carried around if nIter0 $<$  PTRACERS\_Iter0.\\
+$\bullet$ {\bf PTRACERS\_numInUse}: number of tracers to be used in the
+run (needs to be $<=$ PTRACERS\_num set in PTRACERS\_SIZE.h)\\
+$\bullet$  {\bf PTRACERS\_dumpFreq}: defaults to dumpFreq (set in data)\\
+$\bullet$  {\bf PTRACERS\_taveFreq}: defaults to taveFreq (set in data)\\
+$\bullet$  {\bf PTRACERS\_monitorFreq}: defaults to monitorFreq (set in data)\\
+$\bullet$  {\bf PTRACERS\_timeave\_mnc}: needs useMNC, timeave\_mnc, default to false\\
+$\bullet$  {\bf PTRACERS\_snapshot\_mnc}:  needs useMNC, snapshot\_mnc, default to false \\
+$\bullet$  {\bf PTRACERS\_monitor\_mnc}: needs useMNC, monitor\_mnc, default to false\\
+$\bullet$  {\bf PTRACERS\_pickup\_write\_mnc}:  needs useMNC, pickup\_write\_mnc, default to false\\
+$\bullet$  {\bf PTRACERS\_pickup\_read\_mnc}: needs useMNC, pickup\_read\_mnc, default to false\\
+$\bullet$  {\bf PTRACERS\_useRecords}: defaults to false. If true, will write 
+all tracers in a single file, otherwise each tracer in a seperate file.\\
+
+\vspace{.5cm}
+
+The following can be set for each tracer (tracer number iTrc):\\
+$\bullet$  {\bf PTRACERS\_advScheme(iTrc)} will default to saltAdvScheme (set in data). For other options see Table \ref {tab:advectionShemes_summary}.\\
+$\bullet$  {\bf PTRACERS\_ImplVertAdv(iTrc)}: implicit vertical advection flag,
+ default to .FALSE.\\
+$\bullet$  {\bf PTRACERS\_diffKh(iTrc)}: horizontal Laplacian Diffusivity,
+dafaults to diffKhS (set in data).\\
+$\bullet$  {\bf PTRACERS\_diffK4(iTrc)}: Biharmonic Diffusivity, defaults to
+diffK4S (set in data).\\
+$\bullet$  {\bf PTRACERS\_diffKr(iTrc)}: vertical diffusion, defaults to un-set.\\
+$\bullet$  {\bf PTRACERS\_diffKrNr(k,iTrc)}: level specific vertical diffusion,
+defaults to diffKrNrS. Will be set to PTRACERS\_diffKr if this is set.\\
+$\bullet$  {\bf PTRACERS\_ref(k,iTrc)}: reference tracer value for each level k, 
+defaults to 0. Currently only used for
+dilution/concentration of tracers at surface if  PTRACERS\_EvPrRn(iTrc) is
+set and convertFW2Salt (set in data) is set to something other than -1
+(note default is convertFW2Salt=35).\\
+$\bullet$  {\bf PTRACERS\_EvPrRn(iTrc)}: tracer concentration in freshwater.
+Needed for calculation of dilution/concentration in surface layer due to
+freshwater addition/evaporation. Defaults to un-set in which case no
+dilution/concentration occurs.\\
+$\bullet$  {\bf PTRACERS\_useGMRedi(iTrc)}: apply GM or not. Defaults to
+useGMREdi.\\
+$\bullet$  {\bf PTRACERS\_useKPP(iTrc)}: apply KPP or not. Defaults to
+useKPP.\\
+$\bullet$  {\bf PTRACERS\_initialFile(iTrc)}: file with initial tracer 
+concentration. Will be used if PTRACERS\_Iter0 $=$ nIter0. Default
+is no name, in which case tracer is initialised as zero. If 
+ PTRACERS\_Iter0 $<$ nIter0, then tracer concentration will come
+from pickup\_ptracer.\\
+$\bullet$  {\bf PTRACERS\_names(iTrc)}: tracer name. Needed for netcdf.
+Defaults to nothing.\\
+$\bullet$  {\bf PTRACERS\_long\_names(iTrc)}: optional name in long form
+of tracer.\\
+$\bullet$  {\bf PTRACERS\_units(iTrc)}: optional units of tracer.
 \\
 
 
 \subsubsection{PTRACERS Diagnostics}
 \label{sec:pkg:ptracers:diagnostics}
+
+Note that these will only work for 90 or less tracers (some
+problems with the numbering/designation over this number)
 
 {\footnotesize
 \begin{verbatim}
