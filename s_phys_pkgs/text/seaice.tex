@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/text/seaice.tex,v 1.6 2008/01/15 23:58:53 heimbach Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/text/seaice.tex,v 1.7 2008/01/17 22:32:38 heimbach Exp $
 % $Name:  $
 
 %%EH3  Copied from "MITgcm/pkg/seaice/seaice_description.tex"
@@ -197,11 +197,39 @@ c  seaice_model (TOP LEVEL ROUTINE)
 c  |
 c  |-- #ifdef SEAICE_CGRID
 c  |     SEAICE_DYNSOLVER
+c  |     |
+c  |     |-- < compute proxy for geostrophic velocity >
+c  |     |
+c  |     |-- < set up mass per unit area and Coriolis terms >
+c  |     |
+c  |     |-- < dynamic masking of areas with no ice >
+c  |     |
+c  |     |
+
 c  |   #ELSE
 c  |     DYNSOLVER
 c  |   #ENDIF
 c  |
-c  ...
+c  |-- if ( useOBCS ) 
+c  |     OBCS_APPLY_UVICE
+c  |
+c  |-- if ( SEAICEadvHeff .OR. SEAICEadvArea .OR. SEAICEadvSnow .OR. SEAICEadvSalt )
+c  |     SEAICE_ADVDIFF
+c  |
+c  |-- if ( usePW79thermodynamics ) 
+c  |     SEAICE_GROWTH
+c  |
+c  |-- if ( useOBCS ) 
+c  |     if ( SEAICEadvHeff ) OBCS_APPLY_HEFF
+c  |     if ( SEAICEadvArea ) OBCS_APPLY_AREA
+c  |     if ( SEAICEadvSALT ) OBCS_APPLY_HSALT
+c  |     if ( SEAICEadvSNOW ) OBCS_APPLY_HSNOW
+c  |
+c  |-- < do various exchanges >
+c  |
+c  |-- < do additional diagnostics >
+c  |
+c  o
 
 \end{verbatim}
 }
