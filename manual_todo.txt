@@ -451,9 +451,11 @@ Add more to quick links on front page
 
 Chapter 6
 
-   the master package diagram does not appear in the document
+   the master package diagram does not appear in the document <- done
+ (<- needs an update: e.g. atm2d, salt_plume, shelfice ...)
 
 Master list of packages (add this to beginning of chap 6)
+ (<- needs an update: e.g. atm2d, salt_plume, shelfice ...)
 
 admtlm/               - autodiff (chapter 5)
 aim/                  - retired
@@ -542,6 +544,10 @@ list an expeiment which uses package? CNH
  + JMC: please add description of:
 	- diagstat
 	- new temporal averaging feature
+
+ + update the RW / MDSIO description 
+   -> new meta file
+   -> list all RW S/R that one should use instead of calling directly MDSIO
 
  + add Graphix to the list of stuff in utils/matlab (Daniel)
 
