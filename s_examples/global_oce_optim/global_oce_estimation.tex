@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_examples/global_oce_optim/global_oce_estimation.tex,v 1.11 2008/01/28 20:19:19 dfer Exp $
+% $Header: /u/gcmpack/manual/s_examples/global_oce_optim/global_oce_estimation.tex,v 1.12 2008/02/11 21:39:06 dfer Exp $
 % $Name:  $
 
 \section[Global Ocean State Estimation Example]{Global Ocean State Estimation at $4^\circ$ Resolution}
@@ -13,31 +13,32 @@
 
 \subsection{Overview}
 
-Mean surface heat flux as a  control variable : $Q_\mathrm{netm}$
+This experiment illustrates the optimization capacity of the MITgcm: here,
+a high level description.
 
-This experiment illustrates the optimization capacity of the MITgcm.
-Using an ocean configuration with realistic geography and bathymetry on a
-$4\times4^\circ$ spherical polar grid, we estimate a time-independent surface
-heat flux adjustment $Q_\mathrm{netm}$ that attempts to bring the model
-climatology into consistency with observations (Levitus climatology).
-The files for this experiment can be found in the verification directory under
-tutorial\_global\_oce\_optim.
+In this tutorial, a very simple case is used to illustrate the optimization
+capacity of the MITgcm. Using an ocean configuration with realistic geography
+and bathymetry on a $4\times4^\circ$ spherical polar grid, we estimate a
+time-independent surface heat flux adjustment $Q_\mathrm{netm}$ that attempts
+to bring the model climatology into consistency with observations (Levitus
+dataset, \cite{lev:94a}). The files for this experiment can be found in the
+verification directory under tutorial\_global\_oce\_optim.
 
 This adjustment $Q_\mathrm{netm}$ (a 2D field only function of longitude and
 latitude) is the control variable of an optimization problem. It is inferred
 by an iterative procedure using an `adjoint technique' and a least-squares
-method (see, for example, Stammer et al. (2002) and Ferreira et al. (2005)).
+method (see, for example, \cite{stam-etal:02} and \cite{fer-eta:05}).
 
 The ocean model is run forward in time and the quality of the solution is
 determined by a cost function, $J_1$, a measure of the departure of the model
 climatology from observations:
-\begin{equation}
+\begin{equation}\label{cost_temp}
 J_1=\frac{1}{N}\sum_{i=1}^N \left[ \frac{\overline{T}_i-\overline{T}_i^{lev}}{\sigma_i^T}\right]^2
 \end{equation}
-where $\overline{T}_i$ is the average model potential temperature and
-$\overline{T}_i^{lev}$ the annual mean observed potential temperature at each
+where $\overline{T}_i$ and $\overline{T}_i^{lev}$ are, respectively, the model
+and observed potential temperature at each
 grid point $i$. The differences are weighted by an {\it a priori} uncertainty
-$\sigma_i^T$ on observations (as provided by Levitus and Boyer 1994). The error
+$\sigma_i^T$ on observations (as provided by \cite{lev:94a}). The error
 $\sigma_i^T$ is only a function of depth and varies from 0.5 at the surface to
 0.05~K at the bottom of the ocean, mainly reflecting the decreasing
 temperature variance with depth (Fig. \ref{Error}a). A value of $J_1$ of
@@ -52,48 +53,85 @@ J_2 = \frac{1}{N} \sum_{i=1}^N \left[\frac{Q_\mathrm{netm}}{\sigma^Q_i} \right]^
 \end{equation}
 where $\sigma^Q_i$ are the {\it a priori} errors on the observed heat flux as
 estimated by Stammer et al. (2002) from 30\% of local root-mean-square
-variability of the NCEP forcing field (Fig \ref{Error}b ).
+variability of the NCEP forcing field (Fig \ref{Error}b).
 
 The total cost function is defined as $J=\lambda_1 J_1+ \lambda_2 J_2$ where
 $\lambda_1$ and $\lambda_2$ are weights controlling the relative contribution
 of the two components. The adjoint model then yields the sensitivities
 $\partial J/\partial Q_\mathrm{netm}$ of $J$ relative to the 2D fields
-$Q_\mathrm{netm}$. Using a line-searching algorithm (Gilbert and
-Lemar\'{e}chal, 1989), $Q_\mathrm{netm}$ is adjusted then in the sense to
+$Q_\mathrm{netm}$. Using a line-searching algorithm (\cite{gil-lem:89}),
+$Q_\mathrm{netm}$ is adjusted then in the sense to
 reduce $J$ --- the procedure is repeated until convergence.
 
-In the following example, the configuration is identical to the ``Global Ocean
-circulation'' tutorial where more details can be found. In each iteration, the
-model is started from rest with temperature and salinity initial conditions
-taken from Levitus dataset and run for a year. The first guess
-$Q_\mathrm{netm}$ is chosen to be zero. The experiment is run for a year
-and the temperature cost function $J_1$ is computed using the annual averaged
-potential temperature.
+%The configuration is identical 
+%to the ``Global Ocean circulation'' tutorial where more details can be found.
 
-The experiment employs two executables: one for the MITgcm and its adjoint and
-one for the line-search algorithm (offline optimization). The implementation
-of the control variable $Q_\mathrm{netm}$, the cost function $J$ and the I/O
-required for the communication between the model and the line-search are
-described in detail in section 2. The compilation of the two executables is
-given in section 3. The method used to run the experiment is described in
-section 4.
+Fig. \ref{Results} shows the results of such an optimization. The
+model is started from rest and from January-mean temperature and salinity
+initial conditions taken from the Levitus dataset. The experiment is run a year
+and the averaged temperature over the whole run (i.e. annual mean) is used
+in the cost function (\ref{cost_temp}) to evaluate the model. Only the
+top 2 levels are used. The first guess $Q_\mathrm{netm}$ is chosen to be
+zero. The weights $\lambda_1$ and $\lambda_2$ are set to 1 and 2, respectively.
+The total cost function converges after 15 iterations, decreasing from 6.1 to
+2.7 (the temperature contribution decreases from 6.1 to 1.8 while the heat
+flux one increases from 0 to 0.42). The right panels of Fig. (\ref{Results})
+illustrate the evolution of the temperature error at the surface from
+iteration 0 to iteration 15. Unsurprisingly, the largest errors at iteration 0
+(up to 6$^\circ$C, top left panels) are found in the Western boundary
+currents. After optimization, the departure of the model temperature from
+observations is reduced to 1$^\circ$C or less almost everywhere except in the
+Pacific Equatorial Cold Tongue. Comparison of the initial temperature
+error (top, right) and heat flux adjustment (bottom, left) shows that the
+system basically increased the heat flux out of the ocean where temperatures
+were too warm and vice-versa. Obviously, heat flux uncertainties are not the
+sole responsible for temperature errors and the heat flux adjustment partly
+compensates the poor representation of narrow currents (Western boundary
+currents, Equatorial currents) at $4\times4^\circ$ resolution. This is
+allowed by the large {\it a priori} error on the heat flux (Fig. \ref{Error}).
+The Pacific Cold Tongue is a counter example: there, heat fluxes uncertainties
+are fairly small (about 20~W.m$^2$), and a large temperature errors 
+remains after optimization.
+
+In the following, section 2 describes in details the implementation of the 
+control variable $Q_\mathrm{netm}$, the cost function $J$ and the I/O required
+for the communication between the model and the line-search. Instructions to
+compile the MITgcm and its adjoint and the line-search algorithm are given in
+section 3. The method used to run the experiment is described in section 4.
 
 \begin{figure} [tpb]
 \begin{center}
 \includegraphics[width=\textwidth,height=.3\textheight]{part3/case_studies/global_oce_estimation/Error.eps}
-\caption{{\it A priori} errors used in the cost functions on a) the temperature and b) the surface heat flux.} 
+\caption{{\it A priori} errors on potential temperature (left, in $^\circ$C) and
+surface heat flux (right, in W~m$^{-2}$) used to compute the cost
+terms $J_1$ and $J_2$, respectively.} 
 \label{Error}
 \end{center}
 \end{figure}
 
-Gilbert, J. C., and C. Lemar\'echal, 1989: Some numerical experiments with
-variable-storage quasi-Newton algorithms. \textit{Math. Programm.,}
-\textbf{45,} 407-435.
+\begin{figure} [tpb]
+\begin{center}
+\includegraphics[width=\textwidth,height=.3\textheight]{part3/case_studies/global_oce_estimation/Tutorial_fig.eps}
+\caption{Initial annual mean surface heat flux (top right in W.m$^{-2}$) and 
+adjustment obtained at iteration 15 (bottom right). Averaged difference
+between model and observed potential temperatures at the surface (in $^\circ$C) 
+before optimization (iteration 0, top right) and after optimization
+(iteration 15, bottom right). Contour intervals for heat flux and temperature
+are 25~W.m$^{-2}$ and 1$^\circ$C, respectively. A positive flux is out of the
+ocean.}
+\label{Results}
+\end{center}
+\end{figure}
 
 \subsection{Implementation of the control variable and the cost function}
 
-All subroutines that require modifications are found in
-verifications/Optim/code\_ad
+One of the goal of this tutorial is to illustrate how to implement a new
+control variable. Most of this is fairly generic and is done in the ctrl
+and cost packages found in the pkg/ directory. The modifications can be
+tracked by the CPP option ALLOW\_HFLUXM\_CONTROL or the comment
+cHFLUXM\_CONTROL. The more specific modifications required for the experiment
+are found in verification/tutorial\_global\_oce\_optim/code\_ad. Here follows
+a brief description of the implementation.
 
 \subsubsection{The control variable}
 
@@ -114,9 +152,9 @@ of the cost function $\partial J/\partial Q_\mathrm{netm}$ in to a file to be
 used by the line-search algorithm,
 
 \item ctrl\_unpack.F which reads, at the start of each iteration, the updated
-perturbations as provided by the line-search algorithm,
+adjustment as provided by the line-search algorithm,
 
-\item ctrl\_map\_forcing.F in which the updated perturbation is added to the
+\item ctrl\_map\_forcing.F in which the updated adjustment is added to the
 first guess $Q_\mathrm{netm}$.
 \end{itemize}
 
@@ -130,7 +168,7 @@ The cost functions are implemented using the {\it cost} package.
 \begin{itemize}
 
 \item The temperature cost function $J_1$ which measures the drift of the mean
-model temperature from the Levitus climatology is implemented cost\_temp.F.
+model temperature from the Levitus climatology is implemented in cost\_temp.F.
 It is activated by ALLOW\_COST\_TEMP in ECCO\_OPTIONS.h. It requires the mean
 temperature of the model which is obtained by accumulating the temperature in
 cost\_tile.F (called at each time step).
@@ -139,7 +177,7 @@ $\lambda_1$ in {\it mult\_temp}.
 
 \item The heat flux cost function, penalizing the departure of the surface
 heat flux from observations is implemented in cost\_hflux.F, and activated by
-activated ALLOW\_COST\_HFLUXM in ECCO\_OPTIONS.h. The value of the cost
+the key ALLOW\_COST\_HFLUXM in ECCO\_OPTIONS.h. The value of the cost
 function is stored in {\it objf\_hfluxm} and its weight $\lambda_2$ in
 {\it mult\_hfluxm}.
 
@@ -161,44 +199,44 @@ The model configuration for this experiment resides under the directory
 {\it verification/tutorial\_global\_oce\_optim/}.  The experiment files in
 code\_ad/ and input\_ad/ contain the code customizations and parameter
 settings. Most of them are identical to those used in the Global Ocean
-experiment. Below we describe the customizations to these files required for
-the experiment.
+( experiment {\it  tutorial_global_oce_latlon}). Below, we describe some of
+the customizations required for this experiment.
 
 \subsubsection{Compilation-time customizations in {\it code\_ad/}}
 
-ECCO\_CPPOPTIONS.h the optimization.
+In ECCO\_CPPOPTIONS.h:
 
 \begin{itemize}
-\item ALLOW\_ECCO\_OPTIMIZATION
+\item define ALLOW\_ECCO\_OPTIMIZATION 
 
-\item ALLOW\_COST ALLOW\_COST\_TEMP ALLOW\_COST\_HFLUXM
+\item define ALLOW\_COST, ALLOW\_COST\_TEMP, and ALLOW\_COST\_HFLUXM
 
-\item ALLOW\_HFLUXM\_CONTROL
+\item define ALLOW\_HFLUXM\_CONTROL
 \end{itemize}
 
 \subsubsection{Running-time customizations in {\it input\_ad/}}
 
 \begin{itemize}
 
-\item {\it data} is similar to 
+\item {\it data}: note the smaller {\it cg2dTargetResidual} than in the
+forward-only experiment,
 
-\item {\it data.optim} specifies the iteration number.
+\item {\it data.optim} specifies the iteration number,
 
 \item {\it data.ctrl} is used, in particular, to specify the
 name of the sensitivity and adjustment files associated to a control
-variable.
+variable,
 
-\item {\it data.cost} 
+\item {\it data.cost}: parameters of the cost functions, in particular
+{\it lastinterval} specifies the length of time-averaging for the model
+temperature to be used in the cost function (\ref{cost_temp}),
 
-\item {\it data.pkg}
+\item {\it data.pkg}: note that the Gradient Check package is turned on by
+default (useGrdchk=.TRUE.),
 
 \item {\it Err\_hflux.bin} and {\it Err\_levitus\_15layer.bin} are the
 files containing the heat flux and potential temperature uncertainties,
 respectively.
-
-\item {\it Err\_levitus\_15layer.bin}
-
-\item Subdirectory {\it OPTIM}
 
 \end{itemize}
 
@@ -264,21 +302,29 @@ to 0 in data.optim and run the MITgcm:
 \end{verbatim}
 
 The output files adxx\_hfluxm.0000000000.* and xx\_hfluxm.0000000000.* contain
-the sensitivity of the cost function to $Q_\mathrm{netm}$ and the perturbations
+the sensitivity of the cost function to $Q_\mathrm{netm}$ and the adjustment
 to $Q_\mathrm{netm}$ (zero at the first iteration), respectively. Two other
-files called ecco\_cost.. and ecco\_ctrl are also generated. They essentially
-contain the same information as the adxx\_* and xx\_* files, but in a
-compressed format. These two files are the only ones involved in the
-communication between the adjoint model {\it mitgcmuv\_ad} and the line-search
-algorithm {\it optim.x}. The ecco\_cost*n is an output of the adjoint model at
+files called costhflux\_tut\_MITgcm.opt0000 and ctrlhflux\_tut\_MITgcm.opt0000
+are also generated. They essentially contain the same information as the
+adxx\_.hfluxm* and xx\_hfluxm* files, but in a compressed format. These two files
+are the only ones involved in the communication between the adjoint model
+{\it mitgcmuv\_ad} and the line-search algorithm {\it optim.x}. Only at the first
+iteration, are they both generated by {\it mitgcmuv\_ad}. Subsenquently,
+costhflux\_tut\_MITgcm.opt$n$ is an output of the adjoint model at
 iteration $n$ and an input of the line-search. The latter returns an updated
-perturbation in ecco\_ctrl*n+1 to be used as an input of the adjoint model at
-iteration n+1. 
+adjustment in ctrlhflux\_tut\_MITgcm.opt$n+1$ to be used as an input of the
+adjoint model at iteration n+1. 
 
-At the first iteration, move these two files (ecco\_cost and ecco\_ctrl) to
-OPTIM/, open data.optim and check the iteration number is set to 0. The target
-cost function {\it fmin} needs to be specified too: a rule of thumb suggests
-it should be set to about 0.95-0.90 times the value of the cost function at
+At the first iteration, move costhflux\_tut\_MITgcm.opt0000 and
+ctrlhflux\_tut\_MITgcm.opt0000 to OPTIM/, move into this directory and link data.optim 
+and data.ctrl locally:
+\begin{verbatim}
+% cd OPTIM/
+% ln -s ../data.optim .
+% ln -s ../data.ctrl .
+\end{verbatim}
+The target cost function {\it fmin} needs to be specified too: as a rule of thumb,
+it should be about 0.95-0.90 times the value of the cost function at
 the first iteration. This value is only used at the first iteration and does
 not need to be updated afterward. However, it implicitly specifies the
 ``pace'' at which the cost function is going down (if you are lucky and it does
@@ -288,11 +334,12 @@ Once this is done, run the line-search algorithm:
 \begin{verbatim}
 % ./optim.x
 \end{verbatim}
-which computes the updated perturbations for iteration 1 ecco\_ctrl\_1.
+which computes the updated adjustment for iteration 1, ctrlhflux\_tut\_MITgcm.opt0001.
 
 The following iterations can be executed automatically using the shell
 script {\it cycsh} found in input\_ad/. This script will take care of changing
 the iteration numbers in the data.optim, launch the adjoint model, clean and
-store the outputs, move the ecco\_cost* and ecco\_ctrl* files, and run the
+store the outputs, move the costhflux* and ctrlhflux* files, and run the
 line-search algorithm. Edit {\it cycsh} to specify the prefix of the
 directories used to store the outputs and the maximum number of iteration.
+
