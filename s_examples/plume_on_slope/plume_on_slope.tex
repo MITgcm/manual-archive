@@ -213,8 +213,9 @@ algorithm and open-boundaries:
 \#define ALLOW\_NONHYDROSTATIC} in {\tt code/CPP\_OPTIONS.h} and
 activated with {\bf nonHydrostatic=.TRUE.,} in namelist {\em PARM01}
 of {\tt input/data}.
-\item Open boundaries are enabled with {\bf \#define ALLOW\_OBCS} in
-{\tt code/CPP\_OPTIONS.h} and activated with {\bf use\_OBCS=.TRUE,} in
+\item Open boundaries are enabled by adding line {\bf obcs} to 
+package configuration file
+{\tt code/packages.conf} and activated via {\bf useOBCS=.TRUE,} in
 namelist {\em PACKAGES} of {\tt input/data.pkg}.
 \end{itemize}
 
