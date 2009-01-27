@@ -189,12 +189,13 @@ $5200\,{\rm m}$.
 \begin{itemize}
 \item Line 39
 \begin {verbatim}
- phiMin=-90.,
+ ygOrigin=-90.,
 \end{verbatim}
 \end{itemize}
 
 \noindent This line sets the southern boundary of the modeled domain
-to $0^{\circ}$ latitude. This value affects both the generation of the
+to $-90^{\circ}$ latitude N ($90^{\circ}$ S). This value affects both 
+the generation of the
 locally orthogonal grid that the model uses internally and affects the
 initialization of the coriolis force.  Note - it is not required to
 set a longitude boundary, since the absolute longitude does not alter
@@ -278,7 +279,7 @@ this experiment, a depth of $0m$ indicates land.
 36   delR=  50.,  70., 100., 140., 190., 
 37         240., 290., 340., 390., 440., 
 38         490., 540., 590., 640., 690.,
-39   phiMin=-90.,
+39   ygOrigin=-90.,
 40   dxSpacing=2.8125,
 41   dySpacing=2.8125,
 42   &

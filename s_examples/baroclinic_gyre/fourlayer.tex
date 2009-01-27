@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_examples/baroclinic_gyre/fourlayer.tex,v 1.25 2008/01/15 21:48:27 cnh Exp $
+% $Header: /u/gcmpack/manual/s_examples/baroclinic_gyre/fourlayer.tex,v 1.26 2009/01/27 16:26:43 jmc Exp $
 % $Name:  $
 
 \section[Baroclinic Gyre MITgcm Example]{Four Layer Baroclinic Ocean Gyre In Spherical Coordinates}
@@ -559,7 +559,7 @@ usingSphericalPolarGrid=.TRUE.,
 
 \item Line 41,
 \begin{verbatim}
-phiMin=0.,
+ygOrigin=0.,
 \end{verbatim}
   This line sets the southern boundary of the modeled domain to
   $0^{\circ}$ latitude. This value affects both the generation of the
@@ -567,7 +567,7 @@ phiMin=0.,
   the initialization of the coriolis force.  Note - it is not required
   to set a longitude boundary, since the absolute longitude does not
   alter the kernel equation discretisation.  The variable
-  \varlink{phiMin}{phiMin} is read in the
+  \varlink{ygOrigin}{ygOrigin} is read in the
   routine \varlink{INI\_PARMS}{INI_PARMS} and is used in routine
 
   \fbox{
