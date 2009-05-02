@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/text/exch2.tex,v 1.26 2006/06/28 15:35:07 molod Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/text/exch2.tex,v 1.27 2009/05/02 02:13:18 jmc Exp $
 % $Name:  $
 
 %%  * Introduction
@@ -109,8 +109,8 @@ m-file
 from the Matlab prompt (there are no parameters to pass) generates
 exch2 topology files \file{W2\_EXCH2\_TOPOLOGY.h} and
 \file{w2\_e2setup.F} in the working directory and displays a figure of
-the topology via Matlab -- figures \ref{fig:6tile}, \ref{fig:12tile}, 
-and \ref{fig:24tile} are examples of the generated diagrams.  The other 
+the topology via Matlab -- figures \ref{fig:6tile}, \ref{fig:18tile}, 
+and \ref{fig:48tile} are examples of the generated diagrams.  The other 
 m-files in the directory are
 subroutines called from \file{driver.m} and should not be run ``bare'' except
 for development purposes. \\
@@ -131,39 +131,48 @@ The parameters \code{tnx} and \code{tny} determine the width and height of
 the tiles into which the subdomains are decomposed, and must evenly
 divide the integer assigned to \code{nr}, \code{nb} and \code{ng}.
 The result is a rectangular tiling of the subdomain.  Figure
-\ref{fig:24tile} shows one possible topology for a twenty-four-tile
-cube, and figure \ref{fig:12tile} shows one for twelve tiles. \\
+\ref{fig:48tile} shows one possible topology for a twenty-four-tile
+cube, and figure \ref{fig:6tile} shows one for six tiles. \\
 
 \begin{figure}
 \begin{center}
- \resizebox{4in}{!}{
-  \includegraphics{part6/s24t_16x16.ps}
+ \resizebox{6in}{!}{
+% \includegraphics{part6/s24t_16x16.ps}
+  \includegraphics{part6/adjust_cs.ps}
  }
 \end{center} 
 
 \caption{Plot of a cubed sphere topology with a 32$\times$192 domain
 divided into six 32$\times$32 subdomains, each of which is divided
-into four tiles of width \code{tnx=16} and height \code{tny=16} for a 
-total of twenty-four tiles.  The colored borders of the subdomains 
-represent the parameters \code{nr} (red), \code{nb} (blue), and 
-\code{ng} (green).  } \label{fig:24tile}
+into eight tiles of width \code{tnx=16} and height \code{tny=8} for a 
+total of forty-eight tiles. The colored borders of the subdomains 
+represent the parameters \code{nr} (red), \code{ng} (green), and
+\code{nb} (blue). 
+This tiling is used in the example
+verification/adjustment.cs-32x32x1/
+with the option (blanklist.txt) to remove the land-only 4 tiles 
+(11,12,13,14) which are filled in red on the plot.
+} \label{fig:48tile}
 \end{figure}
 
 \begin{figure}
 \begin{center}
- \resizebox{4in}{!}{
-  \includegraphics{part6/s12t_16x32.ps}
+ \resizebox{6in}{!}{
+% \includegraphics{part6/s12t_16x32.ps}
+  \includegraphics{part6/polarcap.ps}
  }
 \end{center} 
-\caption{Plot of a cubed sphere topology with a 32$\times$192 domain
-divided into six 32$\times$32 subdomains of two tiles each
- (\code{tnx=16, tny=32}).
-} \label{fig:12tile}
+\caption{Plot of a non-square cubed sphere topology with 
+6 subdomains of different size (nr=90,ng=360,nb=90),
+divided into one to four tiles each
+ (\code{tnx=90, tny=90}), resulting in a total of 18 tiles.
+} \label{fig:18tile}
 \end{figure}
 
 \begin{figure}
 \begin{center}
  \resizebox{4in}{!}{
+% \includegraphics{part6/s6t_32x32.ps}
   \includegraphics{part6/s6t_32x32.ps}
  }
 \end{center} 
@@ -231,17 +240,17 @@ would have to run one ``dummy'' tile to make an even six tiles per
 processor.  Such dummy tiles are \emph{not} listed in
 \file{blanklist.txt}.
 
-The following is an example of \file{SIZE.h} for the twelve-tile
-configuration illustrated in figure \ref{fig:12tile} running on one
-processor:
+The following is an example of \file{SIZE.h} for the six-tile
+configuration illustrated in figure \ref{fig:6tile} 
+running on one processor:
 
 \begin{verbatim}
       PARAMETER (
-     &           sNx =  16,
+     &           sNx =  32,
      &           sNy =  32,
      &           OLx =   2,
      &           OLy =   2,
-     &           nSx =  12,
+     &           nSx =   6,
      &           nSy =   1,
      &           nPx =   1,
      &           nPy =   1,
@@ -250,16 +259,16 @@ processor:
      &           Nr  =   5)
 \end{verbatim}
 
-The following is an example for the twenty-four-tile topology in
-figure \ref{fig:24tile} running on six processors:
+The following is an example for the forty-eight-tile topology in
+figure \ref{fig:48tile} running on six processors:
 
 \begin{verbatim}
       PARAMETER (
      &           sNx =  16,
-     &           sNy =  16,
+     &           sNy =   8,
      &           OLx =   2,
      &           OLy =   2,
-     &           nSx =   4,
+     &           nSx =   8,
      &           nSy =   1,
      &           nPx =   6,
      &           nPy =   1,
@@ -293,9 +302,9 @@ and \varlink{exch2\_domain\_nyt}{exch2_domain_nyt} express the number
 of tiles in the $x$ and $y$ global indices.  For example, the default
 setup of six tiles (Fig. \ref{fig:6tile}) has
 \code{exch2\_domain\_nxt=6} and \code{exch2\_domain\_nyt=1}.  A
-topology of twenty-four square tiles, four per subdomain (as in figure
-\ref{fig:24tile}), will have \code{exch2\_domain\_nxt=12} and
-\code{exch2\_domain\_nyt=2}.  Note that these parameters express the
+topology of forty-eight tiles, eight per subdomain (as in figure
+\ref{fig:48tile}), will have \code{exch2\_domain\_nxt=12} and
+\code{exch2\_domain\_nyt=4}.  Note that these parameters express the
 tile layout in order to allow global data files that are tile-layout-neutral.
 They have no bearing on the internal storage of the arrays.  The tiles
 are stored internally in a range from \code{\varlink{bi}{bi}=(1:NTILES)} in the
@@ -335,8 +344,8 @@ files. \\
 The array \varlink{exch2\_myFace}{exch2_myFace} contains the number of
 the subdomain of each tile, in a range \code{(1:6)} in the case of the
 standard cube topology and indicated by \textbf{\textsf{f}}$n$ in
-figures \ref{fig:12tile} and
-\ref{fig:24tile}. \varlink{exch2\_nNeighbours}{exch2_nNeighbours}
+figures \ref{fig:6tile} and
+\ref{fig:48tile}. \varlink{exch2\_nNeighbours}{exch2_nNeighbours}
 contains a count of the neighboring tiles each tile has, and sets 
 the bounds for looping over neighboring tiles.
 \varlink{exch2\_tProc}{exch2_tProc} holds the process rank of each
@@ -458,8 +467,8 @@ Finally, \varlink{exch2\_itlo\_c}{exch2_itlo_c},
 \varlink{exch2\_jthi\_c}{exch2_jthi_c} hold the location and index
 bounds of the edge segment of the neighbor tile \code{N}'s subdomain
 that gets exchanged with the local tile \code{T}.  To take the example
-of tile \code{T=2} in the twelve-tile topology
-(Fig. \ref{fig:12tile}): \\
+of tile \code{T=2} in the forty-eight-tile topology
+(Fig. \ref{fig:48tile}): \\
 
 \begin{verbatim}
        exch2_itlo_c(4,2)=17
