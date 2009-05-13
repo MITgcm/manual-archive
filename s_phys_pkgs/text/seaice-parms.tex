@@ -1,8 +1,10 @@
 
 \begin{table}[h!]
-{\small
+\caption{Run-time parameters and default values
+\label{tab:pkg:seaice:runtimeparms}}
+{\footnotesize
 %\hspace*{-1.5in}
-\begin{tabular}{|lllc|}
+\begin{tabular}{|llp{5cm}c|}
 \hline
   & & & \\
   \textbf{Name}  &  \textbf{Default value}  
@@ -17,7 +19,47 @@
     &   use dynamics 
     &  %---ref---
     \\
-   LAD                 &                         2
+    SEAICEuseTEM       &                     F
+    & use truncated ellipse method
+    &  %---ref---
+    \\
+    SEAICEuseMetricTerms &                   T
+    & use metric terms in dynamics
+    &  %---ref---
+    \\
+    SEAICEuseEVPpickup  &                    T
+    & use EVP pickups
+    &  %---ref---
+    \\
+    SEAICEuseFluxForm   &                    F
+    & use flux form for 2nd central difference advection scheme
+    &  %---ref---
+    \\
+    SEAICErestoreUnderIce &                  F
+    & enable restoring to climatology under ice
+    &  %---ref---
+    \\
+    useHB87stressCoupling &                  F
+    & turn on ice-ocean stress coupling following \citet{hibler87}
+    &  %---ref---
+    \\
+    usePW79thermodynamics &                T
+    & flag to turn off zero-layer-thermodynamics for testing
+    &  %---ref---
+    \\
+    SEAICEadvHeff/Area/Snow/Salt/Age &      T
+    & flag to turn off advection of scalar state variables
+    &  %---ref---
+    \\
+    SEAICEuseFlooding   &                   T
+    & use flood-freeze algorithm
+    &  %---ref---
+    \\
+    SEAICE\_no\_slip      &                   F
+    & switch between free-slip and no-slip boundary conditions 
+    &  %---ref---
+    \\
+    LAD                 &                         2
     &   time stepping scheme 
     &  %---ref---
     \\
@@ -25,19 +67,19 @@
     &   iterations for ice heat budget 
     &  %---ref---
     \\
-   SEAICE\_deltaTtherm  &                   3.60000E+03
+   SEAICE\_deltaTtherm  &                   dTracerLev(1)
     &   thermodynamic timestep 
     &  %---ref---
     \\
-   SEAICE\_deltaTdyn    &                   3.60000E+03
+   SEAICE\_deltaTdyn    &                   dTracerLev(1)
     &   dynamic timestep 
     &  %---ref---
     \\
-   SEAICE\_dumpFreq     &                   0.00000E+00
+   SEAICE\_dumpFreq     &                   dumpFreq
     &   dump frequency 
     &  %---ref---
     \\
-   SEAICE\_taveFreq     &                   3.60000E+04
+   SEAICE\_taveFreq     &                   taveFreq
     &   time-averaging frequency 
     &  %---ref---
     \\
@@ -57,7 +99,7 @@
     &   write TimeAverage using MNC 
     &  %---ref---
     \\
-   SEAICE\_initialHEFF  &                   1.00000E+00
+   SEAICE\_initialHEFF  &                   0.00000E+00
     &   initial sea-ice thickness 
     &  %---ref---
     \\
@@ -98,15 +140,15 @@
     &  %---ref---
     \\
    SEAICE\_sensHeat     &                   2.28400E+00
-    &   sensible heat transfer 
+    &   sensible heat transfer (1.75E-03 * 1004 * 1.3)
     &  %---ref---
     \\
    SEAICE\_latentWater  &                   5.68750E+03
-    &   latent heat transfer for water 
+    &   latent heat transfer for water (1.75E-03 * 2.5E+06 * 1.3)
     &  %---ref---
     \\
    SEAICE\_latentIce    &                   6.44740E+03
-    &   latent heat transfer for ice 
+    &   latent heat transfer for ice (1.75E-03 * 2.834E+06 * 1.3)
     &  %---ref---
     \\
    SEAICE\_iceConduct   &                   2.16560E+00
@@ -133,7 +175,27 @@
     &   freezing temp. of sea water 
     &  %---ref---
     \\
-   LSR\_ERROR           &                   1.00000E-12
+    SEAICE\_salinity    &                   0.0
+    &   salinity of ice
+    &  %---ref---
+    \\
+    SEAICE\_gamma\_t    &                   UNSET
+    &   restoring time scale for basal freezing and melting
+    &  %---ref---
+    \\
+    SEAICE\_gamma\_t\_frz &                 UNSET
+    &   restoring time scale for basal freezing
+    &  %---ref---
+    \\
+    SEAICEstressFactor  &                  1.00000E+00
+    &   scaling factor for ice-ocean stress
+    &  %---ref---
+    \\
+    Heff/Area/Hsnow/Hsalt/IceAgeFile & UNSET
+    & initial fields for variables HEFF/AREA/HSNOW/HSALT/ICEAGE
+    &  %---ref---
+    \\
+   LSR\_ERROR           &                   1.00000E-04
     &   sets accuracy of LSR solver 
     &  %---ref---
     \\
