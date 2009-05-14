@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/text/shelfice.tex,v 1.1 2009/05/14 10:19:12 mlosch Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/text/shelfice.tex,v 1.2 2009/05/14 15:35:48 mlosch Exp $
 % $Name:  $
 
 \subsection{SHELFICE Package}
@@ -20,7 +20,7 @@ underneath floating ice shelves.
 CPP options enable or disable different aspects of the package
 (Section \ref{sec:pkg:shelfice:config}).
 Run-Time options, flags, filenames and field-related dates/times are
-set in \texttt{data.shelfice}
+set in \code{data.shelfice}
 (Section \ref{sec:pkg:shelfice:runtime}).
 A description of key subroutines is given in Section
 \ref{sec:pkg:shelfice:subroutines}.
@@ -41,11 +41,11 @@ As with all MITgcm packages, SHELFICE can be turned on or off at compile time
 \begin{itemize}
 %
 \item
-using the \texttt{packages.conf} file by adding \texttt{shelfice} to it,
+using the \code{packages.conf} file by adding \code{shelfice} to it,
 %
 \item
-or using \texttt{genmake2} adding
-\texttt{-enable=shelfice} or \texttt{-disable=shelfice} switches
+or using \code{genmake2} adding
+\code{-enable=shelfice} or \code{-disable=shelfice} switches
 %
 \item
 \textit{required packages and CPP options}: \\
@@ -60,7 +60,7 @@ off, e.g.\ for KPP (\ref{sec:pkg:kpp}).
 
 Parts of the SHELFICE code can be enabled or disabled at compile time
 via CPP preprocessor flags. These options are set
-\texttt{SHELFICE\_OPTIONS.h}.
+\code{SHELFICE\_OPTIONS.h}.
 Table \ref{tab:pkg:shelfice:cpp} summarizes these options.
 
 \begin{table}[h!]
@@ -71,14 +71,14 @@ Table \ref{tab:pkg:shelfice:cpp} summarizes these options.
       \hline 
       \textbf{CPP option}  &  \textbf{Description}  \\
       \hline \hline
-        \texttt{ALLOW\_SHELFICE\_DEBUG} & 
+        \code{ALLOW\_SHELFICE\_DEBUG} & 
           Include code for enhanged diagnosis \\
-        \texttt{ALLOW\_ISOMIP\_TD} & 
+        \code{ALLOW\_ISOMIP\_TD} & 
           Include code for simplifed ISOMIP thermodynamics \\
       \hline
     \end{tabular}
   }
-  \caption{Available CPP-flags to be set in \texttt{SHELFICE\_OPTIONS.h}}
+  \caption{Available CPP-flags to be set in \code{SHELFICE\_OPTIONS.h}}
 \end{table}
 
 %----------------------------------------------------------------------
@@ -87,14 +87,14 @@ Table \ref{tab:pkg:shelfice:cpp} summarizes these options.
 \label{sec:pkg:shelfice:runtime}}
 
 Run-time parameters are set in files 
-\texttt{data.pkg} (read in \texttt{packages\_readparms.F}),
-and \texttt{data.shelfice} (read in \texttt{shelfice\_readparms.F}).
+\code{data.pkg} (read in \code{packages\_readparms.F}),
+and \code{data.shelfice} (read in \code{shelfice\_readparms.F}).
 
 \paragraph{Enabling the package}
 ~ \\
 %
 A package is switched on/off at run-time by setting
-(e.g. for SHELFICE) \texttt{useSHELFICE = .TRUE.} in \texttt{data.pkg}.
+(e.g. for SHELFICE) \code{useSHELFICE = .TRUE.} in \code{data.pkg}.
 
 \paragraph{General flags and parameters}
 ~ \\
@@ -228,7 +228,7 @@ assumed to be floating in isostatic equilibrium, $p_{top}$ at the top
 of the water column is the atmospheric pressure $p_{a}$ plus the
 weight of the ice-shelf. It is this weight of the ice-shelf that has
 to be provided as a boundary condition at the top of the water column
-(in run-time parameter \texttt{SHELFICEloadAnomalyFile}).
+(in run-time parameter \code{SHELFICEloadAnomalyFile}).
 The weight is conveniently computed by integrating a density profile
 $\rho^*$, that is constant in time and corresponds to the sea-water
 replaced by ice, from $z=0$ to a ``reference'' ice-shelf draft at
@@ -277,7 +277,7 @@ gradient is computed in the center of the ``wet'' cell $k$ as
 \end{equation}
 where $H(k'-k)=1$ for $k'<k$ and $0$ otherwise.  
 
-Setting \texttt{SHELFICEboundaryLayer=.true.} introduces a simple
+Setting \code{SHELFICEboundaryLayer=.true.} introduces a simple
 boundary layer that reduces the potential noise problem at the cost of
 increased vertical mixing. For this purpose the water temperature at
 the $k$-th layer abutting ice shelf topography for use in the heat
@@ -452,7 +452,7 @@ equation~(\ref{eq:hellmersaltbalance}) is valid. Further, in this
 formulation it is obvious that melting ($q<0$) leads to a reduction of
 salinity.
 
-The default value of \texttt{SHELFICEconserve=.false.} removes the
+The default value of \code{SHELFICEconserve=.false.} removes the
 contribution $q ( X_{b}-X )$ from Eq.~(\ref{eq:jenkinsbc}), making the
 boundary conditions for temperature non-conservative.
 
@@ -474,7 +474,7 @@ and the fresh water flux $q$ is computed from
   q = - \frac{c_{p} \rho \gamma_T (T - T_{b})}{L}.
 \end{equation}
 In order to use this formulation, set run-time parameter
-\texttt{useISOMIPTD=.true.} in data.shelfice.
+\code{useISOMIPTD=.true.} in data.shelfice.
 
 \paragraph{Remark} The shelfice package and experiments demonstrating
 its strenghts and weaknesses are also described in
@@ -487,7 +487,7 @@ the thermodynamics in the appendix of \citet{losch08} is wrong.
 \subsubsection{Key subroutines
 \label{sec:pkg:shelfice:subroutines}}
 
-Top-level routine: \texttt{shelfice\_model.F}
+Top-level routine: \code{shelfice\_model.F}
 
 {\footnotesize
 \begin{verbatim}
