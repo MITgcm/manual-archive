@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/text/seaice.tex,v 1.8 2009/05/13 12:54:45 mlosch Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/text/seaice.tex,v 1.9 2009/05/14 15:35:17 mlosch Exp $
 % $Name:  $
 
 %%EH3  Copied from "MITgcm/pkg/seaice/seaice_description.tex"
@@ -25,7 +25,7 @@ sea-ice model.
 CPP options enable or disable different aspects of the package
 (Section \ref{sec:pkg:seaice:config}).
 Run-Time options, flags, filenames and field-related dates/times are
-set in \texttt{data.seaice}
+set in \code{data.seaice}
 (Section \ref{sec:pkg:seaice:runtime}).
 A description of key subroutines is given in Section
 \ref{sec:pkg:seaice:subroutines}.
@@ -46,15 +46,15 @@ As with all MITgcm packages, SEAICE can be turned on or off at compile time
 \begin{itemize}
 %
 \item
-using the \texttt{packages.conf} file by adding \texttt{seaice} to it,
+using the \code{packages.conf} file by adding \code{seaice} to it,
 %
 \item
-or using \texttt{genmake2} adding
-\texttt{-enable=seaice} or \texttt{-disable=seaice} switches
+or using \code{genmake2} adding
+\code{-enable=seaice} or \code{-disable=seaice} switches
 %
 \item
 \textit{required packages and CPP options}: \\
-SEAICE requires the external forcing package \texttt{exf} to be enabled;
+SEAICE requires the external forcing package \code{exf} to be enabled;
 no additional CPP options are required.
 %
 \end{itemize}
@@ -62,7 +62,7 @@ no additional CPP options are required.
 
 Parts of the SEAICE code can be enabled or disabled at compile time
 via CPP preprocessor flags. These options are set in either
-\texttt{SEAICE\_OPTIONS.h} or in \texttt{ECCO\_CPPOPTIONS.h}.
+\code{SEAICE\_OPTIONS.h} or in \code{ECCO\_CPPOPTIONS.h}.
 Table \ref{tab:pkg:seaice:cpp} summarizes these options.
 
 \begin{table}[h!]
@@ -73,33 +73,33 @@ Table \ref{tab:pkg:seaice:cpp} summarizes these options.
       \hline 
       \textbf{CPP option}  &  \textbf{Description}  \\
       \hline \hline
-        \texttt{SEAICE\_DEBUG} & 
+        \code{SEAICE\_DEBUG} & 
           Enhance STDOUT for debugging \\
-        \texttt{SEAICE\_ALLOW\_DYNAMICS} & 
+        \code{SEAICE\_ALLOW\_DYNAMICS} & 
           sea-ice dynamics code \\
-        \texttt{SEAICE\_CGRID} & 
+        \code{SEAICE\_CGRID} & 
           LSR solver on C-grid (rather than original B-grid) \\
-        \texttt{SEAICE\_ALLOW\_EVP} & 
+        \code{SEAICE\_ALLOW\_EVP} & 
           use EVP rather than LSR rheology solver \\
-        \texttt{SEAICE\_EXTERNAL\_FLUXES} & 
+        \code{SEAICE\_EXTERNAL\_FLUXES} & 
           use EXF-computed fluxes as starting point \\
-        \texttt{SEAICE\_MULTICATEGORY} & 
+        \code{SEAICE\_MULTICATEGORY} & 
           enable 8-category thermodynamics (by default undefined)\\
-        \texttt{SEAICE\_VARIABLE\_FREEZING\_POINT} & 
+        \code{SEAICE\_VARIABLE\_FREEZING\_POINT} & 
           enable linear dependence of the freezing point on salinity
           (by default undefined)\\
-        \texttt{ALLOW\_SEAICE\_FLOODING} & 
+        \code{ALLOW\_SEAICE\_FLOODING} & 
           enable snow to ice conversion for submerged sea-ice \\
-        \texttt{SEAICE\_SALINITY} & 
+        \code{SEAICE\_SALINITY} & 
           enable "salty" sea-ice (by default undefined) \\
-        \texttt{SEAICE\_AGE} & 
+        \code{SEAICE\_AGE} & 
           enable "age tracer" sea-ice (by default undefined) \\
-        \texttt{SEAICE\_CAP\_HEFF} & 
+        \code{SEAICE\_CAP\_HEFF} & 
           enable capping of sea-ice thickness to MAX\_HEFF \\ \hline
-        \texttt{SEAICE\_BICE\_STRESS} &
+        \code{SEAICE\_BICE\_STRESS} &
           B-grid only for backward compatiblity: turn on ice-stress on
           ocean\\
-        \texttt{EXPLICIT\_SSH\_SLOPE} &
+        \code{EXPLICIT\_SSH\_SLOPE} &
           B-grid only for backward compatiblity: use ETAN for tilt
           computations rather than geostrophic velocities \\
       \hline
@@ -114,14 +114,14 @@ Table \ref{tab:pkg:seaice:cpp} summarizes these options.
 \label{sec:pkg:seaice:runtime}}
 
 Run-time parameters are set in files 
-\texttt{data.pkg} (read in \texttt{packages\_readparms.F}),
-and \texttt{data.seaice} (read in \texttt{seaice\_readparms.F}).
+\code{data.pkg} (read in \code{packages\_readparms.F}),
+and \code{data.seaice} (read in \code{seaice\_readparms.F}).
 
 \paragraph{Enabling the package}
 ~ \\
 %
 A package is switched on/off at run-time by setting
-(e.g. for SEAICE) \texttt{useSEAICE = .TRUE.} in \texttt{data.pkg}.
+(e.g. for SEAICE) \code{useSEAICE = .TRUE.} in \code{data.pkg}.
 
 \paragraph{General flags and parameters}
 ~ \\
@@ -232,8 +232,7 @@ surface heat flux, and net shortwave flux.  The sea-ice model is
 global: in ice-free regions bulk formulae are used to estimate oceanic
 forcing from the atmospheric fields.
 
-\subsubsection{Dynamics}
-\label{sec:pkg:seaice:dynamics}
+\paragraph{Dynamics\label{sec:pkg:seaice:dynamics}}
 
 \newcommand{\vek}[1]{\ensuremath{\vec{\mathbf{#1}}}}
 \newcommand{\vtau}{\vek{\mathbf{\tau}}}
@@ -264,7 +263,7 @@ terms are given by
   \vtau_{air}   = & \rho_{air}  C_{air}   |\vek{U}_{air}  -\vek{u}|
                    R_{air}  (\vek{U}_{air}  -\vek{u}), \\ 
   \vtau_{ocean} = & \rho_{ocean}C_{ocean} |\vek{U}_{ocean}-\vek{u}| 
-                   R_{ocean}(\vek{U}_{ocean}-\vek{u}), \\ 
+                   R_{ocean}(\vek{U}_{ocean}-\vek{u}),
 \end{align*}
 where $\vek{U}_{air/ocean}$ are the surface winds of the atmosphere
 and surface currents of the ocean, respectively; $C_{air/ocean}$ are
@@ -294,7 +293,7 @@ both thickness $h$ and compactness (concentration) $c$:
   P_{\max} = P^{*}c\,h\,e^{[C^{*}\cdot(1-c)]},
 \label{eq:icestrength}
 \end{equation}
-with the constants $P^{*}$ (run-time parameter \texttt{SEAICE\_strength}) and
+with the constants $P^{*}$ (run-time parameter \code{SEAICE\_strength}) and
 $C^{*}=20$. The nonlinear bulk and shear 
 viscosities $\eta$ and $\zeta$ are functions of ice strain rate
 invariants and ice strength such that the principal components of the
@@ -313,12 +312,12 @@ minor axis $e$ equal to $2$; they are given by:
 \end{align*}
 The bulk viscosities are bounded above by imposing both a minimum
 $\Delta_{\min}$ (for numerical reasons, run-time parameter
-\texttt{SEAICE\_EPS} with a default value of
+\code{SEAICE\_EPS} with a default value of
 $10^{-10}\text{\,s}^{-1}$) and a maximum $\zeta_{\max} =
 P_{\max}/\Delta^*$, where
 $\Delta^*=(5\times10^{12}/2\times10^4)\text{\,s}^{-1}$. (There is also
 the option of bounding $\zeta$ from below by setting run-time
-parameter \texttt{SEAICE\_zetaMin} $>0$, but this is generally not
+parameter \code{SEAICE\_zetaMin} $>0$, but this is generally not
 recommended). For stress tensor computation the replacement pressure $P
 = 2\,\Delta\zeta$ \citep{hibler95} is used so that the stress state
 always lies on the elliptic yield curve by definition.
@@ -332,9 +331,9 @@ is capped to suppress any tensile stress \citep{hibler97, geiger98}:
   {\sqrt{(\dot{\epsilon}_{11}+\dot{\epsilon}_{22})^2
       +4\dot{\epsilon}_{12}^2}}\right).
 \end{equation}
-To enable this method, set \texttt{\#define SEAICE\_ALLOW\_TEM} in
-\texttt{SEAICE\_OPTIONS.h} and turn it on with
-\texttt{SEAICEuseTEM=.TRUE.} in \texttt{data.seaice}. 
+To enable this method, set \code{\#define SEAICE\_ALLOW\_TEM} in
+\code{SEAICE\_OPTIONS.h} and turn it on with
+\code{SEAICEuseTEM=.TRUE.} in \code{data.seaice}. 
 
 In the current implementation, the VP-model is integrated with the
 semi-implicit line successive over relaxation (LSOR)-solver of
@@ -393,18 +392,18 @@ $T=E_{0}\Delta{t}$ with the tunable parameter $E_0<1$ and
 the external (long) timestep $\Delta{t}$. \citet{hun97} recommend
 $E_{0} = \frac{1}{3}$ (which is the default value in the code).
 
-To use the EVP solver, make sure that both \texttt{SEAICE\_CGRID} and
-\texttt{SEAICE\_ALLOW\_EVP} are defined in \texttt{SEAICE\_OPTIONS.h}
+To use the EVP solver, make sure that both \code{SEAICE\_CGRID} and
+\code{SEAICE\_ALLOW\_EVP} are defined in \code{SEAICE\_OPTIONS.h}
 (default). The solver is turned on by setting the sub-cycling time
-step \texttt{SEAICE\_deltaTevp} to a value larger than zero. The
+step \code{SEAICE\_deltaTevp} to a value larger than zero. The
 choice of this time step is under debate. \citet{hun97} recommend
 order(120) time steps for the EVP solver within one model time step
-$\Delta{t}$ (\texttt{deltaTmom}). One can also choose order(120) time
+$\Delta{t}$ (\code{deltaTmom}). One can also choose order(120) time
 steps within the forcing time scale, but then we recommend adjusting
 the damping time scale $T$ accordingly, by setting either
-\texttt{SEAICE\_elasticParm} ($E_{0}$), so that
+\code{SEAICE\_elasticParm} ($E_{0}$), so that
 $E_{0}\Delta{t}=\mbox{forcing time scale}$, or directly
-\texttt{SEAICE\_evpTauRelax} ($T$) to the forcing time scale.
+\code{SEAICE\_evpTauRelax} ($T$) to the forcing time scale.
 
 Moving sea ice exerts a stress on the ocean which is the opposite of
 the stress $\vtau_{ocean}$ in Eq.~\ref{eq:momseaice}. This stess is
@@ -422,7 +421,7 @@ advect tracers, is really an average over the ocean surface
 velocity and the ice velocity leading to an inconsistency as the ice
 temperature and salinity are different from the oceanic variables.
 To turn on the stress formulation of \citet{hibler87}, set
-\texttt{useHB87StressCoupling=.TRUE.} in \texttt{data.seaice}.
+\code{useHB87StressCoupling=.TRUE.} in \code{data.seaice}.
 
 
 % Our discretization differs from \citet{zhang97, zhang03} in the
@@ -434,9 +433,8 @@ To turn on the stress formulation of \citet{hibler87}, set
 % differences and averaging is only involved in computing $\Delta$ and
 % $P$ at vorticity points.
 
-\subsubsection{Finite-volume discretization of the stress tensor
-  divergence}
-\label{sec:pkg:seaice:discretization}
+\paragraph{Finite-volume discretization of the stress tensor
+  divergence\label{sec:pkg:seaice:discretization}}
 On an Arakawa C~grid, ice thickness and concentration and thus ice
 strength $P$ and bulk and shear viscosities $\zeta$ and $\eta$ are
 naturally defined a C-points in the center of the grid
@@ -515,7 +513,9 @@ widths. For the $u$-equation ($\alpha=1$) we have:
   + \Delta{x}_1\sigma_{21}\biggl|_{x_{2}}^{x_{2}+\Delta{x}_{2}}
   \biggr\} \\ \notag
   =& \frac{1}{A_{i,j}^w} \biggl\{
-  (\Delta{x}_2\sigma_{11})_{i,j}^C - (\Delta{x}_2\sigma_{11})_{i-1,j}^C \\\notag
+  (\Delta{x}_2\sigma_{11})_{i,j}^C -
+  (\Delta{x}_2\sigma_{11})_{i-1,j}^C 
+  \\\notag
   \phantom{=}& \phantom{\frac{1}{A_{i,j}^w} \biggl\{}
   + (\Delta{x}_1\sigma_{21})_{i,j+1}^Z - (\Delta{x}_1\sigma_{21})_{i,j}^Z
   \biggr\}
@@ -530,7 +530,6 @@ widths. For the $u$-equation ($\alpha=1$) we have:
   \phantom{=}& + \Delta{y}_{i,j}^{F}(\zeta - \eta)^{C}_{i,j}
   k_{1,i,j}^{C}\frac{u_{i+1,j}+u_{i,j}}{2} \\ \notag
   \phantom{=}& - \Delta{y}_{i,j}^{F} \frac{P}{2} \\
-  % 
   (\Delta{x}_1\sigma_{21})_{i,j}^Z =& \phantom{+}
   \Delta{x}_{i,j}^{V}\overline{\eta}^{Z}_{i,j}
   \frac{u_{i,j}-u_{i,j-1}}{\Delta{y}_{i,j}^{U}} \\ \notag
@@ -565,14 +564,15 @@ Similarly, we have for the $v$-equation ($\alpha=2$):
   \intertext{with}
   (\Delta{x}_1\sigma_{12})_{i,j}^Z =& \phantom{+}
   \Delta{y}_{i,j}^{U}\overline{\eta}^{Z}_{i,j}
-  \frac{u_{i,j}-u_{i,j-1}}{\Delta{y}_{i,j}^{U}} \\\notag
-  &+ \Delta{y}_{i,j}^{U}\overline{\eta}^{Z}_{i,j}
-  \frac{v_{i,j}-v_{i-1,j}}{\Delta{x}_{i,j}^{V}} \\ \notag
+  \frac{u_{i,j}-u_{i,j-1}}{\Delta{y}_{i,j}^{U}} 
+  \\\notag &
+  + \Delta{y}_{i,j}^{U}\overline{\eta}^{Z}_{i,j}
+  \frac{v_{i,j}-v_{i-1,j}}{\Delta{x}_{i,j}^{V}} \\\notag
   &- \Delta{y}_{i,j}^{U}\overline{\eta}^{Z}_{i,j}
-  k_{2,i,j}^{Z}\frac{u_{i,j}+u_{i,j-1}}{2} \\ \notag
-  &- \Delta{y}_{i,j}^{U}\overline{\eta}^{Z}_{i,j}
+  k_{2,i,j}^{Z}\frac{u_{i,j}+u_{i,j-1}}{2} 
+  \\\notag &
+  - \Delta{y}_{i,j}^{U}\overline{\eta}^{Z}_{i,j}
   k_{1,i,j}^{Z}\frac{v_{i,j}+v_{i-1,j}}{2} \\ \notag
-  % 
   (\Delta{x}_2\sigma_{22})_{i,j}^C =& \phantom{+}
   \Delta{x}_{i,j}^{F}(\zeta - \eta)^{C}_{i,j}
   \frac{u_{i+1,j}-u_{i,j}}{\Delta{x}_{i,j}^{F}} \\ \notag
@@ -591,8 +591,7 @@ free slip boundary conditions the lateral stress is set to zeros. In
 analogy to $(\epsilon_{12})^Z=0$ on boundaries, we set
 $\sigma_{21}^{Z}=0$, or equivalently $\eta_{i,j}^{Z}=0$, on boundaries.
 
-\subsubsection{Thermodynamics}
-\label{sec:pkg:seaice:thermodynamics}
+\paragraph{Thermodynamics\label{sec:pkg:seaice:thermodynamics}}
 
 In its original formulation the sea ice model \citep{menemenlis05}
 uses simple thermodynamics following the appendix of
@@ -616,7 +615,7 @@ minimum imposed ice thickness of $5\text{\,cm}$ by $H_n=
 \frac{2n-1}{7}\,h$ for $n\in[1,7]$. The heat fluxes computed for each
 thickness category is area-averaged to give the total heat flux
 \citep{hibler84}. To use this thickness category parameterization set
-\texttt{\#define SEAICE\_MULTICATEGORY}; note that this requires
+\code{\#define SEAICE\_MULTICATEGORY}; note that this requires
 different restart files and switching this flag on in the middle of an
 integration is not possible.
 
@@ -626,12 +625,12 @@ $\rho\,c_{p}\left(T_{w}-T_{fr}\right)$ where $\rho$ and $c_{p}$ are
 the density and heat capacity of sea water and $T_{fr}$ is the local
 freezing point temperature that is a function of salinity. This flux
 is not assumed to instantaneously melt or create ice, but a time scale
-of three days (run-time parameter \texttt{SEAICE\_gamma\_t}) is used
+of three days (run-time parameter \code{SEAICE\_gamma\_t}) is used
 to relax $T_{w}$ to the freezing point.
 %
 The parameterization of lateral and vertical growth of sea ice follows
 that of \citet{hib79, hib80}; the so-called lead closing parameter
-$h_{0}$ (run-time parameter \texttt{HO}) has a default value of
+$h_{0}$ (run-time parameter \code{HO}) has a default value of
 0.5~meters.
 
 On top of the ice there is a layer of snow that modifies the heat flux
@@ -644,8 +643,8 @@ the snow is flooded, a simple mass conserving parameterization of
 snowice formation (a flood-freeze algorithm following Archimedes'
 principle) turns snow into ice until the ice surface is back at $z=0$
 \citep{leppaeranta83}. The flood-freeze algorithm is enabled with the CPP-flag
-\texttt{SEAICE\_ALLOW\_FLOODING} and turned on with run-time parameter
-\texttt{SEAICEuseFlooding=.true.}.
+\code{SEAICE\_ALLOW\_FLOODING} and turned on with run-time parameter
+\code{SEAICEuseFlooding=.true.}.
 
 Effective ice thickness (ice volume per unit area,
 $c\cdot{h}$), concentration $c$ and effective snow thickness
@@ -665,8 +664,8 @@ preserve sharp gradients and edges that are typical of sea ice
 distributions and to rule out unphysical over- and undershoots
 (negative thickness or concentration). These scheme conserve volume
 and horizontal area and are unconditionally stable, so that we can set
-$D_{X}=0$. Run-timeflags: \texttt{SEAICEadvScheme} (default=2),
-\texttt{DIFF1} (default=0.004).
+$D_{X}=0$. Run-timeflags: \code{SEAICEadvScheme} (default=2),
+\code{DIFF1} (default=0.004).
 
 There is considerable doubt about the reliability of a ``zero-layer''
 thermodynamic model --- \citet{semtner84} found significant errors in
@@ -699,7 +698,7 @@ enthalpy and to prevent false enthalpy extrema.
 \subsubsection{Key subroutines
 \label{sec:pkg:seaice:subroutines}}
 
-Top-level routine: \texttt{seaice\_model.F}
+Top-level routine: \code{seaice\_model.F}
 
 {\footnotesize
 \begin{verbatim}
