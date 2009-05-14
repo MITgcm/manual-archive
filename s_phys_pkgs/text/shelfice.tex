@@ -1,0 +1,573 @@
+% $Header: /u/gcmpack/manual/s_phys_pkgs/text/shelfice.tex,v 1.1 2009/05/14 10:19:12 mlosch Exp $
+% $Name:  $
+
+\subsection{SHELFICE Package}
+\label{sec:pkg:shelfice}
+\begin{rawhtml}
+<!-- CMIREDIR:package_shelfice: -->
+\end{rawhtml}
+
+Authors: Martin Losch, Jean-Michel Campin
+
+%----------------------------------------------------------------------
+\subsubsection{Introduction
+\label{sec:pkg:exf:intro}}
+
+
+Package ``shelfice'' provides a thermodynamic model for basal melting
+underneath floating ice shelves.
+
+CPP options enable or disable different aspects of the package
+(Section \ref{sec:pkg:shelfice:config}).
+Run-Time options, flags, filenames and field-related dates/times are
+set in \texttt{data.shelfice}
+(Section \ref{sec:pkg:shelfice:runtime}).
+A description of key subroutines is given in Section
+\ref{sec:pkg:shelfice:subroutines}.
+Input fields, units and sign conventions are summarized in
+Section \ref{sec:pkg:shelfice:fields_units}, and available diagnostics
+output is listed in Section \ref{sec:pkg:shelfice:fields_diagnostics}.
+
+%----------------------------------------------------------------------
+
+\subsubsection{SHELFICE configuration, compiling \& running}
+
+\paragraph{Compile-time options
+\label{sec:pkg:shelfice:config}}
+~
+
+As with all MITgcm packages, SHELFICE can be turned on or off at compile time
+%
+\begin{itemize}
+%
+\item
+using the \texttt{packages.conf} file by adding \texttt{shelfice} to it,
+%
+\item
+or using \texttt{genmake2} adding
+\texttt{-enable=shelfice} or \texttt{-disable=shelfice} switches
+%
+\item
+\textit{required packages and CPP options}: \\
+SHELFICE does not require any additional packages, but it will only
+work with conventional vertical $z$-coordinates (pressure coordinates
+are not implemented, yet). If you use it together with vertical mixing
+schemes, be aware, that non-local parameterizations have been turned
+off, e.g.\ for KPP (\ref{sec:pkg:kpp}).
+%
+\end{itemize}
+(see Section \ref{sect:buildingCode}).
+
+Parts of the SHELFICE code can be enabled or disabled at compile time
+via CPP preprocessor flags. These options are set
+\texttt{SHELFICE\_OPTIONS.h}.
+Table \ref{tab:pkg:shelfice:cpp} summarizes these options.
+
+\begin{table}[h!]
+\centering
+  \label{tab:pkg:shelfice:cpp}
+  {\footnotesize
+    \begin{tabular}{|l|l|}
+      \hline 
+      \textbf{CPP option}  &  \textbf{Description}  \\
+      \hline \hline
+        \texttt{ALLOW\_SHELFICE\_DEBUG} & 
+          Include code for enhanged diagnosis \\
+        \texttt{ALLOW\_ISOMIP\_TD} & 
+          Include code for simplifed ISOMIP thermodynamics \\
+      \hline
+    \end{tabular}
+  }
+  \caption{Available CPP-flags to be set in \texttt{SHELFICE\_OPTIONS.h}}
+\end{table}
+
+%----------------------------------------------------------------------
+
+\subsubsection{Run-time parameters
+\label{sec:pkg:shelfice:runtime}}
+
+Run-time parameters are set in files 
+\texttt{data.pkg} (read in \texttt{packages\_readparms.F}),
+and \texttt{data.shelfice} (read in \texttt{shelfice\_readparms.F}).
+
+\paragraph{Enabling the package}
+~ \\
+%
+A package is switched on/off at run-time by setting
+(e.g. for SHELFICE) \texttt{useSHELFICE = .TRUE.} in \texttt{data.pkg}.
+
+\paragraph{General flags and parameters}
+~ \\
+%
+Table~\ref{tab:pkg:shelfice:runtimeparms} lists all run-time parameters.
+\begin{table}[h!]
+  \caption{Run-time parameters and default values
+    \label{tab:pkg:shelfice:runtimeparms}}
+  {\footnotesize
+    % \hspace*{-1.5in}
+    \begin{tabular}{|lp{4cm}p{4cm}c|}
+      \hline
+      & & & \\
+      \textbf{Name}  &  \textbf{Default value}  
+      &  \textbf{Description}   &  \textbf{Reference}  \\
+      & & & \\
+      \hline \hline
+      useISOMIPTD              & F
+      &   use simplified ISOMIP thermodynamics instead of default
+      &  %---ref---
+      \\
+      SHELFICEconserve         & F
+      &   use conservative form of temperature boundary conditions
+      &  %---ref---
+      \\
+      SHELFICEboundaryLayer    & F
+      &   use simple boundary layer mixing parameterization
+      &  %---ref---
+      \\
+      SHELFICEloadAnomalyFile  & UNSET
+      &   inital geopotential anomaly
+      &  %---ref---
+      \\
+      SHELFICEtopoFile         & UNSET
+      &   under-ice topography of ice shelfes
+      &  %---ref---
+      \\
+      SHELFICElatentHeat       &  334.0E+03
+      &   latent heat of fusion ($L$)
+      &  %---ref---
+      \\
+      SHELFICEHeatCapacity\_Cp & 2000.0E+00
+      &   latent heat of fusion ($c_{p,I}$)
+      &  %---ref---
+      \\
+      rhoShelfIce              &  917.0E+00
+      &   (constant) mean density of ice shelf ($\rho_{I}$)
+      &  %---ref---
+      \\
+      SHELFICEheatTransCoeff   &    1.0E-04
+      &   transfer coefficient (exchange velocity) for temperature
+      ($\gamma_T$)
+      &  %---ref---
+      \\
+      SHELFICEsaltTransCoeff   &   5.05E-03 $\times$~SHELFICEheatTransCoeff
+      &   transfer coefficient (exchange velocity) for salinity
+      ($\gamma_S$)
+      &  %---ref---
+      \\
+      SHELFICEkappa            &   1.54E-06
+      &   temperature diffusion coefficient of the ice shelf ($kappa$)
+      &  %---ref---
+      \\
+      SHELFICEthetaSurface     &  -20.0E+00
+      &   (constant) surface temperature above the ice shelf ($T_{S}$)
+      &  %---ref---
+      \\
+      no\_slip\_shelfice       & no\_slip\_bottom (data)
+      &   flag for slip along bottom of ice shelf
+      &  %---ref---
+      \\
+      SHELFICEDragLinear       & bottomDragLinear (data)
+      &   linear drag coefficient at bottom ice shelf
+      &  %---ref---
+      \\
+      SHELFICEDragQuadratic    & bottomDragQuadratic (data)
+      &   quadratic drag coefficient at bottom ice shelf
+      &  %---ref---
+      \\
+      SHELFICEwriteState       & F
+      &   write ice shelf state to file 
+      &  %---ref---
+      \\
+      SHELFICE\_dumpFreq       & dumpFreq (data)
+      &   dump frequency
+      &  %---ref---
+      \\
+      SHELFICE\_taveFreq       & taveFreq (data)
+      &   time-averaging frequency 
+      &  %---ref---
+      \\
+      SHELFICE\_tave\_mnc      & timeave\_mnc (data.mnc)
+      &   write snap-shot   using MNC 
+      &  %---ref---
+      \\
+      SHELFICE\_dump\_mnc      & snapshot\_mnc (data.mnc)
+      &   write TimeAverage using MNC 
+      &  %---ref---
+      \\
+\hline
+\end{tabular}
+}
+\end{table}
+
+
+
+%----------------------------------------------------------------------
+\subsubsection{Description
+\label{sec:pkg:shelfice:descr}}
+
+In the light of isomorphic equations for pressure and height
+coordinates, the ice shelf topography on top of the water column has a
+similar role as (and in the language of \citet{marshall:04} is
+isomorphic to) the orography and the pressure boundary conditions at
+the bottom of the fluid for atmospheric and oceanic models in pressure
+coordinates.
+%
+
+The total pressure $p_{tot}$ in the ocean can be divided into the
+pressure at the top of the water column $p_{top}$, the hydrostatic
+pressure and the non-hydrostatic pressure contribution $p_{NH}$:
+\begin{equation}
+  \label{eq:pressureocean}
+  p_{tot} = p_{top} + \int_z^{\eta-h} g\,\rho\,dz + p_{NH}, 
+\end{equation}
+with the gravitational acceleration $g$, the density $\rho$, the
+vertical coordinate $z$ (positive upwards), and the dynamic
+sea-surface height $\eta$. For the open ocean, $p_{top}=p_{a}$
+(atmospheric pressure) and $h=0$. Underneath an ice-shelf that is
+assumed to be floating in isostatic equilibrium, $p_{top}$ at the top
+of the water column is the atmospheric pressure $p_{a}$ plus the
+weight of the ice-shelf. It is this weight of the ice-shelf that has
+to be provided as a boundary condition at the top of the water column
+(in run-time parameter \texttt{SHELFICEloadAnomalyFile}).
+The weight is conveniently computed by integrating a density profile
+$\rho^*$, that is constant in time and corresponds to the sea-water
+replaced by ice, from $z=0$ to a ``reference'' ice-shelf draft at
+$z=-h$ \citep{beckmann99}, so that
+\begin{equation}
+  \label{eq:ptop}
+  p_{top} = p_{a} + \int_{-h}^{0}g\,\rho^{*}\,dz.
+\end{equation}
+Underneath the ice shelf, the ``sea-surface height'' $\eta$ is the
+deviation from the ``reference'' ice-shelf draft $h$. During a model
+integration, $\eta$ adjusts so that the isostatic equilibrium is
+maintained for sufficiently slow and large scale motion.
+  
+In the MITgcm, the total pressure anomaly $p'_{tot}$ which is used for
+pressure gradient computations is defined by substracting a purely
+depth dependent contribution $-g\rho_{0}z$ with a constant reference
+density $\rho_{0}$ from $p_{tot}$.  Eq.~(\ref{eq:pressureocean}) becomes
+\begin{alignat}{2}
+  \label{eq:pressure}
+  p_{tot} =& \,p_{top} - g\,\rho_0\,(z+h)  &+ g\,\rho_0\,\eta + \int_z^{\eta-h}
+  g\,(\rho-\rho_0)\,dz +   p_{NH}, \\
+  \intertext{and after rearranging}
+  p'_{tot} =& \,p'_{top}
+  &+ g\,\rho_0\,\eta + \int_z^{\eta-h}g\,(\rho-\rho_0)\,dz +   p_{NH}, 
+\end{alignat}
+with $p'_{tot} = p_{tot} + g\,\rho_0\,z$ and $p'_{top} = p_{top} -
+g\,\rho_0\,h$. The non-hydrostatic pressure contribution $p_{NH}$ is
+neglected in the following.
+
+In practice, the ice shelf contribution to $p_{top}$ is computed by
+integrating Eq.~(\ref{eq:ptop}) from $z=0$ to the bottom of the last
+fully dry cell within the ice shelf:
+\begin{equation}
+  \label{eq:surfacepressure}
+  p_{top} = g\,\sum_{k'=1}^{n-1}\rho_{k'}^{*}\Delta{z_{k'}} + p_{a}
+\end{equation}
+where $n$ is the vertical index of the first (at least partially)
+``wet'' cell and $\Delta{z_{k'}}$ is the thickness of the $k'$-th
+layer (counting downwards). The pressure anomaly for evaluating the pressure
+gradient is computed in the center of the ``wet'' cell $k$ as
+\begin{equation}
+  \label{eq:discretizedpressure}
+  p'_{k} = p'_{top} + g\rho_{n}\eta +
+  g\,\sum_{k'=n}^{k}\left((\rho_{k'}-\rho_{0})\Delta{z_{k'}} 
+  \frac{1+H(k'-k)}{2}\right)
+\end{equation}
+where $H(k'-k)=1$ for $k'<k$ and $0$ otherwise.  
+
+Setting \texttt{SHELFICEboundaryLayer=.true.} introduces a simple
+boundary layer that reduces the potential noise problem at the cost of
+increased vertical mixing. For this purpose the water temperature at
+the $k$-th layer abutting ice shelf topography for use in the heat
+flux parameterizations is computed as a mean temperature
+$\overline{\theta}_{k}$ over a boundary layer of the same thickness as
+the layer thickness $\Delta{z}_{k}$:
+\begin{equation}
+  \label{eq:thetabl}
+  \overline{\theta}_{k} = \theta_{k} h_{k} + \theta_{k+1} (1-h_{k})
+\end{equation}
+where $h_{k}\in(0,1]$ is the fractional layer thickness of the $k$-th
+layer. The original contributions due to ice shelf-ocean interaction
+$g_{\theta}$ to the total tendency terms $G_{\theta}$ in the
+time-stepping equation
+%$\theta^{n+1} = \theta^{n} + \Delta{t}\, g_{\theta}^{n}$
+$\theta^{n+1} = f(\theta^{n},\Delta{t},G_{\theta}^{n})$ 
+%
+are
+\begin{equation}
+  \label{eq:orgtendency}
+  g_{\theta,k}   = \frac{Q}{\rho_{0} c_{p} h_{k} \Delta{z}_{k}}
+  \text{ and } g_{\theta,k+1} = 0
+\end{equation}
+for layers $k$ and $k+1$ ($c_{p}$ is the heat capacity).  Averaging
+these terms over a layer thickness $\Delta{z_{k}}$ (e.g., extending
+from the ice shelf base down to the dashed line in cell C) and
+applying the averaged tendency to cell A (in layer $k$) and to the
+appropriate fraction of cells C (in layer $k+1$) yields
+\begin{align}
+  \label{eq:tendencyk}
+  g_{\theta,k}^*   &= \frac{Q}{\rho_{0} c_{p} \Delta{z}_{k}} \\
+  \label{eq:tendencykp1}
+  g_{\theta,k+1}^*
+  &= \frac{Q}{\rho_{0} c_{p} \Delta{z}_{k}} 
+  \frac{ \Delta{z}_{k} ( 1- h_{k} )}{\Delta{z}_{k+1}}.
+\end{align}
+Eq.~(\ref{eq:tendencykp1}) describes averaging over the part of the
+grid cell $k+1$ that is part of the boundary layer with tendency
+$g_{\theta,k}^*$ and the part with no tendency. Salinity is treated in
+the same way. The momentum equations are not modified. 
+
+\paragraph{Three-Equations-Thermodynamics}
+\label{sec:pkg:shelfice:thermodynamics}
+
+Freezing and melting form a boundary layer between ice shelf and
+ocean. %
+Phase transitions at the boundary between saline water and ice imply
+the following fluxes across the boundary: the freshwater mass flux
+$q$ ($<0$ for melting); the heat flux that consists of the diffusive
+flux through the ice, the latent heat flux due to melting and freezing
+and the heat that is carried by the mass flux; and the salinity that
+is carried by the mass flux, if the ice has a non-zero salinity $S_I$.
+Further, the position of the interface between ice and ocean changes
+because of $q$, so that, say, in the case of melting the volume of sea
+water increases. As a consequence salinity and temperature are
+modified.
+
+The turbulent exchange terms for tracers at the ice-ocean interface
+are generally expressed as diffusive fluxes. Following
+\citet{jenkins01}, the boundary conditions for a tracer take
+into account that this boundary is not a material surface. 
+%The position of this surface changes when ice is melted or water freezes. %
+The implied upward freshwater flux $q$ (in mass units, negative for
+melting) is included in the boundary conditions for the temperature
+and salinity equation as an advective flux:
+\begin{equation}
+  \label{eq:jenkinsbc}
+  {\rho}K\frac{\partial{X}}{\partial{z}}\biggl|_{b} 
+  = (\rho\gamma_{X}-q) ( X_{b} - X ) 
+\end{equation}
+where tracer $X$ stands for either temperature $T$ or salinity $S$.
+$X_b$ is the tracer at the interface (taken to be at freezing), $X$ is
+the tracer at the first interior grid point, $\rho$ is the density of
+seawater, and $\gamma_X$ is the turbulent exchange coefficient (in
+units of an exchange velocity). The left hand side of
+Eq.~(\ref{eq:jenkinsbc}) is shorthand for the (downward) flux of tracer $X$
+across the boundary. $T_b$, $S_b$ and the freshwater flux $q$ are
+obtained from solving a system of three equations that is derived from
+the heat and freshwater balance at the ice ocean interface.
+
+In this so-called three-equation-model \citep[e.g.,][]{hellmer89,
+  jenkins01} the heat balance at the ice-ocean interface is expressed
+as
+
+\begin{equation}
+  \label{eq:hellmerheatbalance}
+  c_{p} \rho \gamma_T (T - T_{b})
+  +\rho_{I} c_{p,I} \kappa \frac{(T_{S} - T_{b})}{h}
+  = -Lq 
+\end{equation}
+where %
+$\rho$ is the density of sea-water, %
+$c_{p} = 3974\text{\,J\,kg$^{-1}$\,K$^{-1}$}$ is the specific heat
+capacity of water and %
+$\gamma_T$ the turbulent exchange coefficient of temperature. %
+The value of $\gamma_T$ is discussed in \citet{holland99}.  $L =
+334000\text{\,J\,kg$^{-1}$}$ is the latent heat of fusion. $\rho_{I} =
+920\text{\,kg\,m$^{-3}$}$, $c_{p,I} =
+2000\text{\,J\,kg$^{-1}$\,K$^{-1}$}$, and $T_{S}$ are the density,
+heat capacity and the surface temperature of the ice shelf;
+$\kappa=1.54\times10^{-6}\text{\,m$^2$\,s$^{-1}$}$ is the heat
+diffusivity through the ice-shelf and $h$ is the ice-shelf draft. The
+second term on the right hand side describes the heat flux through the
+ice shelf. A constant surface temperature $T_S=-20^{\circ}$ is
+imposed.  $T$ is the temperature of the model cell adjacent to the
+ice-water interface. The temperature at the interface $T_{b}$ is
+assumed to be the in-situ freezing point temperature of sea-water
+$T_{f}$ which is computed from a linear equation of state
+
+\begin{equation}
+  \label{eq:helmerfreeze}
+    T_{f} = (0.0901 - 0.0575\ S_{b})^{\circ}
+    - 7.61 \times 10^{-4}\frac{^{\circ}}{\text{dBar}}\ p_{b} 
+\end{equation}
+with the salinity $S_{b}$ and the pressure $p_{b}$ (in dBar) in the
+cell at the ice-water interface. From the salt budget, the salt flux
+across the shelf ice-ocean interface is equal to the salt flux due to
+melting and freezing:
+\begin{equation}
+  \label{eq:hellmersaltbalance}
+  \rho \gamma_{S} (S - S_{b}) = - q\,(S_{b}-S_{I}),
+\end{equation}
+where $\gamma_S = 5.05\times10^{-3}\gamma_T$ is the turbulent salinity
+exchange coefficient, and $S$ and $S_{b}$ are defined in analogy to
+temperature as the salinity of the model cell adjacent to the
+ice-water interface and at the interface, respectively. Note, that the
+salinity of the ice shelf is generally neglected ($S_{I}=0$).
+Equations~(\ref{eq:hellmerheatbalance}) to (\ref{eq:hellmersaltbalance}) can
+be solved for $S_{b}$, $T_{b}$, and the freshwater flux $q$ due to
+melting. These values are substituted into expression~(\ref{eq:jenkinsbc})
+to obtain the boundary conditions for the temperature and salinity
+equations of the ocean model.
+% Then upward heat and (virtual) salt fluxes out of the ocean
+%are computed following \citet[their equations 6, 7, 25, 28, and 29, note
+%that $q = -\text{their melt rate $m$}\times\text{density of
+%  freshwater}$, and that salinity within the ice is assumed to be
+%zero]{jenkins01}
+%\begin{align}
+%  \label{eq:hellmerthetaflux}
+%  K\frac{\partial{T}}{\partial{z}}\biggl|_{b} =& 
+%    (\rho\gamma_{T}-q) ( T_{b} - T ) \\\notag
+%    =& -  q \left[ \frac{L}{c_{p}} + (T - T_{b}) \right]
+%    - \frac{\rho_{I} c_{p,I} \kappa}{c_{p}} \frac{(T_{S} - T_{b})}{h} \\ 
+%  \label{eq:hellmersaltflux}
+%  K\frac{\partial{S}}{\partial{z}}\bigg|_{b} =&
+%  (\rho\gamma_{S}-q)(S_{b} - S) \\\notag 
+%  =& q\,S \\
+%  \label{eq:hellmerheatflux}
+%%  Q =&  qc_{p} (T - T_{b}) -  qL - \rho_{I} c_{p,I} \kappa
+%%  \frac{(T_{S} - T_{b})}{h} \\
+%  Q =& - c_{p} (\rho\gamma_{T}-q) ( T_{b} - T ) \\\notag
+%    =& -  q \left[ L + c_{p} (T - T_{b}) \right]
+%    - \rho_{I} c_{p,I} \kappa \frac{(T_{S} - T_{b})}{h} \\ 
+%  \label{eq:hellmerfwflux}
+%  Q_{S} =& (\rho\gamma_{S}-q)(S_{b} - S) \\\notag
+%  =& q\,S
+%\end{align}
+
+This formulation tends to yield smaller melt rates than the simpler
+formulation of the ISOMIP protocol because the freshwater flux due to
+melting decreases the salinity which raises the freezing point
+temperature and thus leads to less melting at the interface. For a
+simpler thermodynamics model where $S_b$ is not computed explicitly,
+for example as in the ISOMIP protocol, equation~(\ref{eq:jenkinsbc}) cannot
+be applied directly. In this case equation~(\ref{eq:hellmersaltbalance})
+can be used with Eq.~(\ref{eq:jenkinsbc}) to obtain:
+\begin{equation}
+ \rho{K}\frac{\partial{S}}{\partial{z}}\biggl|_{b}  = q\,(S-S_I).
+\end{equation}
+This formulation can be used for all cases for which
+equation~(\ref{eq:hellmersaltbalance}) is valid. Further, in this
+formulation it is obvious that melting ($q<0$) leads to a reduction of
+salinity.
+
+The default value of \texttt{SHELFICEconserve=.false.} removes the
+contribution $q ( X_{b}-X )$ from Eq.~(\ref{eq:jenkinsbc}), making the
+boundary conditions for temperature non-conservative.
+
+\paragraph{ISOMIP-Thermodynamics}
+\label{sec:pkg:shelfice:isomip}
+
+A simpler formulation follows the ISOMIP protocol
+(\url{http://efdl.cims.nyu.edu/project_oisi/isomip/overview.html}). The
+freezing and melting in the boundary layer between ice shelf and ocean
+is parameterized following \citet{grosfeld97}. In this formulation
+Eq.~(\ref{eq:hellmerheatbalance}) reduces to 
+\begin{equation}
+  \label{eq:isomipheatbalance}
+  c_{p} \rho \gamma_T (T - T_{b})  = -Lq 
+\end{equation}
+and the fresh water flux $q$ is computed from
+\begin{equation}
+  \label{eq:isomipfwflx}
+  q = - \frac{c_{p} \rho \gamma_T (T - T_{b})}{L}.
+\end{equation}
+In order to use this formulation, set run-time parameter
+\texttt{useISOMIPTD=.true.} in data.shelfice.
+
+\paragraph{Remark} The shelfice package and experiments demonstrating
+its strenghts and weaknesses are also described in
+\citet{losch08}. However, note that unfortunately the description of
+the thermodynamics in the appendix of \citet{losch08} is wrong.
+
+
+%----------------------------------------------------------------------
+
+\subsubsection{Key subroutines
+\label{sec:pkg:shelfice:subroutines}}
+
+Top-level routine: \texttt{shelfice\_model.F}
+
+{\footnotesize
+\begin{verbatim}
+C     !CALLING SEQUENCE:
+C ...
+C |-FORWARD_STEP           :: Step forward a time-step ( AT LAST !!! )
+C ...
+C | |-DO_OCEANIC_PHY       :: Control oceanic physics and parameterization
+C ...
+C | | |-SHELFICE_THERMODYNAMICS :: main routine for thermodynamics
+C                                  with diagnostics
+C ...
+C | |-THERMODYNAMICS       :: theta, salt + tracer equations driver.
+C ...
+C | | |-EXTERNAL_FORCING_T :: Problem specific forcing for temperature.
+C | | |-SHELFICE_FORCING_T :: apply heat fluxes from ice shelf model
+C ...
+C | | |-EXTERNAL_FORCING_S :: Problem specific forcing for temperature.
+C | | |-SHELFICE_FORCING_S :: apply fresh water fluxes from ice shelf model
+C ...
+C | |-DYNAMICS             :: Momentum equations driver.
+C ...
+C | | |-MOM_FLUXFORM       :: Flux form mom eqn. package ( see
+C ...
+C | | | |-SHELFICE_U_DRAG  :: apply drag along ice shelf to u-equation
+C                             with diagnostics
+C ...
+C | | |-MOM_VECINV         :: Vector invariant form mom eqn. package ( see
+C ...
+C | | | |-SHELFICE_V_DRAG  :: apply drag along ice shelf to v-equation
+C                             with diagnostics
+C ...
+C  o
+\end{verbatim}
+}
+
+
+%----------------------------------------------------------------------
+
+\subsubsection{SHELFICE diagnostics
+\label{sec:pkg:shelfice:diagnostics}}
+
+Diagnostics output is available via the diagnostics package
+(see Section \ref{sec:pkg:diagnostics}).
+Available output fields are summarized in 
+Table \ref{tab:pkg:shelfice:diagnostics}.
+
+\begin{table}[h!]
+\centering
+\label{tab:pkg:shelfice:diagnostics}
+{\footnotesize
+\begin{verbatim}
+---------+----+----+----------------+-----------------
+ <-Name->|Levs|grid|<--  Units   -->|<- Tile (max=80c)
+---------+----+----+----------------+-----------------
+ SHIfwFlx|  1 |SM  |kg/m^2/s        |Ice shelf fresh water flux (positive upward)
+ SHIhtFlx|  1 |SM  |W/m^2           |Ice shelf heat flux  (positive upward)
+ SHIUDrag| 30 |UU  |m/s^2           |U momentum tendency from ice shelf drag
+ SHIVDrag| 30 |VV  |m/s^2           |V momentum tendency from ice shelf drag
+ SHIForcT|  1 |SM  |W/m^2           |Ice shelf forcing for theta, >0 increases theta
+ SHIForcS|  1 |SM  |g/m^2/s         |Ice shelf forcing for salt, >0 increases salt
+\end{verbatim}
+}
+\caption{Available diagnostics of the shelfice-package}
+\end{table}
+
+
+%\subsubsection{Package Reference}
+
+\subsubsection{Experiments and tutorials that use shelfice}
+\label{sec:pkg:shelfice:experiments}
+
+\begin{itemize}
+\item{ISOMIP, Experiment 1
+    (\url{http://efdl.cims.nyu.edu/project_oisi/isomip/overview.html})
+    in isomip verification directory.}
+\end{itemize}
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../manual"
+%%% End: 
