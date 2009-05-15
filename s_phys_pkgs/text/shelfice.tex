@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/text/shelfice.tex,v 1.2 2009/05/14 15:35:48 mlosch Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/text/shelfice.tex,v 1.3 2009/05/15 08:10:23 mlosch Exp $
 % $Name:  $
 
 \subsection{SHELFICE Package}
@@ -26,7 +26,7 @@ A description of key subroutines is given in Section
 \ref{sec:pkg:shelfice:subroutines}.
 Input fields, units and sign conventions are summarized in
 Section \ref{sec:pkg:shelfice:fields_units}, and available diagnostics
-output is listed in Section \ref{sec:pkg:shelfice:fields_diagnostics}.
+output is listed in Section \ref{sec:pkg:shelfice:diagnostics}.
 
 %----------------------------------------------------------------------
 
@@ -129,7 +129,7 @@ Table~\ref{tab:pkg:shelfice:runtimeparms} lists all run-time parameters.
       &  %---ref---
       \\
       SHELFICEtopoFile         & UNSET
-      &   under-ice topography of ice shelfes
+      &   under-ice topography of ice shelves
       &  %---ref---
       \\
       SHELFICElatentHeat       &  334.0E+03
@@ -199,7 +199,24 @@ Table~\ref{tab:pkg:shelfice:runtimeparms} lists all run-time parameters.
 }
 \end{table}
 
+\paragraph{Input fields and units\label{sec:pkg:shelfice:fields_units}}
 
+\begin{description}
+\item[\code{SHEFLICEtopoFile}:] under-ice topography of ice shelves in
+  meters; upwards is positive, that as for the bathymetry files,
+  negative values are required for topography below the sea-level;
+\item[\code{SHEFLICEloadAnomalyFile}:] pressure load anomaly at the bottom of
+  the ice shelves in pressure units (Pa); this field is absolutely
+  required to avoid large excursions of the free surface during
+  initial adjustment processes; obtained by integrating an approximate
+  density from the surface at $z=0$ down to the bottom of the last
+  fully dry cell within the ice shelf, see 
+  Eq.~(\ref{eq:surfacepressure}); however, the file
+  \code{SHEFLICEloadAnomalyFile} must not be $p_{top}$, but
+  $p_{top}-g\sum_{k'=1}^{n-1}\rho_{0}\Delta{z}_{k'}$, with
+  $\rho_{0}=$~\code{rhoConst}, so that in the absenses of a $\rho^{*}$
+  that is different from $\rho_{0}$, the anomaly is zero.
+\end{description}
 
 %----------------------------------------------------------------------
 \subsubsection{Description
