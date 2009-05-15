@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/text/seaice.tex,v 1.9 2009/05/14 15:35:17 mlosch Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/text/seaice.tex,v 1.10 2009/05/15 07:48:47 mlosch Exp $
 % $Name:  $
 
 %%EH3  Copied from "MITgcm/pkg/seaice/seaice_description.tex"
@@ -31,7 +31,7 @@ A description of key subroutines is given in Section
 \ref{sec:pkg:seaice:subroutines}.
 Input fields, units and sign conventions are summarized in
 Section \ref{sec:pkg:seaice:fields_units}, and available diagnostics
-output is listed in Section \ref{sec:pkg:seaice:fields_diagnostics}.
+output is listed in Section \ref{sec:pkg:seaice:diagnostics}.
 
 %----------------------------------------------------------------------
 
@@ -129,7 +129,19 @@ A package is switched on/off at run-time by setting
 Table~\ref{tab:pkg:seaice:runtimeparms} lists most run-time parameters.
 \input{part6/seaice-parms.tex}
 
-
+\paragraph{Input fields and units\label{sec:pkg:seaice:fields_units}}
+\begin{description}
+\item[\code{HeffFile}:] Initial sea ice thickness averaged over grid cell
+  in meters; initializes variable \code{HEFF};
+\item[\code{AreaFile}:] Initial fractional sea ice cover, range $[0,1]$;
+  initializes variable \code{AREA};
+\item[\code{HsnowFile}:] Initial snow thickness on sea ice averaged
+  over grid cell in meters; initializes variable \code{HSNOW};
+\item[\code{HsaltFile}:] Initial salinity of sea ice averaged over grid
+  cell in g/m$^2$; initializes variable \code{HSALT};
+\item[\code{IceAgeFile}:] Initial ice age of sea ice averaged over grid
+  cell in seconds; initializes variable \code{ICEAGE};
+\end{description}
 
 %----------------------------------------------------------------------
 \subsubsection{Description
