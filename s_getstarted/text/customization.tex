@@ -202,9 +202,19 @@ variables.
 \begin{description}
 \item[initialization] \ 
   
-  The velocity components are initialized to 0 unless the simulation
-  is starting from a pickup file (see section on simulation control
-  parameters).
+  The initial horizontal velocity components can be specified from 
+  binary files \textbf{uVelInitFile} and \textbf{vVelInitFile}.
+  These files should contain 3D data ordered in an (x,y,r) fashion with 
+  k=1 as the first vertical level (surface level). 
+  If no file names are provided, the velocity is initialised to zero.
+  The initial vertical velocity is always derived from the horizontal velocity
+  using the continuity equation, even in the case of non-hydrostatic simulation 
+  (see, e.g.: {\it tutorial\_deep\_convection/input/data}).
+
+  In the case of a restart (from the end of a previous simulation), 
+  the velocity field is read from a pickup file
+  (see section on simulation control parameters) 
+  and the initial velocity files are ignored.
 
 \item[forcing] \ 
   
