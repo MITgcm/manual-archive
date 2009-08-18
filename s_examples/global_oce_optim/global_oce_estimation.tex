@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_examples/global_oce_optim/global_oce_estimation.tex,v 1.14 2008/02/29 22:55:13 dfer Exp $
+% $Header: /u/gcmpack/manual/s_examples/global_oce_optim/global_oce_estimation.tex,v 1.15 2009/08/18 21:24:42 dfer Exp $
 % $Name:  $
 
 \section[Global Ocean State Estimation Example]{Global Ocean State Estimation at $4^\circ$ Resolution}
@@ -70,7 +70,11 @@ Fig. \ref{Results} shows the results of such an optimization. The
 model is started from rest and from January-mean temperature and salinity
 initial conditions taken from the Levitus dataset. The experiment is run a year
 and the averaged temperature over the whole run (i.e. annual mean) is used
-in the cost function (\ref{cost_temp}) to evaluate the model. Only the
+in the cost function (\ref{cost_temp}) to evaluate the model\footnote{Because of
+the daily automatic testing, the experiment as found in the repository is set-up
+with a very small number of time-steps. To reproduce the results shown here, one
+needs to set nTimeSteps = 360 and lastinterval=31104000 (both corresponding to a
+year, see section \ref{sectRun} for further details).}. Only the
 top 2 levels are used. The first guess $Q_\mathrm{netm}$ is chosen to be
 zero. The weights $\lambda_1$ and $\lambda_2$ are set to 1 and 2, respectively.
 The total cost function converges after 15 iterations, decreasing from 6.1 to
@@ -214,7 +218,7 @@ In ECCO\_CPPOPTIONS.h:
 \item define ALLOW\_HFLUXM\_CONTROL
 \end{itemize}
 
-\subsubsection{Running-time customizations in {\it input\_ad/}}
+\subsubsection{Running-time customizations in {\it input\_ad/}}\label{sectRun}
 
 \begin{itemize}
 
