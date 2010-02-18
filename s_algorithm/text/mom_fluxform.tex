@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/mom_fluxform.tex,v 1.12 2008/01/18 21:26:45 jmc Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/mom_fluxform.tex,v 1.13 2010/02/18 21:26:26 jmc Exp $
 % $Name:  $
 
 \section{Flux-form momentum equations}
@@ -256,7 +256,7 @@ The lateral viscous stresses are discretized:
 where the non-dimensional factors $c_{lm\Delta^n}(\varphi), \{l,m,n\} \in
 \{1,2\}$ define the ``cosine'' scaling with latitude which can be
 applied in various ad-hoc ways. For instance, $c_{11\Delta} =
-c_{21\Delta} = (\cos{\varphi})^{3/2}$, $c_{12\Delta}=c_{22\Delta}=0$ would
+c_{21\Delta} = (\cos{\varphi})^{3/2}$, $c_{12\Delta}=c_{22\Delta}=1$ would
 represent the an-isotropic cosine scaling typically used on the
 ``lat-lon'' grid for Laplacian viscosity.
 \marginpar{Need to tidy up method for controlling this in code}
@@ -279,7 +279,7 @@ viscA4}), has units of $m^4 s^{-1}$.
 
 {\em S/R MOM\_V\_YVISCFLUX} ({\em mom\_v\_yviscflux.F})
 
-$\tau_{11}$, $\tau_{12}$, $\tau_{22}$, $\tau_{22}$: {\bf vF}, {\bf
+$\tau_{11}$, $\tau_{12}$, $\tau_{21}$, $\tau_{22}$: {\bf vF}, {\bf
 v4F} (local to {\em mom\_fluxform.F})
 \end{minipage} }
 
