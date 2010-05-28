@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.41 2010/01/22 00:38:16 jmc Exp $
+% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.42 2010/05/28 02:09:59 jmc Exp $
 % $Name:  $
 
 %\section{Getting started}
@@ -520,10 +520,24 @@ To compile the code, first use the program \texttt{genmake2} (located
 in the \texttt{tools} directory) to generate a Makefile.
 \texttt{genmake2} is a shell script written to work with all
 ``sh''--compatible shells including bash v1, bash v2, and Bourne.
-Internally, \texttt{genmake2} determines the locations of needed
-files, the compiler, compiler options, libraries, and Unix tools.  It
-relies upon a number of ``optfiles'' located in the
-\texttt{tools/build\_options} directory.
+%Internally, \texttt{genmake2} determines the locations of needed
+%files, the compiler, compiler options, libraries, and Unix tools.  It
+%relies upon a number of ``optfiles'' located in the
+%\texttt{tools/build\_options} directory.
+\texttt{genmake2} parses information from the following sources:
+\begin{description}
+\item[-] a {\em gemake\_local} file if one is found in the current 
+  directory
+\item[-] command-line options
+\item[-] an "options file" as specified by the command-line option
+  \texttt{--optfile=/PATH/FILENAME}
+\item[-] a {\em packages.conf} file (if one is found) with the 
+  specific list of packages to compile. The search path for 
+  file {\em packages.conf} is, first, the current directory and
+  then each of the "MODS" directories in the given order (see below).
+\end{description}
+
+\subsubsection{Optfiles in \texttt{tools/build\_options} directory:}
 
 The purpose of the optfiles is to provide all the compilation options
 for particular ``platforms'' (where ``platform'' roughly means the
@@ -596,6 +610,8 @@ for inclusion.  Please send the file to the
 \begin{rawhtml} </A> \end{rawhtml}
 mailing list.
 
+\subsubsection{Command-line options:}
+
 In addition to the optfiles, \texttt{genmake2} supports a number of
 helpful command-line options.  A complete list of these options can be
 obtained from:
@@ -618,21 +634,31 @@ The most important command-line options are:
   the user's path.  When these three items have been identified,
   genmake2 will try to find an optfile that has a matching name.
   
-\item[\texttt{--pdefault='PKG1 PKG2 PKG3 ...'}] specifies the default
-  set of packages to be used.  The normal order of precedence for
-  packages is as follows:
-  \begin{enumerate}
-  \item If available, the command line (\texttt{--pdefault}) settings
-    over-rule any others.
-
-  \item Next, \texttt{genmake2} will look for a file named
-    ``\texttt{packages.conf}'' in the local directory or in any of the
-    directories specified with the \texttt{--mods} option.
-    
-  \item Finally, if neither of the above are available,
-    \texttt{genmake2} will use the \texttt{/pkg/pkg\_default} file.
-  \end{enumerate}
+\item[\texttt{--mods='DIR1 DIR2 DIR3 ...'}] specifies a list of
+  directories containing ``modifications''.  These directories contain
+  files with names that may (or may not) exist in the main MITgcm
+  source tree but will be overridden by any identically-named sources
+  within the ``MODS'' directories.
   
+  The order of precedence for this "name-hiding" is as follows:
+  \begin{itemize}
+  \item ``MODS'' directories (in the order given)
+  \item Packages either explicitly specified or provided by default
+    (in the order given)
+  \item Packages included due to package dependencies (in the order
+    that that package dependencies are parsed)
+  \item The "standard dirs" (which may have been specified by the
+    ``-standarddirs'' option)
+  \end{itemize}
+  
+\item[\texttt{--pgroups=/PATH/FILENAME}] specifies the file
+  where package groups are defined. If not set, the package-groups 
+  definition will be read from {\em pkg/pkg\_groups}.
+  It also contains the default list of packages (defined
+  as the group ``{\it default\_pkg\_list}'' which is used
+  when no specific package list ({\em packages.conf})
+  is found in current directory or in any "MODS" directory.
+
 \item[\texttt{--pdepend=/PATH/FILENAME}] specifies the dependency file
   used for packages.
   
@@ -656,23 +682,6 @@ The most important command-line options are:
   {\em tools/adjoint\_options/adjoint\_staf} that selects the newer
   "STAF" compiler.  As with any compilers, it is helpful to have their
   directories listed in your {\tt \$PATH} environment variable.
-  
-\item[\texttt{--mods='DIR1 DIR2 DIR3 ...'}] specifies a list of
-  directories containing ``modifications''.  These directories contain
-  files with names that may (or may not) exist in the main MITgcm
-  source tree but will be overridden by any identically-named sources
-  within the ``MODS'' directories.
-  
-  The order of precedence for this "name-hiding" is as follows:
-  \begin{itemize}
-  \item ``MODS'' directories (in the order given)
-  \item Packages either explicitly specified or provided by default
-    (in the order given)
-  \item Packages included due to package dependencies (in the order
-    that that package dependencies are parsed)
-  \item The "standard dirs" (which may have been specified by the
-    ``-standarddirs'' option)
-  \end{itemize}
   
 \item[\texttt{--mpi}] This option enables certain MPI features (using
   CPP \texttt{\#define}s) within the code and is necessary for MPI
