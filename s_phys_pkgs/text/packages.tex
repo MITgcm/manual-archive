@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/text/packages.tex,v 1.6 2005/07/18 20:45:27 molod Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/text/packages.tex,v 1.7 2010/07/26 15:48:56 jmc Exp $
 % $Name:  $
 
 \section{Using MITgcm Packages}
@@ -41,8 +41,9 @@ inclusion or exclusion and they are all implemented by the
   automatically obtains all packages in that group.
 
 \item By default (that is, if a \texttt{packages.conf} file is not
-  found), the \texttt{genmake2} program will use the contents of the
-  \texttt{pkg/pkg\_default} file to obtain a list of packages.
+  found), the \texttt{genmake2} program will use the
+  package group default ``\texttt{default\_pkg\_list}'' as defined 
+  in \texttt{pkg/pkg\_groups} file.
 
 \item To help prevent users from creating unusable package groups, the
   \texttt{genmake2} program will parse the contents of the
@@ -228,7 +229,7 @@ outlined here:
 
         #ifdef ALLOW_${PKG}
           if ( use${Pkg} )
-     &       CALL ${PKG}_DIAGS( )
+     &       CALL ${PKG}_OUTPUT( )
         #endif
 
      7. S/R PACKAGES_WRITE_PICKUP()
