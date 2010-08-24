@@ -1,5 +1,5 @@
 #
-#  $Header: /u/gcmpack/manual/s_examples/held_suarez_cs/Makefile,v 1.1 2005/08/09 16:41:35 edhill Exp $
+#  $Header: /u/gcmpack/manual/s_examples/held_suarez_cs/Makefile,v 1.2 2010/08/24 20:51:01 jmc Exp $
 #  $Name:  $
 #
 
@@ -24,4 +24,7 @@ $(TEX_FILES) : $(TEMPLATE_FILES)
 clean :
 	-rm -f $(TEX_FILES)
 
+Clean:
+	@make clean
+	-rm -f input/*.tex code/*.tex
 
