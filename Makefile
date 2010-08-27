@@ -1,5 +1,5 @@
 #
-#  $Header: /u/gcmpack/manual/Makefile,v 1.28 2005/12/16 01:27:58 edhill Exp $
+#  $Header: /u/gcmpack/manual/Makefile,v 1.29 2010/08/27 13:30:56 jmc Exp $
 #  $Name:  $
 #
 
@@ -57,7 +57,7 @@ l2h: l2h.tgz
 subfigs: manual.tgz
 
 manual.dvi: *.tex */*.tex */*/*/*.tex */*.ps */*.eps */*/*/*.eps manual_references.bib */*/*/*.templ
-	( cd part3/case_studies/held_suarez_cs/  &&  make )
+	( cd s_examples/held_suarez_cs/  &&  make )
 	TEXINPUTS=.:::texinputs latex manual
 	bibtex manual
 	TEXINPUTS=.:::texinputs latex manual
@@ -74,7 +74,7 @@ clean:
 
 Clean:
 	make clean
-	( cd part3/case_studies/held_suarez_cs/  &&  make clean )
+	( cd s_examples/held_suarez_cs/  &&  make Clean )
 	rm -f manual.{ps,pdf,ps.gz}
 	rm -rf manual
 	rm -f manual.{tz,tgz} mbkup.{tz,tgz} l2h.{tz,tgz}
