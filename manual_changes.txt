@@ -1,0 +1,118 @@
+============================================================================
+2010 Aug 26:
+
+Change manual directory structure inside cvs repository (gcmpack/manual):
+
+Objective:
+- to have all the tex files in manual/*/*/*.tex
+- chapter dir with an explicit name (easier to insert a new chapter)
+- renamed the tutorial documentation dir to match the
+  MITgcm/verification (but without the "tutorial_" suffix).
+
+In order to keep the cvs history of each file, the following changes were
+made directly from gcmpack/manual dir (whereas using cvs add/remove the
+history would have been broken in 2 pieces and difficult to follow):
+
+------------------------
+step 1: copy to new dir
+-------
+2010 Aug 26, from orwell.csail.mit.edu:
+cd /export/export-9/gcmpack/manual/
+
+cp -p -r part1      s_overview
+cp -p -r part2      s_algorithm
+cp -p -r part3      s_getstarted
+ mv s_getstarted/case_studies    s_examples
+cp -p -r part4      s_software
+cp -p -r part5      s_autodiff
+cp -p -r part6      s_phys_pkgs
+cp -p -r part7      s_outp_pkgs
+cp -p -r part8      s_ecco
+cp -p -r under_dvlp s_under_dvlp
+
+cd s_overview
+ mkdir text figs
+ mv part1.tex,v text/top_section.tex,v
+ mv *.tex,v text
+ mv manual.src,v text
+ mv *.eps,v *.ps,v *.fig,v figs
+
+cd s_algorithm
+ mkdir text figs
+ mv part2.tex,v text/top_section.tex,v
+ mv *.tex,v text
+ mv *.eps,v *.ps,v *.fig,v *.jpg,v figs
+
+cd s_getstarted
+ mkdir text
+ mv part3.tex,v text/top_section.tex,v
+ mv tutorials.tex,v ../s_examples
+ mv *.tex,v text
+
+cd s_examples
+ mkdir text
+ mv tutorials.tex,v text/model_examples.tex,v
+ mv advection_in_gyre_circulation  advection_in_gyre
+ mv biogeochem_tutorial            global_oce_biogeo
+ mv climatalogical_ogcm            global_oce_latlon
+ mv doubly_periodic_convection     deep_convection
+ mv fourlayer_gyre                 baroclinic_gyre
+ mv global_oce_estimation          global_oce_optim
+ mv offline                        cfc_offline
+ mv ogcm_in_pressure               global_oce_in_p
+ mv sens_airsea_tracer             tracer_adjsens
+
+ mv carbon_outgassing_sensitivity/Attic tracer_adjsens/
+ mv hs_atmosphere/Attic                 held_suarez_cs/
+ rm -rf adiabatic_front_collapse
+ rm -rf boundary_forced_internal_wave
+ rm -rf flow_over_topography
+ rmdir carbon_outgassing_sensitivity
+ rmdir hs_atmosphere
+ rmdir offline_north_atlantic
+
+cd s_software
+ mkdir text figs
+ mv part4.tex,v text/top_section.tex,v
+ mv *.tex,v text
+ mv *.eps,v figs
+
+cd s_autodiff
+ mkdir text figs
+ mv part5.tex,v text/top_section.tex,v
+ mv *.tex,v text
+ mv *.eps,v *.fig,v figs
+
+cd s_phys_pkgs
+ mkdir text figs
+ mv part6.tex,v text/top_section.tex,v
+ mv *.tex,v text
+ mv *.eps,v *.ps,v *.ppt,v figs
+
+cd s_outp_pkgs
+ mkdir text
+ mv part7.tex,v text/top_section.tex,v
+ mv *.tex,v text
+
+cd s_ecco
+ mkdir text
+ mv part8.tex,v text/top_section.tex,v
+ mv *.tex,v text
+
+cd s_under_dvlp
+ mkdir text figs
+ mv under_dvlp.tex,v text/top_section.tex,v
+ mv *.tex,v text
+ mv *.eps,v figs
+
+----------------------------------------------------
+step 2: download the new manual and check-in changes for new directory path.
+ (2010 Aug 27); see cvs-commit log messages
+-------------------------------
+step 3: remove old chapter dir:
+-------
+ (to do soon, but might encounter some permission issues)
+ from orwell.csail.mit.edu:
+cd /export/export-9/gcmpack/manual/
+ /bin/rm -rf part1 part2 part3 part4 part5 part6 part7 part8 under_dvlp
+============================================================================
