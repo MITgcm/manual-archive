@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.26 2006/06/29 01:45:32 jmc Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.27 2010/08/27 13:08:18 jmc Exp $
 % $Name:  $
 
 This chapter lays out the numerical schemes that are
@@ -10,7 +10,7 @@ describe the spatial discretization. The schemes employed for momentum
 terms are described first, afterwards the schemes that apply to
 passive and dynamically active tracers are described.
 
-\input{part2/notation}
+\input{s_algorithm/text/notation}
 
 \section{Time-stepping}
 \begin{rawhtml}
@@ -74,7 +74,7 @@ described in section \ref{sect:nonlinear-freesurface}.
 
 \begin{figure}
 \begin{center}
-\resizebox{4.0in}{!}{\includegraphics{part2/pressure-method-rigid-lid.eps}}
+\resizebox{4.0in}{!}{\includegraphics{s_algorithm/figs/pressure-method-rigid-lid.eps}}
 \end{center}
 \caption{
 A schematic of the evolution in time of the pressure method
@@ -376,7 +376,7 @@ A stability analysis for a relaxation equation should be given at this point.
 
 \begin{figure}
 \begin{center}
-\resizebox{5.5in}{!}{\includegraphics{part2/oscil+damp_AB2.eps}}
+\resizebox{5.5in}{!}{\includegraphics{s_algorithm/figs/oscil+damp_AB2.eps}}
 \end{center}
 \caption{
 Oscillatory and damping response of
@@ -451,7 +451,7 @@ implicit and are thus cast as a an explicit drag term.
 
 \begin{figure}
 \begin{center}
-\resizebox{5.0in}{!}{\includegraphics{part2/adams-bashforth-sync.eps}}
+\resizebox{5.0in}{!}{\includegraphics{s_algorithm/figs/adams-bashforth-sync.eps}}
 \end{center}
 \caption{
 A schematic of the explicit Adams-Bashforth and implicit time-stepping
@@ -571,7 +571,7 @@ time-step. The corresponding calling tree is given in
 
 \begin{figure}
 \begin{center}
-\resizebox{5.5in}{!}{\includegraphics{part2/adams-bashforth-staggered.eps}}
+\resizebox{5.5in}{!}{\includegraphics{s_algorithm/figs/adams-bashforth-staggered.eps}}
 \end{center}
 \caption{
 A schematic of the explicit Adams-Bashforth and implicit time-stepping

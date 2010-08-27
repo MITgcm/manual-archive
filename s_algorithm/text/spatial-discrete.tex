@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/spatial-discrete.tex,v 1.22 2008/01/22 20:50:41 heimbach Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/spatial-discrete.tex,v 1.23 2010/08/27 13:08:18 jmc Exp $
 % $Name:  $
 
 \section{Spatial discretization of the dynamical equations}
@@ -74,7 +74,7 @@ directions simultaneously. Illustration of this is given in
 
 \begin{figure}
 \begin{center}
-\resizebox{!}{2in}{ \includegraphics{part2/cgrid3d.eps}}
+\resizebox{!}{2in}{ \includegraphics{s_algorithm/figs/cgrid3d.eps}}
 \end{center}
 \caption{Three dimensional staggering of velocity components. This
 facilitates the natural discretization of the continuity and tracer
@@ -126,11 +126,11 @@ grid data: ({\em model/inc/GRID.h})
 \begin{figure}
 \begin{center}
 \begin{tabular}{cc}
-  \raisebox{1.5in}{a)}\resizebox{!}{2in}{ \includegraphics{part2/hgrid-Ac.eps}}
-& \raisebox{1.5in}{b)}\resizebox{!}{2in}{ \includegraphics{part2/hgrid-Az.eps}}
+  \raisebox{1.5in}{a)}\resizebox{!}{2in}{ \includegraphics{s_algorithm/figs/hgrid-Ac.eps}}
+& \raisebox{1.5in}{b)}\resizebox{!}{2in}{ \includegraphics{s_algorithm/figs/hgrid-Az.eps}}
 \\
-  \raisebox{1.5in}{c)}\resizebox{!}{2in}{ \includegraphics{part2/hgrid-Au.eps}}
-& \raisebox{1.5in}{d)}\resizebox{!}{2in}{ \includegraphics{part2/hgrid-Av.eps}}
+  \raisebox{1.5in}{c)}\resizebox{!}{2in}{ \includegraphics{s_algorithm/figs/hgrid-Au.eps}}
+& \raisebox{1.5in}{d)}\resizebox{!}{2in}{ \includegraphics{s_algorithm/figs/hgrid-Av.eps}}
 \end{tabular}
 \end{center}
 \caption{
@@ -327,8 +327,8 @@ other grids, the horizontal grid descriptors have units of meters.
 \begin{center}
   \begin{tabular}{cc}
   \raisebox{4in}{a)} \resizebox{!}{4in}{
-  \includegraphics{part2/vgrid-cellcentered.eps}} & \raisebox{4in}{b)}
-  \resizebox{!}{4in}{ \includegraphics{part2/vgrid-accurate.eps}}
+  \includegraphics{s_algorithm/figs/vgrid-cellcentered.eps}} & \raisebox{4in}{b)}
+  \resizebox{!}{4in}{ \includegraphics{s_algorithm/figs/vgrid-accurate.eps}}
 \end{tabular} 
 \end{center}
 \caption{Two versions of the vertical grid. a) The cell centered
@@ -407,7 +407,7 @@ $\Delta r_c^{-1}$: {\bf RECIP\_DRc} ({\em GRID.h})
 
 \begin{figure}
 \begin{center}
-\resizebox{4.5in}{!}{\includegraphics{part2/vgrid-xz.eps}}
+\resizebox{4.5in}{!}{\includegraphics{s_algorithm/figs/vgrid-xz.eps}}
 \end{center}
 \caption{
 A schematic of the x-r plane showing the location of the
