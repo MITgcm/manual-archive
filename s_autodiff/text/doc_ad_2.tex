@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_autodiff/text/doc_ad_2.tex,v 1.21 2008/01/17 22:32:06 heimbach Exp $
+% $Header: /u/gcmpack/manual/s_autodiff/text/doc_ad_2.tex,v 1.22 2010/08/27 13:09:40 jmc Exp $
 % $Name:  $
 
 Author: Patrick Heimbach
@@ -663,8 +663,8 @@ $ n^{lev3}, \,\, n^{lev2}, \,\, n^{lev1} $.
 %\psfrag{v_kn^lev2}{\mathinfigure{v_{k_{n}^{lev2}}}}
 %\psfrag{v_k1^lev1}{\mathinfigure{v_{k_{1}^{lev1}}}}
 %\psfrag{v_kn^lev1}{\mathinfigure{v_{k_{n}^{lev1}}}}
-%\mbox{\epsfig{file=part5/checkpointing.eps, width=0.8\textwidth}}
-\resizebox{5.5in}{!}{\includegraphics{part5/checkpointing.eps}}
+%\mbox{\epsfig{file=s_autodiff/figs/checkpointing.eps, width=0.8\textwidth}}
+\resizebox{5.5in}{!}{\includegraphics{s_autodiff/figs/checkpointing.eps}}
 %\psfull
 \end{center}
 \caption{
@@ -695,7 +695,7 @@ the parts of the code that are relevant for automatic
 differentiation using the software tool TAF.
 Modifications to use OpenAD are described in \ref{sec_ad_openad}. 
 
-\input{part5/doc_ad_the_model}
+\input{s_autodiff/text/doc_ad_the_model}
 
 The basic flow is depicted in \ref{fig:adthemodel}.
 If CPP option \texttt{ALLOW\_AUTODIFF\_TAMC} is defined, 
@@ -1014,7 +1014,7 @@ The aspects relevant to the treatment of the independent variables
 are controlled by the package {\it pkg/ctrl} and will be treated
 in the next section.
 
-\input{part5/doc_cost_flow}
+\input{s_autodiff/text/doc_cost_flow}
 
 \subsubsection{Enabling the package}
 
@@ -1136,7 +1136,7 @@ taf -output 'fc' ...
 
 %%%% \end{document}
 
-\input{part5/doc_ad_the_main}
+\input{s_autodiff/text/doc_ad_the_main}
 
 \subsection{The control variables (independent variables)
 \label{section_ctrl}}
@@ -1156,7 +1156,7 @@ All aspects relevant to the treatment of the control variables
 (parameter setting, initialization, perturbation)
 are controlled by the package {\it pkg/ctrl}.
 
-\input{part5/doc_ctrl_flow}
+\input{s_autodiff/text/doc_ctrl_flow}
 
 \subsubsection{genmake and CPP options}
 %
