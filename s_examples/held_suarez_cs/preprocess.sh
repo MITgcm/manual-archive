@@ -4,7 +4,7 @@
 here=`pwd`
 tutor=`basename $here`
 echo 'tutorial:' $tutor
-src='../../../../MITgcm/verification/tutorial_'$tutor
+src='../../../MITgcm/verification/tutorial_'$tutor
 
 if test -d $src
 then
@@ -40,7 +40,7 @@ fi
     yy=`echo $zz | sed 's/inp_/input\//'  | sed 's/cod_/code\//'`
     #echo 'xx='$xx ' ; yy='$yy
     if test -f $src/$yy ; then
-      ../../../tools/replace_line_nb $xx $src/$yy
+      ../../tools/replace_line_nb $xx $src/$yy
       echo '  ' `ls $zz.tex`'	<-- ' $xx '(using:' $yy')'
     else 
       if test -f $zz.tex ; then :
