@@ -1,5 +1,5 @@
 #
-#  $Header: /u/gcmpack/manual/Makefile,v 1.29 2010/08/27 13:30:56 jmc Exp $
+#  $Header: /u/gcmpack/manual/Makefile,v 1.30 2010/08/28 22:57:11 jmc Exp $
 #  $Name:  $
 #
 
@@ -56,12 +56,13 @@ l2h: l2h.tgz
 
 subfigs: manual.tgz
 
-manual.dvi: *.tex */*.tex */*/*/*.tex */*.ps */*.eps */*/*/*.eps manual_references.bib */*/*/*.templ
+manual.dvi: *.tex */*/*.tex */*/*.templ */*/*.ps */*/*.eps manual_references.bib
 	( cd s_examples/held_suarez_cs/  &&  make )
 	TEXINPUTS=.:::texinputs latex manual
 	bibtex manual
 	TEXINPUTS=.:::texinputs latex manual
-	TEXINPUTS=.:::texinputs latex manual | tee warnings
+	TEXINPUTS=.:::texinputs latex manual
+	tools/latex_warning.sh manual.log warnings
 
 manual.ps: manual.dvi
 	dvips -Pcmz -Pamz -o manual.ps manual.dvi
