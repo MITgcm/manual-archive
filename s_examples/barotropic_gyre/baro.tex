@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_examples/barotropic_gyre/baro.tex,v 1.19 2010/08/27 13:25:31 jmc Exp $
+% $Header: /u/gcmpack/manual/s_examples/barotropic_gyre/baro.tex,v 1.20 2010/08/30 23:09:19 jmc Exp $
 % $Name:  $
 
 \bodytext{bgcolor="#FFFFFFFF"}
@@ -14,8 +14,8 @@
 %\end{center}
 
 \section[Barotropic Gyre MITgcm Example]{Barotropic Ocean Gyre In Cartesian Coordinates}
-\label{www:tutorials}
-\label{sect:eg-baro}
+%\label{www:tutorials}
+\label{sec:eg-baro}
 \begin{rawhtml}
 <!-- CMIREDIR:eg-baro: -->
 \end{rawhtml}
@@ -39,19 +39,19 @@ the coriolis parameter $f$ is defined according to a mid-latitude beta-plane
 equation
 
 \begin{equation}
-\label{EQ:eg-baro-fcori}
+\label{eq:eg-baro-fcori}
 f(y) = f_{0}+\beta y
 \end{equation}
  
 \noindent where $y$ is the distance along the ``north-south'' axis of the 
 simulated domain. For this experiment $f_{0}$ is set to $10^{-4}s^{-1}$ in 
-(\ref{EQ:eg-baro-fcori}) and $\beta = 10^{-11}s^{-1}m^{-1}$. 
+(\ref{eq:eg-baro-fcori}) and $\beta = 10^{-11}s^{-1}m^{-1}$. 
 \\
 \\
  The sinusoidal wind-stress variations are defined according to 
 
 \begin{equation}
-\label{EQ:eg-baro-taux}
+\label{eq:eg-baro-taux}
 \tau_x(y) = \tau_{0}\sin(\pi \frac{y}{L_y})
 \end{equation}
  
@@ -59,7 +59,7 @@ simulated domain. For this experiment $f_{0}$ is set to $10^{-4}s^{-1}$ in
 $\tau_0$ is set to $0.1N m^{-2}$. 
 \\
 \\
-Figure \ref{FIG:eg-baro-simulation_config}
+Figure \ref{fig:eg-baro-simulation_config}
 summarizes the configuration simulated.
 
 %% === eh3 ===
@@ -76,11 +76,11 @@ summarizes the configuration simulated.
 \caption{Schematic of simulation domain and wind-stress forcing function 
 for barotropic gyre numerical experiment. The domain is enclosed bu solid
 walls at $x=$~0,1200km and at $y=$~0,1200km.}
-\label{FIG:eg-baro-simulation_config}
+\label{fig:eg-baro-simulation_config}
 \end{figure}
 
 \subsection{Equations Solved}
-\label{www:tutorials}
+%\label{www:tutorials}
 The model is configured in hydrostatic form. The implicit free surface form of the
 pressure equation described in Marshall et. al \cite{marshall:97a} is
 employed.
@@ -88,11 +88,11 @@ A horizontal Laplacian operator $\nabla_{h}^2$ provides viscous
 dissipation. The wind-stress momentum input is added to the momentum equation
 for the ``zonal flow'', $u$. Other terms in the model
 are explicitly switched off for this experiment configuration (see section
-\ref{SEC:code_config} ), yielding an active set of equations solved in this
-configuration as follows 
+\ref{sec:eg-baro-code_config} ), yielding an active set of equations solved 
+in this configuration as follows 
 
 \begin{eqnarray}
-\label{EQ:eg-baro-model_equations}
+\label{eq:eg-baro-model_equations}
 \frac{Du}{Dt} - fv +
               g\frac{\partial \eta}{\partial x} -
               A_{h}\nabla_{h}^2u
@@ -115,7 +115,7 @@ flow vector $\vec{u}$.
 
 
 \subsection{Discrete Numerical Configuration}
-\label{www:tutorials}
+%\label{www:tutorials}
 
  The domain is discretised with 
 a uniform grid spacing in the horizontal set to
@@ -124,13 +124,13 @@ that there are sixty grid cells in the $x$ and $y$ directions. Vertically the
 model is configured with a single layer with depth, $\Delta z$, of $5000$~m. 
 
 \subsubsection{Numerical Stability Criteria}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 The Laplacian dissipation coefficient, $A_{h}$, is set to $400 m s^{-1}$.
 This value is chosen to yield a Munk layer width \cite{adcroft:95},
 
 \begin{eqnarray}
-\label{EQ:eg-baro-munk_layer}
+\label{eq:eg-baro-munk_layer}
 M_{w} = \pi ( \frac { A_{h} }{ \beta } )^{\frac{1}{3}}
 \end{eqnarray}
 
@@ -146,7 +146,7 @@ parameter to the horizontal Laplacian friction \cite{adcroft:95}
 
 
 \begin{eqnarray}
-\label{EQ:eg-baro-laplacian_stability}
+\label{eq:eg-baro-laplacian_stability}
 S_{l} = 4 \frac{A_{h} \delta t}{{\Delta x}^2}
 \end{eqnarray}
 
@@ -158,7 +158,7 @@ for stability.
 \cite{adcroft:95} 
 
 \begin{eqnarray}
-\label{EQ:eg-baro-inertial_stability}
+\label{eq:eg-baro-inertial_stability}
 S_{i} = f^{2} {\delta t}^2
 \end{eqnarray}
 
@@ -170,7 +170,7 @@ limit for stability.
 horizontal flow speed of $ | \vec{u} | = 2 ms^{-1}$
 
 \begin{eqnarray}
-\label{EQ:eg-baro-cfl_stability}
+\label{eq:eg-baro-cfl_stability}
 S_{a} = \frac{| \vec{u} | \delta t}{ \Delta x}
 \end{eqnarray}
 
@@ -178,8 +178,8 @@ S_{a} = \frac{| \vec{u} | \delta t}{ \Delta x}
 of 0.5 and limits $\delta t$ to $1200s$.
 
 \subsection{Code Configuration}
-\label{www:tutorials}
-\label{SEC:eg-baro-code_config}
+%\label{www:tutorials}
+\label{sec:eg-baro-code_config}
 
 The model configuration for this experiment resides under the 
 directory {\it verification/tutorial\_barotropic\_gyre/}.  
@@ -199,7 +199,7 @@ experiments. Below we describe the customizations
 to these files associated with this experiment.
 
 \subsubsection{File {\it input/data}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 This file, reproduced completely below, specifies the main parameters 
 for the experiment. The parameters that are significant for this configuration
@@ -311,19 +311,19 @@ notes.
 \end{small}
 
 \subsubsection{File {\it input/data.pkg}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 This file uses standard default values and does not contain
 customizations for this experiment.
 
 \subsubsection{File {\it input/eedata}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 This file uses standard default values and does not contain
 customizations for this experiment.
 
 \subsubsection{File {\it input/windx.sin\_y}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 The {\it input/windx.sin\_y} file specifies a two-dimensional ($x,y$) 
 map of wind stress ,$\tau_{x}$, values. The units used are $Nm^{-2}$.
@@ -334,7 +334,7 @@ in MITgcm. The included matlab program {\it input/gendata.m} gives a complete
 code for creating the {\it input/windx.sin\_y} file.
 
 \subsubsection{File {\it input/topog.box}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 
 The {\it input/topog.box} file specifies a two-dimensional ($x,y$) 
@@ -346,7 +346,7 @@ The included matlab program {\it input/gendata.m} gives a complete
 code for creating the {\it input/topog.box} file.
 
 \subsubsection{File {\it code/SIZE.h}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 Two lines are customized in this file for the current experiment
 
@@ -369,14 +369,14 @@ axis aligned with the y-coordinate.
 \end{small}
 
 \subsubsection{File {\it code/CPP\_OPTIONS.h}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 This file uses standard default values and does not contain
 customizations for this experiment.
 
 
 \subsubsection{File {\it code/CPP\_EEOPTIONS.h}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 This file uses standard default values and does not contain
 customizations for this experiment.

@@ -1,12 +1,12 @@
-% $Header: /u/gcmpack/manual/s_software/text/sarch.tex,v 1.25 2010/08/27 13:17:59 jmc Exp $
+% $Header: /u/gcmpack/manual/s_software/text/sarch.tex,v 1.26 2010/08/30 23:09:22 jmc Exp $
 
 This chapter focuses on describing the {\bf WRAPPER} environment
 within which both the core numerics and the pluggable packages
 operate. The description presented here is intended to be a detailed
 exposition and contains significant background material, as well as
 advanced details on working with the WRAPPER.  The tutorial sections
-of this manual (see sections \ref{sect:tutorials} and
-\ref{sect:tutorialIII}) contain more succinct, step-by-step
+of this manual (see sections \ref{sec:modelExamples} and
+\ref{sec:tutorialIII}) contain more succinct, step-by-step
 instructions on running basic numerical experiments, of varous types,
 both sequentially and in parallel. For many projects simply starting
 from an example code and adapting it to suit a particular situation
@@ -93,7 +93,7 @@ Resource). All numerical and support code in MITgcm is written to
 ``fit'' within the WRAPPER infrastructure. Writing code to ``fit''
 within the WRAPPER means that coding has to follow certain, relatively
 straightforward, rules and conventions (these are discussed further in
-section \ref{sect:specifying_a_decomposition}).
+section \ref{sec:specifying_a_decomposition}).
 
 The approach taken by the WRAPPER is illustrated in figure
 \ref{fig:fit_in_wrapper} which shows how the WRAPPER serves to
@@ -118,7 +118,7 @@ optimized for that platform.}
 \end{figure}
 
 \subsection{Target hardware}
-\label{sect:target_hardware}
+\label{sec:target_hardware}
 
 The WRAPPER is designed to target as broad as possible a range of
 computer systems.  The original development of the WRAPPER took place
@@ -136,11 +136,11 @@ routinely used on large scale MPP systems (for example, Cray T3E and
 IBM SP systems). In all cases numerical code, operating within the
 WRAPPER, performs and scales very competitively with equivalent
 numerical code that has been modified to contain native optimizations
-for a particular system \ref{ref hoe and hill, ecmwf}.
+for a particular system \cite{hoe-hill:99}.
 
 \subsection{Supporting hardware neutrality}
 
-The different systems listed in section \ref{sect:target_hardware} can
+The different systems listed in section \ref{sec:target_hardware} can
 be categorized in many different ways. For example, one common
 distinction is between shared-memory parallel systems (SMP and PVP)
 and distributed memory parallel systems (for example x86 clusters and
@@ -165,7 +165,7 @@ manner, any computer architecture currently available to the
 scientific computing community.
 
 \subsection{Machine model parallelism}
-\label{sect:domain_decomposition}
+\label{sec:domain_decomposition}
 \begin{rawhtml}
 <!-- CMIREDIR:domain_decomp: -->
 \end{rawhtml}
@@ -240,7 +240,7 @@ an overlap region whenever it requires values that lie outside the
 domain it owns.  Periodically processors will make calls to WRAPPER
 functions to communicate data between tiles, in order to keep the
 overlap regions up to date (see section
-\ref{sect:communication_primitives}).  The WRAPPER functions can use a
+\ref{sec:communication_primitives}).  The WRAPPER functions can use a
 variety of different mechanisms to communicate data between tiles.
 
 \begin{figure}
@@ -280,7 +280,7 @@ possible mechanisms.
   call a function in the API of the communication library to
   communicate data from a tile that it owns to a tile that another CPU
   owns. By default the WRAPPER binds to the MPI communication library
-  \ref{MPI} for this style of communication.
+  \cite{MPI-std-20} for this style of communication.
 \end{itemize}
 
 The WRAPPER assumes that communication will use one of these two styles
@@ -329,7 +329,7 @@ value to be communicated between CPUs.
 \end{figure}
 
 \subsection{Shared memory communication}
-\label{sect:shared_memory_communication}
+\label{sec:shared_memory_communication}
 
 Under shared communication independent CPUs are operating on the
 exact same global address space at the application level.  This means
@@ -356,7 +356,7 @@ method of communication very efficient provided it is used
 appropriately.
 
 \subsubsection{Memory consistency}
-\label{sect:memory_consistency}
+\label{sec:memory_consistency}
 
 When using shared memory communication between multiple processors the
 WRAPPER level shields user applications from certain counter-intuitive
@@ -382,7 +382,7 @@ invoke the appropriate mechanism to ensure memory consistency for a
 particular platform.
 
 \subsubsection{Cache effects and false sharing}
-\label{sect:cache_effects_and_false_sharing}
+\label{sec:cache_effects_and_false_sharing}
 
 Shared-memory machines often have local to processor memory caches
 which contain mirrored copies of main memory.  Automatic cache-coherence
@@ -402,20 +402,24 @@ compute threads. Multiple threads operating within a single process is
 the standard mechanism for supporting shared memory that the WRAPPER
 utilizes. Configuring and launching code to run in multi-threaded mode
 on specific platforms is discussed in section
-\ref{sect:multi-threaded-execution}.  However, on many systems,
+\ref{sec:multi_threaded_execution}.  However, on many systems,
 potentially very efficient mechanisms for using shared memory
 communication between multiple processes (in contrast to multiple
 threads within a single process) also exist. In most cases this works
 by making a limited region of memory shared between processes. The
-MMAP \ref{magicgarden} and IPC \ref{magicgarden} facilities in UNIX
+MMAP %\ref{magicgarden} 
+and IPC %\ref{magicgarden} 
+facilities in UNIX
 systems provide this capability as do vendor specific tools like LAPI
-\ref{IBMLAPI} and IMC \ref{Memorychannel}.  Extensions exist for the
+%\ref{IBMLAPI} 
+and IMC. %\ref{Memorychannel}.  
+Extensions exist for the
 WRAPPER that allow these mechanisms to be used for shared memory
 communication. However, these mechanisms are not distributed with the
 default WRAPPER sources, because of their proprietary nature.
 
 \subsection{Distributed memory communication}
-\label{sect:distributed_memory_communication}
+\label{sec:distributed_memory_communication}
 Many parallel systems are not constructed in a way where it is
 possible or practical for an application to use shared memory for
 communication. For example cluster systems consist of individual
@@ -426,11 +430,11 @@ communication library (see figure \ref{fig:comm_msg}).  The default
 communication library used is MPI \cite{MPI-std-20}. However, it is
 relatively straightforward to implement bindings to optimized platform
 specific communication libraries. For example the work described in
-\ref{hoe-hill:99} substituted standard MPI communication for a highly
+\cite{hoe-hill:99} substituted standard MPI communication for a highly
 optimized library.
 
 \subsection{Communication primitives}
-\label{sect:communication_primitives}
+\label{sec:communication_primitives}
 
 \begin{figure}
 \begin{center}
@@ -578,16 +582,16 @@ provided by the WRAPPER are
   computing CPUs.
 \end{enumerate} 
 This section describes the details of each of these operations.
-Section \ref{sect:specifying_a_decomposition} explains how the way in
+Section \ref{sec:specifying_a_decomposition} explains how the way in
 which a domain is decomposed (or composed) is expressed. Section
-\ref{sect:starting_a_code} describes practical details of running
+\ref{sec:starting_the_code} describes practical details of running
 codes in various different parallel modes on contemporary computer
-systems.  Section \ref{sect:controlling_communication} explains the
+systems.  Section \ref{sec:controlling_communication} explains the
 internal information that the WRAPPER uses to control how information
 is communicated between tiles.
 
 \subsection{Specifying a domain decomposition}
-\label{sect:specifying_a_decomposition}
+\label{sec:specifying_a_decomposition}
 
 At its heart much of the WRAPPER works only in terms of a collection of tiles
 which are interconnected to each other. This is also true of application
@@ -639,7 +643,7 @@ be created within a single process. Each of these tiles will have internal
 dimensions of {\em sNx} and {\em sNy}. If, when the code is executed, these tiles are 
 allocated to different threads of a process that are then bound to
 different physical processors ( see the multi-threaded
-execution discussion in section \ref{sect:starting_the_code} ) then
+execution discussion in section \ref{sec:starting_the_code} ) then
 computation will be performed concurrently on each tile. However, it is also
 possible to run the same decomposition within a process running a single thread on
 a single processor. In this case the tiles will be computed over sequentially.
@@ -836,14 +840,14 @@ There are six tiles allocated to six separate logical processors ({\em nSx=6}).
 This set of values can be used for a cube sphere calculation.
 Each tile of size $32 \times 32$ represents a face of the
 cube. Initializing the tile connectivity correctly ( see section
-\ref{sect:cube_sphere_communication}. allows the rotations associated with
+\ref{sec:cube_sphere_communication}. allows the rotations associated with
 moving between the six cube faces to be embedded within the 
 tile-tile communication code.
 \end{enumerate}
 
 
 \subsection{Starting the code}
-\label{sect:starting_the_code}
+\label{sec:starting_the_code}
 When code is started under the WRAPPER, execution begins in a main routine {\em
 eesupp/src/main.F} that is owned by the WRAPPER. Control is transferred 
 to the application through a routine called {\em THE\_MODEL\_MAIN()}
@@ -890,13 +894,13 @@ occurs through the procedure {\em THE\_MODEL\_MAIN()}.
 \end{figure}
 
 \subsubsection{Multi-threaded execution}
-\label{sect:multi-threaded-execution}
+\label{sec:multi_threaded_execution}
 Prior to transferring control to the procedure {\em THE\_MODEL\_MAIN()} the
 WRAPPER may cause several coarse grain threads to be initialized. The routine
 {\em THE\_MODEL\_MAIN()} is called once for each thread and is passed a single
 stack argument which is the thread number, stored in the
 variable {\em myThid}. In addition to specifying a decomposition with
-multiple tiles per process ( see section \ref{sect:specifying_a_decomposition}) 
+multiple tiles per process ( see section \ref{sec:specifying_a_decomposition}) 
 configuring and starting a code to run using multiple threads requires the following
 steps.\\
 
@@ -978,7 +982,7 @@ Parameter:  {\em nTy}
 } \\
 
 \subsubsection{Multi-process execution}
-\label{sect:multi-process-execution}
+\label{sec:multi_process_execution}
 
 Despite its appealing programming model, multi-threaded execution
 remains less common than multi-process execution. One major reason for
@@ -990,7 +994,7 @@ support for multi-threaded programming models varies between systems.
 
 Multi-process execution is more ubiquitous.  In order to run code in a
 multi-process configuration a decomposition specification (see section
-\ref{sect:specifying_a_decomposition}) is given (in which the at least
+\ref{sec:specifying_a_decomposition}) is given (in which the at least
 one of the parameters {\em nPx} or {\em nPy} will be greater than one)
 and then, as for multi-threaded operation, appropriate compile time
 and run time steps must be taken.
@@ -1010,7 +1014,7 @@ linking MITgcm.  (Previously this was done by setting the {\em
   ALLOW\_USE\_MPI} and {\em ALWAYS\_USE\_MPI} flags in the {\em
   CPP\_EEOPTIONS.h} file.)  More detailed information about the use of
 {\em genmake2} for specifying
-local compiler flags is located in section \ref{sect:genmake}.\\
+local compiler flags is located in section \ref{sec:genmake}.\\
 
 
 \fbox{ 
@@ -1114,6 +1118,7 @@ Parameter: {\em pidN       }
 
 
 \subsection{Controlling communication}
+\label{sec:controlling_communication}
 The WRAPPER maintains internal information that is used for communication
 operations and that can be customized for different platforms. This section 
 describes the information that is held and used.
@@ -1136,10 +1141,10 @@ describes the information that is held and used.
   a particular face. A value of {\em COMM\_MSG} is used to indicate
   that some form of distributed memory communication is required to
   communicate between these tile faces (see section
-  \ref{sect:distributed_memory_communication}).  A value of {\em
+  \ref{sec:distributed_memory_communication}).  A value of {\em
     COMM\_PUT} or {\em COMM\_GET} is used to indicate forms of shared
   memory communication (see section
-  \ref{sect:shared_memory_communication}). The {\em COMM\_PUT} value
+  \ref{sec:shared_memory_communication}). The {\em COMM\_PUT} value
   indicates that a CPU should communicate by writing to data
   structures owned by another CPU. A {\em COMM\_GET} value indicates
   that a CPU should communicate by reading from data structures owned
@@ -1196,7 +1201,7 @@ Parameter: {\em tileCommModeS} \\
   the file {\em eedata}. If the value of {\em nThreads} is
   inconsistent with the number of threads requested from the operating
   system (for example by using an environment variable as described in
-  section \ref{sect:multi_threaded_execution}) then usually an error
+  section \ref{sec:multi_threaded_execution}) then usually an error
   will be reported by the routine {\em CHECK\_THREADS}.
 
 \fbox{ 
@@ -1213,7 +1218,7 @@ Parameter: {\em nTy} \\
 }
 
 \item {\bf memsync flags}
-  As discussed in section \ref{sect:memory_consistency}, a low-level
+  As discussed in section \ref{sec:memory_consistency}, a low-level
   system function may be need to force memory consistency on some
   shared memory systems.  The routine {\em MEMSYNC()} is used for this
   purpose. This routine should not need modifying and the information
@@ -1239,7 +1244,7 @@ asm("lock; addl $0,0(%%esp)": : :"memory")
 \end{verbatim}
 
 \item {\bf Cache line size}
-  As discussed in section \ref{sect:cache_effects_and_false_sharing},
+  As discussed in section \ref{sec:cache_effects_and_false_sharing},
   milti-threaded codes explicitly avoid penalties associated with
   excessive coherence traffic on an SMP system. To do this the shared
   memory data structures used by the {\em GLOBAL\_SUM}, {\em
@@ -1269,7 +1274,7 @@ asm("lock; addl $0,0(%%esp)": : :"memory")
     CPP\_EEMACROS.h}.  The \_GSUM macro is a performance critical
   operation, especially for large processor count, small tile size
   configurations.  The custom communication example discussed in
-  section \ref{sect:jam_example} shows how the macro is used to invoke
+  section \ref{sec:jam_example} shows how the macro is used to invoke
   a custom global sum routine for a specific set of hardware.
 
 \item {\bf \_EXCH}
@@ -1282,7 +1287,7 @@ asm("lock; addl $0,0(%%esp)": : :"memory")
   the header file {\em CPP\_EEMACROS.h}. As with \_GSUM, the \_EXCH
   operation plays a crucial role in scaling to small tile, large
   logical and physical processor count configurations.  The example in
-  section \ref{sect:jam_example} discusses defining an optimized and
+  section \ref{sec:jam_example} discusses defining an optimized and
   specialized form on the \_EXCH operation.
 
   The \_EXCH operation is also central to supporting grids such as the
@@ -1323,7 +1328,7 @@ asm("lock; addl $0,0(%%esp)": : :"memory")
   if this mechanism is unavailable then the work arrays can be extended
   with dimensions using the tile dimensioning scheme of {\em nSx} and
   {\em nSy} (as described in section
-  \ref{sect:specifying_a_decomposition}). However, if the
+  \ref{sec:specifying_a_decomposition}). However, if the
   configuration being specified involves many more tiles than OS
   threads then it can save memory resources to reduce the variable
   {\em MAX\_NO\_THREADS} to be equal to the actual number of threads
@@ -1381,7 +1386,7 @@ Here we show how it can be used to improve application performance and
 how it can be used to adapt to new griding approaches.
 
 \subsubsection{JAM example}
-\label{sect:jam_example}
+\label{sec:jam_example}
 On some platforms a big performance boost can be obtained by binding
 the communication routines {\em \_EXCH} and {\em \_GSUM} to
 specialized native libraries (for example, the shmem library on CRAY
@@ -1405,7 +1410,7 @@ Developing specialized code for other libraries follows a similar
 pattern.
 
 \subsubsection{Cube sphere communication}
-\label{sect:cube_sphere_communication}
+\label{sec:cube_sphere_communication}
 Actual {\em \_EXCH} routine code is generated automatically from a
 series of template files, for example {\em exch\_rx.template}.  This
 is done to allow a large number of variations on the exchange process
@@ -1440,10 +1445,10 @@ point locations.
 
 Fitting together the WRAPPER elements, package elements and
 MITgcm core equation elements of the source code produces calling
-sequence shown in section \ref{sect:calling_sequence}
+sequence shown in section \ref{sec:calling_sequence}
 
 \subsection{Annotated call tree for MITgcm and WRAPPER}
-\label{sect:calling_sequence}
+\label{sec:calling_sequence}
 
 WRAPPER layer.
 

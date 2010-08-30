@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.27 2010/08/27 13:08:18 jmc Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.28 2010/08/30 23:09:19 jmc Exp $
 % $Name:  $
 
 This chapter lays out the numerical schemes that are
@@ -13,6 +13,7 @@ passive and dynamically active tracers are described.
 \input{s_algorithm/text/notation}
 
 \section{Time-stepping}
+\label{sec:time_stepping}
 \begin{rawhtml}
 <!-- CMIREDIR:time-stepping: -->
 \end{rawhtml}
@@ -50,24 +51,24 @@ evaluated explicitly in time. Since the over-arching algorithm is
 independent of the particular time-stepping scheme chosen we will
 describe first the over-arching algorithm, known as the pressure
 method, with a rigid-lid model in section
-\ref{sect:pressure-method-rigid-lid}. This algorithm is essentially
+\ref{sec:pressure-method-rigid-lid}. This algorithm is essentially
 unchanged, apart for some coefficients, when the rigid lid assumption
 is replaced with a linearized implicit free-surface, described in
-section \ref{sect:pressure-method-linear-backward}. These two flavors
+section \ref{sec:pressure-method-linear-backward}. These two flavors
 of the pressure-method encompass all formulations of the model as it
 exists today. The integration of explicit in time terms is out-lined
-in section \ref{sect:adams-bashforth} and put into the context of the
-overall algorithm in sections \ref{sect:adams-bashforth-sync} and
-\ref{sect:adams-bashforth-staggered}. Inclusion of non-hydrostatic
+in section \ref{sec:adams-bashforth} and put into the context of the
+overall algorithm in sections \ref{sec:adams-bashforth-sync} and
+\ref{sec:adams-bashforth-staggered}. Inclusion of non-hydrostatic
 terms requires applying the pressure method in three dimensions
 instead of two and this algorithm modification is described in section
-\ref{sect:non-hydrostatic}. Finally, the free-surface equation may be
+\ref{sec:non-hydrostatic}. Finally, the free-surface equation may be
 treated more exactly, including non-linear terms, and this is
-described in section \ref{sect:nonlinear-freesurface}.
+described in section \ref{sec:nonlinear-freesurface}.
 
 
 \section{Pressure method with rigid-lid}
-\label{sect:pressure-method-rigid-lid}
+\label{sec:pressure-method-rigid-lid}
 \begin{rawhtml}
 <!-- CMIREDIR:pressure_method_rigid_lid: -->
 \end{rawhtml}
@@ -204,7 +205,7 @@ that are treated implicitly in time,
 such as the vertical viscosity when using the backward time-stepping scheme
 (\varlink{implicitViscosity}{implicitViscosity} {\it =.TRUE.}).
 The method used to solve those implicit terms is provided in 
-section \ref{sect:implicit-backward-stepping}, and modifies
+section \ref{sec:implicit-backward-stepping}, and modifies
 equations \ref{eq:discrete-time-u} and \ref{eq:discrete-time-v} to
 give:
 \begin{eqnarray}
@@ -217,7 +218,7 @@ v^{n+1} - \Delta t \partial_z A_v \partial_z v^{n+1}
 
 
 \section{Pressure method with implicit linear free-surface}
-\label{sect:pressure-method-linear-backward}
+\label{sec:pressure-method-linear-backward}
 \begin{rawhtml}
 <!-- CMIREDIR:pressure_method_linear_backward: -->
 \end{rawhtml}
@@ -253,7 +254,7 @@ pressure method is then replaced by the time discretization of
 where the use of flow at time level $n+1$ makes the method implicit
 and backward in time. This is the preferred scheme since it still
 filters the fast unresolved wave motions by damping them. A centered
-scheme, such as Crank-Nicholson (see section \ref{sect:freesurf-CrankNick}),
+scheme, such as Crank-Nicholson (see section \ref{sec:freesurf-CrankNick}),
 would alias the energy of the fast modes onto slower modes of motion.
 
 As for the rigid-lid pressure method, equations
@@ -297,7 +298,7 @@ pressure-method.
 
 
 \section{Explicit time-stepping: Adams-Bashforth}
-\label{sect:adams-bashforth}
+\label{sec:adams-bashforth}
 \begin{rawhtml}
 <!-- CMIREDIR:adams_bashforth: -->
 \end{rawhtml}
@@ -307,7 +308,7 @@ time discretization of the explicit terms. We have historically used
 the quasi-second order Adams-Bashforth method for all explicit terms
 in both the momentum and tracer equations. This is still the default
 mode of operation but it is now possible to use alternate schemes for
-tracers (see section \ref{sect:tracer-advection}).
+tracers (see section \ref{sec:tracer-advection}).
 
 \begin{figure}
 \begin{center} \fbox{ \begin{minipage}{4.5in} \begin{tabbing}
@@ -396,7 +397,7 @@ The right column represents the damping response amplitude
 
 
 \section{Implicit time-stepping: backward method}
-\label{sect:implicit-backward-stepping}
+\label{sec:implicit-backward-stepping}
 \begin{rawhtml}
 <!-- CMIREDIR:implicit_time-stepping_backward: -->
 \end{rawhtml}
@@ -444,7 +445,7 @@ unconditionally stable, no-slip boundary conditions may not be made
 implicit and are thus cast as a an explicit drag term.
 
 \section{Synchronous time-stepping: variables co-located in time}
-\label{sect:adams-bashforth-sync}
+\label{sec:adams-bashforth-sync}
 \begin{rawhtml}
 <!-- CMIREDIR:adams_bashforth_sync: -->
 \end{rawhtml}
@@ -564,7 +565,7 @@ time-step. The corresponding calling tree is given in
 \ref{fig:call-tree-adams-bashforth-sync}.
 
 \section{Staggered baroclinic time-stepping}
-\label{sect:adams-bashforth-staggered}
+\label{sec:adams-bashforth-staggered}
 \begin{rawhtml}
 <!-- CMIREDIR:adams_bashforth_staggered: -->
 \end{rawhtml}
@@ -709,7 +710,7 @@ time-level variables and terms correspond to.
 
 
 \section{Non-hydrostatic formulation}
-\label{sect:non-hydrostatic}
+\label{sec:non-hydrostatic}
 \begin{rawhtml}
 <!-- CMIREDIR:non-hydrostatic_formulation: -->
 \end{rawhtml}
@@ -801,7 +802,7 @@ u^{**} & = & u^{*} - \Delta t g \partial_x \eta^{n+1} \label{eq:unx-nh}\\
 v^{**} & = & v^{*} - \Delta t g \partial_y \eta^{n+1} \label{eq:vnx-nh}\\
 \partial_{xx} \phi_{nh}^{n+1} + \partial_{yy} \phi_{nh}^{n+1} + 
 \partial_{rr} \phi_{nh}^{n+1} & = &
-\partial_x u^{**} + \partial_y v^{**} + \partial_r w^{*} \\
+\partial_x u^{**} + \partial_y v^{**} + \partial_r w^{*}  \label{eq:phi-nh}\\
 u^{n+1} & = & u^{**} - \Delta t \partial_x \phi_{nh}^{n+1} \label{eq:un+1-nh}\\
 v^{n+1} & = & v^{**} - \Delta t \partial_y \phi_{nh}^{n+1} \label{eq:vn+1-nh}\\
 \partial_r w^{n+1} & = & - \partial_x u^{n+1} - \partial_y v^{n+1}
@@ -812,7 +813,7 @@ $w^{n+1}$.
 
 
 \section{Variants on the Free Surface}
-\label{sect:free-surface}
+\label{sec:free-surface}
 
 We now describe the various formulations of the free-surface that
 include non-linear forms, implicit in time using Crank-Nicholson,
@@ -925,7 +926,7 @@ at the same point in the code.
 
 
 \subsection{Crank-Nickelson barotropic time stepping}
-\label{sect:freesurf-CrankNick}
+\label{sec:freesurf-CrankNick}
 
 The full implicit time stepping described previously is
 unconditionally stable but damps the fast gravity waves, resulting in

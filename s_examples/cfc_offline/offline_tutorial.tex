@@ -7,8 +7,8 @@
 % \begin{document}
 
 \section[Offline Example]{Offline Experiments}
-\label{www:tutorials}
-\label{sect:eg-offline}
+%\label{www:tutorials}
+\label{sec:eg-offline}
 \begin{center}
 (in directory: {\it verification/tutorial\_offline/})\\
 \end{center}
@@ -26,14 +26,15 @@ This document describes a simple experiment using the offline form of
 the MITgcm.
 
 \subsection{Overview}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 This experiment demonstrates use of the offline form of the MITgcm to
 study advection of a passive tracer. Time-averaged flow-fields and
 mixing coefficients, deriving from a prior online run, are re-used
 leaving only the tracer equation to be integrated.
 
-Figure \ref{FIG:eg-ofline_config} shows a movie of tracer being
+Figure {\it --- missing figure ---} %\ref{fig:eg-ofline_config} 
+shows a movie of tracer being
 advected using the offline package of the MITgcm. In the top panel the
 frames of the movie show the monthly surface evolution of an initially
 local source of passive tracer. In the lower panel, the frames of the
@@ -41,14 +42,14 @@ movie show the changing monthly surface evolution where the initial
 tracer field had a global distribution.
 
 \subsection{Time-stepping of tracers}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 \noindent see section 2.15 through 2.18 for details of available
 tracer time-stepping schemes and their characteristics.
 
 \subsection{Code Configuration}
-\label{www:tutorials}
-\label{SEC:eg_offl_code_config}
+%\label{www:tutorials}
+\label{sec:eg_offl_code_config}
 
 \noindent The model configuration for this experiment resides under the 
 directory {\it verification/tutorial\_offline}.  The experiment files 
@@ -79,7 +80,7 @@ files are required:
 
 
 \subsubsection{File {\it input/data}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 \noindent This file, reproduced completely below, specifies the main
 parameters for the experiment.
@@ -291,7 +292,7 @@ this experiment, a depth of $0m$ indicates land.
 \end{verbatim}
 
 \subsubsection{File {\it input/data.off}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 \noindent {\it input/data.off} provides the MITgcm offline package
 with package specific parameters. {\it input/data.off} specifies the
@@ -391,7 +392,7 @@ the value of the 10 digit sequencing tag the model expects files in
 
 
 \subsubsection{File {\it input/data.pkg}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 \noindent File {\it input/data.pkg}, reproduced completely below,
 specifies which MITgcm packages ({\it ~/MITgcm/pkg}) are to be used.
@@ -415,7 +416,7 @@ responsible for the advection of the tracer within the model.
 \end{verbatim}
 
 \subsubsection{File {\it input/data.ptracers}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 \noindent File {\it input/data.ptracers}, reproduced completely below,
 provides the MITgcm ptracers package with package specific parameters,
@@ -517,14 +518,14 @@ manipulating initial tracer fields.
 each tracer.
 
 \subsubsection{File {\it input/eedata}}
-\label{www:tutorials}
+%\label{www:tutorials}
 \noindent This file uses standard default values and does not contain
 customisations for this experiment.
 
 \noindent The following code changes are required to run this exaperiment. 
 
 \subsubsection{File {\it code/packages.conf}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 \noindent This file is used to invoke the model components required
 for a particuylar implementation of the MITgcm. In this case the {\it
@@ -543,7 +544,7 @@ offline
 \end{verbatim}
 
 \subsubsection{File {\it code/PTRACERS\_SIZE.h}}
-\label{www:tutorials}
+%\label{www:tutorials}
 \begin{itemize}
 \item Line
 \begin{verbatim}
@@ -556,7 +557,7 @@ tracers to be integrated) to 2 (in agreement with {\it
   input/data.ptracers}).
 
 \subsubsection{File {\it code/SIZE.h}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 \noindent Two lines are customized in this file for the current
 experiment
@@ -583,18 +584,18 @@ the vertical domain extent in grid points.
 
 
 \subsection{Running The Example}
-\label{www:tutorials}
-\label{SEC:running_the_example}
+%\label{www:tutorials}
+%\label{sec:running_the_example}
 
 \subsubsection{Code Download}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 In order to run the examples you must first download the code
 distribution.  Instructions for downloading the code can be found in
-section \ref{sect:obtainingCode}.
+section \ref{sec:obtainingCode}.
 
 \subsubsection{Experiment Location}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 This example experiment is located under the release sub-directory
 
@@ -602,7 +603,7 @@ This example experiment is located under the release sub-directory
 {\it verification/offline/ }
 
 \subsubsection{Running the Experiment}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 To run the experiment
 
@@ -673,7 +674,7 @@ file pickup\_ptracers.0000000720.001.001.meta. To run on simply change
 nIter0 in file {\it run/data} to 720...
 
 \subsection{A more complicated example}
-\label{sect:eg-offline-cfc}
+\label{sec:eg-offline-cfc}
 \begin{center}
 (in directory: {\it verification/tutorial\_cfc\_offline/})\\
 \end{center}
@@ -740,7 +741,7 @@ GM_Kwy-T.0004248720.meta  Ttave.0004248720.meta     wVeltave.0004248720.meta
 
 
 \subsubsection{File {\it input/data}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 \noindent A single line must be added (under PARM01, between lines 6
 and 7) in file {\it input/data} from the previous example
@@ -770,7 +771,7 @@ when it stops without error a dump will be written with timetag
 
 
 \subsubsection{File {\it input/data.off}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 \noindent File {\it input/data.off}, reproduced in full below,
 specifies the prefixes and locations of additional input files
@@ -801,7 +802,7 @@ introduced with a non-zero starttime, at timestep 4248000.
 \end{verbatim}
 
 \subsubsection{File {\it input/data.pkg}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 \noindent File {\it input/data.pkg}, reproduced completely below,
 specifies which MITgcm packages ({\it ~/MITgcm/pkg}) are to be used.
@@ -819,7 +820,7 @@ It now invokes additional packages {\it pkg/gmredi} and {pkg/gchem}.
 
 
 \subsubsection{File {\it input/data.ptracers}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 \noindent File {\it input/data.ptracers}, reproduced completely below,
 specifies parameters associated with the CFC11 and CFC12 tracer fields
@@ -894,7 +895,7 @@ pickup\_ptracers.0004269600.data
 
 
 \subsubsection{File {\it input/data.gchem}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 \noindent File {\it input/data.gchem}, reproduced completely below,
 names the forcing files needed in package GCHEM.
@@ -929,7 +930,7 @@ surface wind fields.
 \noindent Package GCHEM is described in detail in section ??
 
 \subsubsection{File {\it input/data.gmredi}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 \noindent File {\it input/data.gmredi}, reproduced completely below,
 provides the parameters required for package GMREDI.
@@ -948,14 +949,14 @@ provides the parameters required for package GMREDI.
 \noindent Package GMREDI is described in detail in section ??
 
 \subsubsection{File {\it input/cfc1112.atm}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 \noindent File {\it input/cfc1112.atm} is a text file containing the
 CFC source functions over the northern and southern hemispheres
 annually from 1931 through 1998.
 
 \subsubsection{File {\it code/packages.conf}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 \noindent In this example {\it code/packages.conf} additionally
 invokes components gchem, cfc and rmredi:
@@ -976,33 +977,33 @@ gmredi
 \end{verbatim}
 
 \subsubsection{File {\it code/GCHEM\_OPTIONS.h}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 \noindent File {\it code/GCHEM\_OPTIONS.h}, specifies options for
 package GCHEM. In this case defining the flag ALLOW\_CFC to activate
 the cfc code.
 
 \subsubsection{File {\it code/GMREDI\_OPTIONS.h}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 \noindent File {\it code/GCHEM\_OPTIONS.h}, specifies options for
 package GMREDI.
 
 \subsubsection{File {\it code/PTRACERS\_SIZE.h}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 \noindent File {\it code/PTRACERS\_SIZE.h} is unchanged from the
 simpler example.
 
 \subsubsection{File {\it code/SIZE.h}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 \noindent File {\it code/SIZE.h} is unchanged from the simpler
 example.
 
 
 \subsubsection{Running the Experiment}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 The model is run as before and produces the files the model generates
 describing the grid (prefixed Depth, DXC, DXG, hFacC, hFacS and hFacW)

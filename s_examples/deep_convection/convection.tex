@@ -1,6 +1,6 @@
 \section{Surface Driven Convection}
-\label{www:tutorials}
-\label{sect:eg-bconv}
+%\label{www:tutorials}
+\label{sec:eg-bconv}
 \begin{rawhtml}
 <!-- CMIREDIR:eg-bconv: -->
 \end{rawhtml}
@@ -29,10 +29,10 @@
 for the surface driven convection experiment. The domain is doubly periodic
 with an initially uniform temperature of 20 $^oC$. 
 }
-\label{FIG:eg-bconv-simulation_config}
+\label{fig:eg-bconv-simulation_config}
 \end{figure}
 
-This experiment, figure \ref{FIG:eg-bconv-simulation_config}, showcasing MITgcm's non-hydrostatic 
+This experiment, figure \ref{fig:eg-bconv-simulation_config}, showcasing MITgcm's non-hydrostatic 
 capability, was designed to explore 
 the temporal and spatial characteristics of convection plumes as they might exist during a 
 period of oceanic deep convection. The files for this experiment can be found in the verification
@@ -48,7 +48,7 @@ directory under tutorial\_deep\_convection. It is
 \end{itemize}
 
 \subsection{Overview}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 The model domain consists of an approximately 3
 km square by 1 km deep box of initially
@@ -60,14 +60,14 @@ uniform reference potential temperature $\theta = $ 20 $^o$C. The equation of st
 used in this experiment is linear
 
 \begin{equation}
-\label{EQ:eg-bconv-linear1_eos}
+\label{eq:eg-bconv-linear1_eos}
 \rho = \rho_{0} ( 1 - \alpha_{\theta}\theta^{'} )
 \end{equation}
 
 \noindent which is implemented in the model as a density anomaly equation
 
 \begin{equation}
-\label{EQ:eg-bconv-linear1_eos_pert}
+\label{eq:eg-bconv-linear1_eos_pert}
 \rho^{'} = -\rho_{0}\alpha_{\theta}\theta^{'}
 \end{equation}
 
@@ -82,7 +82,7 @@ the quantity that is carried in the model core equations.
 As the fluid in the surface layer is cooled (at a mean rate of 800 Wm$^2$), it becomes 
 convectively unstable and 
 overturns, at first close to the grid-scale, but, as the flow matures, on larger scales 
-(figures \ref{FIG:eg-bconv-vertsection} and \ref{FIG:eg-bconv-horizsection}), under the influence of 
+(figures \ref{fig:eg-bconv-vertsection} and \ref{fig:eg-bconv-horizsection}), under the influence of 
 rotation ($f_o = 10^{-4}$ s$^{-1}$) .
 
 \begin{rawhtml}MITGCM_INSERT_FIGURE_BEGIN surf-convection-vertsection\end{rawhtml}
@@ -94,7 +94,7 @@ rotation ($f_o = 10^{-4}$ s$^{-1}$) .
 \end{center}
 \caption{
 }
-\label{FIG:eg-bconv-vertsection}
+\label{fig:eg-bconv-vertsection}
 \label{fig:surf-convection-vertsection}
 \end{figure}
 \begin{rawhtml}MITGCM_INSERT_FIGURE_END\end{rawhtml}
@@ -108,7 +108,7 @@ rotation ($f_o = 10^{-4}$ s$^{-1}$) .
 \end{center}
 \caption{
 }
-\label{FIG:eg-bconv-horizsection}
+\label{fig:eg-bconv-horizsection}
 \label{fig:surf-convection-horizsection}
 \end{figure}
 \begin{rawhtml}MITGCM_INSERT_FIGURE_END\end{rawhtml}
@@ -118,7 +118,7 @@ prescribed in {\it code/SIZE.h}. The forcing (file {\it input/Qsurf.bin}) is spe
 in a binary data file generated using the Matlab script {\it input/gendata.m}.
 
 \subsection{Equations solved}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 The model is configured in nonhydrostatic form, that is, all terms in the Navier 
 Stokes equations are retained and the pressure field is found, subject to appropriate
@@ -128,11 +128,11 @@ The implicit free surface form of the
 pressure equation described in Marshall et. al \cite{marshall:97a} is
 employed. A horizontal Laplacian operator $\nabla_{h}^2$ provides viscous
 dissipation. The thermodynamic forcing appears as a sink in the potential temperature, 
-$\theta$, equation (\ref{EQ:eg-bconv-global_forcing_ft}). This produces a set of equations 
-solved in this configuration as follows:
+$\theta$, equation (\ref{eq:eg-bconv-theta_equations}). 
+This produces a set of equations solved in this configuration as follows:
 
 \begin{eqnarray}
-\label{EQ:eg-bconv-model_equations}
+\label{eq:eg-bconv-model_equations}
 \frac{Du}{Dt} - fv + 
   \frac{1}{\rho}\frac{\partial p^{'}}{\partial x} - 
   \nabla_{h}\cdot A_{h}\nabla_{h}u - 
@@ -177,6 +177,7 @@ solved in this configuration as follows:
 {\cal F}_\theta & \text{(surface)} \\
 0 & \text{(interior)}
 \end{cases}
+\label{eq:eg-bconv-theta_equations}
 \end{eqnarray}
 
 \noindent where $u=\frac{Dx}{Dt}$, $v=\frac{Dy}{Dt}$  and 
@@ -188,14 +189,14 @@ equations and continuity (see section \ref{sec:finding_the_pressure_field}).
 \\
 
 \subsection{Discrete numerical configuration}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 The domain is discretised with a uniform grid spacing in each direction. There are 64
 grid cells in directions $x$ and $y$ and 20 vertical levels thus the domain
 comprises a total of just over 80 000 gridpoints.
 
 \subsection{Numerical stability criteria and other considerations}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 For a heat flux of 800 Wm$^2$ and a rotation rate of $10^{-4}$ s$^{-1}$ the
 plume-scale can be expected to be a few hundred meters guiding our choice of grid
@@ -209,7 +210,7 @@ For an extreme maximum flow speed of $ | \vec{u} | = 1 ms^{-1}$, at a resolution
 50 m, the implied maximum timestep for stability, $\delta t_u$ is 
 
 \begin{eqnarray}
-\label{EQ:eg-bconv-advectiveCFLcondition}
+\label{eq:eg-bconv-advectiveCFLcondition}
 %\delta t_u = \frac{\Delta x}{| \vec{u} \} = 50 s
 \end{eqnarray}
 
@@ -221,7 +222,7 @@ diffusion coefficient $\kappa_h (=
 correlated over 50 m.  
 
 \subsection{Experiment configuration}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 The model configuration for this experiment resides under the directory
 {\it verification/convection/}. The experiment files
@@ -238,19 +239,19 @@ contain the code customisations and parameter settings for this
 experiment. Below we describe these experiment-specific customisations.
 
 \subsubsection{File {\it code/CPP\_EEOPTIONS.h}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 This file uses standard default values and does not contain
 customisations for this experiment.
 
 \subsubsection{File {\it code/CPP\_OPTIONS.h}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 This file uses standard default values and does not contain
 customisations for this experiment.
 
 \subsubsection{File {\it code/SIZE.h}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 Three lines are customized in this file. These prescribe the domain grid dimensions.
 \begin{itemize}
@@ -278,7 +279,7 @@ the vertical domain extent in grid points.
 \begin{rawhtml}</PRE>\end{rawhtml}
 
 \subsubsection{File {\it input/data}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 This file, reproduced completely below, specifies the main parameters 
 for the experiment. The parameters that are significant for this configuration
@@ -693,10 +694,13 @@ cg3dTargetResidual=1.E-9,
 \end{verbatim}
 Sets the tolerance which the three-dimensional, conjugate
 gradient solver will use to test for convergence in equation 
-\ref{EQ:eg-bconv-congrad_3d_resid} to $1 \times 10^{-9}$.
-The solver will iterate until the 
-tolerance falls below this value or until the maximum number of
-solver iterations is reached. Used in routine
+%- note: Description of Conjugate gradient method (& related params) is missing
+%  in the mean time, substitute this eq ref:
+\ref{eq:phi-nh} %\ref{eq:eg-bconv-congrad_3d_resid} 
+to $1 \times 10^{-9}$.
+The solver will iterate until the tolerance falls below this value 
+or until the maximum number of solver iterations is reached. 
+Used in routine
 {\it
 \begin{rawhtml} <A href=../code_reference/vdb/code/94.htm> \end{rawhtml}
 S/R CG3D ({\it cg3d.F})
@@ -796,20 +800,20 @@ S/R EXTERNAL\_FORCING\_SURF ({\it external\_forcing\_surf.F})
 
 
 \subsubsection{File {\it input/data.pkg}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 This file uses standard default values and does not contain
 customisations for this experiment.
 
 \subsubsection{File {\it input/eedata}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 This file uses standard default values and does not contain
 customisations for this experiment.
 
 
 \subsubsection{File {\it input/Qsurf.bin}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 The file {\it input/Qsurf.bin} specifies a two-dimensional ($x,y$) 
 map of heat flux values where 
@@ -828,20 +832,20 @@ directed upwards, according to the model's sign convention, $Q$ is positive.
 \end{center}
 \caption{
 }
-\label{FIG:eg-bconv-Qsurf}
+\label{fig:eg-bconv-Qsurf}
 \end{figure}
 
 \subsection{Running the example}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 \subsubsection{Code download}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 In order to run the examples you must first download the code distribution.
-Instructions for downloading the code can be found in \ref{sect:obtainingCode}.
+Instructions for downloading the code can be found in \ref{sec:obtainingCode}.
 
 \subsubsection{Experiment Location}
-\label{www:tutorials}
+%\label{www:tutorials}
 
  This example experiments is located under the release sub-directory
 
@@ -849,7 +853,7 @@ Instructions for downloading the code can be found in \ref{sect:obtainingCode}.
 {\it verification/convection/ }
 
 \subsubsection{Running the Experiment}
-\label{www:tutorials}
+%\label{www:tutorials}
 
  To run the experiment
 

@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/text/exch2.tex,v 1.28 2010/08/27 13:15:37 jmc Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/text/exch2.tex,v 1.29 2010/08/30 23:09:21 jmc Exp $
 % $Name:  $
 
 %%  * Introduction
@@ -49,7 +49,7 @@ met:
 \begin{itemize}
 \item The exch2 package is included when \file{genmake2} is run.  The
   easiest way to do this is to add the line \code{exch2} to the
-  \file{packages.conf} file -- see Section \ref{sect:buildingCode}
+  \file{packages.conf} file -- see Section \ref{sec:buildingCode}
   \sectiontitle{Building the code} for general
   details.
 
@@ -81,7 +81,7 @@ met:
   and \ref{sec:exch2mpi} \sectiontitle{exch2, SIZE.h, and
     Multiprocessing}; a more general background on the subject
   relevant to MITgcm is presented in Section
-  \ref{sect:specifying_a_decomposition}
+  \ref{sec:specifying_a_decomposition}
   \sectiontitle{Specifying a decomposition}.
 \end{itemize}
 
@@ -199,7 +199,7 @@ by their tile number in the topology, separated by a newline. \\
 
 Once the topology configuration files are created, the Fortran
 \code{PARAMETER}s in \file{SIZE.h} must be configured to match.
-Section \ref{sect:specifying_a_decomposition} \sectiontitle{Specifying
+Section \ref{sec:specifying_a_decomposition} \sectiontitle{Specifying
   a decomposition} provides a general description of domain
 decomposition within MITgcm and its relation to \file{SIZE.h}. The
 current section specifies constraints that the exch2 package imposes
@@ -512,7 +512,7 @@ width of \code{T}'s northern edge, expanded by one into the halo. \\
 
 Most of the subroutines particular to exch2 handle the exchanges
 themselves and are of the same format as those described in
-\ref{sect:cube_sphere_communication} \sectiontitle{Cube sphere
+\ref{sec:cube_sphere_communication} \sectiontitle{Cube sphere
 communication}.  Like the original routines, they are written as
 templates which the local Makefile converts from \code{RX} into 
 \code{RL} and \code{RS} forms. \\
@@ -543,5 +543,5 @@ the work using the variables discussed above. \\
 
 \begin{itemize}
 \item{Held Suarez tutorial, in tutorial\_held\_suarez\_cs verification directory, 
-described in section \ref{sect:eg-hs} }
+described in section \ref{sec:eg-hs} }
 \end{itemize}

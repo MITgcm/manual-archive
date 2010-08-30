@@ -44,13 +44,13 @@ The latter case requires
 packages \texttt{cal} and \texttt{exf} to be enabled.
 %
 \end{itemize}
-(see also Section \ref{sect:buildingCode}).
+(see also Section \ref{sec:buildingCode}).
 
 Parts of the OBCS code can be enabled or disabled at compile time
 via CPP preprocessor flags. These options are set in
 \texttt{OBCS\_OPTIONS.h}. Table \ref{tab:pkg:obcs:cpp} summarizes them.
 
-\begin{table}[h!]
+\begin{table}[!ht]
 \centering
   \label{tab:pkg:obcs:cpp}
   {\footnotesize
@@ -112,9 +112,8 @@ Table \ref{tab:pkg:obcs:runtime_flags} summarizes the
 runtime flags that are set in \texttt{data.obcs}, and
 their default values.
 
-\begin{table}[h!]
+\begin{table}[!ht]
 \centering
-  \label{tab:pkg:obcs:runtime_flags}
   {\footnotesize
     \begin{tabular}{|l|c|l|}
       \hline 
@@ -182,7 +181,8 @@ their default values.
       \hline
     \end{tabular}
   }
-  \caption{~}
+  \caption{pkg OBCS run-time parameters}
+  \label{tab:pkg:obcs:runtime_flags}
 \end{table}
 
 
@@ -243,7 +243,7 @@ see obcs\_ini\_fixed.F}
 \paragraph{OBCS\_READPARMS:} ~ \\
 Set OB positions through arrays
 {\tt OB\_Jnorth(Ny), OB\_Jsouth(Ny), OB\_Ieast(Nx), OB\_Iwest(Nx)},
-and runtime flags see Table \ref{tab:???}.
+and runtime flags (see Table \ref{tab:pkg:obcs:runtime_flags}).
 
 \paragraph{OBCS\_CALC:} ~ \\
 %
@@ -319,7 +319,7 @@ Diagnostics output is available via the diagnostics package
 Available output fields are summarized in 
 Table \ref{tab:pkg:obcs:diagnostics}.
 
-\begin{table}[h!]
+\begin{table}[!ht]
 \centering
 \label{tab:pkg:obcs:diagnostics}
 {\footnotesize

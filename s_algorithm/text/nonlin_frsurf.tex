@@ -1,17 +1,17 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/nonlin_frsurf.tex,v 1.13 2006/06/27 22:31:23 edhill Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/nonlin_frsurf.tex,v 1.14 2010/08/30 23:09:18 jmc Exp $
 % $Name:  $
 
 
 
 \subsection{Non-linear free-surface}
-\label{sect:nonlinear-freesurface}
+\label{sec:nonlinear-freesurface}
 
 Recently, new options have been added to the model
 that concern the free surface formulation.
 
 
 \subsubsection{pressure/geo-potential and free surface}
-\label{sect:phi-freesurface}
+\label{sec:phi-freesurface}
 
 For the atmosphere, since $\phi = \phi_{topo} - \int^p_{p_s} \alpha dp$,
 subtracting the reference state defined in section
@@ -104,12 +104,12 @@ This approximation is dropped when using the non-linear free-surface
 formulation and the total thickness, including the time varying part
 $\eta$, is considered when computing horizontal transports.
 Implications for the barotropic part are presented hereafter.
-In section \ref{sect:freesurf-tracer-advection} consequences for 
+In section \ref{sec:freesurf-tracer-advection} consequences for 
 tracer conservation is briefly discussed (more details can be 
 found in \cite{campin:02})~; the general time-stepping is presented 
-in section \ref{sect:nonlin-freesurf-timestepping} with some 
+in section \ref{sec:nonlin-freesurf-timestepping} with some 
 limitations regarding the vertical resolution in section 
-\ref{sect:nonlin-freesurf-dz_surf}.
+\ref{sec:nonlin-freesurf-dz_surf}.
 
 In the non-linear formulation, the continuous form of the model 
 equations remains unchanged, except for the 2D continuity equation 
@@ -205,7 +205,7 @@ computation cost involved in the solver matrix update is negligible.
 
 
 \subsubsection{Tracer conservation with non-linear free-surface}
-\label{sect:freesurf-tracer-advection}
+\label{sec:freesurf-tracer-advection}
 
 To ensure global tracer conservation (i.e., the total amount) as well
 as local conservation, the change in the surface level thickness must
@@ -225,7 +225,7 @@ $$
   = P \theta_{\mathrm{rain}}
 $$
 Using the implicit (non-linear) free surface described above (section
-\ref{sect:pressure-method-linear-backward}) we have:
+\ref{sec:pressure-method-linear-backward}) we have:
 \begin{eqnarray*}
 h^{n+1} = h^{n} - \Delta t \nabla \cdot (h^n \, \vec{\bf v}^{n+1} ) + \Delta t P \\
 \end{eqnarray*}
@@ -271,14 +271,14 @@ $
 
 \subsubsection{Time stepping implementation of the
 non-linear free-surface}     
-\label{sect:nonlin-freesurf-timestepping}
+\label{sec:nonlin-freesurf-timestepping}
 
 The grid cell thickness was hold constant with the linear
 free-surface~; with the non-linear free-surface, it is now varying 
 in time, at least at the surface level.
 This implies some modifications of the general algorithm described 
-earlier in sections \ref{sect:adams-bashforth-sync} and 
-\ref{sect:adams-bashforth-staggered}.
+earlier in sections \ref{sec:adams-bashforth-sync} and 
+\ref{sec:adams-bashforth-staggered}.
 
 A simplified version of the staggered in time, non-linear 
 free-surface algorithm is detailed hereafter, and can be compared 
@@ -354,7 +354,7 @@ redundant with eq.\ref{eq:nstar-nlfs}, the integrated column
 thickness $h^{n+1}$ can be different from $\eta^{n+1/2} + H$~:
 \begin{itemize}
 \item when Crank-Nickelson time-stepping is used (see section
-\ref{sect:freesurf-CrankNick}).
+\ref{sec:freesurf-CrankNick}).
 \item when filters are applied to the flow field, after
 (\ref{eq:v-n+1-nlfs}) and alter the divergence of the flow.
 \item when the solver does not iterate until convergence~;
@@ -366,7 +366,7 @@ In this staggered time-stepping algorithm, the momentum tendencies
 are computed using $dh^{n-1}$ geometry factors.
 (eq.\ref{eq:Gv-n-nlfs}) and then rescaled in subroutine {\it TIMESTEP},
 (eq.\ref{eq:vstar-nlfs}), similarly to tracer tendencies (see section
-\ref{sect:freesurf-tracer-advection}).
+\ref{sec:freesurf-tracer-advection}).
 The tracers are stepped forward later, using the recently updated
 flow field ${\bf v}^{n+1/2}$ and the corresponding model geometry
 $dh^{n}$ to compute the tendencies (eq.\ref{eq:Gt-n-nlfs});
@@ -404,7 +404,7 @@ $h^{n+1}-h^{n}/\Delta t$: {\bf dEtaHdt} ({\em SURFACE.h})
 \end{minipage} }
 
 \subsubsection{Non-linear free-surface and vertical resolution}
-\label{sect:nonlin-freesurf-dz_surf}
+\label{sec:nonlin-freesurf-dz_surf}
 
 When the amplitude of the free-surface variations becomes
 as large as the vertical resolution near the surface,

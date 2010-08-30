@@ -36,11 +36,11 @@ buoyancy. RAS assumes that the normalized cloud mass flux, $\eta$, normalized by
 mass flux, is a linear function of height, expressed as:
 \[
 \pp{\eta(z)}{z} = \lambda \hspace{0.4cm}or\hspace{0.4cm} \pp{\eta(P^{\kappa})}{P^{\kappa}} = 
--{c_p \over {g}}\theta\lambda
+-\frac{c_p}{g}\theta\lambda
 \]
 where we have used the hydrostatic equation written in the form:
 \[
-\pp{z}{P^{\kappa}} = -{c_p \over {g}}\theta
+\pp{z}{P^{\kappa}} = -\frac{c_p}{g}\theta
 \]
 
 The entrainment parameter, $\lambda$, characterizes a particular subensemble based on its
@@ -49,7 +49,7 @@ buoyancy, ie., the level at which the moist static energy of the cloud, $h_c$, i
 to the saturation moist static energy of the environment, $h^*$.  Following \cite{moorsz:92},
 $\lambda$ may be written as
 \[
-\lambda = { {h_B - h^*_D} \over { {c_p \over g} {\int_{P_D}^{P_B}\theta(h^*_D-h)dP^{\kappa}}} } ,
+\lambda = \frac{h_B - h^*_D}{ \frac{c_p}{g} \int_{P_D}^{P_B}\theta(h^*_D-h)dP^{\kappa}},
 \]
 
 where the subscript $B$ refers to cloud base, and the subscript $D$ refers to the detrainment level.
@@ -60,11 +60,11 @@ rate of change of cumulus kinetic energy. The cloud work function is
 related to the buoyancy, or the difference
 between the moist static energy in the cloud and in the environment:
 \[
-A = \int_{P_D}^{P_B} { {\eta \over {1 + \gamma} } 
-\left[ {{h_c-h^*} \over {P^{\kappa}}} \right] dP^{\kappa}}
+A = \int_{P_D}^{P_B} \frac{\eta}{1 + \gamma}
+\left[ \frac{h_c-h^*}{P^{\kappa}} \right] dP^{\kappa}
 \]
 
-where $\gamma$ is ${L \over {c_p}}\pp{q^*}{T}$ obtained from the Claussius Clapeyron equation,
+where $\gamma$ is $\frac{L}{c_p}\pp{q^*}{T}$ obtained from the Claussius Clapeyron equation,
 and the subscript $c$ refers to the value inside the cloud.
 
 
@@ -72,7 +72,7 @@ To determine the cloud base mass flux, the rate of change of $A$ in time {\em du
 the clouds} is assumed to approximately balance the rate of change of $A$ {\em due to the generation 
 by the large scale}. This is the quasi-equilibrium assumption, and results in an expression for $m_B$:
 \[
-m_B = {{- \left.{dA \over dt} \right|_{ls}} \over K}
+m_B = \frac{- \left. \frac{dA}{dt} \right|_{ls}}{K}
 \]
 
 where $K$ is the cloud kernel, defined as the rate of change of the cloud work function per
@@ -90,13 +90,13 @@ and moisture budget equations to determine the impact of convection on the large
 temperature (through latent heating and compensating subsidence) and moisture (through
 precipitation and detrainment):
 \[
-\left.{\pp{\theta}{t}}\right|_{c} = \alpha { m_B \over {c_p P^{\kappa}}} \eta \pp{s}{p}
+\left.{\pp{\theta}{t}}\right|_{c} = \alpha \frac{ m_B}{c_p P^{\kappa}} \eta \pp{s}{p}
 \]
 and
 \[
-\left.{\pp{q}{t}}\right|_{c} = \alpha { m_B \over {L}} \eta (\pp{h}{p}-\pp{s}{p})
+\left.{\pp{q}{t}}\right|_{c} = \alpha \frac{ m_B}{L} \eta (\pp{h}{p}-\pp{s}{p})
 \]
-where $\theta = {T \over P^{\kappa}}$, $P = (p/p_0)$, and $\alpha$ is the relaxation parameter.
+where $\theta = \frac{T}{P^{\kappa}}$, $P = (p/p_0)$, and $\alpha$ is the relaxation parameter.
 
 As an approximation to a full interaction between the different allowable subensembles,
 many clouds are simulated frequently, each modifying the large scale environment some fraction
@@ -136,14 +136,14 @@ Convective cloud fractions produced by RAS are proportional to the
 detrained liquid water amount given by
 
 \[
-F_{RAS} = \min\left[ {l_{RAS}\over l_c}, 1.0 \right]
+F_{RAS} = \min\left[ \frac{l_{RAS}}{l_c}, 1.0 \right]
 \]
 
 where $l_c$ is an assigned critical value equal to $1.25$ g/kg.
 A memory is associated with convective clouds defined by:
 
 \[
-F_{RAS}^n = \min\left[ F_{RAS} + (1-{\Delta t_{RAS}\over\tau})F_{RAS}^{n-1}, 1.0 \right]
+F_{RAS}^n = \min\left[ F_{RAS} + (1-\frac{\Delta t_{RAS}}{\tau})F_{RAS}^{n-1}, 1.0 \right]
 \]
 
 where $F_{RAS}$ is the instantanious cloud fraction and $F_{RAS}^{n-1}$ is the cloud fraction
@@ -154,7 +154,7 @@ Large-scale cloudiness is defined, following Slingo and Ritter (1985), as a func
 humidity:
 
 \[
-F_{LS} = \min\left[ { \left( {RH-RH_c \over 1-RH_c} \right) }^2, 1.0 \right]
+F_{LS} = \min\left[ { \left( \frac{RH-RH_c}{1-RH_c} \right) }^2, 1.0 \right]
 \]
 
 where
@@ -162,7 +162,7 @@ where
 \bqa
 RH_c & = & 1-s(1-s)(2-\sqrt{3}+2\sqrt{3} \, s)r \nonumber \\
    s & = & p/p_{surf} \nonumber \\
-   r & = & \left( {1.0-RH_{min} \over \alpha} \right) \nonumber \\
+   r & = & \left( \frac{1.0-RH_{min}}{\alpha} \right) \nonumber \\
 RH_{min} & = & 0.75 \nonumber \\
 \alpha & = & 0.573285 \nonumber  .
 \eqa
@@ -409,7 +409,7 @@ The total optical depth in a given model layer is computed as a weighted average
 the large-scale and sub-grid scale optical depths, normalized by the total cloud fraction in the
 layer:
 
-\[ \tau = \left( {F_{RAS} \,\,\, \tau_{RAS} + F_{LS} \,\,\, \tau_{LS} \over F_{RAS}+F_{LS} } \right) \Delta p, \]
+\[ \tau = \left( \frac{F_{RAS} \,\,\, \tau_{RAS} + F_{LS} \,\,\, \tau_{LS} }{ F_{RAS}+F_{LS} } \right) \Delta p, \]
 
 where $F_{RAS}$ and $F_{LS}$ are the time-averaged cloud fractions associated with RAS and large-scale
 processes described in Section \ref{sec:fizhi:clouds}.
@@ -463,11 +463,11 @@ is solved numerically using an implicit backward computation of the terms linear
 and is written:
 
 \[
-{\dd{}{t} ({{\h} q^2})} - { \pp{}{z} ({ {5 \over 3} {{\lambda}_1} q { \pp {}{z} 
+{\dd{}{t} ({{\h} q^2})} - { \pp{}{z} ({ \frac{5}{3} {{\lambda}_1} q { \pp {}{z} 
 ({\h}q^2)} })} =
 {- \overline{{u^{\prime}}{w^{\prime}}} { \pp{U}{z} }} - {\overline{{v^{\prime}}{w^{\prime}}} 
-{ \pp{V}{z} }} + {{g \over {\Theta_0}}{\overline{{w^{\prime}}{{{\theta}_v}^{\prime}}}} } 
-- { q^3 \over {{\Lambda} _1} }
+{ \pp{V}{z} }} + {\frac{g}{\Theta_0}{\overline{{w^{\prime}}{{{\theta}_v}^{\prime}}}}
+- \frac{ q^3}{{\Lambda}_1} }
 \]
 
 where $q$ is the turbulent velocity, ${u^{\prime}}$, ${v^{\prime}}$, ${w^{\prime}}$ and 
@@ -491,7 +491,7 @@ $K_m$, respectively.  In the statisically realizable level 2.5 turbulence scheme
 \[
 K_h 
  = \left\{ \begin{array}{l@{\quad\mbox{for}\quad}l} q \, \ell \, S_H(G_M,G_H) \, & \mbox{decaying turbulence}
-\\ { q^2 \over {q_e} } \, \ell \, S_{H}(G_{M_e},G_{H_e}) \, & \mbox{growing turbulence} \end{array} \right.
+\\ \frac{ q^2 }{ q_e } \, \ell \, S_{H}(G_{M_e},G_{H_e}) \, & \mbox{growing turbulence} \end{array} \right.
 \]
 
 and
@@ -499,7 +499,7 @@ and
 \[
 K_m
  = \left\{ \begin{array}{l@{\quad\mbox{for}\quad}l} q \, \ell \, S_M(G_M,G_H) \, & \mbox{decaying turbulence}                
-\\ { q^2 \over {q_e} } \, \ell \, S_{M}(G_{M_e},G_{H_e}) \, & \mbox{growing turbulence} \end{array} \right.
+\\ \frac{ q^2 }{ q_e } \, \ell \, S_{M}(G_{M_e},G_{H_e}) \, & \mbox{growing turbulence} \end{array} \right.
 \]
 
 where the subscript $e$ refers to the value under conditions of local equillibrium
@@ -511,16 +511,18 @@ Both $G_H$ and $G_M$, and their equilibrium values $G_{H_e}$ and $G_{M_e}$,
 are functions of the Richardson number:
 
 \[
-{\bf RI} = { { {g \over \theta_v} \pp {\theta_v}{z} } \over { (\pp{u}{z})^2 + (\pp{v}{z})^2 } }
- =  {  {c_p \pp{\theta_v}{z} \pp{P^ \kappa}{z} } \over { (\pp{u}{z})^2 + (\pp{v}{z})^2 } } .
+{\bf RI} = \frac{ \frac{g}{\theta_v} \pp{\theta_v}{z} }{ (\pp{u}{z})^2 + (\pp{v}{z})^2 }
+ =  \frac{c_p \pp{\theta_v}{z} \pp{P^ \kappa}{z} }{ (\pp{u}{z})^2 + (\pp{v}{z})^2 } .
 \]
 
 Negative values indicate unstable buoyancy and shear, small positive values ($<0.2$)
 indicate dominantly unstable shear, and large positive values indicate dominantly stable
 stratification.
 
-Turbulent eddy diffusion coefficients of momentum, heat and moisture in the surface layer,
-which corresponds to the lowest GCM level (see \ref{tab:fizhi:sigma}),
+Turbulent eddy diffusion coefficients of momentum, heat and moisture in the 
+surface layer, which corresponds to the lowest GCM level 
+(see {\it --- missing table ---}%\ref{tab:fizhi:sigma}
+), 
 are calculated using stability-dependant functions based on Monin-Obukhov theory:
 \[
 {K_m} (surface) = C_u \times u_* = C_D W_s
@@ -536,12 +538,12 @@ and $W_s$ is the magnitude of the surface layer wind.
 $C_u$ is the dimensionless exchange coefficient for momentum from the surface layer
 similarity functions: 
 \[
-{C_u} = {u_* \over W_s} = { k \over \psi_{m} }
+{C_u} = \frac{u_* }{ W_s} = \frac{ k }{ \psi_{m} }
 \]
 where k is the Von Karman constant and $\psi_m$ is the surface layer non-dimensional 
 wind shear given by
 \[
-\psi_{m} = {\int_{\zeta_{0}}^{\zeta} {\phi_{m} \over \zeta} d \zeta} .
+\psi_{m} = {\int_{\zeta_{0}}^{\zeta} \frac{\phi_{m} }{ \zeta} d \zeta} .
 \]
 Here $\zeta$ is the non-dimensional stability parameter, and
 $\phi_m$ is the similarity function of $\zeta$ which expresses the stability dependance of
@@ -551,13 +553,13 @@ layers.
 $C_t$ is the dimensionless exchange coefficient for heat and 
 moisture from the surface layer similarity functions:
 \[
-{C_t} = -{( {\overline{w^{\prime}\theta^{\prime}}}) \over {u_* \Delta \theta }} =
--{( {\overline{w^{\prime}q^{\prime}}}) \over {u_* \Delta q }} =
-{ k \over { (\psi_{h} + \psi_{g}) } }
+{C_t} = -\frac{( \overline{w^{\prime}\theta^{\prime}}) }{ u_* \Delta \theta } =
+-\frac{( \overline{w^{\prime}q^{\prime}}) }{ u_* \Delta q } =
+\frac{ k }{ (\psi_{h} + \psi_{g}) }
 \]
 where $\psi_h$ is the surface layer non-dimensional temperature gradient given by
 \[
-\psi_{h} = {\int_{\zeta_{0}}^{\zeta} {\phi_{h} \over \zeta} d \zeta} .
+\psi_{h} = {\int_{\zeta_{0}}^{\zeta} \frac{\phi_{h} }{ \zeta} d \zeta} .
 \]
 Here $\phi_h$ is the similarity function of $\zeta$, which expresses the stability dependance of
 the temperature and moisture gradients, and is specified differently for stable and unstable
@@ -568,7 +570,7 @@ which is the mosstly laminar region between the surface and the tops of the roug
 elements, in which temperature and moisture gradients can be quite large.
 Based on \cite{yagkad:74}:
 \[
-\psi_{g} = { 0.55 (Pr^{2/3} - 0.2) \over \nu^{1/2} }
+\psi_{g} = \frac{ 0.55 (Pr^{2/3} - 0.2) }{ \nu^{1/2} }
 (h_{0}u_{*} - h_{0_{ref}}u_{*_{ref}})^{1/2}
 \]
 where Pr is the Prandtl number for air, $\nu$ is the molecular viscosity, $z_{0}$ is the 
@@ -577,7 +579,7 @@ $h_{0} = 30z_{0}$ with a maximum value over land of 0.01
  
 The surface roughness length over oceans is is a function of the surface-stress velocity,
 \[
-{z_0} = c_1u^3_* + c_2u^2_* + c_3u_* + c_4 + {c_5 \over {u_*}}
+{z_0} = c_1u^3_* + c_2u^2_* + c_3u_* + c_4 + \frac{c_5 }{ u_*}
 \]
 where the constants are chosen to interpolate between the reciprocal relation of
 \cite{kondo:75} for weak winds, and the piecewise linear relation of \cite{larpond:81}
@@ -598,10 +600,10 @@ For a stable surface layer, the stability functions are the observationally
 based functions of \cite{clarke:70},  slightly modified for
 the momemtum flux:  
 \[
-{\phi_m} = { { 1 + 5 {{\zeta}_1} } \over { 1 + 0.00794 {{\zeta}_1}
-(1+ 5 {{\zeta}_1}) } } \hspace{1cm} ; \hspace{1cm}
-{\phi_h} = { { 1 + 5 {{\zeta}_1} } \over { 1 + 0.00794 {\zeta}
-(1+ 5 {{\zeta}_1}) } } .
+{\phi_m} = \frac{ 1 + 5 {{\zeta}_1} }{ 1 + 0.00794 {\zeta}_1
+(1+ 5 {\zeta}_1) } \hspace{1cm} ; \hspace{1cm}
+{\phi_h} = \frac{ 1 + 5 {{\zeta}_1} }{ 1 + 0.00794 {\zeta}
+(1+ 5 {{\zeta}_1}) } .
 \]
 The moisture flux also depends on a specified evapotranspiration
 coefficient, set to unity over oceans and dependant on the climatological ground wetness over
@@ -646,7 +648,7 @@ humidity of the surface and of the lowest $\sigma$-level, respectively.
 
 The heat conduction through sea ice, $Q_{ice}$, is given by
 \[
-{Q_{ice}} = {C_{ti} \over {H_i}} (T_i-T_g)
+{Q_{ice}} = \frac{C_{ti} }{ H_i} (T_i-T_g)
 \]
 where $C_{ti}$ is the thermal conductivity of ice, $H_i$ is the ice thickness, assumed to
 be $3 \hspace{.1cm} m$ where sea ice is present, $T_i$ is 273 degrees Kelvin, and $T_g$ is the 
@@ -655,11 +657,11 @@ surface temperature of the ice.
 $C_g$ is the total heat capacity of the ground, obtained by solving a heat diffusion equation
 for the penetration of the diurnal cycle into the ground (\cite{black:77}), and is given by:
 \[
-C_g = \sqrt{ {\lambda C_s \over 2\omega} } = \sqrt{(0.386 + 0.536W + 0.15W^2)2\times10^{-3}
-{86400 \over 2 \pi} } \, \, .
+C_g = \sqrt{ \frac{\lambda C_s }{ 2\omega} } = \sqrt{(0.386 + 0.536W + 0.15W^2)2\times10^{-3}
+\frac{86400}{2\pi} } \, \, .
 \]
-Here, the thermal conductivity, $\lambda$, is equal to $2\times10^{-3}$ ${ly\over{ sec}}
-{cm \over {^oK}}$,    
+Here, the thermal conductivity, $\lambda$, is equal to $2\times10^{-3}$ $\frac{ly}{sec}
+\frac{cm}{K}$,
 the angular velocity of the earth, $\omega$, is written as $86400$ $sec/day$ divided
 by $2 \pi$ $radians/  
 day$, and the expression for $C_s$, the heat capacity per unit volume at the surface,
@@ -752,7 +754,7 @@ In this version, the gravity wave stress at the surface is
 based on that derived by Pierrehumbert (1986) and is given by:
 
 \bq
-|\vec{\tau}_{sfc}| = {\rho U^3\over{N \ell^*}} \left(F_r^2 \over{1+F_r^2}\right) \, \, ,
+|\vec{\tau}_{sfc}| = \frac{\rho U^3}{N \ell^*} \left( \frac{F_r^2}{1+F_r^2}\right) \, \, ,
 \eq
 
 where $F_r = N h /U$ is the Froude number, $N$ is the {\em Brunt - V\"{a}is\"{a}l\"{a}} frequency, $U$ is the 
@@ -1374,9 +1376,9 @@ In all cases, each diagnostic as currently archived on the output datasets
 is time-averaged over its diagnostic output frequency:
 
 \[
-{\bf DIAGNOSTIC} = {1 \over TTOT} \sum_{t=1}^{t=TTOT} diag(t)
+{\bf DIAGNOSTIC} = \frac{1}{TTOT} \sum_{t=1}^{t=TTOT} diag(t)
 \]
-where $TTOT = {{\bf NQDIAG} \over \Delta t}$, {\bf NQDIAG} is the 
+where $TTOT = \frac{ {\bf NQDIAG} }{\Delta t}$, {\bf NQDIAG} is the 
 output frequency of the diagnostic, and $\Delta t$ is
 the timestep over which the diagnostic is updated.  
 
@@ -1448,7 +1450,7 @@ conduction from the relatively warm ocean through the sea ice. The heat conducti
 through sea ice represents an additional energy source term for the ground temperature equation.
 
 \[
-{\bf QICE} = {C_{ti} \over {H_i}} (T_i-T_g)
+{\bf QICE} = \frac{C_{ti}}{H_i} (T_i-T_g)
 \]
 
 where $C_{ti}$ is the thermal conductivity of ice, $H_i$ is the ice thickness, assumed to
@@ -1490,8 +1492,8 @@ the downward Shortwave flux and $F_{SW}^\uparrow$ is the upward Shortwave flux.
 \noindent
 The non-dimensional stability indicator is the ratio of the buoyancy to the shear:
 \[
-{\bf RI} = { { {g \over \theta_v} \pp {\theta_v}{z} } \over { (\pp{u}{z})^2 + (\pp{v}{z})^2 } }
- =  {  {c_p \pp{\theta_v}{z} \pp{P^ \kappa}{z} } \over { (\pp{u}{z})^2 + (\pp{v}{z})^2 } }
+{\bf RI} = \frac{ \frac{g}{\theta_v} \pp {\theta_v}{z} }{ (\pp{u}{z})^2 + (\pp{v}{z})^2 }
+ =  \frac{c_p \pp{\theta_v}{z} \pp{P^ \kappa}{z} }{ (\pp{u}{z})^2 + (\pp{v}{z})^2 }
 \]
 \\
 where we used the hydrostatic equation: 
@@ -1510,15 +1512,15 @@ stratification.
 The surface exchange coefficient is obtained from the similarity functions for the stability
  dependant flux profile relationships:
 \[
-{\bf CT} = -{( {\overline{w^{\prime}\theta^{\prime}}}) \over {u_* \Delta \theta }} = 
--{( {\overline{w^{\prime}q^{\prime}}}) \over {u_* \Delta q }} = 
-{ k \over { (\psi_{h} + \psi_{g}) } } 
+{\bf CT} = -\frac{( \overline{w^{\prime}\theta^{\prime}} ) }{ u_* \Delta \theta } = 
+-\frac{( \overline{w^{\prime}q^{\prime}} ) }{ u_* \Delta q } = 
+\frac{ k }{ (\psi_{h} + \psi_{g}) } 
 \]
 where $\psi_h$ is the surface layer non-dimensional temperature change and $\psi_g$ is the
 viscous sublayer non-dimensional temperature or moisture change:
 \[
-\psi_{h} = {\int_{\zeta_{0}}^{\zeta} {\phi_{h} \over \zeta} d \zeta} \hspace{1cm} and 
-\hspace{1cm} \psi_{g} = { 0.55 (Pr^{2/3} - 0.2) \over \nu^{1/2} } 
+\psi_{h} = \int_{\zeta_{0}}^{\zeta} \frac{\phi_{h} }{ \zeta} d \zeta \hspace{1cm} and 
+\hspace{1cm} \psi_{g} = \frac{ 0.55 (Pr^{2/3} - 0.2) }{ \nu^{1/2} } 
 (h_{0}u_{*} - h_{0_{ref}}u_{*_{ref}})^{1/2}
 \]
 and:
@@ -1540,11 +1542,11 @@ viscosity, $z_{0}$ is the surface roughness length, $u_*$ is the surface stress 
 The surface exchange coefficient is obtained from the similarity functions for the stability
  dependant flux profile relationships:
 \[
-{\bf CU} = {u_* \over W_s} = { k \over \psi_{m} } 
+{\bf CU} = \frac{u_* }{ W_s} = \frac{ k }{ \psi_{m} } 
 \]
 where $\psi_m$ is the surface layer non-dimensional wind shear: 
 \[
-\psi_{m} = {\int_{\zeta_{0}}^{\zeta} {\phi_{m} \over \zeta} d \zeta}
+\psi_{m} = {\int_{\zeta_{0}}^{\zeta} \frac{\phi_{m} }{ \zeta} d \zeta}
 \]
 \noindent
 $\phi_m$ is the similarity function of $\zeta$, which expresses the stability dependance of
@@ -1564,9 +1566,9 @@ diffusion coefficient $K_h$ times the negative of the gradient of potential temp
 or moisture. In the \cite{helflab:88} adaptation of this closure, $K_h$ 
 takes the form:
 \[
-{\bf ET} = K_h = -{( {\overline{w^{\prime}\theta_v^{\prime}}}) \over {\pp{\theta_v}{z}} }
+{\bf ET} = K_h = -\frac{( \overline{w^{\prime}\theta_v^{\prime}}) }{ \pp{\theta_v}{z} } 
  = \left\{ \begin{array}{l@{\quad\mbox{for}\quad}l} q \, \ell \, S_H(G_M,G_H) & \mbox{decaying turbulence}
-\\ { q^2 \over {q_e} } \, \ell \, S_{H}(G_{M_e},G_{H_e}) & \mbox{growing turbulence} \end{array} \right.
+\\ \frac{ q^2 }{ q_e } \, \ell \, S_{H}(G_{M_e},G_{H_e}) & \mbox{growing turbulence} \end{array} \right.
 \]
 where $q$ is the turbulent velocity, or $\sqrt{2*turbulent \hspace{.2cm} kinetic \hspace{.2cm} 
 energy}$, $q_e$ is the turbulence velocity derived from the more simple level 2.0 model, 
@@ -1605,9 +1607,9 @@ diffusion coefficient $K_m$ times the negative of the gradient of the u-wind.
 In the \cite{helflab:88} adaptation of this closure, $K_m$
 takes the form:
 \[
-{\bf EU} = K_m = -{( {\overline{u^{\prime}w^{\prime}}}) \over {\pp{U}{z}} }
+{\bf EU} = K_m = -\frac{( \overline{u^{\prime}w^{\prime}} ) }{ \pp{U}{z} }
  = \left\{ \begin{array}{l@{\quad\mbox{for}\quad}l} q \, \ell \, S_M(G_M,G_H) & \mbox{decaying turbulence}
-\\ { q^2 \over {q_e} } \, \ell \, S_{M}(G_{M_e},G_{H_e}) & \mbox{growing turbulence} \end{array} \right.
+\\ \frac{ q^2 }{ q_e } \, \ell \, S_{M}(G_{M_e},G_{H_e}) & \mbox{growing turbulence} \end{array} \right.
 \]
 \noindent
 where $q$ is the turbulent velocity, or $\sqrt{2*turbulent \hspace{.2cm} kinetic \hspace{.2cm}
@@ -1710,9 +1712,9 @@ equation.
 \]
 where:
 \[
-\left.{\pp{T}{t}}\right|_{c} = R \sum_i \left( \alpha { m_B \over c_p} \Gamma_s \right)_i 
+\left.{\pp{T}{t}}\right|_{c} = R \sum_i \left( \alpha \frac{m_B}{c_p} \Gamma_s \right)_i 
 \hspace{.4cm} and 
-\hspace{.4cm} \left.{\pp{T}{t}}\right|_{ls} = {L \over c_p } (q^*-q)
+\hspace{.4cm} \left.{\pp{T}{t}}\right|_{ls} = \frac{L}{c_p} (q^*-q)
 \]
 and
 \[
@@ -1740,7 +1742,7 @@ $R$ is the rain re-evaporation adjustment.
 \]
 where:
 \[
-\left.{\pp{q}{t}}\right|_{c} = R \sum_i \left( \alpha { m_B \over {L}}(\Gamma_h-\Gamma_s) \right)_i 
+\left.{\pp{q}{t}}\right|_{c} = R \sum_i \left( \alpha \frac{m_B}{L}(\Gamma_h-\Gamma_s) \right)_i 
 \hspace{.4cm} and 
 \hspace{.4cm} \left.{\pp{q}{t}}\right|_{ls} = (q^*-q)
 \]
@@ -1786,11 +1788,11 @@ F_{LW} = C(p,p') \cdot F^{clearsky}_{LW},
 Finally, the net longwave heating rate is calculated as the vertical divergence of the
 net terrestrial radiative fluxes:
 \[
-\pp{\rho c_p T}{t} = - {\partial \over \partial z} F_{LW}^{NET} ,
+\pp{\rho c_p T}{t} = - \p{z} F_{LW}^{NET} ,
 \]
 or
 \[
-{\bf RADLW} = \frac{g}{c_p \pi} {\partial \over \partial \sigma} F_{LW}^{NET} .
+{\bf RADLW} = \frac{g}{c_p \pi} \p{\sigma} F_{LW}^{NET} .
 \]
 
 \noindent
@@ -1821,11 +1823,11 @@ input at the top of the atmosphere.
 \noindent
 The heating rate due to Shortwave Radiation under cloudy skies is defined as:
 \[
-\pp{\rho c_p T}{t} = - {\partial \over \partial z} F(cloudy)_{SW}^{NET} \cdot {\rm RADSWT},
+\pp{\rho c_p T}{t} = - \p{z} F(cloudy)_{SW}^{NET} \cdot {\rm RADSWT},
 \]
 or
 \[
-{\bf RADSW} = \frac{g}{c_p \pi} {\partial \over \partial \sigma} F(cloudy)_{SW}^{NET}\cdot {\rm RADSWT} .
+{\bf RADSW} = \frac{g}{c_p \pi} \p{\sigma} F(cloudy)_{SW}^{NET}\cdot {\rm RADSWT} .
 \]
 
 \noindent
@@ -1845,7 +1847,7 @@ For a change in specific humidity due to moist processes, $\Delta q_{moist}$,
 the vertical integral or total precipitable amount is given by:   
 \[
 {\bf PREACC} = \int_{surf}^{top} \rho \Delta q_{moist} dz = - \int_{surf}^{top} \Delta  q_{moist}
-{dp \over g} = {1 \over g} \int_0^1 \Delta q_{moist} dp
+\frac{dp}{g} = \frac{1}{g} \int_0^1 \Delta q_{moist} dp
 \]
 \\
 
@@ -1862,7 +1864,7 @@ For a change in specific humidity due to sub-grid scale cumulus convective proce
 the vertical integral or total precipitable amount is given by:   
 \[
 {\bf PRECON} = \int_{surf}^{top} \rho \Delta q_{cum} dz = - \int_{surf}^{top} \Delta  q_{cum}
-{dp \over g} = {1 \over g} \int_0^1 \Delta q_{cum} dp
+\frac{dp}{g} = \frac{1}{g} \int_0^1 \Delta q_{cum} dp
 \]
 \\
 
@@ -1947,7 +1949,7 @@ where $\rho$ is the air density, and $K_h$ is the eddy coefficient.
 \noindent
 The drag coefficient for momentum obtained by assuming a neutrally stable surface layer:
 \[
-{\bf CN} = { k \over { \ln({h \over {z_0}})} }
+{\bf CN} = \frac{ k }{ \ln(\frac{h }{z_0}) }
 \]
 
 \noindent
@@ -1983,7 +1985,7 @@ The air/surface virtual temperature difference measures the stability of the sur
 \noindent
 where
 \[
-\theta_{v{Nrphys+1}} = { T_g \over {P^{\kappa}_{surf}} } (1 + .609 q_{Nrphys+1}) \hspace{1cm}
+\theta_{v{Nrphys+1}} = \frac{ T_g }{ P^{\kappa}_{surf} } (1 + .609 q_{Nrphys+1}) \hspace{1cm}
 and \hspace{1cm} q_{Nrphys+1} = q_{Nrphys} + \beta(q^*(T_g,P_s) - q_{Nrphys})
 \]
 
@@ -2014,12 +2016,12 @@ flux, and $C_g$ is the total heat capacity of the ground.
 $C_g$ is obtained by solving a heat diffusion equation 
 for the penetration of the diurnal cycle into the ground (\cite{black:77}), and is given by:
 \[
-C_g = \sqrt{ {\lambda C_s \over {2 \omega} } } = \sqrt{(0.386 + 0.536W + 0.15W^2)2x10^{-3}
-{ 86400. \over {2 \pi} } } \, \, .
+C_g = \sqrt{ \frac{\lambda C_s }{ 2 \omega } } = \sqrt{(0.386 + 0.536W + 0.15W^2)2x10^{-3}
+\frac{86400.}{2\pi} } \, \, .
 \]
 \noindent
-Here, the thermal conductivity, $\lambda$, is equal to $2x10^{-3}$ ${ly\over{ sec}} 
-{cm \over {^oK}}$, 
+Here, the thermal conductivity, $\lambda$, is equal to $2x10^{-3}$ $\frac{ly}{sec} 
+\frac{cm}{K}$, 
 the angular velocity of the earth, $\omega$, is written as $86400$ $sec/day$ divided 
 by $2 \pi$ $radians/
 day$, and the expression for $C_s$, the heat capacity per unit volume at the surface, 
@@ -2161,11 +2163,11 @@ Thus, {\bf LWCLR} is defined as the net longwave heating rate due to the
 vertical divergence of the
 clear-sky longwave radiative flux:
 \[
-\pp{\rho c_p T}{t}_{clearsky} = - {\partial \over \partial z} F(clearsky)_{LW}^{NET} ,
+\pp{\rho c_p T}{t}_{clearsky} = - \p{z} F(clearsky)_{LW}^{NET} ,
 \]
 or
 \[
-{\bf LWCLR} = \frac{g}{c_p \pi} {\partial \over \partial \sigma} F(clearsky)_{LW}^{NET} .
+{\bf LWCLR} = \frac{g}{c_p \pi} \p{\sigma} F(clearsky)_{LW}^{NET} .
 \]
 
 \noindent
@@ -2355,7 +2357,7 @@ The surface stress velocity, or the friction velocity, is the wind speed at
 the surface layer top impeded by the surface drag:
 \[
 {\bf USTAR} = C_uW_s \hspace{1cm}where: \hspace{.2cm} 
-C_u = {k \over {\psi_m} }
+C_u = \frac{k}{\psi_m}
 \]
 
 \noindent
@@ -2370,7 +2372,7 @@ Over the land surface, the surface roughness length is interpolated to the local
 time from the monthly mean data of \cite{dorsell:89}. Over the ocean,
 the roughness length is a function of the surface-stress velocity, $u_*$.
 \[
-{\bf Z0} = c_1u^3_* + c_2u^2_* + c_3u_* + c_4 + {c_5 \over {u_*}}
+{\bf Z0} = c_1u^3_* + c_2u^2_* + c_3u_* + c_4 + {c_5}{u_*}
 \]
 
 \noindent
@@ -2424,11 +2426,11 @@ input at the top of the atmosphere.
 \noindent
 The heating rate due to Shortwave Radiation under clear skies is defined as:
 \[
-\pp{\rho c_p T}{t} = - {\partial \over \partial z} F(clear)_{SW}^{NET} \cdot {\rm RADSWT},
+\pp{\rho c_p T}{t} = - \p{z} F(clear)_{SW}^{NET} \cdot {\rm RADSWT},
 \]
 or
 \[
-{\bf SWCLR} = \frac{g}{c_p } {\partial \over \partial p} F(clear)_{SW}^{NET}\cdot {\rm RADSWT} .
+{\bf SWCLR} = \frac{g}{c_p } \p{p} F(clear)_{SW}^{NET}\cdot {\rm RADSWT} .
 \]
 
 \noindent
@@ -2615,11 +2617,11 @@ If we define the time-tendency of Temperature due to Diabatic processes as
 \end{eqnarray*}
 then, since there are no surface pressure changes due to Diabatic processes, we may write
 \[
-\pp{T}{t}_{Diabatic} = {p^\kappa \over \pi }\pp{\pi \theta}{t}_{Diabatic}
+\pp{T}{t}_{Diabatic} = \frac{p^\kappa}{\pi}\pp{\pi \theta}{t}_{Diabatic}
 \]
 where $\theta = T/p^\kappa$.  Thus, {\bf DIABT} may be written as
 \[
-{\bf DIABT} = {p^\kappa \over \pi } \left( \pp{\pi \theta}{t}_{Diabatic} + \pp{\pi \theta}{t}_{Analysis} \right)
+{\bf DIABT} = \frac{p^\kappa}{\pi} \left( \pp{\pi \theta}{t}_{Diabatic} + \pp{\pi \theta}{t}_{Analysis} \right)
 \]
 \\
 
@@ -2638,11 +2640,11 @@ If we define the time-tendency of Specific Humidity due to Diabatic processes as
 \]
 then, since there are no surface pressure changes due to Diabatic processes, we may write
 \[
-\pp{q}{t}_{Diabatic} = {1 \over \pi }\pp{\pi q}{t}_{Diabatic}
+\pp{q}{t}_{Diabatic} = \frac{1}{\pi}\pp{\pi q}{t}_{Diabatic}
 \]
 Thus, {\bf DIABQ} may be written as
 \[
-{\bf DIABQ} = {1 \over \pi } \left( \pp{\pi q}{t}_{Diabatic} + \pp{\pi q}{t}_{Analysis} \right)
+{\bf DIABQ} = \frac{1}{\pi} \left( \pp{\pi q}{t}_{Diabatic} + \pp{\pi q}{t}_{Analysis} \right)
 \]
 \\
 
@@ -2656,7 +2658,7 @@ and dividing by the total mass of the column.
 \[
 {\bf VINTUQ} = \frac{ \int_{surf}^{top} u q \rho dz  } { \int_{surf}^{top} \rho dz  }
 \]
-Using $\rho \delta z = -{\delta p \over g} = - {1 \over g} \delta p$, we have 
+Using $\rho \delta z = -\frac{\delta p}{g} = - \frac{1}{g} \delta p$, we have 
 \[
 {\bf VINTUQ} = { \int_0^1 u q dp  }
 \]
@@ -2673,7 +2675,7 @@ and dividing by the total mass of the column.
 \[
 {\bf VINTVQ} = \frac{ \int_{surf}^{top} v q \rho dz  } { \int_{surf}^{top} \rho dz  }
 \]
-Using $\rho \delta z = -{\delta p \over g} = - {1 \over g} \delta p$, we have 
+Using $\rho \delta z = -\frac{\delta p}{g} = - \frac{1}{g} \delta p$, we have 
 \[
 {\bf VINTVQ} = { \int_0^1 v q dp  }
 \]
@@ -2706,7 +2708,7 @@ and dividing by the total mass of the column.
 \[
 {\bf VINTVT} = \frac{ \int_{surf}^{top} v T \rho dz  } { \int_{surf}^{top} \rho dz  }
 \]
-Using $\rho \delta z = -{\delta p \over g} $, we have 
+Using $\rho \delta z = -\frac{\delta p}{g} $, we have 
 \[
 {\bf VINTVT} = { \int_0^1 v T dp  }
 \]
@@ -2771,10 +2773,10 @@ The Total Precipitable Water is defined as the vertical integral of the specific
 given by:
 \begin{eqnarray*}
 {\bf QINT} & = & \int_{surf}^{top} \rho q dz \\
-           & = & {\pi \over g} \int_0^1 q dp
+           & = & \frac{\pi}{g} \int_0^1 q dp
 \end{eqnarray*}
 where we have used the hydrostatic relation 
-$\rho \delta z = -{\delta p \over g} $.
+$\rho \delta z = -\frac{\delta p}{g} $.
 \\
 
 
@@ -2784,8 +2786,8 @@ $\rho \delta z = -{\delta p \over g} $.
 \noindent
 The u-wind at the 2-meter depth is determined from the similarity theory:
 \[
-{\bf U2M} = {u_* \over k} \psi_{m_{2m}} {u_{sl} \over {W_s}} =
-{ \psi_{m_{2m}} \over {\psi_{m_{sl}} }}u_{sl}
+{\bf U2M} = \frac{u_*}{k} \psi_{m_{2m}} \frac{u_{sl}}{W_s} =
+\frac{ \psi_{m_{2m}} }{ \psi_{m_{sl}} }u_{sl}
 \]
 
 \noindent
@@ -2800,8 +2802,8 @@ is above two meters, ${\bf U2M}$ is undefined.
 \noindent
 The v-wind at the 2-meter depth is a determined from the similarity theory:
 \[
-{\bf V2M} = {u_* \over k} \psi_{m_{2m}} {v_{sl} \over {W_s}} =
-{ \psi_{m_{2m}} \over {\psi_{m_{sl}} }}v_{sl}
+{\bf V2M} = \frac{u_*}{k} \psi_{m_{2m}} \frac{v_{sl}}{W_s} =
+\frac{ \psi_{m_{2m}} }{ \psi_{m_{sl}} }v_{sl}
 \]
 
 \noindent
@@ -2816,13 +2818,13 @@ is above two meters, ${\bf V2M}$ is undefined.
 \noindent
 The temperature at the 2-meter depth is a determined from the similarity theory:
 \[
-{\bf T2M} = P^{\kappa} ({\theta* \over k} ({\psi_{h_{2m}}+\psi_g}) + \theta_{surf} ) = 
-P^{\kappa}(\theta_{surf} + { {\psi_{h_{2m}}+\psi_g} \over {{\psi_{h_{sl}}+\psi_g}} }
-(\theta_{sl} - \theta_{surf})) 
+{\bf T2M} = P^{\kappa} (\frac{\theta*}{k} ({\psi_{h_{2m}}+\psi_g}) + \theta_{surf} ) = 
+P^{\kappa}(\theta_{surf} + \frac{ \psi_{h_{2m}}+\psi_g }{ \psi_{h_{sl}}+\psi_g }
+(\theta_{sl} - \theta_{surf}) ) 
 \]
 where:
 \[
-\theta_* = - { (\overline{w^{\prime}\theta^{\prime}}) \over {u_*} }
+\theta_* = - \frac{ (\overline{w^{\prime}\theta^{\prime}}) }{ u_* }
 \]
 
 \noindent
@@ -2838,13 +2840,13 @@ is above two meters, ${\bf T2M}$ is undefined.
 \noindent
 The specific humidity at the 2-meter depth is determined from the similarity theory:
 \[
-{\bf Q2M} = P^{\kappa} ({q_* \over k} ({\psi_{h_{2m}}+\psi_g}) + q_{surf} ) = 
-P^{\kappa}(q_{surf} + { {\psi_{h_{2m}}+\psi_g} \over {{\psi_{h_{sl}}+\psi_g}} }
+{\bf Q2M} = P^{\kappa} \frac({q_*}{k} ({\psi_{h_{2m}}+\psi_g}) + q_{surf} ) = 
+P^{\kappa}(q_{surf} + \frac{ \psi_{h_{2m}}+\psi_g }{ \psi_{h_{sl}}+\psi_g }
 (q_{sl} - q_{surf})) 
 \]
 where:
 \[
-q_* = - { (\overline{w^{\prime}q^{\prime}}) \over {u_*} }
+q_* = - \frac{ (\overline{w^{\prime}q^{\prime}}) }{ u_* }
 \]
 
 \noindent
@@ -2862,8 +2864,8 @@ The u-wind at the 10-meter depth is an interpolation between the surface wind
 and the model lowest level wind using the ratio of the non-dimensional wind shear
 at the two levels:
 \[
-{\bf U10M} = {u_* \over k} \psi_{m_{10m}} {u_{sl} \over {W_s}} =
-{ \psi_{m_{10m}} \over {\psi_{m_{sl}} }}u_{sl}
+{\bf U10M} = \frac{u_*}{k} \psi_{m_{10m}} \frac{u_{sl}}{W_s} =
+\frac{ \psi_{m_{10m}} }{ \psi_{m_{sl}} }u_{sl}
 \]
 
 \noindent
@@ -2879,8 +2881,8 @@ The v-wind at the 10-meter depth is an interpolation between the surface wind
 and the model lowest level wind using the ratio of the non-dimensional wind shear
 at the two levels:
 \[
-{\bf V10M} = {u_* \over k} \psi_{m_{10m}} {v_{sl} \over {W_s}} =
-{ \psi_{m_{10m}} \over {\psi_{m_{sl}} }}v_{sl}
+{\bf V10M} = \frac{u_*}{k} \psi_{m_{10m}} \frac{v_{sl}}{W_s} =
+\frac{ \psi_{m_{10m}} }{ \psi_{m_{sl}} }v_{sl}
 \]
 
 \noindent
@@ -2896,13 +2898,13 @@ The temperature at the 10-meter depth is an interpolation between the surface po
 temperature and the model lowest level potential temperature using the ratio of the 
 non-dimensional temperature gradient at the two levels:
 \[
-{\bf T10M} = P^{\kappa} ({\theta* \over k} ({\psi_{h_{10m}}+\psi_g}) + \theta_{surf} ) = 
-P^{\kappa}(\theta_{surf} + { {\psi_{h_{10m}}+\psi_g} \over {{\psi_{h_{sl}}+\psi_g}} }
+{\bf T10M} = P^{\kappa} (\frac{\theta*}{k} ({\psi_{h_{10m}}+\psi_g}) + \theta_{surf} ) = 
+P^{\kappa}(\theta_{surf} + \frac{\psi_{h_{10m}}+\psi_g}{\psi_{h_{sl}}+\psi_g}
 (\theta_{sl} - \theta_{surf})) 
 \]
 where:
 \[
-\theta_* = - { (\overline{w^{\prime}\theta^{\prime}}) \over {u_*} }
+\theta_* = - \frac{ (\overline{w^{\prime}\theta^{\prime}}) }{ u_* }
 \]
 
 \noindent
@@ -2919,13 +2921,13 @@ The specific humidity at the 10-meter depth is an interpolation between the surf
 humidity and the model lowest level specific humidity using the ratio of the 
 non-dimensional temperature gradient at the two levels:
 \[
-{\bf Q10M} = P^{\kappa} ({q_* \over k} ({\psi_{h_{10m}}+\psi_g}) + q_{surf} ) = 
-P^{\kappa}(q_{surf} + { {\psi_{h_{10m}}+\psi_g} \over {{\psi_{h_{sl}}+\psi_g}} }
+{\bf Q10M} = P^{\kappa} (\frac{q_*}{k} ({\psi_{h_{10m}}+\psi_g}) + q_{surf} ) = 
+P^{\kappa}(q_{surf} + \frac{\psi_{h_{10m}}+\psi_g}{\psi_{h_{sl}}+\psi_g}
 (q_{sl} - q_{surf})) 
 \]
 where:
 \[
-q_* =  - { (\overline{w^{\prime}q^{\prime}}) \over {u_*} }
+q_* =  - \frac{ (\overline{w^{\prime}q^{\prime}}) }{ u_* }
 \]
 
 \noindent

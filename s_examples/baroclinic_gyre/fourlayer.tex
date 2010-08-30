@@ -1,9 +1,9 @@
-% $Header: /u/gcmpack/manual/s_examples/baroclinic_gyre/fourlayer.tex,v 1.27 2010/08/27 13:25:31 jmc Exp $
+% $Header: /u/gcmpack/manual/s_examples/baroclinic_gyre/fourlayer.tex,v 1.28 2010/08/30 23:09:19 jmc Exp $
 % $Name:  $
 
 \section[Baroclinic Gyre MITgcm Example]{Four Layer Baroclinic Ocean Gyre In Spherical Coordinates}
-\label{www:tutorials}
-\label{sect:eg-fourlayer}
+%\label{www:tutorials}
+\label{sec:eg-fourlayer}
 \begin{rawhtml}
 <!-- CMIREDIR:eg-fourlayer: -->
 \end{rawhtml}
@@ -29,7 +29,7 @@ polar coordinates.  The files for this experiment can be found
 in the verification directory under tutorial\_baroclinic\_gyre.
 
 \subsection{Overview}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 This example experiment demonstrates using the MITgcm to simulate
 a baroclinic, wind-forced, ocean gyre circulation. The experiment 
@@ -47,7 +47,7 @@ domain is a sector on a sphere and the coriolis parameter, $f$, is defined
 according to latitude, $\varphi$
 
 \begin{equation}
-\label{EQ:eg-fourlayer-fcori}
+\label{eq:eg-fourlayer-fcori}
 f(\varphi) = 2 \Omega \sin( \varphi )
 \end{equation}
  
@@ -57,7 +57,7 @@ f(\varphi) = 2 \Omega \sin( \varphi )
  The sinusoidal wind-stress variations are defined according to 
 
 \begin{equation}
-\label{EQ:taux}
+\label{eq:taux}
 \tau_{\lambda}(\varphi) = \tau_{0}\sin(\pi \frac{\varphi}{L_{\varphi}})
 \end{equation}
  
@@ -65,9 +65,9 @@ f(\varphi) = 2 \Omega \sin( \varphi )
 $\tau_0$ is set to $0.1N m^{-2}$. 
 \\
 
-Figure \ref{FIG:eg-fourlayer-simulation_config}
+Figure \ref{fig:eg-fourlayer-simulation_config}
 summarizes the configuration simulated.
-In contrast to the example in section \ref{sect:eg-baro}, the 
+In contrast to the example in section \ref{sec:eg-baro}, the 
 current experiment simulates a spherical polar domain. As indicated
 by the axes in the lower left of the figure the model code works internally
 in a locally orthogonal coordinate $(x,y,z)$. For this experiment description 
@@ -86,14 +86,14 @@ $\theta_{1750}=6^{\circ}$~C. The equation of state used in this experiment is
 linear
 
 \begin{equation}
-\label{EQ:eg-fourlayer-linear1_eos}
+\label{eq:eg-fourlayer-linear1_eos}
 \rho = \rho_{0} ( 1 - \alpha_{\theta}\theta^{'} )
 \end{equation}
 
 \noindent which is implemented in the model as a density anomaly equation
 
 \begin{equation}
-\label{EQ:eg-fourlayer-linear1_eos_pert}
+\label{eq:eg-fourlayer-linear1_eos_pert}
 \rho^{'} = -\rho_{0}\alpha_{\theta}\theta^{'}
 \end{equation}
 
@@ -122,13 +122,13 @@ An initial stratification is
 imposed by setting the potential temperature, $\theta$, in each layer.
 The vertical spacing, $\Delta z$, is constant and equal to $500$m.
 }
-\label{FIG:eg-fourlayer-simulation_config}
+\label{fig:eg-fourlayer-simulation_config}
 \end{figure}
 
 \subsection{Equations solved}
-\label{www:tutorials}
+%\label{www:tutorials}
 For this problem
-the implicit free surface, {\bf HPE} (see section \ref{sect:hydrostatic_and_quasi-hydrostatic_forms}) form of the 
+the implicit free surface, {\bf HPE} (see section \ref{sec:hydrostatic_and_quasi-hydrostatic_forms}) form of the 
 equations described in Marshall et. al \cite{marshall:97a} are
 employed. The flow is three-dimensional with just temperature, $\theta$, as 
 an active tracer.  The equation of state is linear.
@@ -137,12 +137,12 @@ dissipation and provides a diffusive sub-grid scale closure for the
 temperature equation. A wind-stress momentum forcing is added to the momentum 
 equation for the zonal flow, $u$. Other terms in the model
 are explicitly switched off for this experiment configuration (see section
-\ref{SEC:eg_fourl_code_config} ). This yields an active set of equations
+\ref{sec:eg_fourl_code_config} ). This yields an active set of equations
 solved in this configuration, written in spherical polar coordinates as 
 follows
 
 \begin{eqnarray}
-\label{EQ:eg-fourlayer-model_equations}
+\label{eq:eg-fourlayer-model_equations}
 \frac{Du}{Dt} - fv + 
   \frac{1}{\rho}\frac{\partial p^{\prime}}{\partial \lambda} - 
   A_{h}\nabla_{h}^2u - A_{z}\frac{\partial^{2}u}{\partial z^{2}} 
@@ -181,11 +181,11 @@ g\rho_{0} \eta + \int^{0}_{-z}\rho^{\prime} dz
 flow vector $\vec{u}$ on the sphere ($u=\dot{\lambda},v=\dot{\varphi}$).
 The terms $H\widehat{u}$ and $H\widehat{v}$ are the components of the vertical
 integral term given in equation \ref{eq:free-surface} and
-explained in more detail in section \ref{sect:pressure-method-linear-backward}.
+explained in more detail in section \ref{sec:pressure-method-linear-backward}.
 However, for the problem presented here, the continuity relation (equation
 \ref{eq:fourl_example_continuity}) differs from the general form given
-in section \ref{sect:pressure-method-linear-backward},
-equation \ref{eq:linear-free-surface=P-E+R}, because the source terms
+in section \ref{sec:pressure-method-linear-backward},
+equation \ref{eq:linear-free-surface=P-E}, because the source terms
 ${\cal P}-{\cal E}+{\cal R}$ 
 are all $0$.
 
@@ -203,7 +203,7 @@ In the momentum equations
 lateral and vertical boundary conditions for the $\nabla_{h}^{2}$
 and $\frac{\partial^{2}}{\partial z^{2}}$ operators are specified
 when the numerical simulation is run - see section 
-\ref{SEC:eg_fourl_code_config}. For temperature
+\ref{sec:eg_fourl_code_config}. For temperature
 the boundary condition is ``zero-flux'' 
 e.g. $\frac{\partial \theta}{\partial \varphi}=
 \frac{\partial \theta}{\partial \lambda}=\frac{\partial \theta}{\partial z}=0$.
@@ -211,7 +211,7 @@ e.g. $\frac{\partial \theta}{\partial \varphi}=
 
 
 \subsection{Discrete Numerical Configuration}
-\label{www:tutorials}
+%\label{www:tutorials}
 
  The domain is discretised with 
 a uniform grid spacing in latitude and longitude
@@ -231,7 +231,7 @@ y=r\varphi,~\Delta y &= &r\Delta \varphi
 
 The procedure for generating a set of internal grid variables from a
 spherical polar grid specification is discussed in section 
-\ref{sect:spatial_discrete_horizontal_grid}.
+\ref{sec:spatial_discrete_horizontal_grid}.
 
 \noindent\fbox{ \begin{minipage}{5.5in}
 {\em S/R INI\_SPHERICAL\_POLAR\_GRID} ({\em
@@ -252,32 +252,32 @@ $\Delta x_v$, $\Delta y_u$: {\bf DXv}, {\bf DYu} ({\em GRID.h})
 
 
 
-As described in \ref{sect:tracer_equations}, the time evolution of potential 
+As described in \ref{sec:tracer_equations}, the time evolution of potential 
 temperature, 
 $\theta$, (equation \ref{eq:eg_fourl_theta})
 is evaluated prognostically. The centered second-order scheme with
 Adams-Bashforth time stepping described in section 
-\ref{sect:tracer_equations_abII} is used to step forward the temperature 
+\ref{sec:tracer_equations_abII} is used to step forward the temperature 
 equation. Prognostic terms in
 the momentum equations are solved using flux form as
-described in section \ref{sect:flux-form_momentum_eqautions}.
+described in section \ref{sec:flux-form_momentum_equations}.
 The pressure forces that drive the fluid motions, (
 $\frac{\partial p^{'}}{\partial \lambda}$ and $\frac{\partial p^{'}}{\partial \varphi}$), are found by summing pressure due to surface 
 elevation $\eta$ and the hydrostatic pressure. The hydrostatic part of the 
 pressure is diagnosed explicitly by integrating density. The sea-surface
 height, $\eta$, is diagnosed using an implicit scheme. The pressure
 field solution method is described in sections
-\ref{sect:pressure-method-linear-backward} and 
-\ref{sect:finding_the_pressure_field}.
+\ref{sec:pressure-method-linear-backward} and 
+\ref{sec:finding_the_pressure_field}.
 
 \subsubsection{Numerical Stability Criteria}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 The Laplacian viscosity coefficient, $A_{h}$, is set to $400 m s^{-1}$.
 This value is chosen to yield a Munk layer width,
 
 \begin{eqnarray}
-\label{EQ:eg-fourlayer-munk_layer}
+\label{eq:eg-fourlayer-munk_layer}
 M_{w} = \pi ( \frac { A_{h} }{ \beta } )^{\frac{1}{3}}
 \end{eqnarray}
 
@@ -293,7 +293,7 @@ time step $\delta t=1200$secs. With this time step the stability
 parameter to the horizontal Laplacian friction
 
 \begin{eqnarray}
-\label{EQ:eg-fourlayer-laplacian_stability}
+\label{eq:eg-fourlayer-laplacian_stability}
 S_{l} = 4 \frac{A_{h} \delta t}{{\Delta x}^2}
 \end{eqnarray}
 
@@ -305,7 +305,7 @@ for stability for this term under ABII time-stepping.
 $1\times10^{-2} {\rm m}^2{\rm s}^{-1}$. The associated stability limit
 
 \begin{eqnarray}
-\label{EQ:eg-fourlayer-laplacian_stability_z}
+\label{eq:eg-fourlayer-laplacian_stability_z}
 S_{l} = 4 \frac{A_{z} \delta t}{{\Delta z}^2}
 \end{eqnarray}
 
@@ -318,7 +318,7 @@ and vertical ($K_{z}$) diffusion coefficients for temperature respectively.
 \noindent The numerical stability for inertial oscillations
 
 \begin{eqnarray}
-\label{EQ:eg-fourlayer-inertial_stability}
+\label{eq:eg-fourlayer-inertial_stability}
 S_{i} = f^{2} {\delta t}^2
 \end{eqnarray}
 
@@ -331,7 +331,7 @@ horizontal flow
 speed of $ | \vec{u} | = 2 ms^{-1}$
 
 \begin{eqnarray}
-\label{EQ:eg-fourlayer-cfl_stability}
+\label{eq:eg-fourlayer-cfl_stability}
 C_{a} = \frac{| \vec{u} | \delta t}{ \Delta x}
 \end{eqnarray}
 
@@ -343,7 +343,7 @@ limit of 0.5.
 propagating at $2~{\rm m}~{\rm s}^{-1}$ 
 
 \begin{eqnarray}
-\label{EQ:eg-fourlayer-igw_stability}
+\label{eq:eg-fourlayer-igw_stability}
 S_{c} = \frac{c_{g} \delta t}{ \Delta x}
 \end{eqnarray}
 
@@ -351,8 +351,8 @@ S_{c} = \frac{c_{g} \delta t}{ \Delta x}
 stability limit of 0.25.
   
 \subsection{Code Configuration}
-\label{www:tutorials}
-\label{SEC:eg_fourl_code_config}
+%\label{www:tutorials}
+\label{sec:eg_fourl_code_config}
 
 The model configuration for this experiment resides under the 
 directory {\it verification/tutorial\_barotropic\_gyre/}.
@@ -372,7 +372,7 @@ experiment. Below we describe the customisations to these files
 associated with this experiment.
 
 \subsubsection{File {\it input/data}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 This file, reproduced completely below, specifies the main parameters 
 for the experiment. The parameters that are significant for this configuration
@@ -684,19 +684,19 @@ zonalWindFile='windx.sin_y'
 \begin{rawhtml}</PRE>\end{rawhtml}
 
 \subsubsection{File {\it input/data.pkg}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 This file uses standard default values and does not contain
 customisations for this experiment.
 
 \subsubsection{File {\it input/eedata}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 This file uses standard default values and does not contain
 customisations for this experiment.
 
 \subsubsection{File {\it input/windx.sin\_y}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 The {\it input/windx.sin\_y} file specifies a two-dimensional ($x,y$)
 map of wind stress ,$\tau_{x}$, values. The units used are $Nm^{-2}$
@@ -709,7 +709,7 @@ standard code for loading forcing fields in MITgcm (routine {\it
   input/windx.sin\_y} file.
 
 \subsubsection{File {\it input/topog.box}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 
 The {\it input/topog.box} file specifies a two-dimensional ($x,y$) 
@@ -721,7 +721,7 @@ The included matlab program {\it input/gendata.m} gives a complete
 code for creating the {\it input/topog.box} file.
 
 \subsubsection{File {\it code/SIZE.h}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 Two lines are customized in this file for the current experiment
 
@@ -748,20 +748,20 @@ the vertical domain extent in grid points.
 \end{small}
 
 \subsubsection{File {\it code/CPP\_OPTIONS.h}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 This file uses standard default values and does not contain
 customisations for this experiment.
 
 
 \subsubsection{File {\it code/CPP\_EEOPTIONS.h}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 This file uses standard default values and does not contain
 customisations for this experiment.
 
 \subsubsection{Other Files }
-\label{www:tutorials}
+%\label{www:tutorials}
 
 Other files relevant to this experiment are
 \begin{itemize}
@@ -774,18 +774,18 @@ dxF, dyF, dxG, dyG, dxC, dyC}.
 \end{itemize}
 
 \subsection{Running The Example}
-\label{www:tutorials}
-\label{SEC:running_the_example}
+%\label{www:tutorials}
+%\label{sec:running_the_example}
 
 \subsubsection{Code Download}
-\label{www:tutorials}
+%\label{www:tutorials}
 
  In order to run the examples you must first download the code distribution.
 Instructions for downloading the code can be found in section
-\ref{sect:obtainingCode}.
+\ref{sec:obtainingCode}.
 
 \subsubsection{Experiment Location}
-\label{www:tutorials}
+%\label{www:tutorials}
 
  This example experiments is located under the release sub-directory
 
@@ -793,7 +793,7 @@ Instructions for downloading the code can be found in section
 {\it verification/exp2/ }
 
 \subsubsection{Running the Experiment}
-\label{www:tutorials}
+%\label{www:tutorials}
 
  To run the experiment
 

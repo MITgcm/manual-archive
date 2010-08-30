@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.43 2010/05/28 21:04:18 jmc Exp $
+% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.44 2010/08/30 23:09:20 jmc Exp $
 % $Name:  $
 
 %\section{Getting started}
@@ -14,7 +14,7 @@ are described more fully in chapters \ref{chap:discretization} and
 \ref{chap:sarch}. 
 
 \section{Where to find information}
-\label{sect:whereToFindInfo}
+\label{sec:whereToFindInfo}
 \begin{rawhtml}
 <!-- CMIREDIR:whereToFindInfo: -->
 \end{rawhtml}
@@ -29,7 +29,7 @@ http://mitgcm.org/pipermail/mitgcm-support/
 \begin{rawhtml} </A> \end{rawhtml}
 
 \section{Obtaining the code}
-\label{sect:obtainingCode}
+\label{sec:obtainingCode}
 \begin{rawhtml}
 <!-- CMIREDIR:obtainingCode: -->
 \end{rawhtml}
@@ -63,7 +63,7 @@ provide easy support for maintenance updates.
 \end{enumerate}
 
 \subsection{Method 1 - Checkout from CVS}
-\label{sect:cvs_checkout}
+\label{sec:cvs_checkout}
 
 If CVS is available on your system, we strongly encourage you to use it. CVS
 provides an efficient and elegant way of organizing your code and keeping
@@ -219,7 +219,7 @@ also means we can't tell what version of the code you are working
 with. So please be sure you understand what you're doing.
 
 \subsection{Method 2 - Tar file download}
-\label{sect:conventionalDownload}
+\label{sec:conventionalDownload}
 
 If you do not have CVS on your system, you can download the model as a
 tar file from the web site at:
@@ -276,7 +276,7 @@ structure).
   package corresponds to a subdirectory. For example, \texttt{gmredi}
   contains the code related to the Gent-McWilliams/Redi scheme,
   \texttt{aim} the code relative to the atmospheric intermediate
-  physics. The packages are described in detail in chapter \ref{chap.packagesI}.
+  physics. The packages are described in detail in chapter \ref{chap:packagesI}.
   
 \item \texttt{tools}: this directory contains various useful tools.
   For example, \texttt{genmake2} is a script written in csh (C-shell)
@@ -300,7 +300,7 @@ structure).
   decompositions.
   
 \item \texttt{verification}: this directory contains the model
-  examples. See section \ref{sect:modelExamples}.
+  examples. See section \ref{sec:modelExamples}.
 
 \item \texttt{jobs}: contains sample job scripts for running MITgcm.
   
@@ -311,7 +311,7 @@ structure).
 \end{itemize}
 
 \section[Building MITgcm]{Building the code}
-\label{sect:buildingCode}
+\label{sec:buildingCode}
 \begin{rawhtml}
 <!-- CMIREDIR:buildingCode: -->
 \end{rawhtml}
@@ -320,7 +320,7 @@ To compile the code, we use the \texttt{make} program. This uses a
 file (\texttt{Makefile}) that allows us to pre-process source files,
 specify compiler and optimization options and also figures out any
 file dependencies. We supply a script (\texttt{genmake2}), described
-in section \ref{sect:genmake}, that automatically creates the
+in section \ref{sec:genmake}, that automatically creates the
 \texttt{Makefile} for you. You then need to build the dependencies and
 compile the code.
 
@@ -395,7 +395,7 @@ where the ``2'' can be replaced with a number that corresponds to the
 number of CPUs available.
 
 Now you are ready to run the model. General instructions for doing so are
-given in section \ref{sect:runModel}. Here, we can run the model by
+given in section \ref{sec:runModel}. Here, we can run the model by
 first creating links to all the input files:
 \begin{verbatim}
 ln -s ../input/* .
@@ -409,7 +409,7 @@ where we are re-directing the stream of text output to the file
 
 \subsection{Building/compiling the code elsewhere}
 
-In the example above (section \ref{sect:buildingCode}) we built the
+In the example above (section \ref{sec:buildingCode}) we built the
 executable in the {\em input} directory of the experiment for
 convenience. You can also configure and compile the code in other
 locations, for example on a scratch disk with out having to copy the
@@ -513,7 +513,7 @@ the one experiment:
 
 
 \subsection{Using \texttt{genmake2}}
-\label{sect:genmake}
+\label{sec:genmake}
 
 To compile the code, first use the program \texttt{genmake2} (located
 in the \texttt{tools} directory) to generate a Makefile.
@@ -684,7 +684,7 @@ The most important command-line options are:
   
 \item[\texttt{--mpi}] This option enables certain MPI features (using
   CPP \texttt{\#define}s) within the code and is necessary for MPI
-  builds (see Section \ref{sect:mpi-build}).
+  builds (see Section \ref{sec:mpi-build}).
   
 \item[\texttt{--make=/path/to/gmake}] Due to the poor handling of
   soft-links and other bugs common with the \texttt{make} versions
@@ -707,7 +707,7 @@ The most important command-line options are:
 
 
 \subsection{Building with MPI}
-\label{sect:mpi-build}
+\label{sec:mpi-build}
 
 Building MITgcm to use MPI libraries can be complicated due to the
 variety of different MPI implementations available, their dependencies
@@ -722,7 +722,7 @@ The steps for building MITgcm with MPI support are:
   
 \item Determine the locations of your MPI-enabled compiler and/or MPI
   libraries and put them into an options file as described in Section
-  \ref{sect:genmake}.  One can start with one of the examples in:
+  \ref{sec:genmake}.  One can start with one of the examples in:
   \begin{rawhtml} <A
     href="http://mitgcm.org/viewvc/MITgcm/MITgcm/tools/build_options/">
   \end{rawhtml}
@@ -757,7 +757,7 @@ The steps for building MITgcm with MPI support are:
   \end{itemize}
   
 \item Build the code with the \texttt{genmake2} \texttt{-mpi} option
-  (see Section \ref{sect:genmake}) using commands such as:
+  (see Section \ref{sec:genmake}) using commands such as:
 {\footnotesize \begin{verbatim}
   %  ../../../tools/genmake2 -mods=../code -mpi -of=YOUR_OPTFILE
   %  make depend
@@ -811,12 +811,12 @@ the GNU g77 compiler and the mpich MPI library is:
 \end{verbatim} }
 
 \section[Running MITgcm]{Running the model in prognostic mode}
-\label{sect:runModel}
+\label{sec:runModel}
 \begin{rawhtml}
 <!-- CMIREDIR:runModel: -->
 \end{rawhtml}
 
-If compilation finished succesfully (section \ref{sect:buildingCode})
+If compilation finished succesfully (section \ref{sec:buildingCode})
 then an executable called \texttt{mitgcmuv} will now exist in the
 local directory.
 

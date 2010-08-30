@@ -1,10 +1,10 @@
-% $Header: /u/gcmpack/manual/s_examples/held_suarez_cs/held_suarez_cs.tex,v 1.9 2010/08/27 13:25:32 jmc Exp $
+% $Header: /u/gcmpack/manual/s_examples/held_suarez_cs/held_suarez_cs.tex,v 1.10 2010/08/30 23:09:20 jmc Exp $
 % $Name:  $
 
 \section[Held-Suarez Atmosphere MITgcm Example]{Held-Suarez atmospheric simulation
 on cube-sphere grid with 32 square cube faces.}
-\label{www:tutorials}
-\label{sect:eg-hs}
+%\label{www:tutorials}
+\label{sec:eg-hs}
 \begin{rawhtml}
 <!-- CMIREDIR:eg-hs: -->
 \end{rawhtml}
@@ -34,7 +34,7 @@ The files for this experiment can be found in the verification directory
 under tutorial\_held\_suarez\_cs.
 
 \subsection{Overview}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 This example demonstrates using the MITgcm to simulate
 the planetary atmospheric circulation, with flat orography
@@ -72,7 +72,7 @@ for many years on a single processor desktop computer.
 \\
 
 \subsection{Forcing}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 The model is forced by relaxation to a radiative equilibrium temperature from
 \cite{held-suar:94}.
@@ -83,22 +83,22 @@ Altogether, this yields the following forcing
 \cite[from][]{held-suar:94} that is applied to the fluid:
 
 \begin{eqnarray}
-\label{EQ:eg-hs-global_forcing}
-\label{EQ:eg-hs-global_forcing_fv}
+\label{eq:eg-hs-global_forcing}
+\label{eq:eg-hs-global_forcing_fv}
 \vec{{\cal F}_\mathbf{v}} & = & -k_\mathbf{v}(p)\vec{\mathbf{v}}_h
 \\
-\label{EQ:eg-hs-global_forcing_ft}
+\label{eq:eg-hs-global_forcing_ft}
 {\cal F}_{\theta} & = & -k_{\theta}(\varphi,p)[\theta-\theta_{eq}(\varphi,p)]
 \end{eqnarray}
 
 \noindent where $\vec{\cal F}_\mathbf{v}$, ${\cal F}_{\theta}$,
 are the forcing terms in the zonal and meridional
 momentum and in the potential temperature equations respectively.
-The term $k_\mathbf{v}$ in equation (\ref{EQ:eg-hs-global_forcing_fv}) applies a
+The term $k_\mathbf{v}$ in equation (\ref{eq:eg-hs-global_forcing_fv}) applies a
 Rayleigh damping that is active within the planetary boundary layer. 
 It is defined so as to decay as pressure decreases according to
 \begin{eqnarray*}
-\label{EQ:eg-hs-define_kv}
+\label{eq:eg-hs-define_kv}
 k_\mathbf{v} & = & k_{f}~\max[0,~(p^*/P^{0}_{s}-\sigma_{b})/(1-\sigma_{b})]
 \\
 \sigma_{b} & = & 0.7 ~~{\rm and}~~
@@ -113,13 +113,13 @@ of topography.
 The Equilibrium temperature $\theta_{eq}$ and relaxation time scale $k_{\theta}$ 
 are set to:
 \begin{eqnarray}
-\label{EQ:eg-hs-define_Teq}
+\label{eq:eg-hs-define_Teq}
 \theta_{eq}(\varphi,p^*) & = & \max \{ 200.K (P^{0}_{s}/p^*)^\kappa,\\
 \nonumber
 & & \hspace{8mm} 315.K - \Delta T_y~\sin^2(\varphi) 
   - \Delta \theta_z \cos^2(\varphi) \log(p^*/P^{0}_s) \}
 \\
-\label{EQ:eg-hs-define_kT}
+\label{eq:eg-hs-define_kT}
 k_{\theta}(\varphi,p^*) & = &
 k_a + (k_s -k_a)~\cos^4(\varphi)~\max[0,(p^*/P^{0}_{s}-\sigma_{b})/(1-\sigma_{b})]
 \end{eqnarray}
@@ -135,7 +135,7 @@ horizontally average of the radiative equilibrium temperature.
 
 \subsection{Set-up description}
 %\subsection{Discrete Numerical Configuration}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 The model is configured in hydrostatic form, using non-boussinesq
 $p^*$ coordinate.
@@ -150,26 +150,26 @@ Grid spacing and grid-point location are not computed by the model but
 read from files.
 
 The vector-invariant form of the momentum equation (see section
-\ref{sect:vect-inv_momentum_equations}) is used so that no explicit 
+\ref{sec:vect-inv_momentum_equations}) is used so that no explicit 
 metrics are necessary.
 
 Applying the vector-invariant discretization to the
 atmospheric equations \ref{eq:atmos-prime}, and adding the 
 forcing term 
-(\ref{EQ:eg-hs-global_forcing_fv}, \ref{EQ:eg-hs-global_forcing_ft})
+(\ref{eq:eg-hs-global_forcing_fv}, \ref{eq:eg-hs-global_forcing_ft})
 on the right-hand-side,
 leads to the set of equations that are solved in this configuration:
 
 %the The set of equations solved here is der
 %Wind-stress forcing is added to the momentum equations for both
 %the zonal flow, $u$ and the meridional flow $v$, according to equations 
-%(\ref{EQ:eg-hs-global_forcing_fv}) and (\ref{EQ:eg-hs-global_forcing_fv}).
+%(\ref{eq:eg-hs-global_forcing_fv}) and (\ref{eq:eg-hs-global_forcing_fv}).
 %Thermodynamic forcing inputs are added to the equations for
 %potential temperature, $\theta$, and salinity, $S$, according to equations 
-%(\ref{EQ:eg-hs-global_forcing_ft}) and (\ref{EQ:eg-hs-global_forcing_fs}).
+%(\ref{eq:eg-hs-global_forcing_ft}) and (\ref{eq:eg-hs-global_forcing_fs}).
 
 \begin{eqnarray}
-\label{EQ:eg-hs-model_equations}
+\label{eq:eg-hs-model_equations}
 \frac{\partial \vec{\mathbf{v}}_h}{\partial t}
 +(f + \zeta)\hat{\mathbf{k}} \times \vec{\mathbf{v}}_h
 %+\mathbf{\nabla }_{p} ({\rm KE})
@@ -222,20 +222,20 @@ The implicit free surface form of the pressure equation described in
 \cite{marshall:97a} is employed to solve for $p_s$; 
 Integrating vertically the hydrostatic balance 
 gives the geopotential $\Phi'$ and allow to step forward the momentum equation
-\ref{EQ:eg-hs-model_equations}.
+\ref{eq:eg-hs-model_equations}.
 The potential temperature, $\theta$, is stepped forward using the 
 new velocity field ({\it staggered time-step}, section 
-\ref{sect:adams-bashforth-staggered}).
+\ref{sec:adams-bashforth-staggered}).
 \\
 
 \subsubsection{Numerical Stability Criteria}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 \noindent The numerical stability for inertial oscillations
 \cite{adcroft:95} 
 
 \begin{eqnarray}
-\label{EQ:eg-hs-inertial_stability}
+\label{eq:eg-hs-inertial_stability}
 S_{i} = f^{2} {\Delta t}^2
 \end{eqnarray}
 
@@ -249,7 +249,7 @@ for a extreme maximum horizontal flow speed of $ | \vec{u} | = 90. {\rm m/s}$~
 and the smallest horizontal grid spacing $ \Delta x = 1.1\times10^5 {\rm m}$~:
 
 \begin{eqnarray}
-\label{EQ:eg-hs-cfl_stability}
+\label{eq:eg-hs-cfl_stability}
 S_{a} = \frac{| \vec{u} | \Delta t}{ \Delta x}
 \end{eqnarray}
 
@@ -262,7 +262,7 @@ with a maximum speed of $c_{g}=100~{\rm m/s}$
 \cite{adcroft:95}
 
 \begin{eqnarray}
-\label{EQ:eg-hs-gfl_stability}
+\label{eq:eg-hs-gfl_stability}
 S_{c} = \frac{c_{g} \Delta t}{ \Delta x}
 \end{eqnarray}
 
@@ -270,8 +270,8 @@ S_{c} = \frac{c_{g} \Delta t}{ \Delta x}
 stability limit of 0.5.
   
 \subsection{Experiment Configuration}
-\label{www:tutorials}
-\label{SEC:eg-hs_examp_exp_config}
+%\label{www:tutorials}
+\label{sec:eg-hs_examp_exp_config}
 
 The model configuration for this experiment resides under the 
 directory {\it verification/tutorial\_held\_suarez\_cs}.  The experiment files 
@@ -291,17 +291,17 @@ experiments. Below we describe the customizations
 to these files associated with this experiment.
 
 \subsubsection{File {\it input/data}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 \input{s_examples/held_suarez_cs/inp_data}
 
 \subsubsection{File {\it input/data.pkg}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 \input{s_examples/held_suarez_cs/inp_data.pkg}
 
 \subsubsection{File {\it input/eedata}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 This file uses standard default values except line 6:
 \begin{verbatim}
@@ -311,12 +311,12 @@ This line selects the cubed-sphere specific exchanges to
 to connect tiles and faces edges.
 
 \subsubsection{File {\it input/data.shap}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 \input{s_examples/held_suarez_cs/inp_data.shap}
 
 \subsubsection{File {\it code/SIZE.h}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 Four lines are customized in this file for the current experiment
 
@@ -349,12 +349,12 @@ sets the vertical domain extent in grid points.
 %\end{small}
 
 \subsubsection{File {\it code/packages.conf}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 \input{s_examples/held_suarez_cs/cod_packages.conf}
 
 \subsubsection{File {\it code/CPP\_OPTIONS.h}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 This file uses standard default except for Line 40\\
 ({\it diff CPP\_OPTIONS.h ../../../model/inc}):
@@ -365,7 +365,7 @@ This line allow to use the non-linear free-surface part of the code,
 which is required for the $p^*$ coordinate formulation.
 
 \subsubsection{Other Files }
-\label{www:tutorials}
+%\label{www:tutorials}
 
 Other files relevant to this experiment are
 \begin{itemize}
@@ -378,10 +378,10 @@ to these files associated with this experiment.\\
 
 The file {\it code/external\_forcing.F} contains 4 subroutines
 that calculate the forcing terms (Right-Hand side term) in the
-momentum equation (\ref{EQ:eg-hs-global_forcing_fv}, 
+momentum equation (\ref{eq:eg-hs-global_forcing_fv}, 
 {\it S/R EXTERNAL\_FORCING\_U} and {\it EXTERNAL\_FORCING\_V})
 and in the potential temperature equation 
-(\ref{EQ:eg-hs-global_forcing_ft}, {\it S/R  EXTERNAL\_FORCING\_T}). 
+(\ref{eq:eg-hs-global_forcing_ft}, {\it S/R  EXTERNAL\_FORCING\_T}). 
 The water-vapour forcing subroutine ({\it S/R EXTERNAL\_FORCING\_S})
 is left empty for this experiment.\\
 

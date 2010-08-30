@@ -69,16 +69,16 @@ atmosphere (the boundary layer) is retained between physics calculations. This n
 a second set of evolution equations for the atmospheric state variables on the modified grid. 
 If the equation for the evolution of $U$ on $p^*$ can be expressed as:
 \[
-\left . {\partial U \over {\partial t}} \right |_{p^*}^{total} = 
-\left . {\partial U \over {\partial t}} \right |_{p^*}^{dynamics} + 
-\left . {\partial U \over {\partial t}} \right |_{p^*}^{physics}
+\left . \frac{\partial U}{\partial t} \right |_{p^*}^{total} = 
+\left . \frac{\partial U}{\partial t} \right |_{p^*}^{dynamics} + 
+\left . \frac{\partial U}{\partial t} \right |_{p^*}^{physics}
 \]
 where the physics forcing terms on $p^*$ have been mapped from the modified grid, then an additional 
 equation to govern the evolution of $U$ (for example) on the modified grid is written:
 \[
-\left . {\partial U \over {\partial t}} \right |_{p^{*m}}^{total} = 
-\left . {\partial U \over {\partial t}} \right |_{p^{*m}}^{dynamics} + 
-\left . {\partial U \over {\partial t}} \right |_{p^{*m}}^{physics} +
+\left . \frac{\partial U}{\partial t} \right |_{p^{*m}}^{total} = 
+\left . \frac{\partial U}{\partial t} \right |_{p^{*m}}^{dynamics} + 
+\left . \frac{\partial U}{\partial t} \right |_{p^{*m}}^{physics} +
 \gamma ({\left . U \right |_{p^*}} - {\left . U \right |_{p^{*m}}})
 \]
 where $p^{*m}$ refers to the modified higher resolution grid, and the dynamics forcing terms have 

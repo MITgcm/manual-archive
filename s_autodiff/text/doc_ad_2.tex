@@ -1,7 +1,8 @@
-% $Header: /u/gcmpack/manual/s_autodiff/text/doc_ad_2.tex,v 1.22 2010/08/27 13:09:40 jmc Exp $
+% $Header: /u/gcmpack/manual/s_autodiff/text/doc_ad_2.tex,v 1.23 2010/08/30 23:09:19 jmc Exp $
 % $Name:  $
 
 Author: Patrick Heimbach
+\label{ask_the_author:doc_ad_2}
 
 {\sf Automatic differentiation} (AD), also referred to as algorithmic
 (or, more loosely, computational) differentiation, involves
@@ -65,12 +66,12 @@ model output variable $\vec{v}=(v_1,\ldots,v_n)$
 under consideration,
 %
 \begin{equation}
-\begin{split}
+\begin{aligned}
 {\cal M} \, : & \, U \,\, \longrightarrow \, V \\
 ~      & \, \vec{u} \,\, \longmapsto \, \vec{v} \, = \, 
 {\cal M}(\vec{u}) 
 \label{fulloperator}
-\end{split}
+\end{aligned}
 \end{equation}
 %
 The vectors $ \vec{u} \in U $ and $ v \in V $ may be represented w.r.t.
@@ -150,7 +151,7 @@ w.r.t. their corresponding inner product
 $\left\langle \,\, , \,\, \right\rangle $ 
 %
 \begin{equation}
-\begin{split}
+\begin{aligned}
 {\cal J} & = \,
 {\cal J} |_{\vec{u}^{(0)}} \, + \, 
 \left\langle \, \nabla _{u}{\cal J}^T |_{\vec{u}^{(0)}} \, , \, \delta \vec{u} \, \right\rangle 
@@ -159,7 +160,7 @@ $\left\langle \,\, , \,\, \right\rangle $
 {\cal J} |_{\vec{v}^{(0)}} \, + \, 
 \left\langle \, \nabla _{v}{\cal J}^T |_{\vec{v}^{(0)}} \, , \, \delta \vec{v} \, \right\rangle
 \, + \, O(\delta \vec{v}^2)
-\end{split}
+\end{aligned}
 \label{deljidentity}
 \end{equation}
 %
@@ -200,12 +201,12 @@ the gradient $ \nabla _{u}{\cal J} $ can be readily inferred by
 invoking the adjoint $ M^{\ast } $ of the tangent linear model $ M $
 %
 \begin{equation}
-\begin{split}
+\begin{aligned}
 \nabla _{u}{\cal J}^T |_{\vec{u}} & 
 = \, M^T |_{\vec{u}} \cdot \nabla _{v}{\cal J}^T |_{\vec{v}}  \\
 ~ & = \, M^T |_{\vec{u}} \cdot \delta \vec{v}^{\ast} \\
 ~ & = \, \delta \vec{u}^{\ast}
-\end{split}
+\end{aligned}
 \label{adjoint}
 \end{equation}
 %
@@ -253,13 +254,13 @@ $ \langle \, \nabla _{v}{\cal J}^T \, , \, \delta \vec{v} \, \rangle
 = \nabla_v {\cal J} \cdot \delta \vec{v} $ )
 %
 \begin{equation}
-\begin{split}
+\begin{aligned}
 \nabla_v {\cal J} (M(\delta \vec{u})) & = \,
 \nabla_v {\cal J} \cdot M_{\Lambda}
 \cdot ...... \cdot M_{\lambda} \cdot ...... \cdot
 M_{1} \cdot M_{0} \cdot \delta \vec{u} \\
 ~ & = \, \nabla_v {\cal J} \cdot \delta \vec{v} \\
-\end{split}
+\end{aligned}
 \label{forward}
 \end{equation}
 %
@@ -267,7 +268,7 @@ whereas in reverse mode we have
 %
 \begin{equation}
 \boxed{
-\begin{split}
+\begin{aligned}
 M^T ( \nabla_v {\cal J}^T) & = \,
 M_{0}^T \cdot M_{1}^T
 \cdot ...... \cdot M_{\lambda}^T \cdot ...... \cdot 
@@ -276,7 +277,7 @@ M_{\Lambda}^T \cdot \nabla_v {\cal J}^T \\
 \cdot ...... \cdot 
 \nabla_{v^{(\lambda)}} {\cal J}^T \\
 ~ & = \, \nabla_u {\cal J}^T
-\end{split}
+\end{aligned}
 }
 \label{reverse}
 \end{equation}
@@ -295,13 +296,13 @@ $ \vec{v}^{(\lambda)} $ at each intermediate step $ \lambda $, namely
 %
 \begin{equation}
 \boxed{
-\begin{split}
+\begin{aligned}
 \nabla_{v^{(\lambda)}} {\cal J}^T |_{\vec{v}^{(\lambda)}}
 & = \,
 M_{\lambda}^T |_{\vec{v}^{(\lambda)}} \cdot ...... \cdot 
 M_{\Lambda}^T |_{\vec{v}^{(\lambda)}} \cdot \delta \vec{v}^{\ast} \\
 ~ & = \, \delta \vec{v}^{(\lambda) \, \ast}
-\end{split}
+\end{aligned}
 }
 \end{equation}
 %
@@ -418,9 +419,9 @@ and the shorthand notation for the adjoint variables
 $ \delta v^{(\lambda) \, \ast}_{j} = \frac{\partial}{\partial v^{(\lambda)}_{j}} 
 {\cal J}^T $, $ j = 1, \ldots , n_{\lambda} $, 
 for intermediate components, yielding
+{\small
 \begin{equation}
-\small
-\begin{split}
+\begin{aligned}
 \left(
 \begin{array}{c}
 \delta v^{(\lambda) \, \ast}_1 \\
@@ -465,8 +466,9 @@ for intermediate components, yielding
 \delta v^{\ast}_{n} \\
 \end{array}
 \right)
-\end{split}
+\end{aligned}
 \end{equation}
+}
 
 Eq. (\ref{forward}) and (\ref{reverse}) are perhaps clearest in
 showing the advantage of the reverse over the forward mode
@@ -537,14 +539,14 @@ operator which maps the model state space onto the data space.
 Then, $ \nabla_v {\cal J} $ takes the form
 %
 \begin{equation*}
-\begin{split}
+\begin{aligned}
 \nabla_v {\cal J}^T & = \, 2 \, \, H \cdot 
 \left( \, {\cal H}(\vec{v}) - \vec{d} \, \right) \\
 ~          & = \, 2 \sum_{j} \left\{ \sum_k
 \frac{\partial {\cal H}_k}{\partial v_{j}} 
 \left( {\cal H}_k (\vec{v}) - d_k \right)
 \right\} \, {\vec{f}_{j}} \\
-\end{split}
+\end{aligned}
 \end{equation*}
 %
 where $H_{kj} = \partial {\cal H}_k / \partial v_{j} $ is the 
@@ -730,7 +732,7 @@ If gradient checks are to be performed, the option
 {\tt ALLOW\_GRADIENT\_CHECK} is defined. In this case
 the driver routine {\it grdchk\_main} is called after
 the gradient has been computed via the adjoint
-(cf. Section \ref{section_grdchk}).
+(cf. Section \ref{sec:ad_gradient_check}).
 
 %------------------------------------------------------------------
 
@@ -740,7 +742,7 @@ the gradient has been computed via the adjoint
 In order to configure AD-related setups the following packages need
 to be enabled:
 {\it
-\begin{table}[h!]
+\begin{table}[!ht]
 \begin{tabular}{l}
 autodiff \\
 ctrl \\
@@ -784,7 +786,7 @@ the forward model. However, depending on which AD code one wishes
 to generate, and on which AD tool is available (TAF or TAMC),
 the following {\tt make} targets are available:
 
-\begin{table}[h!]
+\begin{table}[!ht]
 {\footnotesize
 \begin{tabular}{|ccll|}
 \hline
@@ -1104,7 +1106,7 @@ Within this 'driver' routine, S/R are called for each of
 the chosen cost function contributions.
 In the present example ({\bf ALLOW\_COST\_TRACER}),
 S/R {\it cost\_tracer} is called.
-It accumulates {\bf objf\_tracer} according to eqn. (\ref{???}).
+It accumulates {\bf objf\_tracer} according to eqn. (\ref{ask_the_author:doc_ad_2}).
 %
 \subsubsection{Finalize all contributions}
 %
@@ -1267,13 +1269,15 @@ temperature and salinity are initialised in {\it ini\_fields}),
 a perturbation anomaly is added to the field in S/R
 {\it ctrl\_map\_ini}
 %
+%\begin{eqnarray}
 \begin{equation}
-\begin{split}
+\begin{aligned}
 u         & = \, u_{[0]} \, + \, \Delta u \\
 {\bf tr1}(...) & = \, {\bf tr1_{ini}}(...) \, + \, {\bf xx\_tr1}(...)
 \label{perturb}
-\end{split}
+\end{aligned}
 \end{equation}
+%\end{eqnarray}
 %
 {\bf xx\_tr1} is a 3-dim. global array 
 holding the perturbation. In the case of a simple
@@ -1499,11 +1503,11 @@ u_{[k+1]} \, = \,  u_{[0]} \, + \, \Delta u_{[k+1]}
 $ u_{[k+1]} $ then serves as input for a forward/adjoint run
 to determine $ {\cal J} $ and $ \nabla _{u}{\cal J} $ at iteration step
 $ k+1 $.
-Tab. \ref{???} sketches the flow between forward/adjoint model
+Tab. \ref{ask_the_author:doc_ad_2} sketches the flow between forward/adjoint model
 and the minimization routine.
 
+{\scriptsize
 \begin{eqnarray*}
-\scriptsize
 \begin{array}{ccccc}
 u_{[0]} \,\, ,  \,\, \Delta u_{[k]}    & ~ & ~ & ~ & ~ \\
 {\Big\downarrow} 
@@ -1554,10 +1558,11 @@ ad \, v_{[k]} (\delta {\cal J}) =
  ~ & ~ & ~ & ~ & \Delta u_{[k+1]} \\
 \end{array}
 \end{eqnarray*}
+}
 
 The routines {\it ctrl\_unpack} and {\it ctrl\_pack} provide
 the link between the model and the minimization routine.
-As described in Section \ref{???} 
+As described in Section \ref{ask_the_author:doc_ad_2} 
 the {\it unpack} and {\it pack} routines read and write
 control and gradient {\it vectors} which are compressed
 to contain only wet points, in addition to the full

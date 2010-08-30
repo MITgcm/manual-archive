@@ -1,6 +1,6 @@
 \section{Gravity Plume On a Continental Slope}
-\label{www:tutorials}
-\label{sect:eg-gravityplume}
+%\label{www:tutorials}
+\label{sec:eg-gravityplume}
 \begin{rawhtml}
 <!-- CMIREDIR:eg-gravityplume: -->
 \end{rawhtml}
@@ -99,18 +99,18 @@ implying horizontal lengthscale of the slope $>>$ the depth of the
 dense fluid. 
 
 \subsection{Configuration}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 The topography, spatial grid, forcing and initial conditions are all
 specified in binary data files generated using a {\em Matlab} script
 called {\tt gendata.m} and detailed in
-section~\ref{sect:plume-generating}. Other model parameters are
+section~\ref{sec:plume-generating}. Other model parameters are
 specified in file {\tt data} and {\tt data.obcs} and detailed in
-section~\ref{sect:plume-params}.
+section~\ref{sec:plume-params}.
 
 \subsection{Binary input data}
-\label{www:tutorials}
-\label{sect:plume-generating}
+%\label{www:tutorials}
+\label{sec:plume-generating}
 
 \begin{figure}
 \begin{center}
@@ -199,8 +199,8 @@ not matter for this experiment. The perturbations have range
 $0-0.01$~$^{\circ}\mathrm{K}$.
 
 \subsection{Code configuration}
-\label{www:tutorials}
-\label{sect:plume-config}
+%\label{www:tutorials}
+\label{sec:plume-config}
 
 The computational domain (number of points) is specified in {\tt
 code/SIZE.h} and is configured as a single tile of dimensions
@@ -220,8 +220,8 @@ namelist {\em PACKAGES} of {\tt input/data.pkg}.
 \end{itemize}
 
 \subsection{Model parameters}
-\label{www:tutorials}
-\label{sect:plume-params}
+%\label{www:tutorials}
+\label{sec:plume-params}
 
 \begin{table}
 \begin{center}
@@ -262,7 +262,7 @@ to $20$~s and gives Courant number order one when the flow reaches the
 bottom of the slope.
 
 \subsection{Build and run the model}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 Build the model per usual. For example:
 \begin{verbatim}

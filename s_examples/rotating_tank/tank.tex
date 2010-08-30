@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_examples/rotating_tank/tank.tex,v 1.17 2010/08/27 13:25:32 jmc Exp $
+% $Header: /u/gcmpack/manual/s_examples/rotating_tank/tank.tex,v 1.18 2010/08/30 23:09:20 jmc Exp $
 % $Name:  $
 
 \bodytext{bgcolor="#FFFFFFFF"}
@@ -14,8 +14,8 @@
 %\end{center}
 
 \section{A Rotating Tank in Cylindrical Coordinates}
-\label{sect:eg-tank}
-\label{www:tutorials}
+\label{sec:eg-tank}
+%\label{www:tutorials}
 \begin{rawhtml}
 <!-- CMIREDIR:eg-tank: -->
 \end{rawhtml}
@@ -24,7 +24,7 @@
 \end{center}
 
 \subsection{Overview}
-\label{www:tutorials}
+%\label{www:tutorials}
                                                                           
 This example configuration demonstrates using the MITgcm to simulate a
 laboratory demonstration using a differentially heated rotating
@@ -44,11 +44,11 @@ example illustration from GFD lab here
  
 
 \subsection{Equations Solved}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 
 \subsection{Discrete Numerical Configuration}
-\label{www:tutorials}
+%\label{www:tutorials}
 
  The domain is discretised with a uniform cylindrical grid spacing in
 the horizontal set to $\Delta a=1$~cm and $\Delta \phi=3^{\circ}$, so
@@ -62,8 +62,8 @@ thickness.
 something about heat flux
 
 \subsection{Code Configuration}
-\label{www:tutorials}
-\label{SEC:eg-baro-code_config}
+%\label{www:tutorials}
+\label{sec:eg-tank-code_config}
 
 The model configuration for this experiment resides under the
 directory {\it verification/rotatingi\_tank/}.  The experiment files
@@ -83,7 +83,7 @@ experiments. Below we describe the customizations
 to these files associated with this experiment.
 
 \subsubsection{File {\it input/data}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 This file, reproduced completely below, specifies the main parameters 
 for the experiment. The parameters that are significant for this configuration
@@ -230,19 +230,19 @@ notes.
 \end{small}
 
 \subsubsection{File {\it input/data.pkg}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 This file uses standard default values and does not contain
 customizations for this experiment.
 
 \subsubsection{File {\it input/eedata}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 This file uses standard default values and does not contain
 customizations for this experiment.
 
 \subsubsection{File {\it input/thetaPol.bin}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 The {\it input/thetaPol.bin} file specifies a three-dimensional ($x,y,z$) 
 map of initial values of $\theta$ in degrees Celsius.  This particular 
@@ -250,7 +250,7 @@ experiment is set to random values x around 20C to provide initial
 perturbations.
 
 \subsubsection{File {\it input/bathyPol.bin}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 
 The {\it input/bathyPol.bin} file specifies a two-dimensional ($x,y$) 
@@ -260,7 +260,7 @@ the tank. The file contains a raw binary stream of data that is enumerated
 in the same way as standard MITgcm two-dimensional, horizontal arrays.
 
 \subsubsection{File {\it code/SIZE.h}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 Two lines are customized in this file for the current experiment
 
@@ -283,14 +283,14 @@ axis aligned with the y-coordinate.
 \end{small}
 
 \subsubsection{File {\it code/CPP\_OPTIONS.h}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 This file uses standard default values and does not contain
 customizations for this experiment.
 
 
 \subsubsection{File {\it code/CPP\_EEOPTIONS.h}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 This file uses standard default values and does not contain
 customizations for this experiment.

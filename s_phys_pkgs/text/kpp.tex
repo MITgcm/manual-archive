@@ -74,9 +74,11 @@ the settings and choices of runtime parameters
 (\ref{sec:pkg:kpp:runtime}),
 more detailed description of equations to which these
 parameters relate (\ref{sec:pkg:kpp:equations}),
-and key subroutines where they are used (\ref{sec:pkg:kpp:subroutines}),
+and key subroutines where they are used %(\ref{sec:pkg:kpp:subroutines}),
+(\ref{sec:pkg:kpp:flowchart}),
 and diagnostics output of KPP-derived diffusivities, viscosities
-and boundary-layer/mixed-layer depths.
+and boundary-layer/mixed-layer depths 
+(\ref{sec:pkg:kpp:diagnostics}).
 
 %----------------------------------------------------------------------
 
@@ -103,13 +105,13 @@ as follows: \\
 \texttt{\#define SHORTWAVE\_HEATING}
 %
 \end{itemize}
-(see Section \ref{sect:buildingCode}).
+(see Section \ref{sec:buildingCode}).
 
 Parts of the KPP code can be enabled or disabled at compile time
 via CPP preprocessor flags. These options are set in
 \texttt{KPP\_OPTIONS.h}. Table \ref{tab:pkg:kpp:cpp} summarizes them.
 
-\begin{table}[h!]
+\begin{table}[!ht]
 \centering
   \label{tab:pkg:kpp:cpp}
   {\footnotesize
@@ -184,7 +186,7 @@ Table \ref{tab:pkg:kpp:runtime_flags} summarizes the
 runtime flags that are set in \texttt{data.pkg}, and
 their default values.
 
-\begin{table}[h!]
+\begin{table}[!ht]
 \centering
   \label{tab:pkg:kpp:runtime_flags}
   {\footnotesize

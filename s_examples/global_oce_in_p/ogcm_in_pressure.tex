@@ -3,8 +3,8 @@
 
 \section[P coordinate Global Ocean MITgcm Example]{Global Ocean Simulation at $4^\circ$ Resolution in Pressure
   Coordinates}
-\label{www:tutorials}
-\label{sect:eg-globalpressure}
+%\label{www:tutorials}
+\label{sec:eg-globalpressure}
 \begin{rawhtml}
 <!-- CMIREDIR:eg-globalpressure: -->
 \end{rawhtml}
@@ -30,7 +30,7 @@ thousands of years on a single processor desktop computer.
 
 
 \subsection{Overview}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 The model is forced with climatological wind stress data from
 Trenberth \cite{trenberth90} and surface flux data from Jiang et~al.\ 
@@ -44,18 +44,18 @@ Altogether, this yields the following forcing applied in the model
 surface layer.
 
 \begin{eqnarray}
-\label{EQ:eg-global_forcing_pcoord}
-\label{EQ:eg-global_forcing_fu_pcoord}
+\label{eq:eg-global_forcing_pcoord}
+\label{eq:eg-global_forcing_fu_pcoord}
 {\cal F}_{u} & = & g\frac{\tau_{x}}{\Delta p_{s}}
 \\
-\label{EQ:eg-global_forcing_fv_pcoord}
+\label{eq:eg-global_forcing_fv_pcoord}
 {\cal F}_{v} & = & g\frac{\tau_{y}}{\Delta p_{s}}
 \\
-\label{EQ:eg-global_forcing_ft_pcoord}
+\label{eq:eg-global_forcing_ft_pcoord}
 {\cal F}_{\theta} & = & - g\lambda_{\theta} ( \theta - \theta^{\ast} ) 
  - \frac{1}{C_{p} \Delta p_{s}}{\cal Q}
 \\
-\label{EQ:eg-global_forcing_fs_pcoord}
+\label{eq:eg-global_forcing_fs_pcoord}
 {\cal F}_{s} & = &
  + g\rho_{FW}\frac{S}{\rho\Delta p_{s}}({\cal E} - {\cal P} - {\cal R})
 \end{eqnarray}
@@ -80,11 +80,11 @@ have units of ${\rm N}~{\rm m}^{-2}$. The temperature forcing fields
 ($\cal{E}-\cal{P}-\cal{R}$) has units of ${\rm m}~{\rm s}^{-1}$
 respectively. The source files and procedures for ingesting these data
 into the simulation are described in the experiment configuration
-discussion in section \ref{SEC:eg-global-clim_ocn_examp_exp_config}.
+discussion in section \ref{sec:eg-global-clim_ocn_examp_exp_config}.
 
 
 \subsection{Discrete Numerical Configuration}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 
 Due to the pressure coordinate, the model can only be hydrostatic
@@ -128,17 +128,17 @@ Marshall et al. \cite{marshall:97a} with the nonlinear extension by
 Campin et al. \cite{campin:02} is employed. A Laplacian operator, $\nabla^2$, provides viscous
 dissipation. Thermal and haline diffusion is also represented by a Laplacian operator.
 
-Wind-stress forcing is added to the momentum equations in (\ref{EQ:eg-global-model_equations_pcoord}) 
+Wind-stress forcing is added to the momentum equations in (\ref{eq:eg-global-model_equations_pcoord}) 
 for both the zonal flow, $u$ and the meridional flow $v$, according to equations 
-(\ref{EQ:eg-global_forcing_fu_pcoord}) and (\ref{EQ:eg-global_forcing_fv_pcoord}).
+(\ref{eq:eg-global_forcing_fu_pcoord}) and (\ref{eq:eg-global_forcing_fv_pcoord}).
 Thermodynamic forcing inputs are added to the equations 
-in (\ref{EQ:eg-global-model_equations_pcoord}) for
+in (\ref{eq:eg-global-model_equations_pcoord}) for
 potential temperature, $\theta$, and salinity, $S$, according to equations 
-(\ref{EQ:eg-global_forcing_ft_pcoord}) and (\ref{EQ:eg-global_forcing_fs_pcoord}).
+(\ref{eq:eg-global_forcing_ft_pcoord}) and (\ref{eq:eg-global_forcing_fs_pcoord}).
 This produces a set of equations solved in this configuration as follows:
 
 \begin{eqnarray}
-\label{EQ:eg-global-model_equations_pcoord}
+\label{eq:eg-global-model_equations_pcoord}
 \frac{Du}{Dt} - fv + 
   \frac{1}{\rho}\frac{\partial \Phi^{'}}{\partial x} - 
   \nabla_{h}\cdot A_{h}\nabla_{h}u - 
@@ -199,8 +199,8 @@ $\Phi_{-H}'^{(0)}$, which is provided as an input field.
 
 
 \subsection{Experiment Configuration}
-\label{www:tutorials}
-\label{SEC:eg-globalpressure-config}
+%\label{www:tutorials}
+\label{sec:eg-globalpressure-config}
 
 The model configuration for this experiment resides under the 
 directory {\it tutorial\_examples/global\_ocean\_circulation/}.  
@@ -228,69 +228,69 @@ experiments. Below we describe the customizations
 to these files associated with this experiment.
 
 \subsubsection{Driving Datasets}
-\label{www:tutorials}
+%\label{www:tutorials}
 
-Figures (\ref{FIG:sim_config_tclim_pcoord}-\ref{FIG:sim_config_empmr_pcoord}) show
+Figures (\ref{fig:sim_config_tclim_pcoord}-\ref{fig:sim_config_empmr_pcoord}) show
 the relaxation temperature ($\theta^{\ast}$) and salinity ($S^{\ast}$)
 fields, the wind stress components ($\tau_x$ and $\tau_y$), the heat
 flux ($Q$) and the net fresh water flux (${\cal E} - {\cal P} - {\cal
   R}$) used in equations
-\ref{EQ:eg-global_forcing_fu_pcoord}-\ref{EQ:eg-global_forcing_fs_pcoord}.
+\ref{eq:eg-global_forcing_fu_pcoord}-\ref{eq:eg-global_forcing_fs_pcoord}.
 The figures also indicate the lateral extent and coastline used in the
-experiment.  Figure ({\ref{FIG:model_bathymetry_pcoord}) shows the depth
+experiment.  Figure ({\ref{fig:model_bathymetry_pcoord}) shows the depth
   contours of the model domain.
 \begin{figure}[t]
   \begin{center}
     \includegraphics[width=.9\textwidth]{s_examples/global_oce_in_p/sst}
     \caption{Annual mean of relaxation temperature [$^{\circ}\mathrm{C}$]}
-    \label{FIG:sim_config_tclim_pcoord}
+    \label{fig:sim_config_tclim_pcoord}
   \end{center}
 \end{figure}
 \begin{figure}[t]
   \begin{center}
     \includegraphics[width=.9\textwidth]{s_examples/global_oce_in_p/sss}
     \caption{Annual mean of relaxation salinity [PSU]}
-    \label{FIG:sim_config_sclim_pcoord}
+    \label{fig:sim_config_sclim_pcoord}
   \end{center}
 \end{figure}
 \begin{figure}[t]
   \begin{center}
     \includegraphics[width=.9\textwidth]{s_examples/global_oce_in_p/tx}    
     \caption{Annual mean of zonal wind stress component [Nm\,m$^{-2}$]}
-    \label{FIG:sim_config_taux_pcoord}
+    \label{fig:sim_config_taux_pcoord}
   \end{center}
 \end{figure}
 \begin{figure}[t]
   \begin{center}
     \includegraphics[width=.9\textwidth]{s_examples/global_oce_in_p/ty}
     \caption{Annual mean of meridional wind stress component [Nm\,m$^{-2}$]}
-    \label{FIG:sim_config_tauy_pcoord}
+    \label{fig:sim_config_tauy_pcoord}
   \end{center}
 \end{figure}
 \begin{figure}[t]
   \begin{center}
     \includegraphics[width=.9\textwidth]{s_examples/global_oce_in_p/qnet}
     \caption{Annual mean heat flux [W\,m$^{-2}$]}
-    \label{FIG:sim_config_qnet_pcoord}
+    \label{fig:sim_config_qnet_pcoord}
   \end{center}
 \end{figure}
 \begin{figure}[t]
   \begin{center}
     \includegraphics[width=.9\textwidth]{s_examples/global_oce_in_p/emp}
     \caption{Annual mean fresh water flux (Evaporation-Precipitation) [m\,s$^{-1}$]}
-    \label{FIG:sim_config_empmr_pcoord}
+    \label{fig:sim_config_empmr_pcoord}
   \end{center}
 \end{figure}
 \begin{figure}[t]
   \begin{center}
     \includegraphics[width=.9\textwidth]{s_examples/global_oce_in_p/pb0}
     \caption{Model bathymetry in pressure units [Pa]}
-    \label{FIG:model_bathymetry_pcoord}
+    \label{fig:model_bathymetry_pcoord}
   \end{center}
 \end{figure}
 
 \subsubsection{File {\it input/data}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 This file, reproduced completely below, specifies the main parameters 
 for the experiment. The parameters that are significant for this configuration
@@ -482,10 +482,12 @@ cg2dTargetResidual=1.E-13,
 \end{verbatim}
   Sets the tolerance which the two-dimensional, conjugate
   gradient solver will use to test for convergence in equation 
-  \ref{EQ:congrad_2d_resid} to $1 \times 10^{-9}$.
-  Solver will iterate until 
-  tolerance falls below this value or until the maximum number of
-  solver iterations is reached.\\
+%- note: Description of Conjugate gradient method (& related params) is missing
+%  in the mean time, substitute this eq ref:
+  \ref{eq:elliptic-backward-free-surface} %\ref{eq:congrad_2d_resid} 
+  to $1 \times 10^{-9}$.
+  Solver will iterate until tolerance falls below this value or until the 
+  maximum number of solver iterations is reached.\\
   \fbox{
     \begin{minipage}{5.0in}
       {\it S/R CG2D}~({\it cg2d.F})
@@ -523,8 +525,12 @@ The internal time counter works in seconds.
   Sets the timestep $\delta t_{v}$ used in the momentum equations to
   $20~{\rm mins}$ and the timesteps $\delta t_{\theta}$ in the tracer
   equations and $\delta t_{\eta}$ in the implicit free surface
-  equation to $48\mbox{\,hours}$.  See section
-  \ref{SEC:mom_time_stepping}.\\
+  equation to $48\mbox{\,hours}$.
+%- note: Distord Physics (using different time-steps) is not described
+%  in the mean time, put this section ref:
+  See section \ref{sec:time_stepping}.%\ref{sec:mom_time_stepping}
+  \\
+
 \fbox{
 \begin{minipage}{5.0in}
 {\it S/R TIMESTEP}({\it timestep.F}) \\
@@ -577,7 +583,7 @@ write a pick-up file every 100 years of integration.
 \begin{verbatim}
  abEps=0.1,
 \end{verbatim}
-  Adams-Bashford factor (see section \ref{sect:adams-bashforth})
+  Adams-Bashford factor (see section \ref{sec:adams-bashforth})
 
 \item Line 68--69
 \begin{verbatim}
@@ -628,7 +634,7 @@ specifies the reversal of the vertical indexing. The vertical index is
   conditions of temperature and salinity, wind stress forcing fields,
   sea surface temperature climatology, heat flux, and fresh water flux
   (evaporation minus precipitation minus run-off) at the surface. 
-  See file descriptions in section \ref{SEC:eg-globalpressure-config}.
+  See file descriptions in section \ref{sec:eg-globalpressure-config}.
 
 \end{itemize}
 
@@ -641,19 +647,19 @@ notes.
 \end{small}
 
 \subsubsection{File {\it input/data.pkg}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 This file uses standard default values and does not contain
 customisations for this experiment.
 
 \subsubsection{File {\it input/eedata}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 This file uses standard default values and does not contain
 customisations for this experiment.
 
 \subsubsection{File {\it input/topog.bin}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 This file is a two-dimensional ($x,y$) map of
 depths. This file is assumed to contain 64-bit binary numbers giving
@@ -666,7 +672,7 @@ $0\mbox{\,Pa}$ indicates a land point wall and a depth of
 $>0\mbox{\,Pa}$ indicates open ocean.
 
 \subsubsection{File {\it input/deltageopotjmd95.box}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 The file contains 12 identical two dimensional maps ($x,y$) of
 geopotential height anomaly at the bottom at rest. The values have
@@ -676,7 +682,7 @@ has to be consitent with the temperature and salinity field at rest
 and the choice of equation of state!
 
 \subsubsection{File {\it input/lev\_t/s.bin}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 The files {\it input/lev\_t/s.bin} specify the initial conditions for
 temperature and salinity for every grid point in a three dimensional
@@ -686,7 +692,7 @@ grid. Keep in mind, that the first index corresponds to the bottom
 layer and highest index to the surface layer.
 
 \subsubsection{File {\it input/trenberth\_taux/y.bin}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 Each of the {\it input/trenberth\_taux/y.bin} files specifies 12
 two-dimensional ($x,y,t$) maps of zonal and meridional wind stress
@@ -694,14 +700,14 @@ values, $\tau_{x}$ and $\tau_{y}$, that is monthly mean values from
 Trenberth \cite{trenberth90}. The units used are $Nm^{-2}$.
 
 \subsubsection{File {\it input/lev\_sst.bin}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 The file {\it input/lev\_sst.bin} contains 12 monthly surface
 temperature climatologies from Levitus \cite{Levitus94} in a three
 dimensional array ($x,y,t$).
 
 \subsubsection{File {\it input/shi\_qnet/empmr.bin}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 The files {\it input/shi\_qnet/empmr.bin} contain 12 monthly surface
 fluxes of heat (qnet) and freshwater (empmr) by Jiang et al.
@@ -710,7 +716,7 @@ normalized so that of one year there is no net flux into the
 ocean. The freshwater flux is actually constant in time.
 
 \subsubsection{File {\it code/SIZE.h}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 Three lines are customized in this file for the current experiment
 
@@ -737,7 +743,7 @@ the vertical domain extent in grid points.
 \end{small}
 
 \subsubsection{File {\it code/CPP\_OPTIONS.h}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 This file uses mostly standard default values except for:
 \begin{itemize}
@@ -753,7 +759,7 @@ This file uses mostly standard default values except for:
 
 
 \subsubsection{File {\it code/CPP\_EEOPTIONS.h}}
-\label{www:tutorials}
+%\label{www:tutorials}
 
 This file uses standard default values and does not contain
 customisations for this experiment.

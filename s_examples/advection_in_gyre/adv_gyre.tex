@@ -1,12 +1,12 @@
-% $Header: /u/gcmpack/manual/s_examples/advection_in_gyre/adv_gyre.tex,v 1.15 2010/08/27 13:25:31 jmc Exp $
+% $Header: /u/gcmpack/manual/s_examples/advection_in_gyre/adv_gyre.tex,v 1.16 2010/08/30 23:09:19 jmc Exp $
 % $Name:  $
 
 \bodytext{bgcolor="#FFFFFFFF"}
 
 
 \section[Gyre Advection Example]{Ocean Gyre Advection Schemes}
-\label{www:tutorials}
-\label{sect:eg-adv-gyre}
+%\label{www:tutorials}
+\label{sec:eg-adv-gyre}
 \begin{rawhtml}
 <!-- CMIREDIR:eg-adv-gyre: -->
 \end{rawhtml}
@@ -19,7 +19,7 @@ Author: Oliver Jahn and Chris Hill
 
 
 This set of examples is based on the barotropic and baroclinic gyre MITgcm configurations,
-that are described in the tutorial sections \ref{sect:eg-baro} and \ref{sect:eg-fourlayer}. 
+that are described in the tutorial sections \ref{sec:eg-baro} and \ref{sec:eg-fourlayer}. 
 The examples in this section explain how to introduce a passive tracer into the flow 
 field of the barotropic and baroclinic gyre setups and looks at how the time evolution
 of the passive tracer depends on the advection or transport scheme that is selected 
@@ -28,7 +28,7 @@ for the tracer.
 Passive tracers are useful in many numerical experiments. In some cases tracers are
 used to track flow pathways, for example in \cite{Dutay02} a passive tracer is used
 to track pathways of CFC-11 in 13 global ocean models, using a numerical
-configuration similar to the example described in section \ref{sect:eg-offline-cfc}).
+configuration similar to the example described in section \ref{sec:eg-offline-cfc}).
 In other cases tracers are used as a way
 to infer bulk mixing coefficients for a turbulent flow field, for example in 
 \cite{marsh06} a tracer is used to infer eddy mixing coefficients in the
@@ -51,12 +51,12 @@ and behavior.
 In general, the tracer problem we want to solve can be written
 
 \begin{equation}
-\label{EQ:eg-adv-gyre-generic-tracer}
+\label{eq:eg-adv-gyre-generic-tracer}
 \frac{\partial C}{partial t} = -U \cdot \nabla C + S
 \end{equation}
 
 where $C$ is the tracer concentration in a model cell, $U$ is the model three-dimensional
-flow field ( $U=(u,v,w)$ ). In (\ref{EQ:eg-adv-gyre-generic-tracer}) $S$ represents source, sink 
+flow field ( $U=(u,v,w)$ ). In (\ref{eq:eg-adv-gyre-generic-tracer}) $S$ represents source, sink 
 and tendency terms not associated with advective transport. Example of terms in $S$ include
 (i) air-sea fluxes for a dissolved gas, (ii) biological grazing and growth terms (for a 
 biogeochemical problem) or (iii) convective mixing and other sub-grid parameterizations of 

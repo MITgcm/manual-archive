@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/text/packages.tex,v 1.7 2010/07/26 15:48:56 jmc Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/text/packages.tex,v 1.8 2010/08/30 23:09:21 jmc Exp $
 % $Name:  $
 
 \section{Using MITgcm Packages}
@@ -20,7 +20,7 @@ set of subsequent run--time options.
 There are numerous ways that one can specify compile--time package
 inclusion or exclusion and they are all implemented by the
 \texttt{genmake2} program which was previously described in Section
-\ref{sect:buildingCode}.  The options are as follows:
+\ref{sec:buildingCode}.  The options are as follows:
 \begin{enumerate}
 \item Setting the \texttt{genamake2} options \texttt{--enable PKG}
   and/or \texttt{--disable PKG} specifies inclusion or exclusion.
@@ -244,7 +244,7 @@ outlined here:
 \subsubsection{Adding a package to PARAMS.h and  packages\_boot()}
 
 An MITgcm package directory contains all the code needed for that package apart
-from one variable for each package. This variable is the {\tt use\$\{Pkg\} } 
+from one variable for each package. This variable is the {\it use\$\{Pkg\} } 
 flag. This flag, which is of type logical, {\bf must} be declared in the 
 shared header file {\it PARAMS.h} in the {\it PARM\_PACKAGES} block. This 
 convention is used to support a single runtime control file {\it data.pkg} 
@@ -252,8 +252,8 @@ which is read by the startup routine {\it packages\_boot()} and that sets a
 flag controlling the runtime use of a package. This routine needs to be able to 
 read the flags for packages that were not built at compile time. Therefore
 when adding a new package, in addition to creating the per-package directory
-in the {\it pkg/} subdirectory a developer should add a {\tt use\$\{Pkg\} }
-flag to {\it PARAMS.h} and a {\tt use\$\{Pkg\} } entry to the 
+in the {\it pkg/} subdirectory a developer should add a {\it use\$\{Pkg\} }
+flag to {\it PARAMS.h} and a {\it use\$\{Pkg\} } entry to the 
 {\it packages\_boot()} {\it PACKAGES} namelist.
 The only other package specific code that should appear outside the individual 
 package directory are calls to the specific package API.

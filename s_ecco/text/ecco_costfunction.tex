@@ -37,7 +37,7 @@ weighted by the full geoid error covariance.
 \subsubsection{Input fields}
 ~
 
-\begin{table}[h!]
+\begin{table}[!ht]
 \begin{center}
 \begin{tabular}{lllc}
 \hline \hline
@@ -76,12 +76,12 @@ psbar(i,j)
 Compute global offset between $nYears$ model and T/P mean:
 %
 \begin{equation}
-\begin{split}
+\begin{aligned}
 offset & = \, \overline{tpmean} \, - \, \overline{psmean} \\
 ~ & = \, \frac{1}{normaliz.} \sum_{i,j}
 \left\{ tpmean(i,j) \, - \, psmean(i,j) \right\} 
 \cdot cosphi(i,j) \cdot tpmeanmask(i,j)
-\end{split}
+\end{aligned}
 \end{equation}
 %
 \item
@@ -90,14 +90,14 @@ Misfits are computed w.r.t. global $offset$.
 First spatial distribution:
 %
 \begin{equation}
-\begin{split}
+\begin{aligned}
 cost\_ssh\_mean(i,j) & = \,
 \frac{1}{wp^2} \left\{ \,
 \left[ \, psmean(i,j) - \overline{psmean} \, \right] \, - \,
 \left[ \, tpmean(i,j) - \overline{tpmean} \, \right] \, \right\}^2 \\ 
 ~ & = \, \frac{1}{wp^2} \left\{ \,
 psmean(i,j) \, - \, tpmean(i,j) \, + \, offset \, \right\}^2
-\end{split}
+\end{aligned}
 \end{equation}
 
 %
@@ -122,12 +122,12 @@ Here we write out computation for T/P.
 Compute difference in anomalies:
 
 \begin{equation}
-\begin{split}
+\begin{aligned}
 cost\_ssh\_anom(i,j,t) & = \, \frac{1}{wtp^2} \left\{ \, 
 \left[ \, psbar(i,j,t) - psmean(i,j) \, \right] \, - \, 
 \left[ \, tpobs(i,j,t) \, \right] \,
 \right\}^2
-\end{split}
+\end{aligned}
 \end{equation}
 %
 where $t$ denotes time (day) index, and
@@ -138,10 +138,10 @@ $tpmean(i,j)$ has already been removed from data $tpobs(i,j)$!
 Sum over all spatial points and all times
 
 \begin{equation}
-\begin{split}
+\begin{aligned}
 \overline{cost\_ssh\_anom} & = \, \sum_{t} \sum_{i,j}
 cost\_ssh\_anom(i,j,t)
-\end{split}
+\end{aligned}
 \end{equation}
 
 \end{enumerate}
@@ -261,7 +261,7 @@ $T$, $S$ from fields from Levitus (???)
 \subsubsection{Input fields}
 ~
 
-\begin{table}[h!]
+\begin{table}[!ht]
 \begin{center}
 \begin{tabular}{lllc}
 \hline \hline
@@ -305,18 +305,18 @@ field & file name & deccription & unit \\
 \subsubsection{XBT data}
 
 \begin{equation}
-\begin{split}
+\begin{aligned}
 cost\_xbt\_t(i,j,k) & = \,
 \left[ \, \frac{fac \cdot ratio}{wti^2 + wtvar^2} \sum_{\tau=1}^{nMonsRec}
 \left\{ Tbar(\tau) \, - \, T2\theta[xbtobs(\tau)] \right\}^2 \, \right](i,j,k)
  \\
-\end{split}
+\end{aligned}
 \end{equation}
 
 \subsubsection{WOCE CTD data}
 
 \begin{equation}
-\begin{split}
+\begin{aligned}
 cost\_ctd\_t(i,j,k) & = \,
 \left[ \, \frac{fac \cdot ratio}{wti^2 + wtvar^2} \sum_{\tau=1}^{nMonsRec}
 \left\{ Tbar(\tau) \, - \, ctdTobs(\tau) \right\}^2 \, \right](i,j,k)
@@ -325,13 +325,13 @@ cost\_ctd\_s(i,j,k) & = \,
 \left[ \, \frac{fac \cdot ratio}{wsi^2 + wsvar^2} \sum_{\tau=1}^{nMonsRec}
 \left\{ Sbar(\tau) \, - \, ctdSobs(\tau) \right\}^2 \, \right](i,j,k)
  \\
-\end{split}
+\end{aligned}
 \end{equation}
 
 \subsubsection{ARGO float data}
 
 \begin{equation}
-\begin{split}
+\begin{aligned}
 cost\_argo\_t(i,j,k) & = \,
 \left[ \, \frac{fac \cdot ratio}{wti^2 + wtvar^2} \sum_{\tau=1}^{nMonsRec}
 \left\{ Tbar(\tau) \, - \, T2\theta[argoTobs(\tau)] \right\}^2 \, \right](i,j,k)
@@ -340,13 +340,13 @@ cost\_argo\_s(i,j,k) & = \,
 \left[ \, \frac{fac \cdot ratio}{wsi^2 + wsvar^2} \sum_{\tau=1}^{nMonsRec}
 \left\{ Sbar(\tau) \, - \, argoSobs(\tau) \right\}^2 \, \right](i,j,k)
  \\
-\end{split}
+\end{aligned}
 \end{equation}
 
 \subsubsection{Reynolds sea surface T, S data}
 
 \begin{equation}
-\begin{split}
+\begin{aligned}
 cost\_sst(i,j) & = \,
 \left[ \, wsst \sum_{\tau=1}^{nMonsRec}
 \left\{ Tbar(\tau) \, - \, sstDat(\tau) \right\}^2 \, \right](i,j)
@@ -355,7 +355,7 @@ cost\_sss(i,j) & = \,
 \left[ \, wsss \sum_{\tau=1}^{nMonsRec}
 \left\{ Sbar(\tau) \, - \, sssDat(\tau) \right\}^2 \, \right](i,j)
  \\
-\end{split}
+\end{aligned}
 \end{equation}
 
 \subsubsection{Levitus montly T, S climatological data}
@@ -417,10 +417,10 @@ ratio = 0.25 = \left( \frac{1}{2} \right)^2 $
 \item
 Take inverse squares:
 \[
-\begin{split}
+\begin{aligned}
 wtheta(k) & = \, \frac{ratio}{wti(k)^2} \\
 wsalt(k) & = \, \frac{ratio}{wsi(k)^2} \\
-\end{split}
+\end{aligned}
 \]
 %
 \end{enumerate}
@@ -438,13 +438,13 @@ $ {\tt salterrfile} \, \longrightarrow \, wsvar(i,j,k) $ \\
 \item
 Weights are combination of spatially constant and varying parts:
 \[
-\begin{split}
+\begin{aligned}
 wtheta2(i,j,k) & = \, \frac{ratio}
 {wti(k)^2 \, + \,wtvar(i,j,k)^2 } \\
 wsalt2(i,j,k) & = \, 
 \frac{ratio}
 {wsi(k)^2 \, + \,wsvar(i,j,k)^2 } \\
-\end{split}
+\end{aligned}
 \]
 %
 \end{enumerate}

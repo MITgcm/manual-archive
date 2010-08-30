@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/text/shelfice.tex,v 1.3 2009/05/15 08:10:23 mlosch Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/text/shelfice.tex,v 1.4 2010/08/30 23:09:22 jmc Exp $
 % $Name:  $
 
 \subsection{SHELFICE Package}
@@ -11,7 +11,7 @@ Authors: Martin Losch, Jean-Michel Campin
 
 %----------------------------------------------------------------------
 \subsubsection{Introduction
-\label{sec:pkg:exf:intro}}
+\label{sec:pkg:shelfice:intro}}
 
 
 Package ``shelfice'' provides a thermodynamic model for basal melting
@@ -56,14 +56,14 @@ schemes, be aware, that non-local parameterizations have been turned
 off, e.g.\ for KPP (\ref{sec:pkg:kpp}).
 %
 \end{itemize}
-(see Section \ref{sect:buildingCode}).
+(see Section \ref{sec:buildingCode}).
 
 Parts of the SHELFICE code can be enabled or disabled at compile time
 via CPP preprocessor flags. These options are set
 \code{SHELFICE\_OPTIONS.h}.
 Table \ref{tab:pkg:shelfice:cpp} summarizes these options.
 
-\begin{table}[h!]
+\begin{table}[!ht]
 \centering
   \label{tab:pkg:shelfice:cpp}
   {\footnotesize
@@ -100,7 +100,7 @@ A package is switched on/off at run-time by setting
 ~ \\
 %
 Table~\ref{tab:pkg:shelfice:runtimeparms} lists all run-time parameters.
-\begin{table}[h!]
+\begin{table}[!ht]
   \caption{Run-time parameters and default values
     \label{tab:pkg:shelfice:runtimeparms}}
   {\footnotesize
@@ -552,7 +552,7 @@ Diagnostics output is available via the diagnostics package
 Available output fields are summarized in 
 Table \ref{tab:pkg:shelfice:diagnostics}.
 
-\begin{table}[h!]
+\begin{table}[!ht]
 \centering
 \label{tab:pkg:shelfice:diagnostics}
 {\footnotesize
