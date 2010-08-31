@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_examples/tracer_adjsens/doc_ad_examples.tex,v 1.3 2010/08/30 23:09:20 jmc Exp $
+% $Header: /u/gcmpack/manual/s_examples/tracer_adjsens/doc_ad_examples.tex,v 1.4 2010/08/31 20:56:18 jmc Exp $
 % $Name:  $
 
 %**********************************************************************
@@ -14,7 +14,6 @@
 (in directory: {\it verification/tutorial\_tracer\_adjsens/})
 \end{center}
 %**********************************************************************
-\label{ask_the_author:tracer_adjsens:doc_ad_examples}
 
 MITgcm has been adapted to enable AD using TAMC or TAF.
 The present description, therefore, is specific to the
@@ -197,7 +196,7 @@ Other packages which are not needed are switched off: \\
 %\label{www:tutorials}
 
 These files used to contain package-specific CPP-options
-(see Section \ref{ask_the_author:tracer_adjsens:doc_ad_examples}).
+(see Section ref:ask-the-author).
 For technical reasons those options have been grouped together
 in the file {\it ECCO\_OPTIONS.h}.
 To retain the modularity, the files have been kept and contain
@@ -208,13 +207,13 @@ the standard include of the {\it CPP\_OPTIONS.h} file.
 
 This file contains 'wrapper'-specific CPP options.
 It only needs to be changed if the code is to be run
-in a parallel environment (see Section \ref{ask_the_author:tracer_adjsens:doc_ad_examples}).
+in a parallel environment (see Section ref:ask-the-author).
 
 \subsubsection{File {\it CPP\_OPTIONS.h}}
 %\label{www:tutorials}
 
 This file contains model-specific CPP options
-(see Section \ref{ask_the_author:tracer_adjsens:doc_ad_examples}).
+(see Section ref:ask-the-author).
 Most options are related to the forward model setup.
 They are identical to the global steady circulation setup of
 {\it verification/global\_ocean.90x40x15/}.
@@ -267,7 +266,7 @@ defines TAMC-related features in the code. \\
 %
 \hspace*{4ex} {\tt \#define ALLOW\_TAMC\_CHECKPOINTING} \\
 enables the checkpointing feature of TAMC
-(see Section \ref{ask_the_author:tracer_adjsens:doc_ad_examples}).
+(see Section ref:ask-the-author).
 In the present example a 3-level checkpointing is implemented.
 The code contains the relevant store directives, common block
 and tape initializations, storing key computation,
@@ -280,16 +279,16 @@ in the files {\it checkpoint\_lev3\_directives.h},
 %
 \hspace*{4ex} {\tt \#define ALLOW\_AUTODIFF\_MONITOOR} \\
 enables the monitoring of intermediate adjoint variables
-(see Section \ref{ask_the_author:tracer_adjsens:doc_ad_examples}). \\
+(see Section ref:ask-the-author). \\
 %
 \hspace*{4ex} {\tt \#define ALLOW\_DIVIDED\_ADJOINT} \\
 enables adjoint dump and restart
-(see Section \ref{ask_the_author:tracer_adjsens:doc_ad_examples}).
+(see Section ref:ask-the-author).
 %
 \item Cost function package: {\it pkg/cost/} \\
 This package contains all relevant routines for
 initializing, accumulating and finalizing the cost function
-(see Section \ref{ask_the_author:tracer_adjsens:doc_ad_examples}). \\
+(see Section ref:ask-the-author). \\
 \hspace*{4ex} {\tt \#define ALLOW\_COST} \\
 enables all general aspects of the cost function handling,
 in particular the hooks in the forward code for
@@ -381,7 +380,7 @@ and some indices relevant for storing ky computations.
 %
 \item {\tt \#ifdef ALLOW\_TAMC\_CHECKPOINTING} \\
 3-level checkpointing is enabled, i.e. the timestepping
-is divided into three different levels (see Section \ref{ask_the_author:tracer_adjsens:doc_ad_examples}).
+is divided into three different levels (see Section ref:ask-the-author).
 The model state of the outermost ({\tt nchklev\_3}) and the
 intermediate ({\tt nchklev\_2}) timestepping loop are stored to file
 (handled in {\it the\_main\_loop}).

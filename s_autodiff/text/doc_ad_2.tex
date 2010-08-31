@@ -1,8 +1,7 @@
-% $Header: /u/gcmpack/manual/s_autodiff/text/doc_ad_2.tex,v 1.23 2010/08/30 23:09:19 jmc Exp $
+% $Header: /u/gcmpack/manual/s_autodiff/text/doc_ad_2.tex,v 1.24 2010/08/31 20:56:21 jmc Exp $
 % $Name:  $
 
 Author: Patrick Heimbach
-\label{ask_the_author:doc_ad_2}
 
 {\sf Automatic differentiation} (AD), also referred to as algorithmic
 (or, more loosely, computational) differentiation, involves
@@ -1106,7 +1105,7 @@ Within this 'driver' routine, S/R are called for each of
 the chosen cost function contributions.
 In the present example ({\bf ALLOW\_COST\_TRACER}),
 S/R {\it cost\_tracer} is called.
-It accumulates {\bf objf\_tracer} according to eqn. (\ref{ask_the_author:doc_ad_2}).
+It accumulates {\bf objf\_tracer} according to eqn. (ref:ask-the-author).
 %
 \subsubsection{Finalize all contributions}
 %
@@ -1503,7 +1502,7 @@ u_{[k+1]} \, = \,  u_{[0]} \, + \, \Delta u_{[k+1]}
 $ u_{[k+1]} $ then serves as input for a forward/adjoint run
 to determine $ {\cal J} $ and $ \nabla _{u}{\cal J} $ at iteration step
 $ k+1 $.
-Tab. \ref{ask_the_author:doc_ad_2} sketches the flow between forward/adjoint model
+Tab. ref:ask-the-author sketches the flow between forward/adjoint model
 and the minimization routine.
 
 {\scriptsize
@@ -1562,7 +1561,7 @@ ad \, v_{[k]} (\delta {\cal J}) =
 
 The routines {\it ctrl\_unpack} and {\it ctrl\_pack} provide
 the link between the model and the minimization routine.
-As described in Section \ref{ask_the_author:doc_ad_2} 
+As described in Section ref:ask-the-author 
 the {\it unpack} and {\it pack} routines read and write
 control and gradient {\it vectors} which are compressed
 to contain only wet points, in addition to the full
