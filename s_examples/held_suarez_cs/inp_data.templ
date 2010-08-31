@@ -110,7 +110,7 @@ are only permitted for testing/debuging purpose.
 Select the linear relation between surface geopotential anomaly 
 and surface pressure anomaly to be evaluated from 
 $\frac{\partial \Phi_s}{\partial p_s} = 1/\rho(\theta_{Ref})$
-(see section \ref{sect:phi-freesurface}).
+(see section \ref{sec:phi-freesurface}).
 Note that using the default (=TRUE), the constant $1/\rho_0$ is
 used instead, and is not necessary consistent with other 
 parts of the geopotential that relies on $\theta_{Ref}$.
@@ -176,12 +176,14 @@ criteria being met}.
 \begin{verbatim}
  cg2dTargetResWunit=1.E-17,
 \end{verbatim}
-Sets the tolerance (in units of $\omega$) which the 
-two-dimensional, conjugate gradient solver will use to test for convergence 
-in equation \ref{EQ:eg-hs-congrad_2d_resid} to $1 \times 10^{-17} Pa/s$.
-Solver will iterate until 
-tolerance falls below this value or until the maximum number of
-solver iterations is reached.
+Sets the tolerance (in units of $\omega$) which the two-dimensional, 
+conjugate gradient solver will use to test for convergence in equation 
+%- note: Description of Conjugate gradient method (& related params) is missing
+%  in the mean time, substitute this eq ref:
+\ref{eq:elliptic-backward-free-surface} %\ref{eq:eg-hs-congrad_2d_resid} 
+to $1 \times 10^{-17} Pa/s$.
+Solver will iterate until tolerance falls below this value or until the 
+maximum number of solver iterations is reached.
 \\ \fbox{
 \begin{minipage}{5.0in}
 {\it S/R CG2D}~({\it cg2d.F})
