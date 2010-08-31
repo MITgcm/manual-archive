@@ -13,6 +13,13 @@ In order to keep the cvs history of each file, the following changes were
 made directly from gcmpack/manual dir (whereas using cvs add/remove the
 history would have been broken in 2 pieces and difficult to follow):
 
+-------
+step 0:
+-------
+ 2010 Aug 25, from orwell.csail.mit.edu: make a tar file of gcmpack/manual/
+ into: orwell:/export/export-9/ARCHIVE/gcmpack_manual.20100825.tar
+-rw-rw-r--.  1 jmc   555   212879360 2010-08-25 11:46 gcmpack_manual.20100825.tar
+
 ------------------------
 step 1: copy to new dir
 -------
@@ -111,8 +118,7 @@ step 2: download the new manual and check-in changes for new directory path.
 -------------------------------
 step 3: remove old chapter dir:
 -------
- (to do soon, but might encounter some permission issues)
- from orwell.csail.mit.edu:
+2010 Aug 31, from orwell.csail.mit.edu:
 cd /export/export-9/gcmpack/manual/
  /bin/rm -rf part1 part2 part3 part4 part5 part6 part7 part8 under_dvlp
 ============================================================================
