@@ -32,7 +32,7 @@ $\tau_T$. These are set in data.rbcs (see below).
 
 \subsubsection {Key subroutines and parameters}
 
-The only change need in the code might be in {RBCS.H}, for
+The only change need in the code might be in {RBCS.h}, for
 PARAMETER(maskLEN = 3 ), if you need more than 3
 masks (see below).
 
@@ -43,17 +43,28 @@ There are runtime parameters
 set in {\it data.rbcs}:\\
 These runtime options include\\
 Set in {RBCS\_PARM01}:\\
-$\bullet$ Parameters to set the timing for periodic fields to
-relax to are to
-be loaded are: {\it rbcs\_ForcingPeriod}, {\it rbcs\_ForcingCycle}.
+%$\bullet$ Parameters to set the timing for periodic fields to
+%relax to are to
+%be loaded are:
+$\bullet$ {\bf rbcsForcingPeriod}, {\bf rbcsForcingCycle}: timing of
+fields to relax to.
 The former is how often to load, the latter is how often to cycle
-through those fields (eg. period couple be monthly and cycle one year).
-rbcs\_ForcingCycle=0 meaning no periodic forcing, and the relax field
+through those fields (eg. period could be monthly and cycle one year).
+rbcs\_ForcingCycle=0 means non-cyclic forcing, and
+rbcs\_ForcingPeriod=0 non-time-varying forcing, where the relax field
 is only read in at the beginning of the run and kept constant
 the rest of the run. Default is 0.
 \\
-$\bullet$  {\bf rbcsIniter}: if you want to offset rbcs forcing
-timing. Default is nIter0.\\
+$\bullet$  {\bf rbcsForcingOffset}: if you want to offset rbcs forcing
+timing. This is the time at the beginning of the first forcing period
+(in seconds).  Default is 0.  (This used to be rbcsInIter and was in
+units of iterations.)\\
+$\bullet$  {\bf rbcsSingleTimeFiles}: if true, relax fields are given
+1 file per time labeled by iteration number.\\
+$\bullet$  {\bf deltaTrbcs}: time step used to compute iteration numbers 
+for rbcsSingleTimeFiles.\\
+$\bullet$  {\bf rbcsIter0}: rbcsSingleTimeFiles iteration number
+corresponding to rbcsForcingOffset.\\
 $\bullet$  {\bf useRBCtemp}: true or false (default false)\\
 $\bullet$  {\bf useRBCsalt}: true or false (default false)\\
 $\bullet$  {\bf useRBCptracers}: true or false (default false), must be using
@@ -84,6 +95,66 @@ is false).\\
 $\bullet$ {\bf tauRelaxPTR(iTrc)}: relax timescale.\\
 $\bullet$ {\bf relaxPtracerFile(iTrc)}: file with relax
 fields.\\
+
+\noindent
+Typical ways of specifying timing of relaxation fields:
+\begin{enumerate}
+\item Constant-in-time forcing:
+  \begin{quote}
+     rbcsForcingPeriod = 0
+  \end{quote}
+  One field is read and used for all times.  Use this to emulate the result of
+  rbcsForcingCycle=0 before 2010-11-10.
+
+\item Non-cyclic time-varying forcing:
+  \begin{quote}
+     rbcsForcingPeriod = period in seconds\\
+     rbcsForcingCycle = 0\\
+     rbcsForcingOffset = beginning of first forcing period in seconds (default 0)
+  \end{quote}
+  When starting the run at time 0 (as usually the case), a period with center before
+  or at time 0 is needed for time interpolation, hence Offset needs to be negative.
+  For aligned periods (one period starting at time 0) and one extra record before
+  time 0 (and ending at time 0), set Offset=-Period.
+
+  This option makes most sense with rbcsSingleTimeFiles=T (see below), but may be
+  used with either setting.
+
+\item Cyclic Forcing:
+  \begin{quote}
+     rbcsForcingPeriod = period in seconds\\
+     rbcsForcingCycle = cycle in seconds\\
+     rbcsForcingOffset = beginning of first forcing period in seconds (default 0)
+  \end{quote}
+  Here Offset may be at or after the start time (actually starttime-period/2),
+  in which case records from the end of the cycle are used for missing records at
+  the beginning (via cyclicity).  Not very nice, but works.
+
+  This is the traditional way used with rbcsSingleTimeFiles=F, but again may be
+  used with either setting.
+\end{enumerate}
+
+\noindent
+Ways to organize the files:
+\begin{enumerate}
+\item One big file with many time records:
+  \begin{quote}
+     rbcsSingleTimeFiles = .False.
+  \end{quote}
+  All time records are in one big file.
+
+\item A separate file for each time:
+  \begin{quote}
+     rbcsSingleTimeFiles = .True.\\
+     deltaTrbcs = time step used to generate forcing files\\
+     rbcsIter0 = forcing file iteration number corresponding to rbcsForcingOffset
+  \end{quote}
+  The rbcs field for each time needed is in a separate file, labeled by the
+  iteration number at the end of the forcing period.  If a different timestep
+  was used for generating the files (and the file names), set deltaTrbcs.
+  If there is a shift in time, set rbcsIter0.
+\end{enumerate}
+
 
 
 \subsubsection{Do's and Don'ts}
