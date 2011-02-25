@@ -24,11 +24,11 @@ at compile time
 \begin{itemize}
 %
 \item
-using the \texttt{packages.conf} file by adding \texttt{obcs} to it,
+using the \code{packages.conf} file by adding \code{obcs} to it,
 %
 \item
-or using \texttt{genmake2} adding
-\texttt{-enable=obcs} or \texttt{-disable=obcs} switches
+or using \code{genmake2} adding
+\code{-enable=obcs} or \code{-disable=obcs} switches
 %
 \item
 \textit{Required packages and CPP options:} \\
@@ -37,18 +37,18 @@ To alternatives are available for prescribing open boundary values,
 which differ in the way how OB's are treated in time:
 A simple time-management (e.g. constant in time, or cyclic with
 fixed fequency) is provided through 
-S/R \texttt{obcs\_external\_fields\_load}.
+S/R \code{obcs\_external\_fields\_load}.
 More sophisticated ``real-time'' (i.e. calendar time) management is
-available through \texttt{obcs\_prescribe\_read}. 
+available through \code{obcs\_prescribe\_read}. 
 The latter case requires
-packages \texttt{cal} and \texttt{exf} to be enabled.
+packages \code{cal} and \code{exf} to be enabled.
 %
 \end{itemize}
 (see also Section \ref{sec:buildingCode}).
 
 Parts of the OBCS code can be enabled or disabled at compile time
 via CPP preprocessor flags. These options are set in
-\texttt{OBCS\_OPTIONS.h}. Table \ref{tab:pkg:obcs:cpp} summarizes them.
+\code{OBCS\_OPTIONS.h}. Table \ref{tab:pkg:obcs:cpp} summarizes them.
 
 \begin{table}[!ht]
 \centering
@@ -58,23 +58,27 @@ via CPP preprocessor flags. These options are set in
       \hline 
       \textbf{CPP option}  &  \textbf{Description}  \\
       \hline \hline
-        \texttt{ALLOW\_OBCS\_NORTH} & 
+        \code{ALLOW\_OBCS\_NORTH} & 
           enable Northern OB \\
-        \texttt{ALLOW\_OBCS\_SOUTH} & 
+        \code{ALLOW\_OBCS\_SOUTH} & 
           enable Southern OB \\
-        \texttt{ALLOW\_OBCS\_EAST} & 
+        \code{ALLOW\_OBCS\_EAST} & 
           enable Eastern OB \\
-        \texttt{ALLOW\_OBCS\_WEST} & 
+        \code{ALLOW\_OBCS\_WEST} & 
           enable Western OB \\
       \hline
-        \texttt{ALLOW\_OBCS\_PRESCRIBE} & 
+        \code{ALLOW\_OBCS\_PRESCRIBE} & 
           enable code for prescribing OB's \\
-        \texttt{ALLOW\_OBCS\_SPONGE} & 
+        \code{ALLOW\_OBCS\_SPONGE} & 
           enable sponge layer code \\
-        \texttt{ALLOW\_OBCS\_BALANCE} & 
+        \code{ALLOW\_OBCS\_BALANCE} & 
           enable code for balancing transports through OB's \\
-        \texttt{ALLOW\_ORLANSKI} & 
+        \code{ALLOW\_ORLANSKI} & 
           enable Orlanski radiation conditions at OB's \\
+        \code{ALLOW\_OBCS\_STEVENS} & 
+          enable Stevens (1990) boundary conditions at OB's \\
+        & (currently only implemented for eastern and western \\
+        &  boundaries and NOT for ptracers) \\
       \hline
     \end{tabular}
   }
@@ -88,28 +92,28 @@ via CPP preprocessor flags. These options are set in
 \label{sec:pkg:obcs:runtime}}
 
 Run-time parameters are set in files 
-\texttt{data.pkg}, \texttt{data.obcs}, and \texttt{data.exf} 
+\code{data.pkg}, \code{data.obcs}, and \code{data.exf} 
 if ``real-time'' prescription is requested 
-(i.e. package \texttt{exf} enabled).
+(i.e. package \code{exf} enabled).
 These parameter files are read in S/R
-\texttt{packages\_readparms.F}, \texttt{obcs\_readparms.F}, and
-\texttt{exf\_readparms.F}, respectively.
+\code{packages\_readparms.F}, \code{obcs\_readparms.F}, and
+\code{exf\_readparms.F}, respectively.
 Run-time parameters may be broken into 3 categories:
 (i) switching on/off the package at runtime,
 (ii) OBCS package flags and parameters,
-(iii) additional timing flags in \texttt{data.exf}, if selected.
+(iii) additional timing flags in \code{data.exf}, if selected.
 
 \paragraph{Enabling the package}
 ~ \\
 %
 The OBCS package is switched on at runtime by setting
-\texttt{useOBCS = .TRUE.} in \texttt{data.pkg}.
+\code{useOBCS = .TRUE.} in \code{data.pkg}.
 
 \paragraph{Package flags and parameters}
 ~ \\
 %
 Table \ref{tab:pkg:obcs:runtime_flags} summarizes the
-runtime flags that are set in \texttt{data.obcs}, and
+runtime flags that are set in \code{data.obcs}, and
 their default values.
 
 \begin{table}[!ht]
@@ -119,7 +123,7 @@ their default values.
       \hline 
       \textbf{Flag/parameter} & \textbf{default} &  \textbf{Description}  \\
       \hline \hline
-         \multicolumn{3}{|c|}{\textit{basic flags \& parameters} } \\
+         \multicolumn{3}{|c|}{\textit{basic flags \& parameters} (OBCS\_PARM01) } \\
          \hline
         OB\_Jnorth & 0 & 
            Nx-vector of J-indices (w.r.t. Ny) of Northern OB
@@ -133,12 +137,16 @@ their default values.
         OB\_Iwest & 0 & 
            Ny-vector of I-indices (w.r.t. Nx) of Western OB
            at each J-position (w.r.t. Ny) \\
-        useOBCSprescribe & \texttt{.FALSE.} & 
+        useOBCSprescribe & \code{.FALSE.} & 
            ~ \\
-        useOBCSsponge & \texttt{.FALSE.} & 
+        useOBCSsponge & \code{.FALSE.} & 
            ~ \\
-        useOBCSbalance & \texttt{.FALSE.} & 
+        useOBCSbalance & \code{.FALSE.} & 
            ~ \\
+        useOrlanskiNorth/South/EastWest & \code{.FALSE.} & 
+           turn on Orlanski boundary conditions for individual boundary\\
+        useStevensNorth/South/EastWest & \code{.FALSE.} & 
+           turn on Stevens boundary conditions for individual boundary\\
         OB\textbf{X}\textbf{y}File & ~ & 
            file name of OB field \\
         ~ & ~ & 
@@ -146,9 +154,14 @@ their default values.
                        \textbf{E}(ast), \textbf{W}(est) \\
         ~ & ~ & 
            \textbf{y}: \textbf{t}(emperature), \textbf{s}(salinity), 
-           \textbf{u}(-velocity), \textbf{v}(-velocity) \\
+           \textbf{u}(-velocity), \textbf{v}(-velocity), \\
+        ~ & ~ & 
+           \textbf{w}(-velocity), \textbf{eta}(sea surface height)\\
+        ~ & ~ & 
+           \textbf{a}(sea ice area), \textbf{h}(sea ice thickness),
+           \textbf{sn}(snow thickness), \textbf{sl}(sea ice salinity)\\
       \hline
-      \multicolumn{3}{|c|}{\textit{Orlanski parameters} } \\
+      \multicolumn{3}{|c|}{\textit{Orlanski parameters} (OBCS\_PARM02) } \\
       \hline
         cvelTimeScale & 2000 sec & 
            averaging period for phase speed \\
@@ -156,12 +169,12 @@ their default values.
            maximum allowable phase speed-CFL for AB-II \\
         CFIX & 0.8 m/s & 
            fixed boundary phase speed \\
-        useFixedCEast & .FALSE. & 
+        useFixedCEast & \code{.FALSE.} & 
            ~ \\
-        useFixedCWest & .FALSE. & 
+        useFixedCWest & \code{.FALSE.} & 
            ~ \\
       \hline
-      \multicolumn{3}{|c|}{\textit{Sponge-layer parameters} } \\
+      \multicolumn{3}{|c|}{\textit{Sponge-layer parameters} (OBCS\_PARM03)} \\
       \hline
         spongeThickness & 0 & 
            sponge layer thickness (in \# grid points) \\
@@ -177,6 +190,13 @@ their default values.
         Vrelaxobcsbound & 0 sec & 
            relaxation time scale at the 
            outermost sponge layer point of a zonal OB \\
+      \hline
+      \multicolumn{3}{|c|}{\textit{Stevens parameters} (OBCS\_PARM04) } \\
+      \hline
+        T/SrelaxStevens & 0~sec & relaxation time scale for
+           temperature/salinity \\
+        useStevensPhaseVel & \code{.TRUE.} & \\
+        useStevensAdvection & \code{.TRUE.} & \\
          \hline
       \hline
     \end{tabular}
@@ -196,14 +216,14 @@ There are four open boundaries (OBs), a
 Northern, Southern, Eastern, and Western.
 All OB locations are specified by their absolute
 meridional (Northern/Southern) or zonal (Eastern/Western) indices.
-Thus, for each zonal position $i=1,\ldots,Nx$ a meridional index
+Thus, for each zonal position $i=1,\ldots,N_x$ a meridional index
 $j$ specifies the Northern/Southern OB position,
-and for each meridional position $j=1,\ldots,Ny$, a zonal index
+and for each meridional position $j=1,\ldots,N_y$, a zonal index
 $i$ specifies the Eastern/Western OB position.
-For Northern/Southern OB this defines an $Nx$-dimensional
+For Northern/Southern OB this defines an $N_x$-dimensional
 ``row'' array $\tt OB\_Jnorth(Ny)$ / $\tt OB\_Jsouth(Ny)$,
-and an $Ny$-dimenisonal 
-``column'' array $\tt OB\_Ieast(Nx)$ / $\tt OB\_Iwest(Nx)$
+and an $N_y$-dimenisonal 
+``column'' array $\tt OB\_Ieast(Nx)$ / $\tt OB\_Iwest(Nx)$.
 Positions determined in this way allows Northern/Southern
 OBs to be at variable $j$ (or $y$) positions, and Eastern/Western
 OBs at variable $i$ (or $x$) positions.
@@ -267,16 +287,85 @@ $T,S,U,V$ values determined via Orlanski radiation conditions
 \item
 prescribed time-constant or time-varying fields (see below).
 %
+\item 
+use prescribed boundary fields to compute Stevens boundary conditions.
 \end{itemize}
 
 
-\paragraph{ORLANSKI} ~ \\
+\paragraph{ORLANSKI:} ~ \\
 %
-Orlanski radiation conditions \citep{orl:76}
+Orlanski radiation conditions \citep{orl:76}, examples can be found in
+\code{verification/dome} and
+\code{verification/tutorial\_plume\_on\_slope}
+(\ref{sec:eg-gravityplume}).
 
-\paragraph{OBCS\_PRESCRIBE\_READ} Setting OB fields and updates \\
+\paragraph{OBCS\_PRESCRIBE\_READ:} ~ \\
 %
-~
+When \code{useOBCSprescribe = .TRUE.} the model tries to read
+temperature, salinity, u- and v-velocities from files specified in the
+runtime parameters \code{OB[N/S/E/W][t/s/u/v]File}. These files are
+the usual IEEE, big-endian files with dimensions of a section along an
+open boundary:
+\begin{itemize}
+\item For North/South boundary files the dimensions are
+  $(N_x\times N_r\times\mbox{time levels})$, for East/West boundary
+  files the dimensions are $(N_y\times N_r\times\mbox{time levels})$.
+\item If a non-linear free surface is used
+  (\ref{sec:nonlinear-freesurface}), additional files
+  \code{OB[N/S/E/W]etaFile} for the sea surface height $\eta$ with
+  dimension $(N_{x/y}\times\mbox{time levels})$ may be specified.
+\item If non-hydrostatic dynamics are used
+  (\ref{sec:non-hydrostatic}), additional files
+  \code{OB[N/S/E/W]wFile} for the vertical velocity $w$ with
+  dimensions $(N_{x/y}\times N_r\times\mbox{time levels})$ may be
+  specified.
+\item If \code{useSEAICE=.TRUE.} then additional files
+  \code{OB[N/S/E/W][a,h,sl,sn,uice,vice]} for sea ice area, thickness
+  (\code{HEFF}), seaice salinity, snow and ice velocities
+  $(N_{x/y}\times\mbox{time levels})$ may be specified.
+\end{itemize}
+When the \code{exf}-package is used, the time levels are controlled
+for each boundary separately in the same way as the \code{exf}-fields
+in \code{data.exf}, namelist \code{EXF\_NML\_OBCS}. The runtime flags
+follow the above naming conventions, e.g. for the western boundary the
+corresponding flags are \code{OBCWstartdate1/2} and
+\code{OBCWperiod}. Sea-ice boundary values are controlled separately
+with \code{siobWstartdate1/2} and \code{siobWperiod}.
+When the \code{exf}-package is not used, the time levels are
+controlled by the runtime flags \code{externForcingPeriod} and
+\code{externForcingCycle} in \code{data}, see \code{verification/exp4}
+for an example.
+
+\paragraph{OBCS\_CALC\_STEVENS:} ~ \\
+(THE IMPLEMENTATION OF THESE BOUNDARY CONDITIONS IS NOT COMPLETE. SO
+FAR ONLY EASTERN AND WESTERN BOUNDARIES ARE SUPPORTED.) \\
+The boundary conditions following \citet{stevens:90} require the
+vertically averaged normal velocity (originally specified as a stream
+function along the open boundary) $\bar{u}_{ob}$ and the tracer fields
+$\chi_{ob}$ (note: passive tracers are currently not implemented and
+the code stops when package \code{ptracers} is used together with this
+option). Currently, the code vertically averages the normal velocity
+as specified. From these prescribed values the code computes the
+boundary values for the next timestep $n+1$ as follows (as an 
+example, we use the notation for an eastern or western boundary):
+\begin{itemize}
+\item $u^{n+1}(y,z) = \bar{u}_{ob}(y) + u'(y,z)$, where $u_{n}'$ is the
+  deviation from the vertically averaged velocity one grid point
+  inward from the boundary.
+\item If $u^{n+1}$ is directed into the model domain, the boudary
+  value for tracer $\chi$ is restored to the prescribed values:
+  \[\chi^{n+1} =   \chi^{n} + \frac{\Delta{t}}{\tau_\chi} (\chi_{ob} -
+  \chi^{n}),\] where $\tau_\chi$ is the relaxation time
+  scale \texttt{T/SrelaxStevens}.
+\item If $u^{n+1}$ is directed out of the model domain, the tracer is
+  advected out of the domain with $u^{n+1}+c$, where $c$ is a phase
+  velocity estimated as
+  $\frac{1}{2}\frac{\partial\chi}{\partial{t}}/\frac{\partial\chi}{\partial{x}}$.
+  For test purposes, the phase velocity contribution or the entire
+  advection can
+  be turned off by setting the corresponding parameters
+  \texttt{useStevensPhaseVel} and \texttt{useStevensAdvection} to
+  \texttt{.FALSE.}.\end{itemize} See \citet{stevens:90} for details.
 
 \paragraph{OBCS\_BALANCE} ~ \\
 %
@@ -350,3 +439,8 @@ Table \ref{tab:pkg:obcs:diagnostics}.
 \item{Ocean experiment in exp4 verification directory. }
 \end{itemize}
 
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../../manual"
+%%% End: 
