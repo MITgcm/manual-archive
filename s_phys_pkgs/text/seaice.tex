@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/text/seaice.tex,v 1.14 2011/02/28 16:05:07 mlosch Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/text/seaice.tex,v 1.15 2011/02/28 16:27:56 mlosch Exp $
 % $Name:  $
 
 %%EH3  Copied from "MITgcm/pkg/seaice/seaice_description.tex"
@@ -689,26 +689,32 @@ thermodynamic model --- \citet{semtner84} found significant errors in
 phase (one month lead) and amplitude ($\approx$50\%\,overestimate) in
 such models --- so that today many sea ice models employ more complex
 thermodynamics. The MITgcm sea ice model provides the option to use
-the thermodynamics model of \citet{win00}, which in turn is based
-on the 3-layer model of \citet{sem76} and which treats brine
-content by means of enthalpy conservation. This scheme requires
-additional state variables, namely the enthalpy of the two ice layers
-(instead of effective ice salinity), to be advected by ice velocities.
+the thermodynamics model of \citet{win00}, which in turn is based on
+the 3-layer model of \citet{sem76} and which treats brine content by
+means of enthalpy conservation; the corresponding package
+\code{thsice} is described in section~\ref{sec:pkg:thsice}. This
+scheme requires additional state variables, namely the enthalpy of the
+two ice layers (instead of effective ice salinity), to be advected by
+ice velocities.
 %
 The internal sea ice temperature is inferred from ice enthalpy.  To
 avoid unphysical (negative) values for ice thickness and
 concentration, a positive 2nd-order advection scheme with a SuperBee
 flux limiter \citep{roe:85} is used in this study to advect all
-sea-ice-related quantities of the \citet{win00} thermodynamic
-model.  Because of the non-linearity of the advection scheme, care
-must be taken in advecting these quantities: when simply using ice
-velocity to advect enthalpy, the total energy (i.e., the volume
-integral of enthalpy) is not conserved. Alternatively, one can advect
-the energy content (i.e., product of ice-volume and enthalpy) but then
-false enthalpy extrema can occur, which then leads to unrealistic ice
+sea-ice-related quantities of the \citet{win00} thermodynamic model.
+Because of the non-linearity of the advection scheme, care must be
+taken in advecting these quantities: when simply using ice velocity to
+advect enthalpy, the total energy (i.e., the volume integral of
+enthalpy) is not conserved. Alternatively, one can advect the energy
+content (i.e., product of ice-volume and enthalpy) but then false
+enthalpy extrema can occur, which then leads to unrealistic ice
 temperature.  In the currently implemented solution, the sea-ice mass
 flux is used to advect the enthalpy in order to ensure conservation of
-enthalpy and to prevent false enthalpy extrema.
+enthalpy and to prevent false enthalpy extrema. %
+In order to use the \code{seaice}-package with the more sophisticated
+thermodynamics of \code{thsice}, compile both packages and turn both
+package on in \code{data.pkg}; see an example in
+\code{global\_ocean.cs32x15/input.icedyn}.
 
 %----------------------------------------------------------------------
 
