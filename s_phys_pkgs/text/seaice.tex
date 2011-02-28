@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/text/seaice.tex,v 1.13 2011/02/28 15:59:49 mlosch Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/text/seaice.tex,v 1.14 2011/02/28 16:05:07 mlosch Exp $
 % $Name:  $
 
 %%EH3  Copied from "MITgcm/pkg/seaice/seaice_description.tex"
@@ -674,14 +674,15 @@ where $\Gamma_X$ are the thermodynamic source terms and $D_{X}$ the
 diffusive terms for quantities $X=(c\cdot{h}), c, (c\cdot{h}_{s})$.
 %
 From the various advection scheme that are available in the MITgcm, we
-choose flux-limited schemes \citep[multidimensional 2nd and 3rd-order
-advection scheme with flux limiter][]{roe:85, hundsdorfer94} to
-preserve sharp gradients and edges that are typical of sea ice
+recommend flux-limited schemes \citep[multidimensional 2nd and
+3rd-order advection scheme with flux limiter][]{roe:85, hundsdorfer94}
+to preserve sharp gradients and edges that are typical of sea ice
 distributions and to rule out unphysical over- and undershoots
-(negative thickness or concentration). These scheme conserve volume
+(negative thickness or concentration). These schemes conserve volume
 and horizontal area and are unconditionally stable, so that we can set
-$D_{X}=0$. Run-timeflags: \code{SEAICEadvScheme} (default=2),
-\code{DIFF1} (default=0.004).
+$D_{X}=0$. Run-timeflags: \code{SEAICEadvScheme} (default=2, is the
+historic 2nd-order, centered difference scheme), \code{DIFF1}
+(default=0.004).
 
 There is considerable doubt about the reliability of a ``zero-layer''
 thermodynamic model --- \citet{semtner84} found significant errors in
