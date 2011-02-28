@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/text/seaice.tex,v 1.12 2010/08/30 23:09:21 jmc Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/text/seaice.tex,v 1.13 2011/02/28 15:59:49 mlosch Exp $
 % $Name:  $
 
 %%EH3  Copied from "MITgcm/pkg/seaice/seaice_description.tex"
@@ -531,7 +531,9 @@ widths. For the $u$-equation ($\alpha=1$) we have:
   \phantom{=}& \phantom{\frac{1}{A_{i,j}^w} \biggl\{}
   + (\Delta{x}_1\sigma_{21})_{i,j+1}^Z - (\Delta{x}_1\sigma_{21})_{i,j}^Z
   \biggr\}
-  \intertext{with}
+\end{align}
+with
+\begin{align}
   (\Delta{x}_2\sigma_{11})_{i,j}^C =& \phantom{+}
   \Delta{y}_{i,j}^{F}(\zeta + \eta)^{C}_{i,j}
   \frac{u_{i+1,j}-u_{i,j}}{\Delta{x}_{i,j}^{F}} \\ \notag
@@ -573,7 +575,9 @@ Similarly, we have for the $v$-equation ($\alpha=2$):
   \phantom{=}& \phantom{\frac{1}{A_{i,j}^s} \biggl\{}
   + (\Delta{x}_1\sigma_{22})_{i,j}^C - (\Delta{x}_1\sigma_{22})_{i,j-1}^C
   \biggr\} 
-  \intertext{with}
+\end{align}
+with
+\begin{align}
   (\Delta{x}_1\sigma_{12})_{i,j}^Z =& \phantom{+}
   \Delta{y}_{i,j}^{U}\overline{\eta}^{Z}_{i,j}
   \frac{u_{i,j}-u_{i,j-1}}{\Delta{y}_{i,j}^{U}} 
@@ -834,5 +838,5 @@ Table \ref{tab:pkg:seaice:diagnostics}.
 
 %%% Local Variables: 
 %%% mode: latex
-%%% TeX-master: "../manual"
+%%% TeX-master: "../../manual"
 %%% End: 
