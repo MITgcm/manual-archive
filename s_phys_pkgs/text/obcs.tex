@@ -11,7 +11,17 @@ Alistair Adcroft, Patrick Heimbach, Samar Katiwala, Martin Losch
 \subsubsection{Introduction
 \label{sec:pkg:obcs:intro}}
 
-
+The OBCS-package is fundamental to regional ocean modelling with the
+MITgcm, but because there are so many details to be considered in
+regional ocean modelling that this package cannot accomodate all
+imaginable and possible options. Therefore, for a regional simulation
+with very particular details, it is recommended to familiarize oneself
+not only with the compile- and runtime-options of this package, but
+also with the code itself. In many cases it will be necessary to adapt
+the obcs-code (in particular \code{S/R OBCS\_CALC}) to the application
+in question; in these cases the obcs-package (together with the
+rbcs-package, section \ref{sec:pkg:rbcs}) is a very
+useful infrastructure for implementing special regional models.
 
 %----------------------------------------------------------------------
 
@@ -291,7 +301,6 @@ prescribed time-constant or time-varying fields (see below).
 use prescribed boundary fields to compute Stevens boundary conditions.
 \end{itemize}
 
-
 \paragraph{ORLANSKI:} ~ \\
 %
 Orlanski radiation conditions \citep{orl:76}, examples can be found in
@@ -317,24 +326,27 @@ open boundary:
 \item If non-hydrostatic dynamics are used
   (\ref{sec:non-hydrostatic}), additional files
   \code{OB[N/S/E/W]wFile} for the vertical velocity $w$ with
-  dimensions $(N_{x/y}\times N_r\times\mbox{time levels})$ may be
+  dimensions $(N_{x/y}\times N_r\times\mbox{time levels})$ can be
   specified.
 \item If \code{useSEAICE=.TRUE.} then additional files
   \code{OB[N/S/E/W][a,h,sl,sn,uice,vice]} for sea ice area, thickness
   (\code{HEFF}), seaice salinity, snow and ice velocities
-  $(N_{x/y}\times\mbox{time levels})$ may be specified.
+  $(N_{x/y}\times\mbox{time levels})$ can be specified.
 \end{itemize}
-When the \code{exf}-package is used, the time levels are controlled
-for each boundary separately in the same way as the \code{exf}-fields
-in \code{data.exf}, namelist \code{EXF\_NML\_OBCS}. The runtime flags
+As in \code{S/R external\_fields\_load} or the \code{exf}-package, the
+code reads two time levels for each variable, e.g.\ \code{OBNu0} and
+\code{OBNu1}, and interpolates linearly between these time levels to
+obtain the value \code{OBNu} at the current model time (step). When the
+\code{exf}-package is used, the time levels are controlled for each
+boundary separately in the same way as the \code{exf}-fields in
+\code{data.exf}, namelist \code{EXF\_NML\_OBCS}. The runtime flags
 follow the above naming conventions, e.g. for the western boundary the
 corresponding flags are \code{OBCWstartdate1/2} and
 \code{OBCWperiod}. Sea-ice boundary values are controlled separately
-with \code{siobWstartdate1/2} and \code{siobWperiod}.
-When the \code{exf}-package is not used, the time levels are
-controlled by the runtime flags \code{externForcingPeriod} and
-\code{externForcingCycle} in \code{data}, see \code{verification/exp4}
-for an example.
+with \code{siobWstartdate1/2} and \code{siobWperiod}.  When the
+\code{exf}-package is not used, the time levels are controlled by the
+runtime flags \code{externForcingPeriod} and \code{externForcingCycle}
+in \code{data}, see \code{verification/exp4} for an example.
 
 \paragraph{OBCS\_CALC\_STEVENS:} ~ \\
 (THE IMPLEMENTATION OF THESE BOUNDARY CONDITIONS IS NOT COMPLETE. SO
@@ -367,9 +379,28 @@ example, we use the notation for an eastern or western boundary):
   \texttt{useStevensPhaseVel} and \texttt{useStevensAdvection} to
   \texttt{.FALSE.}.\end{itemize} See \citet{stevens:90} for details.
 
-\paragraph{OBCS\_BALANCE} ~ \\
+\paragraph{OBCS\_BALANCE:} ~ \\
 %
-~
+This is not (yet) a separate routine in the code, but it may become
+one to make this code more transparent. The code is part of
+\code{S/R~OBCS\_CALC}. When turned on (\code{ALLOW\_OBCS\_BALANCE}
+defined in \code{OBCS\_OPTIONS.h} and \code{useOBCSbalance=.true.} in
+\code{data.obcs/OBCS\_PARM01}), the normal velocities across each of
+the four boundaries are modified separately, so that the net volume
+transport across \emph{each} boundary is zero. For example, for the
+western boundary at $i=i_{b}$, the modified velocity is:
+\[
+u(y,z) - \int_{\mbox{western boundary}}u\,dy\,dz \approx OBNu(j,k) - \sum_{j,k}
+OBNu(j,k) h_{w}(i_{b},j,k)\Delta{y_G(i_{b},j)}\Delta{z(k)}.
+\]
+This also ensures a net total inflow of zero through all boundaries to
+make it a useful flag to prevent infinite sea-level change within the
+domain, but the flag is \emph{not} useful if you want to simulate,
+say, a sector of the Southern Ocean with a strong ACC entering through
+the western and leaving through the eastern boundary, because this
+flag will make sure that the strong inflow is removed. It is
+recommended that this part of the code is adapted to the particular
+needs of the simulation in question.
 
 \paragraph{OBCS\_APPLY\_*:} ~ \\
 ~
@@ -425,6 +456,20 @@ Table \ref{tab:pkg:obcs:diagnostics}.
 %----------------------------------------------------------------------
 
 \subsubsection{Reference experiments}
+In the directory \code{verifcation}, the following experiments use
+\code{obcs}: 
+\begin{itemize}
+\item \code{exp4}: box with 4 open boundaries, simulating flow over a
+  Gaussian bump based on \citet{adcroft:97}, also tests
+  Stevens-boundary conditions;
+\item \code{dome}: based on ``Denmark Strait Overflow Model
+  Experiment'', use Orlanski-BCs;
+\item \code{internal\_wave}: uses a heavily modified \code{S/R~OBCS\_CALC}
+\item \code{seaice\_obcs}: simple example who to use the sea-ice
+  related code, based on \code{lab\_sea};
+\item \code{tutorial\_plume\_on\_slope}: uses Orlanski-BCs, see also
+  section~\ref{sec:eg-gravityplume}.
+\end{itemize}
 
 
 
@@ -436,7 +481,7 @@ Table \ref{tab:pkg:obcs:diagnostics}.
 \label{sec:pkg:obcs:experiments}
 
 \begin{itemize}
-\item{Ocean experiment in exp4 verification directory. }
+\item \code{tutorial\_plume\_on\_slope} (section~\ref{sec:eg-gravityplume})
 \end{itemize}
 
 
