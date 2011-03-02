@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.28 2010/08/30 23:09:19 jmc Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.29 2011/03/02 22:59:44 jahn Exp $
 % $Name:  $
 
 This chapter lays out the numerical schemes that are
@@ -950,7 +950,9 @@ Equations \ref{eq:ustar-backward-free-surface} --
 \frac{ \vec{\bf v}^{n+1} }{ \Delta t }
 + {\bf \nabla}_h b_s [ \beta {\eta}^{n+1} + (1-\beta) {\eta}^{n} ] 
 + \epsilon_{nh} {\bf \nabla}_h {\phi'_{nh}}^{n+1}
- = \frac{ \vec{\bf v}^* }{ \Delta t }
+ = \frac{ \vec{\bf v}^{n} }{ \Delta t }
+ + \vec{\bf G}_{\vec{\bf v}} ^{(n+1/2)}
+ + {\bf \nabla}_h {\phi'_{hyd}}^{(n+1/2)}
 \end{eqnarray*}
 \begin{eqnarray}
 \epsilon_{fs} \frac{ {\eta}^{n+1} - {\eta}^{n} }{ \Delta t}
@@ -959,7 +961,7 @@ Equations \ref{eq:ustar-backward-free-surface} --
 = \epsilon_{fw} (P-E)
 \label{eq:eta-n+1-CrankNick}
 \end{eqnarray}
-where:
+We set
 \begin{eqnarray*}
 \vec{\bf v}^* & = &
 \vec{\bf v} ^{n} + \Delta t \vec{\bf G}_{\vec{\bf v}} ^{(n+1/2)}
