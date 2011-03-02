@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/text/seaice.tex,v 1.15 2011/02/28 16:27:56 mlosch Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/text/seaice.tex,v 1.16 2011/03/02 13:46:38 mlosch Exp $
 % $Name:  $
 
 %%EH3  Copied from "MITgcm/pkg/seaice/seaice_description.tex"
@@ -113,9 +113,9 @@ Table \ref{tab:pkg:seaice:cpp} summarizes these options.
 \subsubsection{Run-time parameters
 \label{sec:pkg:seaice:runtime}}
 
-Run-time parameters are set in files 
-\code{data.pkg} (read in \code{packages\_readparms.F}),
-and \code{data.seaice} (read in \code{seaice\_readparms.F}).
+Run-time parameters (see Table~\ref{tab:pkg:seaice:runtimeparms}) are set
+in files \code{data.pkg} (read in \code{packages\_readparms.F}), and
+\code{data.seaice} (read in \code{seaice\_readparms.F}).
 
 \paragraph{Enabling the package}
 ~ \\
@@ -214,26 +214,39 @@ relatively simpler formulation, compared to the EVP model, we decided
 to use the VP model as the default dynamic component of our ice
 model. To do this we extended the line successive over relaxation
 (LSOR) method of \citet{zhang97} for use in a parallel
-configuration.
+configuration. An EVP model and a free-drift implemtation can be
+selected with runtime flags.
 
-Note, that by default the seaice-package includes the orginial
+\paragraph{Compatibility with ice-thermodynamics package \code{thsice}\label{sec:pkg:seaice:thsice}}~\\
+%
+Note, that by default the \code{seaice}-package includes the orginial
 so-called zero-layer thermodynamics following \citet{hib80} with a
 snow cover as in \citet{zha98a}. The zero-layer thermodynamic model
 assumes that ice does not store heat and, therefore, tends to
 exaggerate the seasonal variability in ice thickness.  This
 exaggeration can be significantly reduced by using
-\citeauthor{sem76}'s~[\citeyear{sem76}] three-layer thermodynamic model
-that permits heat storage in ice.  Recently, the three-layer
-thermodynamic model has been reformulated by \citet{win00}.  The
-reformulation improves model physics by representing the brine content
-of the upper ice with a variable heat capacity.  It also improves
-model numerics and consumes less computer time and memory.  The Winton
-sea-ice thermodynamics have been ported to the MIT GCM; they currently
-reside under pkg/thsice. The package pkg/thsice is fully compatible
-with pkg/seaice and with pkg/exf. When turned on together with
-pkg/seaice, the zero-layer thermodynamics are replaced by the Winton
-thermodynamics.
+\citeauthor{sem76}'s~[\citeyear{sem76}] three-layer thermodynamic
+model that permits heat storage in ice. Recently, the three-layer thermodynamic model has been reformulated by
+\citet{win00}.  The reformulation improves model physics by
+representing the brine content of the upper ice with a variable heat
+capacity.  It also improves model numerics and consumes less computer
+time and memory. 
 
+The Winton sea-ice thermodynamics have been ported to the MIT GCM;
+they currently reside under \code{pkg/thsice}.  The package
+\code{thsice} is described in section~\ref{sec:pkg:thsice}; it is
+fully compatible with the packages \code{seaice} and \code{exf}. When
+turned on together with \code{seaice}, the zero-layer thermodynamics
+are replaced by the Winton thermodynamics. In order to use the
+\code{seaice}-package with the thermodynamics of \code{thsice},
+compile both packages and turn both package on in \code{data.pkg}; see
+an example in \code{global\_ocean.cs32x15/input.icedyn}. Note, that
+once \code{thsice} is turned on, the variables and diagnostics
+associated to the default thermodynamics are meaningless, and the
+diagnostics of \code{thsice} have to be used instead.
+
+\paragraph{Surface forcing\label{sec:pkg:seaice:surfaceforcing}}~\\
+%
 The sea ice model requires the following input fields: 10-m winds, 2-m
 air temperature and specific humidity, downward longwave and shortwave
 radiations, precipitation, evaporation, and river and glacier runoff.
@@ -244,8 +257,8 @@ surface heat flux, and net shortwave flux.  The sea-ice model is
 global: in ice-free regions bulk formulae are used to estimate oceanic
 forcing from the atmospheric fields.
 
-\paragraph{Dynamics\label{sec:pkg:seaice:dynamics}}
-
+\paragraph{Dynamics\label{sec:pkg:seaice:dynamics}}~\\
+%
 \newcommand{\vek}[1]{\ensuremath{\vec{\mathbf{#1}}}}
 \newcommand{\vtau}{\vek{\mathbf{\tau}}}
 The momentum equation of the sea-ice model is
@@ -283,6 +296,8 @@ air and ocean drag coefficients; $\rho_{air/ocean}$ are reference
 densities; and $R_{air/ocean}$ are rotation matrices that act on the
 wind/current vectors.
 
+\paragraph{Viscous-Plastic (VP) Rheology and LSOR solver \label{sec:pkg:seaice:VPdynamics}}~\\
+%
 For an isotropic system the stress tensor $\sigma_{ij}$ ($i,j=1,2$) can
 be related to the ice strain rate and strength by a nonlinear
 viscous-plastic (VP) constitutive law \citep{hib79, zhang97}:
@@ -334,19 +349,6 @@ recommended). For stress tensor computation the replacement pressure $P
 = 2\,\Delta\zeta$ \citep{hibler95} is used so that the stress state
 always lies on the elliptic yield curve by definition.
 
-In the so-called truncated ellipse method the shear viscosity $\eta$
-is capped to suppress any tensile stress \citep{hibler97, geiger98}:
-\begin{equation}
-  \label{eq:etatem}
-  \eta = \min\left(\frac{\zeta}{e^2},
-  \frac{\frac{P}{2}-\zeta(\dot{\epsilon}_{11}+\dot{\epsilon}_{22})}
-  {\sqrt{(\dot{\epsilon}_{11}+\dot{\epsilon}_{22})^2
-      +4\dot{\epsilon}_{12}^2}}\right).
-\end{equation}
-To enable this method, set \code{\#define SEAICE\_ALLOW\_TEM} in
-\code{SEAICE\_OPTIONS.h} and turn it on with
-\code{SEAICEuseTEM=.TRUE.} in \code{data.seaice}. 
-
 In the current implementation, the VP-model is integrated with the
 semi-implicit line successive over relaxation (LSOR)-solver of
 \citet{zhang97}, which allows for long time steps that, in our case,
@@ -356,6 +358,8 @@ limitation because it restricts the time step to approximately the
 same length as in the ocean model where the Coriolis term is also
 treated explicitly.
 
+\paragraph{Elastic-Viscous-Plastic (EVP) Dynamics\label{sec:pkg:seaice:EVPdynamics}}~\\
+%
 \citet{hun97}'s introduced an elastic contribution to the strain
 rate in order to regularize Eq.~\ref{eq:vpequation} in such a way that
 the resulting elastic-viscous-plastic (EVP) and VP models are
@@ -373,11 +377,12 @@ identical at steady state,
 %used and compared the present sea-ice model study.
 The EVP-model uses an explicit time stepping scheme with a short
 timestep. According to the recommendation of \citet{hun97}, the
-EVP-model is stepped forward in time 120 times within the physical
-ocean model time step (although this parameter is under debate), to
-allow for elastic waves to disappear.  Because the scheme does not
-require a matrix inversion it is fast in spite of the small internal
-timestep and simple to implement on parallel computers
+EVP-model should be stepped forward in time 120 times
+($\code{SEAICE\_deltaTevp} = \code{SEAICIE\_deltaTdyn}/120$) within
+the physical ocean model time step (although this parameter is under
+debate), to allow for elastic waves to disappear.  Because the scheme
+does not require a matrix inversion it is fast in spite of the small
+internal timestep and simple to implement on parallel computers
 \citep{hun97}. For completeness, we repeat the equations for the
 components of the stress tensor $\sigma_{1} =
 \sigma_{11}+\sigma_{22}$, $\sigma_{2}= \sigma_{11}-\sigma_{22}$, and
@@ -398,11 +403,12 @@ abbreviations, the equations~\ref{eq:evpequation} can be written as:
   \frac{\partial\sigma_{12}}{\partial{t}} + \frac{\sigma_{12} e^{2}}{2T}
   &= \frac{P}{4T\Delta} D_S 
 \end{align}
-Here, the elastic parameter $E$ is redefined in terms of a damping timescale
-$T$ for elastic waves \[E=\frac{\zeta}{T}.\]
-$T=E_{0}\Delta{t}$ with the tunable parameter $E_0<1$ and
-the external (long) timestep $\Delta{t}$. \citet{hun97} recommend
-$E_{0} = \frac{1}{3}$ (which is the default value in the code).
+Here, the elastic parameter $E$ is redefined in terms of a damping
+timescale $T$ for elastic waves \[E=\frac{\zeta}{T}.\]
+$T=E_{0}\Delta{t}$ with the tunable parameter $E_0<1$ and the external
+(long) timestep $\Delta{t}$.  $E_{0} = \frac{1}{3}$ is the default
+value in the code and close to what \citet{hun97} and
+\citet{hun01} recommend.
 
 To use the EVP solver, make sure that both \code{SEAICE\_CGRID} and
 \code{SEAICE\_ALLOW\_EVP} are defined in \code{SEAICE\_OPTIONS.h}
@@ -417,6 +423,23 @@ the damping time scale $T$ accordingly, by setting either
 $E_{0}\Delta{t}=\mbox{forcing time scale}$, or directly
 \code{SEAICE\_evpTauRelax} ($T$) to the forcing time scale.
 
+\paragraph{Truncated ellipse method (TEM) for yield curve \label{sec:pkg:seaice:TEM}}~\\
+%
+In the so-called truncated ellipse method the shear viscosity $\eta$
+is capped to suppress any tensile stress \citep{hibler97, geiger98}:
+\begin{equation}
+  \label{eq:etatem}
+  \eta = \min\left(\frac{\zeta}{e^2},
+  \frac{\frac{P}{2}-\zeta(\dot{\epsilon}_{11}+\dot{\epsilon}_{22})}
+  {\sqrt{(\dot{\epsilon}_{11}+\dot{\epsilon}_{22})^2
+      +4\dot{\epsilon}_{12}^2}}\right).
+\end{equation}
+To enable this method, set \code{\#define SEAICE\_ALLOW\_TEM} in
+\code{SEAICE\_OPTIONS.h} and turn it on with
+\code{SEAICEuseTEM} in \code{data.seaice}. 
+
+\paragraph{Ice-Ocean stress \label{sec:pkg:seaice:iceoceanstress}}~\\
+%
 Moving sea ice exerts a stress on the ocean which is the opposite of
 the stress $\vtau_{ocean}$ in Eq.~\ref{eq:momseaice}. This stess is
 applied directly to the surface layer of the ocean model. An
@@ -446,7 +469,8 @@ To turn on the stress formulation of \citet{hibler87}, set
 % $P$ at vorticity points.
 
 \paragraph{Finite-volume discretization of the stress tensor
-  divergence\label{sec:pkg:seaice:discretization}}
+  divergence\label{sec:pkg:seaice:discretization}}~\\
+%
 On an Arakawa C~grid, ice thickness and concentration and thus ice
 strength $P$ and bulk and shear viscosities $\zeta$ and $\eta$ are
 naturally defined a C-points in the center of the grid
@@ -607,8 +631,8 @@ free slip boundary conditions the lateral stress is set to zeros. In
 analogy to $(\epsilon_{12})^Z=0$ on boundaries, we set
 $\sigma_{21}^{Z}=0$, or equivalently $\eta_{i,j}^{Z}=0$, on boundaries.
 
-\paragraph{Thermodynamics\label{sec:pkg:seaice:thermodynamics}}
-
+\paragraph{Thermodynamics\label{sec:pkg:seaice:thermodynamics}}~\\
+%
 In its original formulation the sea ice model \citep{menemenlis05}
 uses simple thermodynamics following the appendix of
 \citet{sem76}. This formulation does not allow storage of heat,
@@ -662,6 +686,8 @@ principle) turns snow into ice until the ice surface is back at $z=0$
 \code{SEAICE\_ALLOW\_FLOODING} and turned on with run-time parameter
 \code{SEAICEuseFlooding=.true.}.
 
+\paragraph{Advection of thermodynamic variables\label{sec:pkg:seaice:advection}}~\\
+%
 Effective ice thickness (ice volume per unit area,
 $c\cdot{h}$), concentration $c$ and effective snow thickness
 ($c\cdot{h}_{s}$) are advected by ice velocities:
@@ -681,14 +707,11 @@ distributions and to rule out unphysical over- and undershoots
 (negative thickness or concentration). These schemes conserve volume
 and horizontal area and are unconditionally stable, so that we can set
 $D_{X}=0$. Run-timeflags: \code{SEAICEadvScheme} (default=2, is the
-historic 2nd-order, centered difference scheme), \code{DIFF1}
+historic 2nd-order, centered difference scheme), \code{DIFF1} =
+$D_{X}/\Delta{x}$
 (default=0.004).
 
-There is considerable doubt about the reliability of a ``zero-layer''
-thermodynamic model --- \citet{semtner84} found significant errors in
-phase (one month lead) and amplitude ($\approx$50\%\,overestimate) in
-such models --- so that today many sea ice models employ more complex
-thermodynamics. The MITgcm sea ice model provides the option to use
+The MITgcm sea ice model provides the option to use
 the thermodynamics model of \citet{win00}, which in turn is based on
 the 3-layer model of \citet{sem76} and which treats brine content by
 means of enthalpy conservation; the corresponding package
@@ -700,21 +723,19 @@ ice velocities.
 The internal sea ice temperature is inferred from ice enthalpy.  To
 avoid unphysical (negative) values for ice thickness and
 concentration, a positive 2nd-order advection scheme with a SuperBee
-flux limiter \citep{roe:85} is used in this study to advect all
-sea-ice-related quantities of the \citet{win00} thermodynamic model.
-Because of the non-linearity of the advection scheme, care must be
-taken in advecting these quantities: when simply using ice velocity to
-advect enthalpy, the total energy (i.e., the volume integral of
-enthalpy) is not conserved. Alternatively, one can advect the energy
-content (i.e., product of ice-volume and enthalpy) but then false
-enthalpy extrema can occur, which then leads to unrealistic ice
-temperature.  In the currently implemented solution, the sea-ice mass
-flux is used to advect the enthalpy in order to ensure conservation of
-enthalpy and to prevent false enthalpy extrema. %
-In order to use the \code{seaice}-package with the more sophisticated
-thermodynamics of \code{thsice}, compile both packages and turn both
-package on in \code{data.pkg}; see an example in
-\code{global\_ocean.cs32x15/input.icedyn}.
+flux limiter \citep{roe:85} should be used to advect all
+sea-ice-related quantities of the \citet{win00} thermodynamic model
+(runtime flag \code{thSIceAdvScheme=77} and
+\code{thSIce\_diffK}=$D_{X}$=0 in \code{data.ice}, defaults are 0).  Because of the
+non-linearity of the advection scheme, care must be taken in advecting
+these quantities: when simply using ice velocity to advect enthalpy,
+the total energy (i.e., the volume integral of enthalpy) is not
+conserved. Alternatively, one can advect the energy content (i.e.,
+product of ice-volume and enthalpy) but then false enthalpy extrema
+can occur, which then leads to unrealistic ice temperature.  In the
+currently implemented solution, the sea-ice mass flux is used to
+advect the enthalpy in order to ensure conservation of enthalpy and to
+prevent false enthalpy extrema. %
 
 %----------------------------------------------------------------------
 
@@ -839,7 +860,13 @@ Table \ref{tab:pkg:seaice:diagnostics}.
 \label{sec:pkg:seaice:experiments}
 
 \begin{itemize}
-\item{Labrador Sea experiment in lab\_sea verification directory. }
+\item{Labrador Sea experiment in \code{lab\_sea} verification directory. }
+\item \code{seaice\_obcs}, based on \code{lab\_sea}
+\item \code{offline\_exf\_seaice/input.seaicetd}, based on \code{lab\_sea}
+\item \code{global\_ocean.cs32x15/input.icedyn} and
+  \code{global\_ocean.cs32x15/input.seaice}, global
+  cubed-sphere-experiment with combinations of \code{seaice} and
+  \code{thsice}
 \end{itemize}
 
 
