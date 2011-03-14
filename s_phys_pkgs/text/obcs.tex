@@ -153,7 +153,7 @@ their default values.
            ~ \\
         useOBCSbalance & \code{.FALSE.} & 
            ~ \\
-           OBCS\_balanceFacN/S/E/W & 0 & factor(s) determining the details
+           OBCS\_balanceFacN/S/E/W & 1 & factor(s) determining the details
            of the balaning code \\
         useOrlanskiNorth/South/EastWest & \code{.FALSE.} & 
            turn on Orlanski boundary conditions for individual boundary\\
@@ -386,35 +386,83 @@ example, we use the notation for an eastern or western boundary):
   \texttt{useStevensPhaseVel} and \texttt{useStevensAdvection} to
   \texttt{.FALSE.}.\end{itemize} See \citet{stevens:90} for details.
 
-\paragraph{OBCS\_BALANCE:} ~ \\
+\paragraph{OBCS\_BALANCE\_FLOW:} ~ \\
 %
-This is not (yet) a separate routine in the code, but it may become
-one to make this code more transparent. The code is part of
-\code{S/R~OBCS\_CALC}. When turned on (\code{ALLOW\_OBCS\_BALANCE}
+When turned on (\code{ALLOW\_OBCS\_BALANCE}
 defined in \code{OBCS\_OPTIONS.h} and \code{useOBCSbalance=.true.} in
-\code{data.obcs/OBCS\_PARM01}), the normal velocities across each of
-the four boundaries are modified separately, so that the net volume
-transport across \emph{each} boundary is zero. For example, for the
-western boundary at $i=i_{b}$, the modified velocity is:
+\code{data.obcs/OBCS\_PARM01}), this routine balances the net flow
+across the open boundaries. By default the net flow across the
+boundaries is computed and all normal velocities on boundaries are
+adjusted to obtain zero net inflow.
+
+This behavior can be controlled with the runtime flags
+\code{OBCS\_balanceFacN/S/E/W}. The values of these flags determine
+how the net inflow is redistributed as small correction velocities
+between the individual sections. A value ``\code{-1}'' balances an
+individual boundary, values $>0$ determine the relative size of the
+correction. For example, with the values
+\begin{tabbing}
+ \code{OBCS\_balanceFac\_E}\=\code{ = 1.,} \\
+ \code{OBCS\_balanceFac\_W}\>\code{ = -1.,} \\
+ \code{OBCS\_balanceFac\_N}\>\code{ = 2.,} \\
+ \code{OBCS\_balanceFac\_S}\>\code{ = 0.,}
+\end{tabbing}
+will make the model
+\begin{itemize}
+\item correct Western \code{OBWu} by substracting a uniform velocity to
+ensure zero net transport through Western OB
+\item correct Eastern and Northern normal flow, with the Northern
+  velocity correction two times larger than Eastern correction, but
+  not the Southern normal flow to ensure that the total inflow through
+  East, Northern, and Southern OB is balanced
+\end{itemize}
+
+The old method of balancing the net flow for all sections individually
+can be recovered by setting all flags to -1. Then the normal
+velocities across each of the four boundaries are modified separately,
+so that the net volume transport across \emph{each} boundary is
+zero. For example, for the western boundary at $i=i_{b}$, the modified
+velocity is:
 \[
 u(y,z) - \int_{\mbox{western boundary}}u\,dy\,dz \approx OBNu(j,k) - \sum_{j,k}
 OBNu(j,k) h_{w}(i_{b},j,k)\Delta{y_G(i_{b},j)}\Delta{z(k)}.
 \]
 This also ensures a net total inflow of zero through all boundaries to
-make it a useful flag to prevent infinite sea-level change within the
-domain, but the flag is \emph{not} useful if you want to simulate,
-say, a sector of the Southern Ocean with a strong ACC entering through
-the western and leaving through the eastern boundary, because this
-flag will make sure that the strong inflow is removed. It is
-recommended that this part of the code is adapted to the particular
-needs of the simulation in question.
+make it a useful flag for preventing infinite sea-level change within
+the domain, but this combination of flags is \emph{not} useful if you
+want to simulate, say, a sector of the Southern Ocean with a strong
+ACC entering through the western and leaving through the eastern
+boundary, because the value of ``\code{-1}'' for these flags will make
+sure that the strong inflow is removed.
 
 \paragraph{OBCS\_APPLY\_*:} ~ \\
 ~
 
-\paragraph{OBCS\_SPONGE} Setting sponge layer characteristics \\
+\paragraph{OBCS\_SPONGE:} ~ \\
 %
-~
+The sponge layer code (turned on with \code{ALLOW\_OBCS\_SPONGE} and
+\code{useOBCSsponge}) adds a relaxation term to the right-hand-side of
+the momentum and tracer equations. The variables are relaxed towards
+the boundary values with a relaxation time scale that increases
+linearly with distance from the boundary
+\[
+G_{\chi}^{\mbox{(sponge)}} = 
+- \frac{\chi - [( L - \delta{L} ) \chi_{BC} + \delta{L}\chi]/L}
+{[(L-\delta{L})\tau_{b}+\delta{L}\tau_{i}]/L} 
+= - \frac{\chi - [( 1 - l ) \chi_{BC} + l\chi]}
+{[(1-l)\tau_{b}+l\tau_{i}]}
+\]
+where $\chi$ is the model variable (U/V/T/S) in the interior,
+$\chi_{BC}$ the boundary value, $L$ the thickness of the sponge layer
+(runtime parameter \code{spongeThickness} in number of grid points),
+$\delta{L}\in[0,L]$ ($l\in[0,1]$) the distance from the boundary (also in grid points), and
+$\tau_{b}$ (runtime parameters \code{Urelaxobcsbound} and
+\code{Vrelaxobcsbound}) and $\tau_{i}$ (runtime parameters
+\code{Urelaxobcsinner} and \code{Vrelaxobcsinner}) the relaxation time
+scales on the boundary and at the interior termination of the sponge
+layer. The parameters \code{Urelaxobcsbound/inner} set the relaxation
+time scales for the Eastern and Western boundaries,
+\code{Vrelaxobcsbound/inner} for the Northern and Southern boundaries.
 
 \paragraph{OB's with nonlinear free surface} ~ \\
 %
