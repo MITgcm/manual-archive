@@ -364,25 +364,33 @@ function along the open boundary) $\bar{u}_{ob}$ and the tracer fields
 $\chi_{ob}$ (note: passive tracers are currently not implemented and
 the code stops when package \code{ptracers} is used together with this
 option). Currently, the code vertically averages the normal velocity
-as specified. From these prescribed values the code computes the
-boundary values for the next timestep $n+1$ as follows (as an 
-example, we use the notation for an eastern or western boundary):
+as specified in \code{OB[E,W]u} or \code{OB[N,S]v}. From these
+prescribed values the code computes the boundary values for the next
+timestep $n+1$ as follows (as an example, we use the notation for an
+eastern or western boundary):
 \begin{itemize}
-\item $u^{n+1}(y,z) = \bar{u}_{ob}(y) + u'(y,z)$, where $u_{n}'$ is the
-  deviation from the vertically averaged velocity one grid point
-  inward from the boundary.
+\item $u^{n+1}(y,z) = \bar{u}_{ob}(y) + (u')^{n}(y,z)$, where $(u')^{n}$
+  is the deviation from the vertically averaged velocity at timestep
+  $n$ one grid point inward from the boundary.
 \item If $u^{n+1}$ is directed into the model domain, the boudary
   value for tracer $\chi$ is restored to the prescribed values:
   \[\chi^{n+1} =   \chi^{n} + \frac{\Delta{t}}{\tau_\chi} (\chi_{ob} -
   \chi^{n}),\] where $\tau_\chi$ is the relaxation time
-  scale \texttt{T/SrelaxStevens}.
-\item If $u^{n+1}$ is directed out of the model domain, the tracer is
-  advected out of the domain with $u^{n+1}+c$, where $c$ is a phase
-  velocity estimated as
-  $\frac{1}{2}\frac{\partial\chi}{\partial{t}}/\frac{\partial\chi}{\partial{x}}$.
+  scale \texttt{T/SrelaxStevens}. The new $\chi^{n+1}$ is then subject
+  to the advection by $u^{n+1}$.
+\item If $u^{n+1}$ is directed out of the model domain, the tracer
+  $\chi^{n+1}$ on the boundary at timestep $n+1$ is estimated from
+  advection advected out of the domain with $u^{n+1}+c$, where $c$ is
+  a phase velocity estimated as
+  $\frac{1}{2}\frac{\partial\chi}{\partial{t}}/\frac{\partial\chi}{\partial{x}}$. The
+  numerical scheme is (as an example for an eastern boundary):
+  \[\chi_{i,j,k}^{n+1} =   \chi_{i,j,k}^{n} + \Delta{t} 
+  (u^{n+1}+c)_{i_{b},j,k}\frac{\chi_{i_{b},j,k}^{n}
+    - \chi_{i_{b}-1,j,k}^{n}}{\Delta{x}_{i_{b},j}^{C}}\mbox{, if }u_{i_{b},j,k}^{n+1}>0,
+  \] where $i_{b}$ is the boundary index.
+
   For test purposes, the phase velocity contribution or the entire
-  advection can
-  be turned off by setting the corresponding parameters
+  advection can be turned off by setting the corresponding parameters
   \texttt{useStevensPhaseVel} and \texttt{useStevensAdvection} to
   \texttt{.FALSE.}.\end{itemize} See \citet{stevens:90} for details.
 
