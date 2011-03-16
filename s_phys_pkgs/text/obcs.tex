@@ -400,21 +400,21 @@ This behavior can be controlled with the runtime flags
 how the net inflow is redistributed as small correction velocities
 between the individual sections. A value ``\code{-1}'' balances an
 individual boundary, values $>0$ determine the relative size of the
-correction. For example, with the values
+correction. For example, the values
 \begin{tabbing}
- \code{OBCS\_balanceFac\_E}\=\code{ = 1.,} \\
- \code{OBCS\_balanceFac\_W}\>\code{ = -1.,} \\
- \code{OBCS\_balanceFac\_N}\>\code{ = 2.,} \\
- \code{OBCS\_balanceFac\_S}\>\code{ = 0.,}
+ \code{OBCS\_balanceFacE}\code{ = 1.,} \\
+ \code{OBCS\_balanceFacW}\code{ = -1.,} \\
+ \code{OBCS\_balanceFacN}\code{ = 2.,} \\
+ \code{OBCS\_balanceFacS}\code{ = 0.,}
 \end{tabbing}
-will make the model
+make the model
 \begin{itemize}
 \item correct Western \code{OBWu} by substracting a uniform velocity to
-ensure zero net transport through Western OB
+ensure zero net transport through the Western open boundary;
 \item correct Eastern and Northern normal flow, with the Northern
-  velocity correction two times larger than Eastern correction, but
-  not the Southern normal flow to ensure that the total inflow through
-  East, Northern, and Southern OB is balanced
+  velocity correction two times larger than the Eastern correction, but
+  \emph{not} the Southern normal flow, to ensure that the total inflow through
+  East, Northern, and Southern open boundary is balanced.
 \end{itemize}
 
 The old method of balancing the net flow for all sections individually
@@ -427,13 +427,13 @@ velocity is:
 u(y,z) - \int_{\mbox{western boundary}}u\,dy\,dz \approx OBNu(j,k) - \sum_{j,k}
 OBNu(j,k) h_{w}(i_{b},j,k)\Delta{y_G(i_{b},j)}\Delta{z(k)}.
 \]
-This also ensures a net total inflow of zero through all boundaries to
-make it a useful flag for preventing infinite sea-level change within
-the domain, but this combination of flags is \emph{not} useful if you
-want to simulate, say, a sector of the Southern Ocean with a strong
-ACC entering through the western and leaving through the eastern
-boundary, because the value of ``\code{-1}'' for these flags will make
-sure that the strong inflow is removed.
+This also ensures a net total inflow of zero through all boundaries,
+but this combination of flags is \emph{not} useful if you want to
+simulate, say, a sector of the Southern Ocean with a strong ACC
+entering through the western and leaving through the eastern boundary,
+because the value of ``\code{-1}'' for these flags will make sure that
+the strong inflow is removed. Clearly, gobal balancing with
+\code{OBCS\_balanceFacE/W/N/S} $\ge0$ is the preferred method.
 
 \paragraph{OBCS\_APPLY\_*:} ~ \\
 ~
@@ -455,7 +455,7 @@ G_{\chi}^{\mbox{(sponge)}} =
 where $\chi$ is the model variable (U/V/T/S) in the interior,
 $\chi_{BC}$ the boundary value, $L$ the thickness of the sponge layer
 (runtime parameter \code{spongeThickness} in number of grid points),
-$\delta{L}\in[0,L]$ ($l\in[0,1]$) the distance from the boundary (also in grid points), and
+$\delta{L}\in[0,L]$ ($\frac{\delta{L}}{L}=l\in[0,1]$) the distance from the boundary (also in grid points), and
 $\tau_{b}$ (runtime parameters \code{Urelaxobcsbound} and
 \code{Vrelaxobcsbound}) and $\tau_{i}$ (runtime parameters
 \code{Urelaxobcsinner} and \code{Vrelaxobcsinner}) the relaxation time
