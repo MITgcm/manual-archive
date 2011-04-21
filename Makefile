@@ -1,5 +1,5 @@
 #
-#  $Header: /u/gcmpack/manual/Makefile,v 1.30 2010/08/28 22:57:11 jmc Exp $
+#  $Header: /u/gcmpack/manual/Makefile,v 1.31 2011/04/21 20:14:39 jmc Exp $
 #  $Name:  $
 #
 
@@ -57,6 +57,7 @@ l2h: l2h.tgz
 subfigs: manual.tgz
 
 manual.dvi: *.tex */*/*.tex */*/*.templ */*/*.ps */*/*.eps manual_references.bib
+	( cd s_examples/global_oce_latlon/  &&  make )
 	( cd s_examples/held_suarez_cs/  &&  make )
 	TEXINPUTS=.:::texinputs latex manual
 	bibtex manual
@@ -75,6 +76,7 @@ clean:
 
 Clean:
 	make clean
+	( cd s_examples/global_oce_latlon/  &&  make Clean )
 	( cd s_examples/held_suarez_cs/  &&  make Clean )
 	rm -f manual.{ps,pdf,ps.gz}
 	rm -rf manual
