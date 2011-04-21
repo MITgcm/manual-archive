@@ -1,5 +1,5 @@
 #
-#  $Header: /u/gcmpack/manual/s_examples/held_suarez_cs/Makefile,v 1.2 2010/08/24 20:51:01 jmc Exp $
+#  $Header: /u/gcmpack/manual/s_examples/held_suarez_cs/Makefile,v 1.3 2011/04/21 19:56:37 jmc Exp $
 #  $Name:  $
 #
 
@@ -15,7 +15,7 @@ TEX_FILES = $(TEMPLATE_FILES:.templ=.tex)
 .SUFFIXES: .templ .tex
 
 .templ.tex :
-	-./preprocess.sh
+	-../../tools/preprocess.sh
 
 all : $(TEX_FILES)
 
