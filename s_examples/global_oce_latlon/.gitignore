@@ -1,6 +1,5 @@
-*.aux
-*.log
-*.blg
-*.bbl
-*.dvi
-*.ps
+cod_packages.conf.tex
+inp_data.pkg.tex
+inp_data.shap.tex
+inp_data.tex
+
