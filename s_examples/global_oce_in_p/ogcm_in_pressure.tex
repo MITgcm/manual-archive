@@ -18,7 +18,8 @@ This example experiment demonstrates using the MITgcm to simulate the
 planetary ocean circulation in pressure coordinates, that is, without
 making the Boussinesq approximations. The files for this experiment
 can be found in the verification directory under tutorial\_global\_oce\_in\_p.
-The simulation is configured
+The simulation is configured as a near copy of
+tutorial\_global\_oce\_latlon (Section~\ref{sec:eg-global}).
 with realistic geography and bathymetry on a $4^{\circ} \times
 4^{\circ}$ spherical polar grid.  Fifteen levels are used in the
 vertical, ranging in thickness from
@@ -33,13 +34,13 @@ thousands of years on a single processor desktop computer.
 %\label{www:tutorials}
 
 The model is forced with climatological wind stress data from
-Trenberth \cite{trenberth90} and surface flux data from Jiang et~al.\ 
-\cite{jiang99}. Climatological data from Levitus \cite{Levitus94} is
-used to initialize the model hydrography.  Levitus seasonal
+\citet{trenberth90} and surface flux data from
+\citet{jiang99}. Climatological data \citep{Levitus94} is
+used to initialize the model hydrography. \citeauthor{Levitus94} seasonal
 climatology data is also used throughout the calculation to provide
 additional air-sea fluxes.  These fluxes are combined with the Jiang
 climatological estimates of surface heat flux, resulting in a mixed
-boundary condition of the style described in Haney \cite{Haney}.
+boundary condition of the style described in \citet{Haney}.
 Altogether, this yields the following forcing applied in the model
 surface layer.
 
@@ -88,7 +89,7 @@ discussion in section \ref{sec:eg-global-clim_ocn_examp_exp_config}.
 
 
 Due to the pressure coordinate, the model can only be hydrostatic
-\cite{szoeke02}. The domain is discretized with a uniform grid
+\citep{szoeke02}. The domain is discretized with a uniform grid
 spacing in latitude and longitude on the sphere $\Delta \phi=\Delta
 \lambda=4^{\circ}$, so that there are ninety grid cells in the zonal
 and forty in the meridional direction.  The internal model coordinate
@@ -124,8 +125,8 @@ ${\tt k}$; note, that the surface layer has the highest index number 15) to
 give a total depth, $H$, of $-5200{\rm m}$. In pressure, this is
 $p_{b}^{0}=53023122.566084\mbox{\,Pa}$. 
 The implicit free surface form of the pressure equation described in
-Marshall et al. \cite{marshall:97a} with the nonlinear extension by
-Campin et al. \cite{campin:02} is employed. A Laplacian operator, $\nabla^2$, provides viscous
+\citet{marshall:97a} with the nonlinear extension by
+\citet{campin:02} is employed. A Laplacian operator, $\nabla^2$, provides viscous
 dissipation. Thermal and haline diffusion is also represented by a Laplacian operator.
 
 Wind-stress forcing is added to the momentum equations in (\ref{eq:eg-global-model_equations_pcoord}) 
@@ -407,9 +408,9 @@ for implicit vertical diffusion to $1.030905162225\times10^{9}\,{\rm
 \begin{verbatim}
  eosType='JMD95P',
 \end{verbatim}
-  Selects the full equation of state according to Jackett and McDougall
-  \cite{jackett95}. The only other sensible choice is the equation of
-  state by McDougall et al. \cite{mcdougall03}, 'MDJFW'. All other
+  Selects the full equation of state according to 
+  \citet{jackett95}. The only other sensible choice is the equation of
+  state by \citet{mcdougall03}, 'MDJFW'. All other
   equations of state do not make sense in this configuration.\\
   \fbox{
     \begin{minipage}{5.0in}
@@ -686,8 +687,8 @@ and the choice of equation of state!
 
 The files {\it input/lev\_t/s.bin} specify the initial conditions for
 temperature and salinity for every grid point in a three dimensional
-array ($x,y,z$). The data are obtain by interpolating Levitus
-\cite{Levitus94} monthly mean values for January onto the model
+array ($x,y,z$). The data are obtain by interpolating
+ monthly mean values \citep{Levitus94} for January onto the model
 grid. Keep in mind, that the first index corresponds to the bottom
 layer and highest index to the surface layer.
 
@@ -697,21 +698,21 @@ layer and highest index to the surface layer.
 Each of the {\it input/trenberth\_taux/y.bin} files specifies 12
 two-dimensional ($x,y,t$) maps of zonal and meridional wind stress
 values, $\tau_{x}$ and $\tau_{y}$, that is monthly mean values from
-Trenberth \cite{trenberth90}. The units used are $Nm^{-2}$.
+\citet{trenberth90}. The units used are $Nm^{-2}$.
 
 \subsubsection{File {\it input/lev\_sst.bin}}
 %\label{www:tutorials}
 
 The file {\it input/lev\_sst.bin} contains 12 monthly surface
-temperature climatologies from Levitus \cite{Levitus94} in a three
+temperature climatologies \citep{Levitus94} in a three
 dimensional array ($x,y,t$).
 
 \subsubsection{File {\it input/shi\_qnet/empmr.bin}}
 %\label{www:tutorials}
 
 The files {\it input/shi\_qnet/empmr.bin} contain 12 monthly surface
-fluxes of heat (qnet) and freshwater (empmr) by Jiang et al.
-\cite{jiang99} in three dimensional arrays ($x,y,t$). Both fluxes are
+fluxes of heat (qnet) and freshwater (empmr) by 
+\citet{jiang99} in three dimensional arrays ($x,y,t$). Both fluxes are
 normalized so that of one year there is no net flux into the
 ocean. The freshwater flux is actually constant in time.
 
