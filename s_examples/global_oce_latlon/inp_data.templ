@@ -1,36 +1,41 @@
-% $Header: /u/gcmpack/manual/s_examples/global_oce_latlon/inp_data.templ,v 1.1 2011/04/21 20:05:12 jmc Exp $
+% $Header: /u/gcmpack/manual/s_examples/global_oce_latlon/inp_data.templ,v 1.2 2011/05/02 10:46:28 mlosch Exp $
 % $Name:  $
 
 %\subsubsection{File {\it input/data}}
 %\label{www:tutorials}
 
 This file, reproduced completely below, specifies the main parameters 
-for the experiment. The parameters that are significant for this configuration
+for the experiment. The parameters that are significant for this configuration 
 are
 
 \begin{itemize}
 
-\item Lines 7-10 and 11-14 
-\begin{verbatim} tRef= 16.0 , 15.2 , 14.5 , 13.9 , 13.3 ,  \end{verbatim} 
-$\cdots$ \\
+\item Lines 7--8
+\begin{verbatim} 
+tRef= 15*20.,
+sRef= 15*35.,
+\end{verbatim} 
+%$\cdots$ 
+\\
 set reference values for potential
-temperature and salinity at each model level in units of $^{\circ}\mathrm{C}$ and
+temperature and salinity at each model level in units of $^{\circ}\mathrm{C}$ and 
 ${\rm ppt}$. The entries are ordered from surface to depth.
 Density is calculated from anomalies at each level evaluated
 with respect to the reference values set here.\\
 \fbox{
 \begin{minipage}{5.0in}
-{\it S/R INI\_THETA}({\it ini\_theta.F})
+{\it S/R INI\_THETA}({\it ini\_theta.F}) \\
+{\it S/R INI\_SALT}({\it ini\_salt.F})
 \end{minipage}
 }
 
-
-\item Line 15, 
-\begin{verbatim} viscAz=1.E-3, \end{verbatim}
+\item Line 9, 
+\begin{verbatim} 
+viscAr=1.E-3,
+\end{verbatim}
 this line sets the vertical Laplacian dissipation coefficient to
 $1 \times 10^{-3} {\rm m^{2}s^{-1}}$. Boundary conditions
-for this operator are specified later. This variable is copied into
-model general vertical coordinate variable {\bf viscAr}.
+for this operator are specified later.
 
 \fbox{
 \begin{minipage}{5.0in}
@@ -38,7 +43,7 @@ model general vertical coordinate variable {\bf viscAr}.
 \end{minipage}
 }
 
-\item Line 16, 
+\item Line 10, 
 \begin{verbatim}
 viscAh=5.E5,
 \end{verbatim} 
@@ -46,73 +51,36 @@ this line sets the horizontal Laplacian frictional dissipation coefficient to
 $5 \times 10^{5} {\rm m^{2}s^{-1}}$. Boundary conditions
 for this operator are specified later.
 
-\item Lines 17,
+\item Lines 11 and 13,
 \begin{verbatim}
-no_slip_sides=.FALSE.
+diffKhT=0.0,
+diffKhS=0.0,
 \end{verbatim}
-this line selects a free-slip lateral boundary condition for
-the horizontal Laplacian friction operator 
-e.g. $\frac{\partial u}{\partial y}$=0 along boundaries in $y$ and
-$\frac{\partial v}{\partial x}$=0 along boundaries in $x$.
+set the horizontal diffusion coefficient for temperature and salinity
+to 0, since package GMREDI is used.
 
-\item Lines 9,
+\item Lines 12 and 14,
 \begin{verbatim}
-no_slip_bottom=.TRUE.
+diffKrT=3.E-5,
+diffKrS=3.E-5,
 \end{verbatim}
-this line selects a no-slip boundary condition for bottom
-boundary condition in the vertical Laplacian friction operator 
-e.g. $u=v=0$ at $z=-H$, where $H$ is the local depth of the domain.
-
-\item Line 19,
-\begin{verbatim}
-diffKhT=1.E3,
-\end{verbatim}
-this line sets the horizontal diffusion coefficient for temperature
-to $1000\,{\rm m^{2}s^{-1}}$. The boundary condition on this
-operator is $\frac{\partial}{\partial x}=\frac{\partial}{\partial y}=0$ on
-all boundaries.
-
-\item Line 20,
-\begin{verbatim}
-diffKzT=3.E-5,
-\end{verbatim}
-this line sets the vertical diffusion coefficient for temperature
+set the vertical diffusion coefficient for temperature and salinity
 to $3 \times 10^{-5}\,{\rm m^{2}s^{-1}}$. The boundary 
 condition on this operator is $\frac{\partial}{\partial z}=0$ at both
 the upper and lower boundaries.
 
-\item Line 21,
-\begin{verbatim}
-diffKhS=1.E3,
+\item Lines 15--17
+\begin{verbatim} 
+rhonil=1035.,
+rhoConstFresh=1000.,
+eosType = 'JMD95Z', 
 \end{verbatim}
-this line sets the horizontal diffusion coefficient for salinity
-to $1000\,{\rm m^{2}s^{-1}}$. The boundary condition on this
-operator is $\frac{\partial}{\partial x}=\frac{\partial}{\partial y}=0$ on
-all boundaries.
-
-\item Line 22,
-\begin{verbatim}
-diffKzS=3.E-5,
-\end{verbatim}
-this line sets the vertical diffusion coefficient for salinity
-to $3 \times 10^{-5}\,{\rm m^{2}s^{-1}}$. The boundary 
-condition on this operator is $\frac{\partial}{\partial z}=0$ at both
-the upper and lower boundaries.
-
-\item Lines 23-26
-\begin{verbatim}
-beta=1.E-11,
-\end{verbatim}
-\vspace{-5mm}$\cdots$\\
-These settings do not apply for this experiment.
-
-\item Line 27,
-\begin{verbatim}
-gravity=9.81,
-\end{verbatim}
-Sets the gravitational acceleration coefficient to $9.81{\rm m}{\rm s}^{-1}$.\\
+set the reference densities for sea water and fresh water, and selects
+the equation of state \citep{jackett95}
 \fbox{
 \begin{minipage}{5.0in}
+{\it S/R FIND\_RHO}~({\it find\_rho.F})\\
+{\it S/R FIND\_ALPHA}~({\it find\_alpha.F}) \\
 {\it S/R CALC\_PHI\_HYD}~({\it calc\_phi\_hyd.F})\\
 {\it S/R INI\_CG2D}~({\it ini\_cg2d.F})\\
 {\it S/R INI\_CG3D}~({\it ini\_cg3d.F})\\
@@ -122,27 +90,21 @@ Sets the gravitational acceleration coefficient to $9.81{\rm m}{\rm s}^{-1}$.\\
 }
 
 
-\item Line 28-29,
+\item Lines 18--19,
 \begin{verbatim}
-rigidLid=.FALSE., 
-implicitFreeSurface=.TRUE., 
+ ivdc_kappa=100.,
+ implicitDiffusion=.TRUE.,
 \end{verbatim}
-Selects the barotropic pressure equation to be the implicit free surface
-formulation.
-
-\item Line 30,
-\begin{verbatim}
-eosType='POLY3',
-\end{verbatim}
-Selects the third order polynomial form of the equation of state.\\
+specify an ``implicit diffusion'' scheme with increased vertical
+diffusivity of 100~m$^2$/s in case of instable stratification.
 \fbox{
 \begin{minipage}{5.0in}
-{\it S/R FIND\_RHO}~({\it find\_rho.F})\\
-{\it S/R FIND\_ALPHA}~({\it find\_alpha.F})
 \end{minipage}
 }
 
-\item Line 31,
+\item \ldots
+
+\item Line 28,
 \begin{verbatim}
 readBinaryPrec=32,
 \end{verbatim}
@@ -155,9 +117,9 @@ use 32-bit representation for floating-point numbers.\\
 \end{minipage}
 }
 
-\item Line 36,
+\item Line 33,
 \begin{verbatim}
-cg2dMaxIters=1000,
+cg2dMaxIters=500,
 \end{verbatim}
 Sets maximum number of iterations the two-dimensional, conjugate
 gradient solver will use, {\bf irrespective of convergence 
@@ -168,7 +130,7 @@ criteria being met}.\\
 \end{minipage}
 }
 
-\item Line 37,
+\item Line 34,
 \begin{verbatim}
 cg2dTargetResidual=1.E-13,
 \end{verbatim}
@@ -186,38 +148,33 @@ maximum number of solver iterations is reached.\\
 \end{minipage}
 }
 
-\item Line 42,
+\item Line 39,
 \begin{verbatim}
-startTime=0,
+nIter0=0,
 \end{verbatim}
 Sets the starting time for the model internal time counter.
 When set to non-zero this option implicitly requests a 
 checkpoint file be read for initial state.
 By default the checkpoint file is named according to
-the integer number of time steps in the {\bf startTime} value.
-The internal time counter works in seconds.
+the integer number of time step value \verb+nIter0+.
+The internal time counter works in seconds. Alternatively,
+\verb+startTime+ can be set.
 
-\item Line 43,
+\item Line 40,
 \begin{verbatim}
-endTime=2808000.,
+nTimesteps=20,
 \end{verbatim}
-Sets the time (in seconds) at which this simulation will terminate.
+Sets the time step number at which this simulation will terminate.
 At the end of a simulation a checkpoint file is automatically
 written so that a numerical experiment can consist of multiple
-stages.
+stages. Alternatively \verb+endTime+ can be set.
 
 \item Line 44,
 \begin{verbatim}
-#endTime=62208000000,
-\end{verbatim}
-A commented out setting for endTime for a 2000 year simulation.
-
-\item Line 45,
-\begin{verbatim}
-deltaTmom=2400.0,
+deltaTmom=1800.0,
 \end{verbatim}
 Sets the timestep $\delta t_{v}$ used in the momentum equations to
-$20~{\rm mins}$.
+$30~{\rm mins}$.
 %- note: Distord Physics (using different time-steps) is not described
 %  in the mean time, put this section ref:
 See section \ref{sec:time_stepping}. %\ref{sec:mom_time_stepping}.
@@ -228,7 +185,7 @@ See section \ref{sec:time_stepping}. %\ref{sec:mom_time_stepping}.
 \end{minipage}
 }
 
-\item Line 46,
+\item Line 45,
 \begin{verbatim}
 tauCD=321428.,
 \end{verbatim}
@@ -245,14 +202,17 @@ used in the momentum equations.
 \end{minipage}
 }
 
-\item Line 47,
+\item Lines 46--48,
 \begin{verbatim}
-deltaTtracer=108000.,
+deltaTtracer=86400.,
+deltaTClock = 86400.,
+deltaTfreesurf= 86400.,
 \end{verbatim}
-Sets the default timestep, $\delta t_{\theta}$, for tracer equations to
-$30~{\rm hours}$.
-%- note: Distord Physics (using different time-steps) is not described
-%  in the mean time, put this section ref:
+Sets the default timestep, $\delta t_{\theta}$, for tracer equations
+and implicit free surface equations to
+$24~{\rm hours}$.
+% - note: Distord Physics (using different time-steps) is not
+% described in the mean time, put this section ref:
 See section \ref{sec:time_stepping}. %\ref{sec:tracer_time_stepping}.
 
 \fbox{
@@ -261,35 +221,30 @@ See section \ref{sec:time_stepping}. %\ref{sec:tracer_time_stepping}.
 \end{minipage}
 }
 
-\item Line 47,
+\item Line 76,
 \begin{verbatim}
-bathyFile='topog.box'
+bathyFile='bathymetry.bin'
 \end{verbatim}
 This line specifies the name of the file from which the domain
 bathymetry is read. This file is a two-dimensional ($x,y$) map of
-depths. This file is assumed to contain 64-bit binary numbers 
+depths. This file is assumed to contain 32-bit binary numbers 
 giving the depth of the model at each grid cell, ordered with the x 
 coordinate varying fastest. The points are ordered from low coordinate
 to high coordinate for both axes. The units and orientation of the
 depths in this file are the same as used in the MITgcm code. In this
 experiment, a depth of $0m$ indicates a solid wall and a depth
-of $-2000m$ indicates open ocean. The matlab program
-{\it input/gendata.m} shows an example of how to generate a
-bathymetry file.
+of $<0m$ indicates open ocean.
 
 
-\item Line 50,
+\item Line 79--80,
 \begin{verbatim}
-zonalWindFile='windx.sin_y'
+zonalWindFile='trenberth_taux.bin'
+meridWindFile='trenberth_tauy.bin'
 \end{verbatim}
-This line specifies the name of the file from which the x-direction
-surface wind stress is read. This file is also a two-dimensional
-($x,y$) map and is enumerated and formatted in the same manner as the 
-bathymetry file. The matlab program {\it input/gendata.m} includes example 
-code to generate a valid 
-{\bf zonalWindFile} 
-file.  
-
+  These lines specify the names of the files from which the x- and y-
+  direction surface wind stress is read. These files are also
+  three-dimensional ($x,y,time$) maps and are enumerated and formatted
+  in the same manner as the bathymetry file. 
 \end{itemize}
 
 \noindent other lines in the file {\it input/data} are standard values
