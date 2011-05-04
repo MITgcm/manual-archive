@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.29 2011/03/02 22:59:44 jahn Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.30 2011/05/04 22:42:48 jmc Exp $
 % $Name:  $
 
 This chapter lays out the numerical schemes that are
@@ -263,9 +263,9 @@ As for the rigid-lid pressure method, equations
 \begin{eqnarray}
 u^{*} & = & u^{n} + \Delta t G_u^{(n+1/2)} \label{eq:ustar-backward-free-surface} \\
 v^{*} & = & v^{n} + \Delta t G_v^{(n+1/2)} \label{eq:vstar-backward-free-surface} \\
-\eta^* & = & \epsilon_{fs} \left( \eta^{n} + \Delta t (P-E) \right)- \Delta t 
-  \partial_x H \widehat{u^{*}}
-+ \partial_y H \widehat{v^{*}}
+\eta^* & = & \epsilon_{fs} \left( \eta^{n} + \Delta t (P-E) \right)
+         - \Delta t \left( \partial_x H \widehat{u^{*}}
+                         + \partial_y H \widehat{v^{*}} \right)
 \\
   \partial_x g H \partial_x \eta^{n+1}
 & + & \partial_y g H \partial_y \eta^{n+1}
@@ -425,7 +425,7 @@ using the Adams-Bashforth method as described above.  Equation
 \end{eqnarray}
 where ${\cal L}_\tau^{-1}$ is the inverse of the operator
 \begin{equation}
-{\cal L} = \left[ 1 + \Delta t \partial_r \kappa_v \partial_r \right]
+{\cal L}_\tau = \left[ 1 + \Delta t \partial_r \kappa_v \partial_r \right]
 \end{equation}
 Equation \ref{eq:taustar-implicit} looks exactly as \ref{eq:taustar}
 while \ref{eq:tau-n+1-implicit} involves an operator or matrix
@@ -613,7 +613,7 @@ thermodynamics solver is delayed from half a time step,
 allowing the use of the most recent velocities to compute 
 the advection terms. Once the thermodynamics fields are
 updated, the hydrostatic pressure is computed 
-to step forwrad the dynamics.
+to step forward the dynamics.
 Note that the pressure gradient must also be taken out of the
 Adams-Bashforth extrapolation. Also, retaining the integer time-levels,
 $n$ and $n+1$, does not give a user the sense of where variables are
@@ -718,7 +718,7 @@ time-level variables and terms correspond to.
 The non-hydrostatic formulation re-introduces the full vertical
 momentum equation and requires the solution of a 3-D elliptic
 equations for non-hydrostatic pressure perturbation. We still
-intergrate vertically for the hydrostatic pressure and solve a 2-D
+integrate vertically for the hydrostatic pressure and solve a 2-D
 elliptic equation for the surface pressure/elevation for this reduces
 the amount of work needed to solve for the non-hydrostatic pressure.
 
