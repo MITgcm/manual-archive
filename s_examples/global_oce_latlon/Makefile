@@ -1,9 +1,10 @@
 #
-#  $Header: /u/gcmpack/manual/s_examples/global_oce_latlon/Makefile,v 1.1 2011/04/21 20:05:12 jmc Exp $
+#  $Header: /u/gcmpack/manual/s_examples/global_oce_latlon/Makefile,v 1.2 2011/05/08 16:24:24 jmc Exp $
 #  $Name:  $
 #
 
 TEMPLATE_FILES = \
+cod_SIZE.h.templ \
 inp_data.templ
 
 TEX_FILES = $(TEMPLATE_FILES:.templ=.tex)

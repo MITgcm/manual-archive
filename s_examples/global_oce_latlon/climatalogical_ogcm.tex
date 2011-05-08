@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_examples/global_oce_latlon/climatalogical_ogcm.tex,v 1.22 2011/05/02 10:46:28 mlosch Exp $
+% $Header: /u/gcmpack/manual/s_examples/global_oce_latlon/climatalogical_ogcm.tex,v 1.23 2011/05/08 16:24:24 jmc Exp $
 % $Name:  $
 
 \section[Global Ocean MITgcm Example]{Global Ocean Simulation at $4^\circ$ Resolution}
@@ -322,8 +322,8 @@ directory {\it tutorial\_global\_oce\_latlon/}. The experiment files
 \item {\it input/lev\_sss.bin},
 \item {\it input/lev\_sst.bin},
 \item {\it input/bathymetry.bin},
-\item {\it code/CPP\_EEOPTIONS.h}
-\item {\it code/CPP\_OPTIONS.h},
+%\item {\it code/CPP\_EEOPTIONS.h}
+%\item {\it code/CPP\_OPTIONS.h},
 \item {\it code/SIZE.h}. 
 \end{itemize}
 contain the code customizations and parameter settings for these
@@ -443,44 +443,20 @@ code for creating the {\it input/topog.box} file.
 \subsubsection{File {\it code/SIZE.h}}
 %\label{www:tutorials}
 
-Two lines are customized in this file for the current experiment
+\input{s_examples/global_oce_latlon/cod_SIZE.h}
 
-\begin{itemize}
-
-\item Line 39, 
-\begin{verbatim} sNx=45, \end{verbatim} this line sets
-the lateral domain extent in grid points for the
-axis aligned with the x-coordinate.
-
-\item Line 40, 
-\begin{verbatim} sNy=40, \end{verbatim} this line sets
-the lateral domain extent in grid points for the
-axis aligned with the y-coordinate.
-
-\item Line 49, 
-\begin{verbatim} 
-Nr=15,
-\end{verbatim} this line sets
-the vertical domain extent in grid points.
-
-\end{itemize}
-
-\begin{small}
-\input{s_examples/global_oce_latlon/code/SIZE.h}
-\end{small}
-
-\subsubsection{File {\it code/CPP\_OPTIONS.h}}
+%\subsubsection{File {\it code/CPP\_OPTIONS.h}}
 %\label{www:tutorials}
 
-This file uses standard default values and does not contain
-customisations for this experiment.
+%This file uses standard default values and does not contain
+%customisations for this experiment.
 
 
-\subsubsection{File {\it code/CPP\_EEOPTIONS.h}}
+%\subsubsection{File {\it code/CPP\_EEOPTIONS.h}}
 %\label{www:tutorials}
 
-This file uses standard default values and does not contain
-customisations for this experiment.
+%This file uses standard default values and does not contain
+%customisations for this experiment.
 
 \subsubsection{Other Files }
 %\label{www:tutorials}

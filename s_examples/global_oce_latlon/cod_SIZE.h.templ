@@ -1,0 +1,50 @@
+% $Header: /u/gcmpack/manual/s_examples/global_oce_latlon/cod_SIZE.h.templ,v 1.1 2011/05/08 16:24:24 jmc Exp $
+% $Name:  $
+
+%\subsubsection{File {\it code/SIZE.h}}
+%\label{www:tutorials}
+
+Four lines are customized in this file for the current experiment
+
+\begin{itemize}
+
+\item Line PUT_LINE_NB:sNx=,
+\begin{verbatim}
+sNx=45,
+\end{verbatim}
+%this line sets the lateral domain extent in grid points for the
+%axis aligned with the x-coordinate.
+this line sets the number of grid points of each tile (or sub-domain)
+along the x-coordinate axis.
+
+\item Line PUT_LINE_NB:sNy=,
+\begin{verbatim}
+sNy=40,
+\end{verbatim}
+%this line sets the lateral domain extent in grid points for the
+%axis aligned with the y-coordinate.
+this line sets the number of grid points of each tile (or sub-domain)
+along the y-coordinate axis.
+
+\item Lines PUT_LINE_NB:nPx= and PUT_LINE_NB:nSx=,
+\begin{verbatim}
+nPx=1,
+nSx=2,
+\end{verbatim}
+theses lines set, respectively, the number of processes and
+the number of tiles per process along the x-coordinate axis.
+Therefore, the total number of grid points along the x-coordinate axis
+corresponding to the full domain extent is $Nx=sNx*sNx*nPx=90$
+
+\item Line PUT_LINE_NB:Nr=,
+\begin{verbatim}
+Nr=15
+\end{verbatim}
+this line sets the vertical domain extent in grid points.
+
+\end{itemize}
+
+\begin{small}
+\input{s_examples/global_oce_latlon/code/SIZE.h}
+\end{small}
+
