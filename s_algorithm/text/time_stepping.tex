@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.30 2011/05/04 22:42:48 jmc Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.31 2011/05/09 13:45:05 jmc Exp $
 % $Name:  $
 
 This chapter lays out the numerical schemes that are
@@ -542,7 +542,7 @@ G_{\theta,S}^{(n+1/2)} & = & (3/2+\epsilon_{AB}) G_{\theta,S}^{n}-(1/2+\epsilon_
 \nabla \cdot g H \nabla \eta^{n+1} & - & \frac{\epsilon_{fs} \eta^{n+1}}{\Delta t^2}
 ~ = ~ - \frac{\eta^*}{\Delta t^2}
 \label{eq:elliptic-sync} \\
-\vec{\bf v}^{n+1} & = & \vec{\bf v}^{*} - \Delta t g \nabla \eta^{n+1}
+\vec{\bf v}^{n+1} & = & \vec{\bf v}^{**} - \Delta t g \nabla \eta^{n+1}
 \label{eq:v-n+1-sync}
 \end{eqnarray}
 Fig.~\ref{fig:adams-bashforth-sync} illustrates the location of
@@ -637,7 +637,7 @@ position in time of variables appropriately:
 \nabla \cdot g H \nabla \eta^{n+1/2} & - & \frac{\epsilon_{fs} \eta^{n+1/2}}{\Delta t^2}
 ~ = ~ - \frac{\eta^*}{\Delta t^2}
 \label{eq:elliptic-staggered} \\
-\vec{\bf v}^{n+1/2} & = & \vec{\bf v}^{*} - \Delta t g \nabla \eta^{n+1/2}
+\vec{\bf v}^{n+1/2} & = & \vec{\bf v}^{**} - \Delta t g \nabla \eta^{n+1/2}
 \label{eq:v-n+1-staggered} \\
 G_{\theta,S}^{n} & = & G_{\theta,S} ( u^{n+1/2}, \theta^{n}, S^{n} )
 \label{eq:Gt-n-staggered} \\
@@ -759,7 +759,7 @@ Substituting into the depth integrated continuity
 \partial_x H \partial_x \left( g \eta^{n+1} + \widehat{\phi}_{nh}^{n+1} \right)
 +
 \partial_y H \partial_y \left( g \eta^{n+1} + \widehat{\phi}_{nh}^{n+1} \right)
- - \frac{\epsilon_{fs}\eta^*}{\Delta t^2}
+ - \frac{\epsilon_{fs}\eta^{n+1}}{\Delta t^2}
 = - \frac{\eta^*}{\Delta t^2}
 \end{equation}
 which is approximated by equation
@@ -767,7 +767,7 @@ which is approximated by equation
 $\phi_{nh}^{n+1}$ is not yet known and ii) $\nabla \widehat{\phi}_{nh}
 << g \nabla \eta$. If \ref{eq:elliptic-backward-free-surface} is
 solved accurately then the implication is that $\widehat{\phi}_{nh}
-\approx 0$ so that thet non-hydrostatic pressure field does not drive
+\approx 0$ so that the non-hydrostatic pressure field does not drive
 barotropic motion.
 
 The flow must satisfy non-divergence
@@ -787,9 +787,8 @@ u^{*} & = & u^{n} + \Delta t G_u^{(n+1/2)} \label{eq:ustar-nh} \\
 v^{*} & = & v^{n} + \Delta t G_v^{(n+1/2)} \label{eq:vstar-nh} \\
 w^{*} & = & w^{n} + \Delta t G_w^{(n+1/2)} \label{eq:wstar-nh} \\
 \eta^* ~ = ~ \epsilon_{fs} \left( \eta^{n} + \Delta t (P-E) \right)
-& - & \Delta t 
-  \partial_x H \widehat{u^{*}}
-+ \partial_y H \widehat{v^{*}}
+& - & \Delta t \left( \partial_x H \widehat{u^{*}}
+                    + \partial_y H \widehat{v^{*}} \right)
 \\
   \partial_x g H \partial_x \eta^{n+1}
 + \partial_y g H \partial_y \eta^{n+1}
