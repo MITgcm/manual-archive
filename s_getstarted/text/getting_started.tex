@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.44 2010/08/30 23:09:20 jmc Exp $
+% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.45 2011/05/11 18:58:02 jmc Exp $
 % $Name:  $
 
 %\section{Getting started}
@@ -92,12 +92,16 @@ You only need to do a ``cvs login'' once.
 
 To obtain the latest sources type:
 \begin{verbatim}
-% cvs co MITgcm
+% cvs co -P MITgcm
 \end{verbatim}
 or to get a specific release type:
 \begin{verbatim}
-% cvs co -P -r checkpoint52i_post  MITgcm
+% cvs co -P -r checkpoint52i_post MITgcm
 \end{verbatim}
+The CVS command ``\texttt{cvs co}'' is the abreviation of the full-name
+``\texttt{cvs checkout}'' command and using the option ``-P'' (\texttt{cvs co -P})
+will prevent to download unnecessary empty directories.
+
 The MITgcm web site contains further directions concerning the source
 code and CVS.  It also contains a web interface to our CVS archive so
 that one may easily view the state of files, revisions, and other
@@ -148,7 +152,7 @@ It is important to note that the CVS aliases in Table
 \texttt{-d DIRNAME} option.  However, the \texttt{MITgcm} directories
 they create can be changed to a different name following the check-out:
 \begin{verbatim}
-   %  cvs co MITgcm_verif_basic
+   %  cvs co -P MITgcm_verif_basic
    %  mv MITgcm MITgcm_verif_basic
 \end{verbatim}
 
@@ -162,7 +166,7 @@ your copy instead of downloading the entire repository again. First,
 \end{verbatim}
 and then issue the cvs update command such as:
 \begin{verbatim}
-% cvs -q update -r checkpoint52i_post -d -P
+% cvs -q update -d -P -r checkpoint52i_post
 \end{verbatim}
 This will update the ``tag'' to ``checkpoint52i\_post'', add any new
 directories (-d) and remove any empty directories (-P). The -q option
@@ -208,7 +212,7 @@ have run into a problem for which ``we have already fixed in the
 latest code'' and we haven't made a ``tag'' or ``release'' since that
 patch then you'll need to get the latest code:
 \begin{verbatim}
-% cvs -q update -A -d -P
+% cvs -q update -d -P -A
 \end{verbatim}
 Unlike, the ``check-out'' and ``update'' procedures above, there is no
 ``tag'' or release name. The -A tells CVS to upgrade to the
