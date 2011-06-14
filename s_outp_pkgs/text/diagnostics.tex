@@ -51,14 +51,14 @@ enable, disable, clear, write and retrieve model diagnostics, and may
 be called from any routine.  The available utilities and the CALL
 sequences are listed below.
 
-\noindent 
-{\bf DIAGNOSTICS\_ADDTOLIST} 
+\noindent
+{\bf DIAGNOSTICS\_ADDTOLIST}
 (\filelink{pkg/diagnostics/diagnostics\_addtolist.F}{pkg-diagnostics-diagnostics\_addtolist.F}):
-%This subroutine enables a diagnostic from the Diagnostic Menu, 
+%This subroutine enables a diagnostic from the Diagnostic Menu,
 %meaning that space is allocated for the
 %diagnostic and the model routines will increment the diagnostic value
-%during execution.  
-This routine is the underlying interface routine for defining a new permanent 
+%during execution.
+This routine is the underlying interface routine for defining a new permanent
 diagnostic in the main model or in a package. The calling sequence is:
 
 \begin{verbatim}
@@ -80,15 +80,15 @@ diagnostic in the main model or in a package. The calling sequence is:
 
 
 \noindent
-{\bf DIAGNOSTICS\_FILL} 
+{\bf DIAGNOSTICS\_FILL}
 (\filelink{pkg/diagnostics/diagnostics\_fill.F}{pkg-diagnostics-diagnostics\_fill.F}):
-This is the main user interface routine to the diagnostics package. 
+This is the main user interface routine to the diagnostics package.
 This routine will increment the specified
 diagnostic quantity with a field sent through the argument list.
 
 \begin{verbatim}
         CALL DIAGNOSTICS_FILL(
-       I             inpFld, chardiag,
+       I             inpFld, diagName,
        I             kLev, nLevs, bibjFlg, bi, bj, myThid )
 
      where:
@@ -117,7 +117,7 @@ diagnostic quantity with a field sent through the argument list.
 \end{verbatim}
 
 \noindent
-{\bf DIAGNOSTICS\_SCALE\_FILL} 
+{\bf DIAGNOSTICS\_SCALE\_FILL}
 (\filelink{pkg/diagnostics/diagnostics\_scale\_fill.F}{pkg-diagnostics-diagnostics\_scale\_fill.F}):
 This is a possible alternative routine to
 DIAGNOSTICS\_FILL which performs the same functions and has an additional option
@@ -125,19 +125,42 @@ to scale the field before filling or raise the field to a power before filling.
 
 \begin{verbatim}
         CALL DIAGNOSTICS_SCALE_FILL(
-       I             inpFld, scaleFact, power, chardiag,
+       I             inpFld, scaleFact, power, diagName,
        I             kLev, nLevs, bibjFlg, bi, bj, myThid )
 
 
-     where all the arguments are the same as for DIAGNOSTICS_FILL with 
+     where all the arguments are the same as for DIAGNOSTICS_FILL with
      the addition of:
         scaleFact   = Scaling factor to apply to the input field product
         power       = Integer power to which to raise the input field (before scaling)
 \end{verbatim}
 
 \noindent
+{\bf DIAGNOSTICS\_FRACT\_FILL}
+(\filelink{pkg/diagnostics/diagnostics\_fract\_fill.F}{pkg-diagnostics-diagnostics\_fract\_fill.F}):
+This is a specific alternative routine to DIAGNOSTICS\_[SCALE]\_FILL
+for the case of a diagnostics which is associated to
+a fraction-weight factor (referred to as the diagnostics "counter mate").
+This fraction-weight field is expected to vary during the simulation
+and is provided as argument to DIAGNOSTICS\_FRACT\_FILL
+in order to perform fraction-weighted time-average diagnostics.
+Note that the fraction-weight field has to correspond to the diagnostics
+counter-mate which has to be filled independently with a call to DIAGNOSTICS\_FILL.
+
+\begin{verbatim}
+        CALL DIAGNOSTICS_FRACT_FILL(
+       I             inpFld, fractFld, scaleFact, power, diagName,
+       I             kLev, nLevs, bibjFlg, bi, bj, myThid )
+
+
+     where all the arguments are the same as for DIAGNOSTICS_SCALE_FILL with
+     the addition of:
+        fractFld    = fraction used for weighted average diagnostics
+\end{verbatim}
+
+\noindent
 {\bf DIAGNOSTICS\_IS\_ON}: Function call to inquire whether a
-diagnostic is active and can be incremented. Useful when there is a
+diagnostic is active and should be incremented. Useful when there is a
 computation that must be done locally before a call to
 DIAGNOSTICS\_FILL. The call sequence:
 
@@ -150,86 +173,96 @@ DIAGNOSTICS\_FILL. The call sequence:
 \end{verbatim}
 
 \noindent
-{\bf DIAGNOSTICS\_GET\_POINTERS}
+{\bf DIAGNOSTICS\_COUNT}
 (\filelink{pkg/diagnostics/diagnostics\_utils.F}{pkg-diagnostics-diagnostics\_utils.F}):
-This subroutine retrieves the value of a the diagnostics pointers 
-that other routines require as input - can be useful if the diagnostics common 
-blocks are not local to a routine.
+This subroutine increments the diagnostics counter only.
+In general, the diagnostics counter is incremented at the same time as the
+diagnostics is filled, by calling DIAGNOSTICS\_FILL.
+However, there are few cases where the counter is not incremented
+during the filling (e.g., when the filling is done level per level but
+level 1 is skipped) and needs to be done explicitly with a call to subroutine
+DIAGNOSTICS\_COUNT. The call sequence is:
 
 \begin{verbatim}
-        CALL DIAGNOSTICS_GET_POINTERS(
-     I                       diagName, listId,
-     O                       ndId, ip,
-     I                       myThid )
+        CALL DIAGNOSTICS_COUNT(
+       I                        diagName, bi, bj, myThid )
 
      where:
-        diagName = diagnostic identificator name (8 characters long)
-        listId   = list number that specifies the output frequency
-        ndId     = diagnostics  Id number (in available diagnostics list)
-        ip       = diagnostics  pointer to storage array
-        myThid   = my Thread Id number
+        diagName  = name of diagnostic to increment the counter
+        bi        = X-direction tile number, or 0 if called outside bi,bj loops
+        bj        = Y-direction tile number, or 0 if called outside bi,bj loops
+        myThid    = my thread Id number
+
 \end{verbatim}
 
-\noindent
-{\bf GETDIAG} 
-(\filelink{pkg/diagnostics/diagnostics\_utils.F}{pkg-diagnostics-diagnostics\_utils.F}):
-This subroutine retrieves the value of a model diagnostic.  
-This routine is particularly useful when called from a
-user output routine, although it can be called from any routine.  This
-routine returns the time-averaged value of the diagnostic by dividing
-the current accumulated diagnostic value by its corresponding counter.
-This routine does not change the value of the diagnostic itself, that
-is, it does not replace the diagnostic with its time-average.  The
-calling sequence for this routine is givin by:
-
-\begin{verbatim}
-        CALL GETDIAG(
-       I             levreal, undef,
-       O             qtmp,
-       I             ndId, mate, ip, im, bi, bj, myThid )
-
-     where:
-        lev     = Model Level at which the diagnostic is desired
-        undef   = Fill value to be used when diagnostic is undefined
-        qtmp    = Time-Averaged Diagnostic Output
-        ndId    = diagnostics  Id number (in available diagnostics list)
-        mate    = counter diagnostic number if any ; 0 otherwise
-        ip      = pointer to storage array location for diag.
-        im      = pointer to storage array location for mate
-        bi      = X-direction tile number
-        bj      = Y-direction tile number
-        myThid  = my thread Id number
-\end{verbatim}
-
-\noindent
-{\bf DIAGNOSTICS\_CLRDIAG} 
-(\filelink{pkg/diagnostics/diagnostics\_clear.F}{pkg-diagnostics-diagnostics\_clear.F}):
-This subroutine initializes the values of model
-diagnostics to zero, and is particularly useful when called from user
-output routines to re-initialize diagnostics during the run.  
-The calling sequence is:
-
-\begin{verbatim}
-        CALL DIAGNOSTICS_CLRDIAG ( ipt, nLev, myThid )
-
-     where:
-        ipt    :: diagnostic pointer to storage array
-        nLev   :: number of levels (in storage array) to reset
-        myThid :: my Thread Id number
-\end{verbatim}
-
-\noindent
-The diagnostics are computed at various times and places within the
-GCM. Because MITgcm may employ a staggered grid, diagnostics may be
-computed at grid box centers, corners, or edges, and at the middle or
-edge in the vertical. Some diagnostics are scalars, while others are
-components of vectors. An internal array is defined which contains
-information concerning various grid attributes of each diagnostic. The
-GDIAG array (in common block {\tt diagnostics} in file {\tt
-  DIAGNOSTICS.h}) is internally defined as a character*10 variable, and
-is equivalenced to a character*1 "parse" array in output in order to
-extract the grid-attribute information.  The GDIAG array is described
-in Table \ref{tab:diagnostics:gdiag.tabl}.
+%\noindent
+%{\bf DIAGNOSTICS\_GET\_POINTERS}
+%(\filelink{pkg/diagnostics/diagnostics\_utils.F}{pkg-diagnostics-diagnostics\_utils.F}):
+%This subroutine retrieves the value of a the diagnostics pointers
+%that other routines require as input - can be useful if the diagnostics common
+%blocks are not local to a routine.
+%
+%\begin{verbatim}
+%        CALL DIAGNOSTICS_GET_POINTERS(
+%     I                       diagName, listId,
+%     O                       ndId, ip,
+%     I                       myThid )
+%
+%     where:
+%        diagName = diagnostic identificator name (8 characters long)
+%        listId   = list number that specifies the output frequency
+%        ndId     = diagnostics  Id number (in available diagnostics list)
+%        ip       = diagnostics  pointer to storage array
+%        myThid   = my Thread Id number
+%\end{verbatim}
+%
+%\noindent
+%{\bf GETDIAG}
+%%(\filelink{pkg/diagnostics/diagnostics\_utils.F}{pkg-diagnostics-diagnostics\_utils.F}):
+%This subroutine retrieves the value of a model diagnostic.
+%This routine is particularly useful when called from a
+%user output routine, although it can be called from any routine.  This
+%routine returns the time-averaged value of the diagnostic by dividing
+%the current accumulated diagnostic value by its corresponding counter.
+%This routine does not change the value of the diagnostic itself, that
+%is, it does not replace the diagnostic with its time-average.  The
+%%calling sequence for this routine is givin by:
+%
+%\begin{verbatim}
+%        CALL GETDIAG(
+%       I             levreal, undef,
+%       O             qtmp,
+%       I             ndId, mate, ip, im, bi, bj, myThid )
+%
+%     where:
+%%        lev     = Model Level at which the diagnostic is desired
+%        undef   = Fill value to be used when diagnostic is undefined
+%        qtmp    = Time-Averaged Diagnostic Output
+%        ndId    = diagnostics  Id number (in available diagnostics list)
+%        mate    = counter diagnostic number if any ; 0 otherwise
+%        ip      = pointer to storage array location for diag.
+%        im      = pointer to storage array location for mate
+%        bi      = X-direction tile number
+%        bj      = Y-direction tile number
+%        myThid  = my thread Id number
+%\end{verbatim}
+%
+%\noindent
+%{\bf DIAGNOSTICS\_CLRDIAG}
+%(\filelink{pkg/diagnostics/diagnostics\_clear.F}{pkg-diagnostics-diagnostics\_clear.F}):
+%This subroutine initializes the values of model
+%diagnostics to zero, and is particularly useful when called from user
+%output routines to re-initialize diagnostics during the run.
+%The calling sequence is:
+%
+%\begin{verbatim}
+%        CALL DIAGNOSTICS_CLRDIAG ( ipt, nLev, myThid )
+%
+%     where:
+%        ipt    :: diagnostic pointer to storage array
+%        nLev   :: number of levels (in storage array) to reset
+%        myThid :: my Thread Id number
+%\end{verbatim}
 
 \begin{table}
 \caption{Diagnostic Parsing Array}
@@ -237,23 +270,24 @@ in Table \ref{tab:diagnostics:gdiag.tabl}.
 \begin{center}
 \begin{tabular}{ |c|c|l| }
 \hline
-\multicolumn{3}{|c|}{\bf Diagnostic Parsing Array} \\ 
+\multicolumn{3}{|c|}{\bf Diagnostic Parsing Array} \\
 \hline
 \hline
 Array & Value & Description \\
 \hline
- parse(1)  & $\rightarrow$ S &  Scalar Diagnostic                 \\ 
-           & $\rightarrow$ U &  U-vector component Diagnostic     \\ 
+ parse(1)  & $\rightarrow$ S &  Scalar Diagnostic                 \\
+           & $\rightarrow$ U &  U-vector component Diagnostic     \\
            & $\rightarrow$ V &  V-vector component Diagnostic     \\ \hline
- parse(2)  & $\rightarrow$ U &  C-Grid U-Point                    \\ 
-           & $\rightarrow$ V &  C-Grid V-Point                    \\ 
-           & $\rightarrow$ M &  C-Grid Mass Point                 \\ 
+ parse(2)  & $\rightarrow$ U &  C-Grid U-Point                    \\
+           & $\rightarrow$ V &  C-Grid V-Point                    \\
+           & $\rightarrow$ M &  C-Grid Mass Point                 \\
            & $\rightarrow$ Z &  C-Grid Vorticity (Corner) Point   \\ \hline
  parse(3)  & $\rightarrow$   &  Used for Level Integrated output: cumulate levels \\
            & $\rightarrow$ r &  same but cumulate product by model level thickness \\
            & $\rightarrow$ R &  same but cumulate product by hFac \& level thickness \\ \hline
  parse(4)  & $\rightarrow$ P &  Positive Definite Diagnostic      \\ \hline
  parse(5)  & $\rightarrow$ C &  with Counter array                \\
+           & $\rightarrow$ P &  post-processed (not filled up) from other diags \\
            & $\rightarrow$ D &  Disabled Diagnostic for output    \\ \hline
  parse(6-8)&                 &  retired, formerly: 3-digit mate number \\ \hline
  parse(9)  & $\rightarrow$ U &  model-level plus 1/2  \\
@@ -272,39 +306,53 @@ Array & Value & Description \\
 \end{center}
 \end{table}
 
+\noindent
+The diagnostics are computed at various times and places within the
+GCM. Because MITgcm may employ a staggered grid, diagnostics may be
+computed at grid box centers, corners, or edges, and at the middle or
+edge in the vertical. Some diagnostics are scalars, while others are
+components of vectors. An internal array is defined which contains
+information concerning various grid attributes of each diagnostic. The
+GDIAG array (in common block {\tt diagnostics} in file {\tt
+  DIAGNOSTICS.h}) is internally defined as a character*16 variable, and
+is equivalenced to a character*1 "parse" array in output in order to
+extract the grid-attribute information.  The GDIAG array is described
+in Table \ref{tab:diagnostics:gdiag.tabl}.
 
 \noindent
 As an example, consider a diagnostic whose associated GDIAG parameter is equal
-to ``UUR\hspace{5mm}MR''.  From GDIAG we can determine that this diagnostic is a 
+to ``UUR\hspace{5mm}MR''.  From GDIAG we can determine that this diagnostic is a
 U-vector component located at the C-grid U-point, model mid-level (M)
 with Nr levels (last R).
 
 \noindent
 In this way, each Diagnostic in the model has its attributes (ie. vector or scalar,
-C-grid location, etc.) defined internally.  The Output routines use this information 
-in order to determine what type of transformations need to be performed.  Any 
+C-grid location, etc.) defined internally.  The Output routines use this information
+in order to determine what type of transformations need to be performed.  Any
 interpolations are done at the time of output rather than during each model step.
-In this way the User has flexibility in determining the type of gridded data which 
+In this way the User has flexibility in determining the type of gridded data which
 is output.
 
+%\newpage
 \subsection{Usage Notes}
 \label{sec:diagnostics:usersguide}
 
+\subsubsection{Using available diagnostics}
 \noindent
 To use the diagnostics package, other than enabling it in {\tt packages.conf}
 and turning the {\tt useDiagnostics} flag in {\tt data.pkg} to .TRUE., there are two
 further steps the user must take to enable the diagnostics package for
 output of quantities that are already defined in the GCM under an experiment's
-configuration of packages.  
+configuration of packages.
 A parameter file {\tt data.diagnostics} must be supplied in the run directory,
-and the file DIAGNOSTICS\_SIZE.h must be included in the 
-code directory.  The steps for defining a new (permanent or experiment-specific 
-temporary) diagnostic quantity will be outlined later. 
+and the file DIAGNOSTICS\_SIZE.h must be included in the
+code directory.  The steps for defining a new (permanent or experiment-specific
+temporary) diagnostic quantity will be outlined later.
 
-\noindent The namelist in parameter file {\tt data.diagnostics} will activate 
-a user-defined list of diagnostics quantities to be computed, 
-specify the frequency and type of output, the number of levels, and 
-the name of all the separate output files. 
+\noindent The namelist in parameter file {\tt data.diagnostics} will activate
+a user-defined list of diagnostics quantities to be computed,
+specify the frequency and type of output, the number of levels, and
+the name of all the separate output files.
 A sample {\tt data.diagnostics} namelist file:
 
 \begin{verbatim}
@@ -328,33 +376,16 @@ A sample {\tt data.diagnostics} namelist file:
 #  fileFlags(n)     : specific code (8c string) for output file "n"
 #--------------------
  &DIAGNOSTICS_LIST
-  fields(1:2,1) = 'UVEL    ','VVEL    ', 
-   levels(1:5,1) = 1.,2.,3.,4.,5., 
-   filename(1) = 'diagout1', 
-  frequency(1) = 86400., 
+  fields(1:2,1) = 'UVEL    ','VVEL    ',
+   levels(1:5,1) = 1.,2.,3.,4.,5.,
+   filename(1) = 'diagout1',
+  frequency(1) = 86400.,
   fields(1:3,2) = 'THETA   ','SALT    ',
-   filename(2) = 'diagout2', 
-  fileflags(2) = ' P1     ', 
-  frequency(2) = 3600., 
+   filename(2) = 'diagout2',
+  fileflags(2) = ' P1     ',
+  frequency(2) = 3600.,
  &
 
-#--------------------
-# Parameter for Diagnostics of per level statistics:
-#--------------------
-#  diagSt_mnc (logical): write stat-diags to NetCDF files (default=diag_mnc)
-#  diagSt_regMaskFile : file containing the region-mask to read-in
-#  nSetRegMskFile   : number of region-mask sets within the region-mask file
-#  set_regMask(i)   : region-mask set-index that identifies the region "i"
-#  val_regMask(i)   : region "i" identifier value in the region mask
-#--for each output-stream:
-#  stat_fName(n) : prefix of the output file name (max 80c long) for outp.stream n
-#  stat_freq(n):< 0 : write snap-shot output every |stat_freq| seconds
-#               > 0 : write time-average output every stat_freq seconds
-#  stat_phase(n)    : write at time = stat_phase + multiple of |stat_freq|
-#  stat_region(:,n) : list of "regions" (default: 1 region only=global)
-#  stat_fields(:,n) : list of selected diagnostics fields (8.c) in outp.stream n
-#                (see "available_diagnostics.log" file for the full list of diags)
-#--------------------
  &DIAG_STATIS_PARMS
  &
 \end{verbatim}
@@ -378,8 +409,8 @@ The parameters that should be checked are called numDiags, numLists,
 numperList, and diagSt\_size.
 
 \noindent numDiags (and diagSt\_size): \\
-\noindent All GCM diagnostic quantities are stored in the single diagnostic array QDIAG 
-which is located in the file 
+\noindent All GCM diagnostic quantities are stored in the single diagnostic array QDIAG
+which is located in the file
 \filelink{pkg/diagnostics/DIAGNOSTICS.h}{pkg-diagnostics-DIAGNOSTICS.h}
 and has the form:\\
 \begin{verbatim}
@@ -413,6 +444,8 @@ the number of separate output streams that the user specifies in the
 namelist file data.diagnostics.  The parameter numperList corresponds
 to the maximum number of diagnostics requested per output streams.
 
+\subsubsection{Adding new diagnostics to the code}
+
 \noindent
 In order to define and include as part of the diagnostic output any
 field that is desired for a particular experiment, two steps must be
@@ -431,9 +464,9 @@ that the main model or any package contains as part of its diagnostics
 menu, the subroutine DIAGNOSTICS\_ADDTOLIST should be called during the
 initialization phase of the main model or package. For the main model,
 the call should be made from subroutine DIAGNOSTICS\_MAIN\_INIT, and
-for a package, the call should probably be made from 
-%somewhere in the PACKAGES\_INIT\_FIXED sequence (probably 
-from inside the particular package's init\_fixed routine. 
+for a package, the call should probably be made from
+%somewhere in the PACKAGES\_INIT\_FIXED sequence (probably
+from inside the particular package's init\_fixed routine.
 A typical code sequence to set the
 input arguments to DIAGNOSTICS\_ADDTOLIST would look like:
 
@@ -448,8 +481,8 @@ input arguments to DIAGNOSTICS\_ADDTOLIST would look like:
 
 \noindent If the new diagnostic quantity is associated with either a
 vector pair or a diagnostic counter, the diagMate argument must be
-provided with the proper index corresponding to the ``mate''. 
-The output argument from DIAGNOSTICS\_ADDTOLIST that is called diagNum here 
+provided with the proper index corresponding to the ``mate''.
+The output argument from DIAGNOSTICS\_ADDTOLIST that is called diagNum here
 contains a running total of the number of diagnostics defined in the code up to
 any point during the run. The sequence number for the next two
 diagnostics defined (the two components of the vector pair, for
