@@ -296,7 +296,7 @@ prepend the field name to the listed attribute, e.g. for attribute
 \paragraph{Example configuration} ~ \\
 %
 The following block is taken from the \texttt{data.exf} file
-of the veification experiment \texttt{global\_with\_exf/}.
+of the verification experiment \texttt{global\_with\_exf/}.
 It defines attributes for the heat flux variable \texttt{hflux}:
 
 \begin{verbatim}
@@ -317,10 +317,10 @@ Its first record represents January 1st, 1992 at 00:00 UTC.
 Next record is 2592000 seconds (or 30 days) later.
 Note that the first record read and used by the EXF package corresponds to the
 value 'startDate1' set in data.cal.  Therefore if you want to start the EXF
-forcing from later in the 'ncep_qnet.bin' file, it suffices to specify
+forcing from later in the 'ncep\_qnet.bin' file, it suffices to specify
 startDate1 in data.cal as a date later than 19920101 (for example, startDate1
 = 19940101, for starting January 1st, 1994).  For this to work,
-'ncep_qnet.bin' must have at least 2 years of data because in this
+'ncep\_qnet.bin' must have at least 2 years of data because in this
 configuration EXF will read 2 years into the file to find the 1994 starting
 value.
 Interpolation on-the-fly is used (in the present case trivially
