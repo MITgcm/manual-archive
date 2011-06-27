@@ -1,4 +1,4 @@
-%  $Header: /u/gcmpack/manual/s_algorithm/text/nonlin_visc.tex,v 1.5 2010/08/30 23:09:18 jmc Exp $
+%  $Header: /u/gcmpack/manual/s_algorithm/text/nonlin_visc.tex,v 1.6 2011/06/27 02:10:49 dfer Exp $
 %  $Name:  $
 
 \section{Nonlinear Viscosities for Large Eddy Simulation}
@@ -174,7 +174,7 @@ shallow-water scaling is
 \end{equation}
 The coefficient {\sf viscC2Smag} is what an MITgcm user sets, and it
 replaces the proportionality in the Kolmogorov length with an
-equality.  Others \cite{grha00} suggest values of {\sf viscC2Smag}
+equality.  Others \cite{griffies:00} suggest values of {\sf viscC2Smag}
 from 2.2 to 4 for oceanic problems.  Smagorinsky \cite{Smagorinsky93}
 shows that values from 0.2 to 0.9 have been used in atmospheric
 modeling.
@@ -278,7 +278,7 @@ viscosities are provided by {\sf viscAhGridMin} and {\sf
   viscA4GridMin}, which if used, should be set to values $\ll 1$. $L$
 is roughly the gridscale (see below).
 
-Following \cite{grha00}, we note that there is a factor of $\Delta
+Following \cite{griffies:00}, we note that there is a factor of $\Delta
 x^2/8$ difference between the harmonic and biharmonic viscosities.
 Thus, whenever a non-dimensional harmonic coefficient is used in the
 MITgcm (\textit{eg.} {\sf viscAhGridMax}$<1$), the biharmonic equivalent is
@@ -305,7 +305,7 @@ viscosity:
 \frac{-\nabla^4_h \BFKav b}{\Pr\BFKRe_4}
 +\frac{\BFKpds{z} {\BFKav b}}{\Pr\BFKRe_v}\nonumber
 \end{eqnarray}
-\cite{grha00} propose that if one scales the biharmonic viscosity by
+\cite{griffies:00} propose that if one scales the biharmonic viscosity by
 stability considerations, then the biharmonic viscous terms will be
 similarly active to harmonic viscous terms at the gridscale of the
 model, but much less active on larger scale motions.  Similarly, a
@@ -353,13 +353,13 @@ L^6\sqrt{\left(\frac{{\sf viscC4Leith}}{\pi}\right)^{12}
   +\left(\frac{{\sf viscC4LeithD}}{\pi}\right)^{12}
   |\nabla^2 \nabla\cdot \BFKav {\bf \BFKtu}_h|^2}
 \end{eqnarray}
-Thus, the biharmonic scaling suggested by \cite{grha00} implies:
+Thus, the biharmonic scaling suggested by \cite{griffies:00} implies:
 \begin{eqnarray}
 |D| & \propto &  L|\nabla^2\BFKav {\bf \BFKtu}_h|\\
 |\nabla \BFKav \omega_3| & \propto & L|\nabla^2 \BFKav \omega_3|
 \end{eqnarray}
 It is not at all clear that these assumptions ought to hold.  Only the
-\cite{grha00} forms are currently implemented in MITgcm.
+\cite{griffies:00} forms are currently implemented in MITgcm.
 
 \subsubsection{Selection of Length Scale}
 Above, the length scale of the grid has been denoted $L$.  However, in
