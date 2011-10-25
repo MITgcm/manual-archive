@@ -5,9 +5,10 @@
 \end{rawhtml}
 
 There are two parts to the Redi/GM parameterization of geostrophic
-eddies. The first, the Redi scheme \citep{re82}, aims to mix tracer properties along isentropes
-(neutral surfaces) by means of a diffusion operator oriented along the
-local isentropic surface. The second part, GM \citep{gen-mcw:90,gen-eta:95}, adiabatically
+eddies. The first, the Redi scheme \citep{re82}, aims to mix tracer properties 
+along isentropes (neutral surfaces) by means of a diffusion operator oriented 
+along the local isentropic surface. 
+The second part, GM \citep{gen-mcw:90,gen-eta:95}, adiabatically
 re-arranges tracers through an advective flux where the advecting flow
 is a function of slope of the isentropic surfaces.
 
@@ -46,10 +47,10 @@ where $\kappa_\rho$ is the along isopycnal diffusivity and
 $\bf{K}_{Redi}$ is a rank 2 tensor that projects the gradient of
 $\tau$ onto the isopycnal surface. The unapproximated projection tensor is:
 \begin{equation}
-\bf{K}_{Redi} = \left(
+\bf{K}_{Redi} = \frac{1}{1 + |S|^2} \left(
 \begin{array}{ccc}
-1 + S_x& S_x S_y & S_x \\
-S_x S_y  & 1 + S_y & S_y \\
+1 + S_y^2& -S_x S_y & S_x \\
+-S_x S_y  & 1 + S_x^2 & S_y \\
 S_x & S_y & |S|^2 \\
 \end{array}
 \right)
