@@ -357,7 +357,8 @@ in \code{data}, see \code{verification/exp4} for an example.
 
 \paragraph{OBCS\_CALC\_STEVENS:} ~ \\
 (THE IMPLEMENTATION OF THESE BOUNDARY CONDITIONS IS NOT COMPLETE. SO
-FAR ONLY EASTERN AND WESTERN BOUNDARIES ARE SUPPORTED.) \\
+FAR ONLY EASTERN AND WESTERN BOUNDARIES ARE SUPPORTED. PASSIVE TRACERS
+AND NON-LINEAR FREE SURFACE ARE NOT SUPPORTED.) \\
 The boundary conditions following \citet{stevens:90} require the
 vertically averaged normal velocity (originally specified as a stream
 function along the open boundary) $\bar{u}_{ob}$ and the tracer fields
@@ -369,9 +370,21 @@ prescribed values the code computes the boundary values for the next
 timestep $n+1$ as follows (as an example, we use the notation for an
 eastern or western boundary):
 \begin{itemize}
-\item $u^{n+1}(y,z) = \bar{u}_{ob}(y) + (u')^{n}(y,z)$, where $(u')^{n}$
-  is the deviation from the vertically averaged velocity at timestep
-  $n$ one grid point inward from the boundary.
+\item $u^{n+1}(y,z) = \bar{u}_{ob}(y) + (u')^{n}(y,z)$, where
+  $(u')^{n}$ is the deviation from the vertically averaged velocity at
+  timestep $n$ on the boundary. $(u')^{n}$ is computed in the previous
+  time step $n$ from the intermediate velocity $u^*$ prior to the
+  correction step (see section \ref{sec:time_stepping}, e.g.,
+  eq.\,(\ref{eq:ustar-backward-free-surface})).
+  % and~(\ref{eq:vstar-backward-free-surface})). 
+  (This velocity is not
+  available at the beginning of the next time step $n+1$, when
+  S/R~OBCS\_CALC/OBCS\_CALC\_STEVENS are called, therefore it needs to
+  be saved in S/R~DYNAMICS by calling S/R~OBCS\_SAVE\_UV\_N and also
+  stored in a separate restart files
+  \verb+pickup_stevens[N/S/E/W].${iteration}.data+)
+%  Define CPP-flag OBCS\_STEVENS\_USE\_INTERIOR\_VELOCITY to use the
+%  velocity one grid point inward from the boundary. 
 \item If $u^{n+1}$ is directed into the model domain, the boudary
   value for tracer $\chi$ is restored to the prescribed values:
   \[\chi^{n+1} =   \chi^{n} + \frac{\Delta{t}}{\tau_\chi} (\chi_{ob} -
@@ -380,19 +393,23 @@ eastern or western boundary):
   to the advection by $u^{n+1}$.
 \item If $u^{n+1}$ is directed out of the model domain, the tracer
   $\chi^{n+1}$ on the boundary at timestep $n+1$ is estimated from
-  advection advected out of the domain with $u^{n+1}+c$, where $c$ is
+  advection out of the domain with $u^{n+1}+c$, where $c$ is
   a phase velocity estimated as
   $\frac{1}{2}\frac{\partial\chi}{\partial{t}}/\frac{\partial\chi}{\partial{x}}$. The
   numerical scheme is (as an example for an eastern boundary):
   \[\chi_{i_{b},j,k}^{n+1} =   \chi_{i_{b},j,k}^{n} + \Delta{t} 
   (u^{n+1}+c)_{i_{b},j,k}\frac{\chi_{i_{b},j,k}^{n}
     - \chi_{i_{b}-1,j,k}^{n}}{\Delta{x}_{i_{b},j}^{C}}\mbox{, if }u_{i_{b},j,k}^{n+1}>0,
-  \] where $i_{b}$ is the boundary index.
-
+  \] where $i_{b}$ is the boundary index.\\
   For test purposes, the phase velocity contribution or the entire
   advection can be turned off by setting the corresponding parameters
   \texttt{useStevensPhaseVel} and \texttt{useStevensAdvection} to
-  \texttt{.FALSE.}.\end{itemize} See \citet{stevens:90} for details.
+  \texttt{.FALSE.}.
+\end{itemize} 
+See \citet{stevens:90} for details. With this boundary condition
+specifying the exact net transport across the open boundary is simple,
+so that balancing the flow with (S/R~OBCS\_BALANCE\_FLOW, see next
+paragraph) is usually not necessary.
 
 \paragraph{OBCS\_BALANCE\_FLOW:} ~ \\
 %
