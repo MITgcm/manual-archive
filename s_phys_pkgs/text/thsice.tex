@@ -34,7 +34,7 @@ a variable specific heat resulting from brine pockets,
 the lower layer has a fixed heat capacity. A zero heat capacity snow
 layer lies above the ice. Heat fluxes at the top and bottom
 surfaces are used to calculate the change in ice and snow layer
-thickness. Grid cells of the ocean model are 
+thickness. Grid cells of the ocean model are
 either fully covered in ice or are open water. There is
 a provision to parametrize ice fraction (and leads) in this package.
 Modifications are discussed in small font following the
@@ -59,7 +59,7 @@ ocean model surface layer of water:
 \[
   {\bf frzmlt} = (T_f - SST) \frac{c_{sw} \rho_{sw} \Delta z}{\Delta t}
 \]
-where $c_{sw}$ is seawater heat capacity, 
+where $c_{sw}$ is seawater heat capacity,
 $\rho_{sw}$ is the seawater density, $\Delta z$
 is the ocean model upper layer thickness and $\Delta t$ is the model (tracer)
 timestep. The freezing temperature, $T_f=\mu S$ is a function of the
@@ -72,12 +72,12 @@ salinity.
 
 2) If there is ice present in the grid cell
    we call the main ice model routine {\it ice\_therm.F} (see below).
-   Output from this routine gives net heat and freshwater flux 
+   Output from this routine gives net heat and freshwater flux
    affecting the top of the ocean.
 
-Subroutine {\it ice\_forcing.F} uses these values to find the 
+Subroutine {\it ice\_forcing.F} uses these values to find the
 sea surface tendencies
-in grid cells. When there is ice present,  
+in grid cells. When there is ice present,
 the surface stress tendencies are
 set to zero; the ice model is purely thermodynamic and the
 effect of ice motion on the sea-surface is not examined.
@@ -96,7 +96,7 @@ open water and seaice; if {\bf compact} is between  0 and 1)}
 {\bf {\underline{ subroutine ICE\_FREEZE}}}
 
 This routine is called from {\it thermodynamics.F}
-after the new temperature calculation, {\it calc\_gt.F}, 
+after the new temperature calculation, {\it calc\_gt.F},
 but before {\it calc\_gs.F}.
 In {\it ice\_freeze.F}, any ocean upper layer grid cell
 with no ice cover, but with temperature below freezing,
@@ -106,7 +106,7 @@ the water column that have a temperature less than
 freezing. In this routine, any water below the surface
 that is below freezing is set to $T_f$.
 A call to
-{\it ice\_start.F} is made if {\bf frzmlt} $>0$, 
+{\it ice\_start.F} is made if {\bf frzmlt} $>0$,
 and salinity tendancy is updated for brine release.
 
 \noindent
@@ -126,11 +126,11 @@ the sea surface is brought into this routine as {\bf esurp}.
 The enthalpy of the 2 layers of any new ice is calculated as:
 \begin{eqnarray}
 q_1 & = & -c_{i}*T_f + L_i \nonumber \\
-q_2 & = & -c_{f}T_{mlt}+ c_{i}(T_{mlt}-T{f}) + L_i(1-\frac{T_{mlt}}{T_f} 
-\nonumber \\
+q_2 & = & -c_{f}T_{mlt}+ c_{i}(T_{mlt}-T{f}) + L_i(1-\frac{T_{mlt}}{T_f})
+\nonumber
 \end{eqnarray}
 where  $c_f$ is specific heat of liquid fresh water, $c_i$ is the
-specific heat of fresh ice, $L_i$ is latent heat of freezing, 
+specific heat of fresh ice, $L_i$ is latent heat of freezing,
 $\rho_i$ is density of ice and
 $T_{mlt}$ is melting temperature of ice with salinity of 1.
 The height of a new layer of ice is
@@ -148,12 +148,12 @@ new ice is formed over open water; the first freezing in the cell
 must have a height of {\bf himin0}; this determines the ice
 fraction {\bf compact}. If there is already ice in the grid cell,
 the new ice must have the same height and the new ice fraction
-is 
+is
 \[
 i_f=(1-\hat{i_f}) \frac{h_{i new}}{h_i}
 \]
 where $\hat{i_f}$ is ice fraction from previous timestep
-and $h_i$ is current ice height. Snow is redistributed 
+and $h_i$ is current ice height. Snow is redistributed
 over the new ice fraction. The ice fraction is
 not allowed to become larger than {\bf iceMaskmax} and
 if the ice height is above {\bf hihig} then freezing energy
@@ -169,7 +169,7 @@ under orginal ice due to freezing water.
 \noindent
 The main subroutine of this package is {\it ice\_therm.F} where the
 ice temperatures are calculated and the changes in ice and snow
-thicknesses are determined. Output provides the net heat and fresh 
+thicknesses are determined. Output provides the net heat and fresh
 water fluxes that force the top layer of the ocean model.
 
 If the current ice height is less than {\bf himin} then
@@ -181,19 +181,19 @@ the ice model calculation.
 
 We follow the procedure
 of Winton (1999) -- see equations 3 to 21 -- to calculate
-the surface and internal ice temperatures. 
+the surface and internal ice temperatures.
 The surface temperature is found from the balance of the
-flux at the surface $F_s$, the shortwave heat flux absorbed by the ice, 
+flux at the surface $F_s$, the shortwave heat flux absorbed by the ice,
 {\bf fswint}, and
 the upward conduction of heat through the snow and/or ice, $F_u$.
-We linearize $F_s$ about the surface temperature, $\hat{T_s}$, 
+We linearize $F_s$ about the surface temperature, $\hat{T_s}$,
 at the previous timestep (where \mbox{}$\hat{ }$ indicates the value at
 the  previous timestep):
 \[
 F_s (T_s) = F_s(\hat{T_s}) + \frac{\partial F_s(\hat{T_s)}}{\partial T_s}
 (T_s-\hat{T_s})
 \]
-where, 
+where,
 \[
 F_s  =  F_{sensible}+F_{latent}+F_{longwave}^{down}+F_{longwave}^{up}+ (1-
 \alpha) F_{shortwave}
@@ -203,10 +203,10 @@ and
  \frac{d F_s}{dT} = \frac{d F_{sensible}}{dT} + \frac{d F_{latent}}{dT}
 +\frac{d F_{longwave}^{up}}{dT}.
 \]
-$F_s$ and $\frac{d F_s}{dT}$ are currently calculated from the {\bf BULKF} 
+$F_s$ and $\frac{d F_s}{dT}$ are currently calculated from the {\bf BULKF}
 package described separately, but could also be provided by an atmospheric
-model. The surface albedo is calculated from the ice height and/or 
-surface temperature (see below, {\it srf\_albedo.F}) and the 
+model. The surface albedo is calculated from the ice height and/or
+surface temperature (see below, {\it srf\_albedo.F}) and the
 shortwave flux absorbed in the ice is
 \[
 {\bf fswint} = (1-e^{\kappa_i h_i})(1-\alpha) F_{shortwave}
@@ -257,9 +257,9 @@ E_{bot} &= & (\frac{4K_i(T_2-T_f)}{h_i}-F_b) \Delta t
 \end{eqnarray}
 where $F_b$ is the heat flux at the ice bottom due to the sea surface
 temperature variations from freezing.
-If $T_{sst}$ is above freezing, $F_b=c_{sw} \rho_{sw} 
+If $T_{sst}$ is above freezing, $F_b=c_{sw} \rho_{sw}
 \gamma (T_{sst}-T_f)u^{*}$, $\gamma$ is the heat transfer coefficient
-and $u^{*}=QQ$ is frictional velocity between ice 
+and $u^{*}=QQ$ is frictional velocity between ice
 and water. If $T_{sst}$ is below freezing,
 $F_b=(T_f - T_{sst})c_f \rho_f \Delta z /\Delta t$ and set $T_{sst}$
 to $T_f$. We also
@@ -268,7 +268,7 @@ and set those layers to $T_f$.
 
 If $E_{top}>0$ we melt snow from the surface, if all the snow is melted
 and there is energy left, we melt the ice. If the ice is all gone
-and there is still energy left, we apply the left over energy to 
+and there is still energy left, we apply the left over energy to
 heating the ocean model upper layer (See Winton, 1999, equations 27-29).
 Similarly if $E_{bot}>0$ we melt ice from the bottom. If all the ice
 is melted, the snow is melted (with energy from the ocean model upper layer
@@ -286,7 +286,7 @@ q_2 = \frac{ \hat{h_i}/2 \hat{q_2} + \Delta h_i q_{bot} }
 If there is a ice layer and the overlying air temperature is
 below 0$^o$C then any precipitation, $P$ joins the snow layer:
 \[
-\Delta h_s  = -P \frac{\rho_f}{\rho_s} \Delta t, 
+\Delta h_s  = -P \frac{\rho_f}{\rho_s} \Delta t,
 \]
 $\rho_f$ and $\rho_s$ are the fresh water and snow densities.
 Any evaporation, similarly, removes snow or ice from the surface.
@@ -342,9 +342,9 @@ the surface albedo. There are two calculations provided here:
 \[ \alpha = f_s \alpha_s + (1-f_s) (\alpha_{i_{min}}
          + (\alpha_{i_{max}}- \alpha_{i_{min}}) (1-e^{-h_i/h_{\alpha}}))
 \]
-where $f_s$ is 1 if there is snow, 0 if not; the snow albedo, 
+where $f_s$ is 1 if there is snow, 0 if not; the snow albedo,
 $\alpha_s$ has two values
-depending on whether $T_s<0$ or not; $\alpha_{i_{min}}$ and 
+depending on whether $T_s<0$ or not; $\alpha_{i_{min}}$ and
 $\alpha_{i_{max}}$ are ice albedos for thin melting ice, and
 thick bare ice respectively, and $h_{\alpha}$ is a scale
 height.
@@ -430,7 +430,7 @@ Finds averages and writes out diagnostics
 {\bf {\underline{Common Blocks}}}
 
 \noindent
-{\it ICE.h}: Ice Varibles, also 
+{\it ICE.h}: Ice Varibles, also
 {\bf relaxlat} and {\bf startIceModel}
 
 \noindent
@@ -438,7 +438,7 @@ Finds averages and writes out diagnostics
 from {\it ice\_diags.F}
 
 \noindent
-{\it BULKF\_ICE\_CONSTANTS.h} (in {\bf BULKF} package): 
+{\it BULKF\_ICE\_CONSTANTS.h} (in {\bf BULKF} package):
 all the parameters need by the ice model
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -485,7 +485,7 @@ models.
 \begin{verbatim}
 
 ------------------------------------------------------------------------
-<-Name->|Levs|<-parsing code->|<--  Units   -->|<- Tile (max=80c) 
+<-Name->|Levs|<-parsing code->|<--  Units   -->|<- Tile (max=80c)
 ------------------------------------------------------------------------
 SI_Fract|  1 |SM P    M1      |0-1             |Sea-Ice fraction  [0-1]
 SI_Thick|  1 |SM PC197M1      |m               |Sea-Ice thickness (area weighted average)
@@ -511,7 +511,7 @@ SIsOcMxL|  1 |SM P    M1      |psu             |ocean mixed layer salinity
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \vspace{1cm}
 
-\noindent 
+\noindent
 {\bf {\underline{References}}}
 
 \noindent
