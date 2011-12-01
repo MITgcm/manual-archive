@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/text/shelfice.tex,v 1.4 2010/08/30 23:09:22 jmc Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/text/shelfice.tex,v 1.5 2011/12/01 11:59:46 mlosch Exp $
 % $Name:  $
 
 \subsection{SHELFICE Package}
@@ -94,7 +94,7 @@ and \code{data.shelfice} (read in \code{shelfice\_readparms.F}).
 ~ \\
 %
 A package is switched on/off at run-time by setting
-(e.g. for SHELFICE) \code{useSHELFICE = .TRUE.} in \code{data.pkg}.
+(e.g.\ for SHELFICE) \code{useSHELFICE = .TRUE.} in \code{data.pkg}.
 
 \paragraph{General flags and parameters}
 ~ \\
@@ -137,7 +137,7 @@ Table~\ref{tab:pkg:shelfice:runtimeparms} lists all run-time parameters.
       &  %---ref---
       \\
       SHELFICEHeatCapacity\_Cp & 2000.0E+00
-      &   latent heat of fusion ($c_{p,I}$)
+      &   specific heat capacity of ice ($c_{p,I}$)
       &  %---ref---
       \\
       rhoShelfIce              &  917.0E+00
@@ -407,7 +407,7 @@ $T_{f}$ which is computed from a linear equation of state
 \begin{equation}
   \label{eq:helmerfreeze}
     T_{f} = (0.0901 - 0.0575\ S_{b})^{\circ}
-    - 7.61 \times 10^{-4}\frac{^{\circ}}{\text{dBar}}\ p_{b} 
+    - 7.61 \times 10^{-4}\frac{\text{K}}{\text{dBar}}\ p_{b} 
 \end{equation}
 with the salinity $S_{b}$ and the pressure $p_{b}$ (in dBar) in the
 cell at the ice-water interface. From the salt budget, the salt flux
@@ -522,7 +522,7 @@ C ...
 C | | |-EXTERNAL_FORCING_T :: Problem specific forcing for temperature.
 C | | |-SHELFICE_FORCING_T :: apply heat fluxes from ice shelf model
 C ...
-C | | |-EXTERNAL_FORCING_S :: Problem specific forcing for temperature.
+C | | |-EXTERNAL_FORCING_S :: Problem specific forcing for salinity.
 C | | |-SHELFICE_FORCING_S :: apply fresh water fluxes from ice shelf model
 C ...
 C | |-DYNAMICS             :: Momentum equations driver.
@@ -586,5 +586,5 @@ Table \ref{tab:pkg:shelfice:diagnostics}.
 
 %%% Local Variables: 
 %%% mode: latex
-%%% TeX-master: "../manual"
+%%% TeX-master: "../../manual"
 %%% End: 
