@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/text/seaice.tex,v 1.18 2011/08/13 15:50:05 heimbach Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/text/seaice.tex,v 1.19 2011/12/14 11:22:42 mlosch Exp $
 % $Name:  $
 
 %%EH3  Copied from "MITgcm/pkg/seaice/seaice_description.tex"
@@ -317,7 +317,7 @@ The ice strain rate is given by
 The maximum ice pressure $P_{\max}$, a measure of ice strength, depends on
 both thickness $h$ and compactness (concentration) $c$:
 \begin{equation}
-  P_{\max} = P^{*}c\,h\,e^{[C^{*}\cdot(1-c)]},
+  P_{\max} = P^{*}c\,h\,\exp\{-C^{*}\cdot(1-c)\},
 \label{eq:icestrength}
 \end{equation}
 with the constants $P^{*}$ (run-time parameter \code{SEAICE\_strength}) and
