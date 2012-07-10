@@ -51,52 +51,52 @@ U
 \sim \sqrt{ \frac{g \Delta \rho H}{\rho_0} }
 \sim \sqrt{B_0 t}
 \end{equation}
-A steady state is rapidly established in which the buoyancy flux out of 
-the cooling region is balanced by the surface buoyancy loss. 
-Then 
+A steady state is rapidly established in which the buoyancy flux out of
+the cooling region is balanced by the surface buoyancy loss.
+Then
 \begin{equation}
-U \sim (B_0 R)^{1/3} \mbox{  ;  } \Delta \rho \sim \frac{\rho_0}{g H} (B_0 R)^{2/3} 
+U \sim (B_0 R)^{1/3} \mbox{  ;  } \Delta \rho \sim \frac{\rho_0}{g H} (B_0 R)^{2/3}
 \end{equation}
-The Froude number of the flow on the shelf is close to unity (but in 
-practice slightly less than unity, giving subcritical flow). 
-When the flow reaches the slope, it accelerates, so that it may become 
-supercritical (provided the slope angle $ \alpha $ is steep enough). 
-In this case, a hydraulic control is established at 
-the shelf break. On the slope, where the Froude number is greater 
-than one, and gradient Richardson number 
-(defined as $Ri \sim g' h^*/U^2$ where $h^*$ is the thickness of the 
-interface between dense and ambient fluid) is reduced 
-below 1/4, Kelvin-Helmholtz instability is possible, and leads to 
-entrainment of ambient fluid into the plume, modifying the 
-density, and hence the acceleration down the slope. 
-Kelvin-Helmholtz instability is suppressed at low Reynolds and 
-Peclet numbers given by 
+The Froude number of the flow on the shelf is close to unity (but in
+practice slightly less than unity, giving subcritical flow).
+When the flow reaches the slope, it accelerates, so that it may become
+supercritical (provided the slope angle $ \alpha $ is steep enough).
+In this case, a hydraulic control is established at
+the shelf break. On the slope, where the Froude number is greater
+than one, and gradient Richardson number
+(defined as $Ri \sim g' h^*/U^2$ where $h^*$ is the thickness of the
+interface between dense and ambient fluid) is reduced
+below 1/4, Kelvin-Helmholtz instability is possible, and leads to
+entrainment of ambient fluid into the plume, modifying the
+density, and hence the acceleration down the slope.
+Kelvin-Helmholtz instability is suppressed at low Reynolds and
+Peclet numbers given by
 \begin{equation}
 Re \sim \frac{U h}{ \nu} \sim \frac{(B_0 R)^{1/3} h}{\nu} \mbox{  ;  } Pe = Re Pr
 \end{equation}
-where $h$ is the depth of the dense fluid on the slope. 
-Hence this experiment is carried out in the high Re, Pe regime. 
-A further constraint is that the convective heat flux must be much greater 
-than the diffusive heat flux (Nusselt number $>> 1$). 
-Then 
+where $h$ is the depth of the dense fluid on the slope.
+Hence this experiment is carried out in the high Re, Pe regime.
+A further constraint is that the convective heat flux must be much greater
+than the diffusive heat flux (Nusselt number $>> 1$).
+Then
 \begin{equation}
 Nu = \frac{U h^* }{\kappa} >> 1
 \end{equation}
 Finally, since we have assumed that the convective mixing on the shelf
-occurs in a much shorter time than the horizontal equilibration, 
-this implies $H/R << 1$.  
+occurs in a much shorter time than the horizontal equilibration,
+this implies $H/R << 1$.
 
-Hence to summarize the important nondimensional parameters, and 
+Hence to summarize the important nondimensional parameters, and
 the limits we are considering:
 \begin{equation}
 \frac{H}{R} << 1 \mbox{ ; } Re >> 1 \mbox{  ; } Pe >> 1 \mbox{  ; } Nu >> 1
-\mbox{  ;  } \mbox{  ; } Ri < 1/4 
+\mbox{  ;  } \mbox{  ; } Ri < 1/4
 \end{equation}
-In addition we are assuming that the slope is steep enough to provide 
-sufficient acceleration  to the gravity plume, but nonetheless much less 
-that $1:1$, since many Kelvin-Helmholtz billows appear on the slope, 
-implying horizontal lengthscale of the slope $>>$ the depth of the 
-dense fluid. 
+In addition we are assuming that the slope is steep enough to provide
+sufficient acceleration  to the gravity plume, but nonetheless much less
+that $1:1$, since many Kelvin-Helmholtz billows appear on the slope,
+implying horizontal lengthscale of the slope $>>$ the depth of the
+dense fluid.
 
 \subsection{Configuration}
 %\label{www:tutorials}
@@ -151,9 +151,9 @@ where
 Nx & = & 320 \\
 Lx & = & 6400 \;\; \mbox{(m)} \\
 \Delta x_1 & = & \frac{2}{3} \frac{Lx}{Nx} \;\; \mbox{(m)} \\
-\Delta x_2 & = & \frac{Lx/2}{Nx-Lx/2 \Delta x_1} \;\; \mbox{(m)} \\
+\Delta x_2 & = & \frac{Lx/2}{Nx-Lx/(2 \Delta x_1)} \;\; \mbox{(m)} \\
 i_s & = & Lx/( 2 \Delta x_1 ) \\
-w & = & 40 
+w & = & 40
 \end{eqnarray*}
 Here, $\Delta x_1$ is the resolution on the shelf, $\Delta x_2$ is the
 resolution in deep water and $Nx$ is the number of points in the
@@ -213,7 +213,7 @@ algorithm and open-boundaries:
 \#define ALLOW\_NONHYDROSTATIC} in {\tt code/CPP\_OPTIONS.h} and
 activated with {\bf nonHydrostatic=.TRUE.,} in namelist {\em PARM01}
 of {\tt input/data}.
-\item Open boundaries are enabled by adding line {\bf obcs} to 
+\item Open boundaries are enabled by adding line {\bf obcs} to
 package configuration file
 {\tt code/packages.conf} and activated via {\bf useOBCS=.TRUE,} in
 namelist {\em PACKAGES} of {\tt input/data.pkg}.
