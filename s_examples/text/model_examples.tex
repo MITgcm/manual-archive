@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_examples/text/model_examples.tex,v 1.24 2011/05/11 19:17:52 jmc Exp $
+% $Header: /u/gcmpack/manual/s_examples/text/model_examples.tex,v 1.25 2013/03/26 13:21:28 jmc Exp $
 % $Name:  $
 
 \section[MITgcm Example Experiments]{Example experiments}
@@ -23,7 +23,7 @@ Each example is briefly described below.
 \subsection{Full list of model examples}
 
 \begin{enumerate}
-  
+
 \item \texttt{tutorial\_advection\_in\_gyre} - Test of various
   advection schemes in a single-layer double-gyre experiment.
   This experiment is described in detail in section
@@ -34,7 +34,7 @@ Each example is briefly described below.
   \ref{sec:eg-fourlayer}.
 
 \item \texttt{tutorial\_barotropic\_gyre} - Single layer, ocean double
-  gyre (barotropic with free-surface). 
+  gyre (barotropic with free-surface).
   This experiment is described in detail in section \ref{sec:eg-baro}.
 
 \item \texttt{tutorial\_cfc\_offline} - Offline form of the MITgcm to
@@ -65,7 +65,7 @@ Each example is briefly described below.
 \item \texttt{tutorial\_held\_suarez\_cs} - 3D atmosphere dynamics
   using Held and Suarez (1994) forcing on cubed sphere grid.  This
   experiment is described in detail in section \ref{sec:eg-hs}.
-  
+
 \item \texttt{tutorial\_offline} - Offline form of the MITgcm to study
   advection of a passive tracer.  This experiment is described in
   detail in section \ref{sec:eg-offline}.
@@ -80,32 +80,32 @@ Each example is briefly described below.
 
 \item \texttt{adjustment.128x64x1} - Barotropic adjustment problem on
   latitude longitude grid with 128x64 grid points ($2.8^\circ$ resolution).
-  
+
 \item \texttt{adjustment.cs-32x32x1} - Barotropic adjustment problem on
   cube sphere grid with 32x32 points per face (roughly $2.8^\circ$
   resolution).\\
   Also contains a non-linear free-surface adjustment version ({\it input.nlfs/}).
-  
+
 \item \texttt{advect\_cs} Two-dimensional passive advection test on
   cube sphere grid (32x32 grid points per face, roughly $2.8^\circ$)
-  
+
 \item \texttt{advect\_xy} - Two-dimensional (horizontal plane) passive
   advection test on Cartesian grid.\\
   Also contains an additional set-up using Adams-Bashforth 3 ({\it input.ab3\_c4/}).
-  
+
 \item \texttt{advect\_xz} - Two-dimensional (vertical plane) passive
   advection test on Cartesian grid.
-  
+
 \item \texttt{aim.5l\_Equatorial\_Channel}
-  - 5-levels Intermediate Atmospheric physics, 
+  - 5-levels Intermediate Atmospheric physics,
   3D Equatorial Channel configuration.
-  
+
 \item \texttt{aim.5l\_LatLon} - 5-levels Intermediate Atmospheric physics,
   Global configuration, on latitude longitude grid with 128x64x5 grid
   points ($2.8^\circ$ resolution).
-  
+
 \item \texttt{aim.5l\_cs} - 5-levels Intermediate Atmospheric physics,
-  Global configuration on cube sphere grid 
+  Global configuration on cube sphere grid
   (32x32 grid points per face, roughly $2.8^\circ$).\\
   Also contains an additional set-up with an ocean mixed layer and thermodynamics
   sea-ice ({\it input.thSI/}).
@@ -116,13 +116,13 @@ Each example is briefly described below.
 \item \texttt{cfc\_example} - Global ocean with online computation and
   advection of CFC11 and CFC12.
 
-\item \texttt{cpl\_aim+ocn} - Coupled Ocean - Atmosphere realistic 
-  configuration on cubed-sphere cs32 horizontal grid, 
+\item \texttt{cpl\_aim+ocn} - Coupled Ocean - Atmosphere realistic
+  configuration on cubed-sphere cs32 horizontal grid,
   using Intermediate Atmospheric physics ({\it pkg/aim\_v23})
   thermodynamics seaice ({\it pkg/thsice}) and land packages.
   on cubed-sphere cs32 in a realistics configuration.
 
-\item \texttt{cpl\_atm2d+ocn} - Coupled Ocean - Atmosphere realistic 
+\item \texttt{cpl\_atm2d+ocn} - Coupled Ocean - Atmosphere realistic
   configuration using 2-D Atmospheric Model ({\it pkg/atm2d}).
 
 \item \texttt{deep\_anelastic} - Convection simulation on a giant planet:
@@ -131,13 +131,13 @@ Each example is briefly described below.
 
 \item \texttt{dome} - Idealized 3D test of a density-driven bottom current.
 
-\item \texttt{exp2} - Old version of the global ocean experiment (no GM, 
+\item \texttt{exp2} - Old version of the global ocean experiment (no GM,
       no partial-cells).\\
   Also contains an additional set-up with ridid-lid ({\it input.rigidLid/}).
 
 \item \texttt{exp4} - Flow over a Gaussian bump in open-water or
   channel with open boundaries.
-  
+
 \item \texttt{exp5} - Deep convection.
 
 \item \texttt{fizhi-cs-32x32x40} - Global atmospheric simulation with
@@ -154,7 +154,7 @@ Each example is briefly described below.
   dynamical forcing running on different vertical grids.
 
 \item \texttt{flt\_example} - Example of using float package.
-  
+
 \item \texttt{front\_relax} - Relaxation of an ocean thermal front
   (test for Gent/McWilliams scheme). 2D (Y-Z).\\
   Also contains an additional set-up with Mixed-Layer Eddy parameterization
@@ -165,13 +165,13 @@ Each example is briefly described below.
 
 \item \texttt{global2x2\_tot} - ECCO production configuration version 0
 
-\item \texttt{global\_ocean.90x40x15} Global ocean simulation at 4x4 
+\item \texttt{global\_ocean.90x40x15} Global ocean simulation at 4x4
   degree resolution. Similar to tutorial\_global\_oce\_latlon, with
   quasi-non-hydrostatics and non-hydrostatic metric terms.\\
   Also contains an adjoint set-up ({\it code\_ad/, input\_ad/}).
 
 \item \texttt{global\_ocean.cs32x15} - Global ocean experiment on the
-  cubed sphere grid.\\ 
+  cubed sphere grid.\\
   Also contains additional set-ups:
   \begin{enumerate}
    \item non-hydrostratic with biharmonic viscosity ({\it input.viscA4/})
@@ -191,11 +191,11 @@ Each example is briefly described below.
 
 \item \texttt{hs94.128x64x5} - 3D atmosphere dynamics on lat-lon grid,
   using Held and Suarez '94 forcing.
-  
-\item \texttt{hs94.1x64x5} - Zonal averaged atmosphere dynamics 
+
+\item \texttt{hs94.1x64x5} - Zonal averaged atmosphere dynamics
   using Held and Suarez '94 forcing.\\
   Also contains an adjoint set-up ({\it code\_ad/, input\_ad/}).
-  
+
 \item \texttt{hs94.cs-32x32x5} - 3D atmosphere dynamics using Held and
   Suarez (1994) forcing on the cubed sphere. 5 vertical levels.\\
   Also contains an additional set-up with Implicit Internal gravity waves
@@ -251,8 +251,8 @@ Each example is briefly described below.
    \item with sea-ice ({\it pkg/seaice}) thermodynamics ({\it input.seaicetd/})
    \item an adjoint test ({\it code\_ad/, input\_ad/}).
   \end{enumerate}
-  
-\item \texttt{OpenAD} simple Adjoint experiement (used also to test 
+
+\item \texttt{OpenAD} simple Adjoint experiement (used also to test
   open-AD compiler)
 
 \item \texttt{rotating\_tank} Rotating tank simulation in cylindrical
@@ -270,13 +270,13 @@ Each example is briefly described below.
 
 \item \texttt{vermix} Simple test in a small domain (3 columns) for
   ocean vertical mixing schemes. The standard set-up ({\it input/}) uses
-  KPP scheme.\\
+  KPP scheme \cite[]{lar-eta:94}.\\
   Also contains additional set-ups:
   \begin{enumerate}
-   \item with Gaspar et al. (1990) ({\it pkg/ggl90}) scheme ({\it input.ggl90/})
-   \item with Mellor \& Yamada (1982) level 2. ({\it pkg/my82}) scheme ({\it input.my82/})
-   \item with Paluszkiewicz \& Romea (1997) ({\it pkg/opps}) scheme ({\it input.opps/})
-   \item with Pacanowski \& Philander (1981) ({\it pkg/pp81}) scheme ({\it input.pp81/})
+   \item with \cite{gas-eta:90} ({\it pkg/ggl90}) scheme ({\it input.ggl90/})
+   \item with \cite{Mellor:Yamada1982} level 2. ({\it pkg/my82}) scheme ({\it input.my82/})
+   \item with \cite{pal-rom:97} ({\it pkg/opps}) scheme ({\it input.opps/})
+   \item with \cite{Pacanowski:Philander1981} ({\it pkg/pp81}) scheme ({\it input.pp81/})
   \end{enumerate}
 
 \end{enumerate}
@@ -302,20 +302,20 @@ Each example directory has the following subdirectories:
   \item \texttt{code/CPP\_EEOPTIONS.h}: declares CPP keys relative to
     the ``execution environment'' part of the code. The default
     version is located in \texttt{eesupp/inc}.
-  
+
   \item \texttt{code/CPP\_OPTIONS.h}: declares CPP keys relative to
     the ``numerical model'' part of the code. The default version is
     located in \texttt{model/inc}.
-  
+
   \item \texttt{code/SIZE.h}: declares size of underlying
     computational grid.  The default version is located in
     \texttt{model/inc}.
   \end{itemize}
-  
+
   In addition, other include files and subroutines might be present in
   \texttt{code} depending on the particular experiment. See Section 2
   for more details.
-  
+
 \item \texttt{input}: contains the input data files required to run
   the example. At a minimum, the \texttt{input} directory contains the
   following files:
@@ -323,16 +323,16 @@ Each example directory has the following subdirectories:
   \begin{itemize}
   \item \texttt{input/data}: this file, written as a namelist,
     specifies the main parameters for the experiment.
-  
+
   \item \texttt{input/data.pkg}: contains parameters relative to the
     packages used in the experiment.
-  
+
   \item \texttt{input/eedata}: this file contains ``execution
     environment'' data. At present, this consists of a specification
     of the number of threads to use in $X$ and $Y$ under multithreaded
     execution.
   \end{itemize}
-  
+
   In addition, you will also find in this directory the forcing and
   topography files as well as the files describing the initial state
   of the experiment.  This varies from experiment to experiment. See
