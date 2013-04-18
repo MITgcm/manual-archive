@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.32 2013/02/26 21:23:56 jmc Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/time_stepping.tex,v 1.33 2013/04/18 03:36:16 jmc Exp $
 % $Name:  $
 
 This chapter lays out the numerical schemes that are
@@ -924,7 +924,7 @@ at the same point in the code.
 
 
 
-\subsection{Crank-Nickelson barotropic time stepping}
+\subsection{Crank-Nicolson barotropic time stepping}
 \label{sec:freesurf-CrankNick}
 
 The full implicit time stepping described previously is
@@ -936,7 +936,7 @@ for the barotropic flow divergence ($\gamma$).
 \\
 For instance, $\beta=\gamma=1$ is the previous fully implicit scheme;
 $\beta=\gamma=1/2$ is the non damping (energy conserving), unconditionally
-stable, Crank-Nickelson scheme; $(\beta,\gamma)=(1,0)$ or $=(0,1)$
+stable, Crank-Nicolson scheme; $(\beta,\gamma)=(1,0)$ or $=(0,1)$
 corresponds to the forward - backward scheme that conserves energy but is
 only stable for small time steps.\\
 In the code, $\beta,\gamma$ are defined as parameters, respectively
@@ -999,11 +999,11 @@ to the free-surface variations ($\epsilon_{fw}=1$,
 {\bf useRealFreshWater}{\em=TRUE} in parameter file {\em data}).
 In order to remain consistent with the tracer equation, specially in
 the non-linear free-surface formulation, this term is also
-affected by the Crank-Nickelson time stepping. The RHS reads:
+affected by the Crank-Nicolson time stepping. The RHS reads:
 $\epsilon_{fw} ( \gamma (P-E)^{n+1/2} + (1-\gamma) (P-E)^{n-1/2} )$
 %\item The non-hydrostatic part of the code has not yet been
 %updated, and therefore cannot be used with $(\beta,\gamma) \neq (1,1)$.
-\item The stability criteria with Crank-Nickelson time stepping
+\item The stability criteria with Crank-Nicolson time stepping
 for the pure linear gravity wave problem in cartesian coordinates is:
 \begin{itemize}
 \item $\beta + \gamma < 1$ : unstable
