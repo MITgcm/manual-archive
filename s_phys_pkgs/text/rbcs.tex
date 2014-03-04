@@ -30,51 +30,31 @@ each of these
 can be relaxed or not and can have its own timescale
 $\tau_T$. These are set in data.rbcs (see below).
 
+
 \subsubsection {Key subroutines and parameters}
 
-The only change need in the code might be in {RBCS.h}, for
-PARAMETER(maskLEN = 3 ), if you need more than 3
-masks (see below).
+The only compile-time parameter you are likely to have to change is in {RBCS.h},
+the number of masks, PARAMETER(maskLEN = 3 ), see below.
+
+The runtime parameters are set in {\it data.rbcs}:
 
 \vspace{.5cm}
-
 \noindent
-There are runtime parameters
-set in {\it data.rbcs}:\\
-These runtime options include\\
 Set in {RBCS\_PARM01}:\\
-%$\bullet$ Parameters to set the timing for periodic fields to
-%relax to are to
-%be loaded are:
-$\bullet$ {\bf rbcsForcingPeriod}, {\bf rbcsForcingCycle}: timing of
-fields to relax to.
-The former is how often to load, the latter is how often to cycle
-through those fields (eg. period could be monthly and cycle one year).
-rbcs\_ForcingCycle=0 means non-cyclic forcing, and
-rbcs\_ForcingPeriod=0 non-time-varying forcing, where the relax field
-is only read in at the beginning of the run and kept constant
-the rest of the run. Default is 0.
-\\
-$\bullet$  {\bf rbcsForcingOffset}: time offset of forcing fields (in seconds).
-If the forcing fields are time averages over forcing periods,
-then this must be set to the time at the beginning of the
-first forcing period.  The fields will then be placed at time
-rbcsForcingOffset+rbcsForcingPeriod/2 for interpolation.  Default is 0.
-If you use snapshots and the first snapshot is at $t_1$, you need to set
-\[
-  {\rm rbcsForcingOffset} = t_1 - {\rm rbcsForcingPeriod}/2
-\]
-(This used to be rbcsInIter and was in units of iterations.)\\
+$\bullet$ {\bf rbcsForcingPeriod}: time interval between forcing fields
+(in seconds), zero means constant-in-time forcing.\\
+$\bullet$ {\bf rbcsForcingCycle}: repeat cycle of forcing fields (in seconds),
+zero means non-cyclic forcing.\\
+$\bullet$  {\bf rbcsForcingOffset}: time offset of forcing fields
+(in seconds, default 0); this is relative to time averages starting at
+$t=0$, i.e., the first forcing record/file is placed at
+${\rm rbcsForcingOffset+rbcsForcingPeriod}/2$; see below for examples.\\
 $\bullet$  {\bf rbcsSingleTimeFiles}: true or false (default false),
-if true, forcing fields are given 1 file per time labeled by iteration number.\\
+if true, forcing fields are given 1 file per rbcsForcingPeriod.\\
 $\bullet$  {\bf deltaTrbcs}: time step used to compute the iteration numbers
 for rbcsSingleTimeFiles=T.\\
 $\bullet$  {\bf rbcsIter0}: shift in iteration numbers used to label files if
-rbcsSingleTimeFiles=T (default 0).  If the file for the first forcing period
-(as specified by rbcsForcingOffset) has label $i_1$, you need to set
-\[
-  {\rm rbcsIter0} = i_1 - {\rm rbcsForcingPeriod}/{\rm deltaTrbcs}
-\]
+rbcsSingleTimeFiles=T (default 0, see below for examples).\\
 $\bullet$  {\bf useRBCtemp}: true or false (default false)\\
 $\bullet$  {\bf useRBCsalt}: true or false (default false)\\
 $\bullet$  {\bf useRBCptracers}: true or false (default false), must be using
@@ -91,10 +71,12 @@ Need a file for each irbc. 1=temperature,
 end (see maskLEN) are less than the number tracers, then
 relaxMaskFile(maskLEN) is used for all remaining ptracers.\\
 $\bullet$  {\bf relaxTFile}: name of file where temperatures
-that need to be realxed to ($T_{rbc}$ in equation above)
-are stored. Need 3-D fields to
-match model domain, and as many entries as given by
-rbcsForcingPeriod and rbcsForcingCycle.\\
+that need to be relaxed to ($T_{rbc}$ in equation above)
+are stored.  The file must contain 3-D records to match the model domain.
+If rbcsSingleTimeFiles=F, it must have one record for each forcing period.
+If T, there must be a separate file for each period and a 10-digit iteration
+number is appended to the file name (see Table~\ref{tab:pkg:rbcs:timing} 
+and examples below).\\
 $\bullet$  {\bf relaxSFile}: same for salinity.\\
 
 \vspace{.5cm}
@@ -106,59 +88,82 @@ $\bullet$ {\bf tauRelaxPTR(iTrc)}: relax timescale.\\
 $\bullet$ {\bf relaxPtracerFile(iTrc)}: file with relax
 fields.\\
 
-\noindent
-Typical ways of specifying timing of relaxation fields:
-\begin{enumerate}
-\item Constant-in-time forcing:
-  \begin{quote}
-     rbcsForcingPeriod = 0
-  \end{quote}
-  One field is read and used for all times.  Use this to emulate the result of
-  rbcsForcingCycle=0 before 2010-11-10.
 
-\item Non-cyclic time-varying forcing:
-  \begin{quote}
-     rbcsForcingPeriod = period in seconds\\
-     rbcsForcingCycle = 0
-  \end{quote}
-  When starting the run at time 0 (as usually the case), a period with center before
-  or at time 0 is needed for time interpolation.  If you are not providing separate
-  files for each time (rbcsSingleTimeFiles=F), rbcsForcingOffset needs to be negative.
-  For aligned periods (one period starting at time 0) and one extra record before
-  time 0 (and ending at time 0), set rbcsForcingOffset${}=-$Period.
-  For other situations, see the description of rbcsForcingOffset above.
+\subsubsection{Timing of relaxation forcing fields}
 
-\item Cyclic Forcing:
-  \begin{quote}
-     rbcsForcingPeriod = period in seconds\\
-     rbcsForcingCycle = cycle in seconds
-  \end{quote}
-  The same comment as for non-cyclic forcing applies, but rbcsForcingOffset may now be
-  after the time of the first required record even with rbcsSingleTimeFiles=F, in which
-  case records from the end of the file will be used (via cyclicity).
-\end{enumerate}
+For constant-in-time relaxation, set rbcsForcingPeriod=0.
+For time-varying relaxation, Table~\ref{tab:pkg:rbcs:timing} illustrates the
+relation between model time and forcing fields (either records in
+one big file or, for rbcsSingleTimeFiles=T, individual files labeled with an
+iteration number).  With rbcsSingleTimeFiles=T, this is the same as in the
+offline package, except that the forcing offset is in seconds.
+\newcommand{\dtr}{\Delta t_{\text{rbcs}}}%
+\begin{table}
+    \centering
+    \begin{tabular}{|l|l|l|c|}
+      \hline 
+      &
+      \multicolumn{2}{|c|}{rbcsSingleTimeFiles = T} &
+      F \\
+      &
+      \textbf{$c=0$} &
+      \textbf{$c\ne0$} &
+      \textbf{$c\ne0$}
+      \\ \hline
+      \textbf{model time} &
+      \textbf{file number} &
+      \textbf{file number} &
+      \textbf{record} \\
+      \hline \hline
+        $t_0 -     p/2$ & $i_0$            & $i_0 +   c/\dtr$ & $c/p$ \\ \hline
+        $t_0 +     p/2$ & $i_0 +   p/\dtr$ & $i_0 +   p/\dtr$ & $1$ \\ \hline
+        $t_0 + p + p/2$ & $i_0 + 2 p/\dtr$ & $i_0 + 2 p/\dtr$ & $2$ \\ \hline
+        \dots & \dots & \dots & \dots \\ \hline
+        $t_0 + c - p/2$ & \dots            & $i_0 +   c/\dtr$ & $c/p$ \\ \hline
+        \dots & \dots & \dots & \dots \\ \hline
+    \end{tabular}
+    \qquad
+    \begin{tabular}{c@{${}={}$}l}
+        \multicolumn{2}{l}{} \\[4ex]
+        \multicolumn{2}{l}{where} \\[1ex]
+        $p$    & rbcsForcingPeriod \\
+        $c$    & rbcsForcingCycle \\
+        $t_0$  & rbcsForcingOffset \\
+        $i_0$  & rbcsIter0 \\
+        $\dtr$ & deltaTrbcs \\
+    \end{tabular}\\[3ex]
+    \caption{Timing of relaxation forcing fields.}
+    \label{tab:pkg:rbcs:timing}
+\end{table}
 
-\noindent
-Ways to organize the files:
-\begin{enumerate}
-\item One big file with many time records:
-  \begin{quote}
-     rbcsSingleTimeFiles = .FALSE.
-  \end{quote}
-  All time records are in one big file.
 
-\item A separate file for each time:
-  \begin{quote}
-     rbcsSingleTimeFiles = .TRUE.\\
-     deltaTrbcs = time step used to generate forcing files\\
-     rbcsIter0 = iteration number of first file $-$ rbcsForcingPeriod/deltaTrbcs
-  \end{quote}
-  The rbcs field for each time needed is in a separate file, labeled by the
-  iteration number at the end of the forcing period.  If a different timestep
-  was used for generating the files (and the file names), set deltaTrbcs to it.
-  If there is a shift in time, set rbcsIter0.
-\end{enumerate}
+\subsubsection{Example 1: forcing with time averages starting at $t=0$}
 
+\paragraph{Cyclic data in a single file.}  Set rbcsSingleTimeFiles=F and
+rbcsForcingOffset=0, and the model will start by interpolating the last and first
+records of rbcs data, placed at $-p/2$ and $p/2$, resp., as appropriate for fields
+averaged over the time intervals $[-p, 0]$ and $[0, p]$.
+
+\paragraph{Non-cyclic data, multiple files.}  Set rbcsForcingCycle=0 and
+rbcsSingleTimeFiles=T.  With rbcsForcingOffset=0, rbcsIter0=0 and
+deltaTrbcs=rbcsForcingPeriod, the model would then start by interpolating data from
+files relax*File.0000000000.data and relax*File.0000000001.data, \dots,
+again placed at $-p/2$ and $p/2$.
+
+
+\subsubsection{Example 2: forcing with snapshots starting at $t=0$}
+
+\paragraph{Cyclic data in a single file.}  Set rbcsSingleTimeFiles=F and
+rbcsForcingOffset=$-p/2$, and the model will start forcing with the first
+record at $t=0$.
+
+\paragraph{Non-cyclic data, multiple files.}  Set rbcsForcingCycle=0 and
+rbcsSingleTimeFiles=T.  In this case, it is more natural to set
+rbcsForcingOffset=$+p/2$.
+With rbcsIter0=0 and deltaTrbcs=rbcsForcingPeriod, the model would then start
+with data from files relax*File.0000000000.data at $t=0$.
+It would then proceed to interpolate between this file and files
+relax*File.0000000001.data at $t={}$rbcsForcingPeriod.
 
 
 \subsubsection{Do's and Don'ts}
