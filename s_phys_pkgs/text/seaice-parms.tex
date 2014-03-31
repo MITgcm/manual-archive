@@ -2,7 +2,7 @@
 \begin{table}[!ht]
 \caption{Run-time parameters and default values
 \label{tab:pkg:seaice:runtimeparms}}
-{\footnotesize
+{\tiny
 %\hspace*{-1.5in}
 \begin{tabular}{|llp{5cm}c|}
 \hline
@@ -17,6 +17,10 @@
     \\
    SEAICEuseDYNAMICS   &                     T
     &   use dynamics 
+    &  %---ref---
+    \\
+   SEAICEuseJFNK       &                     F
+    &   use the JFNK-solver
     &  %---ref---
     \\
     SEAICEuseTEM       &                     F
@@ -47,7 +51,7 @@
     & flag to turn off zero-layer-thermodynamics for testing
     &  %---ref---
     \\
-    SEAICEadvHeff/Area/Snow/Salt/Age &      T
+    SEAICEadvHeff/Area/Snow/Salt &      T
     & flag to turn off advection of scalar state variables
     &  %---ref---
     \\
@@ -76,8 +80,41 @@
    SEAICE\_evpTauRelax & $\Delta{t}_{EVP}E_0$ 
      & relaxation time scale $T$ for EVP waves & \\
 %   SEAICE_evpDampC & & & \\
-   SEAICE\_dumpFreq     &                   dumpFreq
-    &   dump frequency 
+    SEAICEnewtonIterMax & 10
+    & maximum number of JFNK-Newton iterations
+    &  %---ref---
+    \\
+    SEAICEkrylovIterMax & 10
+    & maximum number of JFNK-Krylov iterations
+    &  %---ref---
+    \\
+    SEAICE\_JFNK\_lsIter & (off)
+    & start line search after ``lsIter'' Newton iterations
+    &  %---ref---
+    \\
+%     SEAICE\_JFNK\_tolIter    & 100
+%     & number of Newton iterations after which the
+%     the tolerance is relaxed again
+%     &  %---ref---
+%     \\
+    JFNKgamma\_nonlin        & 1.0E-05
+    & non-linear tolerance parameter for JFNK solver
+    &  %---ref---
+    \\
+    JFNKgamma\_lin\_min/max  & 0.10/0.99
+    & tolerance parameters for linear JFNK solver
+    &  %---ref---
+    \\
+    JFNKres\_tFac            & UNSET
+    & tolerance parameter for FGMRES residual
+    &  %---ref---
+    \\
+    SEAICE\_JFNKepsilon      & 1.0E-06
+    & step size for the FD-Jacobian-times-vector 
+    &  %---ref---
+    \\
+    SEAICE\_dumpFreq     &                   dumpFreq
+    &   dump frequency
     &  %---ref---
     \\
    SEAICE\_taveFreq     &                   taveFreq
@@ -188,31 +225,45 @@
     &   freezing temp. of sea water 
     &  %---ref---
     \\
-    SEAICE\_salinity    &                   0.0
-    &   salinity of ice
+    SEAICE\_saltFrac    &                   0.0
+    &   salinity newly formed ice (fraction of ocean surface salinity)
     &  %---ref---
     \\
-    SEAICE\_gamma\_t    &                   UNSET
-    &   restoring time scale for basal freezing and melting
-    &  %---ref---
-    \\
-    SEAICE\_gamma\_t\_frz &                 UNSET
-    &   restoring time scale for basal freezing
+%     SEAICE\_gamma\_t    &                   UNSET
+%     &   restoring time scale for basal freezing and melting
+%     &  %---ref---
+%     \\
+%     SEAICE\_gamma\_t\_frz &                 UNSET
+%     &   restoring time scale for basal freezing
+%     &  %---ref---
+%     \\
+%     SEAICE\_mcPheePiston  &                  UNSET
+%     &  ocean-ice turbulent flux "piston velocity" (m/s) that sets melt
+%     efficiency. 
+%     &  %---ref---
+%     \\
+%     SEAICE\_mcPheeTaper   &                  UNSET
+%     & tapering down of turbulent flux term with ice concentration.
+%     &  %---ref---
+%     \\
+    SEAICE\_frazilFrac    &                   0.0
+    &  Fraction of surface level negative heat content anomalies
+    (relative to the local freezing point) 
     &  %---ref---
     \\
     SEAICEstressFactor  &                  1.00000E+00
     &   scaling factor for ice-ocean stress
     &  %---ref---
     \\
-    Heff/Area/Hsnow/Hsalt/IceAgeFile & UNSET
-    & initial fields for variables HEFF/AREA/HSNOW/HSALT/ICEAGE
+    Heff/Area/HsnowFile/Hsalt & UNSET
+    & initial fields for variables HEFF/AREA/HSNOW/HSALT
     &  %---ref---
     \\
-   LSR\_ERROR           &                   1.00000E-04
+    LSR\_ERROR           &                   1.00000E-04
     &   sets accuracy of LSR solver 
     &  %---ref---
     \\
-   DIFF1               &                   4.00000E-03
+    DIFF1               &                   0.0
     &   parameter used in advect.F 
     &  %---ref---
     \\
@@ -248,8 +299,12 @@
     &   reduce derivative singularities 
     &  %---ref---
     \\
-   A22                 &                   1.50000E-01
-    &   parameter (minimum area) used in growth.F 
+   SEAICE\_area\_reg    &                   1.00000E-5
+    &   minimum concentration to regularize ice thickness
+    &  %---ref---
+    \\
+   SEAICE\_hice\_reg    &                   0.05 m
+    &   minimum ice thickness for regularization
     &  %---ref---
     \\
 \hline
@@ -257,3 +312,7 @@
 }
 \end{table}
 
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../../manual"
+%%% End: 
