@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/text/seaice.tex,v 1.19 2011/12/14 11:22:42 mlosch Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/text/seaice.tex,v 1.20 2014/03/31 11:30:21 mlosch Exp $
 % $Name:  $
 
 %%EH3  Copied from "MITgcm/pkg/seaice/seaice_description.tex"
@@ -61,9 +61,9 @@ no additional CPP options are required.
 (see Section \ref{sec:buildingCode}).
 
 Parts of the SEAICE code can be enabled or disabled at compile time
-via CPP preprocessor flags. These options are set in either
-\code{SEAICE\_OPTIONS.h} or in \code{ECCO\_CPPOPTIONS.h}.
-Table \ref{tab:pkg:seaice:cpp} summarizes these options.
+via CPP preprocessor flags. These options are set in 
+\code{SEAICE\_OPTIONS.h}.
+Table \ref{tab:pkg:seaice:cpp} summarizes the most important ones.
 
 \begin{table}[!ht]
 \centering
@@ -80,22 +80,22 @@ Table \ref{tab:pkg:seaice:cpp} summarizes these options.
         \code{SEAICE\_CGRID} & 
           LSR solver on C-grid (rather than original B-grid) \\
         \code{SEAICE\_ALLOW\_EVP} & 
-          use EVP rather than LSR rheology solver \\
+          enable use of EVP rheology solver \\
+        \code{SEAICE\_ALLOW\_JFNK} & 
+          enable use of JFNK rheology solver \\
         \code{SEAICE\_EXTERNAL\_FLUXES} & 
           use EXF-computed fluxes as starting point \\
-        \code{SEAICE\_MULTICATEGORY} & 
-          enable 8-category thermodynamics (by default undefined)\\
+        \code{SEAICE\_ZETA\_SMOOTHREG} & 
+          use differentialable regularization for viscosities \\
         \code{SEAICE\_VARIABLE\_FREEZING\_POINT} & 
           enable linear dependence of the freezing point on salinity
           (by default undefined)\\
         \code{ALLOW\_SEAICE\_FLOODING} & 
           enable snow to ice conversion for submerged sea-ice \\
-        \code{SEAICE\_SALINITY} & 
-          enable "salty" sea-ice (by default undefined) \\
-        \code{SEAICE\_AGE} & 
-          enable "age tracer" sea-ice (by default undefined) \\
-        \code{SEAICE\_CAP\_HEFF} & 
-          enable capping of sea-ice thickness to MAX\_HEFF \\ \hline
+        \code{SEAICE\_VARIABLE\_SALINITY} & 
+          enable sea-ice with variable salinity (by default undefined) \\
+        \code{SEAICE\_SITRACER} & 
+          enable sea-ice tracer package (by default undefined) \\
         \code{SEAICE\_BICE\_STRESS} &
           B-grid only for backward compatiblity: turn on ice-stress on
           ocean\\
@@ -105,7 +105,8 @@ Table \ref{tab:pkg:seaice:cpp} summarizes these options.
       \hline
     \end{tabular}
   }
-  \caption{~}
+  \caption{Some of the most relevant CPP preprocessor flags in the
+    \code{seaice}-package.} 
 \end{table}
 
 %----------------------------------------------------------------------
@@ -139,8 +140,6 @@ Table~\ref{tab:pkg:seaice:runtimeparms} lists most run-time parameters.
   over grid cell in meters; initializes variable \code{HSNOW};
 \item[\code{HsaltFile}:] Initial salinity of sea ice averaged over grid
   cell in g/m$^2$; initializes variable \code{HSALT};
-\item[\code{IceAgeFile}:] Initial ice age of sea ice averaged over grid
-  cell in seconds; initializes variable \code{ICEAGE};
 \end{description}
 
 %----------------------------------------------------------------------
@@ -187,9 +186,9 @@ improved:
 \item the code has been rewritten for an Arakawa C-grid, both B- and
   C-grid variants are available; the C-grid code allows for no-slip
   and free-slip lateral boundary conditions;
-\item two different solution methods for solving the nonlinear
-  momentum equations have been adopted: LSOR \citep{zhang97}, and EVP
-  \citep{hun97};
+\item three different solution methods for solving the nonlinear
+  momentum equations have been adopted: LSOR \citep{zhang97}, EVP
+  \citep{hun97}, JFNK \citep{lemieux10,losch14:_jfnk};
 \item ice-ocean stress can be formulated as in \citet{hibler87} or as in
   \citet{cam08}; 
 \item ice variables are advected by sophisticated, conservative
@@ -296,7 +295,7 @@ air and ocean drag coefficients; $\rho_{air/ocean}$ are reference
 densities; and $R_{air/ocean}$ are rotation matrices that act on the
 wind/current vectors.
 
-\paragraph{Viscous-Plastic (VP) Rheology and LSOR solver \label{sec:pkg:seaice:VPdynamics}}~\\
+\paragraph{Viscous-Plastic (VP) Rheology\label{sec:pkg:seaice:VPrheology}}~\\
 %
 For an isotropic system the stress tensor $\sigma_{ij}$ ($i,j=1,2$) can
 be related to the ice strain rate and strength by a nonlinear
@@ -349,14 +348,184 @@ recommended). For stress tensor computation the replacement pressure $P
 = 2\,\Delta\zeta$ \citep{hibler95} is used so that the stress state
 always lies on the elliptic yield curve by definition.
 
-In the current implementation, the VP-model is integrated with the
-semi-implicit line successive over relaxation (LSOR)-solver of
-\citet{zhang97}, which allows for long time steps that, in our case,
-are limited by the explicit treatment of the Coriolis term. The
-explicit treatment of the Coriolis term does not represent a severe
-limitation because it restricts the time step to approximately the
-same length as in the ocean model where the Coriolis term is also
-treated explicitly.
+Defining the CPP-flag \code{SEAICE\_ZETA\_SMOOTHREG} in
+\code{SEAICE\_OPTIONS.h} before compiling replaces the method for
+bounding $\zeta$ by a smooth (differentiable) expression:
+\begin{equation}
+  \label{eq:zetaregsmooth}
+  \begin{split}
+  \zeta &= \zeta_{\max}\tanh\left(\frac{P}{2\,\min(\Delta,\Delta_{\min})
+      \,\zeta_{\max}}\right)\\
+  &= \frac{P}{2\Delta^*}
+  \tanh\left(\frac{\Delta^*}{\min(\Delta,\Delta_{\min})}\right) 
+  \end{split}
+\end{equation}
+where $\Delta_{\min}=10^{-20}\text{\,s}^{-1}$ is chosen to avoid divisions
+by zero.
+
+\paragraph{LSR and  JFNK solver \label{sec:pkg:seaice:LSRJFNK}}~\\
+%
+% By default, the VP-model is integrated by a Pickwith the
+% semi-implicit line successive over relaxation (LSOR)-solver of
+% \citet{zhang97}, which allows for long time steps that, in our case,
+% are limited by the explicit treatment of the Coriolis term. The
+% explicit treatment of the Coriolis term does not represent a severe
+% limitation because it restricts the time step to approximately the
+% same length as in the ocean model where the Coriolis term is also
+% treated explicitly.
+
+\newcommand{\mat}[1]{\ensuremath{\mathbf{#1}}} 
+%
+In the matrix notation, the discretized momentum equations can be
+written as
+\begin{equation}
+  \label{eq:matrixmom}
+  \mat{A}(\vek{x})\,\vek{x} = \vek{b}(\vek{x}).
+\end{equation}
+The solution vector $\vek{x}$ consists of the two velocity components
+$u$ and $v$ that contain the velocity variables at all grid points and
+at one time level. The standard (and default) method for solving
+Eq.\,(\ref{eq:matrixmom}) in the sea ice component of the
+\mbox{MITgcm}, as in many sea ice models, is an iterative Picard
+solver: in the $k$-th iteration a linearized form
+$\mat{A}(\vek{x}^{k-1})\,\vek{x}^{k} = \vek{b}(\vek{x}^{k-1})$ is
+solved (in the case of the MITgcm it is a Line Successive (over)
+Relaxation (LSR) algorithm \citep{zhang97}).  Picard solvers converge
+slowly, but generally the iteration is terminated after only a few
+non-linear steps \citep{zhang97, lemieux09} and the calculation
+continues with the next time level. This method is the default method
+in the MITgcm. The number of non-linear iteration steps or pseudo-time
+steps can be controlled by the runtime parameter
+\code{NPSEUDOTIMESTEPS} (default is 2).
+
+In order to overcome the poor convergence of the Picard-solver,
+\citet{lemieux10} introduced a Jacobian-free Newton-Krylov solver for
+the sea ice momentum equations. This solver is also implemented in the
+MITgcm \citep{losch14:_jfnk}. The Newton method transforms minimizing
+the residual $\vek{F}(\vek{x}) = \mat{A}(\vek{x})\,\vek{x} -
+\vek{b}(\vek{x})$ to finding the roots of a multivariate Taylor
+expansion of the residual \vek{F} around the previous ($k-1$) estimate
+$\vek{x}^{k-1}$:
+\begin{equation}
+  \label{eq:jfnktaylor}
+  \vek{F}(\vek{x}^{k-1}+\delta\vek{x}^{k}) = 
+  \vek{F}(\vek{x}^{k-1}) + \vek{F}'(\vek{x}^{k-1})\,\delta\vek{x}^{k}
+\end{equation}
+with the Jacobian $\mat{J}\equiv\vek{F}'$. The root
+$\vek{F}(\vek{x}^{k-1}+\delta\vek{x}^{k})=0$ is found by solving
+\begin{equation}
+  \label{eq:jfnklin}
+  \mat{J}(\vek{x}^{k-1})\,\delta\vek{x}^{k} = -\vek{F}(\vek{x}^{k-1})
+\end{equation}
+for $\delta\vek{x}^{k}$. The next ($k$-th) estimate is given by
+$\vek{x}^{k}=\vek{x}^{k-1}+a\,\delta\vek{x}^{k}$. In order to avoid
+overshoots the factor $a$ is iteratively reduced in a line search
+($a=1, \frac{1}{2}, \frac{1}{4}, \frac{1}{8}, \ldots$) until
+$\|\vek{F}(\vek{x}^k)\| < \|\vek{F}(\vek{x}^{k-1})\|$, where
+$\|\cdot\|=\int\cdot\,dx^2$ is the $L_2$-norm. In practice, the line
+search is stopped at $a=\frac{1}{8}$. The line search starts after
+$\code{SEAICE\_JFNK\_lsIter}$ non-linear Newton iterations (off by
+default).
+
+
+Forming the Jacobian $\mat{J}$ explicitly is often avoided as ``too
+error prone and time consuming'' \citep{knoll04:_jfnk}. Instead,
+Krylov methods only require the action of \mat{J} on an arbitrary
+vector \vek{w} and hence allow a matrix free algorithm for solving
+Eq.\,(\ref{eq:jfnklin}) \citep{knoll04:_jfnk}. The action of \mat{J}
+can be approximated by a first-order Taylor series expansion:
+\begin{equation}
+  \label{eq:jfnkjacvecfd}
+  \mat{J}(\vek{x}^{k-1})\,\vek{w} \approx
+  \frac{\vek{F}(\vek{x}^{k-1}+\epsilon\vek{w}) - \vek{F}(\vek{x}^{k-1})}
+  {\epsilon} 
+\end{equation}
+or computed exactly with the help of automatic differentiation (AD)
+tools. \code{SEAICE\_JFNKepsilon} sets the step size
+$\epsilon$. 
+
+We use the Flexible Generalized Minimum RESidual method
+\citep[FGMRES,][]{saad93:_fgmres} with right-hand side preconditioning
+to solve Eq.\,(\ref{eq:jfnklin}) iteratively starting from a first
+guess of $\delta\vek{x}^{k}_{0} = 0$. For the preconditioning matrix
+\mat{P} we choose a simplified form of the system matrix
+$\mat{A}(\vek{x}^{k-1})$ \citep{lemieux10} where $\vek{x}^{k-1}$ is
+the estimate of the previous Newton step $k-1$. The transformed
+equation\,(\ref{eq:jfnklin}) becomes
+\begin{equation}
+  \label{eq:jfnklinpc}
+  \mat{J}(\vek{x}^{k-1})\,\mat{P}^{-1}\delta\vek{z} =
+  -\vek{F}(\vek{x}^{k-1}), 
+  \quad\text{with}\quad \delta\vek{z}=\mat{P}\delta\vek{x}^{k}.
+\end{equation}
+The Krylov method iteratively improves the approximate solution
+to~(\ref{eq:jfnklinpc}) in subspace ($\vek{r}_0$,
+$\mat{J}\mat{P}^{-1}\vek{r}_0$, $(\mat{J}\mat{P}^{-1})^2\vek{r}_0$,
+\ldots, $(\mat{J}\mat{P}^{-1})^m\vek{r}_0$) with increasing $m$;
+$\vek{r}_0 = -\vek{F}(\vek{x}^{k-1})
+-\mat{J}(\vek{x}^{k-1})\,\delta\vek{x}^{k}_{0}$
+%-\vek{F}(\vek{x}^{k-1})
+%-\mat{J}(\vek{x}^{k-1})\,\mat{P}^{-1}\delta\vek{z}$ 
+is the initial residual of
+(\ref{eq:jfnklin}); $\vek{r}_0=-\vek{F}(\vek{x}^{k-1})$ with the first
+guess $\delta\vek{x}^{k}_{0}=0$. We allow a Krylov-subspace of
+dimension~$m=50$ and we do not use restarts. The preconditioning operation
+involves applying $\mat{P}^{-1}$ to the basis vectors $\vek{v}_0,
+\vek{v}_1, \vek{v}_2, \ldots, \vek{v}_m$ of the Krylov subspace. This
+operation is approximated by solving the linear system
+$\mat{P}\,\vek{w}=\vek{v}_i$. Because $\mat{P} \approx
+\mat{A}(\vek{x}^{k-1})$, we can use the LSR-algorithm \citep{zhang97}
+already implemented in the Picard solver. Each preconditioning
+operation uses a fixed number of 10~LSR-iterations avoiding any
+termination criterion. More details and results can be found in
+\citet{lemieux10, losch14:_jfnk}.
+
+To use the JFNK-solver set \code{SEAICEuseJFNK = .TRUE.} in the
+namelist file \code{data.seaice}; \code{SEAICE\_ALLOW\_JFNK} needs to
+be defined in \code{SEAICE\_OPTIONS.h} and we recommend using a smooth
+regularization of $\zeta$ by defining \code{SEAICE\_ZETA\_SMOOTHREG}
+(see above) for better convergence.  The non-linear Newton iteration
+is terminated when the $L_2$-norm of the residual is reduced by
+$\gamma_{\mathrm{nl}}$ (runtime parameter \code{JFNKgamma\_nonlin =
+  1.e-4} will already lead to expensive simulations) with respect to
+the initial norm: $\|\vek{F}(\vek{x}^k)\| <
+\gamma_{\mathrm{nl}}\|\vek{F}(\vek{x}^0)\|$.  Within a non-linear
+iteration, the linear FGMRES solver is terminated when the residual is
+smaller than $\gamma_k\|\vek{F}(\vek{x}^{k-1})\|$ where $\gamma_k$ is
+determined by
+\begin{equation}
+  \label{eq:jfnkgammalin}
+  \gamma_k = 
+  \begin{cases} 
+    \gamma_0 &\text{for $\|\vek{F}(\vek{x}^{k-1})\| \geq r$},  \\ 
+    \max\left(\gamma_{\min},
+    \frac{\|\vek{F}(\vek{x}^{k-1})\|}{\|\vek{F}(\vek{x}^{k-2})\|}\right)  
+%    \phi\left(\frac{\|\vek{F}(\vek{x}^{k-1})\|}{\|\vek{F}(\vek{x}^{k-2})\|}\right)^\alpha\right)  
+    &\text{for $\|\vek{F}(\vek{x}^{k-1})\| < r$,}
+  \end{cases}
+\end{equation}
+so that the linear tolerance parameter $\gamma_k$ decreases with the
+non-linear Newton step as the non-linear solution is approached. This
+inexact Newton method is generally more robust and computationally
+more efficient than exact methods \citep[e.g.,][]{knoll04:_jfnk}.
+% \footnote{The general idea behind
+%   inexact Newton methods is this: The Krylov solver is ``only''
+%   used to find an intermediate solution of the linear
+%   equation\,(\ref{eq:jfnklin}) that is used to improve the approximation of
+%   the actual equation\,(\ref{eq:matrixmom}). With the choice of a
+%   relatively weak lower limit for FGMRES convergence 
+%   $\gamma_{\min}$ we make sure that the time spent in the FGMRES
+%   solver is reduced at the cost of more Newton iterations. Newton
+%   iterations are cheaper than Krylov iterations so that this choice
+%   improves the overall efficiency.} 
+Typical parameter choices are
+$\gamma_0=\code{JFNKgamma\_lin\_max}=0.99$,
+$\gamma_{\min}=\code{JFNKgamma\_lin\_min}=0.1$, and $r = 
+\code{JFNKres\_tFac}\times\|\vek{F}(\vek{x}^{0})\|$ with
+$\code{JFNKres\_tFac} = \frac{1}{2}$. We recommend a maximum number of
+non-linear iterations $\code{SEAICEnewtonIterMax} = 100$ and a maximum
+number of Krylov iterations $\code{SEAICEkrylovIterMax} = 50$, because
+the Krylov subspace has a fixed dimension of 50.
 
 \paragraph{Elastic-Viscous-Plastic (EVP) Dynamics\label{sec:pkg:seaice:EVPdynamics}}~\\
 %
