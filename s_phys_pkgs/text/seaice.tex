@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/text/seaice.tex,v 1.20 2014/03/31 11:30:21 mlosch Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/text/seaice.tex,v 1.21 2014/04/01 07:30:32 mlosch Exp $
 % $Name:  $
 
 %%EH3  Copied from "MITgcm/pkg/seaice/seaice_description.tex"
@@ -181,7 +181,7 @@ viscous-plastic (VP) dynamic-thermodynamic sea ice model \citep{zhang97}
 first introduced by \citet{hib79, hib80}. In order to adapt this model
 to the requirements of coupled ice-ocean state estimation, many
 important aspects of the original code have been modified and
-improved:
+improved \citep{losch10:_mitsim}:
 \begin{itemize}
 \item the code has been rewritten for an Arakawa C-grid, both B- and
   C-grid variants are available; the C-grid code allows for no-slip
@@ -701,7 +701,8 @@ relation $\sigma_{\alpha\beta} = 2\eta\dot{\epsilon}_{\alpha\beta} +
 [(\zeta-\eta)\dot{\epsilon}_{\gamma\gamma} - P/2
 ]\delta_{\alpha\beta}$ \citep{hib79}. The stress tensor divergence
 $(\nabla\sigma)_{\alpha} = \partial_\beta\sigma_{\beta\alpha}$, is
-discretized in finite volumes. This conveniently avoids dealing with
+discretized in finite volumes \citep[see
+also][]{losch10:_mitsim}. This conveniently avoids dealing with
 further metric terms, as these are ``hidden'' in the differential cell
 widths. For the $u$-equation ($\alpha=1$) we have:
 \begin{align}
