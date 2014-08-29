@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_examples/text/model_examples.tex,v 1.25 2013/03/26 13:21:28 jmc Exp $
+% $Header: /u/gcmpack/manual/s_examples/text/model_examples.tex,v 1.26 2014/08/29 17:08:21 jmc Exp $
 % $Name:  $
 
 \section[MITgcm Example Experiments]{Example experiments}
@@ -41,9 +41,13 @@ Each example is briefly described below.
   study advection of a passive tracer and CFCs.
   This experiment is described in detail in section \ref{sec:eg-offline-cfc}.
 
-\item \texttt{tutorial\_deep\_convection} - Inhomogenously forced
+\item \texttt{tutorial\_deep\_convection} - Non-uniformly forced
   ocean convection in a doubly periodic box. This experiment is
   described in detail in section \ref{sec:eg-bconv}.
+
+\item \texttt{tutorial\_dic\_adoffline} - Offline form of MITgcm
+  dynamics coupled to the dissolved inorganic carbon biogeochemistry model;
+  adjoint set-up.
 
 \item \texttt{tutorial\_global\_oce\_biogeo} - Ocean model coupled to
   the dissolved inorganic carbon biogeochemistry model. This
@@ -76,7 +80,11 @@ Each example is briefly described below.
 
 \item \texttt{tutorial\_tracer\_adjsens} - Simple passive tracer
   experiment. Includes derivative calculation. This experiment is
-  described in detail in section \ref{sec:eg-simple-tracer-adjoint}.
+  described in detail in section \ref{sec:eg-simple-tracer-adjoint}.\\
+  Also contains an additional set-up using Secon Order Moment (SOM) advection
+  scheme ({\it input\_ad.som81/}).
+
+\item \texttt{1D\_ocean\_ice\_column} - Oceanic column with seaice on top.
 
 \item \texttt{adjustment.128x64x1} - Barotropic adjustment problem on
   latitude longitude grid with 128x64 grid points ($2.8^\circ$ resolution).
@@ -86,18 +94,20 @@ Each example is briefly described below.
   resolution).\\
   Also contains a non-linear free-surface adjustment version ({\it input.nlfs/}).
 
-\item \texttt{advect\_cs} Two-dimensional passive advection test on
-  cube sphere grid (32x32 grid points per face, roughly $2.8^\circ$)
+\item \texttt{advect\_cs} - Two-dimensional passive advection test on
+  cube sphere grid (32x32 grid points per face, roughly $2.8^\circ$ resolution)
 
 \item \texttt{advect\_xy} - Two-dimensional (horizontal plane) passive
   advection test on Cartesian grid.\\
   Also contains an additional set-up using Adams-Bashforth 3 ({\it input.ab3\_c4/}).
 
 \item \texttt{advect\_xz} - Two-dimensional (vertical plane) passive
-  advection test on Cartesian grid.
+  advection test on Cartesian grid.\\
+  Also contains an additional set-up using non-linear free-surface
+   with divergent barotropic flow and implicit vertical advection ({\it input.nlfs/}).
 
-\item \texttt{aim.5l\_Equatorial\_Channel}
-  - 5-levels Intermediate Atmospheric physics,
+\item \texttt{aim.5l\_Equatorial\_Channel} -
+  5-levels Intermediate Atmospheric physics,
   3D Equatorial Channel configuration.
 
 \item \texttt{aim.5l\_LatLon} - 5-levels Intermediate Atmospheric physics,
@@ -107,7 +117,7 @@ Each example is briefly described below.
 \item \texttt{aim.5l\_cs} - 5-levels Intermediate Atmospheric physics,
   Global configuration on cube sphere grid
   (32x32 grid points per face, roughly $2.8^\circ$).\\
-  Also contains an additional set-up with an ocean mixed layer and thermodynamics
+  Also contains an additional set-up with a slab-ocean and thermodynamic
   sea-ice ({\it input.thSI/}).
 
 \item \texttt{bottom\_ctrl\_5x5} - Adjoint test using the bottom
@@ -116,11 +126,14 @@ Each example is briefly described below.
 \item \texttt{cfc\_example} - Global ocean with online computation and
   advection of CFC11 and CFC12.
 
+\item \texttt{cheapAML\_box} - Example using cheap atmospheric mixed layer
+   (cheapAML) package.
+
 \item \texttt{cpl\_aim+ocn} - Coupled Ocean - Atmosphere realistic
   configuration on cubed-sphere cs32 horizontal grid,
   using Intermediate Atmospheric physics ({\it pkg/aim\_v23})
-  thermodynamics seaice ({\it pkg/thsice}) and land packages.
-  on cubed-sphere cs32 in a realistics configuration.
+  thermodynamic seaice ({\it pkg/thsice}) and land packages.
+  on cubed-sphere cs32 in a realistic configuration.
 
 \item \texttt{cpl\_atm2d+ocn} - Coupled Ocean - Atmosphere realistic
   configuration using 2-D Atmospheric Model ({\it pkg/atm2d}).
@@ -133,12 +146,11 @@ Each example is briefly described below.
 
 \item \texttt{exp2} - Old version of the global ocean experiment (no GM,
       no partial-cells).\\
-  Also contains an additional set-up with ridid-lid ({\it input.rigidLid/}).
+  Also contains an additional set-up with rigid-lid ({\it input.rigidLid/}).
 
 \item \texttt{exp4} - Flow over a Gaussian bump in open-water or
-  channel with open boundaries.
-
-\item \texttt{exp5} - Deep convection.
+  channel with open boundaries.\\
+  Also contains an additional set-up using non-linear free-surface ({\it input.nlfs/}).
 
 \item \texttt{fizhi-cs-32x32x40} - Global atmospheric simulation with
   realistic topography, 40 vertical levels, a cubed sphere grid and
@@ -156,28 +168,49 @@ Each example is briefly described below.
 \item \texttt{flt\_example} - Example of using float package.
 
 \item \texttt{front\_relax} - Relaxation of an ocean thermal front
-  (test for Gent/McWilliams scheme). 2D (Y-Z).\\
-  Also contains an additional set-up with Mixed-Layer Eddy parameterization
-  (Ferrari \& McWilliams, 2007) ({\it input.mxl/}).
+  (test for Gent/McWilliams scheme). 2D (y-z).\\
+  Also contains additional set-ups:
+  \begin{enumerate}
+   \item using the Boundary-Value Problem method
+          (Ferrari et al., 2010) ({\it input.bvp/}).
+   \item with Mixed-Layer Eddy parameterization
+          (Ferrari \& McWilliams, 2007) ({\it input.mxl/}).
+  \end{enumerate}
 
-\item \texttt{global1x1\_tot} - ECCO-GODAE production configuration
- version 1, 2 \& 3
-
-\item \texttt{global2x2\_tot} - ECCO production configuration version 0
-
-\item \texttt{global\_ocean.90x40x15} Global ocean simulation at 4x4
-  degree resolution. Similar to tutorial\_global\_oce\_latlon, with
-  quasi-non-hydrostatics and non-hydrostatic metric terms.\\
-  Also contains an adjoint set-up ({\it code\_ad/, input\_ad/}).
+\item \texttt{global\_ocean.90x40x15} - Global ocean simulation at 4x4
+  degree resolution. Similar to tutorial\_global\_oce\_latlon, but using
+  $z^*$ coordinates with quasi-non-hydrostatic and non-hydrostatic metric terms.
+  This experiment also illustrate the use of SBO package.
+  Also contains additional set-ups:
+  \begin{enumerate}
+   \item using down-slope package ({\it pkg/down\_slope}) ({\it input.dwnslp/})
+   \item an Open-AD adjoint set-up ({\it code\_oad/, input\_oad/}).
+   \item four TAF adjoint set-ups ({\it code\_ad/}):
+   \begin{enumerate}
+     \item standard experiment ({\it input\_ad/}).
+     \item with bottom drag as a control ({\it input\_ad.bottomdrag/}).
+     \item with kappa GM as a control ({\it input\_ad.kapgm/}).
+     \item with kappa Redi as a control ({\it input\_ad.kapredi/}).
+   \end{enumerate}
+  \end{enumerate}
 
 \item \texttt{global\_ocean.cs32x15} - Global ocean experiment on the
   cubed sphere grid.\\
-  Also contains additional set-ups:
+  Also contains additional forward set-ups:
   \begin{enumerate}
-   \item non-hydrostratic with biharmonic viscosity ({\it input.viscA4/})
+   \item non-hydrostatic with biharmonic viscosity ({\it input.viscA4/})
    \item using thermodynamic sea ice and bulk force ({\it input.thsice/})
-   \item using thermodynamic ({\it pkg/thsice}) dynamics ({\it pkg/seaice}) sea-ice
-         and EXF package ({\it input.icedyn/})
+   \item using thermodynamic ({\it pkg/thsice}) dynamic ({\it pkg/seaice}) sea-ice
+         and {\it exf} package ({\it input.icedyn/})
+   \item using thermodynamic - dynamic ({\it pkg/seaice}) sea-ice
+         with {\it exf} package ({\it input.seaice/})
+  \end{enumerate}
+  and few additional adjoint set-ups ({\it code\_ad/}):
+  \begin{enumerate}
+   \item standard experiment without sea-ice ({\it input\_ad/}).
+   \item using thermodynamic - dynamic sea-ice ({\it input\_ad.seaice/})
+   \item same as above without adjoint sea-ice dynamics ({\it input\_ad.seaice\_dynmix/})
+   \item using thermodynamic sea-ice from {\it thsice} package ({\it input\_ad.thsice/})
   \end{enumerate}
 
 \item \texttt{global\_ocean\_ebm} - Global ocean experiment on a lat-lon
@@ -186,93 +219,137 @@ Each example is briefly described below.
   Also contains an adjoint set-up ({\it code\_ad/, input\_ad/}).
 
 \item \texttt{global\_with\_exf} - Global ocean experiment on a lat-lon
-  grid using the exf package. Similar to global\_ocean.90x40x15
-  experiment.
+  grid using the {\it exf} package. Similar to tutorial\_global\_oce\_latlon
+  experiment.\\
+  Also contains a secondary set-up with yearly {\it exf} fields ({\it input\_ad.yearly/}).
+
+\item \texttt{halfpipe\_streamice} - Example using package "streamice".\\
+  Also contains adjoint set-ups using TAF ({\it code\_ad/, input\_ad/})
+   and using Open-AD ({\it code\_oad/, input\_oad/}).
 
 \item \texttt{hs94.128x64x5} - 3D atmosphere dynamics on lat-lon grid,
   using Held and Suarez '94 forcing.
 
 \item \texttt{hs94.1x64x5} - Zonal averaged atmosphere dynamics
   using Held and Suarez '94 forcing.\\
-  Also contains an adjoint set-up ({\it code\_ad/, input\_ad/}).
+  Also contains adjoint set-ups using TAF ({\it code\_ad/, input\_ad/})
+   and using Open-AD ({\it code\_oad/, input\_oad/}).
 
 \item \texttt{hs94.cs-32x32x5} - 3D atmosphere dynamics using Held and
-  Suarez (1994) forcing on the cubed sphere. 5 vertical levels.\\
+  Suarez (1994) forcing on the cubed sphere, similar to tutorial\_held\_suarez\_cs
+  experiment but using linear free-surface and only 5 levels.\\
   Also contains an additional set-up with Implicit Internal gravity waves
-  treatment ({\it input.impIGW/}).
+  treatment and Adams-Bashforth 3 ({\it input.impIGW/}).
 
 \item \texttt{ideal\_2D\_oce} - Idealized 2D global ocean simulation on
   an aqua planet.
 
 \item \texttt{internal\_wave} - Ocean internal wave forced by open
-  boundary conditions.
+  boundary conditions.\\
+  Also contains an additional set-up using {\it pkg/kl10} (see section
+   \ref{sec:pkg:kl10}, Klymak and Legg, 2010) ({\it input.kl10/}).
 
 \item \texttt{inverted\_barometer} - Simple test of ocean response to
   atmospheric pressure loading.
 
 \item \texttt{isomip} - ISOMIP like set-up including ice-shelf cavities
   ({\it pkg/shelfice}).\\
-  Also contains an additional set-up with ({\it input.htd/})
-  but only Martin knows what "htd" stands for.
+  Also contains additional set-ups:
+  \begin{enumerate}
+   \item with "htd" ({\it input.htd/})
+          but only Martin knows what "htd" stands for.
+   \item using package {\it icefront} ({\it input.icefront})
+  \end{enumerate}
+  and also adjoint set-ups using TAF ({\it code\_ad/, input\_ad/, input\_ad.htd/})
+  or using Open-AD ({\it code\_oad/, input\_oad/}).
 
 \item \texttt{lab\_sea} - Regional Labrador Sea simulation on a lat-lon
   grid using the sea ice package.\\
   Also contains additional set-ups:
   \begin{enumerate}
-   \item using the LSR solver (instead of EVP dynamics) ({\it input.lsr/})
-   \item using Hibler and Bryan (1987) sea-ice ocean stress ({\it input.hb87/})
+   \item using the simple "free-drift" assumption for seaice ({\it input.fd/})
+   \item using EVP dynamics (instead of LSR solver) and Hibler \& Bryan (1987)
+         sea-ice ocean stress ({\it input.hb87/})
    \item using package {\it salt\_plume} ({\it input.salt\_plume/})
   \end{enumerate}
   and also 3 adjoint set-ups ({\it code\_ad/, input\_ad/, input\_ad.noseaicedyn/,
-  input\_ad.noseaice/}).
+   input\_ad.noseaice/}).
 
 \item \texttt{matrix\_example} - Test of experimental method to
-  accelerated convergence towards equillibrium.
+  accelerated convergence towards equilibrium.
 
 \item \texttt{MLAdjust} - Simple tests for different viscosity formulations.\\
-  Also contains additional set-ups:
+  Also contains additional set-ups (see: {\it verification/MLAdjust/README}):
   \begin{enumerate}
-   \item ({\it input.0.leith/})
-   \item ({\it input.0.leithD/})
-   \item ({\it input.0.smag/})
-   \item ({\it input.1.leith/})
+   \item ({\it input.A4FlxF/})
+   \item ({\it input.AhFlxF/})
+   \item ({\it input.AhVrDv/})
+   \item ({\it input.AhStTn/})
   \end{enumerate}
 
 \item \texttt{natl\_box} - Eastern subtropical North Atlantic with KPP
   scheme; 1 month integration
 
-\item \texttt{natl\_box\_adjoint} - Eastern subtropical North Atlantic with KPP
-  scheme; adjoint set-up.
+\item \texttt{obcs\_ctrl} - Adjoint test using Open-Boundary conditions
+  as control parameters.
 
-\item \texttt{offline\_exf\_seaice} - oceanic surface forcing computed
-  by bulk-formulae ({\it pkg/exf}) and inposed SST (offline ocean).\\
+\item \texttt{offline\_exf\_seaice} - Seaice on top of oceanic surface layer
+  in an idealized channel. Forcing is computed by bulk-formulae ({\it pkg/exf})
+  with temperature relaxation to prescribed SST (offline ocean).\\
   Also contains additional set-ups:
   \begin{enumerate}
-   \item with sea-ice ({\it pkg/seaice}) thermodynamics ({\it input.seaicetd/})
-   \item an adjoint test ({\it code\_ad/, input\_ad/}).
+   \item sea-ice dynamics-only using JFNK solver
+         and {\it pkg/thsice} advection ({\it input.dyn\_jfnk/})
+   \item sea-ice dynamics-only using LSR solver
+         and {\it pkg/seaice} advection ({\it input.dyn\_lsr/})
+   \item sea-ice thermodynamics-only using {\it pkg/seaice} ({\it input.thermo/})
+   \item sea-ice thermodynamics-only using {\it pkg/thsice} ({\it input.thsice/})
   \end{enumerate}
+  and also 2 adjoint set-ups ({\it code\_ad/, input\_ad/, input\_ad.thsice/}).
 
-\item \texttt{OpenAD} simple Adjoint experiement (used also to test
-  open-AD compiler)
+\item \texttt{OpenAD} - Simple Adjoint experiment (used also to test
+  Open-AD compiler)
 
-\item \texttt{rotating\_tank} Rotating tank simulation in cylindrical
+\item \texttt{rotating\_tank} - Rotating tank simulation in cylindrical
   coordinates.  This experiment is described in detail in section
   \ref{sec:eg-tank}.
 
-\item \texttt{seaice\_obcs} similar to "lab\_sea" ({\it input.salt\_plume/})
-  experiment with only a fraction of the domain and open-boundary conditions
-  derived from "lab\_sea" experiment.
+\item \texttt{seaice\_itd} - Seaice example using Ice Thickness Distribution (ITD).\\
+  Also contains additional set-ups:
+  \begin{enumerate}
+   \item ({\it input.thermo/})
+   \item ({\it input.lipscomb07/})
+  \end{enumerate}
 
-\item \texttt{solid-body.cs-32x32x1} Solid body rotation test for cube
+\item \texttt{seaice\_obcs} - Similar to "lab\_sea" ({\it input.salt\_plume/})
+  experiment with only a fraction of the domain and open-boundary conditions
+  derived from "lab\_sea" experiment.\\
+  Also contains additional set-ups:
+  \begin{enumerate}
+   \item ({\it input.seaiceSponge/})
+   \item ({\it input.tides/})
+  \end{enumerate}
+
+\item \texttt{short\_surf\_wave} - Short surface wave adjusment
+   (non-hydrostatic) in homogeneous 2-D vertical section (x-z).
+
+\item \texttt{so\_box\_biogeo} - Open-boundary Southern ocean box around
+ Drake passage, using same model parameters and forcing as experiment
+  "tutorial\_global\_oce\_biogeo" from which initial conditions
+ and OB conditions have been extracted.
+
+\item \texttt{solid-body.cs-32x32x1} - Solid body rotation test for cube
   sphere grid.
 
-\item \texttt{tidal\_basin\_2d} 2-D vertical section (X-Z) with tidal forcing
+\item \texttt{tidal\_basin\_2d} - 2-D vertical section (x-z) with tidal forcing
+ (untested)
 
-\item \texttt{vermix} Simple test in a small domain (3 columns) for
+\item \texttt{vermix} - Simple test in a small domain (3 columns) for
   ocean vertical mixing schemes. The standard set-up ({\it input/}) uses
   KPP scheme \cite[]{lar-eta:94}.\\
   Also contains additional set-ups:
   \begin{enumerate}
+   \item with Double Diffusion scheme from KPP ({\it input.dd/})
    \item with \cite{gas-eta:90} ({\it pkg/ggl90}) scheme ({\it input.ggl90/})
    \item with \cite{Mellor:Yamada1982} level 2. ({\it pkg/my82}) scheme ({\it input.my82/})
    \item with \cite{pal-rom:97} ({\it pkg/opps}) scheme ({\it input.opps/})
@@ -329,7 +406,7 @@ Each example directory has the following subdirectories:
 
   \item \texttt{input/eedata}: this file contains ``execution
     environment'' data. At present, this consists of a specification
-    of the number of threads to use in $X$ and $Y$ under multithreaded
+    of the number of threads to use in $X$ and $Y$ under multi-threaded
     execution.
   \end{itemize}
 
