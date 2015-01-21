@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/text/seaice.tex,v 1.21 2014/04/01 07:30:32 mlosch Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/text/seaice.tex,v 1.22 2015/01/21 18:18:22 mlosch Exp $
 % $Name:  $
 
 %%EH3  Copied from "MITgcm/pkg/seaice/seaice_description.tex"
@@ -591,6 +591,60 @@ the damping time scale $T$ accordingly, by setting either
 \code{SEAICE\_elasticParm} ($E_{0}$), so that
 $E_{0}\Delta{t}=\mbox{forcing time scale}$, or directly
 \code{SEAICE\_evpTauRelax} ($T$) to the forcing time scale.
+
+\paragraph{More stable variant of Elastic-Viscous-Plastic Dynamics:  EVP*\label{sec:pkg:seaice:EVPstar}}~\\ 
+%
+The genuine EVP schemes appears to give noisy solutions \citep{hun01,
+  lemieux12, bouillon13}. This has lead to a modified EVP or EVP*
+\citep{lemieux12, bouillon13, kimmritz15}; here, refer to these
+variants by EVP*. The main idea is to modify the ``natural''
+time-discretization of the momentum equations:
+\begin{equation}
+  \label{eq:evpstar}
+  m\frac{D\vec{u}}{Dt} \approx m\frac{u^{p+1}-u^{n}}{\Delta{t}}
+  + \beta^{*}\frac{u^{p+1}-u^{p}}{\Delta{t}_{\mathrm{EVP}}}
+\end{equation}
+where $n$ is the previous time step index, and $p$ is the previous
+sub-cycling index. The term allows the definition of a residual
+$|u^{p+1}-u^{p}|$ that, as $u^{p+1} \rightarrow u^{n+1}$, converges to
+$0$ and a re-interpretation of EVP as a pure iterative solver where
+the sub-cycling has lost all time-relation \citep{bouillon13,
+  kimmritz15}. Using the terminology of \citet{kimmritz15}, the
+evolution equations of stress $\sigma_{ij}$ and momentum $\vec{u}$ can
+be written as:
+\begin{align}
+  \label{eq:evpstarsigma}
+  \sigma_{ij}^{p+1}&=\sigma_{ij}^p+\frac{1}{\alpha}
+  \Big(\sigma_{ij}(\vec{u}^p)-\sigma_{ij}^p\Big),
+  \phantom{\int}\\
+  \label{eq:evpstarmom}
+  \vec{u}^{p+1}&=\vec{u}^p+\frac{1}{\beta}
+  \Big(\frac{\Delta t}{m}\nabla \cdot{\bf \sigma}^{p+1}+
+  \frac{\Delta t}{m}\vec{R}^{p+1/2}+\vec{u}_n-\vec{u}^p\Big).
+\end{align}
+$\vec{R}$ contains all terms in the momentum equations except for the
+rheology terms and the time derivative, $\alpha$ and $\beta$ are free
+parameters (\code{SEAICE\_evpAlpha}, \code{SEAICE\_evpBeta}) that
+replace the time stepping parameters \code{SEAICE\_deltaTevp}
+($\Delta{T}_{\mathrm{EVP}}$), \code{SEAICE\_elasticParm} ($E_{0}$), or
+\code{SEAICE\_evpTauRelax} ($T$). $\alpha$ and $\beta$ determine the
+speed of convergence and the stability. Usually, it makes sense to use
+$\alpha = \beta$, and \code{SEAICEnEVPstarSteps} $>> \alpha = \beta$
+\citep{kimmritz15}.
+
+In order to use EVP* in the MITgcm, set \code{SEAICEuseEVPstar =
+  .TRUE.,} in \code{data.seaice}. \code{SEAICEuseEVPrev =.TRUE.,} uses
+the actual form of equations (\ref{eq:evpstarsigma}) and
+(\ref{eq:evpstarmom}) with fewer implicit terms and the factor of
+$e^{2}$ dropped in the stress equations (\ref{eq:evpstresstensor2})
+and (\ref{eq:evpstresstensor12}).  This turns out to improve
+convergence \citep{bouillon13}.
+
+Note, that for historical reasons, \code{SEAICE\_deltaTevp} needs to
+be set to some value in order to use also EVP*. Also note, that
+probably because of the C-grid staggering of velocities and stresses,
+EVP* does not converge as successfully as in \citet{kimmritz15}.
+
 
 \paragraph{Truncated ellipse method (TEM) for yield curve \label{sec:pkg:seaice:TEM}}~\\
 %

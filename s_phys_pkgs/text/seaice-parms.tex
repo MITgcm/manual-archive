@@ -73,7 +73,17 @@
     \\
    SEAICE\_deltaTevp    &                   0
     &   EVP sub-cycling time step, values $>$ 0 turn on EVP
-    &  %---ref---
+    &  
+    \\
+   SEAICEuseEVPstar    & F & use modified EVP* instead of EVP & %---ref---
+    \\
+   SEAICEuseEVPrev     & F & use yet another variation on EVP* & %---ref---
+    \\
+   SEAICEnEVPstarSteps & UNSET & number of modified EVP* iteration & %---ref---
+    \\
+   SEAICE\_evpAlpha & UNSET & EVP* parameter & %---ref---
+    \\
+   SEAICE\_evpBeta & UNSET & EVP* parameter & %---ref---
     \\
    SEAICE\_elasticParm & $\frac{1}{3}$ 
      & EVP paramter $E_0$ & \\
