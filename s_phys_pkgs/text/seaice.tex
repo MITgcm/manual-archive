@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/text/seaice.tex,v 1.22 2015/01/21 18:18:22 mlosch Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/text/seaice.tex,v 1.23 2015/01/22 09:10:27 mlosch Exp $
 % $Name:  $
 
 %%EH3  Copied from "MITgcm/pkg/seaice/seaice_description.tex"
@@ -63,7 +63,8 @@ no additional CPP options are required.
 Parts of the SEAICE code can be enabled or disabled at compile time
 via CPP preprocessor flags. These options are set in 
 \code{SEAICE\_OPTIONS.h}.
-Table \ref{tab:pkg:seaice:cpp} summarizes the most important ones.
+Table \ref{tab:pkg:seaice:cpp} summarizes the most important ones. For
+more options see the default \code{pkg/seaice/SEAICE\_OPTIONS.h}.
 
 \begin{table}[!ht]
 \centering
@@ -527,6 +528,15 @@ non-linear iterations $\code{SEAICEnewtonIterMax} = 100$ and a maximum
 number of Krylov iterations $\code{SEAICEkrylovIterMax} = 50$, because
 the Krylov subspace has a fixed dimension of 50.
 
+Setting \code{SEAICEuseStrImpCpl = .TRUE.,} turns on ``strength
+implicit coupling'' \citep{hutchings04} in the LSR-solver and in the
+LSR-preconditioner for the JFNK-solver. In this mode, the different
+contributions of the stress divergence terms are re-ordered in order
+to increase the diagonal dominance of the system
+matrix. Unfortunately, the convergence rate of the LSR solver is
+increased only slightly, while the JFNK-convergence appears to be
+unaffected.
+
 \paragraph{Elastic-Viscous-Plastic (EVP) Dynamics\label{sec:pkg:seaice:EVPdynamics}}~\\
 %
 \citet{hun97}'s introduced an elastic contribution to the strain
@@ -605,13 +615,14 @@ time-discretization of the momentum equations:
   + \beta^{*}\frac{u^{p+1}-u^{p}}{\Delta{t}_{\mathrm{EVP}}}
 \end{equation}
 where $n$ is the previous time step index, and $p$ is the previous
-sub-cycling index. The term allows the definition of a residual
+sub-cycling index. The extra ``intertial'' term
+$m\,(u^{p+1}-u^{n})/\Delta{t})$ allows the definition of a residual
 $|u^{p+1}-u^{p}|$ that, as $u^{p+1} \rightarrow u^{n+1}$, converges to
-$0$ and a re-interpretation of EVP as a pure iterative solver where
-the sub-cycling has lost all time-relation \citep{bouillon13,
-  kimmritz15}. Using the terminology of \citet{kimmritz15}, the
-evolution equations of stress $\sigma_{ij}$ and momentum $\vec{u}$ can
-be written as:
+$0$. In this way EVP can be re-interpreted as a pure iterative solver
+where the sub-cycling has no association with time-relation (through
+$\Delta{t}_{\mathrm{EVP}}$) \citep{bouillon13, kimmritz15}. Using the
+terminology of \citet{kimmritz15}, the evolution equations of stress
+$\sigma_{ij}$ and momentum $\vec{u}$ can be written as:
 \begin{align}
   \label{eq:evpstarsigma}
   \sigma_{ij}^{p+1}&=\sigma_{ij}^p+\frac{1}{\alpha}
@@ -620,31 +631,33 @@ be written as:
   \label{eq:evpstarmom}
   \vec{u}^{p+1}&=\vec{u}^p+\frac{1}{\beta}
   \Big(\frac{\Delta t}{m}\nabla \cdot{\bf \sigma}^{p+1}+
-  \frac{\Delta t}{m}\vec{R}^{p+1/2}+\vec{u}_n-\vec{u}^p\Big).
+  \frac{\Delta t}{m}\vec{R}^{p}+\vec{u}_n-\vec{u}^p\Big).
 \end{align}
 $\vec{R}$ contains all terms in the momentum equations except for the
-rheology terms and the time derivative, $\alpha$ and $\beta$ are free
+rheology terms and the time derivative; $\alpha$ and $\beta$ are free
 parameters (\code{SEAICE\_evpAlpha}, \code{SEAICE\_evpBeta}) that
 replace the time stepping parameters \code{SEAICE\_deltaTevp}
 ($\Delta{T}_{\mathrm{EVP}}$), \code{SEAICE\_elasticParm} ($E_{0}$), or
 \code{SEAICE\_evpTauRelax} ($T$). $\alpha$ and $\beta$ determine the
 speed of convergence and the stability. Usually, it makes sense to use
-$\alpha = \beta$, and \code{SEAICEnEVPstarSteps} $>> \alpha = \beta$
-\citep{kimmritz15}.
+$\alpha = \beta$, and \code{SEAICEnEVPstarSteps} $\gg
+(\alpha,\,\beta)$ \citep{kimmritz15}. Currently, there is no
+termination criterion and the number of EVP* iterations is fixed to
+\code{SEAICEnEVPstarSteps}.
 
 In order to use EVP* in the MITgcm, set \code{SEAICEuseEVPstar =
-  .TRUE.,} in \code{data.seaice}. \code{SEAICEuseEVPrev =.TRUE.,} uses
+  .TRUE.,} in \code{data.seaice}. If \code{SEAICEuseEVPrev =.TRUE.,}
 the actual form of equations (\ref{eq:evpstarsigma}) and
-(\ref{eq:evpstarmom}) with fewer implicit terms and the factor of
-$e^{2}$ dropped in the stress equations (\ref{eq:evpstresstensor2})
-and (\ref{eq:evpstresstensor12}).  This turns out to improve
-convergence \citep{bouillon13}.
+(\ref{eq:evpstarmom}) is used with fewer implicit terms and the factor
+of $e^{2}$ dropped in the stress equations (\ref{eq:evpstresstensor2})
+and (\ref{eq:evpstresstensor12}). Although this modifies the original
+EVP-equations, it turns out to improve convergence \citep{bouillon13}.
 
 Note, that for historical reasons, \code{SEAICE\_deltaTevp} needs to
-be set to some value in order to use also EVP*. Also note, that
+be set to some (any!) value in order to use also EVP*; this behavoir
+many change in the future. Also note, that
 probably because of the C-grid staggering of velocities and stresses,
 EVP* does not converge as successfully as in \citet{kimmritz15}.
-
 
 \paragraph{Truncated ellipse method (TEM) for yield curve \label{sec:pkg:seaice:TEM}}~\\
 %
@@ -857,6 +870,7 @@ $\sigma_{21}^{Z}=0$, or equivalently $\eta_{i,j}^{Z}=0$, on boundaries.
 
 \paragraph{Thermodynamics\label{sec:pkg:seaice:thermodynamics}}~\\
 %
+\noindent\textbf{NOTE: THIS SECTION IS TERRIBLY OUT OF DATE}\\
 In its original formulation the sea ice model \citep{menemenlis05}
 uses simple thermodynamics following the appendix of
 \citet{sem76}. This formulation does not allow storage of heat,
@@ -872,16 +886,22 @@ way to that of \citet{parkinson79} and \citet{manabe79}.
 The conductive heat flux depends strongly on the ice thickness $h$.
 However, the ice thickness in the model represents a mean over a
 potentially very heterogeneous thickness distribution.  In order to
-parameterize a sub-grid scale distribution for heat flux
-computations, the mean ice thickness $h$ is split into seven thickness
-categories $H_{n}$ that are equally distributed between $2h$ and a
-minimum imposed ice thickness of $5\text{\,cm}$ by $H_n=
-\frac{2n-1}{7}\,h$ for $n\in[1,7]$. The heat fluxes computed for each
-thickness category is area-averaged to give the total heat flux
-\citep{hibler84}. To use this thickness category parameterization set
-\code{\#define SEAICE\_MULTICATEGORY}; note that this requires
-different restart files and switching this flag on in the middle of an
-integration is not possible.
+parameterize a sub-grid scale distribution for heat flux computations,
+the mean ice thickness $h$ is split into $N$ thickness categories
+$H_{n}$ that are equally distributed between $2h$ and a minimum
+imposed ice thickness of $5\text{\,cm}$ by $H_n= \frac{2n-1}{7}\,h$
+for $n\in[1,N]$. The heat fluxes computed for each thickness category
+is area-averaged to give the total heat flux \citep{hibler84}. To use
+this thickness category parameterization set \code{SEAICE\_multDim} to
+the number of desired categories (7 is a good guess, for anything
+larger than 7 modify \code{SEAICE\_SIZE.h}) in
+\code{data.seaice}; note that this requires different restart files
+and switching this flag on in the middle of an integration is not
+advised. In order to include the same distribution for snow, set
+\code{SEAICE\_useMultDimSnow = .TRUE.}; only then, the
+parameterization of always having a fraction of thin ice is efficient
+and generally thicker ice is produced \citep{castro-morales14}.
+
 
 The atmospheric heat flux is balanced by an oceanic heat flux from
 below.  The oceanic flux is proportional to

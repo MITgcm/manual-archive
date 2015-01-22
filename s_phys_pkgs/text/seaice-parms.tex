@@ -27,6 +27,10 @@
     & use truncated ellipse method
     &  %---ref---
     \\
+    SEAICEuseStrImpCpl &                     F
+    & use strength implicit coupling in LSR/JFNK
+    &  %---ref---
+    \\
     SEAICEuseMetricTerms &                   T
     & use metric terms in dynamics
     &  %---ref---
@@ -184,7 +188,11 @@
     &  %---ref---
     \\
    SEAICE\_strength     &                   2.75000E+04
-    &   sea-ice strength Pstar 
+    &   sea-ice strength $P^{*}$
+    &  %---ref---
+    \\
+   SEAICE\_cStar       &                    20.0000E+00
+    &   sea-ice strength paramter $C^{*}$ 
     &  %---ref---
     \\
     SEAICE\_rhoAir      & 1.3 (or \code{exf} value)
