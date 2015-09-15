@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/text/seaice.tex,v 1.23 2015/01/22 09:10:27 mlosch Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/text/seaice.tex,v 1.24 2015/09/15 13:31:19 mlosch Exp $
 % $Name:  $
 
 %%EH3  Copied from "MITgcm/pkg/seaice/seaice_description.tex"
@@ -667,8 +667,8 @@ is capped to suppress any tensile stress \citep{hibler97, geiger98}:
   \label{eq:etatem}
   \eta = \min\left(\frac{\zeta}{e^2},
   \frac{\frac{P}{2}-\zeta(\dot{\epsilon}_{11}+\dot{\epsilon}_{22})}
-  {\sqrt{(\dot{\epsilon}_{11}+\dot{\epsilon}_{22})^2
-      +4\dot{\epsilon}_{12}^2}}\right).
+  {\sqrt{\max(\Delta_{\min}^{2},(\dot{\epsilon}_{11}-\dot{\epsilon}_{22})^2
+      +4\dot{\epsilon}_{12}^2})}\right).
 \end{equation}
 To enable this method, set \code{\#define SEAICE\_ALLOW\_TEM} in
 \code{SEAICE\_OPTIONS.h} and turn it on with
