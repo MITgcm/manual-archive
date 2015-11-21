@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.45 2011/05/11 18:58:02 jmc Exp $
+% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.46 2015/11/21 03:19:54 dimitri Exp $
 % $Name:  $
 
 %\section{Getting started}
@@ -145,8 +145,7 @@ updates.  More extensive information on using CVS for maintaining
 MITgcm code can be found
 \begin{rawhtml} <A href="http://mitgcm.org/public/using_cvs.html" target="idontexist"> \end{rawhtml}
 here
-\begin{rawhtml} </A> \end{rawhtml} 
-.
+\begin{rawhtml} </A> \end{rawhtml}.
 It is important to note that the CVS aliases in Table
 \ref{tab:cvsModules} cannot be used in conjunction with the CVS
 \texttt{-d DIRNAME} option.  However, the \texttt{MITgcm} directories
@@ -154,6 +153,13 @@ they create can be changed to a different name following the check-out:
 \begin{verbatim}
    %  cvs co -P MITgcm_verif_basic
    %  mv MITgcm MITgcm_verif_basic
+\end{verbatim}
+
+Note that it is possible to checkout code without ``cvs login'' and without
+setting any shell environment variables by specifying the pserver name and
+password in one line, for example:
+\begin{verbatim}
+   %  cvs -d :pserver:cvsanon:cvsanon@mitgcm.org:/u/gcmpack co -P MITgcm
 \end{verbatim}
 
 \subsubsection{Upgrading from an earlier version}
