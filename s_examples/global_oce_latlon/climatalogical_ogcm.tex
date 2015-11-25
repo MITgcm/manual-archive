@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_examples/global_oce_latlon/climatalogical_ogcm.tex,v 1.24 2013/05/15 22:47:12 jmc Exp $
+% $Header: /u/gcmpack/manual/s_examples/global_oce_latlon/climatalogical_ogcm.tex,v 1.25 2015/11/25 10:57:41 mlosch Exp $
 % $Name:  $
 
 \section[Global Ocean MITgcm Example]{Global Ocean Simulation at $4^\circ$ Resolution}
@@ -432,14 +432,12 @@ The {\it input/trenberth\_taux.bin} and {\it
 \subsubsection{File {\it input/bathymetry.bin}}
 %\label{www:tutorials}
 
-
-The {\it input/topog.box} file specifies a two-dimensional ($x,y$)
-map of depth values. For this experiment values are either
-$0m$ or $-5200\,{\rm m}$, corresponding respectively to a wall or to deep
-ocean. The file contains a raw binary stream of data that is enumerated
-in the same way as standard MITgcm two-dimensional, horizontal arrays.
-The included matlab program {\it input/gendata.m} gives a complete
-code for creating the {\it input/topog.box} file.
+The {\it input/bathymetry.bin} file specifies a two-dimensional
+($x,y$) map of depth values. For this experiment values range
+between~$0$ and $-5200\,{\rm m}$, and have been derived from
+ETOPO5. The file contains a raw binary stream of data that is
+enumerated in the same way as standard MITgcm two-dimensional,
+horizontal arrays.
 
 \subsubsection{File {\it code/SIZE.h}}
 %\label{www:tutorials}
