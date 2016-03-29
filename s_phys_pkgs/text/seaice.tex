@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_phys_pkgs/text/seaice.tex,v 1.24 2015/09/15 13:31:19 mlosch Exp $
+% $Header: /u/gcmpack/manual/s_phys_pkgs/text/seaice.tex,v 1.25 2016/03/29 14:50:54 mlosch Exp $
 % $Name:  $
 
 %%EH3  Copied from "MITgcm/pkg/seaice/seaice_description.tex"
@@ -602,12 +602,14 @@ the damping time scale $T$ accordingly, by setting either
 $E_{0}\Delta{t}=\mbox{forcing time scale}$, or directly
 \code{SEAICE\_evpTauRelax} ($T$) to the forcing time scale.
 
-\paragraph{More stable variant of Elastic-Viscous-Plastic Dynamics:  EVP*\label{sec:pkg:seaice:EVPstar}}~\\ 
+\paragraph{More stable variants of Elastic-Viscous-Plastic Dynamics:
+  EVP* , mEVP, and aEVP \label{sec:pkg:seaice:EVPstar}}~\\ 
 %
 The genuine EVP schemes appears to give noisy solutions \citep{hun01,
   lemieux12, bouillon13}. This has lead to a modified EVP or EVP*
-\citep{lemieux12, bouillon13, kimmritz15}; here, refer to these
-variants by EVP*. The main idea is to modify the ``natural''
+\citep{lemieux12, bouillon13, kimmritz15}; here, we refer to these
+variants by modified EVP (mEVP) and adaptive EVP (aEVP)
+\citep{kimmritz16}. The main idea is to modify the ``natural'' 
 time-discretization of the momentum equations:
 \begin{equation}
   \label{eq:evpstar}
@@ -642,10 +644,10 @@ replace the time stepping parameters \code{SEAICE\_deltaTevp}
 speed of convergence and the stability. Usually, it makes sense to use
 $\alpha = \beta$, and \code{SEAICEnEVPstarSteps} $\gg
 (\alpha,\,\beta)$ \citep{kimmritz15}. Currently, there is no
-termination criterion and the number of EVP* iterations is fixed to
+termination criterion and the number of mEVP iterations is fixed to
 \code{SEAICEnEVPstarSteps}.
 
-In order to use EVP* in the MITgcm, set \code{SEAICEuseEVPstar =
+In order to use mEVP in the MITgcm, set \code{SEAICEuseEVPstar =
   .TRUE.,} in \code{data.seaice}. If \code{SEAICEuseEVPrev =.TRUE.,}
 the actual form of equations (\ref{eq:evpstarsigma}) and
 (\ref{eq:evpstarmom}) is used with fewer implicit terms and the factor
@@ -653,11 +655,30 @@ of $e^{2}$ dropped in the stress equations (\ref{eq:evpstresstensor2})
 and (\ref{eq:evpstresstensor12}). Although this modifies the original
 EVP-equations, it turns out to improve convergence \citep{bouillon13}.
 
-Note, that for historical reasons, \code{SEAICE\_deltaTevp} needs to
-be set to some (any!) value in order to use also EVP*; this behavoir
-many change in the future. Also note, that
-probably because of the C-grid staggering of velocities and stresses,
-EVP* does not converge as successfully as in \citet{kimmritz15}.
+Another variant is the aEVP scheme \citep{kimmritz16}, where the value
+of $\alpha$ is set dynamically based on the stability criterion
+\begin{equation}
+  \label{eq:aevpalpha}
+  \alpha = \beta = \max\left( \tilde{c}\pi\sqrt{c \frac{\zeta}{A_{c}}
+    \frac{\Delta{t}}{\max(m,10^{-4}\text{\,kg})}},\alpha_{\min} \right)
+\end{equation}
+with the grid cell area $A_c$ and the ice and snow mass $m$.  This
+choice sacrifices speed of convergence for stability with the result
+that aEVP converges quickly to VP where $\alpha$ can be small and more
+slowly in areas where the equations are stiff. In practice, aEVP leads
+to an overall better convergence than mEVP \citep{kimmritz16}.
+% 
+To use aEVP in the MITgcm set \code{SEAICEaEVPcoeff} $= \tilde{c}$;
+this also sets the default values of \code{SEAICEaEVPcStar} ($c=4$)
+and \code{SEAICEaEVPalphaMin} ($\alpha_{\min}=5$). Good convergence
+has been obtained with setting these values \citep{kimmritz16}:
+\code{SEAICEaEVPcoeff = 0.5, SEAICEnEVPstarSteps = 500,
+  SEAICEuseEVPstar = .TRUE., SEAICEuseEVPrev = .TRUE.}
+
+Note, that probably because of the C-grid staggering of velocities and
+stresses, mEVP may not converge as successfully as in
+\citet{kimmritz15}, and that convergence at very high resolution
+(order 5\,km) has not been studied yet.
 
 \paragraph{Truncated ellipse method (TEM) for yield curve \label{sec:pkg:seaice:TEM}}~\\
 %
