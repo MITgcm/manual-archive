@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.29 2010/08/30 23:09:21 jmc Exp $
+% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.30 2016/05/11 18:45:43 jmc Exp $
 % $Name:  $
 
 %tci%\documentclass[12pt]{book}
@@ -33,9 +33,6 @@
 
 
 % Section: Overview
-
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.29 2010/08/30 23:09:21 jmc Exp $
-% $Name:  $
 
 This document provides the reader with the information necessary to
 carry out numerical experiments using MITgcm. It gives a comprehensive
@@ -138,9 +135,6 @@ J. Geophysical Res., 104(C12), 29,529-29,547.
 
 We begin by briefly showing some of the results of the model in action to
 give a feel for the wide range of problems that can be addressed using it.
-
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.29 2010/08/30 23:09:21 jmc Exp $
-% $Name:  $
 
 \section{Illustrations of the model in action}
 
@@ -375,9 +369,6 @@ stratification of the ACC.
 %%CNHbegin
 \input{s_overview/text/lab_figure}
 %%CNHend
-
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.29 2010/08/30 23:09:21 jmc Exp $
-% $Name:  $
 
 \section{Continuous equations in `r' coordinates}
 \begin{rawhtml}
@@ -1129,9 +1120,6 @@ to discretize the model.
 Tangent linear and adjoint counterparts of the forward model are described
 in Chapter 5.
 
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.29 2010/08/30 23:09:21 jmc Exp $
-% $Name:  $
-
 \section{Appendix ATMOSPHERE}
 
 \subsection{Hydrostatic Primitive Equations for the Atmosphere in pressure
@@ -1151,14 +1139,14 @@ p\alpha &=&RT  \label{eq:atmos-eos} \\
 c_{v}\frac{DT}{Dt}+p\frac{D\alpha }{Dt} &=&\mathcal{Q}  \label{eq:atmos-heat}
 \end{eqnarray}
 where $\vec{\mathbf{v}}_{h}=(u,v,0)$ is the `horizontal' (on pressure
-surfaces) component of velocity,$\frac{D}{Dt}=\vec{\mathbf{v}}_{h}\cdot 
-\mathbf{\nabla }_{p}+\omega \frac{\partial }{\partial p}$ is the total
-derivative, $f=2\Omega \sin \varphi$ is the Coriolis parameter, $\phi =gz$ is
-the geopotential, $\alpha =1/\rho $ is the specific volume, $\omega =\frac{Dp
-}{Dt}$ is the vertical velocity in the $p-$coordinate. Equation(\ref
-{eq:atmos-heat}) is the first law of thermodynamics where internal energy $
-e=c_{v}T$, $T$ is temperature, $Q$ is the rate of heating per unit mass and $
-p\frac{D\alpha }{Dt}$ is the work done by the fluid in compressing.
+surfaces) component of velocity, $\frac{D}{Dt}=\frac{\partial}{\partial t}
++\vec{\mathbf{v}}_{h}\cdot \mathbf{\nabla }_{p}+\omega \frac{\partial }{\partial p}$
+is the total derivative, $f=2\Omega \sin \varphi$ is the Coriolis parameter,
+$\phi =gz$ is the geopotential, $\alpha =1/\rho $ is the specific volume,
+$\omega =\frac{Dp }{Dt}$ is the vertical velocity in the $p-$coordinate.
+Equation(\ref {eq:atmos-heat}) is the first law of thermodynamics where internal
+energy $e=c_{v}T$, $T$ is temperature, $Q$ is the rate of heating per unit mass
+and $p\frac{D\alpha }{Dt}$ is the work done by the fluid in compressing.
 
 It is convenient to cast the heat equation in terms of potential temperature 
 $\theta $ so that it looks more like a generic conservation law.
@@ -1257,9 +1245,6 @@ _{h}+\mathbf{\nabla }_{p}\phi ^{\prime } &=&\vec{\mathbf{\mathcal{F}}}
 \frac{\partial \Pi }{\partial p}\theta ^{\prime } &=&\alpha ^{\prime } \\
 \frac{D\theta }{Dt} &=&\frac{\mathcal{Q}}{\Pi } 
 \end{eqnarray}
-
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.29 2010/08/30 23:09:21 jmc Exp $
-% $Name:  $
 
 \section{Appendix OCEAN}
 
@@ -1474,9 +1459,6 @@ since we essentially assume a different EOS for the reference density and
 the perturbation density. Nevertheless, it is the hydrostatic ($\epsilon
 _{nh}=0$ form of these equations that are used throughout the ocean modeling
 community and referred to as the primitive equations (HPE).
-
-% $Header: /u/gcmpack/manual/s_overview/text/manual.tex,v 1.29 2010/08/30 23:09:21 jmc Exp $
-% $Name:  $
 
 \section{Appendix:OPERATORS}
 
