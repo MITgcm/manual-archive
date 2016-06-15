@@ -268,6 +268,24 @@ points relative to the Northern/Eastern edges of the model
 eg. $\tt OB\_Jnorth(3)=-1$  means that the point $\tt (3,Ny)$ 
 is a northern OB.
 
+\noindent\textbf{Simple examples:} For a model grid with $ N_{x}\times
+N_{y} = 120\times144$ horizontal grid points with four open boundaries
+along the four egdes of the domain, the simplest way of specifying the
+boundary points in \code{data.obcs} is:
+\begin{verbatim}
+  OB_Ieast = 144*-1,
+# or OB_Ieast = 144*120,
+  OB_Iwest = 144*1,
+  OB_Jnorth = 120*-1,
+# or OB_Jnorth = 120*144,
+  OB_Jsouth = 120*1,
+\end{verbatim}
+If only the first $50$ grid points of the southern boundary are
+boundary points: 
+\begin{verbatim}
+  OB_Jsouth(1:50) = 50*1,
+\end{verbatim}
+
 \noindent
 \textsf{Add special comments for case \#define NONLIN\_FRSURF,
 see obcs\_ini\_fixed.F}
