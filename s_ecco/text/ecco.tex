@@ -1,0 +1,222 @@
+\section{ECCO: model-data comparisons using gridded data sets}
+\label{sec:pkg:ecco}
+\begin{rawhtml}
+<!-- CMIREDIR:package_ecco: -->
+\end{rawhtml}
+
+\def\mitgcmCheckpointVersion{65x}
+
+The functionalities implemented in \texttt{pkg/ecco} are: (1) output time-averaged model fields to compare with gridded data sets; (2) compute normalized model-data distances or cost functions. The former is achieved as the model runs forwards in time whereas the latter occurs after time-integration has completed. Following \cite{for-eta:15} the resulting `cost function' is formulated generically as
+\begin{align} 
+	\mathcal{J}(\vec{u}) &= \sum_i \alpha_i \left(\vec{d}_i^T R_i^{-1} \vec{d}_i\right) + \sum_j \beta_j \vec{u}^T\vec{u}, \label{eq:Jtotal} \\
+	\vec{d}_i &= \mathcal{P}(\vec{m}_i - \vec{o}_i), \label{eq:Jposproc} \\
+	\vec{m}_i &= \mathcal{S}\mathcal{D}\mathcal{M}(\vec{v}), \label{eq:Jpreproc} \\
+	\vec{v}	  &= \mathcal{Q}(\vec{u}), \label{eq:Upreproc} \\
+	\vec{u}	  &= \mathcal{R}(\vec{u}') \label{eq:Uprecond}
+\end{align}
+using symbols defined in table~\ref{tbl:gencost_symbols}. Per Eq.~\eqref{eq:Jpreproc} model counterparts ($\vec{m}_i$) to observational data ($\vec{o}_i$) derive from adjustable model parameters ($\vec{v}$) through the model dynamics integration ($\mathcal{M}$), diagnostic calculations ($\mathcal{D}$), and averaging in space and time ($\mathcal{S}$). Alternatively $\mathcal{S}$ stands for subsampling in space and time (section~\ref{sec:pkg:profiles}). Plain model-data misfits ($\vec{m}_i-\vec{o}_i$) can be penalized directly in Eq.~\eqref{eq:Jtotal} but penalized misfits ($\vec{d}_i$) more generally derive from $\vec{m}_i-\vec{o}_i$ through the generic $\mathcal{P}$ post-processor (Eq. \eqref{eq:Jposproc}). Eqs.~\eqref{eq:Upreproc}-\eqref{eq:Uprecond} pertain to model control parameter adjustment capabilities described in section~\ref{sec:pkg:ctrl}.
+
+\begin{table}[!ht]
+\centering
+\begin{tabular}{rl}
+symbol			&	definition	\\ \hline
+$\vec{u}$			&	vector of nondimensional control variables \\
+$\vec{v}$			&	vector of dimensional control variables \\
+$\alpha_i, \beta_j$	&	misfit and control cost function multipliers (1 by default) \\
+$R_i$ 			&	data error covariance matrix ($R_i^{-1}$ are weights) \\
+$\vec{d}_i$		&	a set of model-data differences \\
+$\vec{o}_i$		&	observational data vector \\
+$\vec{m}_i$		&	model counterpart to $\vec{o}_i$ \\
+$\mathcal{P}$		&	post-processing operator (e.g., a smoother) \\
+$\mathcal{M}$		&	forward model dynamics operator \\
+$\mathcal{D}$		&	diagnostic computation operator \\
+$\mathcal{S}$		&	averaging/subsampling operator \\
+$\mathcal{Q}$		&	Pre-processing operator \\
+$\mathcal{R}$		&	Pre-conditioning operator
+\end{tabular}
+\caption{Symbol definitions for pkg/ecco and pkg/ctrl generic cost functions.}
+\label{tbl:gencost_symbols}
+\end{table}
+
+\subsection{Generic Cost Function Terms} \label{costgen}
+
+The parameters available for configuring generic cost terms in \texttt{data.ecco} are given in table~\ref{tbl:gencost_ecco_params} and example of possible specifications are available in:
+\begin{itemize}
+\itemsep0em
+\item MITgcm\_contrib/verification\_other/global\_oce\_cs32/input/data.ecco
+\item MITgcm\_contrib/verification\_other/global\_oce\_cs32/input\_ad.sens/data.ecco
+\item MITgcm\_contrib/gael/verification/global\_oce\_llc90/input.ecco\_v4/data.ecco
+\end{itemize}
+ 
+ \noindent
+The gridded observation file name is specified by `gencost\_datafile'. Observational time series may be provided as on big file or split into yearly files finishing in \texttt{`\_1992'}, \texttt{`\_1993'}, etc. The corresponding physical variable in $\vec{m}_i$ is specified via the first characters in \texttt{gencost\_barfile}. The list of implemented variables (as of checkpoint \mitgcmCheckpointVersion) is reported in table~\ref{tbl:gencost_ecco_barfile}. A file named according to \texttt{gencost\_barfile} will be created where averaged fields will be written progressively as the model integration proceeds forward in time. At the end this file will be re-read by \texttt{cost\_generic} to compute the cost function and (if \texttt{gencost\_outputlevel} = 1) output model-data misfit fields (i.e., $\vec{d}_i$) for offline analysis and visualization.
+
+In the current implementation, model-data error covariance matrices $R_i$ omit non-diagonal terms. Specifying $R_i=\sigma_i^2$ thus boils down to providing uncertainty fields ($\sigma_i$ such that $R_i=\sigma_i^2$) in a file which name is specified via \texttt{gencost\_errfile}. By default $\sigma_i$ is assumed time-invariant but a $\sigma_i$ time series (of the same length as $\vec{o}_i$ time series) can be provided using the \texttt{variaweight} option. By default a cost function is quadratic but $\vec{d}_i^T R_i^{-1} \vec{d}_i$ can be replaced with $R_i^{-1/2} \vec{d}_i$ using the \texttt{nosumsq} option. 
+
+In principle, any periodicity should be possible, but only \texttt{`day'}, \texttt{`month'}, \texttt{`step'}, and \texttt{`const'} are implemented for \texttt{gencost\_avgperiod}. If two different averages of the same variable are needed for separate cost function terms (e.g., daily and monthly) then an extension starting with `\_' should be added to \texttt{gencost\_barfile} (such as `\_day' and `\_mon').
+\footnote{ecco\_check may be missing a test for conflicting names.} If two cost function terms use the same variable and periodicity, however, then using a common \texttt{gencost\_barfile} saves disk space. 
+
+Climatologies of $\vec{m}_i$ can be formed from the time series of model averages in order to compare with climatologies of $\vec{o}_i$ by activating the \texttt{`clim'} option via \texttt{gencost\_preproc} and setting the corresponding \texttt{gencost\_preproc\_i}  integer parameter to the number of records (i.e., months, days, or time steps) per climatological cycle. The generic post-processor ($\mathcal{P}$ in Eq.~\eqref{eq:Jposproc}) allows model-data misfits to be, for example, smoothed in space by setting \texttt{gencost\_posproc} to \texttt{`smooth'}. Other options associated with the computation of Eq.~\eqref{eq:Jtotal} are summarized in table~\ref{tbl:gencost_ecco_preproc} and further discussed below. Multiple \texttt{gencost\_preproc} / \texttt{gencost\_posproc} options may be specified per cost term. 
+
+In general the specification of \texttt{gencost\_name} is optional, has no impact on the end-result, and only serves to identify cost function terms in the model text outputs (STDOUT.0000, STDERR.0000, costfunction000). The exceptions are listed in table~\ref{tbl:gencost_ecco_name}, which activate alternative cost function codes (in place of \texttt{cost\_generic.F}) described in the following subsections. The specification of \texttt{gencost\_mask} allows the user to specify whether the gridded data input and model counterparts is located at tracer points (`c'; the default) or velocity points (`w' or `s'). Note however that the `c' option (not `w' or `s') should be used when gridded velocity data is provided as zonal/meridional components at tracer points. 
+
+\begin{table}[!ht]
+\centering
+\begin{tabular}{lll}
+parameter					&	type			&	function \\ \hline
+%\texttt{using\_gencost} 		&	logical			&	Turns specified generic cost term on. \\
+\texttt{gencost\_name} 			&	character(*) 	&	Name of cost term \\
+\texttt{gencost\_barfile} 		&	character(*)	&	File to receive model counterpart $\vec{m}_i$ (see table~\ref{tbl:gencost_ecco_barfile}) \\
+\texttt{gencost\_datafile} 		&	character(*)	&	File containing observational data $\vec{o}_i$ \\
+\texttt{gencost\_avgperiod}	&	character(5)	&	Averaging period for $\vec{o}_i$ and $\vec{m}_i$ (see text) \\
+\texttt{gencost\_outputlevel} 	&	integer 		&	Greater than 0 will output misfit fields\\
+\texttt{gencost\_errfile} 		& 	character(*)	&	File containing diagonal of error matrix $R_i$\\ 
+\texttt{mult\_gencost} 			&	real			&	Multiplier $\alpha_i$ (default: 1) \\ 
+\hline
+\texttt{gencost\_preproc} 		&	character(*)	&	Preprocessor names \\
+\texttt{gencost\_preproc\_c} 	&	character(*)	&	Preprocessor character arguments 	\\
+\texttt{gencost\_preproc\_i} 	&	integer(*)		&	Preprocessor integer arguments 		\\
+\texttt{gencost\_preproc\_r} 	&	real(*)			&	Preprocessor real arguments 	\\
+\texttt{gencost\_posproc} 		&	character(*)	&	Post-processor names \\
+\texttt{gencost\_posproc\_c} 	&	character(*)	&	Post-processor character arguments 	\\
+\texttt{gencost\_posproc\_i} 	&	integer(*) 		&	Post-processor integer arguments 	\\
+\texttt{gencost\_posproc\_r} 	&	real(*)			&	Post-processor real arguments 	\\
+\hline
+\texttt{gencost\_mask}		&	character(1)	&	Location of $\vec{m}_i$\\
+\texttt{gencost\_spmin}		&	real			&	Data less than this value will be omitted \\
+\texttt{gencost\_spmax}		&	real			&	Data greater than this value will be omitted \\
+\texttt{gencost\_spzero}		&	real			&	Data points equal to this value will be omitted \\
+\texttt{gencost\_startdate1} 	&	integer			&	Start date of observations (YYYMMDD)	\\
+\texttt{gencost\_startdate2} 	&	integer			&	Start date of observations (HHMMSS)				\\
+\texttt{gencost\_is3d}		&	logical 		&	Needs to be true for 3D fields \\
+\hline
+\texttt{gencost\_smooth2Ddiffnbt} &integer		&	Smoother \# of time steps (sec.~\ref{v4custom} only)
+\\
+\texttt{gencost\_scalefile}	&	character(*)	&	Smoothing scale file (sec.~\ref{v4custom} only)
+\\
+\texttt{gencost\_nrecperiod} 	&	integer		&	Deprecated	\\
+\texttt{gencost\_timevaryweight}&	logical 		&	Deprecated	\\
+\texttt{gencost\_enddate1} 		&	integer	&	Not fully implemented \\
+\texttt{gencost\_enddate2} 		&	integer	&	Not fully implemented \\
+\end{tabular}
+\caption{Parameters in \texttt{ecco\_gencost\_nml} namelist in \texttt{data.ecco}. All parameters are vectors of length \texttt{NGENCOST} (the \# of available cost terms) except for \texttt{gencost\_*proc*} are arrays of size \texttt{NGENPPROC}$\times$\texttt{NGENCOST}. Notes: \texttt{gencost\_is3d} will automatically be reset to true in cases listed as 3D in table~\ref{tbl:gencost_ecco_barfile}; the last group of parameters should be disregarded except for the section~\ref{v4custom} special cases.}
+\label{tbl:gencost_ecco_params}
+\end{table}
+
+\begin{table}[!ht]
+\centering
+\begin{tabular}{lll}
+variable name				&	description						&	remarks \\ \hline\hline
+\texttt{m\_eta}				&	sea surface height				&	free surface + corrections \\
+\texttt{m\_sst}				&	sea surface temperature			&	first level potential temperature \\
+\texttt{m\_sss}				&	sea surface salinity			&	first level salinity \\ 
+\texttt{m\_bp}				&	bottom pressure					& \\ \hline
+\texttt{m\_ustress}			&	zonal wind stress				& \\
+\texttt{m\_vstress}			&	meridional wind stress			& \\
+\texttt{m\_uwind}			&	zonal wind 						& \\
+\texttt{m\_vwind}			&	meridional wind 				& \\
+\texttt{m\_atemp}			&	atmospheric temperature			& \\
+\texttt{m\_aqh}				&	atmospheric specific humidity	& \\
+\texttt{m\_precip}			&	precipitation					& \\
+\texttt{m\_swdown}			&	downward shortwave				& \\
+\texttt{m\_lwdown}			&	downward longwave				& \\
+\texttt{m\_wspeed}			&	wind speed						& \\ \hline
+\texttt{m\_siarea}			&	sea-ice area					& \\
+\texttt{m\_siheff}			&	sea-ice effective thickness		& \\
+\texttt{m\_sihsnow}			&	snow effective thickness		& \\ \hline
+\texttt{m\_theta}			&	potential temperature			& three-dimensional \\
+\texttt{m\_salt}			&	salinity						& three-dimensional \\
+\texttt{m\_UE}				&	zonal velocity					& three-dimensional \\
+\texttt{m\_VN}				&	meridional velocity				& three-dimensional \\ \hline
+\texttt{m\_diffkr}			&	vertical/diapycnal diffusivity	& three-dimensional, constant \\ 
+\texttt{m\_kapgm}			&	GM diffusivity					& three-dimensional, constant \\ 
+\texttt{m\_kapredi}			&	isopycnal diffusivity			& three-dimensional, constant \\ 
+\texttt{m\_geothermalflux}	&	geothermal heat flux			& constant \\ 
+\texttt{m\_bottomdrag}		&	bottom drag						& constant \\
+\end{tabular}
+\caption{Implemented \texttt{gencost\_barfile} options (as of checkpoint \mitgcmCheckpointVersion) that can be used via \texttt{cost\_generic.F} as explained in section~\ref{costgen}. An extension starting with `\_' can be appended at the end of the variable name to distinguish between separate cost function terms.}
+\label{tbl:gencost_ecco_barfile}
+\end{table}
+
+\begin{table}[!ht]
+\centering
+\begin{tabular}{lll}
+name					&	description					&	specs needed via \texttt{gencost\_preproc\_i}, \texttt{\_r}, or \texttt{\_c} \\ \hline\hline
+\texttt{gencost\_preproc} \\ \hline
+\texttt{clim} 				&	Use climatological misfits	&	integer: no.\ of records per climatological cycle \\
+\texttt{mean} 				&	Use time mean of misfits 	&	--- \\
+\texttt{anom} 				&	Use anomalies from time mean &	--- \\
+\texttt{variaweight}		&	Use time-varying weight $W_i$&	--- \\
+\texttt{nosumsq} 			&	Use linear misfits 			&	--- \\
+\texttt{factor} 			&	Multiply $\vec{m}_i$ by a scaling factor	&	real: the scaling factor \\ \hline \hline
+\texttt{gencost\_posproc} \\ \hline
+\texttt{smooth} 			&	Smooth misfits				&	character: smoothing scale file\\ 
+						&								&	integer: smoother \# of time steps \\
+\end{tabular} 
+\caption{\texttt{gencost\_preproc} and \texttt{gencost\_posproc} options implemented as of checkpoint \mitgcmCheckpointVersion.}
+\label{tbl:gencost_ecco_preproc}
+\end{table}
+
+\clearpage
+
+\subsection{Custom Cost Function Terms} \label{v4custom}
+
+This section pertains to the special cases of cost\_gencost\_bpv4.F  cost\_gencost\_seaicev4.F  cost\_gencost\_sshv4.F  cost\_gencost\_sstv4.F
+
+If \texttt{gencost\_name} is any of the \texttt{sshv4} or \texttt{sstv4} terms, additional smoothing arguments can be specified---\texttt{gencost\_scalefile} points to a file containing the smoothing scales and \texttt{gencost\_smooth2Ddiffnbt} gives the number of smoothing steps. These parameters are otherwise not used.
+
+\subsection{Boxmean Generic Cost Function} \label{genboxmean}
+
+This section pertains to the special case of cost\_gencost\_boxmean.F and is very much a work in progress. The box mean generic cost function penalizes the mean of a model field over a box (non quadratic cost function). To use this cost function, set \texttt{gencost\_name = 'boxmean*'}, where \texttt{*} is an optional suffix starting with \texttt{`\_'}. The model field of interest is specified by \texttt{gencost\_barfile}. Currently valid options are \texttt{m\_boxmean\_theta}, \texttt{m\_boxmean\_salt}, and \texttt{m\_boxmean\_eta}. The ``box'' is a mask of ones and zeros read from files whose prefix is given by the string \texttt{gencost\_errfile}. Different files contain the horizontal, vertical, and temporal masks; these files are distinguished by the suffixes \texttt{`C'}, \texttt{`K'}, and \texttt{`T'}, respectively. For example, if \texttt{gencost\_errfile = 'foo\_mask'}, then the horizontal, vertical, and temporal mask files are named \texttt{foo\_maskC}, \texttt{foo\_maskK}, and \texttt{foo\_maskT}. Note that the horizontal mask can have an arbitrary shape, so the ``box'' is not necessarily rectangular.
+
+\subsection{Transport Generic Cost Function} \label{gentrsp}
+
+This section pertains to the special case of cost\_gencost\_transp.F and is very much a work in progress. The transport generic cost function penalizes the transport of volume, heat, or salt through a specified section (non quadratic cost function). To use this cost function, set \texttt{gencost\_name = 'transp*'}, where \texttt{*} is an optional suffix starting with \texttt{`\_'}, and set \texttt{gencost\_barfile} to one of \texttt{m\_trVol}, \texttt{m\_trHeat}, and \texttt{m\_trSalt}. The section is specified a mask of ones and zeros denoting ``west'' and ``south'' faces through which to compute transport. The prefix for the mask files is given by the string \texttt{gencost\_errfile}, with the suffixes \texttt{`W'} and \texttt{`S'} denoting the ``west'' and ``south'' faces, respectively. There does not appear to be a suffix denoting a temporal mask, but temporal masking could be achieved using the \texttt{variaweight} post-processor.
+
+\begin{table}[!ht]
+\centering
+\begin{tabular}{lll}
+name						&	description					&	remarks \\ \hline\hline
+\texttt{sshv4-mdt}			&	sea surface height			&	mean dynamic topography (SLA + geod) \\
+\texttt{sshv4-tp}			&	sea surface height			&	TOPEX SLA \\
+\texttt{sshv4-ers}			&	sea surface height			&	ERS SLA \\
+\texttt{sshv4-gfo}			&	sea surface height			&	\\
+\texttt{sshv4-lsc}			&	sea surface height			&	\\
+\texttt{sshv4-gmsl}			&	sea surface height			&	\\
+\texttt{bpv4-grace}			&	bottom pressure				&	\\
+\texttt{sstv4-amsre}		&	sea surface temperature		&	\\
+\texttt{sstv4-amsre-lsc}	&	sea surface temperature		&	\\ \hline
+\texttt{boxmean}			&	mean over a box				&	specify box \\
+\texttt{transp}				&	transport across section	&	specify section \\ \hline
+\texttt{si4-cons}			&	sea ice concentration		& \\
+\texttt{si4-deconc}			&	model sea ice deficiency	& \\
+\texttt{si4-exconc}			&	model sea ice excess	& \\
+\end{tabular}
+\caption{Pre-defined \texttt{gencost\_name} options associated with the sections~\ref{v4custom}, \ref{genboxmean}, \ref{gentrsp} special cases.}
+\label{tbl:gencost_ecco_name}
+\end{table}
+
+\begin{table}[!ht]
+\centering
+\begin{tabular}{lll}
+variable name				&	description						&	remarks \\ \hline\hline
+\texttt{m\_trVol}			&	volume transport				& three-dimensional, specify section \\ 
+\texttt{m\_trHeat}			&	heat transport					& three-dimensional, specify section \\ 
+\texttt{m\_trSalt}			&	salt transport					& three-dimensional, specify section \\ 
+\texttt{m\_boxmean\_theta}	&	mean of theta over box			& specify box \\
+\texttt{m\_boxmean\_salt}	&	mean of salt over box			& specify box \\
+\texttt{m\_boxmean\_eta}	&	mean of SSH over box			& specify box 
+\end{tabular}
+\caption{Implemented \texttt{gencost\_barfile} options (as of checkpoint \mitgcmCheckpointVersion) that can be used via \texttt{cost\_gencost\_boxmean.F} or \texttt{cost\_gencost\_transp.F} (see sections~\ref{genboxmean} and ~\ref{gentrsp}.}
+\label{tbl:gencost_ecco_barfile_custom}
+\end{table}
+
+
+
+\subsection{Key Routines}
+
+TBA... \texttt{cost\_generic.F}, \texttt{ecco\_check.F}, \texttt{ecco\_phys.F}, \texttt{ecco\_summary.F}, \texttt{ecco\_readparms.F}, ...
+
+\subsection{Compile Options}
+
+TBA... ALLOW\_GENCOST3D, ALLOW\_PSBAR\_STERIC, ECCO\_CTRL\_DEPRECATED, ...

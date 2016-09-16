@@ -1,0 +1,89 @@
+\section{CTRL: Model Parameter Adjustment Capability}
+\label{sec:pkg:ctrl}
+\begin{rawhtml}
+<!-- CMIREDIR:package_ctrl: -->
+\end{rawhtml}
+
+\def\mitgcmCheckpointVersion{65x}
+
+The parameters available for configuring generic cost terms in \texttt{data.ctrl} are given in table~\ref{tbl:gencost_ctrl_params}. 
+
+\begin{table}[!ht]
+\centering
+\begin{tabular}{lll}
+parameter							&	type			&	function \\ \hline
+\texttt{xx\_gen*\_file} 			&	character(*)	&	Name of control. Prefix from table~\ref{tbl:gencost_ctrl_files} + suffix. \\
+\texttt{xx\_gen*\_weight} 			&	character(*)	&	Weights in the form of $\sigma_{\vec{u}_j}^{-2}$ \\
+\texttt{xx\_gen*\_bounds} 			&	real(5)			&	Apply bounds \\
+\texttt{xx\_gen*\_preproc} 			&	character(*)	&	Control preprocessor(s) (see table~\ref{tbl:gencost_ctrl_preproc}) \\
+\texttt{xx\_gen*\_preproc\_c} 		&	character(*)	&	Preprocessor character arguments \\
+\texttt{xx\_gen*\_preproc\_i} 		&	integer(*)		&	Preprocessor integer arguments \\
+\texttt{xx\_gen*\_preproc\_r} 		&	real(*)			&	Preprocessor real arguments \\
+\texttt{gen*Precond} 				&	real			&	Preconditioning factor ($=1$ by default) \\
+\texttt{mult\_gen*}	 				&	real			&	Cost function multiplier $\beta_j$ ($= 1$ by default) \\
+\texttt{xx\_gentim2d\_period}		&	real			&	Frequency of adjustments (in seconds) \\
+\texttt{xx\_gentim2d\_startdate1}	&	integer			&	Adjustment start date  \\
+\texttt{xx\_gentim2d\_startdate2}	&	integer			&	Default: model start date \\
+\texttt{xx\_gentim2d\_cumsum}		&	logical			&	Accumulate control adjustments \\
+\texttt{xx\_gentim2d\_glosum}		&	logical			&	Global sum of adjustment (output is still 2D) \\
+\end{tabular}
+\caption{Parameters in \texttt{ctrl\_nml\_genarr} namelist in \texttt{data.ctrl}. The \texttt{*} can be replaced by \texttt{arr2d}, \texttt{arr3d}, or \texttt{tim2d} for time-invariant two and three dimensional controls and time-varying 2D controls, respectively. Parameters for \texttt{genarr2d}, \texttt{genarr3d}, and \texttt{gentime2d} are arrays of length \texttt{maxCtrlArr2D}, \texttt{maxCtrlArr3D}, and \texttt{maxCtrlTim2D}, respectively, with one entry per term in the cost function.}
+\label{tbl:gencost_ctrl_params}
+\end{table}
+
+\begin{table}[!ht]
+\centering
+\begin{tabular}{lll}
+					&	name							&	description	\\ \hline \hline
+2D, time-invariant controls & \texttt{genarr2d} \\
+					&	\texttt{xx\_etan} 				&	initial sea surface height	\\
+					&	\texttt{xx\_bottomdrag} 		&	bottom drag \\
+					&	\texttt{xx\_geothermal} 		&	geothermal heat flux \\ \hline
+3D, time-invariant controls & \texttt{genarr3d} \\
+					&	\texttt{xx\_theta} 				&	initial potential temperature	\\
+					&	\texttt{xx\_salt} 				&	initial salinity \\
+					&	\texttt{xx\_kapgm}		 		&	GM coefficient \\ 
+					&	\texttt{xx\_kapredi}	 		&	isopycnal diffusivity \\ 
+					&	\texttt{xx\_diffkr}	 			&	diapycnal diffusivity \\ \hline
+2D, time-varying controls 	&	\texttt{gentim2D}	\\ 
+					&	\texttt{xx\_atemp}				&	atmospheric temperature \\
+					&	\texttt{xx\_aqh}				&	atmospheric specific humidity \\
+					&	\texttt{xx\_swdown}				&	downward shortwave \\
+					&	\texttt{xx\_lwdown}				&	downward longwave \\
+					&	\texttt{xx\_precip}				&	precipitation \\
+					&	\texttt{xx\_uwind}				&	zonal wind \\
+					&	\texttt{xx\_vwind}				&	meridional wind \\
+					&	\texttt{xx\_tauu}				&	zonal wind stress \\					
+					&	\texttt{xx\_tauv}				&	meridional wind stress \\					
+					&	\texttt{xx\_gen\_precip}		&	globally averaged precipitation? \\					
+\end{tabular}
+\caption{Generic control prefixes implemented as of checkpoint \mitgcmCheckpointVersion.}
+\label{tbl:gencost_ctrl_files}
+\end{table}
+
+\begin{table}[!ht]
+\centering
+\begin{tabular}{lll}
+name								&	description							&	arguments \\ \hline\hline
+\texttt{WC01} 						&	Correlation modeling 				&	integer: operator type (default: 1) \\
+\texttt{smooth}						&	Smoothing without normalization 	&	integer: operator type (default: 1) \\
+\texttt{docycle}					&	Average period replication			&	integer: cycle length \\
+\texttt{replicate}					&	Alias for \texttt{docycle}				&	\ \ \ \ (units of \texttt{xx\_gentim2d\_period}) \\
+\texttt{rmcycle} 					&	Periodic average subtraction		&	integer: cycle length \\
+\texttt{variaweight}				&	Use time-varying weight				&	--- \\
+\texttt{noscaling}$^{a}$			&	Do not scale with \texttt{xx\_gen*\_weight} & --- \\
+\texttt{documul}					&	Sets \texttt{xx\_gentim2d\_cumsum} 	& ---\\
+\texttt{doglomean}					&	Sets \texttt{xx\_gentim2d\_glosum} 	& --- \\
+\end{tabular} 
+\caption{\texttt{xx\_gen????d\_preproc} options implemented as of checkpoint \mitgcmCheckpointVersion. Notes: $^a$: If \texttt{noscaling} is false, the control adjustment is scaled by one on the square root of the weight before being added to the base control variable; if \texttt{noscaling} is true, the control is multiplied by the weight in the cost function itself.}
+\label{tbl:gencost_ctrl_preproc}
+\end{table}
+
+The control problem is non-dimensional by default, as reflected in the omission of weights in control penalties [($\vec{u}_j^T\vec{u}_j$ in \eqref{eq:Jtotal}]. Non-dimensional controls ($\vec{u}_j$) are scaled to physical units ($\vec{v}_j$) through multiplication by the respective uncertainty fields ($\sigma_{\vec{u}_j}$), as part of the generic preprocessor $\mathcal{Q}$ in \eqref{eq:Upreproc}. Besides the scaling of $\vec{u}_j$ to physical units, the preprocessor $\mathcal{Q}$ can include, for example, spatial correlation modeling (using an implementation of Weaver and Coutier, 2001) by setting \texttt{xx\_gen*\_preproc = 'WC01'}. Alternatively, setting \texttt{xx\_gen*\_preproc = 'smooth'} activates the smoothing part of \texttt{WC01}, but omits the normalization. Additionally, bounds for the controls can be specified by setting \texttt{xx\_gen*\_bounds}. In forward mode, adjustments to the $i^\text{th}$ control are clipped so that they remain between \texttt{xx\_gen*\_bounds(i,1)} and \texttt{xx\_gen*\_bounds(i,4)}. If \texttt{xx\_gen*\_bounds(i,1)} $<$ \texttt{xx\_gen*\_bounds(i+1,1)} for $i = 1, 2, 3$, then the bounds will ``emulate a local minimum;''\footnote{Not sure what this means.} otherwise, the bounds have no effect in adjoint mode.
+
+For the case of time-varying controls, the frequency is specified by \texttt{xx\_gentim2d\_period}. The generic control package interprets special values of \texttt{xx\_gentim2d\_period} in the same way as the \texttt{exf} package: a value of $-12$ implies cycling monthly fields while a value of $0$ means that the field is steady. Time varying weights can be provided by specifying the preprocessor \texttt{variaweight}, in which case the \texttt{xx\_gentim2d\_weight} file must contain as many records as the control parameter time series itself (approximately the run length divided by \texttt{xx\_gentim2d\_period}). 
+
+The parameter \texttt{mult\_gen*} sets the multiplier for the corresponding cost function penalty [$\beta_j$ in \eqref{eq:Jtotal}; $\beta_j = 1$ by default). The preconditioner, $\cal{R}$, does not directly appear in the estimation problem, but only serves to push the optimization process in a certain direction in control space; this operator is specified by \texttt{gen*Precond} ($=1$ by default). 
+
+
+

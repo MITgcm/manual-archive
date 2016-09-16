@@ -1,22 +1,31 @@
-% $Header: /u/gcmpack/manual/s_ecco/text/top_section.tex,v 1.12 2010/08/27 13:10:47 jmc Exp $
+% $Header: /u/gcmpack/manual/s_ecco/text/top_section.tex,v 1.13 2016/09/16 18:52:27 gforget Exp $
 % $Name:  $
 
-\chapter{Interface with ECCO}
+\chapter{Ocean State Estimation Packages}
 \begin{rawhtml}
 <!-- CMIREDIR:interface_with_ecco: -->
 \end{rawhtml}
 \label{chap.ecco}
 
-This chapter describes the interface between MITgcm and the large 
-scale optimization schemes employed in the ECCO project.
-The interface provides the so-called ``ECCO environment'', which
-is maintained alongside the kernel MITgcm code.
+This chapter describes packages that have been introduced for ocean state estimation purposes and in relation with automatic differentiation (see Chapter~\ref{chap:autodiff})
 
-\input{s_ecco/text/ecco_costfunction.tex}
+\input{s_ecco/text/ecco.tex}
 
 \newpage
 
 \input{s_ecco/text/profiles.tex}
+
+\newpage
+
+\input{s_ecco/text/ctrl.tex}
+
+\newpage
+
+\input{s_ecco/text/smooth.tex}
+
+\newpage
+
+\input{s_ecco/text/ecco_costfunction.tex}
 
 \newpage
 
