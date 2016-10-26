@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_algorithm/text/tracer.tex,v 1.26 2010/08/30 23:09:19 jmc Exp $
+% $Header: /u/gcmpack/manual/s_algorithm/text/tracer.tex,v 1.27 2016/10/26 17:30:23 heimbach Exp $
 % $Name:  $
 
 \section{Tracer equations}
@@ -680,6 +680,7 @@ $W$: {\bf rTrans} (local)
 
 \begin{table}[htb]
 \centering
+{\small
  \begin{tabular}[htb]{|l|c|c|c|c|l|}
    \hline
    Advection Scheme & code & use  & use Multi- & Stencil & comments \\
@@ -697,12 +698,31 @@ $W$: {\bf rTrans} (local)
                          No & Yes & 3 pts & linear/$\tau$, non-linear/v\\
    \hline
    $3^{rd}$order DST & 30 &  No & Yes & 5 pts & linear/$\tau$, non-linear/v\\
+   \hline
+   $2^{nd}$order-moment Prather & 80 & No & Yes & ~ & ~ \\
    \hline \hline
    $2^{nd}$order Flux Limiters & 77 &  No & Yes & 5 pts & non-linear \\
    \hline
    $3^{nd}$order DST Flux limiter & 33 &  No & Yes & 5 pts & non-linear \\
    \hline
+   $2^{nd}$order-moment Prather w. limiter & 81 & No & Yes & ~ & ~ \\
+   \hline
+   piecewise parabolic w. ``null'' limiter & 40 & No & Yes & ~ & ~ \\
+   \hline 
+   piecewise parabolic w. ``mono'' limiter & 41 & No & Yes & ~ & ~ \\
+   \hline
+   piecewise quartic w. ``null'' limiter & 50 & No & Yes & ~ & ~ \\
+   \hline
+   piecewise quartic w. ``mono'' limiter & 51 & No & Yes & ~ & ~ \\
+   \hline
+   piecewise quartic w. ``weno'' limiter & 52 & No & Yes & ~ & ~ \\
+   \hline
+   $7^{nd}$order one-step method & 7 & No & Yes & ~ & ~ \\
+   with Monotonicity Preserving Limiter & ~ & ~ & ~ & ~ & ~ \\
+   \hline
+   
  \end{tabular}
+ }
  \caption{Summary of the different advection schemes available in MITgcm.
           ``A.B.'' stands for Adams-Bashforth and ``DST'' for direct space time.
           The code corresponds to the number used to select the corresponding
