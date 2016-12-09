@@ -66,17 +66,17 @@ Table \ref{tab:pkg:exf:cpp} summarizes these options.
   \centering
   {\footnotesize
     \begin{tabular}{|l|l|}
-      \hline 
+      \hline
       \textbf{CPP option}  &  \textbf{Description}  \\
       \hline \hline
-        \texttt{EXF\_VERBOSE} & 
+        \texttt{EXF\_VERBOSE} &
           verbose mode (recommended only for testing) \\
-        \texttt{ALLOW\_ATM\_TEMP} & 
+        \texttt{ALLOW\_ATM\_TEMP} &
           compute heat/freshwater fluxes from atmos. state input \\
-        \texttt{ALLOW\_ATM\_WIND} & 
+        \texttt{ALLOW\_ATM\_WIND} &
           compute wind stress from wind speed input\\
-        \texttt{ALLOW\_BULKFORMULAE} & 
-          is used if \texttt{ALLOW\_ATM\_TEMP} or 
+        \texttt{ALLOW\_BULKFORMULAE} &
+          is used if \texttt{ALLOW\_ATM\_TEMP} or
           \texttt{ALLOW\_ATM\_WIND} is enabled \\
         \texttt{EXF\_READ\_EVAP} & read evaporation instead of computing it \\
         \texttt{ALLOW\_RUNOFF} & read time-constant river/glacier run-off field \\
@@ -101,16 +101,15 @@ Table \ref{tab:pkg:exf:cpp} summarizes these options.
   \label{tab:pkg:exf:cpp}
 \end{table}
 
-
 %----------------------------------------------------------------------
 
 \subsubsection{Run-time parameters
 \label{sec:pkg:exf:runtime}}
 
-Run-time parameters are set in files 
-\texttt{data.pkg}, \texttt{data.exf}, and 
-\texttt{data.exf\_clim} (for relaxation/climatological fields)
-which are read in \texttt{exf\_readparms.F}.
+Run-time parameters are set in files
+\texttt{data.pkg} and \texttt{data.exf}
+%\texttt{data.exf\_clim} (for relaxation/climatological fields)
+which is read in \texttt{exf\_readparms.F}.
 Run-time parameters may be broken into 3 categories:
 (i) switching on/off the package at runtime,
 (ii) general flags and parameters, and
@@ -129,94 +128,94 @@ A package is switched on/off at runtime by setting
   \centering
   {\footnotesize
     \begin{tabular}{|l|c|l|}
-      \hline 
+      \hline
       \textbf{Flag/parameter} & \textbf{default} &  \textbf{Description}  \\
       \hline \hline
-        useExfCheckRange & \texttt{.TRUE.} & 
+        useExfCheckRange & \texttt{.TRUE.} &
            check range of input fields and stop if out of range \\
-        useExfYearlyFields & \texttt{.FALSE.} & 
+        useExfYearlyFields & \texttt{.FALSE.} &
            append current year postfix of form \texttt{\_YYYY} on filename \\
-        twoDigitYear & \texttt{.FALSE.} & 
+        twoDigitYear & \texttt{.FALSE.} &
            instead of appending \texttt{\_YYYY} append  \texttt{YY} \\
-        repeatPeriod & \texttt{0.0} & $ > 0 $ : 
+        repeatPeriod & \texttt{0.0} & $ > 0 $ :
            cycle through all input fields at the same period (in seconds) \\
         ~            & ~            & $ = 0 $ :
            use period assigned to each field \\
         exf\_offset\_atemp & \texttt{0.0} & set to 273.16 to convert from deg. Kelvin (assumed input) to Celsius \\
-        windstressmax & \texttt{2.0} & 
+        windstressmax & \texttt{2.0} &
            max. allowed wind stress $N/m^2$ \\
-        exf\_albedo & \texttt{0.1} & 
+        exf\_albedo & \texttt{0.1} &
           surface albedo used to compute downward vs. net radiative fluxes \\
-        climtempfreeze & \texttt{-1.9} & 
+        climtempfreeze & \texttt{-1.9} &
           ??? \\
-        ocean\_emissivity & \texttt{} & 
+        ocean\_emissivity & \texttt{} &
           longwave ocean-surface emissivity \\
-        ice\_emissivity & \texttt{} & 
+        ice\_emissivity & \texttt{} &
           longwave seaice emissivity \\
-        snow\_emissivity & \texttt{} & 
+        snow\_emissivity & \texttt{} &
           longwave  snow  emissivity \\
-        exf\_iceCd & \texttt{1.63E-3} & 
+        exf\_iceCd & \texttt{1.63E-3} &
           drag coefficient over sea-ice \\
-        exf\_iceCe & \texttt{1.63E-3} & 
+        exf\_iceCe & \texttt{1.63E-3} &
           evaporation transfer coeff. over sea-ice \\
-        exf\_iceCh & \texttt{1.63E-3} & 
+        exf\_iceCh & \texttt{1.63E-3} &
           sensible heat transfer coeff. over sea-ice \\
-        exf\_scal\_BulkCdn & \texttt{1.} & 
+        exf\_scal\_BulkCdn & \texttt{1.} &
           overall scaling of neutral drag coeff. \\
-        useStabilityFct\_overIce  & \texttt{.FALSE.} & 
+        useStabilityFct\_overIce  & \texttt{.FALSE.} &
           compute turbulent transfer coeff. over sea-ice \\
-        readStressOnAgrid & \texttt{.FALSE.} & 
+        readStressOnAgrid & \texttt{.FALSE.} &
           read wind-streess located on model-grid, A-grid point \\
-        readStressOnCgrid & \texttt{.FALSE.} & 
+        readStressOnCgrid & \texttt{.FALSE.} &
           read wind-streess located on model-grid, C-grid point \\
-        useRelativeWind & \texttt{.FALSE.} & 
+        useRelativeWind & \texttt{.FALSE.} &
           subtract [U/V]VEL or [U/VICE from U/V]WIND before \\
         ~ & ~ &  computing [U/V]STRESS \\
-        zref & \texttt{10.} & 
+        zref & \texttt{10.} &
           reference height \\
-        hu & \texttt{10.} & 
+        hu & \texttt{10.} &
           height of mean wind \\
-        ht & \texttt{2.} & 
+        ht & \texttt{2.} &
           height of mean temperature and rel. humidity \\
-        umin & \texttt{0.5} & 
+        umin & \texttt{0.5} &
           minimum absolute wind speed for computing Cd \\
-        atmrho & \texttt{1.2} & 
+        atmrho & \texttt{1.2} &
           mean atmospheric density [kg/m\^3] \\
-        atmcp & \texttt{1005.} & 
+        atmcp & \texttt{1005.} &
           mean atmospheric specific heat [J/kg/K] \\
-        cdrag\_[n] & \texttt{???} & 
+        cdrag\_[n] & \texttt{???} &
           n = 1,2,3; parameters for drag coeff. function \\
-        cstanton\_[n] & \texttt{???} & 
+        cstanton\_[n] & \texttt{???} &
           n = 1,2; parameters for Stanton number function \\
-        cdalton & \texttt{???} & 
+        cdalton & \texttt{???} &
           parameter for Dalton number function \\
-        flamb & \texttt{2500000.} & 
+        flamb & \texttt{2500000.} &
           latent heat of evaporation [J/kg] \\
-        flami & \texttt{334000.} & 
+        flami & \texttt{334000.} &
           latent heat of melting of pure ice [J/kg] \\
-        zolmin & \texttt{-100.} & 
+        zolmin & \texttt{-100.} &
           minimum stability parameter \\
-        cvapor\_fac & \texttt{640380.} & 
+        cvapor\_fac & \texttt{640380.} &
           ~ \\
-        cvapor\_exp & \texttt{5107.4} & 
+        cvapor\_exp & \texttt{5107.4} &
           ~ \\
-        cvapor\_fac\_ice & \texttt{11637800.} & 
+        cvapor\_fac\_ice & \texttt{11637800.} &
           ~ \\
-        cvapor\_fac\_ice & \texttt{5897.8} & 
+        cvapor\_fac\_ice & \texttt{5897.8} &
           ~ \\
-        humid\_fac & \texttt{0.606} & 
+        humid\_fac & \texttt{0.606} &
           parameter for virtual temperature calculation \\
-        gamma\_blk & \texttt{0.010} & 
+        gamma\_blk & \texttt{0.010} &
           adiabatic lapse rate \\
-        saltsat & \texttt{0.980} & 
-          reduction of saturation vapor pressure over salt-water \\          
-        psim\_fac & \texttt{5.} & 
-          ~ \\          
-        exf\_monFreq & \texttt{monitorFreq} & 
+        saltsat & \texttt{0.980} &
+          reduction of saturation vapor pressure over salt-water \\
+        psim\_fac & \texttt{5.} &
+          ~ \\
+        exf\_monFreq & \texttt{monitorFreq} &
           output frequency [s] \\
-        exf\_iprec  & \texttt{32} & 
+        exf\_iprec  & \texttt{32} &
           precision of input fields (32-bit or 64-bit) \\
-        exf\_yftype & \texttt{'RL'} & 
+        exf\_yftype & \texttt{'RL'} &
           precision of arrays ('RL' vs. 'RS') \\
       \hline
     \end{tabular}
@@ -225,8 +224,7 @@ A package is switched on/off at runtime by setting
   \label{tab:pkg:exf:runtime_flags}
 \end{table}
 
-
-\paragraph{Field attributes} 
+\paragraph{Field attributes}
 ~ \\
 %
 All EXF fields are listed in Section \ref{sec:pkg:exf:fields_units}.
@@ -249,14 +247,14 @@ prepend the field name to the listed attribute, e.g. for attribute
   \centering
   {\footnotesize
     \begin{tabular}{|l|c|l|}
-      \hline 
+      \hline
       \textbf{attribute} &  \textbf{Default} &  \textbf{Description}  \\
       \hline \hline
-         \textit{field}\texttt{file} & ' ' & 
+         \textit{field}\texttt{file} & ' ' &
            filename; if left empty no file will be read; \texttt{const} will be used instead \\
          \textit{field}\texttt{const} & 0. &
            constant that will be used if no file is read  \\
-         \textit{field}\texttt{startdate1} & 0. & 
+         \textit{field}\texttt{startdate1} & 0. &
            format: \texttt{YYYYMMDD}; start year (YYYY), month (MM), day (YY) \\
            ~&~& of field to determine record number \\
          \textit{field}\texttt{startdate2} & 0. &
@@ -264,15 +262,15 @@ prepend the field name to the listed attribute, e.g. for attribute
            ~&~& of field to determine record number\\
          \textit{field}\texttt{period} & 0. &
            interval in seconds between two records \\
-         \texttt{exf\_inscal\_}\textit{field}& ~ & 
+         \texttt{exf\_inscal\_}\textit{field}& ~ &
            optional rescaling of input fields to comply with EXF units \\
          \texttt{exf\_outscal\_}\textit{field}& ~ &
            optional rescaling of EXF fields when mapped onto MITgcm fields \\
          \hline
-         \multicolumn{3}{|c|}{\textit{used in conjunction with} 
+         \multicolumn{3}{|c|}{\textit{used in conjunction with}
                               \texttt{EXF\_USE\_INTERPOLATION}} \\
          \hline
-         \textit{field}\texttt{\_lon0} & $xgOrigin+delX/2$  & 
+         \textit{field}\texttt{\_lon0} & $xgOrigin+delX/2$  &
            starting longitude of input \\
          \textit{field}\texttt{\_lon\_inc} & $delX$ &
            increment in longitude of input \\
@@ -288,7 +286,7 @@ prepend the field name to the listed attribute, e.g. for attribute
     \end{tabular}
    }
   \caption{\newline
-           Note one exception for the default of 
+           Note one exception for the default of
            \texttt{atempconst} = celsius2K = 273.16}
   \label{tab:pkg:exf:runtime_attributes}
 \end{table}
@@ -324,8 +322,8 @@ startDate1 in data.cal as a date later than 19920101 (for example, startDate1
 configuration EXF will read 2 years into the file to find the 1994 starting
 value.
 Interpolation on-the-fly is used (in the present case trivially
-on the same grid, but included nevertheless for illustration), 
-and input field grid starting coordinates and increments are 
+on the same grid, but included nevertheless for illustration),
+and input field grid starting coordinates and increments are
 supplied as well.
 
 %----------------------------------------------------------------------
@@ -340,7 +338,7 @@ T.B.D. (cross-ref. to parameter list table)
 \subsubsection{EXF input fields and units
 \label{sec:pkg:exf:fields_units}}
 
-The following list is taken from the header file \texttt{exf\_fields.h}.
+The following list is taken from the header file \texttt{EXF\_FIELDS.h}.
 It comprises all EXF input fields.
 
 Output fields which EXF provides to the MITgcm are fields
@@ -375,9 +373,9 @@ c----------------------------------------------------------------------
 c     hl        :: latent   heat flux into ocean in W/m^2
 c               |  > 0 for increase in theta (ocean warming)
 c----------------------------------------------------------------------
-c     hflux     :: Net upward surface heat flux in W/m^2 
-c               |  excluding shortwave (on input)
-c               |  hflux = latent + sensible + lwflux
+c     hflux     :: Net upward surface heat flux in W/m^2
+c               |  (including shortwave)
+c               |  hflux = latent + sensible + lwflux + swflux
 c               |  > 0 for decrease in theta (ocean cooling)
 c               |  Typical range: -250 < hflux < 600
 c               |  Southwest C-grid tracer point
@@ -573,7 +571,7 @@ Header routines
 
 Diagnostics output is available via the diagnostics package
 (see Section \ref{sec:pkg:diagnostics}).
-Available output fields are summarized in 
+Available output fields are summarized in
 Table \ref{tab:pkg:exf:diagnostics}.
 
 \begin{table}[!ht]
