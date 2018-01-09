@@ -1,4 +1,4 @@
-% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.46 2015/11/21 03:19:54 dimitri Exp $
+% $Header: /u/gcmpack/manual/s_getstarted/text/getting_started.tex,v 1.47 2018/01/09 01:02:48 jmc Exp $
 % $Name:  $
 
 %\section{Getting started}
@@ -8,10 +8,10 @@ model is to run the case study examples provided with the base
 version. Information on how to obtain, compile, and run the code is
 found here as well as a brief description of the model structure
 directory and the case study examples. Information is also provided
-here on how to customize the code when you are ready to try implementing 
+here on how to customize the code when you are ready to try implementing
 the configuration you have in mind.  The code and algorithm
-are described more fully in chapters \ref{chap:discretization} and 
-\ref{chap:sarch}. 
+are described more fully in chapters \ref{chap:discretization} and
+\ref{chap:sarch}.
 
 \section{Where to find information}
 \label{sec:whereToFindInfo}
@@ -20,11 +20,16 @@ are described more fully in chapters \ref{chap:discretization} and
 \end{rawhtml}
 
 There is a web-archived support mailing list for the model that
-you can email at \texttt{MITgcm-support@mitgcm.org} or browse at:
-\begin{rawhtml} <A href=http://mitgcm.org/mailman/listinfo/mitgcm-support/ target="idontexist"> \end{rawhtml}
+you can email at \texttt{MITgcm-support@mitgcm.org} after subscribing to:
+\begin{rawhtml} <A href=http://mailman.mitgcm.org/mailman/listinfo/mitgcm-support/ target="idontexist"> \end{rawhtml}
 \begin{verbatim}
-http://mitgcm.org/mailman/listinfo/mitgcm-support/
-http://mitgcm.org/pipermail/mitgcm-support/
+http://mailman.mitgcm.org/mailman/listinfo/mitgcm-support/
+\end{verbatim}
+\begin{rawhtml} </A> \end{rawhtml}
+or browse at:
+\begin{rawhtml} <A href=http://mailman.mitgcm.org/pipermail/mitgcm-support/ target="idontexist"> \end{rawhtml}
+\begin{verbatim}
+http://mailman.mitgcm.org/pipermail/mitgcm-support/
 \end{verbatim}
 \begin{rawhtml} </A> \end{rawhtml}
 
@@ -71,7 +76,7 @@ track of your changes. If CVS is not available on your machine, you can also
 download a tar file.
 
 Before you can use CVS, the following environment variable(s) should
-be set within your shell.  For a csh or tcsh shell, put the following 
+be set within your shell.  For a csh or tcsh shell, put the following
 \begin{verbatim}
 % setenv CVSROOT :pserver:cvsanon@mitgcm.org:/u/gcmpack
 \end{verbatim}
@@ -81,7 +86,6 @@ shells, put:
 % export CVSROOT=':pserver:cvsanon@mitgcm.org:/u/gcmpack'
 \end{verbatim}
 in your \texttt{.profile} or \texttt{.bashrc} file.
-
 
 To get MITgcm through CVS, first register with the MITgcm CVS server
 using command:
@@ -123,8 +127,8 @@ of CVS aliases
     \textbf{Alias Name}    &  \textbf{Information (directories) Contained}  \\\hline
     \texttt{MITgcm\_code}  &  Only the source code -- none of the verification examples.  \\
     \texttt{MITgcm\_verif\_basic}
-    &  Source code plus a small set of the verification examples 
-    (\texttt{global\_ocean.90x40x15}, \texttt{aim.5l\_cs}, \texttt{hs94.128x64x5}, 
+    &  Source code plus a small set of the verification examples
+    (\texttt{global\_ocean.90x40x15}, \texttt{aim.5l\_cs}, \texttt{hs94.128x64x5},
     \texttt{front\_relax}, and \texttt{plume\_on\_slope}).  \\
     \texttt{MITgcm\_verif\_atmos}  &  Source code plus all of the atmospheric examples.  \\
     \texttt{MITgcm\_verif\_ocean}  &  Source code plus all of the oceanic examples.  \\
@@ -242,7 +246,7 @@ The tar file still contains CVS information which we urge you not to
 delete; even if you do not use CVS yourself the information can help
 us if you should need to send us your copy of the code.  If a recent
 tar file does not exist, then please contact the developers through
-the 
+the
 \begin{rawhtml} <A href="mailto:MITgcm-support@mitgcm.org"> \end{rawhtml}
 MITgcm-support@mitgcm.org
 \begin{rawhtml} </A> \end{rawhtml}
@@ -273,21 +277,21 @@ structure).
 \begin{itemize}
 
 \item \texttt{doc}: contains brief documentation notes.
-  
+
 \item \texttt{eesupp}: contains the execution environment source code.
   Also subdivided into two subdirectories \texttt{inc} and
   \texttt{src}.
-  
+
 \item \texttt{model}: this directory contains the main source code.
   Also subdivided into two subdirectories \texttt{inc} and
   \texttt{src}.
-  
+
 \item \texttt{pkg}: contains the source code for the packages. Each
   package corresponds to a subdirectory. For example, \texttt{gmredi}
   contains the code related to the Gent-McWilliams/Redi scheme,
   \texttt{aim} the code relative to the atmospheric intermediate
   physics. The packages are described in detail in chapter \ref{chap:packagesI}.
-  
+
 \item \texttt{tools}: this directory contains various useful tools.
   For example, \texttt{genmake2} is a script written in csh (C-shell)
   that should be used to generate your makefile. The directory
@@ -297,7 +301,7 @@ structure).
   This directory also contains the subdirectory build\_options, which
   contains the `optfiles' with the compiler options for the different
   compilers and machines that can run MITgcm.
-  
+
 \item \texttt{utils}: this directory contains various utilities. The
   subdirectory \texttt{knudsen2} contains code and a makefile that
   compute coefficients of the polynomial approximation to the knudsen
@@ -308,16 +312,16 @@ structure).
   model output. The subdirectory exch2 contains the code needed for
   the exch2 package to work with different combinations of domain
   decompositions.
-  
+
 \item \texttt{verification}: this directory contains the model
   examples. See section \ref{sec:modelExamples}.
 
 \item \texttt{jobs}: contains sample job scripts for running MITgcm.
-  
+
 \item \texttt{lsopt}: Line search code used for optimization.
-  
+
 \item \texttt{optim}: Interface between MITgcm and line search code.
-  
+
 \end{itemize}
 
 \section[Building MITgcm]{Building the code}
@@ -362,7 +366,7 @@ MITgcm.  In such cases, it is generally helpful to read the existing
 Through the MITgcm-support list, the MITgcm developers are willing to
 provide help writing or modifing ``optfiles''.  And we encourage users
 to post new ``optfiles'' (particularly ones for new machines or
-architectures) to the 
+architectures) to the
 \begin{rawhtml} <A href="mailto:MITgcm-support@mitgcm.org"> \end{rawhtml}
 MITgcm-support@mitgcm.org
 \begin{rawhtml} </A> \end{rawhtml}
@@ -521,7 +525,6 @@ the one experiment:
 % ./mitgcmuv > output.txt
 \end{verbatim}
 
-
 \subsection{Using \texttt{genmake2}}
 \label{sec:genmake}
 
@@ -535,13 +538,13 @@ in the \texttt{tools} directory) to generate a Makefile.
 %\texttt{tools/build\_options} directory.
 \texttt{genmake2} parses information from the following sources:
 \begin{description}
-\item[-] a {\em gemake\_local} file if one is found in the current 
+\item[-] a {\em gemake\_local} file if one is found in the current
   directory
 \item[-] command-line options
 \item[-] an "options file" as specified by the command-line option
   \texttt{--optfile=/PATH/FILENAME}
-\item[-] a {\em packages.conf} file (if one is found) with the 
-  specific list of packages to compile. The search path for 
+\item[-] a {\em packages.conf} file (if one is found) with the
+  specific list of packages to compile. The search path for
   file {\em packages.conf} is, first, the current directory and
   then each of the "MODS" directories in the given order (see below).
 \end{description}
@@ -630,10 +633,10 @@ obtained from:
 
 The most important command-line options are:
 \begin{description}
-  
+
 \item[\texttt{--optfile=/PATH/FILENAME}] specifies the optfile that
   should be used for a particular build.
-  
+
   If no "optfile" is specified (either through the command line or the
   MITGCM\_OPTFILE environment variable), genmake2 will try to make a
   reasonable guess from the list provided in {\em
@@ -642,13 +645,13 @@ The most important command-line options are:
   (eg. "linux\_ia32") and then find a working FORTRAN compiler within
   the user's path.  When these three items have been identified,
   genmake2 will try to find an optfile that has a matching name.
-  
+
 \item[\texttt{--mods='DIR1 DIR2 DIR3 ...'}] specifies a list of
   directories containing ``modifications''.  These directories contain
   files with names that may (or may not) exist in the main MITgcm
   source tree but will be overridden by any identically-named sources
   within the ``MODS'' directories.
-  
+
   The order of precedence for this "name-hiding" is as follows:
   \begin{itemize}
   \item ``MODS'' directories (in the order given)
@@ -659,9 +662,9 @@ The most important command-line options are:
   \item The "standard dirs" (which may have been specified by the
     ``-standarddirs'' option)
   \end{itemize}
-  
+
 \item[\texttt{--pgroups=/PATH/FILENAME}] specifies the file
-  where package groups are defined. If not set, the package-groups 
+  where package groups are defined. If not set, the package-groups
   definition will be read from {\em pkg/pkg\_groups}.
   It also contains the default list of packages (defined
   as the group ``{\it default\_pkg\_list}'' which is used
@@ -670,7 +673,7 @@ The most important command-line options are:
 
 \item[\texttt{--pdepend=/PATH/FILENAME}] specifies the dependency file
   used for packages.
-  
+
   If not specified, the default dependency file {\em pkg/pkg\_depend}
   is used.  The syntax for this file is parsed on a line-by-line basis
   where each line containes either a comment ("\#") or a simple
@@ -679,29 +682,29 @@ The most important command-line options are:
   relationship, respectively.  If no rule is specified, then it is
   assumed that the two packages are compatible and will function
   either with or without each other.
-  
+
 \item[\texttt{--adof=/path/to/file}] specifies the "adjoint" or
   automatic differentiation options file to be used.  The file is
   analogous to the ``optfile'' defined above but it specifies
   information for the AD build process.
-  
+
   The default file is located in {\em
     tools/adjoint\_options/adjoint\_default} and it defines the "TAF"
   and "TAMC" compilers.  An alternate version is also available at
   {\em tools/adjoint\_options/adjoint\_staf} that selects the newer
   "STAF" compiler.  As with any compilers, it is helpful to have their
   directories listed in your {\tt \$PATH} environment variable.
-  
+
 \item[\texttt{--mpi}] This option enables certain MPI features (using
   CPP \texttt{\#define}s) within the code and is necessary for MPI
   builds (see Section \ref{sec:mpi-build}).
-  
+
 \item[\texttt{--make=/path/to/gmake}] Due to the poor handling of
   soft-links and other bugs common with the \texttt{make} versions
   provided by commercial Unix vendors, GNU \texttt{make} (sometimes
   called \texttt{gmake}) should be preferred.  This option provides a
   means for specifying the make executable to be used.
-  
+
 \item[\texttt{--bash=/path/to/sh}] On some (usually older UNIX)
   machines, the ``bash'' shell is unavailable.  To run on these
   systems, \texttt{genmake2} can be invoked using an ``sh'' (that is,
@@ -714,7 +717,6 @@ The most important command-line options are:
   of the desired shell.
 
 \end{description}
-
 
 \subsection{Building with MPI}
 \label{sec:mpi-build}
@@ -729,7 +731,7 @@ administrator.
 
 The steps for building MITgcm with MPI support are:
 \begin{enumerate}
-  
+
 \item Determine the locations of your MPI-enabled compiler and/or MPI
   libraries and put them into an options file as described in Section
   \ref{sec:genmake}.  One can start with one of the examples in:
@@ -765,7 +767,7 @@ The steps for building MITgcm with MPI support are:
     MPIexec
     \begin{rawhtml} </A> \end{rawhtml}
   \end{itemize}
-  
+
 \item Build the code with the \texttt{genmake2} \texttt{-mpi} option
   (see Section \ref{sec:genmake}) using commands such as:
 {\footnotesize \begin{verbatim}
@@ -773,7 +775,7 @@ The steps for building MITgcm with MPI support are:
   %  make depend
   %  make
 \end{verbatim} }
-  
+
 \item Run the code with the appropriate MPI ``run'' or ``exec''
   program provided with your particular implementation of MPI.
   Typical MPI packages such as MPICH will use something like:
@@ -854,8 +856,6 @@ output is kept in \texttt{results/output.txt} for comparison. You can
 compare your \texttt{output.txt} with the corresponding one for that
 experiment to check that the set-up works.
 
-
-
 \subsection{Output files}
 
 The model produces various output files and, when using \texttt{mnc},
@@ -864,7 +864,6 @@ selected at compile time (either \texttt{mdsio} or \texttt{mnc} or
 both as determined by \texttt{code/packages.conf}) and the run-time
 flags set (in \texttt{input/data.pkg}), the following output may
 appear.
-
 
 \subsubsection{MDSIO output files}
 
@@ -913,7 +912,7 @@ there is an additional ``pickup'' file:
 
 containing the D-grid velocity data and that has to be written out as well
 in order to restart the integration. Rolling checkpoint files are the same
-as the pickup files but are named differently. Their name contain the chain 
+as the pickup files but are named differently. Their name contain the chain
 \texttt{ckptA} or \texttt{ckptB} instead of \texttt{00000nIter}. They can be
 used to restart the model but are overwritten every other time they are
 output to save disk space during long integrations.
@@ -922,7 +921,7 @@ output to save disk space during long integrations.
 
 Unlike the \texttt{mdsio} output, the \texttt{mnc}--generated output
 is usually (though not necessarily) placed within a subdirectory with
-a name such as \texttt{mnc\_test\_\${DATE}\_\${SEQ}}.  
+a name such as \texttt{mnc\_test\_\${DATE}\_\${SEQ}}.
 
 \subsection{Looking at the output}
 
@@ -977,7 +976,7 @@ http://www.unidata.ucar.edu/packages/netcdf/
 http://meteora.ucsd.edu/~pierce/ncview_home_page.html
 \end{verbatim}
   \begin{rawhtml} </A> \end{rawhtml}
-  
+
 \item MatLAB(c) and other common post-processing environments provide
   various netCDF interfaces including:
   \begin{rawhtml} <A href="http://mexcdf.sourceforge.net/"> \end{rawhtml}
